@@ -180,7 +180,8 @@
           <Button
             type="submit"
             label="Envoyer la fiche"
-            disabled={!recipientEmail || !recipientKind || requesting}
+            disabled={!recipientEmail || !recipientKind}
+            loading={requesting}
             preventDefaultOnMouseDown
           />
         </div>
