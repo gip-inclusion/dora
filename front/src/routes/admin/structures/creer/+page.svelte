@@ -205,7 +205,7 @@
               name="validate"
               type="submit"
               label="Envoyer l’invitation"
-              disabled={requesting}
+              loading={requesting}
             />
           </div>
         </Form>
