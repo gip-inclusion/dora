@@ -432,8 +432,8 @@ def _get_unified_results(
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
-    dora_ids = [dora_id for dora_id, _ in dora_results_from_di]
     dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
+    dora_ids = list(dora_distances.keys())
 
     dora_services_by_id = {
         str(service.id): service
