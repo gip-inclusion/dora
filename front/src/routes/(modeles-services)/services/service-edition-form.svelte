@@ -37,6 +37,8 @@
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
 
+  type RequestKind = "draft" | "publish";
+
   interface Props {
     service: Service;
     servicesOptions: ServicesOptions;
@@ -56,6 +58,7 @@
   }: Props = $props();
 
   let requesting = $state(false);
+  let requestKind = $state<RequestKind | undefined>(undefined);
   let currentSchema: Schema = $derived(
     service.useInclusionNumeriqueScheme
       ? inclusionNumeriqueSchema
@@ -86,7 +89,8 @@
       280
     );
   }
-  function handleSubmit(validatedData, kind) {
+  function handleSubmit(validatedData, kind: RequestKind) {
+    requestKind = kind;
     if (service.useInclusionNumeriqueScheme) {
       preSaveInclusionNumeriqueService(validatedData);
     }
@@ -116,7 +120,7 @@
     }
   }
 
-  function handleValidate(data, kind: "draft" | "publish") {
+  function handleValidate(data, kind: RequestKind) {
     const schema = kind === "draft" ? draftSchema : currentSchema;
     return validate(data, schema, {
       servicesOptions,
@@ -280,14 +284,14 @@
         type="submit"
         label="Enregistrer en brouillon"
         secondary
-        disabled={requesting}
+        loading={requesting && requestKind === "draft"}
       />
 
       <Button
         id="publish"
         type="submit"
         label="Publier"
-        disabled={requesting}
+        loading={requesting && requestKind === "publish"}
       />
     </StickyFormSubmissionRow>
   {/if}
