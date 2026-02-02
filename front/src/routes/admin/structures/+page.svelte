@@ -6,7 +6,8 @@
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import {
-    DI_METABASE_DASHBOARD_URL,
+    DI_METABASE_LIST_DASHBOARD_URL,
+    DI_METABASE_STATS_DASHBOARD_URL,
     METABASE_DASHBOARD_URL,
     URL_HELP_SITE,
   } from "$lib/consts";
@@ -194,12 +195,20 @@
               extraClass="mb-s12"
             />
             <a
-              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
+              href={DI_METABASE_STATS_DASHBOARD_URL(selectedDepartment.name)}
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 text-france-blue leading-32 underline"
             >
-              Cartographie des services référencés
+              Cartographie des structures et services référencés
+            </a>
+            <a
+              href={DI_METABASE_LIST_DASHBOARD_URL(selectedDepartment.name)}
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 text-france-blue leading-32 underline"
+            >
+              Liste des structures et services référencés
             </a>
             <a
               href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
