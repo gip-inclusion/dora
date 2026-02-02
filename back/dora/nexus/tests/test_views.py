@@ -4,7 +4,7 @@ from urllib.parse import parse_qs, urlencode, urlparse
 import pytest
 from django.conf import settings
 from django.urls import reverse
-from itoutils.django.nexus.token import decode_token, generate_token
+from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from rest_framework import status
 
 from dora.core.test_utils import make_user
@@ -52,7 +52,7 @@ class TestAutoLoginIn:
 
     def test_user_not_authenticated_with_valid_jwt(self, api_client, user):
         """Test avec un utilisateur non authentifié et un token JWT valide"""
-        token = generate_token(user)
+        token = generate_auto_login_token(user)
         response = api_client.post(
             reverse("auto-login-in"),
             data={"jwt": token},
@@ -69,7 +69,7 @@ class TestAutoLoginIn:
 
     def test_user_not_authenticated_with_valid_jwt_and_next_url(self, api_client, user):
         """Test avec un utilisateur non authentifié, un token valide et un next_url"""
-        token = generate_token(user)
+        token = generate_auto_login_token(user)
         next_url = "/some/path"
         response = api_client.post(
             reverse("auto-login-in"),
@@ -87,7 +87,7 @@ class TestAutoLoginIn:
 
     def test_user_already_authenticated_same_email(self, api_client, user):
         """Test avec un utilisateur déjà authentifié avec le même email"""
-        token = generate_token(user)
+        token = generate_auto_login_token(user)
         api_client.force_authenticate(user=user)
         response = api_client.post(
             reverse("auto-login-in"),
@@ -100,7 +100,7 @@ class TestAutoLoginIn:
         self, api_client, user, other_user
     ):
         """Test avec un utilisateur déjà authentifié avec un email différent"""
-        token = generate_token(user)
+        token = generate_auto_login_token(user)
         api_client.force_authenticate(user=other_user)
         response = api_client.post(
             reverse("auto-login-in"),
@@ -116,7 +116,7 @@ class TestAutoLoginIn:
         self, api_client, user, other_user
     ):
         """Test avec un utilisateur déjà authentifié avec un email différent et un next_url"""
-        token = generate_token(user)
+        token = generate_auto_login_token(user)
         api_client.force_authenticate(user=other_user)
         next_url = "/some/path"
         response = api_client.post(
