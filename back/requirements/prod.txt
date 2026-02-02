@@ -10,13 +10,13 @@ asgiref==3.11.0 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.42.34 \
-    --hash=sha256:75d7443c81a029283442fad138629be1eefaa3e6d430c28118a0f4cdbd57855d \
-    --hash=sha256:db3fb539e3f806b911ec4ca991f2f8bff333c5f0b87132a82e28b521fc5ec164
+boto3==1.42.39 \
+    --hash=sha256:d03f82363314759eff7f84a27b9e6428125f89d8119e4588e8c2c1d79892c956 \
+    --hash=sha256:d9d6ce11df309707b490d2f5f785b761cfddfd6d1f665385b78c9d8ed097184b
     # via -r requirements/./base.in
-botocore==1.42.35 \
-    --hash=sha256:40a6e0f16afe9e5d42e956f0b6d909869793fadb21780e409063601fc3d094b8 \
-    --hash=sha256:b89f527987691abbd1374c4116cc2711471ce48e6da502db17e92b17b2af8d47
+botocore==1.42.39 \
+    --hash=sha256:0f00355050821e91a5fe6d932f7bf220f337249b752899e3e4cf6ed54326249e \
+    --hash=sha256:9e0d0fed9226449cc26fcf2bbffc0392ac698dd8378e8395ce54f3ec13f81d58
     # via
     #   boto3
     #   s3transfer
@@ -799,9 +799,9 @@ pydantic-core==2.41.5 \
     --hash=sha256:f41eb9797986d6ebac5e8edff36d5cef9de40def462311b3eb3eeded1431e425 \
     --hash=sha256:f547144f2966e1e16ae626d8ce72b4cfa0caedc7fa28052001c94fb2fcaa1c52
     # via pydantic
-pyjwt==2.10.1 \
-    --hash=sha256:3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953 \
-    --hash=sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb
+pyjwt==2.11.0 \
+    --hash=sha256:35f95c1f0fbe5d5ba6e43f00271c275f7a1a4db1dab27bf708073b75318ea623 \
+    --hash=sha256:94a6bde30eb5c8e04fee991062b534071fd1439ef58d2adc9ccb823e7bcd0469
     # via
     #   -r requirements/./base.in
     #   mozilla-django-oidc
@@ -834,9 +834,9 @@ segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
     # via -r requirements/./base.in
-sentry-sdk==2.50.0 \
-    --hash=sha256:0ef0ed7168657ceb5a0be081f4102d92042a125462d1d1a29277992e344e749e \
-    --hash=sha256:873437a989ee1b8b25579847bae8384515bf18cfed231b06c591b735c1781fe3
+sentry-sdk==2.51.0 \
+    --hash=sha256:b89d64577075fd8c13088bc3609a2ce77a154e5beb8cba7cc16560b0539df4f7 \
+    --hash=sha256:e21016d318a097c2b617bb980afd9fc737e1efc55f9b4f0cdc819982c9717d5f
     # via -r requirements/./base.in
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
