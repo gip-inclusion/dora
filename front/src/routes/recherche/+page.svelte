@@ -140,19 +140,22 @@
         filters.locationKinds.some((value) =>
           service.locationKinds.includes(value)
         );
+
       // Lorsqu'on ne veut que les services en présentiels, on exclue ceux à plus de 50 km de distance
-      const onSiteAndNearby = !(
+      const filteringOutPresentialOnly =
         filters.locationKinds.length === 1 &&
-        filters.locationKinds[0] === "en-presentiel" &&
-        (service.distance === null || service.distance > SEARCH_RADIUS_KM)
-      );
+        filters.locationKinds[0] === "en-presentiel";
+      const isRemoteService =
+        service.distance === null || service.distance > SEARCH_RADIUS_KM;
+      const shouldBeFilteredOut = filteringOutPresentialOnly && isRemoteService;
+
       return (
         diPublicsMatch &&
         kindsMatch &&
         fundingLabelsMatch &&
         feeConditionMatch &&
         locationKindsMatch &&
-        onSiteAndNearby
+        !shouldBeFilteredOut
       );
     })
   );
