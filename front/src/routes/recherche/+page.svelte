@@ -143,7 +143,7 @@
       const onSiteAndNearby = !(
         filters.locationKinds.length === 1 &&
         filters.locationKinds[0] === "en-presentiel" &&
-        service.distance > 50
+        (service.distance === null || service.distance > 50)
       );
       return (
         diPublicsMatch &&
