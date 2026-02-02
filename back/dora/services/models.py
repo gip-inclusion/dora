@@ -277,6 +277,14 @@ class ServiceManager(models.Manager):
             - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
         )
 
+    def filter_for_DI(self):
+        return (
+            self.published()
+            .exclude(structure__is_obsolete=True)
+            .exclude(structure__in=Structure.objects.orphans())
+            .exclude(suspension_date__lt=timezone.localdate())
+        )
+
 
 def get_diffusion_zone_details_display(
     diffusion_zone_type: AdminDivisionType,

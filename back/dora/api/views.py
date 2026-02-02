@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db.models import Exists, OuterRef
-from django.utils import timezone
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.versioning import NamespaceVersioning
@@ -80,10 +79,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return (
-            Service.objects.published()
-            .exclude(structure__is_obsolete=True)
-            .exclude(structure__in=Structure.objects.orphans())
-            .exclude(suspension_date__lt=timezone.localdate())
+            Service.objects.filter_for_DI()
             .select_related("structure", "fee_condition", "source")
             .prefetch_related(
                 "subcategories",

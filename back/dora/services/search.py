@@ -17,7 +17,6 @@ from dora import data_inclusion
 from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import City
 from dora.services.models import ServiceSubCategory
-from dora.structures.models import Structure
 
 from .models import FundingLabel
 from .serializers import FundingLabelSerializer, SearchResultSerializer
@@ -315,7 +314,7 @@ def _get_dora_results(
     lon: Optional[float] = None,
 ):
     services = (
-        models.Service.objects.published()
+        models.Service.objects.filter_for_DI()
         .select_related(
             "structure",
         )
@@ -330,9 +329,6 @@ def _get_dora_results(
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
-        .exclude(structure__is_obsolete=True)
-        .exclude(structure__in=Structure.objects.orphans())
-        .exclude(suspension_date__lt=timezone.localdate())
     )
 
     if kinds:
@@ -437,7 +433,7 @@ def _get_unified_results(
 
     dora_services_by_id = {
         str(service.id): service
-        for service in models.Service.objects.published()
+        for service in models.Service.objects.filter_for_DI()
         .select_related(
             "structure",
         )
@@ -453,9 +449,6 @@ def _get_unified_results(
             "beneficiaries_access_modes",
         )
         .filter(id__in=dora_ids)
-        .exclude(structure__is_obsolete=True)
-        .exclude(structure__in=Structure.objects.orphans())
-        .exclude(suspension_date__lt=timezone.localdate())
         .distinct()
     }
 
