@@ -284,6 +284,7 @@
         type="submit"
         label="Enregistrer en brouillon"
         secondary
+        disabled={requesting}
         loading={requesting && requestKind === "draft"}
       />
 
@@ -291,6 +292,7 @@
         id="publish"
         type="submit"
         label="Publier"
+        disabled={requesting}
         loading={requesting && requestKind === "publish"}
       />
     </StickyFormSubmissionRow>
