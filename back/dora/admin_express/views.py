@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from rest_framework_gis.fields import GeometrySerializerMethodField
 
 from dora.core.constants import WGS84
+from dora.decoupage_administratif.models import AdminDivisionType
 
-from .models import EPCI, AdminDivisionType, City, Department, Region
+from .models import EPCI, City, Department, Region
 
 
 class DeptSerializer(serializers.Serializer):

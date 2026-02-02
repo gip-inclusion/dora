@@ -12,12 +12,12 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
     AccessCondition,
-    AdminDivisionType,
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
@@ -851,6 +851,7 @@ class SearchResultSerializer(ServiceListSerializer):
     distance = serializers.SerializerMethodField()
     coordinates = serializers.SerializerMethodField()
     di_publics = serializers.SerializerMethodField()
+    location_kinds = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -880,7 +881,10 @@ class SearchResultSerializer(ServiceListSerializer):
         ]
 
     def get_distance(self, obj):
-        return obj.distance.km if obj.distance is not None else None
+        if obj.distance is None:
+            return None
+        # La distance peut être un objet Distance (GeoDjango) ou un nombre (DI)
+        return obj.distance.km if hasattr(obj.distance, "km") else obj.distance
 
     def get_coordinates(self, obj):
         if obj.geom:
@@ -891,6 +895,22 @@ class SearchResultSerializer(ServiceListSerializer):
         for public in obj.publics.all():
             di_publics.update(public.corresponding_di_publics)
         return list(di_publics)
+
+    def get_location_kinds(self, obj):
+        """
+        On enlève le lieu d'accueil en présentiel si le service est à distance et que la distance
+        est nulle pour que le frontend le considère comme un service purement à distance.
+        """
+        location_kind_values = [lk.value for lk in obj.location_kinds.all()]
+        if (
+            obj.distance is None
+            and "a-distance" in location_kind_values
+            and "en-presentiel" in location_kind_values
+        ):
+            location_kind_values = [
+                v for v in location_kind_values if v != "en-presentiel"
+            ]
+        return location_kind_values
 
 
 class FundingLabelSerializer(serializers.ModelSerializer):

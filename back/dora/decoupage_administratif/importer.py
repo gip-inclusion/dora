@@ -3,9 +3,9 @@ import logging
 from django.contrib.gis.geos import Point
 from django.db import transaction
 
-from dora.admin_express.utils import normalize_string_for_search
 from dora.core.constants import WGS84
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.utils import normalize_string_for_search
 
 from .api_client import DecoupageAdministratifAPIClient
 from .models import EPCI, City, Department, Region

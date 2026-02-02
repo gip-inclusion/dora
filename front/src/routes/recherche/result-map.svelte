@@ -74,20 +74,11 @@
         center: [parseFloat(data.lon!), parseFloat(data.lat!)],
         zoom: 15,
       });
-    } else {
-      // Sauvegarde des limites par défaut (métropole)
-      const defaultBounds = map.getBounds();
-      // Affectation immédiate des limites de la ville
-      map.fitBounds(new mlgl.LngLatBounds(data.cityBounds), { animate: false });
-      // Sauvegarde des valeurs de centre et de zoom de la ville
-      const center = map.getCenter();
-      const zoom = map.getZoom();
-      // Réduction du zoom de 2 niveaux
-      const newZoom = zoom - 2;
-      // Affectation immédiate des limites par défaut (métropole)
-      map.fitBounds(defaultBounds, { animate: false });
-      // Déplacement animé vers le centre de la ville avec zoom réduit
-      map.flyTo({ center, zoom: newZoom });
+    } else if (data.searchCenter) {
+      map.flyTo({
+        center: [data.searchCenter[0], data.searchCenter[1]],
+        zoom: 10,
+      });
     }
   }
 

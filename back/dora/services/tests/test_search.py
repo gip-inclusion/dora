@@ -4,7 +4,6 @@ import pytest
 from model_bakery import baker
 from rest_framework import serializers
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.test_utils import (
     make_published_service,
     make_service,
@@ -12,8 +11,19 @@ from dora.core.test_utils import (
     make_user,
 )
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.views import _validate_search_categories_and_subcategories
+
+
+@pytest.fixture
+def city():
+    return baker.make(
+        "decoupage_administratif.City",
+        department="01",
+        epci="200000000",
+        region="11",
+    )
 
 
 @pytest.fixture
@@ -34,15 +44,12 @@ def structure_with_user():
     return make_structure(user=make_user())
 
 
-def test_search_services_with_obsolete_structure(api_client):
+def test_search_services_with_obsolete_structure(api_client, city):
     # les services rattachés à une structure obsolète
     # doivent être filtrés lors de la recherche
 
     # Service publié avec structure non obsolète
     service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
-
-    # le paramètre `city` est nécessaire a minima
-    city = baker.make("admin_express.City")
 
     fake_di_client = FakeDataInclusionClient()
 
@@ -76,13 +83,10 @@ def test_search_services_with_obsolete_structure(api_client):
 
 
 def test_search_services_with_orphan_structure(
-    api_client, orphan_service, structure_with_user
+    api_client, orphan_service, structure_with_user, city
 ):
     # les services rattachés à une structure orpheline
     # doivent être filtrés lors de la recherche
-
-    # le paramètre `city` est nécessaire a minima
-    city = baker.make("admin_express.City")
 
     fake_di_client = FakeDataInclusionClient()
 
@@ -115,11 +119,8 @@ def test_search_services_with_orphan_structure(
     assert found["slug"] == orphan_service.slug
 
 
-def test_search_services_includes_thematiques_empty_list(api_client):
+def test_search_services_includes_thematiques_empty_list(api_client, city):
     # Un service service DI ayant le champ thematiques avec une liste vide doit être retourné
-
-    # le paramètre `city` est nécessaire a minima
-    city = baker.make("admin_express.City")
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
@@ -135,11 +136,8 @@ def test_search_services_includes_thematiques_empty_list(api_client):
         assert len(response.data["services"]) == 1, "un service devrait être retourné"
 
 
-def test_search_services_includes_thematiques_null(api_client):
+def test_search_services_includes_thematiques_null(api_client, city):
     # Un service service DI ayant le champ thematiques à null doit être retourné
-
-    # le paramètre `city` est nécessaire a minima
-    city = baker.make("admin_express.City")
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
@@ -213,9 +211,8 @@ class TestValidateSearchCategoriesAndSubcategories:
         assert "Sous-catégories invalides" in str(exc_info.value)
 
 
-def test_search_endpoint_rejects_invalid_categories(api_client):
+def test_search_endpoint_rejects_invalid_categories(api_client, city):
     """Teste que le endpoint de recherche rejette les catégories invalides."""
-    city = baker.make("admin_express.City")
     baker.make("ServiceCategory", value="cat1", label="Catégorie 1")
 
     fake_di_client = FakeDataInclusionClient()
@@ -232,9 +229,8 @@ def test_search_endpoint_rejects_invalid_categories(api_client):
     assert "Catégories invalides" in str(response.data[0]["message"])
 
 
-def test_search_endpoint_rejects_invalid_subcategories(api_client):
+def test_search_endpoint_rejects_invalid_subcategories(api_client, city):
     """Teste que le endpoint de recherche rejette les sous-catégories invalides."""
-    city = baker.make("admin_express.City")
     baker.make("ServiceSubCategory", value="cat1--sub1", label="Sous-catégorie 1")
 
     fake_di_client = FakeDataInclusionClient()

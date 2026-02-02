@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.utils.text import Truncator
 from furl import furl
 
-from dora.admin_express.models import AdminDivisionType, City
 from dora.core import utils
 from dora.core.commands import BaseCommand
 from dora.core.constants import WGS84
@@ -15,6 +14,7 @@ from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.utils import code_insee_to_code_dept
 from dora.data_inclusion.mappings import DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING
+from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     BeneficiaryAccessMode,

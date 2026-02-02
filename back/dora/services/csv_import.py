@@ -8,9 +8,9 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType, City
-from dora.admin_express.utils import arrdt_to_main_insee_code
 from dora.core.utils import get_geo_data, skip_csv_lines
+from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,

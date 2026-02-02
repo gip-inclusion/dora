@@ -9,9 +9,9 @@ from django.contrib.gis.utils import LayerMapping
 from django.db.models import F, Func, Value
 
 from dora.admin_express.models import EPCI, City, Department, Region
-from dora.admin_express.utils import normalize_string_for_search
 from dora.core.commands import BaseCommand
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.utils import normalize_string_for_search
 
 EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 

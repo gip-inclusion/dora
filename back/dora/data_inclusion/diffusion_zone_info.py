@@ -1,7 +1,12 @@
 import re
 
-from dora.admin_express.models import AdminDivisionType
-from dora.decoupage_administratif.models import EPCI, City, Department, Region
+from dora.decoupage_administratif.models import (
+    EPCI,
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
 
 FRANCE_INSEE_CODE = "99100"
 

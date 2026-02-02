@@ -6,6 +6,50 @@ from django.db import models
 from dora.core.constants import WGS84
 
 
+class AdminDivisionType(models.TextChoices):
+    CITY = ("city", "Commune")
+    EPCI = ("epci", "Intercommunalité (EPCI)")
+    DEPARTMENT = ("department", "Département")
+    REGION = ("region", "Région")
+    COUNTRY = ("country", "France entière")
+
+
+sentinel = object()
+
+
+class GeoManager(models.Manager):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._cache = {}
+
+
+# Cache progressif pour les tables comportant de nombreuses entités
+class ManyGeoManager(GeoManager):
+    def get_from_code(self, code):
+        value = self._cache.get(code, sentinel)
+        if value is not sentinel:
+            return value
+
+        try:
+            value = self.get(code=code)
+        except self.model.DoesNotExist:
+            value = None
+        self._cache[code] = value
+        return value
+
+
+# Cache instantané pour les tables comportant peu d'entités
+# on fait la requête une fois pour toute
+class FewGeoManager(GeoManager):
+    def get_from_code(self, code):
+        if len(self._cache):
+            return self._cache.get(code)
+
+        values = self.all()
+        self._cache = {value.code: value for value in values}
+        return self._cache.get(code)
+
+
 class AdminDivision(models.Model):
     """Classe abstraite pour les divisions administratives sans géométrie."""
 
@@ -17,6 +61,10 @@ class AdminDivision(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} ({self.code})"
+
+
+class CityManager(ManyGeoManager):
+    pass
 
 
 class City(AdminDivision):
@@ -31,6 +79,7 @@ class City(AdminDivision):
     )
     population = models.IntegerField(default=0)
     center = gis_models.PointField(srid=WGS84, geography=True)
+    objects = CityManager()
 
     class Meta:
         verbose_name = "commune"
@@ -44,9 +93,14 @@ class City(AdminDivision):
         ]
 
 
+class DepartmentManager(FewGeoManager):
+    pass
+
+
 class Department(AdminDivision):
     code = models.CharField(max_length=3, primary_key=True)
     region = models.CharField(max_length=3, db_index=True)
+    objects = DepartmentManager()
 
     class Meta:
         verbose_name = "département"
@@ -58,6 +112,10 @@ class Department(AdminDivision):
                 opclasses=("gin_trgm_ops",),
             )
         ]
+
+
+class EPCIManager(ManyGeoManager):
+    pass
 
 
 class EPCI(AdminDivision):
@@ -72,6 +130,7 @@ class EPCI(AdminDivision):
         blank=True,
         default=list,
     )
+    objects = EPCIManager()
 
     class Meta:
         verbose_name = "EPCI"
@@ -85,8 +144,13 @@ class EPCI(AdminDivision):
         ]
 
 
+class RegionManager(FewGeoManager):
+    pass
+
+
 class Region(AdminDivision):
     code = models.CharField(max_length=3, primary_key=True)
+    objects = RegionManager()
 
     class Meta:
         verbose_name = "région"

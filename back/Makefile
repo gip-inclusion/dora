@@ -55,6 +55,7 @@ quality: $(VIRTUAL_ENV)
 .PHONY: populate_db runserver
 
 populate_db: $(VIRTUAL_ENV)
+	python manage.py import_decoupage_administratif
 	python manage.py import_admin_express
 	python manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
 

@@ -2,15 +2,22 @@ from datetime import timedelta
 from io import StringIO
 from unittest import mock
 
+from django.contrib.gis.geos import Point
 from django.core import mail
 from django.core.management import call_command
 from django.utils import timezone
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
-from dora.admin_express.models import AdminDivisionType, City, Department
+from dora.core.constants import WGS84
 from dora.core.test_utils import make_service
 from dora.data_inclusion.test_utils import FakeDataInclusionClient
+from dora.decoupage_administratif.models import (
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
 from dora.services.enums import ServiceStatus
 from dora.services.management.commands.send_saved_searches_notifications import (
     get_saved_search_notifications_to_send,
@@ -177,8 +184,22 @@ class ServiceSavedSearchTestCase(APITestCase):
 
 class ServiceSavedSearchNotificationTestCase(APITestCase):
     def setUp(self):
-        baker.make(Department, code="58", name="Nièvre")
-        baker.make(City, code="58211", name="Poil")
+        region = baker.make(Region, code="027", name="Bourgogne-Franche-Comté")
+        baker.make(
+            Department,
+            code="58",
+            name="Nièvre",
+            region=region.code,
+        )
+        baker.make(
+            City,
+            code="58211",
+            name="Poil",
+            department="58",
+            region=region.code,
+            epci="200000000",
+            center=Point(3.0, 47.0, srid=WGS84),
+        )
         self.service_name = "serviceName"
 
         self.di_client = FakeDataInclusionClient()

@@ -2,8 +2,8 @@
 
 from django.db import migrations
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.models import AdminDivisionType
 
 
 def set_default_diffusion_zone(apps, schema_editor):

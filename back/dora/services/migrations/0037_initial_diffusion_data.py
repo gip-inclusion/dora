@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-from dora.admin_express.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType
 
 
 def set_default_diffusion_zone(apps, schema_editor):
