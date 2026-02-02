@@ -369,9 +369,9 @@ furl==2.1.4 \
     --hash=sha256:877657501266c929269739fb5f5980534a41abd6bbabcb367c136d1d3b2a6015 \
     --hash=sha256:da34d0b34e53ffe2d2e6851a7085a05d96922b5b578620a37377ff1dbeeb11c8
     # via -r requirements/./base.in
-gunicorn==24.1.1 \
-    --hash=sha256:757f6b621fc4f7581a90600b2cd9df593461f06a41d7259cb9b94499dc4095a8 \
-    --hash=sha256:f006d110e5cb3102859b4f5cd48335dbd9cc28d0d27cd24ddbdafa6c60929408
+gunicorn==25.0.0 \
+    --hash=sha256:4b1ab820ffc316352da7146005a9e66044a131434b17a7d2a9fb0604f1268864 \
+    --hash=sha256:b9b88f0ebc5a0fcd1e9e29a1f045f56f5402c6423ee3e3f675f679d0db5345d1
     # via -r requirements/prod.in
 hiredis==3.3.0 \
     --hash=sha256:00fb04eac208cd575d14f246e74a468561081ce235937ab17d77cde73aefc66c \
@@ -838,10 +838,6 @@ sentry-sdk==2.50.0 \
     --hash=sha256:0ef0ed7168657ceb5a0be081f4102d92042a125462d1d1a29277992e344e749e \
     --hash=sha256:873437a989ee1b8b25579847bae8384515bf18cfed231b06c591b735c1781fe3
     # via -r requirements/./base.in
-setuptools==80.10.2 \
-    --hash=sha256:8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70 \
-    --hash=sha256:95b30ddfb717250edb492926c92b5221f7ef3fbcc2b07579bcd4a27da21d0173
-    # via yachalk
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
     # via -r requirements/./base.in
