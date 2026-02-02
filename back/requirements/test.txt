@@ -1243,7 +1243,9 @@ sentry-sdk==2.50.0 \
 setuptools==80.10.2 \
     --hash=sha256:8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70 \
     --hash=sha256:95b30ddfb717250edb492926c92b5221f7ef3fbcc2b07579bcd4a27da21d0173
-    # via yachalk
+    # via
+    #   -r requirements/./base.in
+    #   yachalk
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
     # via -r requirements/./base.in
