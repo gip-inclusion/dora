@@ -127,7 +127,8 @@
       <Button
         type="submit"
         label="Envoyer l’invitation"
-        disabled={!email || !level || requesting}
+        disabled={!email || !level}
+        loading={requesting}
         preventDefaultOnMouseDown
       />
     </div>

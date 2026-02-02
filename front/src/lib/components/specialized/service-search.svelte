@@ -64,6 +64,7 @@
   let innerWidth = $state();
   let submitDisabled = $state(!initialSearch);
   let refreshMode = $state(false);
+  let isLoading = $state(false);
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = $state([]);
 
@@ -140,11 +141,13 @@
     }
   }
 
-  function handleSearch(event: Event) {
+  async function handleSearch(event: Event) {
     event.preventDefault();
+    isLoading = true;
     submitDisabled = true;
     refreshMode = false;
-    goto(`/recherche?${query}`, { noScroll: true });
+    await goto(`/recherche?${query}`, { noScroll: true });
+    isLoading = false;
   }
 
   function loadSubCategories() {
@@ -282,6 +285,7 @@
               ? "Modifiez un des critères avant d’actualiser la recherche"
               : undefined}
             disabled={!cityCode || submitDisabled}
+            loading={isLoading}
           />
         </div>
       </div>

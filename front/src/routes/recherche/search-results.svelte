@@ -46,6 +46,7 @@
   }: Props = $props();
 
   let creatingAlert = $state(false);
+  let isLoading = $state(false);
 
   let currentSearchWasAlreadySaved = $derived.by(() => {
     // Saved searches don't store the street address neither lat/lon
@@ -89,6 +90,7 @@
 
   async function handleCreateAlertClick() {
     creatingAlert = true;
+    isLoading = true;
     await saveSearch({
       category: data.categoryIds[0],
       subcategories: data.subCategoryIds.filter(
@@ -103,6 +105,7 @@
     });
     await refreshUserInfo();
     creatingAlert = false;
+    isLoading = false;
   }
 </script>
 
@@ -150,6 +153,7 @@
         label="Créer une alerte"
         disabled={!data.cityCode || creatingAlert}
         onclick={handleCreateAlertClick}
+        loading={isLoading}
       />
     {/if}
   </div>
