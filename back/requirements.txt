@@ -1,1 +1,1 @@
--r requirements/prod.in
+requirements/prod.txt
