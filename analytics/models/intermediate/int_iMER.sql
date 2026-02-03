@@ -23,7 +23,7 @@ SELECT
     struct_members.structure_department,
     m.event_is_di                                                                         AS is_di_service,
     COALESCE(m.user_main_activity IN ('accompagnateur', 'accompagnateur_offreur'), FALSE) AS is_prescriber,
-    m.generates_orientation
+    o_m.generates_orientation
 FROM {{ ref('int_mobilisationevent_user') }} AS m
 LEFT JOIN
     {{ ref('int_structure_members') }} AS struct_members
