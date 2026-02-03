@@ -25,3 +25,8 @@ models:
     marts: 
       +schema: marts
       +materialized: table
+
+seeds:
+  dora:
+    les_emplois:
+      +schema: les_emplois
