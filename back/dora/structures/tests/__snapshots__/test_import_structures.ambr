@@ -1,0 +1,28 @@
+# serializer version: 1
+# name: test_management_command[False][logs]
+  list([
+    '🧘 DRY RUN 🧘',
+    '2. Import de la structure Foo (SIRET:12345678901234)',
+  ])
+# ---
+# name: test_management_command[False][output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---
+# name: test_management_command[True][logs]
+  list([
+    '⚠️ PRODUCTION RUN ⚠️',
+    '2. Import de la structure Foo (SIRET:12345678901234)',
+    'Création de la structure  My Establishment (Parent) (http://localhost:3000/structures/my-establishment-par)',
+    'http://localhost:3000/structures/my-establishment-par',
+    'foo@buzz.com invité·e comme administrateur·rice',
+  ])
+# ---
+# name: test_management_command[True][output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---

@@ -12,12 +12,12 @@ WITH structures_counts AS (
 structures_act AS (
     SELECT
         sc.structure_department,
-        MAX(si."Num Dea Brsa")                                                                                             AS num_dea_brsa,
-        COUNT(DISTINCT sc.structure_id) FILTER (WHERE sc.nb_services_publies >= 1)                                         AS structures_actives,
-        (COUNT(DISTINCT sc.structure_id) FILTER (WHERE sc.nb_services_publies >= 1))/(SQRT(MAX(si."Num Dea Brsa") / 1000)) AS maturite
+        MAX(si."Num Dea Brsa")                                                                                               AS num_dea_brsa,
+        COUNT(DISTINCT sc.structure_id) FILTER (WHERE sc.nb_services_publies >= 1)                                           AS structures_actives,
+        (COUNT(DISTINCT sc.structure_id) FILTER (WHERE sc.nb_services_publies >= 1)) / (SQRT(MAX(si."Num Dea Brsa") / 1000)) AS maturite
     FROM structures_counts AS sc
     LEFT JOIN {{ ref('stats_insertion') }} AS si
-        ON si."Code Dept" = sc.structure_department
+        ON sc.structure_department = si."Code Dept"
     GROUP BY sc.structure_department
 ),
 
@@ -47,11 +47,11 @@ SELECT
 FROM
     structures_counts AS sc
 LEFT JOIN structures_acc AS sacc
-    ON sacc.structure_department = sc.structure_department
+    ON sc.structure_department = sacc.structure_department
 LEFT JOIN structures_act AS sact
-    ON sact.structure_department = sc.structure_department
+    ON sc.structure_department = sact.structure_department
 LEFT JOIN {{ ref('int_service_structure') }} AS serv
-    ON serv.structure_id = sc.structure_id
+    ON sc.structure_id = serv.structure_id
 GROUP BY
     sc.structure_department
 ORDER BY

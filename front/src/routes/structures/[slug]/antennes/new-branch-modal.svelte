@@ -1,5 +1,6 @@
 <script lang="ts">
   import Modal from "$lib/components/hoc/modal.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     isOpen?: boolean;
@@ -14,11 +15,11 @@
       Pour demander la création d’une ou plusieurs antennes, il suffit
       simplement de nous en faire la demande via notre chatbot (bouton “Discuter
       avec nous” en bas de la page <a
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
+        href={URL_HELP_SITE}
         class="text-magenta-cta underline"
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener">https://aide.dora.inclusion.beta.gouv.fr/fr/</a
+        rel="noopener">{URL_HELP_SITE}</a
       >).
     </p>
 

@@ -1,8 +1,10 @@
 from datetime import timedelta
 from operator import itemgetter
+from typing import Optional
 from urllib.parse import unquote
 
 import requests
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
@@ -25,17 +27,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 import dora.data_inclusion as data_inclusion
-from dora.admin_express.models import City
-from dora.admin_express.utils import arrdt_to_main_insee_code
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
+from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.emails import send_service_feedback_email, send_service_sharing_email
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     AccessCondition,
-    AdminDivisionType,
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
@@ -743,6 +744,11 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
+        "di_publics": [
+            {"value": p.value, "label": p.label}
+            for p in DiPublic
+            if p.value != DiPublic.TOUS_PUBLICS.value
+        ],
         "requirements": RequirementSerializer(
             filter_custom_choices(
                 Requirement.objects.select_related("structure").all()
@@ -782,8 +788,7 @@ def service_di(request, di_id: str):
 
     The output format matches the ServiceSerializer.
     """
-    di_id = unquote(di_id)
-    source_di, di_service_id = di_id.split("--")
+    di_service_id = unquote(di_id)
 
     user_agent = request.META.get("HTTP_USER_AGENT")
     user_hash = request.META.get("HTTP_ANONYMOUS_USER_HASH")
@@ -792,7 +797,6 @@ def service_di(request, di_id: str):
 
     try:
         raw_service = di_client.retrieve_service(
-            source=source_di,
             id=di_service_id,
             user_agent=user_agent,
             user_hash=user_hash,
@@ -814,12 +818,10 @@ def share_di_service(
     request,
     di_id: str,
 ):
-    source_di, di_service_id = di_id.split("--")
-
     di_client = data_inclusion.di_client_factory()
 
     try:
-        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+        raw_service = di_client.retrieve_service(id=di_id)
     except requests.ConnectionError:
         return Response(status=status.HTTP_502_BAD_GATEWAY)
 
@@ -841,10 +843,9 @@ def post_di_service_feedback(request, di_id: str):
     d = serializer.validated_data
 
     # Récupération et sérialisation du service DI
-    source_di, di_service_id = di_id.split("--")
     di_client = data_inclusion.di_client_factory()
     try:
-        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+        raw_service = di_client.retrieve_service(id=di_id)
     except requests.ConnectionError:
         return Response(status=status.HTTP_502_BAD_GATEWAY)
     if raw_service is None:
@@ -867,6 +868,47 @@ def post_di_service_feedback(request, di_id: str):
     )
 
     return Response(status=201)
+
+
+def _validate_search_categories_and_subcategories(
+    categories_list: Optional[list[str]], subcategories_list: Optional[list[str]]
+) -> None:
+    """Valide que les catégories et sous-catégories fournies existent et ne sont pas obsolètes.
+
+    Raises:
+        serializers.ValidationError: Si des catégories ou sous-catégories sont invalides
+    """
+    invalid_categories = []
+    invalid_subcategories = []
+
+    if categories_list:
+        valid_categories = set(ServiceCategory.objects.values_list("value", flat=True))
+        invalid_categories = [
+            cat for cat in categories_list if cat not in valid_categories
+        ]
+
+    if subcategories_list:
+        valid_subcategories = set(
+            ServiceSubCategory.objects.values_list("value", flat=True)
+        )
+        invalid_subcategories = [
+            subcat for subcat in subcategories_list if subcat not in valid_subcategories
+        ]
+
+    if invalid_categories or invalid_subcategories:
+        error_parts = []
+        if invalid_categories:
+            error_parts.append(
+                f"Catégories invalides : {', '.join(invalid_categories)}"
+            )
+        if invalid_subcategories:
+            error_parts.append(
+                f"Sous-catégories invalides : {', '.join(invalid_subcategories)}"
+            )
+        raise serializers.ValidationError(
+            " ; ".join(error_parts),
+            code="invalid_categories_or_subcategories",
+        )
 
 
 @api_view()
@@ -892,6 +934,9 @@ def search(request):
     funding_labels_list = funding.split(",") if funding is not None else None
     lat = float(lat) if lat else None
     lon = float(lon) if lon else None
+
+    _validate_search_categories_and_subcategories(categories_list, subcategories_list)
+
     from .search import search_services
 
     city_code = arrdt_to_main_insee_code(city_code)
@@ -915,9 +960,20 @@ def search(request):
         unified_search_enabled=unified_search_enabled,
     )
 
+    from .search import MAX_DISTANCE
+
+    # Le centre de recherche est soit les coordonnées fournies, soit le centre de la ville
+    if lat and lon:
+        search_center = [lon, lat]
+    elif city.center:
+        search_center = [city.center.x, city.center.y]
+    else:
+        search_center = None
+
     return Response(
         {
-            "city_bounds": city.geom.extent,
+            "search_center": search_center,
+            "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
         }

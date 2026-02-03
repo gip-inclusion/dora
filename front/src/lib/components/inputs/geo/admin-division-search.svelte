@@ -19,7 +19,6 @@
     readonly?: boolean;
     choices?: any;
     searchType: AdminDivisionType;
-    withGeom?: boolean;
   }
 
   let {
@@ -32,13 +31,12 @@
     readonly = false,
     choices = $bindable([]),
     searchType,
-    withGeom = false,
   }: Props = $props();
 
   async function searchAdminDivision(query) {
-    const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(
-      query
-    )}&${withGeom ? "with_geom=1" : ""}`;
+    const url = new URL("/admin-division-search/", getApiURL());
+    url.searchParams.set("type", searchType);
+    url.searchParams.set("q", query);
     const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.map((result) => {

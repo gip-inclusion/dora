@@ -14,8 +14,7 @@
   import * as v from "$lib/validation/schema-utils";
   import { structureSchema } from "$lib/validation/schemas/structure";
   import { formErrors } from "$lib/validation/validation";
-  import { token } from "$lib/utils/auth";
-  import { get } from "svelte/store";
+  import { getToken } from "$lib/utils/auth";
   import type { Establishment, Structure } from "$lib/types";
 
   const schema = {
@@ -66,7 +65,7 @@
         Accept: "application/json; version=1.0",
         "Content-Type": "application/json",
 
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         siret: validatedData.siret,
@@ -206,7 +205,7 @@
               name="validate"
               type="submit"
               label="Envoyer l’invitation"
-              disabled={requesting}
+              loading={requesting}
             />
           </div>
         </Form>

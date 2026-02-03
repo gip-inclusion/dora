@@ -29,6 +29,7 @@
     display?: "horizontal" | "vertical";
     style?: "common" | "filter" | "search";
     onChange?: (event: { detail: string; value: string | string[] }) => void;
+    disabled?: boolean;
   }
 
   let {
@@ -48,6 +49,7 @@
     display = "horizontal",
     style = "common",
     onChange,
+    disabled = false,
   }: Props = $props();
 
   const originalChoices: Choice[] = [...choices];
@@ -212,9 +214,11 @@
     class:filter-search={style === "search"}
     class:expanded
     class:has-value={isMultiple ? value.length : value}
+    class:disabled
     role="combobox"
-    tabindex="0"
+    tabindex={disabled ? "-1" : "0"}
     aria-label={placeholder}
+    aria-disabled={disabled}
     onclick={() => toggleCombobox()}
     onkeydown={handleKeydown}
     {@attach clickOutside(() => toggleCombobox(false))}
@@ -244,6 +248,7 @@
             bind:value={filterText}
             aria-label={placeholder}
             {placeholder}
+            {disabled}
           />
         {:else}
           <span class="placeholder text-gray-text-alt">
@@ -254,7 +259,11 @@
 
       <div class="h-s24 w-s24 text-gray-text-alt">
         {#if (isMultiple ? value.length > 0 : !!value) && withClearButton}
-          <button class="h-s24 w-s24 fill-current" onclick={clearAll}>
+          <button
+            class="h-s24 w-s24 fill-current"
+            onclick={clearAll}
+            {disabled}
+          >
             <DeleteBack2FillSystem />
           </button>
         {:else}
@@ -303,6 +312,11 @@
     @apply relative;
   }
 
+  .combobox.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
   @media (width >= 64rem) {
     .vertical {
       width: 75%;
@@ -347,6 +361,18 @@
 
   .filter-search.has-value .chevron {
     @apply bg-magenta-10 text-magenta-cta;
+  }
+
+  .filter-search.disabled .chevron {
+    opacity: 0.3;
+  }
+
+  .filter-search.disabled .placeholder {
+    opacity: 0.6;
+  }
+
+  .filter-search.disabled .current-value {
+    opacity: 0.6;
   }
 
   /* As filter */

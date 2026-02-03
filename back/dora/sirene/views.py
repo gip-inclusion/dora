@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 
-from dora.admin_express.utils import main_insee_code_to_arrdts
+from dora.decoupage_administratif.utils import main_insee_code_to_arrdts
 from dora.structures.models import Structure
 
 from .models import Establishment

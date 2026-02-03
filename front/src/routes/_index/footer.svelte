@@ -5,6 +5,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
+  import { showCookieBanner } from "$lib/utils/consent.svelte";
 </script>
 
 <hr class="border-t-gray-01 print:hidden" />
@@ -15,8 +16,7 @@
   >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>
-      Une fois par mois, recevez un courriel pour être informé des évolutions de
-      DORA.
+      Une fois par mois, recevez un courriel pour être informé des évolutions de DORA.
     </div>
 
     <LinkButton
@@ -77,6 +77,7 @@
         label="Données personnelles"
         href="/politique-de-confidentialite"
       />
+      <NavItem label="Gestion des cookies" onclick={showCookieBanner} />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
       <NavItem label="Statistiques" href="/stats" />

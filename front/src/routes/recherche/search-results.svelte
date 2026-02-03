@@ -1,3 +1,7 @@
+<script module lang="ts">
+  export const SEARCH_RESULTS_PAGE_LENGTH = 10;
+</script>
+
 <script lang="ts">
   import { tick } from "svelte";
 
@@ -26,6 +30,7 @@
     summarized?: boolean;
     noPagination?: boolean;
     showDeploymentNotice?: boolean;
+    currentPageLength?: number;
   }
 
   let {
@@ -37,12 +42,11 @@
     summarized = false,
     noPagination = false,
     showDeploymentNotice = false,
+    currentPageLength = $bindable(SEARCH_RESULTS_PAGE_LENGTH),
   }: Props = $props();
 
-  const PAGE_LENGTH = 10;
-
-  let currentPageLength = $state(PAGE_LENGTH);
   let creatingAlert = $state(false);
+  let isLoading = $state(false);
 
   let currentSearchWasAlreadySaved = $derived.by(() => {
     // Saved searches don't store the street address neither lat/lon
@@ -74,7 +78,7 @@
 
   async function loadMoreResult() {
     const oldPageLength = currentPageLength;
-    currentPageLength += PAGE_LENGTH;
+    currentPageLength += SEARCH_RESULTS_PAGE_LENGTH;
     await tick();
 
     // A11y : focus on the first new result
@@ -86,6 +90,7 @@
 
   async function handleCreateAlertClick() {
     creatingAlert = true;
+    isLoading = true;
     await saveSearch({
       category: data.categoryIds[0],
       subcategories: data.subCategoryIds.filter(
@@ -100,6 +105,7 @@
     });
     await refreshUserInfo();
     creatingAlert = false;
+    isLoading = false;
   }
 </script>
 
@@ -147,6 +153,7 @@
         label="Créer une alerte"
         disabled={!data.cityCode || creatingAlert}
         onclick={handleCreateAlertClick}
+        loading={isLoading}
       />
     {/if}
   </div>

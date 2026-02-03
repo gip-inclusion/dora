@@ -5,9 +5,8 @@ import type {
   Structure,
 } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
-import { token } from "$lib/utils/auth";
+import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
-import { get } from "svelte/store";
 
 export async function getStructuresAdmin(
   departmentCode
@@ -52,7 +51,7 @@ export async function setModerationState(entity, status: ModerationStatus) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ moderationStatus: status }),
   });

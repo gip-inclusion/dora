@@ -207,7 +207,7 @@ def send_service_notification(service_editor):
         "cta_draft_services_link": cta_draft_services_link,
         "cta_services_to_update_link": cta_services_to_update_link,
         # liens d'aide
-        "help_update_services_url": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/actualiser-ses-services-1u0a101/",
+        "help_update_services_url": "https://aide.dora.inclusion.gouv.fr/fr/article/actualiser-ses-services-1u0a101/",
     }
 
     send_mail(

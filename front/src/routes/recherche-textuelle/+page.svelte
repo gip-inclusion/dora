@@ -3,10 +3,11 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import { GOOGLE_CSE_ID } from "$lib/env";
   import Notice from "$lib/components/display/notice.svelte";
+  import { consent, showCookieBanner } from "$lib/utils/consent.svelte";
 </script>
 
 <svelte:head>
-  {#if GOOGLE_CSE_ID}
+  {#if GOOGLE_CSE_ID && consent.consentChoices.googleCSE}
     <!-- Google Custom Search Engine -->
     <script
       async
@@ -46,19 +47,18 @@
     </div>
 
     <Notice
-      title="Nous expérimentons la recherche par mot-clés pour tester son efficacité"
+      title="Vous ne voyez pas la barre de recherche ?"
       type="warning"
       showIcon={false}
     >
       <div>
-        Vous allez tester une version expérimentale de notre moteur de
-        recherche. Les résultats pourraient être moins précis ou moins nombreux
-        qu’une recherche par thématiques ou besoins. Vos retours seront précieux
-        pour l’améliorer. <a
-          class="text-magenta-cta underline"
-          href="https://tally.so/r/mYJ1qW"
-          target="_blank">Donnez votre avis</a
-        >
+        Nous utilisons Google Programmable Search Engine (CSE) pour la recherche
+        sur notre site. Afin de bénéficier de cette fonctionnalité, vous devez
+        accepter le cookie appelé <b>Fonctionnalité de recherche</b> dans le
+        <button
+          class="text-magenta-cta cursor-pointer underline"
+          onclick={showCookieBanner}>gestionnaire de cookies</button
+        >.
       </div>
     </Notice>
   </div>

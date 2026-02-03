@@ -5,14 +5,14 @@ from django.db import migrations
 from django.db.models import Q
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType
-from dora.admin_express.utils import arrdt_to_main_insee_code
+from dora.decoupage_administratif.models import AdminDivisionType
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 
 logger = logging.getLogger(__name__)
 
 
 def get_city_by_code(apps, city_code):
-    City = apps.get_model("admin_express", "City")
+    City = apps.get_model("decoupage_administratif", "City")
 
     insee_code = arrdt_to_main_insee_code(city_code)
 
@@ -156,7 +156,7 @@ def fix_all_services_with_incorrect_diffusion_zone_details(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0124_rename_concerned_public_service_publics"),
+        ("services", "0124_b_rename_publics_m2m_table_django6"),
     ]
 
     operations = [

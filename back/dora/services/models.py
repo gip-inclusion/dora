@@ -16,11 +16,20 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from dora.admin_express.models import EPCI, AdminDivisionType, City, Department, Region
-from dora.admin_express.utils import arrdt_to_main_insee_code, get_clean_city_name
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
+from dora.decoupage_administratif.models import (
+    EPCI,
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
+from dora.decoupage_administratif.utils import (
+    arrdt_to_main_insee_code,
+    get_clean_city_name,
+)
 from dora.structures.models import Structure
 
 from .enums import ServiceStatus
@@ -130,13 +139,26 @@ class Credential(CustomizableChoice):
         verbose_name_plural = "Justificatifs à fournir"
 
 
+class ExcludeObsoleteManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_obsolete=False)
+
+
 class ServiceCategory(EnumModel):
+    objects = ExcludeObsoleteManager()
+
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Catégorie principale"
         verbose_name_plural = "Catégories principales"
 
 
 class ServiceSubCategory(EnumModel):
+    objects = ExcludeObsoleteManager()
+
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Sous-catégorie"
 
@@ -253,6 +275,14 @@ class ServiceManager(models.Manager):
         return self.draft().filter(
             creation_date__lte=timezone.now()
             - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
+        )
+
+    def filter_for_DI(self):
+        return (
+            self.published()
+            .exclude(structure__is_obsolete=True)
+            .exclude(structure__in=Structure.objects.orphans())
+            .exclude(suspension_date__lt=timezone.localdate())
         )
 
 

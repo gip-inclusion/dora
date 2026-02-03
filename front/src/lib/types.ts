@@ -275,22 +275,13 @@ export type OsmOpeningHours = {
 
 export type ServiceKind =
   | "accompagnement"
-  | "accueil"
   | "aide-financiere"
   | "aide-materielle"
   | "atelier"
-  | "autonomie"
-  | "delegation"
-  | "financement"
   | "formation"
-  | "information"
-  | "numerique";
+  | "information";
 
-export type FeeCondition =
-  | "gratuit"
-  | "gratuit-sous-conditions"
-  | "payant"
-  | "adhesion";
+export type FeeCondition = "gratuit" | "payant";
 
 export type SavedSearchNotificationFrequency =
   | "NEVER"
@@ -364,6 +355,7 @@ export interface ServiceSearchResult {
   structure: string;
   status: ServiceStatus;
   updateNeeded: boolean;
+  diPublics: Array<string>;
   kinds: ServiceKind[] | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
@@ -580,6 +572,7 @@ export type ServicesOptions = {
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
 
   publics: CustomChoice[];
+  diPublics: { value: string; label: string }[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
   diffusionZoneType: { value: AdminDivisionType; label: string }; // TODO: should be plural
@@ -711,7 +704,7 @@ export interface Orientation {
     slug: string;
   };
   processingDate?: string;
-  status: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
+  status: "OUVERTE" | "VALIDÉE" | "REFUSÉE" | "EXPIRÉE";
   beneficiaryAttachmentsDetails?: {
     name: string;
     url: string;
@@ -728,4 +721,12 @@ export interface Orientation {
     name: string;
     email: string;
   };
+}
+
+export interface OrientationStats {
+  totalSent: number;
+  totalSentPending: number;
+  totalReceived: number;
+  totalReceivedPending: number;
+  structureHasServices: boolean;
 }

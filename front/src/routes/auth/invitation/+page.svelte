@@ -6,8 +6,7 @@
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
-  import { get } from "svelte/store";
+  import { getToken, validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
@@ -19,8 +18,11 @@
   let { data }: Props = $props();
   let cguAccepted = $state(false);
   let joinError = $state("");
+  let loading = $state(false);
 
   async function handleJoin() {
+    loading = true;
+
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
 
     const response = await fetch(targetUrl, {
@@ -28,7 +30,7 @@
       headers: {
         Accept: defaultAcceptHeader,
         "Content-Type": "application/json",
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         structureSlug: data.structure.slug,
@@ -45,11 +47,14 @@
       result.data = await response.json();
       await validateCredsAndFillUserInfo();
       await goto(`/structures/${result.data.slug}`);
+      loading = false;
     } else {
       try {
         joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
+      } finally {
+        loading = false;
       }
     }
     return result;
@@ -118,6 +123,7 @@
             onclick={handleJoin}
             preventDefaultOnMouseDown
             disabled={!cguAccepted}
+            {loading}
           />
         </div>
       </div>

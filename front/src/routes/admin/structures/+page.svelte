@@ -1,8 +1,4 @@
 <script lang="ts">
-  import dayjs from "dayjs";
-
-  import * as XLSX from "xlsx";
-
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
@@ -10,8 +6,10 @@
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import {
-    DI_METABASE_DASHBOARD_URL,
+    DI_METABASE_LIST_DASHBOARD_URL,
+    DI_METABASE_STATS_DASHBOARD_URL,
     METABASE_DASHBOARD_URL,
+    URL_HELP_SITE,
   } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
@@ -32,6 +30,8 @@
     toModerate,
   } from "./structures-filters";
   import type { StatusFilter } from "./types";
+  import { generateSpreadsheet } from "$lib/utils/spreadsheet";
+
   interface Props {
     data: PageData;
   }
@@ -135,16 +135,10 @@
       };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(sheetData);
-    worksheet["!cols"] = Array(18).fill({ wch: 20 });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet);
-    const date = dayjs().format("YYYY-MM-DD");
-    XLSX.writeFile(
-      workbook,
-      `structures-dora-${selectedDepartment.code}-${searchStatus}-${date}.xlsx`,
-      { compression: true }
-    );
+    generateSpreadsheet({
+      sheetData,
+      sheetName: `structures-dora-${selectedDepartment.code}-${searchStatus}`,
+    });
   }
 
   if (data.isManager && data.department) {
@@ -161,7 +155,6 @@
         searchType="department"
         onChange={handleDepartmentChange}
         placeholder="numéro ou nom"
-        withGeom
       />
     </div>
   </CenteredGrid>
@@ -202,12 +195,20 @@
               extraClass="mb-s12"
             />
             <a
-              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
+              href={DI_METABASE_STATS_DASHBOARD_URL(selectedDepartment.name)}
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 text-france-blue leading-32 underline"
             >
-              Cartographie des services référencés
+              Cartographie des structures et services référencés
+            </a>
+            <a
+              href={DI_METABASE_LIST_DASHBOARD_URL(selectedDepartment.name)}
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 text-france-blue leading-32 underline"
+            >
+              Liste des structures et services référencés
             </a>
             <a
               href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
@@ -266,7 +267,7 @@
                     Action(s)&#8239;: {filterActions}
                   {/if}
                   <a
-                    href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/"
+                    href={`${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`}
                     target="_blank"
                     class="text-magenta-cta underline"
                   >

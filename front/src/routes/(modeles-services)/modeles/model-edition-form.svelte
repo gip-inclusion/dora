@@ -197,6 +197,7 @@
             name="validate"
             type="button"
             label="Enregistrer"
+            loading={requesting}
           />
           <input
             bind:this={submitFormInput}
@@ -209,7 +210,7 @@
             name="validate"
             type="submit"
             label="Enregistrer"
-            disabled={requesting}
+            loading={requesting}
           />
         {/if}
       </div>

@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { get } from "svelte/store";
-
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import { getApiURL } from "$lib/utils/api";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { orientation } from "../store";
@@ -57,7 +55,7 @@
       headers: {
         Accept: "application/json; version=1.0",
         "Content-Type": "application/json",
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         ...validatedData,

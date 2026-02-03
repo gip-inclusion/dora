@@ -4,14 +4,14 @@ from io import StringIO
 import requests
 from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.utils import timezone
 from yachalk import chalk
 
-from dora.admin_express.utils import get_clean_city_name
+from dora.core.commands import BaseCommand
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.utils import normalize_phone_number
+from dora.decoupage_administratif.utils import get_clean_city_name
 from dora.structures.models import Structure, StructureNationalLabel, StructureSource
 from dora.users.models import User
 

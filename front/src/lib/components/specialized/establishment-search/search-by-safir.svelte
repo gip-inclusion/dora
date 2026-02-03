@@ -25,10 +25,11 @@
 
   let safirInput = $state(proposedSafir);
   let serverErrorMsg = $state("");
-
+  let isLoading = $state(false);
   let safirIsValid = $derived(!!safirInput?.match(safirRegexp));
 
   async function handleValidateSafir() {
+    isLoading = true;
     const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(
       safirInput
     )}`;
@@ -48,6 +49,7 @@
     }
 
     onEstablishmentChange(establishment);
+    isLoading = false;
   }
 
   function handleKeydown(event: KeyboardEvent) {
@@ -84,6 +86,7 @@
       <Button
         label="Rechercher"
         disabled={!safirIsValid}
+        loading={isLoading}
         onclick={handleValidateSafir}
         small
       />

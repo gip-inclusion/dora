@@ -2,7 +2,9 @@ import csv
 import io
 from urllib.parse import quote
 
+import pytest
 from django.core import mail
+from django.core.management import call_command
 from freezegun import freeze_time
 from model_bakery import baker
 from rest_framework.test import APITestCase
@@ -16,6 +18,38 @@ from dora.structures.models import (
     StructureSource,
 )
 from dora.users.models import User
+
+
+@pytest.mark.parametrize("wet_run", [True, False])
+def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
+    baker.make(
+        "Establishment",
+        siret="12345678901234",
+        name="My Establishment",
+        parent_name="Parent",
+    )
+    csv_file = tmp_path.joinpath("file_name.csv")
+    csv_file.write_text(
+        "\n".join(
+            [
+                "nom,siret,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure",
+                "Foo,12345678901234,,foo@buzz.com,,,,email@structure.com",
+            ]
+        )
+    )
+
+    assert not Structure.objects.filter(siret="12345678901234").exists()
+    command_args = [csv_file.as_posix()]
+    if wet_run:
+        command_args.append("--wet-run")
+    call_command("import_structures", *command_args)
+
+    assert Structure.objects.filter(siret="12345678901234").exists() is wet_run
+    assert caplog.messages[-1].startswith(
+        "Management command dora.structures.management.commands.import_structures succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
 class StructuresImportTestCase(APITestCase):
@@ -845,3 +879,19 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertEqual(len(result["errors_map"].keys()), 0)
         self.assertEqual(result["created_structures_count"], 1)
+
+    def test_handle_trailing_comma_in_column_with_multiple_elements(self):
+        structure = make_structure()
+        csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,"foo@buzz.com,",,,,'
+
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            self.source_info,
+            wet_run=True,
+            should_remove_first_two_lines=False,
+        )
+
+        self.assertEqual(len(result["errors_map"].keys()), 0)
+        self.assertTrue(User.objects.get(email="foo@buzz.com"))

@@ -6,9 +6,9 @@ from django.utils import timezone
 from django.utils.timezone import timedelta
 from model_bakery import baker
 
-from dora.admin_express.models import City, Department
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service, make_structure, make_user
+from dora.decoupage_administratif.models import City, Department
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -36,7 +36,7 @@ def setup_structure_data():
     baker.make("structures.StructureSource", value="solidagregateur")
     baker.make("structures.StructureNationalLabel", value="MOBIN")
     baker.make("structures.StructureNationalLabel", value="AFPA")
-    baker.make("City", name="Robinboeuf CEDEX", code="09890")
+    baker.make("decoupage_administratif.City", name="Robinboeuf CEDEX", code="09890")
 
 
 # API publique : structures
@@ -53,6 +53,103 @@ def test_structures_api_response(authenticated_user, api_client):
 
     assert 200, response.status_code
     assert [] == response.data
+
+
+def test_structure_with_published_service_is_included(authenticated_user, api_client):
+    """Structure avec au moins un service publié est incluse (même sans membre)"""
+    structure = make_structure(user=None)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_with_published_service_and_member_is_included(
+    authenticated_user, api_client
+):
+    """Structure avec service publié ET membre réel est incluse"""
+    user = make_user()
+    structure = make_structure(user=user)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_without_published_service_but_with_member_is_included(
+    authenticated_user, api_client
+):
+    """Structure sans service publié mais avec au moins un membre réel est incluse"""
+    user = make_user()
+    structure = make_structure(user=user)
+    # Pas de service publié, seulement un brouillon
+    make_service(structure=structure, status=ServiceStatus.DRAFT)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_without_published_service_and_without_member_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure sans service publié et sans membre réel est exclue"""
+    structure = make_structure(user=None)
+    # Pas de service publié, seulement un brouillon
+    make_service(structure=structure, status=ServiceStatus.DRAFT)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_structure_without_services_and_without_member_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure sans aucun service et sans membre réel est exclue"""
+    structure = make_structure(user=None)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_obsolete_structure_with_published_service_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure obsolète avec service publié est exclue"""
+    structure = make_structure(user=None, is_obsolete=True)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_obsolete_structure_with_member_is_excluded(authenticated_user, api_client):
+    """Structure obsolète avec membre réel est exclue"""
+    user = make_user()
+    structure = make_structure(user=user, is_obsolete=True)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
 
 
 # TODO: plus tard ...
@@ -98,12 +195,14 @@ def test_structures_serialization_exemple(
     )
     s1 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s1.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     s2 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s2.subcategories.add(
         ServiceSubCategory.objects.get(
-            value="equipement-et-alimentation--acces-a-du-materiel-informatique"
+            value="mobilite--entretenir-reparer-son-vehicule"
         )
     )
     struct.save()
@@ -176,8 +275,16 @@ def test_unpublished_service_is_not_serialized(authenticated_user, api_client):
 def test_service_serialization_exemple(authenticated_user, api_client, settings):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
-    baker.make(Department, code="29", name="Finistère")
-    baker.make(City, code="29188", name="Plougasnou")
+    baker.make(Department, code="29", name="Finistère", region="53")
+    baker.make(
+        City,
+        code="29188",
+        name="Plougasnou",
+        department="29",
+        epci="",
+        region="53",
+        center=Point(3.8, 48.7, srid=WGS84),
+    )
 
     user = make_user()
     structure = make_structure(user=user)
@@ -208,7 +315,9 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     )
 
     service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     service.kinds.add(
         ServiceKind.objects.get(value="formation"),
@@ -281,7 +390,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "source": None,
         "structure_id": str(structure.id),
         "telephone": "0278911262",
-        "thematiques": ["numerique--acceder-a-du-materiel"],
+        "thematiques": ["choisir-un-metier--confirmer-son-choix-de-metier"],
         "types": [
             "formation",
             "information",
@@ -364,8 +473,16 @@ def test_service_serialization_formulaire_en_ligne(
 
 
 def test_service_serialization_exemple_need_di_user(api_client):
-    baker.make(Department, code="29", name="Finistère")
-    baker.make(City, code="29188", name="Plougasnou")
+    baker.make(Department, code="29", name="Finistère", region="53")
+    baker.make(
+        City,
+        code="29188",
+        name="Plougasnou",
+        department="29",
+        epci="",
+        region="53",
+        center=Point(3.8, 48.7, srid=WGS84),
+    )
 
     structure = make_structure()
     service = make_service(
@@ -392,7 +509,9 @@ def test_service_serialization_exemple_need_di_user(api_client):
     )
 
     service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     service.kinds.add(
         ServiceKind.objects.get(value="formation"),
@@ -419,29 +538,6 @@ def test_service_serialization_exemple_need_di_user(api_client):
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert 401 == response.status_code
-
-
-def test_subcategories_other_excluded(authenticated_user, api_client):
-    # Example adapté de la doc data·inclusion :
-    # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
-    user = make_user()
-    structure = make_structure(user=user)
-    service = make_service(
-        structure=structure,
-        name="TISF",
-        short_desc="Accompagnement des familles à domicile",
-        fee_details="",
-        status=ServiceStatus.PUBLISHED,
-    )
-    service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
-    )
-    service.subcategories.add(ServiceSubCategory.objects.get(value="numerique--autre"))
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert 200 == response.status_code
-    assert response.json().get("thematiques") == ["numerique--acceder-a-du-materiel"]
 
 
 def test_service_from_obsolete_structure_is_excluded(authenticated_user, api_client):

@@ -37,8 +37,8 @@
   let showFeedbackModal = $derived(
     Boolean(
       browser &&
-        service &&
-        !isMemberOrPotentialMemberOfStructure($userInfo, service.structure)
+      service &&
+      !isMemberOrPotentialMemberOfStructure($userInfo, service.structure)
     )
   );
 

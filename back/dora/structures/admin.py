@@ -350,8 +350,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
         # Passage des demandes d'orientation en attente au statut Ouverte / En cours de traitement et envoi des e-mails
         for orientation in moderation_pending_orientations:
-            orientation.status = OrientationStatus.PENDING
-            orientation.save()
+            orientation.set_status(OrientationStatus.PENDING, request.user)
             send_orientation_created_emails(orientation)
 
         # Message de confirmation
@@ -419,10 +418,22 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         structure.moderation_date = timezone.now()
         structure.save()
 
-        # Passage des demandes d'orientation en cours de modération au statut Supprimée par la modération
-        moderation_pending_orientations.update(
-            status=OrientationStatus.MODERATION_REJECTED
-        )
+        # Suppression des pièces jointes des orientations en cours de modération
+        # et passage au statut Rejetée par la modération
+        for orientation in moderation_pending_orientations:
+            try:
+                orientation.delete_attachments()
+                orientation.set_status(
+                    OrientationStatus.MODERATION_REJECTED, request.user
+                )
+            except Exception as e:
+                logger.error(
+                    "Erreur lors de la suppression des pièces jointes de l'orientation %s: %s",
+                    orientation.pk,
+                    e,
+                    exc_info=True,
+                )
+                raise
 
         # Message de confirmation
         self.message_user(
@@ -444,6 +455,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
         context = {
             "title": "Module d'import de structures",
+            "breadcrumb_title": "Importer structures",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,

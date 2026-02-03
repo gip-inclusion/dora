@@ -64,6 +64,7 @@
   let innerWidth = $state();
   let submitDisabled = $state(!initialSearch);
   let refreshMode = $state(false);
+  let isLoading = $state(false);
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = $state([]);
 
@@ -84,6 +85,8 @@
       lat,
     })
   );
+
+  let subCategoriesDisabled = $derived(subCategories.length === 0);
 
   const categories = servicesOptions?.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
@@ -138,26 +141,22 @@
     }
   }
 
-  function handleSearch(event: Event) {
+  async function handleSearch(event: Event) {
     event.preventDefault();
+    isLoading = true;
     submitDisabled = true;
     refreshMode = false;
-    goto(`/recherche?${query}`, { noScroll: true });
+    await goto(`/recherche?${query}`, { noScroll: true });
+    isLoading = false;
   }
 
   function loadSubCategories() {
     if (categoryId) {
-      const allSubCategoriesValue = `${categoryId}--all`;
-      subCategories = sortSubcategory([
-        {
-          value: allSubCategoriesValue,
-          label: "Tous les besoins",
-        },
-        ...servicesOptions.subcategories.filter((sub) =>
+      subCategories = sortSubcategory(
+        servicesOptions.subcategories.filter((sub) =>
           sub.value.startsWith(categoryId)
-        ),
-      ]);
-      subCategoryIds = [allSubCategoriesValue];
+        )
+      );
     } else {
       subCategories = [];
     }
@@ -251,7 +250,10 @@
             class="subcategories-search border-gray-02 px-s16 py-s24 text-f14 lg:py-s16 flex border-b lg:border-r lg:border-b-0"
           >
             <div
-              class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
+              class={[
+                "mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current",
+                { "opacity-25": subCategoriesDisabled },
+              ]}
             >
               <ListCheck2Editor />
             </div>
@@ -269,6 +271,7 @@
                 bind:value={subCategoryIds}
                 choices={subCategories}
                 onChange={enableRefreshButton}
+                disabled={subCategoriesDisabled}
               />
             {/key}
           </div>
@@ -282,6 +285,7 @@
               ? "Modifiez un des critères avant d’actualiser la recherche"
               : undefined}
             disabled={!cityCode || submitDisabled}
+            loading={isLoading}
           />
         </div>
       </div>

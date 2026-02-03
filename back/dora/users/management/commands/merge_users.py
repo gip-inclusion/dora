@@ -10,9 +10,9 @@ L'utilisateur source est désactivé en fin de procédure et peut éventuellemen
 être détruit en utilisant l'option `--delete`.
 """
 
-from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
+from dora.core.commands import BaseCommand
 from dora.structures.models import StructureMember, StructurePutativeMember
 from dora.users.models import User
 

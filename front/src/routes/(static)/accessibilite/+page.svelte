@@ -1,6 +1,7 @@
 <script lang="ts">
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 </script>
 
 <CenteredGrid>
@@ -18,7 +19,7 @@
     </p>
     <p>
       Cette déclaration d’accessibilité s’applique à <strong>DORA</strong>
-      <span> (https://dora.inclusion.beta.gouv.fr/)</span>.
+      <span> (https://dora.inclusion.gouv.fr/)</span>.
     </p>
     <h2>État de conformité</h2>
     <p>
@@ -55,10 +56,7 @@
       </li>
 
       <li>
-        Formulaire de contact&nbsp;: <a
-          href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
-          >https://aide.dora.inclusion.beta.gouv.fr</a
-        >
+        Formulaire de contact&nbsp;: <a href={URL_HELP_SITE}>{URL_HELP_SITE}</a>
       </li>
       <li>
         Adresse&nbsp;: <span>127 rue de Grenelle 75007 Paris </span>

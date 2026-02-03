@@ -3,6 +3,7 @@
 
   import illuServices from "$lib/assets/illustrations/services.svg";
   import EmptyNotice from "../empty-notice.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 </script>
 
 <EmptyNotice
@@ -11,16 +12,16 @@
   title="Vous n’avez pas encore renseigné vos services sur DORA"
   links={[
     {
-      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
+      url: `${URL_HELP_SITE}article/referencer-son-offre-de-service-xpivaw/`,
       label: "Découvrez comment référencer son premier service",
     },
     {
-      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/category/conseils-1vz0ity/",
+      url: `${URL_HELP_SITE}category/conseils-1vz0ity/`,
       label:
         "Découvrez quelques conseils sur la présentation de votre offre de service",
     },
     {
-      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/",
+      url: `${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`,
       label: "Participez à un webinaire",
     },
     {

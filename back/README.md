@@ -7,7 +7,7 @@
 - [GDAL](https://gdal.org/).
 
 ### Setup des variables d'environnement
- 
+
 Si vous utilisez l'environnement Docker Compose fourni par défaut :
 ```bash
   ln -s envs-example envs
@@ -54,11 +54,29 @@ Pour Linux:
 ```bash
 sudo apt install graphviz
 ```
+
 Les consignes d'installation sont [ici](https://graphviz.org/download/).'
+
+# Installer libmagic
+Pour Mac:
+```bash
+brew install libmagic
+```
+Pour Linux:
+```bash
+sudo apt-get install libmagic1
+```
 
 # Installer les dépendances
 ```bash
-pip install -r requirements/dev.txt
+pip install --require-hashes -r requirements/dev.txt
+```
+
+Vous pouvez aussi utiliser la recette `venv` du Makefile pour créer et/ou mettre à jour votre _virtualenv_,
+celle-ci a besoin du petit utilitaire [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installer sur votre système :
+
+```bash
+make venv
 ```
 
 # Vérifier que tout fonctionne
@@ -71,13 +89,48 @@ pip install -r requirements/dev.txt
 ./manage.py migrate
 ```
 
-Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques :
+Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques et les labels nationaux.
+
+Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
+
+## Import des données admin_express
+
+Pour faire tourner `import_admin_express` localement, il faut installer 7zip
+
+Pour Mac :
+```bash
+brew install p7zip
+```
+
+Pour Linux :
+```bash
+sudo apt-get install p7zip*
+```
 
 ```bash
 ./manage.py import_admin_express
+./manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
+# Ou make populate_db
 ```
 
-Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
+## Import des données decoupage_administratif
+
+L’application s’appuie sur les données du découpage administratif (communes, départements, EPCI, régions) importées depuis l’[API geo.api.gouv.fr](https://geo.api.gouv.fr) :
+
+```bash
+./manage.py import_decoupage_administratif
+```
+
+Par défaut, toutes les entités sont importées. Pour limiter l’import à un type d’entité :
+
+```bash
+./manage.py import_decoupage_administratif --scope=regions
+./manage.py import_decoupage_administratif --scope=departements
+./manage.py import_decoupage_administratif --scope=epci
+./manage.py import_decoupage_administratif --scope=communes
+```
+
+L’URL de l’API est configurable via la variable d’environnement `GEO_API_GOUV_BASE_URL` (par défaut : `https://geo.api.gouv.fr`).
 
 # Configurer le téléchargement de documents en local
 Vous devez créer un bucket dans Minio pour les téléchargements de documents.
@@ -180,7 +233,7 @@ export DJANGO_SETTINGS_MODULE=config.settings.dev
 
 ```bash
 # Démarrer le serveur
-./manage.py runserver
+./manage.py runserver # Ou make runserver
 ```
 
 ## Contribution
@@ -192,3 +245,44 @@ pre-commit install
 
 Le pre-commit du projet nécessite une installation locale sur le poste de dev de Talisman (en remplacement de GGShield).
 Voir [la procédure d'installation](https://github.com/thoughtworks/talisman?tab=readme-ov-file#installation).
+
+Vous pouvez aussi utiliser les recettes `quality` et `fix` du fichier Makefile :
+```bash
+make fix
+make quality
+```
+
+Pour lancer la suite de tests :
+```bash
+pytest # Ou make test
+```
+
+### Dépendances
+
+Les dépendances sont suivies dans le dossier `requirements/`. Plusieurs
+fichiers permettent de séparer les dépendances par environnement.
+
+### Ajouter une dépendance
+
+Pour ajouter une nouvelle dépendance, ajoutez une ligne avec la dépendance
+dans le fichier `*.in` correspondant, par exemple `dev.in` pour une dépendance
+de développement.
+Lancer ensuite la commande `make compile-deps`, qui met à jour les fichiers
+`requirements/*.txt` avec la version précise et le hash de la dépendances.
+
+### Mettre à jour une dépendance
+
+```
+make PIP_COMPILE_OPTIONS=--upgrade-package=django compile-deps
+```
+
+### Contraindre la version d’une dépendance
+
+Dans le fichier `requirements/*.in`, ajoutez les contraintes sur la dépendance
+(exemple, `django<7`), voir
+https://packaging.python.org/en/latest/specifications/version-specifiers/#id5
+pour une référence complète, puis exécutez :
+
+```
+make compile-deps
+```

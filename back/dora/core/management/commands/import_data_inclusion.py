@@ -5,12 +5,12 @@ import requests
 from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import Truncator
 from furl import furl
 
 from dora.core import utils
+from dora.core.commands import BaseCommand
 from dora.core.constants import WGS84
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
@@ -306,7 +306,7 @@ class Command(BaseCommand):
                 )
 
                 subcats = s["thematiques"]
-                cats = [s.split("--")[0] for s in subcats]
+                cats = [utils.get_category_from_subcategory(s) for s in subcats]
                 service.categories.set(self._values_to_objects(ServiceCategory, cats))
                 service.subcategories.set(
                     self._values_to_objects(ServiceSubCategory, subcats)

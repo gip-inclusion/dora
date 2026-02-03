@@ -5,7 +5,7 @@ from django.utils import timezone
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
-from dora.orientations.models import ContactPreference
+from dora.orientations.models import ContactPreference, Orientation
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
@@ -344,3 +344,39 @@ def send_orientation_reminder_emails(orientation):
         tags=["orientation"],
         cc=cc,
     )
+
+
+def send_orientation_expiration_emails(
+    orientation: Orientation, start_date: str
+) -> None:
+    context = {
+        "data": orientation,
+        "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
+        "search_link": settings.FRONTEND_URL + "/recherche",
+        "start_date": start_date.strftime("%-d %B %Y"),
+        "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
+        "with_dora_info": True,
+        "with_legal_info": True,
+    }
+
+    send_mail(
+        "Cette demande d’orientation a expiré",
+        orientation.get_contact_email(),
+        mjml2html(render_to_string("orientation-expired-service.mjml", context)),
+        tags=["orientation"],
+    )
+
+    send_mail(
+        "Cette demande d’orientation a été annulée",
+        orientation.beneficiary_email,
+        mjml2html(render_to_string("orientation-expired-beneficiary.mjml", context)),
+        tags=["orientation"],
+    )
+
+    for email in {orientation.prescriber.email, orientation.referent_email}:
+        send_mail(
+            "Votre demande d’orientation a expiré",
+            email,
+            mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
+            tags=["orientation"],
+        )

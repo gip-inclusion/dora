@@ -21,6 +21,7 @@
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
   import type { PageData } from "./$types";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -94,7 +95,7 @@
     </div>
     <div class="md:flex-1">
       <img src={illuAccompagner} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-info">Nouvelle fonctionnalité !</div>
+      <div class="tag bg-info">Orientation facilitée</div>
       <h3>Orienter vos bénéficiaires</h3>
       <p class="text-f16">
         Le formulaire DORA <strong
@@ -113,12 +114,14 @@
     </div>
     <div class="md:flex-1">
       <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-blue-information text-gray-text!">Très bientôt !</div>
+      <div class="tag bg-blue-information text-gray-text!">Nouveauté !</div>
       <h3>Suivre vos demandes</h3>
       <p class="text-f16">
-        La structure partenaire répondra rapidement à votre demande. Vous
-        pourrez <strong>suivre l’ensemble de vos demandes d’orientation</strong>
-        depuis votre espace DORA.
+        DORA vous permet de <strong
+          >suivre l’ensemble de vos demandes d’orientation</strong
+        >
+        depuis votre espace DORA et de voir rapidement la réponse de la structure
+        partenaire.
       </p>
     </div>
   </div>
@@ -132,12 +135,12 @@
       >
         <VideoFillMedia />
       </span>
-      Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes
-      par DORA.
+      Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes par
+      DORA.
     </p>
 
     <LinkButton
-      to="https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/"
+      to={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
       otherTab
       nofollow
       noBackground

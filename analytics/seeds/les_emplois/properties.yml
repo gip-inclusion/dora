@@ -1,0 +1,4 @@
+seeds:
+  - name: settings
+    description: >
+      Paramètres de configuration pour "les_emplois"

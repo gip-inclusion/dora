@@ -5,6 +5,7 @@
   import Header from "./header.svelte";
 
   import { structure } from "./store";
+
   interface Props {
     children?: Snippet;
   }

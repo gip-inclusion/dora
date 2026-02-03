@@ -1,6 +1,7 @@
 import random
 from _operator import itemgetter
 from datetime import date
+from functools import reduce
 from typing import Optional
 
 import requests
@@ -8,26 +9,32 @@ from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
-from django.db.models import IntegerField, Q, Value
+from django.db.models import IntegerField, Q, QuerySet, Value
 from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
-from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.data_inclusion.constants import THEMATIQUES_MAPPING_DORA_TO_DI
-from dora.services.models import ServiceStatus
-from dora.structures.models import Structure
+from dora.decoupage_administratif.models import City
+from dora.services.models import ServiceSubCategory
 
-from .constants import EXCLUDED_DI_SERVICES_THEMATIQUES
 from .models import FundingLabel
 from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
+DEPARTMENT_CODE_SOMME = "80"
+DEPARTMENT_CODE_VOSGES = "88"
+MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
+FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 
-def _filter_and_annotate_dora_services(services, location, with_remote, with_onsite):
+def _filter_and_annotate_dora_services(
+    services: QuerySet[models.Service],
+    location: Point,
+    with_remote: bool,
+    with_onsite: bool,
+) -> QuerySet[models.Service]:
     no_services = models.Service.objects.none()
     # 1) services ayant un lieu de déroulement, à moins de MAX_DISTANCE km
     services_on_site = (
@@ -91,6 +98,48 @@ def _sort_services(services):
     return results
 
 
+DI_SERVICE_KINDS = {
+    "accompagnement",
+    "aide-financiere",
+    "aide-materielle",
+    "atelier",
+    "formation",
+    "information",
+}
+
+
+def _map_kinds_dora_to_di(kinds: list[str]) -> list[str]:
+    return [kind for kind in kinds if kind in DI_SERVICE_KINDS]
+
+
+def _filter_di_results(raw_di_results: list, city_code: str) -> list:
+    city = City.objects.filter(code=city_code).first()
+
+    if not city:
+        return raw_di_results
+
+    if city.department == DEPARTMENT_CODE_VOSGES:
+        # Exclusion des services mediation-numerique
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
+        ]
+
+    if city.department == DEPARTMENT_CODE_SOMME:
+        # Exclusion des services mediation-numerique, sauf les services de France Services
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
+            or result["service"]["structure"]["id"].startswith(
+                FRANCE_SERVICES_STRUCTURE_ID_PREFIX
+            )
+        ]
+
+    return raw_di_results
+
+
 def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -124,19 +173,19 @@ def _get_raw_di_results(
     """
     thematiques = []
     if categories is not None:
-        thematiques += categories
+        # Sélection des sous-catégories correspondant aux catégories
+        subcategories_filters = reduce(
+            lambda x, y: x | y,
+            [Q(value__startswith=category) for category in categories],
+        )
+        thematiques += ServiceSubCategory.objects.filter(
+            subcategories_filters
+        ).values_list("value", flat=True)
     if subcategories is not None:
-        # Les sous-catégories --autre ne sont conservées comme thématiques que lorsqu'elles
-        # sont présentes dans la table de correspondance de thématiques DORA vers DI.
-        # La correspondance sera faite plus tard, dans DataInclusionClient.search_services().
-        thematiques += [
-            subcat
-            for subcat in subcategories
-            if ("--autre" not in subcat or subcat in THEMATIQUES_MAPPING_DORA_TO_DI)
-        ]
+        # Exclusion des sous-catégories --autre
+        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
 
-    # Si on recherche uniquement des sous-catégories `autre` qui n'ont pas de correspondances
-    # de thématiques DORA vers DI (THEMATIQUES_MAPPING_DORA_TO_DI), la liste des thématiques
+    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
     # va être vide et d·i renverrait *tous* les services.
     # On renvoie donc plutôt une liste vide.
     if not thematiques and subcategories:
@@ -147,6 +196,8 @@ def _get_raw_di_results(
     # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
     sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
 
+    types = _map_kinds_dora_to_di(kinds) if kinds else None
+
     try:
         raw_di_results = di_client.search_services(
             sources=sources,
@@ -154,9 +205,9 @@ def _get_raw_di_results(
                 # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
                 None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
             ),
-            code_insee=city_code,
+            code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
-            types=kinds,
+            types=types,
             frais=fees,
             lat=lat,
             lon=lon,
@@ -167,28 +218,7 @@ def _get_raw_di_results(
     if raw_di_results is None:
         return []
 
-    raw_di_results = [
-        result
-        for result in raw_di_results
-        if (
-            result["service"]["date_suspension"] is None
-            or date.fromisoformat(result["service"]["date_suspension"])
-            > timezone.now().date()
-        )
-    ]
-
-    # Exclus les services ayant des thématiques à exclure
-    raw_di_results = [
-        result
-        for result in raw_di_results
-        if result["service"]["thematiques"] is None
-        or not any(
-            thematique in result["service"]["thematiques"]
-            for thematique in EXCLUDED_DI_SERVICES_THEMATIQUES
-        )
-    ]
-
-    return raw_di_results
+    return _filter_di_results(raw_di_results, city_code)
 
 
 def _map_di_results(
@@ -284,7 +314,7 @@ def _get_dora_results(
     lon: Optional[float] = None,
 ):
     services = (
-        models.Service.objects.published()
+        models.Service.objects.filter_for_DI()
         .select_related(
             "structure",
         )
@@ -292,6 +322,7 @@ def _get_dora_results(
             "kinds",
             "fee_condition",
             "location_kinds",
+            "publics",
             "categories",
             "subcategories",
             "funding_labels",
@@ -299,14 +330,6 @@ def _get_dora_results(
             "beneficiaries_access_modes",
         )
     )
-
-    # On exclus les services dont la structure est marquèe comme obsolète
-    services = services.exclude(structure__is_obsolete=True)
-
-    # Par souci de qualité des données,
-    # les services DORA rattachés à une structure orpheline
-    # sont filtrés lors de la recherche.
-    services = services.exclude(structure__in=Structure.objects.orphans())
 
     if kinds:
         services = services.filter(kinds__value__in=kinds)
@@ -354,7 +377,7 @@ def _get_dora_results(
 
     results = _filter_and_annotate_dora_services(
         services_to_display,
-        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
+        city.center if not lat or not lon else Point(lon, lat, srid=WGS84),
         with_remote,
         with_onsite,
     )
@@ -372,7 +395,6 @@ def _get_unified_results(
     request,
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
-    city: City,
     categories: Optional[list[str]] = None,
     subcategories: Optional[list[str]] = None,
     kinds: Optional[list[str]] = None,
@@ -398,13 +420,20 @@ def _get_unified_results(
         with_dora=True,
     )
 
-    dora_results_ids = [
-        result["service"]["id"]
+    # Les ID de services DI sont de la forme "source--id".
+    # On récupère l'ID Dora du service et la distance calculée par DI,
+    # en conservant l'ordre des résultats DI (triés par distance).
+    dora_results_from_di = [
+        (result["service"]["id"].split("--")[1], result["distance"])
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
-    dora_results = (
-        models.Service.objects.filter(id__in=dora_results_ids)
+    dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
+    dora_ids = list(dora_distances.keys())
+
+    dora_services_by_id = {
+        str(service.id): service
+        for service in models.Service.objects.filter_for_DI()
         .select_related(
             "structure",
         )
@@ -412,33 +441,31 @@ def _get_unified_results(
             "kinds",
             "fee_condition",
             "location_kinds",
+            "publics",
             "categories",
             "subcategories",
             "funding_labels",
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
-    ).distinct()
+        .filter(id__in=dora_ids)
+        .distinct()
+    }
 
-    dora_results = dora_results.filter(status=ServiceStatus.PUBLISHED)
+    # Annotation des services avec la distance calculée par DI,
+    # en conservant l'ordre des résultats DI.
+    annotated_dora_results = []
+    for dora_id in dora_ids:
+        service = dora_services_by_id.get(dora_id)
+        if service:
+            service.distance = dora_distances.get(dora_id)
+            annotated_dora_results.append(service)
 
-    # Certains services DORA venant de DI ont une structure obsolète ou orpheline
-    dora_results = dora_results.exclude(structure__is_obsolete=True)
-    dora_results = dora_results.exclude(structure__in=Structure.objects.orphans())
-
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
-    filtered_and_annotated_dora_results = _filter_and_annotate_dora_services(
-        dora_results,
-        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
-        with_remote,
-        with_onsite,
-    )
     serialized_dora_results = SearchResultSerializer(
-        filtered_and_annotated_dora_results, many=True, context={"request": request}
+        annotated_dora_results, many=True, context={"request": request}
     ).data
     funding_labels_found = FundingLabel.objects.filter(
-        service__in=filtered_and_annotated_dora_results
+        service__in=annotated_dora_results
     ).distinct()
 
     other_raw_results = [
@@ -499,7 +526,6 @@ def search_services(
             categories=categories,
             subcategories=subcategories,
             city_code=city_code,
-            city=city,
             kinds=kinds,
             fees=fees,
             location_kinds=location_kinds,

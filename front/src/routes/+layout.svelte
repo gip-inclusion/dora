@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.css";
@@ -9,6 +10,9 @@
   import UserOnboardingModal from "$lib/components/user/user-onboarding-modal.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
+  import { enforceCrispConsent } from "$lib/utils/consent.svelte";
+  import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+
   interface Props {
     children?: Snippet;
   }
@@ -17,6 +21,11 @@
 
   $effect(() => {
     trackPageView($page.url.pathname, $page.data.title);
+  });
+
+  $effect(() => {
+    $page.url;
+    enforceCrispConsent();
   });
 </script>
 
@@ -53,3 +62,5 @@
 </main>
 
 <Footer />
+<CookieBanner />
+<SvelteToast />

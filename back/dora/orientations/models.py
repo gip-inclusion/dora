@@ -9,9 +9,10 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.utils import timezone
 
-from dora.core.models import EnumModel
+from dora.core.models import EnumModel, LogItem
 from dora.services.models import Service
 from dora.structures.models import Structure
+from dora.users.models import User
 
 ORIENTATION_QUERY_LINK_TTL_DAY = 8
 
@@ -31,6 +32,7 @@ class OrientationStatus(models.TextChoices):
     PENDING = "OUVERTE", "Ouverte / En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
     REJECTED = "REFUSÉE", "Refusée"
+    EXPIRED = "EXPIRÉE", "Expirée"
 
 
 class RejectionReason(EnumModel):
@@ -199,6 +201,9 @@ class Orientation(models.Model):
         verbose_name="statut",
     )
     last_reminder_email_sent = models.DateTimeField(blank=True, null=True)
+    is_anonymized = models.BooleanField(
+        verbose_name="Orientation anonymisée", default=False
+    )
 
     class Meta:
         constraints = (
@@ -224,6 +229,10 @@ class Orientation(models.Model):
 
     def __str__(self):
         return f"Orientation #{self.id}"
+
+    def log_note(self, user: User | None, msg: str):
+        user = user if (user and user.is_authenticated) else None
+        LogItem.objects.create(orientation=self, user=user, message=msg.strip())
 
     def get_query_id_hash(self) -> str:
         return hashlib.sha256(
@@ -368,6 +377,16 @@ class Orientation(models.Model):
     @property
     def query_expired(self) -> bool:
         return timezone.now() > self.query_expires_at
+
+    def set_status(self, status: OrientationStatus, user: User | None = None):
+        old_status = OrientationStatus(self.status)
+        self.status = status
+        self.processing_date = timezone.now()
+        self.save(update_fields=["status", "processing_date"])
+        self.log_note(
+            user,
+            f"Orientation passée de {old_status.label} à {status.label}",
+        )
 
 
 class ContactRecipient(models.TextChoices):

@@ -8,9 +8,9 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType, City
-from dora.admin_express.utils import arrdt_to_main_insee_code
 from dora.core.utils import get_geo_data, skip_csv_lines
+from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,
@@ -52,9 +52,9 @@ class ImportServicesHelper:
         self._initialize_trackers()
 
         if self.wet_run:
-            print("⚠️ PRODUCTION RUN ⚠️")
+            logger.info("⚠️ PRODUCTION RUN ⚠️")
         else:
-            print("🧘 DRY RUN 🧘")
+            logger.info("🧘 DRY RUN 🧘")
 
         csv_reader = (
             skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
@@ -66,8 +66,9 @@ class ImportServicesHelper:
         try:
             missing_headers = set(self.CSV_HEADERS) - set(headers)
             if missing_headers:
-                print(
-                    f"Les headers suivants sont manquants : ({', '.join(missing_headers)})"
+                logger.info(
+                    "Les headers suivants sont manquants : (%s)",
+                    ", ".join(missing_headers),
                 )
                 return {"missing_headers": list(missing_headers)}
 
@@ -76,7 +77,9 @@ class ImportServicesHelper:
                     try:
                         self._get_service_source(source_info)
                     except IntegrityError as e:
-                        print(f"\nErreur critique : {e}", file=sys.stderr)
+                        logger.warning(
+                            "Erreur critique: %s", source_info["value"], exc_info=e
+                        )
                         return {
                             "errors": [
                                 f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
@@ -84,17 +87,14 @@ class ImportServicesHelper:
                         }
                 for idx, line in enumerate(lines, 2):
                     try:
-                        print(f"\nTraitement de la ligne {idx} :")
+                        logger.info(f"\nTraitement de la ligne {idx} :")
 
                         data = self._extract_data_from_line(line)
 
                         # Vérification que le SIRET de la structure est bien renseigné
                         if not data.structure_siret:
                             error_msg = f"[{idx}] SIRET manquant pour la structure."
-                            print(
-                                f"❌ {error_msg}",
-                                file=sys.stderr,
-                            )
+                            logger.warning("❌ %s", error_msg)
                             self.errors.append(error_msg)
                             continue
 
@@ -105,10 +105,7 @@ class ImportServicesHelper:
                             )
                         except Structure.DoesNotExist:
                             error_msg = f"[{idx}] Structure avec le SIRET {data.structure_siret} introuvable."
-                            print(
-                                f"❌ {error_msg}",
-                                file=sys.stderr,
-                            )
+                            logger.warning("❌ %s", error_msg)
                             self.errors.append(error_msg)
                             continue
 
@@ -117,9 +114,9 @@ class ImportServicesHelper:
                             model = ServiceModel.objects.get(slug=data.modele_slug)
                         except ServiceModel.DoesNotExist:
                             error_msg = f"[{idx}] Modèle de service avec le slug {data.modele_slug} introuvable."
-                            print(
-                                f"❌ {error_msg}",
-                                file=sys.stderr,
+                            logger.warning(
+                                "❌ %s",
+                                error_msg,
                             )
                             self.errors.append(error_msg)
                             continue
@@ -131,8 +128,9 @@ class ImportServicesHelper:
                         if not should_service_be_created:
                             continue
 
-                        print(
-                            f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
+                        logger.info(
+                            "Création d'un nouveau service pour la structure avec le SIRET '%s'.",
+                            data.structure_siret,
                         )
                         new_service = instantiate_service_from_model(
                             model, structure, self.importing_user
@@ -144,11 +142,11 @@ class ImportServicesHelper:
                         )
 
                         self.created_count += 1
-                        print("✅ Service créé.")
+                        logger.info("✅ Service créé.")
 
                     except Exception as e:
                         error_msg = f"[{idx}] {e}"
-                        print(f"❌ {error_msg}", file=sys.stderr)
+                        logger.warning("❌ %s", error_msg)
                         self.errors.append(error_msg)
                         continue
 
@@ -198,7 +196,7 @@ class ImportServicesHelper:
         self, line: Dict[str, str], header_name: str, model: Any, category_label: str
     ) -> QuerySet:
         values = [
-            label.strip()
+            label.strip().strip(",")
             for label in line.get(header_name, "").split(",")
             if label.strip()
         ]
@@ -350,9 +348,8 @@ class ImportServicesHelper:
             )
 
             self.errors.append(error_msg)
-            print(
+            logger.warning(
                 error_msg,
-                file=sys.stderr,
             )
             return False
 

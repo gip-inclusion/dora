@@ -54,7 +54,7 @@ jobs:
         run: sudo apt update && sudo apt install -y gdal-bin postgresql-client
 
       - name: Checkout du projet
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       # On spécifie que toutes les étapes suivantes se feront dans le répertoire 'back'
       - name: Création de la base de données
@@ -70,7 +70,7 @@ jobs:
           EOL
 
       - name: Installation de Python
-        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: "3.13"
           cache: pip
@@ -86,7 +86,9 @@ jobs:
 
       - name: Linting et formatage du code Python
         working-directory: back
-        run: ruff check dora config
+        run: |
+          ruff format --check dora config scripts
+          ruff check dora config scripts
 
       - name: Vérification Django (check et migrations)
         working-directory: back
@@ -96,7 +98,7 @@ jobs:
 
       - name: Vérification des fichier HTML et templates
         working-directory: back
-        run: djhtml -t 2 -c dora
+        run: djhtml --tabwidth=2 --check dora config scripts
 
       - name: Tests
         working-directory: back

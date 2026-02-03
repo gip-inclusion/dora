@@ -5,10 +5,16 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from dora.admin_express.models import EPCI, AdminDivisionType, City, Department, Region
-from dora.admin_express.utils import arrdt_to_main_insee_code
 from dora.core.constants import WGS84
 from dora.core.models import ModerationStatus
+from dora.decoupage_administratif.models import (
+    EPCI,
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
 
 SYNC_FIELDS = [
@@ -152,7 +158,7 @@ def filter_services_by_city_code(services, city_code):
         )
         | (
             Q(diffusion_zone_type=AdminDivisionType.EPCI)
-            & Q(diffusion_zone_details__in=city.epcis)
+            & Q(diffusion_zone_details=city.epci)
         )
         | (
             Q(diffusion_zone_type=AdminDivisionType.DEPARTMENT)

@@ -1,4 +1,23 @@
 models:
+  - name: stg_accompagnateurs
+    description: >
+      Vue des utilisateurs dont l'activité principale est accompagnateur ou accompagnateur-offreur et qui se sont connectés au moins une fois. 
+  - name: stg_nb_orientations_per_user
+    description: >
+      Nombre total d'orientations et date de la dernière orientation par prescripteur.
+    columns:
+      - name: prescriber_id
+        description: >
+          Identifiant unique du prescripteur.
+        data_tests:
+          - not_null
+          - unique
+      - name: last_orientation_date
+        description: >
+          Date de la dernière orientation effectuée par le prescripteur.
+      - name: total_orientations
+        description: >
+          Nombre total d'orientations effectuées par le prescripteur.
   - name: stg_user
     config:
       indexes:
@@ -9,7 +28,6 @@ models:
         data_tests:
           - unique
           - not_null
-
   - name: stg_structure
     config:
       indexes:
@@ -53,7 +71,9 @@ models:
         data_tests:
           - unique
           - not_null
-
+      - name: prescriber_id
+        data_test: 
+          - unique
   - name: stg_mobilisationevent
     config:
       indexes:

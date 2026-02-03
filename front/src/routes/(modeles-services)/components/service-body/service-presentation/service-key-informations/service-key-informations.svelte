@@ -12,7 +12,6 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
-  import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService, isDurationValid } from "$lib/utils/service";
 
   import ServiceFeedbackButton from "../../../../services/[slug]/service-feedback-button.svelte";
@@ -67,7 +66,15 @@
         icon={CheckboxCircleFillSystem}
         title="Les critères d’admission"
       >
-        {#if eligibilityRequirements.length > 0}
+        {#if eligibilityRequirements.length === 1}
+          <!-- Les services DI n'ont qu'un seul élément de critère d'admission mais il peut comporter plusieurs lignes.
+               On affiche chaque ligne comme élément de liste. -->
+          <ul class="list-inside list-disc">
+            {#each eligibilityRequirements[0].split("\n") as requirement (requirement)}
+              <li>{requirement}</li>
+            {/each}
+          </ul>
+        {:else if eligibilityRequirements.length > 1}
           <ul class="list-inside list-disc">
             {#each eligibilityRequirements as requirement (requirement)}
               <li>{requirement}</li>
@@ -137,7 +144,7 @@
             icon={TimeFillSystem}
             title="Fréquence et horaires"
           >
-            {#if isDI && isValidformatOsmHours(service.recurrence)}
+            {#if isDI}
               <OsmHours osmHours={service.recurrence} />
             {:else}
               {service.recurrence}

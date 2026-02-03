@@ -5,6 +5,7 @@ from rest_framework.routers import SimpleRouter
 
 import dora.admin_express.views
 import dora.core.views
+import dora.decoupage_administratif.views
 import dora.orientations.views
 import dora.services.views
 import dora.sirene.views
@@ -13,6 +14,7 @@ import dora.structures.views
 import dora.support.views
 import dora.users.views
 from dora.auth_links.urls import auth_links_patterns
+from dora.nexus.urls import nexus_patterns
 from dora.oidc.urls import oidc_patterns
 
 from .url_converters import InseeCodeConverter, SiretConverter
@@ -75,7 +77,7 @@ private_api_patterns = [
         "services-di/<str:di_id>/feedback/",
         dora.services.views.post_di_service_feedback,
     ),
-    path("admin-division-search/", dora.admin_express.views.search),
+    path("admin-division-search/", dora.decoupage_administratif.views.search),
     path("admin-division-reverse-search/", dora.admin_express.views.reverse_search),
     path("admin-division-departments/", dora.admin_express.views.get_departments),
     path(
@@ -98,6 +100,14 @@ private_api_patterns = [
         "profile/main-activity/", dora.users.views.update_user_profile
     ),  # TODO: remove when not used by frontend anymore
     path("consent-record/", dora.users.views.record_consent),
+    path(
+        "structures/<slug:structure_slug>/orientations/stats/",
+        dora.orientations.views.display_orientation_stats,
+    ),
+    path(
+        "structures/<slug:structure_slug>/orientations/export/",
+        dora.orientations.views.OrientationExportView.as_view(),
+    ),
 ]
 
 di_api_patterns = [
@@ -114,6 +124,7 @@ urlpatterns = [
     path("oidc/", include("mozilla_django_oidc.urls")),
     # "magic links"
     *auth_links_patterns,
+    *nexus_patterns,
 ]
 
 if settings.PROFILE:

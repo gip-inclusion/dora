@@ -3,7 +3,9 @@ import io
 from unittest import TestCase
 from unittest.mock import patch
 
+import pytest
 from django.contrib.gis.geos import Point
+from django.core.management import call_command
 from freezegun import freeze_time
 from model_bakery import baker
 
@@ -11,6 +13,45 @@ from dora.core.utils import GeoData
 from dora.services.csv_import import ImportServicesHelper
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceSource
+from dora.users.models import User
+
+
+@pytest.mark.parametrize("wet_run", [True, False])
+def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
+    structure = baker.make("Structure", siret="12345678901234")
+    service_model = baker.make(
+        "Service",
+        is_model=True,
+        slug="test-service-model",
+        name="test-service",
+        structure=structure,
+    )
+    funding_label = baker.make("FundingLabel", value="test-value", label="test-label")
+
+    csv_file = tmp_path.joinpath("file_name.csv")
+    csv_file.write_text(
+        "\n".join(
+            [
+                "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public",
+                f"{service_model.slug},{structure.siret},referent@email.com,{funding_label.value},Test Person,0123456789,,,,,,city,",
+            ]
+        )
+    )
+
+    assert not Service.objects.filter(creator=User.objects.get_dora_bot()).exists()
+    command_args = [csv_file.as_posix()]
+    if wet_run:
+        command_args.append("--wet-run")
+    call_command("import_services", *command_args)
+
+    assert (
+        Service.objects.filter(creator=User.objects.get_dora_bot()).exists() is wet_run
+    )
+    assert caplog.messages[-1].startswith(
+        "Management command dora.services.management.commands.import_services succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
 class ImportServicesTestCase(TestCase):
@@ -47,7 +88,14 @@ class ImportServicesTestCase(TestCase):
             lon="2.3522",
             score=1.0,
         )
-        self.city = baker.make("City", code="75056", epci="012345678")
+        self.city = baker.make(
+            "decoupage_administratif.City",
+            code="75056",
+            name="Paris",
+            department="75",
+            epci="012345678",
+            region="11",
+        )
 
     def test_import_services_wet_run(self):
         csv_content = (
@@ -343,7 +391,14 @@ class ImportServicesTestCase(TestCase):
             lon="2.3522",
             score=1.0,
         )
-        dom_tom_city = baker.make("City", code="97123")
+        dom_tom_city = baker.make(
+            "decoupage_administratif.City",
+            code="97123",
+            name="Réunion",
+            department="971",
+            epci="200000000",
+            region="04",
+        )
 
         csv_content = (
             f"{self.csv_headers}\n"
@@ -876,3 +931,21 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
+
+    def test_should_handle_trailing_comma_in_column_with_multiple_values(self):
+        other_funding_label = baker.make(
+            "FundingLabel", value="other-value", label="other-label"
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{other_funding_label.value},",,,,,,,,'
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 1)

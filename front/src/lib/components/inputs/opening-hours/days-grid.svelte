@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Day } from "$lib/types";
   import {
-    fromJsonToOsmString,
     getHoursFromStr,
     returnEmptyHoursData,
-  } from "$lib/utils/opening-hours";
+  } from "$lib/utils/opening-hours/parse";
+  import { fromJsonToOsmString } from "$lib/utils/opening-hours/serialize";
   import DayField from "./day-field.svelte";
 
   interface Props {

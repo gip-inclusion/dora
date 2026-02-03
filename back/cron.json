@@ -11,6 +11,26 @@
     {
       "command": "0 0-6 * * * tools/run-notification-tasks.sh",
       "size": "S"
+    },
+    {
+      "command": "40 0 * * * tools/sync-nexus.sh",
+      "size": "S"
+    },
+    {
+      "command": "0 0 1 * * tools/import-decoupage-administratif.sh",
+      "size": "S"
+    },
+    {
+      "command": "0 8 * * * tools/close-expired-orientations.sh",
+      "size": "S"
+    },
+    {
+      "command": "0 2 * * * tools/delete-old-closed-orientation-attachments.sh",
+      "size": "S"
+    },
+    {
+      "command": "0 6 * * * tools/anonymize-orientations.sh",
+      "size": "S"
     }
   ]
 }

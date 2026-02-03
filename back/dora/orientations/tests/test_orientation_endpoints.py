@@ -1,5 +1,10 @@
 import pytest
+from dateutil.relativedelta import relativedelta
 from django.core import mail
+from django.utils import timezone
+from freezegun import freeze_time
+from model_bakery import baker
+from rest_framework.test import APITestCase
 
 from dora.core.test_utils import (
     make_orientation,
@@ -7,9 +12,9 @@ from dora.core.test_utils import (
     make_structure,
     make_user,
 )
-from dora.structures.models import ModerationStatus
+from dora.structures.models import ModerationStatus, StructureMember
 
-from ..models import OrientationStatus
+from ..models import Orientation, OrientationStatus
 
 
 def test_query_refresh(api_client, orientation):
@@ -32,6 +37,7 @@ def test_query_access(api_client, orientation):
     assert response.status_code == 200
 
 
+@freeze_time("2022-01-01")
 def test_query_validate(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/validate/"
     response = api_client.post(url, follow=True)
@@ -48,6 +54,7 @@ def test_query_validate(api_client, orientation):
 
     assert response.status_code == 204
     assert orientation.status == OrientationStatus.ACCEPTED
+    assert orientation.processing_date == timezone.now()
 
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
@@ -79,6 +86,8 @@ def test_query_validate_service_di(api_client, di_orientation):
     assert mail.outbox[3].to == [di_orientation.beneficiary_email]
 
 
+@freeze_time("2022-01-01")
+@pytest.mark.django_db(transaction=True)
 def test_query_reject(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/reject/"
     response = api_client.post(url, follow=True)
@@ -95,6 +104,7 @@ def test_query_reject(api_client, orientation):
 
     assert response.status_code == 204
     assert orientation.status == OrientationStatus.REJECTED
+    assert orientation.processing_date == timezone.now()
 
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
@@ -394,3 +404,244 @@ def test_create_without_data_protection_commitment(api_client):
     assert "data_protection_commitment" in response.data
 
     assert structure.orientations.count() == 0
+
+
+class OrientationStatsTestCase(APITestCase):
+    def setUp(self):
+        self.structure = make_structure()
+        self.service = make_service(structure=self.structure)
+        self.user = make_user()
+        baker.make(StructureMember, structure=self.structure, user=self.user)
+
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+        )
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.PENDING,
+        )
+
+        baker.make(
+            Orientation,
+            service=self.service,
+            prescriber_structure=self.structure,
+            status=OrientationStatus.REJECTED,
+        )
+        baker.make(
+            Orientation,
+            service=self.service,
+            prescriber_structure=self.structure,
+            status=OrientationStatus.PENDING,
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_stats(self):
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            {
+                "total_sent": 2,
+                "total_sent_pending": 1,
+                "total_received": 4,
+                "total_received_pending": 2,
+                "structure_has_services": True,
+            },
+        )
+
+    def test_raise_403_when_user_not_structure_member(self):
+        self.client.force_authenticate(user=make_user())
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/stats/"
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_department_managers_can_get_stats(self):
+        department_manager = make_user(
+            is_active=True, is_manager=True, departments=[self.structure.department]
+        )
+
+        self.client.force_authenticate(user=department_manager)
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/stats/"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+
+class OrientationsExportTestCase(APITestCase):
+    def setUp(self):
+        self.structure = make_structure()
+        self.service = make_service(structure=self.structure)
+        self.user = make_user()
+        baker.make(StructureMember, structure=self.structure, user=self.user)
+
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_export_of_sent_orientations(self):
+        prescriber = make_user()
+
+        orientation_1 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=1),
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            prescriber_structure=self.structure,
+            prescriber=prescriber,
+        )
+
+        orientation_2 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=2),
+            service=self.service,
+            status=OrientationStatus.MODERATION_PENDING,
+            prescriber_structure=self.structure,
+            prescriber=None,
+        )
+
+        # Assurer que cette orientation n'est pas incluse dans les résultats
+        baker.make(
+            Orientation,
+            service=make_service(),
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(
+            response.data,
+            [
+                {
+                    "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Validée",
+                    "beneficiary_name": orientation_1.get_beneficiary_full_name(),
+                    "prescriber_name": prescriber.get_full_name(),
+                    "structure_name": orientation_1.get_structure_name(),
+                    "service_name": orientation_1.get_service_name(),
+                },
+                {
+                    "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
+                    "status": "En cours de modération",
+                    "beneficiary_name": orientation_2.get_beneficiary_full_name(),
+                    "prescriber_name": "Utilisateur supprimé",
+                    "structure_name": orientation_2.get_structure_name(),
+                    "service_name": orientation_2.get_service_name(),
+                },
+            ],
+        )
+
+    def test_get_export_of_received_orientations(self):
+        prescriber = make_user()
+
+        orientation_1 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=1),
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            prescriber_structure=self.structure,
+            prescriber=prescriber,
+        )
+
+        orientation_2 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=2),
+            service=self.service,
+            status=OrientationStatus.REJECTED,
+            prescriber_structure=None,
+            prescriber=None,
+        )
+
+        # Assurer que ces orientations ne sont pas incluses dans les résultats
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.MODERATION_PENDING,
+        )
+
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.MODERATION_REJECTED,
+        )
+
+        baker.make(
+            Orientation,
+            service=make_service(),
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(
+            response.data,
+            [
+                {
+                    "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Validée",
+                    "beneficiary_name": orientation_1.get_beneficiary_full_name(),
+                    "prescriber_name": prescriber.get_full_name(),
+                    "prescriber_structure_name": orientation_1.prescriber_structure.name,
+                    "service_name": orientation_1.get_service_name(),
+                    "detail_page_url": orientation_1.get_magic_link(),
+                },
+                {
+                    "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Refusée",
+                    "beneficiary_name": orientation_2.get_beneficiary_full_name(),
+                    "prescriber_name": "Utilisateur supprimé",
+                    "prescriber_structure_name": "Pas de prescripteur",
+                    "service_name": orientation_2.get_service_name(),
+                    "detail_page_url": orientation_2.get_magic_link(),
+                },
+            ],
+        )
+
+    def test_raise_403_if_user_not_structure_member(self):
+        self.client.force_authenticate(user=make_user())
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_department_managers_can_get_export(self):
+        department_manager = make_user(
+            is_active=True, is_manager=True, departments=[self.structure.department]
+        )
+
+        self.client.force_authenticate(user=department_manager)
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_raise_400_when_invalid_orientation_type(self):
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=other"
+        )
+
+        self.assertEqual(response.status_code, 400)

@@ -1,22 +1,25 @@
 <script lang="ts">
-  import { onMount, untrack } from "svelte";
+  import { onMount, tick, untrack } from "svelte";
+  import { browser } from "$app/environment";
 
   import { page } from "$app/stores";
 
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import { SEARCH_RADIUS_KM } from "$lib/consts";
   import { userInfo } from "$lib/utils/auth";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
-  import ResultFilters, { type Filters } from "./result-filters.svelte";
   import MapViewButton from "./map-view-button.svelte";
-  import ResultCount from "./result-count.svelte";
-  import SearchResults from "./search-results.svelte";
   import MesAidesDialog from "./mes-aides-dialog.svelte";
-  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
+  import ResultCount from "./result-count.svelte";
+  import ResultFilters, { type Filters } from "./result-filters.svelte";
+  import SearchResults from "./search-results.svelte";
+  import { SEARCH_RESULTS_PAGE_LENGTH } from "./search-results.svelte";
 
   interface Props {
     data: PageData;
@@ -24,7 +27,14 @@
 
   let { data }: Props = $props();
 
+  interface SnapshotState {
+    scrollY: number;
+    filters: Filters;
+    currentPageLength: number;
+  }
+
   const FILTER_KEY_TO_QUERY_PARAM = {
+    diPublics: "publics",
     kinds: "kinds",
     fundingLabels: "funding",
     feeConditions: "fees",
@@ -43,6 +53,32 @@
     )
   );
 
+  let currentPageLength = $state(SEARCH_RESULTS_PAGE_LENGTH);
+
+  export const snapshot = {
+    capture: (): SnapshotState | null => {
+      if (!browser) {
+        return null;
+      }
+
+      return {
+        scrollY: window.scrollY,
+        filters: JSON.parse(JSON.stringify(filters)),
+        currentPageLength,
+      };
+    },
+    restore: async (state: SnapshotState | null) => {
+      if (!browser || !state) {
+        return;
+      }
+
+      filters = state.filters;
+      currentPageLength = state.currentPageLength;
+      await tick();
+      window.scrollTo(0, state.scrollY);
+    },
+  };
+
   onMount(() => {
     // Vérifie si aucun filtre n'est sélectionné
     const noFilterSelected = Object.values(filters).every(
@@ -56,11 +92,14 @@
 
   function resetFilters() {
     filters = {
+      diPublics: [],
       kinds: [],
       fundingLabels: [],
       feeConditions: [],
       locationKinds: ["en-presentiel"],
     };
+    // Réinitialise aussi la pagination quand on change les filtres
+    currentPageLength = SEARCH_RESULTS_PAGE_LENGTH;
   }
 
   // Réinitialise les filtres quand la recherche est actualisée.
@@ -80,6 +119,9 @@
   // Filtre les services en fonctions des filtres sélectionnés
   let filteredServices = $derived(
     data.services.filter((service) => {
+      const diPublicsMatch =
+        filters.diPublics.length === 0 ||
+        filters.diPublics.some((value) => service.diPublics.includes(value));
       const kindsMatch =
         filters.kinds.length === 0 ||
         (service.kinds &&
@@ -98,18 +140,22 @@
         filters.locationKinds.some((value) =>
           service.locationKinds.includes(value)
         );
+
       // Lorsqu'on ne veut que les services en présentiels, on exclue ceux à plus de 50 km de distance
-      const onSiteAndNearby = !(
+      const filteringOutPresentialOnly =
         filters.locationKinds.length === 1 &&
-        filters.locationKinds[0] === "en-presentiel" &&
-        service.distance > 50
-      );
+        filters.locationKinds[0] === "en-presentiel";
+      const isRemoteService =
+        service.distance === null || service.distance > SEARCH_RADIUS_KM;
+      const shouldBeFilteredOut = filteringOutPresentialOnly && isRemoteService;
+
       return (
+        diPublicsMatch &&
         kindsMatch &&
         fundingLabelsMatch &&
         feeConditionMatch &&
         locationKindsMatch &&
-        onSiteAndNearby
+        !shouldBeFilteredOut
       );
     })
   );
@@ -204,6 +250,7 @@
             {filters}
             {filteredServices}
             {showDeploymentNotice}
+            bind:currentPageLength
           />
         </div>
       {:else if showDeploymentNotice}

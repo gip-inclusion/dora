@@ -1,13 +1,23 @@
-from django.core.exceptions import ValidationError
-from django.utils import timezone
+import functools
+import logging
+
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import transaction
+from django.db.models import Count, Exists, OuterRef, Q
+from django.shortcuts import get_object_or_404
 from rest_framework import mixins, permissions, serializers, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
+from ..services.models import Service
+from ..structures.models import Structure
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -23,7 +33,13 @@ from .models import (
     RejectionReason,
     SentContactEmail,
 )
-from .serializers import OrientationSerializer
+from .serializers import (
+    OrientationSerializer,
+    ReceivedOrientationExportSerializer,
+    SentOrientationExportSerializer,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class ModeratedOrientationPermission(permissions.BasePermission):
@@ -108,9 +124,8 @@ class OrientationViewSet(
                 orientation.service.duration_weekly_hours
             )
             orientation.duration_weeks = orientation.service.duration_weeks
-        orientation.processing_date = timezone.now()
-        orientation.status = OrientationStatus.ACCEPTED
-        orientation.save()
+            orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
+        orientation.set_status(OrientationStatus.ACCEPTED, request.user)
 
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
@@ -132,14 +147,19 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        orientation.processing_date = timezone.now()
-        orientation.status = OrientationStatus.REJECTED
-        orientation.save()
-        orientation.rejection_reasons.set(
-            RejectionReason.objects.filter(value__in=reasons)
-        )
+        with transaction.atomic():
+            orientation.delete_attachments()
+            orientation.rejection_reasons.set(
+                RejectionReason.objects.filter(value__in=reasons)
+            )
+            orientation.set_status(OrientationStatus.REJECTED, request.user)
 
-        send_orientation_rejected_emails(orientation, sanitized_message)
+            transaction.on_commit(
+                functools.partial(
+                    send_orientation_rejected_emails, orientation, sanitized_message
+                )
+            )
+
         return Response(status=204)
 
     @action(
@@ -229,3 +249,92 @@ class OrientationViewSet(
         send_orientation_created_to_structure(orientation)
 
         return Response(status=204)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def display_orientation_stats(request: Request, structure_slug: str) -> Response:
+    structure = get_object_or_404(
+        Structure.objects.annotate(
+            has_services=Exists(Service.objects.filter(structure=OuterRef("pk")))
+        ),
+        slug=structure_slug,
+    )
+
+    if not structure.can_edit_services(request.user):
+        raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
+
+    stats = Orientation.objects.filter(
+        Q(prescriber_structure=structure) | Q(service__structure=structure)
+    ).aggregate(
+        total_sent=Count("id", filter=Q(prescriber_structure=structure)),
+        total_sent_pending=Count(
+            "id",
+            filter=Q(prescriber_structure=structure, status=OrientationStatus.PENDING),
+        ),
+        total_received=Count("id", filter=Q(service__structure=structure)),
+        total_received_pending=Count(
+            "id",
+            filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
+        ),
+    )
+
+    stats["structure_has_services"] = structure.has_services
+
+    return Response(stats)
+
+
+class OrientationExportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, structure_slug: str) -> Response:
+        export_type = request.query_params.get("type")
+
+        structure = get_object_or_404(
+            Structure.objects.all(),
+            slug=structure_slug,
+        )
+
+        if not structure.can_edit_services(request.user):
+            raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
+
+        if export_type == "sent":
+            return self._export_sent_orientations(request, structure)
+        elif export_type == "received":
+            return self._export_received_orientations(request, structure)
+        else:
+            raise serializers.ValidationError(
+                {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
+            )
+
+    def _export_sent_orientations(
+        self, request: Request, structure: Structure
+    ) -> Response:
+        orientations = (
+            Orientation.objects.filter(prescriber_structure=structure)
+            .order_by("-creation_date")
+            .select_related("service__structure", "prescriber")
+        )
+
+        serializer = SentOrientationExportSerializer(orientations, many=True)
+
+        return Response(serializer.data)
+
+    def _export_received_orientations(
+        self, request: Request, structure: Structure
+    ) -> Response:
+        orientations = (
+            Orientation.objects.filter(service__structure=structure)
+            .exclude(
+                status__in=[
+                    OrientationStatus.MODERATION_PENDING,
+                    OrientationStatus.MODERATION_REJECTED,
+                ]
+            )
+            .order_by("-creation_date")
+            .select_related("service__structure", "prescriber_structure", "prescriber")
+        )
+
+        serializer = ReceivedOrientationExportSerializer(orientations, many=True)
+
+        return Response(serializer.data)

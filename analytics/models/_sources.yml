@@ -59,6 +59,7 @@ sources:
           description:
           Identifiant du motif de refus.
 
+      - name: services_coachorientationmode
       - name: services_fundinglabel
         description:
         Table de correspondance id-fundinglabel des labels de financement.
@@ -108,6 +109,7 @@ sources:
       - name: services_coachorientationmodes
         ToDo: à documenter avec le métier
 
+      - name: services_servicefee
       - name: services_service_funding_labels
         description:
         Labels de financement des services financés.
@@ -116,6 +118,7 @@ sources:
         description:
         Type de mise à disposition des services (à distance ou en présentiel).
 
+      - name: services_servicesource
       - name: stats_deploymentstate
         description:
         Etat de déploiement pour chaque département.
@@ -231,6 +234,7 @@ sources:
         description:
         Table de correspondance entre les utilisateurs et leur structure potentielle, pour lesquels le rattachement n'est pas finalisé (invitation en attente ou demande de rattachement en attente)
 
+      - name: structures_structuresource
       - name: structures_structuretypology
         description:
         Typologie des structures (donnée déclarative, fiable pour FT, ML et les CD).

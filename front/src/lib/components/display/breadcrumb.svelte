@@ -27,6 +27,7 @@
     | "service-orientation-step2"
     | "service-orientation-confirmation"
     | "orientation"
+    | "orientation-export"
     | "service"
     | "manager-dashboard";
 
@@ -54,6 +55,7 @@
     "service-orientation-step2": "Orienter • Étape 2/2",
     "service-orientation-confirmation": "Orienter • Confirmation",
     orientation: "Demande d’orientation",
+    "orientation-export": "Suivi des orientations",
     "saved-searches": "Mes alertes",
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",

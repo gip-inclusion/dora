@@ -3,16 +3,28 @@ from typing import Optional
 
 from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import CharField, F, Q
+from django.db.models import (
+    BooleanField,
+    Case,
+    CharField,
+    Count,
+    Exists,
+    F,
+    OuterRef,
+    Prefetch,
+    Q,
+    Value,
+    When,
+)
 from django.db.models.functions import Length
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from dora.admin_express.utils import get_clean_city_name
 from dora.core.models import EnumModel, LogItem, ModerationMixin, ModerationStatus
 from dora.core.utils import code_insee_to_code_dept
 from dora.core.validators import (
@@ -22,6 +34,7 @@ from dora.core.validators import (
     validate_safir,
     validate_siret,
 )
+from dora.decoupage_administratif.utils import get_clean_city_name
 from dora.sirene.models import Establishment
 from dora.sirene.serializers import EstablishmentSerializer
 from dora.structures.emails import (
@@ -152,12 +165,127 @@ class StructureQuerySet(models.QuerySet):
     def orphans(self):
         return self.filter(membership=None, putative_membership=None)
 
-    def awaiting_moderation(self):
-        return self.filter(
-            moderation_status__in=[
-                ModerationStatus.NEED_NEW_MODERATION,
-                ModerationStatus.NEED_INITIAL_MODERATION,
-            ]
+    def annotated_structures_for_admin(self):
+        from dora.services.enums import ServiceStatus
+        from dora.services.models import Service
+
+        return self.prefetch_related(
+            "national_labels",
+            Prefetch(
+                "putative_membership",
+                queryset=StructurePutativeMember.objects.filter(
+                    user__is_active=True
+                ).select_related("user"),
+                to_attr="potential_members",
+            ),
+        ).annotate(
+            num_draft_services=Count(
+                "services",
+                distinct=True,
+                filter=Q(services__status=ServiceStatus.DRAFT),
+            ),
+            num_published_services=Count(
+                "services",
+                distinct=True,
+                filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            num_active_services=Count(
+                "services",
+                distinct=True,
+                filter=~Q(services__status=ServiceStatus.ARCHIVED),
+            ),
+            num_outdated_services=Service.objects.update_advised()
+            .filter(structure=OuterRef("pk"))
+            .values("structure")
+            .annotate(count=Count("*"))
+            .values("count")[:1],
+            has_valid_admin=Exists(
+                StructureMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    user__is_valid=True,
+                    user__is_active=True,
+                )
+            ),
+            is_orphan=Case(
+                When(
+                    Exists(StructureMember.objects.filter(structure=OuterRef("pk")))
+                    | Exists(
+                        StructurePutativeMember.objects.filter(structure=OuterRef("pk"))
+                    ),
+                    then=Value(False),
+                ),
+                default=Value(True),
+                output_field=BooleanField(),
+            ),
+            awaiting_moderation=Case(
+                When(
+                    moderation_status__in=[
+                        ModerationStatus.NEED_NEW_MODERATION,
+                        ModerationStatus.NEED_INITIAL_MODERATION,
+                    ],
+                    then=Value(True),
+                ),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            is_waiting=Case(
+                When(
+                    ~Exists(
+                        StructureMember.objects.filter(
+                            structure=OuterRef("pk"),
+                            is_admin=True,
+                            user__is_valid=True,
+                            user__is_active=True,
+                        )
+                    )
+                    & Exists(
+                        StructurePutativeMember.objects.filter(
+                            structure=OuterRef("pk"),
+                            is_admin=True,
+                            invited_by_admin=True,
+                            user__is_active=True,
+                        )
+                    ),
+                    then=Value(True),
+                ),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            categories_list=ArrayAgg(
+                "services__categories__value",
+                distinct=True,
+                filter=Q(services__categories__isnull=False),
+            ),
+            admin_emails=ArrayAgg(
+                "membership__user__email",
+                distinct=True,
+                filter=Q(
+                    membership__is_admin=True,
+                    membership__user__is_valid=True,
+                    membership__user__is_active=True,
+                ),
+            ),
+            editor_emails=ArrayAgg(
+                "services__last_editor__email",
+                distinct=True,
+                filter=Q(
+                    ~Q(services__last_editor__email=settings.DORA_BOT_USER),
+                    services__status=ServiceStatus.PUBLISHED,
+                    services__last_editor__isnull=False,
+                ),
+            ),
+        )
+
+    def orphans_for_manager(self, manager: User):
+        return self.orphans().filter(department__in=manager.departments)
+
+    def awaiting_moderation(self, manager: User | None = None):
+        queryset = self.annotated_structures_for_admin().filter(is_obsolete=False)
+        if manager:
+            queryset = queryset.filter(department__in=manager.departments)
+        return queryset.filter(
+            is_orphan=False, is_waiting=False, awaiting_moderation=True
         )
 
     def requiring_action_from_department_managers(self):

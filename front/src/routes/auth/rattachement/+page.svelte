@@ -4,14 +4,14 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { token, userInfo, refreshUserInfo } from "$lib/utils/auth";
-  import { get } from "svelte/store";
+  import { getToken, userInfo, refreshUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -23,15 +23,17 @@
   let { establishment } = $state(data);
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
+  let loading = $state(false);
 
   async function handleJoin() {
+    loading = true;
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
     const response = await fetch(targetUrl, {
       method: "POST",
       headers: {
         Accept: defaultAcceptHeader,
         "Content-Type": "application/json",
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         siret: establishment.slug ? undefined : establishment.siret,
@@ -48,11 +50,14 @@
       result.data = await response.json();
       await refreshUserInfo();
       await goto(`/structures/${result.data.slug}`);
+      loading = false;
     } else {
       try {
         joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
+      } finally {
+        loading = false;
       }
     }
   }
@@ -136,6 +141,7 @@
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
                   disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  {loading}
                 />
               </div>
             </div>
@@ -146,7 +152,7 @@
 
     <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-lg border bg-white">
       <a
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-sinscrire-sur-dora-14d64n0/#3-03-adherer-a-votre-structure"
+        href={`${URL_HELP_SITE}article/comment-sinscrire-sur-dora-14d64n0/#3-03-adherer-a-votre-structure`}
         target="_blank"
         rel="noopener"
         class="flex items-center"

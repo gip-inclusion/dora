@@ -1,7 +1,7 @@
-from django.core.management.base import BaseCommand
 from django.db.models import Q
 from rest_framework.authtoken.models import Token
 
+from dora.core.commands import BaseCommand
 from dora.oidc.models import UserSession
 
 """

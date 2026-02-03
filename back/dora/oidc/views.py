@@ -1,5 +1,5 @@
 import logging
-from urllib.parse import urlencode
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
@@ -7,14 +7,18 @@ from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from furl import furl
+from itoutils.urls import add_url_params
 from mozilla_django_oidc.views import (
     OIDCAuthenticationCallbackView,
+    OIDCAuthenticationRequestView,
     OIDCLogoutView,
     resolve_url,
 )
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
+
+from dora.core.constants import FRONTEND_PC_CALLBACK_URL
 
 logger = logging.getLogger(__name__)
 
@@ -39,11 +43,11 @@ def oidc_logged_in(request):
     # attention : l'utilisateur est toujours anonyme (à ce point il n'existe qu'un token DRF)
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
-    redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback/{token}/"
+    redirect_uri = FRONTEND_PC_CALLBACK_URL
 
     # gestion du `next` :
     if request.GET.get("next"):
-        redirect_uri += "?" + request.GET.urlencode()
+        redirect_uri = add_url_params(redirect_uri, request.GET)
 
     # Passage au front des informations complémentaires de l'utilisateur
     # ici : SAFIR et / ou SIRET
@@ -51,10 +55,23 @@ def oidc_logged_in(request):
         url_params = token.user.structure_to_join(
             siret=siret_safir["siret"], safir=siret_safir["safir"]
         )
-        redirect_uri += "&" + urlencode(url_params)
+        redirect_uri = add_url_params(redirect_uri, url_params)
 
-    # on redirige (pour l'instant) vers le front en faisant passer le token DRF
-    return HttpResponseRedirect(redirect_to=redirect_uri)
+    response = HttpResponseRedirect(redirect_to=redirect_uri)
+
+    cookie_kwargs = {
+        "path": "/",
+        "samesite": "Lax",
+        "secure": True,
+        "httponly": False,
+    }
+
+    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
+    cookie_kwargs["domain"] = parsed_frontend_url.hostname
+
+    response.set_cookie("token", token.key, **cookie_kwargs)
+
+    return response
 
 
 @api_view(["GET"])
@@ -87,6 +104,24 @@ def oidc_pre_logout(request):
 
     # Dans tous les cas, effacement de la session Django :
     return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
+
+
+class CustomAuthenticationRequestView(OIDCAuthenticationRequestView):
+    """
+    Vue d'authentification OIDC personnalisée :
+        Surcharge la vue par défaut de `mozilla-django-oidc` pour ajouter
+        le paramètre `login_hint` à la requête d'autorisation si celui-ci
+        est présent dans les paramètres de la requête HTTP.
+    """
+
+    def get_extra_params(self, request):
+        extra_params = super().get_extra_params(request) or {}
+
+        login_hint = request.GET.get("login_hint")
+        if login_hint:
+            extra_params["login_hint"] = login_hint
+
+        return extra_params
 
 
 class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):

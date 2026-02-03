@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import json
 import os
 
 from botocore.config import Config
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     "dora.logs",
     "dora.oidc",
     "dora.auth_links",
+    "dora.nexus",
+    "dora.decoupage_administratif",
 ]
 
 MIDDLEWARE = [
@@ -133,6 +136,7 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv("REDIS_URL"),
         "TIMEOUT": int(os.getenv("DJANGO_CACHE_TIMEOUT", 300)),  # 5 minutes par défaut
+        "KEY_PREFIX": "django",
     }
 }
 
@@ -196,6 +200,7 @@ STORAGES = {
                 request_checksum_calculation="when_required",
                 response_checksum_validation="when_required",
             ),
+            "object_parameters": {"ContentDisposition": "attachment"},
         },
     },
     "staticfiles": {
@@ -216,6 +221,8 @@ AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_QUERYSTRING_EXPIRE = 24 * 3600  # secondes
 
 MAX_UPLOAD_SIZE_MB = 6
+MAX_FILENAME_LENGTH = 64
+FILE_VALIDATION_BUFFER_LENGTH = int(os.getenv("FILE_VALIDATION_BUFFER_LENGTH", 2048))
 ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "doc",
     "docx",
@@ -223,10 +230,23 @@ ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "png",
     "jpeg",
     "jpg",
+    "ods",
     "odt",
     "xls",
     "xlsx",
 ]
+
+ALLOWED_MIME_TYPES = {
+    "application/pdf": ["pdf"],
+    "application/msword": ["doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"],
+    "application/vnd.oasis.opendocument.text": ["odt"],
+    "application/vnd.oasis.opendocument.spreadsheet": ["ods"],
+    "application/vnd.ms-excel": ["xls"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"],
+    "image/png": ["png"],
+    "image/jpeg": ["jpeg", "jpg"],
+}
 
 # Type de clé primaire par défaut :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -243,7 +263,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "json": {"()": "dora.logs.utils.RedactUserInformationDataDogJSONFormatter"},
+        "json": {"()": "itoutils.django.logging.DataDogJSONFormatter"},
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
@@ -268,6 +288,12 @@ LOGGING = {
 
 ANON_THROTTLE_RATE_PER_MINUTE = os.getenv("ANON_THROTTLE_RATE_PER_MINUTE", "24")
 USER_THROTTLE_RATE_PER_MINUTE = os.getenv("USER_THROTTLE_RATE_PER_MINUTE", "120")
+USER_UPLOAD_THROTTLE_RATE_PER_MINUTE = os.getenv(
+    "USER_UPLOAD_THROTTLE_RATE_PER_MINUTE", "5"
+)
+STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR = os.getenv(
+    "STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR", "20"
+)
 
 REST_FRAMEWORK = {
     # Let's lock down access by default
@@ -300,6 +326,8 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": f"{ANON_THROTTLE_RATE_PER_MINUTE}/minute",
         "user": f"{USER_THROTTLE_RATE_PER_MINUTE}/minute",
+        "upload": f"{USER_UPLOAD_THROTTLE_RATE_PER_MINUTE}/minute",
+        "structure_upload": f"{STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR}/hour",
     },
 }
 
@@ -330,14 +358,12 @@ DATA_INCLUSION_STREAM_API_KEY = os.getenv("DATA_INCLUSION_STREAM_API_KEY")
 DATA_INCLUSION_STREAM_SOURCES = (lambda s: s.split(",") if s else None)(
     os.getenv("DATA_INCLUSION_STREAM_SOURCES")
 )
-DATA_INCLUSION_TIMEOUT_SECONDS = os.getenv("DATA_INCLUSION_TIMEOUT_SECONDS")
 
-try:
-    DATA_INCLUSION_SCORE_QUALITE_MINIMUM = float(
-        os.getenv("DATA_INCLUSION_SCORE_QUALITE_MINIMUM")
-    )
-except (TypeError, ValueError):
-    DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
+DATA_INCLUSION_TIMEOUT_SECONDS = int(os.getenv("DATA_INCLUSION_TIMEOUT_SECONDS", 10))
+
+DATA_INCLUSION_SCORE_QUALITE_MINIMUM = float(
+    os.getenv("DATA_INCLUSION_SCORE_QUALITE_MINIMUM", 0.8)
+)
 
 DATA_INCLUSION_EXCLUDE_DUPLICATES = (
     os.getenv("DATA_INCLUSION_EXCLUDE_DUPLICATES") == "true"
@@ -411,6 +437,10 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
+# OIDC : permet de préciser quelle est la class/vue en charge de l'initiation de l'authentification
+# (pour l'ajout du paramètre `login_hint`).
+OIDC_AUTHENTICATE_CLASS = "dora.oidc.views.CustomAuthenticationRequestView"
+
 # Notifications :
 # voir management command `process_notification_tasks`
 
@@ -469,9 +499,18 @@ SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL")
 
 SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
 
-# Rientations :
+# Orientations :
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
 ORIENTATION_EMAILS_DEBUG = os.getenv("ORIENTATION_EMAILS_DEBUG") == "true"
+ORIENTATION_EXPIRATION_PERIOD_DAYS = int(
+    os.getenv("ORIENTATION_EXPIRATION_PERIOD_DAYS", 30)
+)
+ORIENTATION_ANONYMIZATION_PERIOD_DAYS = int(
+    os.getenv("ORIENTATION_ANONYMIZATION_PERIOD_DAYS", 730)
+)
+ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS = int(
+    os.getenv("ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS", 6)
+)
 ORIENTATION_SIRENE_BLACKLIST = [
     # France Travail
     "130005481",
@@ -620,3 +659,24 @@ if DJANGO_ADMIN_2FA_ENABLED:
         "django_otp.plugins.otp_totp",
     ]
     MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
+
+
+# Nexus
+# ---------------------------------------
+NEXUS_METABASE_DB_HOST = os.getenv("NEXUS_METABASE_DB_HOST")
+NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
+NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
+NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
+NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
+NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
+pdi_jwt_key = os.getenv("PDI_JWT_KEY")
+PDI_JWT_KEY = json.loads(pdi_jwt_key) if pdi_jwt_key else None
+
+
+# API de découpage administratif
+# ---------------------------------------
+GEO_API_GOUV_BASE_URL = os.getenv("GEO_API_GOUV_BASE_URL", "https://geo.api.gouv.fr")
+try:
+    GEO_API_GOUV_TIMEOUT_SECONDS = int(os.getenv("GEO_API_GOUV_TIMEOUT_SECONDS"), 10)
+except (TypeError, ValueError):
+    GEO_API_GOUV_TIMEOUT_SECONDS = None

@@ -1,0 +1,11 @@
+-r ./test.in
+
+django-extensions
+django-silk
+pre-commit
+
+# Génération du schéma de données
+pygraphviz
+
+# Génération d'un bilan de sécurité
+bandit

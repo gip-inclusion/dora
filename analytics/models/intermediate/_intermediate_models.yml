@@ -1,78 +1,181 @@
 models:
-
+  - name: int_accompagnateurs_1_orientation_max
+    description: |
+      Accompagnateurs ayant réalisé au plus une orientation. Table crée afin de fournir aux UX les utilisateurs accompagnateurs ciblés pour des interviews.
+    config:
+      indexes:
+        - columns: [id_prescriber]
+    columns:
+      - name: id_prescriber
+        description: |
+          Identifiant de l'accompagnateur (pouvant être joigné à la colonne id dans la table user).
+        data_tests:
+          - not_null
+          - unique
+      - name: email_prescriber
+        description: |
+          Email de l'accompagnateur.
+        data_tests:
+          - not_null
+          - unique
+      - name: first_name_prescriber
+        description: |
+          Prénom de l'accompagnateur.
+      - name: last_name_prescriber
+        description: |
+          Nom de l'accompagnateur.
+      - name: last_login_prescriber
+        description: |
+          Date de la dernière connexion de l'accompagnateur.
+        data_tests:
+          - not_null
+      - name: date_joined_prescriber
+        description: |
+          Date à laquelle l'accompagnateur a été ajouté à la base utilisateurs. Cela ne corresponds pas forcement au premier login.
+          En effet, il peut être ajouté en tant que utilisateur potentiel (invité par un service tiers par exemple).
+      - name: main_activity_prescriber
+        description: |
+          Activité principale de l'accompagnateur pouvant être "accompagnateur" ou "accompagnateur-offreur".
+      - name: last_orientation_date
+        description: |
+          Date de la dernière orientation réalisée par l'accompagnateur.
+      - name: total_orientations
+        description: |
+          Nombre total d'orientations réalisées par l'accompagnateur.
+        data_tests:
+          - not_null
   - name: int_iMER
-    description:
-      Intentions de mise en relation.
-      Combinaison des tables orientation et mobilisation.
-
+    description: |
+      Table contenant les intentions de mise en relation (mobilisation et orientations)
+    columns:
+      - name: event_id
+        description: identifiant de la mise en relation
+        tests:
+          - unique
+          - not_null
+  - name: int_mobilisation_to_orientation
+    description: 
+      Cette vue associe à chaque mobilisation la première orientation qui en suit si il y en a une. 
+      Une orientation suit une mobilisation si elle a le même user_id, est faite dans l'heure après la mobilisation,
+      et concerne le même service (slug)
+    columns:
+      - name: mobilisation_id
+        description: identifiant de la mobilisation
+        tests: 
+          - unique
+          - not_null  
+      - name: user_id
+        description: identifiant de l'utilisateur à l'origine de la prescription
+        tests: 
+          - not_null
+      - name: first_following_orientation_id
+        description: id de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
+      - name: mobilisation_date
+        description: date de la mobilisation
+        tests: 
+          - not_null
+      - name: first_following_orientation_date
+        description: date de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
+      - name: delay
+        description: temps passé en entre la mobilisation et l'orientation. 
   - name: int_services_models
-    description:
+    description: |
       Services créés à partir de modèles.
       Une ligne par service, il faut donc bien penser à passer par un distinct(id_model) pour obtenir le modèles sans doublons.
 
   - name: int_orientations_following_mobilisation
-    description:
+    description: |
       Tables contenant les orientations réalisées après une mobilisation.
     config:
       indexes:
         - columns: [mobilisation_id]
-
+    columns: 
+      - name: orientation_id
+        description: identifiant de l'orientation
+        tests: 
+          - unique
+          - not_null
+      - name: mobilisation_id
+        description: identifiant de la mobilisation
+        tests:
+          - not_null
   - name: int_pilotage_bizdev
-    description:
+    description: |
       Indicateurs de pilotage du déploiement par département.
       Contient notamment la maturité telle que définie [ici](https://www.notion.so/gip-inclusion/Calcul-de-la-maturit-1995f321b6048092b876f7b08a87fa11?source=copy_link).
       Ainsi que : le score de maturité, le nombre de DEA et BRSA à partir des données d'insertion de France Travail, le nombre d'accompagnateurs, et de services et structures publiées dans le département.
       Référent métier: Yoan.
 
   - name: int_prescribers
-    description:
+    description: |
       Accompagnateurs avec le label national de leur structure.
       `user_id` n'est pas une clé d'unicité étant donné qu'un utilisateur peut avoir de 0 à n labels.
 
   - name: int_mobilisationevent_user
-    description:
+    description: |
       Événements de mobilisation des utilisateurs.
-
+    columns: 
+      - name: event_id
+        description: |
+          Identifiant de l'événement de mobilisation
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        tests: 
+          - not_null
   - name: int_orientation_user_service
-    description:
+    description: |
       Orientations des utilisateurs vers des services.
     config:
       indexes:
         - columns: [user_id, orientation_creation_date, service_slug]
-
+    columns:  
+      - name: orientation_id 
+        description: |
+          Identifiant de l'orientation
+        tests:
+          - unique
+          - not_null
+  - name: int_users 
+    description: |
+      Vue contenant les informations sur les utilisateurs.
+  - name: int_users_with_iMer
+    description: |
+      Modèle ephemeral contenant les utilisateurs ayant fait au moins une intention de mise en relation
   - name: int_user_page_views
-    description:
+    description: |
       Vues de pages par les utilisateurs.
 
   - name: int_user_search_views
-    description:
+    description: |
       Recherches par les utilisateurs.
 
   - name: int_service_categories
-    description:
+    description: |
       Catégories de services.
 
   - name: int_service_funding_labels
-    description:
+    description: |
       Labels de financement des services.
 
   - name: int_service_structure
-    description:
+    description: |
       Structures de services.
     config:
       indexes:
         - columns: [service_id]
 
   - name: int_service_structure_labels
-    description:
+    description: |
       Labels des structures de services.
 
   - name: int_serviceview_user_service
-    description:
+    description: |
       Vues de services par les utilisateurs.
 
   - name: int_structure_national_labels
-    description:
+    description: |
       Labels nationaux associés aux structures.
       `structure_id` n'est pas une clé d'unicité étant donné qu'une structure peut avoir de 0 à n labels.
     config:
@@ -80,25 +183,25 @@ models:
         - columns: [structure_id]
 
   - name: int_structure_members
-    description:
+    description: |
       Membres des structures.
 
   - name: int_monthly_user_iMER
-    description:
+    description: |
       Suivi du nombre d'intentions de mise en relation par utilisateur et par mois.
 
   - name: int_monthly_user_mobilisations
-    description:
+    description: |
       Suivi du nombre de mobilisations par utilisateur et par mois.
 
   - name: int_monthly_user_orientations
-    description:
+    description: |
       Suivi du nombre d'orientations par utilisateur et par mois.
 
   - name: int_monthly_user_service_views
-    description:
+    description: |
       Suivi du nombre de vues de services par utilisateur et par mois.
 
   - name: int_services_outside_structure_department
-    description: 
+    description: |
       Liste des services rattaché à un département différent de la structure.

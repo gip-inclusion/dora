@@ -1,0 +1,135 @@
+# serializer version: 1
+# name: test_notifications_disabled[logs]
+  list([
+    "Le système de notification n'est pas activé sur cet environnement.",
+  ])
+# ---
+# name: test_notifications_disabled[output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---
+# name: test_notifications_enabled[logs]
+  list([
+    'DRY-RUN',
+    ' - les notifications ne sont pas créées dans ce mode',
+    '> InvitedUsersTask (invited_users) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> DepartmentManagerWeeklyEmailTask (manager_structure_moderation) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> OrphanStructuresTask (orphan_structures) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> SelfInvitedUsersTask (self_invited_users) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> StructureServiceActivationTask (service_activation) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> ServiceEditorsTask (service_editors) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> UserAccountDeletionTask (user_account_deletion) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> UsersWithoutStructureTask (users_without_structure) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+  ])
+# ---
+# name: test_notifications_enabled[output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---
+# name: test_notifications_with_limit[logs]
+  list([
+    'DRY-RUN',
+    ' - les notifications ne sont pas créées dans ce mode',
+    ' - limite de notifications par tâche : 10',
+    '> InvitedUsersTask (invited_users) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> DepartmentManagerWeeklyEmailTask (manager_structure_moderation) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> OrphanStructuresTask (orphan_structures) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> SelfInvitedUsersTask (self_invited_users) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> StructureServiceActivationTask (service_activation) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> ServiceEditorsTask (service_editors) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> UserAccountDeletionTask (user_account_deletion) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+    '> UsersWithoutStructureTask (users_without_structure) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+  ])
+# ---
+# name: test_notifications_with_limit[output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---
+# name: test_notifications_with_types[logs]
+  list([
+    'DRY-RUN',
+    ' - les notifications ne sont pas créées dans ce mode',
+    ' - tâche(s) sélectionnée(s) : orphan_structures',
+    '> OrphanStructuresTask (orphan_structures) :',
+    " > nombre d'éléments candidats : 0",
+    ' > aucune notification traitée',
+    ' > aucune erreur',
+    ' > aucune notification obsolète',
+  ])
+# ---
+# name: test_notifications_with_types[output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---

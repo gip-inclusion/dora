@@ -3,7 +3,7 @@
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import * as v from "$lib/validation/schema-utils";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
@@ -12,6 +12,7 @@
   import { trackServiceShare } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { browser } from "$app/environment";
+
   interface Props {
     isOpen?: boolean;
     service: Service;
@@ -38,7 +39,7 @@
       rules: [v.isString(), v.maxStrLength(254)],
       post: [v.trim],
       required: () => {
-        return !$token;
+        return !getToken();
       },
     },
     recipientEmail: {
@@ -66,8 +67,8 @@
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
     });
-    if ($token) {
-      headers.append("Authorization", `Token ${$token}`);
+    if (getToken()) {
+      headers.append("Authorization", `Token ${getToken()}`);
     }
 
     return fetch(url, {
@@ -135,7 +136,7 @@
         bind:requesting
       >
         <fieldset class="mb-s24 gap-s24 flex flex-col">
-          {#if !$token}
+          {#if !getToken()}
             <BasicInputField
               type="email"
               id="senderName"
@@ -179,7 +180,8 @@
           <Button
             type="submit"
             label="Envoyer la fiche"
-            disabled={!recipientEmail || !recipientKind || requesting}
+            disabled={!recipientEmail || !recipientKind}
+            loading={requesting}
             preventDefaultOnMouseDown
           />
         </div>

@@ -1,10 +1,9 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
 import { defaultAcceptHeader } from "$lib/utils/api";
-import { token } from "$lib/utils/auth";
+import { getToken } from "$lib/utils/auth";
 import insane from "insane";
 import showdown from "showdown";
-import { get } from "svelte/store";
 
 const { defaults } = insane;
 
@@ -42,7 +41,7 @@ export async function fetchData<T>(
   customHeaders: Record<string, string> = {}
 ) {
   const headers = { Accept: defaultAcceptHeader, ...customHeaders };
-  const currentToken = get(token);
+  const currentToken = getToken();
 
   if (currentToken) {
     headers.Authorization = `Token ${currentToken}`;

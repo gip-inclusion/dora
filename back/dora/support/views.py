@@ -1,16 +1,3 @@
-from django.conf import settings
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import (
-    BooleanField,
-    Case,
-    Count,
-    Exists,
-    OuterRef,
-    Prefetch,
-    Q,
-    Value,
-    When,
-)
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
 
@@ -20,7 +7,7 @@ from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember, StructurePutativeMember
+from dora.structures.models import Structure
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
@@ -84,96 +71,7 @@ class StructureAdminViewSet(
         user = self.request.user
         department = self.request.query_params.get("department")
 
-        structures = (
-            Structure.objects.all()
-            .prefetch_related(
-                "national_labels",
-                Prefetch(
-                    "putative_membership",
-                    queryset=StructurePutativeMember.objects.filter(
-                        user__is_active=True
-                    ).select_related("user"),
-                    to_attr="potential_members",
-                ),
-            )
-            .annotate(
-                num_draft_services=Count(
-                    "services",
-                    distinct=True,
-                    filter=Q(services__status=ServiceStatus.DRAFT),
-                ),
-                num_published_services=Count(
-                    "services",
-                    distinct=True,
-                    filter=Q(services__status=ServiceStatus.PUBLISHED),
-                ),
-                num_active_services=Count(
-                    "services",
-                    distinct=True,
-                    filter=~Q(services__status=ServiceStatus.ARCHIVED),
-                ),
-                num_outdated_services=Service.objects.update_advised()
-                .filter(structure=OuterRef("pk"))
-                .values("structure")
-                .annotate(count=Count("*"))
-                .values("count")[:1],
-                has_valid_admin=Exists(
-                    StructureMember.objects.filter(
-                        structure=OuterRef("pk"),
-                        is_admin=True,
-                        user__is_valid=True,
-                        user__is_active=True,
-                    )
-                ),
-                is_orphan=Case(
-                    When(
-                        Exists(StructureMember.objects.filter(structure=OuterRef("pk")))
-                        | Exists(
-                            StructurePutativeMember.objects.filter(
-                                structure=OuterRef("pk")
-                            )
-                        ),
-                        then=Value(False),
-                    ),
-                    default=Value(True),
-                    output_field=BooleanField(),
-                ),
-                awaiting_moderation=Case(
-                    When(
-                        moderation_status__in=[
-                            ModerationStatus.NEED_NEW_MODERATION,
-                            ModerationStatus.NEED_INITIAL_MODERATION,
-                        ],
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                categories_list=ArrayAgg(
-                    "services__categories__value",
-                    distinct=True,
-                    filter=Q(services__categories__isnull=False),
-                ),
-                admin_emails=ArrayAgg(
-                    "membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        membership__is_admin=True,
-                        membership__user__is_valid=True,
-                        membership__user__is_active=True,
-                    ),
-                ),
-                editor_emails=ArrayAgg(
-                    "services__last_editor__email",
-                    distinct=True,
-                    filter=Q(
-                        ~Q(services__last_editor__email=settings.DORA_BOT_USER),
-                        services__status=ServiceStatus.PUBLISHED,
-                        services__last_editor__isnull=False,
-                    ),
-                ),
-            )
-        )
+        structures = Structure.objects.annotated_structures_for_admin()
 
         if not self.action == "list":
             structures = structures.select_related(

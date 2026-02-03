@@ -22,3 +22,11 @@ models:
     intermediate:
       +schema: intermediate
       +materialized: table
+    marts: 
+      +schema: marts
+      +materialized: table
+
+seeds:
+  dora:
+    les_emplois:
+      +schema: les_emplois

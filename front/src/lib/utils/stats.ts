@@ -1,7 +1,6 @@
 import { browser } from "$app/environment";
-import { token } from "$lib/utils/auth";
-import { get } from "svelte/store";
 import { getApiURL } from "$lib/utils/api";
+import { getToken } from "$lib/utils/auth";
 import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
@@ -31,7 +30,7 @@ async function logAnalyticsEvent(
     userHash: getAnalyticsId(),
     ...params,
   };
-  const currentToken = get(token);
+  const currentToken = getToken();
 
   const headers = new Headers({
     Accept: "application/json; version=1.0",

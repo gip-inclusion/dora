@@ -8,6 +8,7 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
   import { currentSchema } from "$lib/validation/validation";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -63,7 +64,7 @@
       <ul class="text-f14 font-bold">
         <li class="mb-s10">
           <a
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/quelle-thematique-choisir-pour-votre-service-cywvsk/"
+            href={`${URL_HELP_SITE}article/quelle-thematique-choisir-pour-votre-service-cywvsk/`}
             class="text-magenta-cta hover:underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
@@ -74,7 +75,7 @@
         </li>
         <li class="mb-s10">
           <a
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/siae-votre-offre-de-service-sur-dora-jb4405/"
+            href={`${URL_HELP_SITE}article/siae-votre-offre-de-service-sur-dora-jb4405/`}
             class="text-magenta-cta hover:underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
@@ -87,7 +88,7 @@
         </li>
         <li class="mb-s10">
           <a
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/"
+            href={`${URL_HELP_SITE}article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/`}
             class="text-magenta-cta hover:underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
@@ -98,7 +99,7 @@
         </li>
         <li>
           <a
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/"
+            href={`${URL_HELP_SITE}article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/`}
             class="text-magenta-cta hover:underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
