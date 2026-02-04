@@ -8,7 +8,12 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import normalize_string_for_search
 
 from .models import EPCI, City, Department, Region
-from .serializers import AdminDivisionSearchResultSerializer, SearchQuerySerializer
+from .serializers import (
+    AdminDivisionSearchResultSerializer,
+    AdminDivisionSerializer,
+    GetDepartmentsQuerySerializer,
+    SearchQuerySerializer,
+)
 
 
 @api_view(["GET"])
@@ -48,3 +53,18 @@ def search(request):
         )
 
     return Response(AdminDivisionSearchResultSerializer(qs, many=True).data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_departments(request):
+    serializer = GetDepartmentsQuerySerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+
+    codes = serializer.validated_data["dept_codes"]
+    if codes:
+        departments = Department.objects.filter(code__in=codes).order_by("code")
+    else:
+        departments = Department.objects.all().order_by("code")
+
+    return Response(AdminDivisionSerializer(departments, many=True).data)
