@@ -8,7 +8,7 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import normalize_string_for_search
 
 from .models import EPCI, City, Department, Region
-from .serializers import AdminDivisionSerializer, SearchQuerySerializer
+from .serializers import AdminDivisionSearchResultSerializer, SearchQuerySerializer
 
 
 @api_view(["GET"])
@@ -47,4 +47,4 @@ def search(request):
             .order_by(*sort_fields)[:10]
         )
 
-    return Response(AdminDivisionSerializer(qs, many=True).data)
+    return Response(AdminDivisionSearchResultSerializer(qs, many=True).data)
