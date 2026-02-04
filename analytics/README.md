@@ -11,6 +11,7 @@ Then:
 ```bash
 dbt deps
 dbt debug
+dbt seed
 dbt run
 dbt test
 ```
