@@ -16,7 +16,19 @@ class SearchQuerySerializer(serializers.Serializer):
     q = serializers.CharField(required=True)
 
 
+class GetDepartmentsQuerySerializer(serializers.Serializer):
+    dept_codes = serializers.CharField(required=False, allow_blank=True, default="")
+
+    def validate_dept_codes(self, value):
+        if not value or not value.strip():
+            return []
+        return [c.strip().upper() for c in value.split(",") if c.strip()]
+
+
 class AdminDivisionSerializer(serializers.Serializer):
     code = serializers.CharField()
     name = serializers.CharField()
+
+
+class AdminDivisionSearchResultSerializer(AdminDivisionSerializer):
     similarity = serializers.FloatField()

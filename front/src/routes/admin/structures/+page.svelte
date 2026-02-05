@@ -247,11 +247,7 @@
       {#if structures}
         <div class="gap-s16 flex flex-col lg:flex-row">
           <div class="h-s512 lg:w-s512 relative w-full shrink-0 lg:h-[800px]">
-            <StructuresMap
-              {filteredStructures}
-              bind:selectedStructureSlug
-              department={selectedDepartment}
-            />
+            <StructuresMap {filteredStructures} bind:selectedStructureSlug />
           </div>
           <div class="gap-s24 flex w-full flex-col">
             <Button
