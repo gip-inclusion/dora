@@ -36,6 +36,7 @@
   import { validate } from "$lib/validation/validation";
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
+  import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
 
   type RequestKind = "draft" | "publish";
 
@@ -297,4 +298,5 @@
       />
     </StickyFormSubmissionRow>
   {/if}
+  <DocumentUploadNoticeModal />
 </Form>
