@@ -145,7 +145,7 @@ fetch_and_export_di_data() {
 
     CURRENT_DATE=$(date +%F)
     # to be sure not to break anything, we keep v0 old version of the api
-    MART_URI="${S3_BUCKET_VARIANT}/data/marts/${CURRENT_DATE}/scheduled__${CURRENT_DATE%%/}T00:00:00+00:00/v0"
+    MART_URI="${S3_BUCKET_VARIANT}/data/marts/${CURRENT_DATE}/scheduled__${CURRENT_DATE%%/}T00:00:00+00:00/v1"
 
     # Generate DuckDB SQL file
     DUCKSQL=$(mktemp)
