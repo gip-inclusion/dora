@@ -22,7 +22,7 @@ class GetDepartmentsQuerySerializer(serializers.Serializer):
     def validate_dept_codes(self, value):
         if not value or not value.strip():
             return []
-        return [c.strip() for c in value.split(",") if c.strip()]
+        return [c.strip().upper() for c in value.split(",") if c.strip()]
 
 
 class AdminDivisionSerializer(serializers.Serializer):
