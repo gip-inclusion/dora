@@ -67,6 +67,11 @@
   );
   let isModalOpen = $state(false);
   let submit = $state<(submitterId?: string) => Promise<void>>();
+  let shouldShowModal = $derived(
+    (service?.credentials?.length ?? 0) > 0 ||
+      (service.forms?.length ?? 0) > 0 ||
+      !!service.onlineForm
+  );
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
   const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
@@ -115,16 +120,8 @@
     }
   }
 
-  function hasDocuments(): boolean {
-    return (
-      (service?.credentials?.length ?? 0) > 0 ||
-      (service.forms?.length ?? 0) > 0 ||
-      !!service.onlineForm
-    );
-  }
-
   function handleButtonClick(event: Event, kind: RequestKind) {
-    if (hasDocuments()) {
+    if (shouldShowModal) {
       event.preventDefault();
       requestKind = kind;
       isModalOpen = true;
