@@ -65,6 +65,7 @@
 </script>
 
 <div
+  {id}
   class="field-wrapper items-top gap-s8 flex flex-col items-stretch lg:items-start"
   class:lg:flex-row={!vertical}
   class:lg:items-stretch={vertical}

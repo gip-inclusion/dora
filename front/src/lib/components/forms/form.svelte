@@ -32,6 +32,7 @@
     ) => { validatedData; valid: boolean };
     children?: Snippet;
     submit?: (submitterId?: string) => Promise<void>;
+    validateForm?: (submitterId?: string) => { valid: boolean; validatedData: any };
   }
 
   let {
@@ -47,6 +48,7 @@
     onValidate,
     children,
     submit = $bindable(),
+    validateForm = $bindable(),
   }: Props = $props();
 
   $effect(() => {
@@ -123,14 +125,15 @@
     return jsonResult;
   }
 
-  async function submitForm(submitterId?: string) {
+  function runValidation(submitterId?: string) {
     $formErrors = {};
-
-    const { validatedData, valid } = onValidate
+    return onValidate
       ? onValidate(data, submitterId)
-      : validate(data, schema, {
-          servicesOptions,
-        });
+      : validate(data, schema, { servicesOptions });
+  }
+
+  async function submitForm(submitterId?: string) {
+    const { validatedData, valid } = runValidation(submitterId);
     if (valid) {
       try {
         requesting = true;
@@ -162,6 +165,7 @@
   }
 
   submit = submitForm;
+  validateForm = runValidation;
 
   async function handleSubmit(event: Event) {
     event.preventDefault();

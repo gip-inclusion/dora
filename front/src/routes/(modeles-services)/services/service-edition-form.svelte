@@ -67,7 +67,8 @@
   );
   let isModalOpen = $state(false);
   let submit = $state<(submitterId?: string) => Promise<void>>();
-  let shouldShowModal = $derived(
+  let validateForm = $state<(submitterId?: string) => { valid: boolean; validatedData: any }>();
+  const shouldShowModal = $derived(
     (service?.credentials?.length ?? 0) > 0 ||
       (service.forms?.length ?? 0) > 0 ||
       !!service.onlineForm
@@ -123,8 +124,11 @@
   function handleButtonClick(event: Event, kind: RequestKind) {
     if (shouldShowModal) {
       event.preventDefault();
-      requestKind = kind;
-      isModalOpen = true;
+      const { valid } = validateForm?.(kind) ?? { valid: false };
+      if (valid) {
+        requestKind = kind;
+        isModalOpen = true;
+      }
     }
   }
 
@@ -176,6 +180,7 @@
 <Form
   bind:data={service}
   bind:submit
+  bind:validateForm
   schema={currentSchema}
   {servicesOptions}
   onChange={handleChange}
