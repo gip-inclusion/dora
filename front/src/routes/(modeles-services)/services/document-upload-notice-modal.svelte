@@ -48,7 +48,7 @@
               </p>
             </div>
             <div
-              class="bg-service-violet p-s8 flex flex-col items-center justify-center rounded-md"
+              class="bg-service-violet p-s16 flex flex-col items-center justify-center rounded-md"
             >
               <h4>📤 Je reçois une orientation</h4>
               <p class="text-f14 text-gray-text">
@@ -168,12 +168,16 @@
               La <a
                 class="text-magenta-cta"
                 href="/politique-de-confidentialite"
-                >politique de confidentialité de Dora</a
+                target="_blank"
+                rel="noopener nofollow">politique de confidentialité de Dora</a
               >
             </li>
             <li class="m-s0 text-f14 text-gray-text">
-              L'<a class="text-magenta-cta" href="/politique-de-confidentialite"
-                >accord de co-responsabilité</a
+              L'<a
+                class="text-magenta-cta"
+                href="/cgu#accord_co_responsabilite"
+                target="_blank"
+                rel="noopener nofollow">accord de co-responsabilité</a
               > entre le GIP et vous
             </li>
           </ul>
@@ -183,7 +187,7 @@
   </div>
   <div class="mt-s16 pt-s16 border-gray-02 pb-s8 flex justify-end border-t-1">
     <Button
-      id={`document-upload-notice-accept-button`}
+      id="document-upload-notice-accept-button"
       label="J'ai compris"
       onclick={onConfirm}
     />

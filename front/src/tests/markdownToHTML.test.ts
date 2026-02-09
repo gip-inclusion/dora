@@ -23,9 +23,15 @@ describe("markdownToHTML", () => {
 
   test("bon niveau de titre", () => {
     const text = `#titre1\n##titre2`;
-    expect(markdownToHTML(text)).toBe("<h1>titre1</h1>\n<h2>titre2</h2>");
-    expect(markdownToHTML(text, 1)).toBe("<h1>titre1</h1>\n<h2>titre2</h2>");
-    expect(markdownToHTML(text, 2)).toBe("<h2>titre1</h2>\n<h3>titre2</h3>");
+    expect(markdownToHTML(text)).toBe(
+      '<h1>titre1</h1>\n<h2 id="titre2">titre2</h2>'
+    );
+    expect(markdownToHTML(text, 1)).toBe(
+      '<h1>titre1</h1>\n<h2 id="titre2">titre2</h2>'
+    );
+    expect(markdownToHTML(text, 2)).toBe(
+      '<h2 id="titre1">titre1</h2>\n<h3>titre2</h3>'
+    );
     expect(markdownToHTML(text, 3)).toBe("<h3>titre1</h3>\n<h4>titre2</h4>");
     expect(markdownToHTML(text, 4)).toBe("<h4>titre1</h4>\n<h5>titre2</h5>");
     expect(markdownToHTML(text, 5)).toBe("<h5>titre1</h5>\n<h6>titre2</h6>");

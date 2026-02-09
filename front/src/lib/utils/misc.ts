@@ -12,6 +12,7 @@ const INSANE_CONFIGURATION = {
   allowedAttributes: {
     ...defaults.allowedAttributes,
     a: [...defaults.allowedAttributes.a, "rel", "class"],
+    ["h2"]: ["id"],
   },
 };
 
@@ -21,6 +22,7 @@ export function markdownToHTML(markdownContent: string, titleLevel?: number) {
     tables: true,
     openLinksInNewWindow: true,
     simplifiedAutoLink: true,
+    customizedHeaderId: true,
   });
 
   return insane(converter.makeHtml(markdownContent), INSANE_CONFIGURATION);
