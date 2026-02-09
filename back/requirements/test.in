@@ -1,4 +1,4 @@
--r ./base.in
+-r base.in
 
 django-environ
 django-querycount
