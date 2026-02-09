@@ -19,6 +19,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { showNotice } from "$lib/utils/service-update-notices";
+  import DocumentUploadNoticeModal from "../services/document-upload-notice-modal.svelte";
 
   interface Props {
     model: Model;
@@ -39,6 +40,19 @@
 
   let requesting = $state(false);
   let submitFormInput = $state();
+  let isModalOpen = $state(false);
+  let submit = $state<() => Promise<void>>();
+  let validateForm = $state<() => { valid: boolean; validatedData: any }>();
+  const shouldShowModal = $derived(
+    (model?.credentials?.length ?? 0) > 0 ||
+      (model.forms?.length ?? 0) > 0 ||
+      !!model.onlineForm
+  );
+
+  function handleModalConfirm() {
+    isModalOpen = false;
+    submit?.();
+  }
 
   const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
 
@@ -50,6 +64,17 @@
     showNotice("modelSync", structure.slug);
     return createOrModifyModel(validatedData, shouldUpdateAllServices);
   }
+
+  function handleButtonClick(event: Event) {
+    if (shouldShowModal) {
+      event.preventDefault();
+      const { valid } = validateForm?.() ?? { valid: false };
+      if (valid) {
+        isModalOpen = true;
+      }
+    }
+  }
+
   function handleSuccess(result) {
     goto(`/modeles/${result.slug}`);
   }
@@ -59,6 +84,8 @@
 
 <Form
   bind:data={model}
+  bind:submit
+  bind:validateForm
   schema={modelSchema}
   {servicesOptions}
   onChange={handleChange}
@@ -202,13 +229,13 @@
           <input
             bind:this={submitFormInput}
             class="hidden"
-            type="submit"
+            onclick={handleButtonClick}
             value="Valider le formulaire"
           />
         {:else}
           <Button
             name="validate"
-            type="submit"
+            onclick={handleButtonClick}
             label="Enregistrer"
             loading={requesting}
           />
@@ -216,4 +243,9 @@
       </div>
     </StickyFormSubmissionRow>
   {/if}
+  <DocumentUploadNoticeModal
+    isOpen={isModalOpen}
+    onClose={() => (isModalOpen = false)}
+    onConfirm={handleModalConfirm}
+  />
 </Form>
