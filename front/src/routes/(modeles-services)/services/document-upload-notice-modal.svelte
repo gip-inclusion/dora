@@ -1,10 +1,15 @@
 <script lang="ts">
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { handleBackClick } from "$lib/utils/consent.svelte";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
   import Button from "$lib/components/display/button.svelte";
 
-  let isOpen = $state(true);
+  interface Props {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+  }
+
+  const { isOpen, onClose, onConfirm }: Props = $props();
 </script>
 
 <Modal {isOpen} hideCloseButton hideTitle hideOverflow width="medium">
@@ -12,7 +17,7 @@
     <Button
       extraClass="self-end"
       label="Fermer"
-      onclick={handleBackClick}
+      onclick={onClose}
       icon={CloseLineSystem}
       iconOnRight
       noBackground
@@ -178,9 +183,9 @@
   </div>
   <div class="mt-s16 pt-s16 border-gray-02 pb-s8 flex justify-end border-t-1">
     <Button
-      label="J'ai compris"
-      onclick={() => console.log("hi")}
       id={`document-upload-notice-accept-button`}
+      label="J'ai compris"
+      onclick={onConfirm}
     />
   </div>
 </Modal>

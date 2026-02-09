@@ -65,6 +65,8 @@
       ? inclusionNumeriqueSchema
       : serviceSchema
   );
+  let isModalOpen = $state(false);
+  let submit = $state<(submitterId?: string) => Promise<void>>();
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
   const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
@@ -95,22 +97,43 @@
     if (service.useInclusionNumeriqueScheme) {
       preSaveInclusionNumeriqueService(validatedData);
     }
-    if (kind === "publish") {
+    if (requestKind === "publish") {
       return createOrModifyService({
         ...validatedData,
         status: "PUBLISHED",
         markSynced: true,
       });
-    } else if (kind === "draft") {
+    } else if (requestKind === "draft") {
       return createOrModifyService({
         ...validatedData,
         status: "DRAFT",
         markSynced: true,
       });
     } else {
-      log(`Soumission de type ${kind} invalide`);
+      log(`Soumission de type ${requestKind} invalide`);
       return null;
     }
+  }
+
+  function hasDocuments(): boolean {
+    return (
+      (service?.credentials?.length ?? 0) > 0 ||
+      (service.forms?.length ?? 0) > 0 ||
+      !!service.onlineForm
+    );
+  }
+
+  function handleButtonClick(event: Event, kind: RequestKind) {
+    if (hasDocuments()) {
+      event.preventDefault();
+      requestKind = kind;
+      isModalOpen = true;
+    }
+  }
+
+  function handleModalConfirm() {
+    isModalOpen = false;
+    submit?.(requestKind);
   }
 
   function handleSuccess(result: Service) {
@@ -121,7 +144,7 @@
     }
   }
 
-  function handleValidate(data, kind: RequestKind) {
+  function handleValidate(data, kind?: string) {
     const schema = kind === "draft" ? draftSchema : currentSchema;
     return validate(data, schema, {
       servicesOptions,
@@ -155,6 +178,7 @@
 
 <Form
   bind:data={service}
+  bind:submit
   schema={currentSchema}
   {servicesOptions}
   onChange={handleChange}
@@ -283,6 +307,7 @@
       <Button
         id="draft"
         type="submit"
+        onclick={(event) => handleButtonClick(event, "draft")}
         label="Enregistrer en brouillon"
         secondary
         disabled={requesting}
@@ -292,11 +317,16 @@
       <Button
         id="publish"
         type="submit"
+        onclick={(event) => handleButtonClick(event, "publish")}
         label="Publier"
         disabled={requesting}
         loading={requesting && requestKind === "publish"}
       />
     </StickyFormSubmissionRow>
   {/if}
-  <DocumentUploadNoticeModal />
+  <DocumentUploadNoticeModal
+    isOpen={isModalOpen}
+    onClose={() => (isModalOpen = false)}
+    onConfirm={handleModalConfirm}
+  />
 </Form>

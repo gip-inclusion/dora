@@ -22,7 +22,7 @@
     requesting?: boolean;
     serverErrorsDict?: any;
     onSubmit: any;
-    onSuccess: (jsonResult: any, submitterId?: string) => Promise<void>;
+    onSuccess: (jsonResult: any, submitterId?: string) => void;
     servicesOptions?: ServicesOptions;
     onChange?: (validatedData, fieldName?) => void;
     disableExitWarning?: boolean;
@@ -31,6 +31,7 @@
       submitterId?: string
     ) => { validatedData; valid: boolean };
     children?: Snippet;
+    submit?: (submitterId?: string) => Promise<void>;
   }
 
   let {
@@ -45,6 +46,7 @@
     disableExitWarning = false,
     onValidate,
     children,
+    submit = $bindable(),
   }: Props = $props();
 
   $effect(() => {
@@ -121,9 +123,7 @@
     return jsonResult;
   }
 
-  async function handleSubmit(event: Event) {
-    event.preventDefault();
-    const submitterId = (event as SubmitEvent).submitter?.id;
+  async function submitForm(submitterId?: string) {
     $formErrors = {};
 
     const { validatedData, valid } = onValidate
@@ -144,6 +144,7 @@
           await onSuccess(await getJsonResult(result), submitterId);
         } else {
           injectAPIErrors(await getJsonResult(result), serverErrorsDict);
+          requesting = false;
         }
       } catch (err) {
         injectAPIErrors(
@@ -154,11 +155,18 @@
           },
           serverErrorsDict
         );
-        throw err;
-      } finally {
         requesting = false;
+        throw err;
       }
     }
+  }
+
+  submit = submitForm;
+
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+    const submitterId = (event as SubmitEvent).submitter?.id;
+    await submitForm(submitterId);
   }
 </script>
 
