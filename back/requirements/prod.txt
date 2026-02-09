@@ -13,7 +13,7 @@ asgiref==3.11.0 \
 boto3==1.42.39 \
     --hash=sha256:d03f82363314759eff7f84a27b9e6428125f89d8119e4588e8c2c1d79892c956 \
     --hash=sha256:d9d6ce11df309707b490d2f5f785b761cfddfd6d1f665385b78c9d8ed097184b
-    # via -r requirements/base.in
+    # via django-storages
 botocore==1.42.39 \
     --hash=sha256:0f00355050821e91a5fe6d932f7bf220f337249b752899e3e4cf6ed54326249e \
     --hash=sha256:9e0d0fed9226449cc26fcf2bbffc0392ac698dd8378e8395ce54f3ec13f81d58
@@ -331,7 +331,7 @@ django-filter==25.2 \
     # via
     #   -r requirements/base.in
     #   djangorestframework-gis
-django-otp==1.7.0 \
+django-otp[segno]==1.7.0 \
     --hash=sha256:406d2d7f797dc313569270e06d6c360c7d986c9f653eab80b190d663ed5f1133 \
     --hash=sha256:961ccf2d80a67303cb46d97427b16c476ee075acfa2b4c82a59d8f1e0745a454
     # via -r requirements/base.in
@@ -339,7 +339,7 @@ django-sesame==3.2.3 \
     --hash=sha256:09977a1c55bdbcce0a024c712c4d683e1a69543a217626ffa1d5f7ef7ebffc58 \
     --hash=sha256:5da0210a57a8f48dd61a6c8125e61121403042ed000c96187e4188a8241496d6
     # via -r requirements/base.in
-django-storages==1.14.6 \
+django-storages[s3]==1.14.6 \
     --hash=sha256:11b7b6200e1cb5ffcd9962bd3673a39c7d6a6109e8096f0e03d46fab3d3aabd9 \
     --hash=sha256:7a25ce8f4214f69ac9c7ce87e2603887f7ae99326c316bc8d2d75375e09341c9
     # via -r requirements/base.in
@@ -479,7 +479,7 @@ hiredis==3.3.0 \
     --hash=sha256:fe730716775f61e76d75810a38ee4c349d3af3896450f1525f5a4034cf8f2ed7 \
     --hash=sha256:ff3179a57745d0f8d71fa8bf3ea3944d3f557dcfa4431304497987fecad381dd \
     --hash=sha256:ffea6c407cff532c7599d3ec9e8502c2c865753cebab044f3dfce9afbf71a8df
-    # via -r requirements/base.in
+    # via redis
 humanize==4.15.0 \
     --hash=sha256:1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10 \
     --hash=sha256:b1186eb9f5a9749cd9cb8565aee77919dd7c8d076161cf44d70e59e3301e1769
@@ -812,7 +812,7 @@ python-magic==0.4.27 \
     --hash=sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b \
     --hash=sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3
     # via -r requirements/base.in
-redis==7.1.0 \
+redis[hiredis]==7.1.0 \
     --hash=sha256:23c52b208f92b56103e17c5d06bdc1a6c2c0b3106583985a76a18f83b265de2b \
     --hash=sha256:b1cc3cfa5a2cb9c2ab3ba700864fb0ad75617b41f01352ce5779dabf6d5f9c3c
     # via -r requirements/base.in
@@ -829,7 +829,7 @@ s3transfer==0.16.0 \
 segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
-    # via -r requirements/base.in
+    # via django-otp
 sentry-sdk==2.51.0 \
     --hash=sha256:b89d64577075fd8c13088bc3609a2ce77a154e5beb8cba7cc16560b0539df4f7 \
     --hash=sha256:e21016d318a097c2b617bb980afd9fc737e1efc55f9b4f0cdc819982c9717d5f
