@@ -320,6 +320,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
     class Meta:
         model = Structure
         fields = [
+            "admin_already_invited",
             "admins",
             "admins_to_moderate",
             "admins_to_remind",
@@ -355,6 +356,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "typology_display",
         ]
         read_only_fields = [
+            "admin_already_invited",
             "admins",
             "admins_to_moderate",
             "admins_to_remind",
