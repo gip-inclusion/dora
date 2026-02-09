@@ -28,7 +28,7 @@ EPCI_CODE_MAPPING = {
     "200067221": "200096683",  # CC Centre Morbihan Communauté → CC Centre Morbihan Communauté
     "200071157": "200096634",  # CC des Hautes Vosges → CC des Hautes Vosges
     "200035459": "200096956",  # CA d'Agen → CA Agglomération d'Agen
-    "200036572": "200096907",  # CC Porte d'Aquitaine en Pays de Serres → CA Agglomération d'Agen
+    "200036572": "200096956",  # CC Porte d'Aquitaine en Pays de Serres → CA Agglomération d'Agen
 }
 
 CITY_CODE_MAPPING = {
