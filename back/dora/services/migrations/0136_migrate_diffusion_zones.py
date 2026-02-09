@@ -88,7 +88,7 @@ def migrate_diffusion_zones(apps, schema_editor):
             code__in=DA_Model.objects.values_list("code", flat=True)
         ).values_list("code", flat=True)
         for entity_code in lost_entity_codes:
-            services_to_update = Service.objects.filter(
+            services_to_update = Service._base_manager.filter(
                 diffusion_zone_type=diffusion_zone_type,
                 diffusion_zone_details=entity_code,
             )
