@@ -32,7 +32,10 @@
     ) => { validatedData; valid: boolean };
     children?: Snippet;
     submit?: (submitterId?: string) => Promise<void>;
-    validateForm?: (submitterId?: string) => { valid: boolean; validatedData: any };
+    validateForm?: (submitterId?: string) => {
+      valid: boolean;
+      validatedData: any;
+    };
   }
 
   let {
