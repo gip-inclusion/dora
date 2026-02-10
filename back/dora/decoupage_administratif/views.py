@@ -114,7 +114,6 @@ def get_departments(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_city_label(request, insee_code):
-    city = City.objects.get_from_code(insee_code)
-    if city:
+    if city := City.objects.get_from_code(insee_code):
         return Response(city.name)
     raise NotFound
