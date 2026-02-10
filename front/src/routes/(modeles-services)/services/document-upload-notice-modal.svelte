@@ -50,7 +50,7 @@
             <div
               class="bg-service-violet p-s16 flex flex-col items-center justify-center rounded-md"
             >
-              <h4>📤 Je reçois une orientation</h4>
+              <h4>📤 J’aide à une orientation</h4>
               <p class="text-f14 text-gray-text">
                 Vous n’êtes pas le responsable principal. Vous intégrez les
                 données, mais c’est l’organisme récepteur qui les traite et en
