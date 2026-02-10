@@ -23,7 +23,7 @@
       noBackground
       noPadding
     />
-    <h2>Notice d’informations&nbsp;:&nbsp;Pièces justificatives</h2>
+    <h2>Notice d’informations&nbsp;: Pièces justificatives</h2>
     <h6 class="text-gray-text">
       Toute demande de pièces justificatives est réglementée. Veuillez prendre
       connaissance de la notice suivante :
@@ -83,15 +83,15 @@
           <div class="flex justify-between">
             <span class="mr-s16">✅</span>
             <p class="text-f14 text-gray-text">
-              <b>Identifier le bénéficiaire&nbsp;?&nbsp;:&nbsp;</b>Demander des
-              pièces qui prouvent que le bénéficiaire fait partie du public que
-              vous accompagnez.
+              <b>Identifier le bénéficiaire&nbsp;: </b>Demander des pièces qui
+              prouvent que le bénéficiaire fait partie du public que vous
+              accompagnez.
             </p>
           </div>
           <div class="flex justify-between">
             <span class="mr-s16">✅</span>
             <p class="text-f14 text-gray-text">
-              <b>Se concentrer sur le bénéficiaire&nbsp;?&nbsp;:&nbsp;</b>
+              <b>Se concentrer sur le bénéficiaire&nbsp;: </b>
               Ne collecter des données sur des tiers que si c’est indispensable pour
               l’orientation et si vous pouvez les informer.
             </p>
@@ -104,7 +104,7 @@
           <div class="flex justify-between">
             <span class="mr-s16">❌</span>
             <p class="text-f14 text-gray-text">
-              <b>La pré-inscription&nbsp;?&nbsp;:&nbsp;</b>
+              <b>La pré-inscription&nbsp;: </b>
               Ne pas utiliser Dora pour des pré-inscriptions. Ces démarches doivent
               se faire directement auprès de votre organisme.
             </p>
@@ -118,10 +118,9 @@
           <div class="flex justify-between">
             <span class="mr-s16">🛡️</span>
             <p class="text-f14 text-gray-text">
-              <b>La pré-inscription&nbsp;?&nbsp;:&nbsp;</b>
-              Le GIP assure une veille. De manière aléatoire ou en cas de doute, il
-              peut vous contacter pour comprendre la justification de la demande d’une
-              pièce justificative.
+              Le GIP assure une veille. De manière aléatoire ou en cas de doute,
+              il peut vous contacter pour comprendre la justification de la
+              demande d’une pièce justificative.
             </p>
           </div>
         </div>
