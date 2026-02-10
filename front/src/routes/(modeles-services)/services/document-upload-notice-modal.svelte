@@ -5,11 +5,10 @@
 
   interface Props {
     isOpen: boolean;
-    onClose: () => void;
     onConfirm: () => void;
   }
 
-  const { isOpen, onClose, onConfirm }: Props = $props();
+  let { isOpen = $bindable(false), onConfirm }: Props = $props();
 </script>
 
 <Modal {isOpen} hideCloseButton hideTitle hideOverflow width="medium">
@@ -17,7 +16,7 @@
     <Button
       extraClass="self-end"
       label="Fermer"
-      onclick={onClose}
+      onclick={() => (isOpen = false)}
       icon={CloseLineSystem}
       iconOnRight
       noBackground

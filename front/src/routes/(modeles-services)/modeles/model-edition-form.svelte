@@ -244,8 +244,7 @@
     </StickyFormSubmissionRow>
   {/if}
   <DocumentUploadNoticeModal
-    isOpen={isModalOpen}
-    onClose={() => (isModalOpen = false)}
+    bind:isOpen={isModalOpen}
     onConfirm={handleModalConfirm}
   />
 </Form>
