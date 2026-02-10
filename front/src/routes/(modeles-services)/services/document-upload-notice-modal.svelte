@@ -28,28 +28,30 @@
       connaissance de la notice suivante :
     </h6>
     <div class="mt-s16 border-gray-02 border-1">
-      <div class=" p-s16 gap-s32 flex max-h-[24rem] flex-col overflow-y-scroll">
+      <div class=" p-s16 gap-s16 flex max-h-[24rem] flex-col overflow-y-scroll">
         <div class="flex flex-col items-center justify-center">
           <h4 class="text-france-blue mb-s0">Notice d’information</h4>
           <h4 class="text-france-blue mb-s0">Pièces justificatives</h4>
         </div>
         <div>
-          <h4>Suis-je responsable des données&nbsp;?</h4>
-          <div class="gap-s16 flex justify-center">
+          <h4 class="text-france-blue">
+            Suis-je responsable des données&nbsp;?
+          </h4>
+          <div class="flex justify-center">
             <div
-              class="bg-service-violet p-s16 flex flex-col items-center justify-center rounded-md"
+              class="bg-service-violet p-s16 mr-s16 flex flex-col items-center justify-center rounded-md"
             >
-              <h4>📥 Je reçois une orientation</h4>
+              <h4 class="text-france-blue">📥 Je reçois une orientation</h4>
               <p class="text-f14 text-gray-text">
-                Vous êtes considéré comme le “responsable de traitement”. C’est
-                vous qui déterminez quelles pièces et donnée sont nécessaires
-                pour valider l’orientation.
+                Vous êtes considéré comme le <b>“responsable de traitement”</b>.
+                C’est vous qui déterminez quelles pièces et donnée sont
+                nécessaires pour valider l’orientation.
               </p>
             </div>
             <div
               class="bg-service-violet p-s16 flex flex-col items-center justify-center rounded-md"
             >
-              <h4>📤 J’aide à une orientation</h4>
+              <h4 class="text-france-blue">📤 J’aide à une orientation</h4>
               <p class="text-f14 text-gray-text">
                 Vous n’êtes pas le responsable principal. Vous intégrez les
                 données, mais c’est l’organisme récepteur qui les traite et en
@@ -79,28 +81,29 @@
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
           <h5>A faire</h5>
-          <div class="flex justify-between">
-            <span class="mr-s16">✅</span>
-            <p class="text-f14 text-gray-text">
-              <b>Identifier le bénéficiaire&nbsp;: </b>Demander des pièces qui
-              prouvent que le bénéficiaire fait partie du public que vous
-              accompagnez.
-            </p>
-          </div>
-          <div class="flex justify-between">
-            <span class="mr-s16">✅</span>
-            <p class="text-f14 text-gray-text">
-              <b>Se concentrer sur le bénéficiaire&nbsp;: </b>
-              Ne collecter des données sur des tiers que si c’est indispensable pour
-              l’orientation et si vous pouvez les informer.
-            </p>
+          <div class="mx-s64">
+            <div class="flex justify-between">
+              <span class="mr-s16">✅</span>
+              <p class="text-f14 text-gray-text">
+                <b>Identifier le bénéficiaire&nbsp;:</b> Demander des pièces qui prouvent
+                que le bénéficiaire fait partie du public que vous accompagnez.
+              </p>
+            </div>
+            <div class="flex justify-between">
+              <span class="mr-s16">✅</span>
+              <p class="text-f14 text-gray-text">
+                <b>Se concentrer sur le bénéficiaire&nbsp;: </b>
+                Ne collecter des données sur des tiers que si c’est indispensable
+                pour l’orientation et si vous pouvez les informer.
+              </p>
+            </div>
           </div>
         </div>
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
           <h5>A éviter</h5>
-          <div class="flex justify-between">
+          <div class="mx-s64 flex justify-between">
             <span class="mr-s16">❌</span>
             <p class="text-f14 text-gray-text">
               <b>La pré-inscription&nbsp;: </b>
@@ -109,12 +112,12 @@
             </p>
           </div>
         </div>
-        <h4>Quelles pièces justificatives puis-je demander&nbsp;?</h4>
+        <h4 class="m-s0">Et le rôle du GIP Plateforme de l’Inclusion&nbsp;?</h4>
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
           <h5>Le rôle de Vigie du GIP</h5>
-          <div class="flex justify-between">
+          <div class="mx-s64 flex justify-between">
             <span class="mr-s16">🛡️</span>
             <p class="text-f14 text-gray-text">
               Le GIP assure une veille. De manière aléatoire ou en cas de doute,
