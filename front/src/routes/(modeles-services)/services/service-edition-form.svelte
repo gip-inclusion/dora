@@ -70,7 +70,7 @@
   let validateForm =
     $state<(submitterId?: string) => { valid: boolean; validatedData: any }>();
   const shouldShowModal = $derived(
-    (service?.credentials?.length ?? 0) > 0 ||
+    (service.credentials?.length ?? 0) > 0 ||
       (service.forms?.length ?? 0) > 0 ||
       !!service.onlineForm
   );
