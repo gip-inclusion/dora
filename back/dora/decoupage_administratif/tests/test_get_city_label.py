@@ -10,7 +10,6 @@ import pytest
         ("2a004", "Ajaccio"),
     ],
 )
-@pytest.mark.django_db
 def test_get_city_label_returns_city_name(
     client, test_cities, insee_code, expected_name
 ):
@@ -27,7 +26,6 @@ def test_get_city_label_returns_city_name(
         "0",
     ],
 )
-@pytest.mark.django_db
 def test_get_city_label_returns_404(client, insee_code):
     """Test que l'endpoint retourne 404 pour un code INSEE invalide ou inconnu."""
     response = client.get(f"/city-label/{insee_code}/")
