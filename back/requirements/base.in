@@ -27,8 +27,6 @@ redis
 requests
 segno
 sentry-sdk
-setuptools
 sib-api-v3-sdk
 Unidecode
 whitenoise
-yachalk
