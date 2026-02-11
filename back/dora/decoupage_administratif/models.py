@@ -26,6 +26,7 @@ class GeoManager(models.Manager):
 # Cache progressif pour les tables comportant de nombreuses entités
 class ManyGeoManager(GeoManager):
     def get_from_code(self, code):
+        code = code.upper()
         value = self._cache.get(code, sentinel)
         if value is not sentinel:
             return value
@@ -42,6 +43,7 @@ class ManyGeoManager(GeoManager):
 # on fait la requête une fois pour toute
 class FewGeoManager(GeoManager):
     def get_from_code(self, code):
+        code = code.upper()
         if len(self._cache):
             return self._cache.get(code)
 
