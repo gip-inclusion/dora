@@ -475,6 +475,9 @@ class StructureMemberSerializer(serializers.ModelSerializer):
                 if num_admins == 1:
                     raise exceptions.PermissionDenied
         for attr, value in validated_data.items():
+            if attr == "is_admin" and value is True:
+                instance.structure.admin_already_invited = True
+                instance.structure.save(update_fields=["admin_already_invited"])
             setattr(instance, attr, value)
         instance.save()
         return instance
