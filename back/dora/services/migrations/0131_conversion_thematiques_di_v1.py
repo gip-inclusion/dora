@@ -434,8 +434,10 @@ def assign_new_thematiques(apps, schema_editor):
             first_new_category = new_categories[0]
             subcategories_for_category = list(
                 filter(
-                    lambda sc: get_category_from_subcategory(sc.value)
-                    == first_new_category.value,
+                    lambda sc: (
+                        get_category_from_subcategory(sc.value)
+                        == first_new_category.value
+                    ),
                     new_subcategories,
                 )
             )
@@ -447,8 +449,10 @@ def assign_new_thematiques(apps, schema_editor):
             for new_category in new_categories[1:]:
                 subcategories_for_category = list(
                     filter(
-                        lambda sc: get_category_from_subcategory(sc.value)
-                        == new_category.value,
+                        lambda sc: (
+                            get_category_from_subcategory(sc.value)
+                            == new_category.value
+                        ),
                         new_subcategories,
                     )
                 )

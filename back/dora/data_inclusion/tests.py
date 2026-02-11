@@ -68,13 +68,11 @@ def test_map_service_coach_orientation_modes_mapping_with_form_mode_but_no_form_
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = list(
-        filter(
-            lambda m: m != "completer-le-formulaire-dadhesion"
-            and m != "formulaire-dora",
-            ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES,
-        )
-    )
+    expected_dora_coach_orientation_modes = [
+        m
+        for m in ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES
+        if m not in ["completer-le-formulaire-dadhesion", "formulaire-dora"]
+    ]
 
     assert sorted(service["coach_orientation_modes"]) == sorted(
         expected_dora_coach_orientation_modes
@@ -119,13 +117,11 @@ def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_e
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = list(
-        filter(
-            lambda m: m != "completer-le-formulaire-dadhesion"
-            and m != "formulaire-dora",
-            ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES,
-        )
-    )
+    expected_dora_coach_orientation_modes = [
+        m
+        for m in ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES
+        if m not in ["completer-le-formulaire-dadhesion", "formulaire-dora"]
+    ]
 
     assert sorted(service["coach_orientation_modes"]) == sorted(
         expected_dora_coach_orientation_modes
