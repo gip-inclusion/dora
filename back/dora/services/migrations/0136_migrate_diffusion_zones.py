@@ -38,12 +38,17 @@ CITY_CODE_MAPPING = {
 
 
 def migrate_departmental_diffusion_zone(services_to_update, department_code):
-    if department_code == SAINT_MARTIN_DEPARTMENT_CODE:
-        services_to_update.update(
-            diffusion_zone_type=DIFFUSION_ZONE_CITY,
-            diffusion_zone_details=SAINT_MARTIN_CITY_CODE,
-            modification_date=timezone.now(),
+    if department_code != SAINT_MARTIN_DEPARTMENT_CODE:
+        raise ValueError(
+            f"Code département inattendu: {department_code}. "
+            f"Seul le code {SAINT_MARTIN_DEPARTMENT_CODE} (Saint-Martin) est pris en charge."
         )
+
+    services_to_update.update(
+        diffusion_zone_type=DIFFUSION_ZONE_CITY,
+        diffusion_zone_details=SAINT_MARTIN_CITY_CODE,
+        modification_date=timezone.now(),
+    )
 
 
 def migrate_epci_diffusion_zone(services_to_update, epci_code):
@@ -52,7 +57,10 @@ def migrate_epci_diffusion_zone(services_to_update, epci_code):
     elif epci_code in EPCI_CODE_MAPPING:
         new_epci_code = EPCI_CODE_MAPPING[epci_code]
     else:
-        return
+        raise ValueError(
+            f"Code EPCI inattendu: {epci_code}. "
+            f"Les codes attendus sont: EPT ({EPT_CODES}) ou EPCI_CODE_MAPPING ({list(EPCI_CODE_MAPPING.keys())})."
+        )
 
     services_to_update.update(
         diffusion_zone_details=new_epci_code,
@@ -62,7 +70,10 @@ def migrate_epci_diffusion_zone(services_to_update, epci_code):
 
 def migrate_city_diffusion_zone(services_to_update, city_code):
     if city_code not in CITY_CODE_MAPPING:
-        return
+        raise ValueError(
+            f"Code commune inattendu: {city_code}. "
+            f"Les codes attendus sont: {list(CITY_CODE_MAPPING.keys())}."
+        )
 
     services_to_update.update(
         diffusion_zone_details=CITY_CODE_MAPPING[city_code],
@@ -92,6 +103,8 @@ def migrate_diffusion_zones(apps, schema_editor):
                 diffusion_zone_type=diffusion_zone_type,
                 diffusion_zone_details=entity_code,
             )
+            if not services_to_update.exists():
+                continue
             if diffusion_zone_type == DIFFUSION_ZONE_DEPARTMENT:
                 migrate_departmental_diffusion_zone(services_to_update, entity_code)
             elif diffusion_zone_type == DIFFUSION_ZONE_EPCI:
