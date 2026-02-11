@@ -59,7 +59,7 @@
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         <InformationFillSystem />
       </span>
-      Uniquement QPV ou ZRR
+      Uniquement QPV ou ZFRR
     </div>
   {/if}
 
