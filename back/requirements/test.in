@@ -8,6 +8,4 @@ model-bakery
 ruff
 pytest
 pytest-django
-sqlfluff
-requests-mock
 syrupy
