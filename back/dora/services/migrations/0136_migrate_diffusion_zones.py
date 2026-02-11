@@ -120,6 +120,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            migrate_diffusion_zones, reverse_code=migrations.RunPython.noop
+            migrate_diffusion_zones,
+            reverse_code=migrations.RunPython.noop,
+            elidable=True,
         )
     ]
