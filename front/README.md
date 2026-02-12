@@ -13,7 +13,7 @@
 - [Installer GitGuardian](https://docs.gitguardian.com/internal-repositories-monitoring/gg_shield/getting_started#step-2-install-ggshield-gitguardian-cli) ;
 - Copier le fichier `.env-example` en `.env` ;
 - Renseigner la variable `VITE_API_URL` dans le fichier `.env` ;
-  - La valeur `"https://api.dora.incubateur.net"` permet de connecter le front sur la preprod et ainsi éviter une mise en place locale du back ;
+  - La valeur `"https://api.staging.dora.inclusion.gouv.fr"` permet de connecter le front sur la preprod et ainsi éviter une mise en place locale du back ;
 - Renseigner la variable `GITGUARDIAN_API_KEY` avec une clé d'API générée sur GitGuardian.com.
 
 ```bash
