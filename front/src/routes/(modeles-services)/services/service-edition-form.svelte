@@ -132,6 +132,8 @@
         requestKind = kind;
         isModalOpen = true;
       }
+    } else {
+      formControls.submit?.();
     }
   }
 

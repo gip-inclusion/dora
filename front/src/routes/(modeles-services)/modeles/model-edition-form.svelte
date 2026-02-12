@@ -74,6 +74,8 @@
       if (valid) {
         isModalOpen = true;
       }
+    } else {
+      formControls.submit?.();
     }
   }
 
