@@ -32,7 +32,7 @@
     requesting?: boolean;
     serverErrorsDict?: any;
     onSubmit: any;
-    onSuccess: (jsonResult: any, submitterId?: string) => void;
+    onSuccess: (jsonResult: any, submitterId?: string) => Promise<void> | void;
     servicesOptions?: ServicesOptions;
     onChange?: (validatedData, fieldName?) => void;
     disableExitWarning?: boolean;
