@@ -28,8 +28,19 @@
   let errorMessage = $state("");
   let progress: number | null = $state(null);
 
+  let localFiles = $state<string[]>([]);
+
+  $effect(() => {
+    localFiles = [...fileKeys];
+  });
+
+  function updateFiles(newFiles: string[]) {
+    localFiles = newFiles;
+    fileKeys = newFiles;
+  }
+
   function handleRemove(fileKey: string) {
-    fileKeys = fileKeys.filter((key) => key !== fileKey);
+    updateFiles(localFiles.filter((key) => key !== fileKey));
   }
 
   function clearInput() {
@@ -47,7 +58,7 @@
 
     function handleUploadDone(request: XMLHttpRequest) {
       const jsonResponse = JSON.parse(request.response);
-      fileKeys = [jsonResponse.key, ...fileKeys];
+      updateFiles([jsonResponse.key, ...localFiles]);
       clearInput();
       errorMessage = "";
     }
@@ -161,7 +172,7 @@
   {/if}
 </form>
 <ul>
-  {#each fileKeys as uploaded}
+  {#each localFiles as uploaded (uploaded)}
     <li class="mb-s8 flex justify-between">
       <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
       <div class="h-s24 w-s24">
