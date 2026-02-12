@@ -14,6 +14,7 @@
     labelText?: string;
     hideLabel?: boolean;
     withBorders?: boolean;
+    withSeparator?: boolean;
     mobileDesign?: boolean;
     label?: Snippet;
     children: Snippet<
@@ -31,6 +32,7 @@
     labelText,
     hideLabel,
     withBorders = false,
+    withSeparator = true,
     mobileDesign,
     label,
     children,
@@ -75,7 +77,12 @@
       onclick={() => (isOpen = !isOpen)}
     >
       {#if label}
-        <div class={["px-s12", !withBorders && "lg:px-s8"]}>
+        <div
+          class={[
+            withBorders && !withSeparator ? "pl-s12" : "px-s12",
+            !withBorders && "lg:px-s8",
+          ]}
+        >
           {@render label()}
         </div>
       {/if}
@@ -103,7 +110,7 @@
         class={[
           "border-gray-03 p-s12 flex",
           !withBorders && "lg:px-s8",
-          !!label && withBorders && "border-l",
+          !!label && withBorders && withSeparator && "border-l",
         ]}
       >
         <span class="h-s24 w-s24 text-magenta-cta fill-current">
