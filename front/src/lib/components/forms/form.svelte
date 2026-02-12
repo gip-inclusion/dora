@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+  export interface FormControls {
+    submit?: (submitterId?: string) => Promise<void>;
+    validateForm?: (submitterId?: string) => {
+      valid: boolean;
+      validatedData: any;
+    };
+  }
+</script>
+
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { onDestroy, onMount, setContext } from "svelte";
@@ -31,11 +41,7 @@
       submitterId?: string
     ) => { validatedData; valid: boolean };
     children?: Snippet;
-    submit?: (submitterId?: string) => Promise<void>;
-    validateForm?: (submitterId?: string) => {
-      valid: boolean;
-      validatedData: any;
-    };
+    formControls?: FormControls;
   }
 
   let {
@@ -50,8 +56,7 @@
     disableExitWarning = false,
     onValidate,
     children,
-    submit = $bindable(),
-    validateForm = $bindable(),
+    formControls = $bindable({}),
   }: Props = $props();
 
   $effect(() => {
@@ -167,8 +172,7 @@
     }
   }
 
-  submit = submitForm;
-  validateForm = runValidation;
+  formControls = { submit: submitForm, validateForm: runValidation };
 
   async function handleSubmit(event: Event) {
     event.preventDefault();

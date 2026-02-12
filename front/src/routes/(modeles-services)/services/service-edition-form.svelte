@@ -5,7 +5,7 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/forms/form.svelte";
+  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
@@ -66,9 +66,10 @@
       : serviceSchema
   );
   let isModalOpen = $state(false);
-  let submit = $state<(submitterId?: string) => Promise<void>>();
-  let validateForm =
-    $state<(submitterId?: string) => { valid: boolean; validatedData: any }>();
+  let formControls = $state<FormControls>({
+    submit: undefined,
+    validateForm: undefined,
+  });
   const shouldShowModal = $derived(
     (service.credentials?.length ?? 0) > 0 ||
       (service.forms?.length ?? 0) > 0 ||
@@ -125,7 +126,7 @@
   function handleButtonClick(event: Event, kind: RequestKind) {
     if (shouldShowModal) {
       event.preventDefault();
-      const { valid } = validateForm?.(kind) ?? { valid: false };
+      const { valid } = formControls.validateForm?.(kind) ?? { valid: false };
       if (valid) {
         requestKind = kind;
         isModalOpen = true;
@@ -135,7 +136,7 @@
 
   function handleModalConfirm() {
     isModalOpen = false;
-    submit?.(requestKind);
+    formControls.submit?.(requestKind);
   }
 
   function handleSuccess(result: Service) {
@@ -180,8 +181,7 @@
 
 <Form
   bind:data={service}
-  bind:submit
-  bind:validateForm
+  bind:formControls
   schema={currentSchema}
   {servicesOptions}
   onChange={handleChange}

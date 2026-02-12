@@ -4,7 +4,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/forms/form.svelte";
+  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
@@ -41,8 +41,10 @@
   let requesting = $state(false);
   let submitFormInput = $state();
   let isModalOpen = $state(false);
-  let submit = $state<() => Promise<void>>();
-  let validateForm = $state<() => { valid: boolean; validatedData: any }>();
+  let formControls = $state<FormControls>({
+    submit: undefined,
+    validateForm: undefined,
+  });
   const shouldShowModal = $derived(
     (model?.credentials?.length ?? 0) > 0 ||
       (model.forms?.length ?? 0) > 0 ||
@@ -51,7 +53,7 @@
 
   function handleModalConfirm() {
     isModalOpen = false;
-    submit?.();
+    formControls.submit?.();
   }
 
   const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
@@ -68,7 +70,7 @@
   function handleButtonClick(event: Event) {
     if (shouldShowModal) {
       event.preventDefault();
-      const { valid } = validateForm?.() ?? { valid: false };
+      const { valid } = formControls.validateForm?.() ?? { valid: false };
       if (valid) {
         isModalOpen = true;
       }
@@ -84,8 +86,7 @@
 
 <Form
   bind:data={model}
-  bind:submit
-  bind:validateForm
+  bind:formControls
   schema={modelSchema}
   {servicesOptions}
   onChange={handleChange}
