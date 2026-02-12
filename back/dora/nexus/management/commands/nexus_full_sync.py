@@ -1,0 +1,28 @@
+from django.conf import settings
+from itoutils.django.nexus.management.base_full_sync import BaseNexusFullSyncCommand
+
+from dora.nexus.sync import serialize_membership, serialize_structure, serialize_user
+from dora.structures.models import Structure, StructureMember
+from dora.users.models import User
+
+
+class Command(BaseNexusFullSyncCommand):
+    structure_serializer = staticmethod(serialize_structure)
+    user_serializer = staticmethod(serialize_user)
+    membership_serializer = staticmethod(serialize_membership)
+
+    def get_structures_queryset(self):
+        return Structure.objects.filter(is_obsolete=False)
+
+    def get_users_queryset(self):
+        return User.objects.filter(
+            is_active=True,
+            is_staff=False,
+        ).exclude(email=settings.DORA_BOT_USER)
+
+    def get_memberships_queryset(self):
+        return StructureMember.objects.filter(
+            user__is_active=True,
+            user__is_staff=False,
+            structure__is_obsolete=False,
+        ).exclude(user__email=settings.DORA_BOT_USER)

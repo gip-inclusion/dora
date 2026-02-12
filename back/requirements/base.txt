@@ -558,9 +558,9 @@ idna==3.11 \
     #   email-validator
     #   httpx
     #   requests
-itoutils[django]==26.2.10.0 \
-    --hash=sha256:8f9193125abfb08756d95156156b858c6fc088806b90af50fcbccf9faa2f4a09 \
-    --hash=sha256:b8bdd69bcc530e0857a206388c15972492577041ec550410fbf59034ea7be1c5
+itoutils[django]==26.2.12.0 \
+    --hash=sha256:565d0669326dfddbab502d6beba1acbd79a3987f17e6c83ce2fd9ed6c0a00fe2 \
+    --hash=sha256:6e45f9bc809c52fed1c8fbca95f001a05583744306a89b840f5c0cfa8816ee78
     # via -r requirements/base.in
 jmespath==1.1.0 \
     --hash=sha256:472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d \
