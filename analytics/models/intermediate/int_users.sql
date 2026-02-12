@@ -12,11 +12,20 @@ WITH usr AS (
 
 usr_with_imer AS (
     SELECT * FROM {{ ref("int_users_with_iMer") }}
+),
+
+structure_members AS (
+    SELECT * FROM {{ source('dora', 'structures_structuremember') }}
+
 )
 
 SELECT
     usr.*,
-    usr_with_imer.user_id IS NOT NULL AS user_with_imer
+    usr_with_imer.user_id IS NOT NULL     AS user_with_imer,
+    structure_members.creation_date       AS creation_date_as_structure_member,
+    structure_members.user_id IS NOT NULL AS user_is_structure_member
 FROM usr
 LEFT JOIN usr_with_imer
     ON usr.id = usr_with_imer.user_id
+LEFT JOIN structure_members
+    ON usr.id = structure_members.user_id
