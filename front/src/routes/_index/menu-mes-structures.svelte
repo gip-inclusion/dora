@@ -32,7 +32,7 @@
   );
 </script>
 
-<div class="mb-s16 lg:mb-s0 lg:mr-s10">
+<div>
   {#if structures.length !== 0}
     <div class="flex w-full items-center lg:w-auto">
       <DropdownMenu
