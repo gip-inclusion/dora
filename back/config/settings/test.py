@@ -64,3 +64,6 @@ PDI_JWT_KEY = {
     "k": "aTR4ZnR1WlpYYmphbFdtaXVlVjB3alljNjhrWXpfYSE",
     "kty": "oct",
 }
+
+
+ASSERT_SNAPSHOT_QUERIES_EXTRA_PACKAGES_ALLOWLIST = []

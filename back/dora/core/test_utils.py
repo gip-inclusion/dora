@@ -12,12 +12,7 @@ from dora.services.utils import update_sync_checksum
 def make_user(structure=None, is_valid=True, is_admin=False, **kwargs):
     user = baker.make("users.User", is_valid=is_valid, **kwargs)
     if structure:
-        structure.members.add(
-            user,
-            through_defaults={
-                "is_admin": is_admin,
-            },
-        )
+        make_structure_member(user, structure, is_admin=is_admin)
 
     return user
 
@@ -42,7 +37,7 @@ def make_structure(user=None, putative_member=None, **kwargs):
         **kwargs,
     )
     if user:
-        structure.members.add(user)
+        make_structure_member(user, structure)
 
     if putative_member:
         structure.putative_membership.add(
@@ -52,6 +47,15 @@ def make_structure(user=None, putative_member=None, **kwargs):
         )
 
     return structure
+
+
+def make_structure_member(user=None, structure=None, **kwargs):
+    return baker.make(
+        "StructureMember",
+        user=user or make_user(),
+        structure=structure or make_structure(),
+        **kwargs,
+    )
 
 
 def make_service(**kwargs):
