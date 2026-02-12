@@ -125,15 +125,15 @@
   }
 
   function handleButtonClick(event: Event, kind: RequestKind) {
+    event.preventDefault();
     if (shouldShowModal) {
-      event.preventDefault();
       const { valid } = formControls.validateForm?.(kind) ?? { valid: false };
       if (valid) {
         requestKind = kind;
         isModalOpen = true;
       }
     } else {
-      formControls.submit?.();
+      formControls.submit?.(kind);
     }
   }
 

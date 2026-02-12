@@ -68,8 +68,8 @@
   }
 
   function handleButtonClick(event: Event) {
+    event.preventDefault();
     if (shouldShowModal) {
-      event.preventDefault();
       const { valid } = formControls.validateForm?.() ?? { valid: false };
       if (valid) {
         isModalOpen = true;
