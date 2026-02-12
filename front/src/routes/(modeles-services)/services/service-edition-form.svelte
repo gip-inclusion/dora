@@ -5,7 +5,7 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/forms/form.svelte";
+  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
@@ -36,6 +36,8 @@
   import { validate } from "$lib/validation/validation";
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
+  import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
+  import { goto } from "$app/navigation";
 
   type RequestKind = "draft" | "publish";
 
@@ -63,6 +65,16 @@
     service.useInclusionNumeriqueScheme
       ? inclusionNumeriqueSchema
       : serviceSchema
+  );
+  let isModalOpen = $state(false);
+  let formControls = $state<FormControls>({
+    submit: undefined,
+    validateForm: undefined,
+  });
+  const shouldShowModal = $derived(
+    (service.credentials?.length ?? 0) > 0 ||
+      (service.forms?.length ?? 0) > 0 ||
+      !!service.onlineForm
   );
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
@@ -94,33 +106,51 @@
     if (service.useInclusionNumeriqueScheme) {
       preSaveInclusionNumeriqueService(validatedData);
     }
-    if (kind === "publish") {
+    if (requestKind === "publish") {
       return createOrModifyService({
         ...validatedData,
         status: "PUBLISHED",
         markSynced: true,
       });
-    } else if (kind === "draft") {
+    } else if (requestKind === "draft") {
       return createOrModifyService({
         ...validatedData,
         status: "DRAFT",
         markSynced: true,
       });
     } else {
-      log(`Soumission de type ${kind} invalide`);
+      log(`Soumission de type ${requestKind} invalide`);
       return null;
     }
   }
 
-  function handleSuccess(result: Service) {
-    if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
-      window.location.href = `/structures/${result.structure}/services/publication`;
+  function handleButtonClick(event: Event, kind: RequestKind) {
+    event.preventDefault();
+    if (shouldShowModal) {
+      const { valid } = formControls.validateForm?.(kind) ?? { valid: false };
+      if (valid) {
+        requestKind = kind;
+        isModalOpen = true;
+      }
     } else {
-      window.location.href = `/services/${result.slug}`;
+      formControls.submit?.(kind);
     }
   }
 
-  function handleValidate(data, kind: RequestKind) {
+  function handleModalConfirm() {
+    isModalOpen = false;
+    formControls.submit?.(requestKind);
+  }
+
+  function handleSuccess(result: Service) {
+    if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
+      return goto(`/structures/${result.structure}/services/publication`);
+    } else {
+      return goto(`/services/${result.slug}`);
+    }
+  }
+
+  function handleValidate(data, kind?: string) {
     const schema = kind === "draft" ? draftSchema : currentSchema;
     return validate(data, schema, {
       servicesOptions,
@@ -154,6 +184,7 @@
 
 <Form
   bind:data={service}
+  bind:formControls
   schema={currentSchema}
   {servicesOptions}
   onChange={handleChange}
@@ -282,6 +313,7 @@
       <Button
         id="draft"
         type="submit"
+        onclick={(event) => handleButtonClick(event, "draft")}
         label="Enregistrer en brouillon"
         secondary
         disabled={requesting}
@@ -291,10 +323,15 @@
       <Button
         id="publish"
         type="submit"
+        onclick={(event) => handleButtonClick(event, "publish")}
         label="Publier"
         disabled={requesting}
         loading={requesting && requestKind === "publish"}
       />
     </StickyFormSubmissionRow>
   {/if}
+  <DocumentUploadNoticeModal
+    bind:isOpen={isModalOpen}
+    onConfirm={handleModalConfirm}
+  />
 </Form>

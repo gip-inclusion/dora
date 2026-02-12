@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+  export interface FormControls {
+    submit?: (submitterId?: string) => Promise<void>;
+    validateForm?: (submitterId?: string) => {
+      valid: boolean;
+      validatedData: any;
+    };
+  }
+</script>
+
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { onDestroy, onMount, setContext } from "svelte";
@@ -22,7 +32,7 @@
     requesting?: boolean;
     serverErrorsDict?: any;
     onSubmit: any;
-    onSuccess: (jsonResult: any, submitterId?: string) => Promise<void>;
+    onSuccess: (jsonResult: any, submitterId?: string) => Promise<void> | void;
     servicesOptions?: ServicesOptions;
     onChange?: (validatedData, fieldName?) => void;
     disableExitWarning?: boolean;
@@ -31,6 +41,7 @@
       submitterId?: string
     ) => { validatedData; valid: boolean };
     children?: Snippet;
+    formControls?: FormControls;
   }
 
   let {
@@ -45,6 +56,7 @@
     disableExitWarning = false,
     onValidate,
     children,
+    formControls = $bindable({}),
   }: Props = $props();
 
   $effect(() => {
@@ -121,16 +133,15 @@
     return jsonResult;
   }
 
-  async function handleSubmit(event: Event) {
-    event.preventDefault();
-    const submitterId = (event as SubmitEvent).submitter?.id;
+  function runValidation(submitterId?: string) {
     $formErrors = {};
-
-    const { validatedData, valid } = onValidate
+    return onValidate
       ? onValidate(data, submitterId)
-      : validate(data, schema, {
-          servicesOptions,
-        });
+      : validate(data, schema, { servicesOptions });
+  }
+
+  async function submitForm(submitterId?: string) {
+    const { validatedData, valid } = runValidation(submitterId);
     if (valid) {
       try {
         requesting = true;
@@ -154,11 +165,20 @@
           },
           serverErrorsDict
         );
+        requesting = false;
         throw err;
       } finally {
         requesting = false;
       }
     }
+  }
+
+  formControls = { submit: submitForm, validateForm: runValidation };
+
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+    const submitterId = (event as SubmitEvent).submitter?.id;
+    await submitForm(submitterId);
   }
 </script>
 

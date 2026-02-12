@@ -4,7 +4,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/forms/form.svelte";
+  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
@@ -19,6 +19,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { showNotice } from "$lib/utils/service-update-notices";
+  import DocumentUploadNoticeModal from "../services/document-upload-notice-modal.svelte";
 
   interface Props {
     model: Model;
@@ -39,6 +40,21 @@
 
   let requesting = $state(false);
   let submitFormInput = $state();
+  let isModalOpen = $state(false);
+  let formControls = $state<FormControls>({
+    submit: undefined,
+    validateForm: undefined,
+  });
+  const shouldShowModal = $derived(
+    (model?.credentials?.length ?? 0) > 0 ||
+      (model.forms?.length ?? 0) > 0 ||
+      !!model.onlineForm
+  );
+
+  function handleModalConfirm() {
+    isModalOpen = false;
+    formControls.submit?.();
+  }
 
   const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
 
@@ -50,8 +66,21 @@
     showNotice("modelSync", structure.slug);
     return createOrModifyModel(validatedData, shouldUpdateAllServices);
   }
+
+  function handleButtonClick(event: Event) {
+    event.preventDefault();
+    if (shouldShowModal) {
+      const { valid } = formControls.validateForm?.() ?? { valid: false };
+      if (valid) {
+        isModalOpen = true;
+      }
+    } else {
+      formControls.submit?.();
+    }
+  }
+
   function handleSuccess(result) {
-    goto(`/modeles/${result.slug}`);
+    return goto(`/modeles/${result.slug}`);
   }
 </script>
 
@@ -59,6 +88,7 @@
 
 <Form
   bind:data={model}
+  bind:formControls
   schema={modelSchema}
   {servicesOptions}
   onChange={handleChange}
@@ -202,13 +232,13 @@
           <input
             bind:this={submitFormInput}
             class="hidden"
-            type="submit"
+            onclick={handleButtonClick}
             value="Valider le formulaire"
           />
         {:else}
           <Button
             name="validate"
-            type="submit"
+            onclick={handleButtonClick}
             label="Enregistrer"
             loading={requesting}
           />
@@ -216,4 +246,8 @@
       </div>
     </StickyFormSubmissionRow>
   {/if}
+  <DocumentUploadNoticeModal
+    bind:isOpen={isModalOpen}
+    onConfirm={handleModalConfirm}
+  />
 </Form>

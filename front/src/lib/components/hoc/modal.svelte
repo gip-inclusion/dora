@@ -26,6 +26,7 @@
     subtitle?: Snippet;
     children?: Snippet;
     footer?: Snippet;
+    hideOverflow?: boolean;
   }
 
   let {
@@ -42,6 +43,7 @@
     subtitle = undefined,
     children = undefined,
     footer = undefined,
+    hideOverflow = false,
   }: Props = $props();
 
   const target = (
@@ -138,12 +140,14 @@
         aria-modal="true"
         tabindex="-1"
         bind:this={modalEl}
-        class="m-s24 max-h-[90vh] overflow-auto rounded-lg bg-white shadow-md"
+        class="m-s24 max-h-[90vh] rounded-lg bg-white shadow-md"
         class:px-s36={!noPadding}
         class:py-s24={!noPadding}
         class:w-[560px]={width === "small"}
         class:w-[820px]={width === "medium"}
         class:min-w-[80vw]={!width}
+        class:overflow-auto={!hideOverflow}
+        class:overflow={hideOverflow}
         onclick={handleModalClick}
         onkeypress={handleModalKeypress}
       >
