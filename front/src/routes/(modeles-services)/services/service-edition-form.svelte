@@ -37,6 +37,7 @@
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
+  import { goto } from "$app/navigation";
 
   type RequestKind = "draft" | "publish";
 
@@ -141,9 +142,9 @@
 
   function handleSuccess(result: Service) {
     if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
-      window.location.href = `/structures/${result.structure}/services/publication`;
+      return goto(`/structures/${result.structure}/services/publication`);
     } else {
-      window.location.href = `/services/${result.slug}`;
+      return goto(`/services/${result.slug}`);
     }
   }
 

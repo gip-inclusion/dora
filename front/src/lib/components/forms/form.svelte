@@ -155,7 +155,6 @@
           await onSuccess(await getJsonResult(result), submitterId);
         } else {
           injectAPIErrors(await getJsonResult(result), serverErrorsDict);
-          requesting = false;
         }
       } catch (err) {
         injectAPIErrors(
@@ -168,6 +167,8 @@
         );
         requesting = false;
         throw err;
+      } finally {
+        requesting = false;
       }
     }
   }

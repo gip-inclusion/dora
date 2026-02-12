@@ -78,7 +78,7 @@
   }
 
   function handleSuccess(result) {
-    goto(`/modeles/${result.slug}`);
+    return goto(`/modeles/${result.slug}`);
   }
 </script>
 
