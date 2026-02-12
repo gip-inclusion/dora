@@ -22,7 +22,7 @@
       noBackground
       noPadding
     />
-    <h2>Notice d’informations&nbsp;: Pièces justificatives</h2>
+    <h2>Notice d’informations&#8239;: Pièces justificatives</h2>
     <h6 class="text-gray-text">
       Toute demande de pièces justificatives est réglementée. Veuillez prendre
       connaissance de la notice suivante :
@@ -35,7 +35,7 @@
         </div>
         <div>
           <h4 class="text-france-blue">
-            Suis-je responsable des données&nbsp;?
+            Suis-je responsable des données&#8239;?
           </h4>
           <div class="flex justify-center">
             <div
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div>
-          <h4>Qu’en est-il du GIP Plateforme de l’inclusion&nbsp;?</h4>
+          <h4>Qu’en est-il du GIP Plateforme de l’inclusion&#8239;?</h4>
           <p class="text-f14 text-gray-text">
             Il est co-responsable de traitement, car il décide notamment
             d’éléments importants comme les durées de conservation et certaines
@@ -69,7 +69,7 @@
           </p>
         </div>
         <div>
-          <h4>Quelles pièces justificatives puis-je demander&nbsp;?</h4>
+          <h4>Quelles pièces justificatives puis-je demander&#8239;?</h4>
           <p class="text-f14 text-gray-text">
             Pour respecter le principe de minimisation du RGPD. Les données
             doivent être nécessaires pour savoir si l’orientation vers vous est
@@ -85,14 +85,14 @@
             <div class="flex justify-between">
               <span class="mr-s16">✅</span>
               <p class="text-f14 text-gray-text">
-                <b>Identifier le bénéficiaire&nbsp;:</b> Demander des pièces qui prouvent
-                que le bénéficiaire fait partie du public que vous accompagnez.
+                <b>Identifier le bénéficiaire&#8239;:</b> Demander des pièces qui
+                prouvent que le bénéficiaire fait partie du public que vous accompagnez.
               </p>
             </div>
             <div class="flex justify-between">
               <span class="mr-s16">✅</span>
               <p class="text-f14 text-gray-text">
-                <b>Se concentrer sur le bénéficiaire&nbsp;: </b>
+                <b>Se concentrer sur le bénéficiaire&#8239;: </b>
                 Ne collecter des données sur des tiers que si c’est indispensable
                 pour l’orientation et si vous pouvez les informer.
               </p>
@@ -106,13 +106,15 @@
           <div class="mx-s64 flex justify-between">
             <span class="mr-s16">❌</span>
             <p class="text-f14 text-gray-text">
-              <b>La pré-inscription&nbsp;: </b>
+              <b>La pré-inscription&#8239;: </b>
               Ne pas utiliser Dora pour des pré-inscriptions. Ces démarches doivent
               se faire directement auprès de votre organisme.
             </p>
           </div>
         </div>
-        <h4 class="m-s0">Et le rôle du GIP Plateforme de l’Inclusion&nbsp;?</h4>
+        <h4 class="m-s0">
+          Et le rôle du GIP Plateforme de l’Inclusion&#8239;?
+        </h4>
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
@@ -128,7 +130,7 @@
         </div>
         <div>
           <h4 class="text-france-blue">
-            Certaines données sont-elles interdites dans Dora&nbsp;?
+            Certaines données sont-elles interdites dans Dora&#8239;?
           </h4>
           <p class="text-f14 text-gray-text">
             Pour des raisons de sécurité notamment, les RIB, les cartes vitales
@@ -138,7 +140,7 @@
         </div>
         <div>
           <h4 class="text-france-blue">
-            Qui peut avoir accès aux fiches d’orientation&nbsp;?
+            Qui peut avoir accès aux fiches d’orientation&#8239;?
           </h4>
           <p class="text-f14 text-gray-text">
             Il revient à chaque organisme de déterminer qui a accès aux fiches
@@ -153,7 +155,7 @@
         </div>
         <div class="border-gray-02 pb-s8 border-b-1">
           <h4 class="text-france-blue">
-            Quels sont les droits des personnes&nbsp;?
+            Quels sont les droits des personnes&#8239;?
           </h4>
           <p class="text-f14 text-gray-text">
             Les bénéficiaires peuvent s’opposer au traitement de leurs données,
@@ -163,7 +165,7 @@
           </p>
         </div>
         <div class="bg-service-violet p-s16 rounded-md">
-          <h4 class="m-s0">Pour en savoir plus&nbsp;...</h4>
+          <h4 class="m-s0">Pour en savoir plus&#8239;...</h4>
           <ul class="p-s16 list-disc">
             <li class="m-s0 text-f14 text-gray-text">
               La <a
