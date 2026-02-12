@@ -25,7 +25,7 @@
     <h2>Notice d’informations&#8239;: Pièces justificatives</h2>
     <h6 class="text-gray-text">
       Toute demande de pièces justificatives est réglementée. Veuillez prendre
-      connaissance de la notice suivante :
+      connaissance de la notice suivante&#8239;:
     </h6>
     <div class="mt-s16 border-gray-02 border-1">
       <div class=" p-s16 gap-s16 flex max-h-[24rem] flex-col overflow-y-scroll">
@@ -43,8 +43,9 @@
             >
               <h4 class="text-france-blue">📥 Je reçois une orientation</h4>
               <p class="text-f14 text-gray-text">
-                Vous êtes considéré comme le <b>“responsable de traitement”</b>.
-                C’est vous qui déterminez quelles pièces et donnée sont
+                Vous êtes considéré comme le <strong
+                  >responsable de traitement</strong
+                >. C’est vous qui déterminez quelles pièces et donnée sont
                 nécessaires pour valider l’orientation.
               </p>
             </div>
@@ -74,13 +75,13 @@
             Pour respecter le principe de minimisation du RGPD. Les données
             doivent être nécessaires pour savoir si l’orientation vers vous est
             valable. Elles ne doivent pas conduire à une pré-inscription qui
-            devra se faire directement auprès de vous
+            devra se faire directement auprès de vous.
           </p>
         </div>
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
-          <h5>A faire</h5>
+          <h5>À faire</h5>
           <div class="mx-s64">
             <div class="flex justify-between">
               <span class="mr-s16">✅</span>
@@ -102,7 +103,7 @@
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
-          <h5>A éviter</h5>
+          <h5>À éviter</h5>
           <div class="mx-s64 flex justify-between">
             <span class="mr-s16">❌</span>
             <p class="text-f14 text-gray-text">
@@ -165,7 +166,7 @@
           </p>
         </div>
         <div class="bg-service-violet p-s16 rounded-md">
-          <h4 class="m-s0">Pour en savoir plus&#8239;...</h4>
+          <h4 class="m-s0">Pour en savoir plus&#8239;…</h4>
           <ul class="p-s16 list-disc">
             <li class="m-s0 text-f14 text-gray-text">
               La <a
@@ -191,7 +192,7 @@
   <div class="mt-s16 pt-s16 border-gray-02 pb-s8 flex justify-end border-t-1">
     <Button
       id="document-upload-notice-accept-button"
-      label="J'ai compris"
+      label="J’ai compris"
       onclick={onConfirm}
     />
   </div>
