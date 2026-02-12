@@ -166,6 +166,7 @@
       <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
       <div class="h-s24 w-s24">
         <button
+          type="button"
           onclick={() => handleRemove(uploaded)}
           class="ml-s16 h-s24 w-s24 fill-error"
         >
