@@ -170,6 +170,8 @@ class ImportStructuresHelper:
                 if not member.is_admin:
                     member.is_admin = True
                     member.save()
+                    structure.admin_already_invited = True
+                    structure.save(update_fields=["admin_already_invited"])
             except StructurePutativeMember.DoesNotExist:
                 try:
                     member = StructureMember.objects.get(user=user, structure=structure)
@@ -177,6 +179,8 @@ class ImportStructuresHelper:
                     if not member.is_admin:
                         member.is_admin = True
                         member.save()
+                        structure.admin_already_invited = True
+                        structure.save(update_fields=["admin_already_invited"])
                 except StructureMember.DoesNotExist:
                     member = StructurePutativeMember.objects.create(
                         user=user,
@@ -184,6 +188,8 @@ class ImportStructuresHelper:
                         invited_by_admin=True,
                         is_admin=True,
                     )
+                    structure.admin_already_invited = True
+                    structure.save(update_fields=["admin_already_invited"])
 
                     logger.info("%s invité·e comme administrateur·rice", email)
                     send_invitation_email(

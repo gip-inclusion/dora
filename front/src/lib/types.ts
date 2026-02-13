@@ -109,6 +109,7 @@ export interface ShortStructure {
 }
 
 export interface AdminShortStructure {
+  adminAlreadyInvited: boolean;
   categories: ServiceCategory[];
   city: string;
   department: string;

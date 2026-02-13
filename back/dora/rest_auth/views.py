@@ -256,6 +256,8 @@ def invite_first_admin(request):
             if not member.is_admin:
                 member.is_admin = True
                 member.save()
+                structure.admin_already_invited = True
+                structure.save(update_fields=["admin_already_invited"])
         except StructureMember.DoesNotExist:
             member = StructurePutativeMember.objects.create(
                 user=invitee,
@@ -263,6 +265,8 @@ def invite_first_admin(request):
                 invited_by_admin=True,
                 is_admin=True,
             )
+            structure.admin_already_invited = True
+            structure.save(update_fields=["admin_already_invited"])
             send_invitation_email(
                 member,
                 inviter.get_full_name(),

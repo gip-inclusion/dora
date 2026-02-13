@@ -430,6 +430,8 @@ class Structure(ModerationMixin, models.Model):
 
     is_obsolete = models.BooleanField(default=False, db_index=True)
 
+    admin_already_invited = models.BooleanField(default=False)
+
     objects = StructureManager()
 
     class Meta:
