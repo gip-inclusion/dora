@@ -45,7 +45,7 @@
               <p class="text-f14 text-gray-text">
                 Vous êtes considéré comme le <strong
                   >responsable de traitement</strong
-                >. C’est vous qui déterminez quelles pièces et donnée sont
+                >. C’est vous qui déterminez quelles pièces et données sont
                 nécessaires pour valider l’orientation.
               </p>
             </div>
@@ -81,7 +81,7 @@
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
-          <h5>À faire</h5>
+          <h5 class="text-france-blue">À faire</h5>
           <div class="mx-s64">
             <div class="flex justify-between">
               <span class="mr-s16">✅</span>
@@ -103,7 +103,7 @@
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
-          <h5>À éviter</h5>
+          <h5 class="text-france-blue">À éviter</h5>
           <div class="mx-s64 flex justify-between">
             <span class="mr-s16">❌</span>
             <p class="text-f14 text-gray-text">
@@ -119,7 +119,7 @@
         <div
           class="bg-service-violet p-s16 gap-s8 flex flex-col items-center justify-center rounded-md"
         >
-          <h5>Le rôle de Vigie du GIP</h5>
+          <h5 class="text-france-blue">Le rôle de Vigie du GIP</h5>
           <div class="mx-s64 flex justify-between">
             <span class="mr-s16">🛡️</span>
             <p class="text-f14 text-gray-text">
@@ -135,8 +135,8 @@
           </h4>
           <p class="text-f14 text-gray-text">
             Pour des raisons de sécurité notamment, les RIB, les cartes vitales
-            et le NIR ne peuvent être traitées sur Dora, et toute donnée
-            sensible qui n’est pas indispensable.
+            et le NIR ne peuvent être traités sur Dora, et toute donnée sensible
+            qui n’est pas indispensable.
           </p>
         </div>
         <div>
