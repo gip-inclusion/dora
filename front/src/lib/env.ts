@@ -10,3 +10,7 @@ export const OIDC_AUTH_BACKEND =
 export const GOOGLE_CSE_ID = import.meta.env.VITE_GOOGLE_CSE_ID;
 export const DI_DORA_UNIFIED_SEARCH_ENABLED =
   import.meta.env.VITE_DI_DORA_UNIFIED_SEARCH_ENABLED !== "false";
+export const EMPLOIS_SIGNUP_PAGE_URL = import.meta.env
+  .VITE_EMPLOIS_SIGNUP_PAGE_URL;
+export const EMPLOIS_PORTAL_PAGE_URL = import.meta.env
+  .VITE_EMPLOIS_PORTAL_PAGE_URL;
