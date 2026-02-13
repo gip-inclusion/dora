@@ -3,7 +3,7 @@
 
   import { getApiURL } from "$lib/utils/api";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import { PROCONNECT_MORE_INFO_URL, URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     nextPage: string;
@@ -42,7 +42,7 @@
         target="_blank"
         title="Qu’est-ce que ProConnect&#8239;? nouvelle fenêtre"
         rel="noopener noreferrer"
-        href="https://www.proconnect.gouv.fr/"
+        href={PROCONNECT_MORE_INFO_URL}
       >
         Qu'est que ProConnect&#8239;?
       </a>
