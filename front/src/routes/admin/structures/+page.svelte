@@ -124,7 +124,7 @@
         "Lien DORA": `${CANONICAL_URL}/structures/${structure.slug}`,
         "Administrateurs": structure.admins.join(","),
         "Éditeurs": structure.editors.join(","),
-        "Administrateur déjà invité": structure.adminAlreadyInvited ? "oui" : "non",
+        "Invitation envoyée": structure.adminAlreadyInvited ? "oui" : "non",
         "Administrateurs à relancer": structure.adminsToRemind.join(","),
         "Administrateurs à modérer": structure.adminsToModerate.join(","),
         "Collaborateurs à relancer": structure.numPotentialMembersToRemind,
