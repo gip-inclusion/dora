@@ -2,23 +2,24 @@
   import type { Snippet } from "svelte";
 
   interface Props {
-    selfStart?: boolean;
-    bgColorClass?: string;
-    textColorClass?: string;
-    children?: Snippet;
+    variant?: "default" | "success" | "info";
+    children: Snippet;
   }
 
-  let {
-    selfStart = false,
-    bgColorClass = "bg-gray-text-alt",
-    textColorClass = "text-white",
-    children,
-  }: Props = $props();
+  let { variant = "default", children }: Props = $props();
+
+  const variantClasses = {
+    default: "bg-gray-text-alt text-white",
+    success: "bg-success text-white",
+    info: "bg-blue-information text-gray-text",
+  };
 </script>
 
 <span
-  class="break-word px-s8 py-s2 text-f14 rounded-sm font-bold {textColorClass} {bgColorClass}"
-  class:self-start={selfStart}
+  class={[
+    "break-word px-s8 py-s2 text-f12 rounded-sm font-bold uppercase",
+    variantClasses[variant],
+  ]}
 >
-  {@render children?.()}
+  {@render children()}
 </span>
