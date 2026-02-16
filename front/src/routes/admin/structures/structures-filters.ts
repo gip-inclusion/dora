@@ -1,11 +1,17 @@
 export function isOrphan(struct) {
   return struct.isOrphan;
 }
+
 export function isObsolete(struct) {
   return struct.isObsolete;
 }
+
 export function waiting(struct) {
   return struct.isWaiting;
+}
+
+export function adminAlreadyInvited(struct) {
+  return struct.adminAlreadyInvited;
 }
 
 export function toModerate(struct) {

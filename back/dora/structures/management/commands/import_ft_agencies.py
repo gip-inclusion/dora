@@ -5,7 +5,6 @@ import requests
 from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.utils import timezone
-from yachalk import chalk
 
 from dora.core.commands import BaseCommand
 from dora.core.models import ModerationStatus
@@ -89,10 +88,8 @@ class Command(BaseCommand):
             self.tmpout = StringIO()
             try:
                 if not agency.get("siret"):
-                    # self.tmpout.write(chalk.red("Siret manquant dans l’API\n"))
                     continue
                 if not agency.get("codeSafir"):
-                    # self.tmpout.write(chalk.red("Code Safir manquant dans l’API\n"))
                     continue
 
                 try:
@@ -260,7 +257,7 @@ class Command(BaseCommand):
                 output = self.tmpout.getvalue()
                 if len(output):
                     self.stdout.write(
-                        f"{chalk.bold(agency.get('libelleEtendu'))} (siret : {agency.get('siret')}, "
+                        f"{agency.get('libelleEtendu')} (siret : {agency.get('siret')}, "
                         f"safir : {agency.get('codeSafir')})"
                     )
                     self.stdout.write(output)
@@ -281,7 +278,7 @@ class Command(BaseCommand):
         return False
 
     def log_agency_error(self, message, structure, other_structure=None):
-        self.tmpout.write(chalk.red(message) + "\n")
+        self.tmpout.write(self.style.ERROR(message) + "\n")
         if structure:
             self.tmpout.write(get_structure_info(structure, "Structure 1 : "))
         if other_structure:

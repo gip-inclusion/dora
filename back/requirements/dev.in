@@ -1,4 +1,4 @@
--r ./test.in
+-r test.in
 
 django-extensions
 django-silk

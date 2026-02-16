@@ -135,7 +135,7 @@ L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations
 
 Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
 
-## Article 9 — Accord de responsabilité conjointe de traitement de données à caractère personnel
+## Article 9 — Accord de responsabilité conjointe de traitement de données à caractère personnel {accord_co_responsabilite}
 
 ### 9.1 Principe de la responsabilité conjointe et obligations communes
 

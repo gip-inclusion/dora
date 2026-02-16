@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.urls import include, path, register_converter
 from rest_framework.routers import SimpleRouter
 
-import dora.admin_express.views
 import dora.core.views
 import dora.decoupage_administratif.views
 import dora.orientations.views
@@ -78,10 +77,17 @@ private_api_patterns = [
         dora.services.views.post_di_service_feedback,
     ),
     path("admin-division-search/", dora.decoupage_administratif.views.search),
-    path("admin-division-reverse-search/", dora.admin_express.views.reverse_search),
-    path("admin-division-departments/", dora.admin_express.views.get_departments),
     path(
-        "city-label/<insee_code:insee_code>/", dora.admin_express.views.get_city_label
+        "admin-division-reverse-search/",
+        dora.decoupage_administratif.views.reverse_search,
+    ),
+    path(
+        "admin-division-departments/",
+        dora.decoupage_administratif.views.get_departments,
+    ),
+    path(
+        "city-label/<insee_code:insee_code>/",
+        dora.decoupage_administratif.views.get_city_label,
     ),
     path("search-sirene/<insee_code:citycode>/", dora.sirene.views.search_sirene),
     path("search-siret/", dora.sirene.views.search_siret),

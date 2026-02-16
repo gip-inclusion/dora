@@ -14,6 +14,7 @@
   } from "$lib/types";
 
   import {
+    adminAlreadyInvited,
     isOrphan,
     isObsolete,
     toActivate,
@@ -65,6 +66,13 @@
         "Structures où un administrateur invité n’a pas encore accepté l’invitation",
       actions:
         "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
+    },
+    {
+      status: "invitation_expirée",
+      label: "Invitation expirée",
+      definition:
+        "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
+      actions: "Identifier un autre administrateur.",
     },
     {
       status: "à_modérer",
@@ -183,9 +191,19 @@
         if (status === "obsolète") {
           return isObsolete(struct);
         } else if (status === "orphelines") {
-          return !isObsolete(struct) && isOrphan(struct);
+          return (
+            !isObsolete(struct) &&
+            isOrphan(struct) &&
+            !adminAlreadyInvited(struct)
+          );
         } else if (status === "en_attente") {
           return !isObsolete(struct) && !isOrphan(struct) && waiting(struct);
+        } else if (status === "invitation_expirée") {
+          return (
+            !isObsolete(struct) &&
+            isOrphan(struct) &&
+            adminAlreadyInvited(struct)
+          );
         } else if (status === "à_modérer") {
           return (
             !isObsolete(struct) &&

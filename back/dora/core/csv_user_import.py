@@ -144,6 +144,9 @@ class ImportUserHelper:
         if admin and not member.is_admin:
             member.is_admin = True
             member.save()
+            structure = member.structure
+            structure.admin_already_invited = True
+            structure.save(update_fields=["admin_already_invited"])
             return " (mais désormais en tant qu'admin)"
         return ""
 
@@ -173,6 +176,9 @@ class ImportUserHelper:
                     invited_by_admin=True,
                     is_admin=admin,
                 )
+                if admin:
+                    structure.admin_already_invited = True
+                    structure.save(update_fields=["admin_already_invited"])
 
                 result = f"{email} invité·e"
                 if admin:

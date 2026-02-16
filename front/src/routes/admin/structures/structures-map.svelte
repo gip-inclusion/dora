@@ -4,19 +4,15 @@
   import * as mlgl from "maplibre-gl";
 
   import Map from "$lib/components/display/map.svelte";
-  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
+  import type { AdminShortStructure } from "$lib/types";
 
   interface Props {
     filteredStructures?: AdminShortStructure[];
     selectedStructureSlug: string | null;
-    department: GeoApiValue;
   }
 
-  let {
-    filteredStructures = [],
-    selectedStructureSlug = $bindable(),
-    department,
-  }: Props = $props();
+  let { filteredStructures = [], selectedStructureSlug = $bindable() }: Props =
+    $props();
 
   let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;
@@ -48,23 +44,6 @@
           padding: 60,
         });
       }
-    } else if (department?.geom) {
-      const coordinates = (department.geom as any).coordinates?.[0];
-      // Quand la géométries a été sursimplifiée, on n'a pas de coordonnées.
-      // Dans ce cas, on ne fait rien en attendant que la logique de simplification soit mise à jour.
-      if (!coordinates) {
-        return;
-      }
-      const bounds = coordinates.reduce(
-        function (acc: mlgl.LngLatBounds, coord: [number, number]) {
-          return acc.extend(coord);
-        },
-        new mlgl.LngLatBounds(coordinates[0], coordinates[0])
-      );
-
-      map.fitBounds(bounds, {
-        padding: 20,
-      });
     }
   }
 

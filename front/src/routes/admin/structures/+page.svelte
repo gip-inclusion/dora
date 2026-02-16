@@ -124,6 +124,7 @@
         "Lien DORA": `${CANONICAL_URL}/structures/${structure.slug}`,
         "Administrateurs": structure.admins.join(","),
         "Éditeurs": structure.editors.join(","),
+        "Invitation envoyée": structure.adminAlreadyInvited ? "oui" : "non",
         "Administrateurs à relancer": structure.adminsToRemind.join(","),
         "Administrateurs à modérer": structure.adminsToModerate.join(","),
         "Collaborateurs à relancer": structure.numPotentialMembersToRemind,
@@ -247,11 +248,7 @@
       {#if structures}
         <div class="gap-s16 flex flex-col lg:flex-row">
           <div class="h-s512 lg:w-s512 relative w-full shrink-0 lg:h-[800px]">
-            <StructuresMap
-              {filteredStructures}
-              bind:selectedStructureSlug
-              department={selectedDepartment}
-            />
+            <StructuresMap {filteredStructures} bind:selectedStructureSlug />
           </div>
           <div class="gap-s24 flex w-full flex-col">
             <Button

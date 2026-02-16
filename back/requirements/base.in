@@ -2,12 +2,11 @@ data-inclusion-schema
 dj-database-url
 Django
 django-cors-headers
-django-otp
+django-otp[segno]
 django-csp
 django-filter
-django-storages
+django-storages[s3]
 django-datadog-logger
-boto3
 djangorestframework-camel-case
 djangorestframework-gis
 djangorestframework
@@ -15,7 +14,6 @@ django-sesame
 itoutils[django]
 mozilla-django-oidc
 furl
-hiredis
 humanize
 jwcrypto
 mjml-python
@@ -23,12 +21,9 @@ osm_opening_hours
 psycopg[binary]
 PyJWT
 python-magic
-redis
+redis[hiredis]
 requests
-segno
 sentry-sdk
-setuptools
 sib-api-v3-sdk
 Unidecode
 whitenoise
-yachalk

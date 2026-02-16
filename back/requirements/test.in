@@ -1,4 +1,4 @@
--r ./base.in
+-r base.in
 
 django-environ
 django-querycount
@@ -8,6 +8,4 @@ model-bakery
 ruff
 pytest
 pytest-django
-sqlfluff
-requests-mock
 syrupy
