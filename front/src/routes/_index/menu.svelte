@@ -11,7 +11,7 @@
   import MenuAide from "./menu-aide.svelte";
   import MenuMesStructures from "./menu-mes-structures.svelte";
   import MenuMonCompte from "./menu-mon-compte.svelte";
-  import MenuMonPortail from "./menu-nexus/menu-mon-portail.svelte";
+  import MenuNexus from "./menu-nexus/menu-nexus.svelte";
   import SubMenu from "./sub-menu.svelte";
 
   let structures: ShortStructure[] = $derived(
@@ -41,7 +41,7 @@
       <div class="gap-s10 hidden lg:flex">
         <MenuMesStructures {structures} {lastVisitedStructure} />
         <MenuMonCompte />
-        <MenuMonPortail />
+        <MenuNexus />
       </div>
     {/if}
 
@@ -49,7 +49,7 @@
       {#if $userInfo}
         <MenuMesStructures {structures} {lastVisitedStructure} mobileDesign />
         <MenuMonCompte mobileDesign />
-        <MenuMonPortail mobileDesign />
+        <MenuNexus mobileDesign />
       {/if}
       <hr class="-mx-s32 mb-s16 mt-s64" />
       <SubMenu mobileDesign />
