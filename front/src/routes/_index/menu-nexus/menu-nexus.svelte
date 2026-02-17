@@ -29,7 +29,7 @@
   });
 </script>
 
-{#if dropdownStatus && dropdownStatus.mvpEnabled}
+{#if dropdownStatus && dropdownStatus.enabled}
   <DropdownMenu withBorders withSeparator={false} {mobileDesign}>
     {#snippet label()}
       <span class="gap-s10 text-magenta-cta flex items-center font-bold">
