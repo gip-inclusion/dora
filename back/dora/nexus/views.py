@@ -4,11 +4,14 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from itoutils.django.nexus.api import NexusAPIClient
 from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from itoutils.urls import add_url_params
 from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+
+from .serializers import DropdownStatusSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -71,3 +74,11 @@ def auto_login_out(request):
         return Response({"redirect_url": redirect_url}, status=status.HTTP_200_OK)
 
     raise exceptions.NotFound
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def dropdown_status(request):
+    data = NexusAPIClient().dropdown_status(request.user.email)
+    serializer = DropdownStatusSerializer(data, context={"request": request})
+    return Response(serializer.data, status=status.HTTP_200_OK)
