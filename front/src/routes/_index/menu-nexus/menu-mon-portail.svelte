@@ -7,32 +7,31 @@
 
   import { ALL_SERVICES } from "./consts";
   import MenuMonPortailServiceItem from "./menu-mon-portail-service-item.svelte";
-  import type { NexusServiceID, NexusDropDownStatus } from "./types";
+  import type { NexusServiceID } from "$lib/requests/nexus";
+  import type { NexusDropDownStatus } from "$lib/requests/nexus";
 
-  interface Props {
-    mobileDesign?: boolean;
-  }
-
-  let { mobileDesign = false }: Props = $props();
-
-  export const ACTIVABLE_SERVICES: NexusServiceID[] = [
+  const ACTIVABLE_SERVICES: NexusServiceID[] = [
     "les-emplois",
     "dora",
     "pilotage",
   ];
 
-  export const NEXUS_DROP_DOWN_STATUS: NexusDropDownStatus = {
-    proconnect: true,
-    // eslint-disable-next-line camelcase
-    activated_services: ["dora", "les-emplois"],
-    "mvp-enabled": true,
-  };
+  interface Props {
+    dropdownStatus: NexusDropDownStatus;
+    mobileDesign?: boolean;
+  }
 
-  const enabledServices = ALL_SERVICES.filter((service) =>
-    NEXUS_DROP_DOWN_STATUS.activated_services.includes(service.id)
+  let { dropdownStatus, mobileDesign = false }: Props = $props();
+
+  let enabledServices = $derived(
+    ALL_SERVICES.filter((service) =>
+      dropdownStatus.activatedServices.includes(service.id)
+    )
   );
-  const disabledServices = ALL_SERVICES.filter(
-    (service) => !NEXUS_DROP_DOWN_STATUS.activated_services.includes(service.id)
+  let disabledServices = $derived(
+    ALL_SERVICES.filter(
+      (service) => !dropdownStatus.activatedServices.includes(service.id)
+    )
   );
 </script>
 
