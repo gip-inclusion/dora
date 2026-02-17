@@ -1,6 +1,8 @@
 <script lang="ts">
   import Tag from "$lib/components/display/tag.svelte";
 
+  import { EMPLOIS_PORTAL_PAGE_URL } from "$lib/env";
+
   import type { NexusServiceID } from "$lib/requests/nexus";
 
   export type NexusService = {
@@ -16,10 +18,14 @@
   }
 
   let { service, activated = false, activable = false }: Props = $props();
+
+  let url = $derived(
+    activated ? service.url : `${EMPLOIS_PORTAL_PAGE_URL}/service/${service.id}`
+  );
 </script>
 
 <a
-  href={service.url}
+  href={url}
   target="_blank"
   rel="noopener"
   class="w-s344 p-s12 text-gray-text hover:bg-magenta-10 flex items-center justify-between rounded-sm"
