@@ -1,0 +1,1 @@
+NEXUS_MENU_ENABLED_DEPARTMENTS = ["29", "31", "33", "34", "44", "67", "76", "88"]
