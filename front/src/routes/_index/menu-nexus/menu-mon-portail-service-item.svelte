@@ -1,8 +1,14 @@
 <script lang="ts">
   import Tag from "$lib/components/display/tag.svelte";
 
-  import type { NexusService } from "./types";
+  import type { NexusServiceID } from "$lib/requests/nexus";
 
+  export type NexusService = {
+    id: NexusServiceID;
+    label: string;
+    url: string;
+    icon: string;
+  };
   interface Props {
     service: NexusService;
     activated?: boolean;
