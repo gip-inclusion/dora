@@ -14,7 +14,7 @@
 
   import MenuMonPortailServiceItem from "./menu-mon-portail-service-item.svelte";
 
-  const ACTIVABLE_SERVICES: NexusServiceID[] = [
+  const ACTIVABLE_IN_ONE_CLICK_SERVICES: NexusServiceID[] = [
     "les-emplois",
     "dora",
     "pilotage",
@@ -68,7 +68,7 @@
   {#each disabledServices as service}
     <MenuMonPortailServiceItem
       {service}
-      activable={ACTIVABLE_SERVICES.includes(service.id)}
+      activableInOneClick={ACTIVABLE_IN_ONE_CLICK_SERVICES.includes(service.id)}
     />
   {/each}
 </div>

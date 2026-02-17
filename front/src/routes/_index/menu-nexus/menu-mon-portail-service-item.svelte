@@ -10,10 +10,14 @@
   interface Props {
     service: NexusService;
     activated?: boolean;
-    activable?: boolean;
+    activableInOneClick?: boolean;
   }
 
-  let { service, activated = false, activable = false }: Props = $props();
+  let {
+    service,
+    activated = false,
+    activableInOneClick = false,
+  }: Props = $props();
 
   let url = $derived(
     activated ? service.url : `${EMPLOIS_PORTAL_PAGE_URL}/service/${service.id}`
@@ -38,7 +42,7 @@
   <img src={service.icon} alt={service.label} class="h-s40" />
   {#if activated}
     <Tag variant="success">Activé</Tag>
-  {:else if activable}
+  {:else if activableInOneClick}
     <Tag variant="info">Activable en 1 clic</Tag>
   {/if}
 </a>
