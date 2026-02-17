@@ -5,6 +5,8 @@
 
   import type { NexusServiceID } from "$lib/requests/nexus";
 
+  import { trackMatomoEvent } from "$lib/utils/matomo";
+
   export type NexusService = {
     id: NexusServiceID;
     label: string;
@@ -22,10 +24,19 @@
   let url = $derived(
     activated ? service.url : `${EMPLOIS_PORTAL_PAGE_URL}/service/${service.id}`
   );
+
+  function handleClick() {
+    trackMatomoEvent(
+      "Nexus",
+      activated ? "portail-acceder-service" : "portail-activer-service",
+      service.id
+    );
+  }
 </script>
 
 <a
   href={url}
+  onclick={handleClick}
   target="_blank"
   rel="noopener"
   class="w-s344 p-s12 text-gray-text hover:bg-magenta-10 flex items-center justify-between rounded-sm"
