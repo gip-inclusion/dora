@@ -48,7 +48,8 @@
                  "structures_structure"."data_inclusion_id",
                  "structures_structure"."data_inclusion_source",
                  "structures_structure"."disable_orientation_form",
-                 "structures_structure"."is_obsolete"
+                 "structures_structure"."is_obsolete",
+                 "structures_structure"."admin_already_invited"
           FROM "structures_structure"
           WHERE NOT "structures_structure"."is_obsolete"
         ''',
