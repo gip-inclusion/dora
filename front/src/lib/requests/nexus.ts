@@ -14,8 +14,8 @@ export type NexusDropDownStatus = {
   enabled: boolean;
 };
 
-export const getNexusDropdownStatus = async () => {
-  const url = new URL("/nexus/dropdown-status/", getApiURL());
+export const getNexusMenuStatus = async () => {
+  const url = new URL("/nexus/menu-status/", getApiURL());
   const response = await fetch(url, {
     method: "GET",
     headers: {

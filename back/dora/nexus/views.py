@@ -11,7 +11,7 @@ from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .serializers import DropdownStatusSerializer
+from .serializers import NexusMenuStatusSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ def auto_login_out(request):
 
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
-def dropdown_status(request):
+def nexus_menu_status(request):
     data = NexusAPIClient().dropdown_status(request.user.email)
-    serializer = DropdownStatusSerializer(data, context={"request": request})
+    serializer = NexusMenuStatusSerializer(data, context={"request": request})
     return Response(serializer.data, status=status.HTTP_200_OK)

@@ -4,7 +4,7 @@
   import logoNexusDropdownIcon from "$lib/assets/logos/logo-nexus-dropdown.svg";
 
   import {
-    getNexusDropdownStatus,
+    getNexusMenuStatus,
     type NexusDropDownStatus,
   } from "$lib/requests/nexus";
 
@@ -23,7 +23,7 @@
   let dropdownStatus: NexusDropDownStatus | undefined = $state(undefined);
 
   onMount(() => {
-    getNexusDropdownStatus().then((status) => {
+    getNexusMenuStatus().then((status) => {
       dropdownStatus = status;
     });
   });

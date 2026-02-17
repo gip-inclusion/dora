@@ -4,7 +4,7 @@ from dora.nexus.constants import NEXUS_MENU_ENABLED_DEPARTMENTS
 from dora.structures.models import StructureMember
 
 
-class DropdownStatusSerializer(serializers.Serializer):
+class NexusMenuStatusSerializer(serializers.Serializer):
     proconnect = serializers.BooleanField()
     activated_services = serializers.ListField(
         child=serializers.CharField(),
