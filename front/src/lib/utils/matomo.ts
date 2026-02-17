@@ -3,6 +3,7 @@ declare global {
   const Piwik: any;
   interface Window {
     matomoAbTestingAsyncInit: any;
+    _paq?: any[][];
   }
 }
 
@@ -41,4 +42,25 @@ export function registerMatomoExperiment(experiment: MatomoExperiment) {
     // if matomo.js is loaded after this code
     window.matomoAbTestingAsyncInit = createExperiment;
   }
+}
+
+export function trackMatomoEvent(
+  category: string,
+  action: string,
+  name?: string,
+  value?: number
+): void {
+  if (typeof window === "undefined" || !(window as any)._paq) {
+    return;
+  }
+
+  const args: any[] = ["trackEvent", category, action];
+  if (name !== undefined) {
+    args.push(name);
+  }
+  if (value !== undefined) {
+    args.push(value);
+  }
+
+  (window as any)._paq.push(args);
 }
