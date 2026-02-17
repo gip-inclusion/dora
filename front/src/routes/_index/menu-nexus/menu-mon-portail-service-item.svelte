@@ -3,16 +3,10 @@
 
   import { EMPLOIS_PORTAL_PAGE_URL } from "$lib/env";
 
-  import type { NexusServiceID } from "$lib/requests/nexus";
-
   import { trackMatomoEvent } from "$lib/utils/matomo";
 
-  export type NexusService = {
-    id: NexusServiceID;
-    label: string;
-    url: string;
-    icon: string;
-  };
+  import type { NexusService } from "./consts";
+
   interface Props {
     service: NexusService;
     activated?: boolean;

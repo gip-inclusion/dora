@@ -3,8 +3,14 @@ import LogoDoraFull from "$lib/assets/logos/logo-dora-full.svg";
 import LogoLeMarche from "$lib/assets/logos/logo-marche-inclusion.svg";
 import LogoPilotage from "$lib/assets/logos/logo-pilotage-inclusion.svg";
 import LogoMonRecap from "$lib/assets/logos/logo-monrecap.svg";
+import type { NexusServiceID } from "$lib/requests/nexus";
 
-import type { NexusService } from "./types";
+export type NexusService = {
+  id: NexusServiceID;
+  label: string;
+  url: string;
+  icon: string;
+};
 
 export const ALL_SERVICES: NexusService[] = [
   {
