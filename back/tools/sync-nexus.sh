@@ -7,4 +7,5 @@ if [ "$ENVIRONMENT" != "production" ];then
 fi
 
 echo "Synchronisation des utilisateurs pour Nexus"
+python /app/manage.py nexus_full_sync
 python /app/manage.py populate_metabase_nexus

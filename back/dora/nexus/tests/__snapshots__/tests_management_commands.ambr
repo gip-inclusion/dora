@@ -1,0 +1,112 @@
+# serializer version: 1
+# name: test_full_sync
+  dict({
+    'num_queries': 3,
+    'queries': list([
+      dict({
+        'origin': list([
+          'Command.sync_structures[itoutils/django/nexus/management/base_full_sync.py]',
+          'Command.handle[itoutils/django/nexus/management/base_full_sync.py]',
+          'test_full_sync[nexus/tests/tests_management_commands.py]',
+        ]),
+        'sql': '''
+          SELECT "structures_structure"."moderation_status",
+                 "structures_structure"."moderation_date",
+                 "structures_structure"."id",
+                 "structures_structure"."siret",
+                 "structures_structure"."parent_id",
+                 "structures_structure"."code_safir_ft",
+                 "structures_structure"."name",
+                 "structures_structure"."typology",
+                 "structures_structure"."slug",
+                 "structures_structure"."url",
+                 "structures_structure"."short_desc",
+                 "structures_structure"."full_desc",
+                 "structures_structure"."phone",
+                 "structures_structure"."email",
+                 "structures_structure"."address1",
+                 "structures_structure"."address2",
+                 "structures_structure"."postal_code",
+                 "structures_structure"."city_code",
+                 "structures_structure"."city",
+                 "structures_structure"."department",
+                 "structures_structure"."longitude",
+                 "structures_structure"."latitude",
+                 "structures_structure"."geocoding_score",
+                 "structures_structure"."ape",
+                 "structures_structure"."accesslibre_url",
+                 "structures_structure"."opening_hours",
+                 "structures_structure"."opening_hours_details",
+                 "structures_structure"."other_labels",
+                 "structures_structure"."creation_date",
+                 "structures_structure"."modification_date",
+                 "structures_structure"."has_been_edited",
+                 "structures_structure"."quick_start_done",
+                 "structures_structure"."creator_id",
+                 "structures_structure"."last_editor_id",
+                 "structures_structure"."source_id",
+                 "structures_structure"."data_inclusion_id",
+                 "structures_structure"."data_inclusion_source",
+                 "structures_structure"."disable_orientation_form",
+                 "structures_structure"."is_obsolete",
+                 "structures_structure"."admin_already_invited"
+          FROM "structures_structure"
+          WHERE NOT "structures_structure"."is_obsolete"
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'Command.sync_users[itoutils/django/nexus/management/base_full_sync.py]',
+          'Command.handle[itoutils/django/nexus/management/base_full_sync.py]',
+          'test_full_sync[nexus/tests/tests_management_commands.py]',
+        ]),
+        'sql': '''
+          SELECT "users_user"."id",
+                 "users_user"."password",
+                 "users_user"."last_login",
+                 "users_user"."sub_pc",
+                 "users_user"."email",
+                 "users_user"."last_name",
+                 "users_user"."first_name",
+                 "users_user"."is_active",
+                 "users_user"."is_valid",
+                 "users_user"."is_staff",
+                 "users_user"."is_manager",
+                 "users_user"."departments",
+                 "users_user"."main_activity",
+                 "users_user"."discovery_method",
+                 "users_user"."discovery_method_other",
+                 "users_user"."date_joined",
+                 "users_user"."last_service_reminder_email_sent",
+                 "users_user"."newsletter",
+                 "users_user"."cgu_versions_accepted"
+          FROM "users_user"
+          WHERE ("users_user"."is_active"
+                 AND NOT "users_user"."is_staff"
+                 AND NOT ("users_user"."email" = %s))
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'Command.sync_memberships[itoutils/django/nexus/management/base_full_sync.py]',
+          'Command.handle[itoutils/django/nexus/management/base_full_sync.py]',
+          'test_full_sync[nexus/tests/tests_management_commands.py]',
+        ]),
+        'sql': '''
+          SELECT "structures_structuremember"."id",
+                 "structures_structuremember"."user_id",
+                 "structures_structuremember"."structure_id",
+                 "structures_structuremember"."is_admin",
+                 "structures_structuremember"."creation_date"
+          FROM "structures_structuremember"
+          INNER JOIN "structures_structure" ON ("structures_structuremember"."structure_id" = "structures_structure"."id")
+          INNER JOIN "users_user" ON ("structures_structuremember"."user_id" = "users_user"."id")
+          WHERE (NOT "structures_structure"."is_obsolete"
+                 AND "users_user"."is_active"
+                 AND NOT "users_user"."is_staff"
+                 AND NOT ("users_user"."email" = %s))
+        ''',
+      }),
+    ]),
+  })
+# ---

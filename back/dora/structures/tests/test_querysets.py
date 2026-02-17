@@ -1,5 +1,10 @@
 from dora.core.models import ModerationStatus
-from dora.core.test_utils import make_service, make_structure, make_user
+from dora.core.test_utils import (
+    make_service,
+    make_structure,
+    make_structure_member,
+    make_user,
+)
 from dora.services.enums import ServiceStatus
 
 from ..models import Structure, StructurePutativeMember
@@ -10,7 +15,7 @@ def test_orphan_structures():
     assert make_structure(user=make_user()) not in Structure.objects.orphans()
 
     structure = make_structure()
-    structure.members.add(make_user())
+    make_structure_member(user=make_user(), structure=structure)
 
     assert structure not in Structure.objects.orphans()
 
@@ -88,17 +93,19 @@ def test_awaiting_moderation():
         is_obsolete=False,
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
     )
-    awaiting_structure_1.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=awaiting_structure_1,
+        is_admin=True,
     )
     awaiting_structure_2 = make_structure(
         is_obsolete=False,
         moderation_status=ModerationStatus.NEED_NEW_MODERATION,
     )
-    awaiting_structure_2.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=awaiting_structure_2,
+        is_admin=True,
     )
 
     # Structure validée (ne doit pas être dans le résultat)
@@ -106,9 +113,10 @@ def test_awaiting_moderation():
         is_obsolete=False,
         moderation_status=ModerationStatus.VALIDATED,
     )
-    validated_structure.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=validated_structure,
+        is_admin=True,
     )
 
     # Structure orpheline (ne doit pas être dans le résultat)
@@ -122,11 +130,11 @@ def test_awaiting_moderation():
         is_obsolete=True,
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
     )
-    obsolete_structure.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=obsolete_structure,
+        is_admin=True,
     )
-
     # Test sans manager
     awaiting = Structure.objects.awaiting_moderation()
     assert awaiting_structure_1 in awaiting
@@ -158,9 +166,10 @@ def test_requiring_action_from_department_managers():
         is_obsolete=False,
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
     )
-    awaiting_structure.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=awaiting_structure,
+        is_admin=True,
     )
 
     # Structure validée avec membre (ne doit pas être dans le résultat)
@@ -169,9 +178,10 @@ def test_requiring_action_from_department_managers():
         is_obsolete=False,
         moderation_status=ModerationStatus.VALIDATED,
     )
-    validated_structure.members.add(
-        make_user(is_valid=True, is_active=True),
-        through_defaults={"is_admin": True},
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=validated_structure,
+        is_admin=True,
     )
 
     requiring_action = Structure.objects.requiring_action_from_department_managers()

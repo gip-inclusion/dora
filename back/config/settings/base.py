@@ -18,6 +18,7 @@ from corsheaders.defaults import default_headers
 
 from . import BASE_DIR
 
+APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
 # Voir : https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -666,6 +667,10 @@ NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
 NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
+
+NEXUS_API_BASE_URL = os.getenv("NEXUS_API_BASE_URL")
+NEXUS_API_TOKEN = os.getenv("NEXUS_API_TOKEN")
+
 pdi_jwt_key = os.getenv("PDI_JWT_KEY")
 PDI_JWT_KEY = json.loads(pdi_jwt_key) if pdi_jwt_key else None
 
