@@ -16,13 +16,13 @@ asgiref==3.11.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.42.46 \
-    --hash=sha256:679cf4930e559621653bbd1439cf6e93b138cbaf46e36e5d7d95319999b7a356 \
-    --hash=sha256:c8c82ab34dd8d2d4d93a562d0e75fca164efa644651d3ccddb0f4aa88a481b38
+boto3==1.42.50 \
+    --hash=sha256:2fdf8f5349b130d62576068a6c47b3eec368a70bc28f16d8cce17c5f7e74fc2e \
+    --hash=sha256:38545d7e6e855fefc8a11e899ccbd6d2c9f64671d6648c2acfb1c78c1057a480
     # via django-storages
-botocore==1.42.46 \
-    --hash=sha256:f7459fcf586f38a3b0a242a172d3332141c770a3f5767bbb21e79d810db95d75 \
-    --hash=sha256:fc290b33aba6e271f627c4f46b8bcebfa1a94e19157d396732da417404158c01
+botocore==1.42.50 \
+    --hash=sha256:3ec7004009d1557a881b1d076d54b5768230849fa9ccdebfd409f0571490e691 \
+    --hash=sha256:de1e128e4898f4e66877bfabbbb03c61f99366f27520442539339e8a74afe3a5
     # via
     #   boto3
     #   s3transfer
@@ -342,9 +342,9 @@ data-inclusion-schema==1.0.5 \
     --hash=sha256:1a4b3b0ed72988e0bce533725160aafede2262bfd70d31fc6da38228ebf8e9bb \
     --hash=sha256:1e5a6a04b807baadeb257a30b58a4c1aa63c06a6a7f42c1a9ee31d709d559462
     # via -r requirements/base.in
-dj-database-url==3.1.0 \
-    --hash=sha256:155a56fbbecbaaf1348ccd73bf29138b4c9988363ba08261a0f0145e392e638c \
-    --hash=sha256:d80218426b83f9302c8d27d4fccf52de5cf0cab179f0645fb2839f37605d1353
+dj-database-url==3.1.1 \
+    --hash=sha256:245120e5df14008f0552b01c8a7d18127302ceea37f7686e55b8718daadf36f3 \
+    --hash=sha256:8c7a6cef2bfde62779df8189c76f9c68010b22cd19a82be4e9dcdfe55b94f881
     # via -r requirements/base.in
 django==6.0.2 \
     --hash=sha256:3046a53b0e40d4b676c3b774c73411d7184ae2745fe8ce5e45c0f33d3ddb71a7 \
@@ -558,9 +558,9 @@ idna==3.11 \
     #   email-validator
     #   httpx
     #   requests
-itoutils[django]==26.2.10.0 \
-    --hash=sha256:8f9193125abfb08756d95156156b858c6fc088806b90af50fcbccf9faa2f4a09 \
-    --hash=sha256:b8bdd69bcc530e0857a206388c15972492577041ec550410fbf59034ea7be1c5
+itoutils[django]==26.2.12.0 \
+    --hash=sha256:565d0669326dfddbab502d6beba1acbd79a3987f17e6c83ce2fd9ed6c0a00fe2 \
+    --hash=sha256:6e45f9bc809c52fed1c8fbca95f001a05583744306a89b840f5c0cfa8816ee78
     # via -r requirements/base.in
 jmespath==1.1.0 \
     --hash=sha256:472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d \
@@ -881,9 +881,9 @@ python-magic==0.4.27 \
     --hash=sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b \
     --hash=sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3
     # via -r requirements/base.in
-redis[hiredis]==7.1.1 \
-    --hash=sha256:a2814b2bda15b39dad11391cc48edac4697214a8a5a4bd10abe936ab4892eb43 \
-    --hash=sha256:f77817f16071c2950492c67d40b771fa493eb3fccc630a424a10976dbb794b7a
+redis[hiredis]==7.2.0 \
+    --hash=sha256:01f591f8598e483f1842d429e8ae3a820804566f1c73dca1b80e23af9fba0497 \
+    --hash=sha256:4dd5bf4bd4ae80510267f14185a15cba2a38666b941aff68cccf0256b51c1f26
     # via -r requirements/base.in
 requests==2.32.5 \
     --hash=sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6 \
@@ -899,9 +899,9 @@ segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
     # via django-otp
-sentry-sdk==2.52.0 \
-    --hash=sha256:931c8f86169fc6f2752cb5c4e6480f0d516112e78750c312e081ababecbaf2ed \
-    --hash=sha256:fa0bec872cfec0302970b2996825723d67390cdd5f0229fb9efed93bd5384899
+sentry-sdk==2.53.0 \
+    --hash=sha256:46e1ed8d84355ae54406c924f6b290c3d61f4048625989a723fd622aab838899 \
+    --hash=sha256:6520ef2c4acd823f28efc55e43eb6ce2e6d9f954a95a3aa96b6fd14871e92b77
     # via -r requirements/base.in
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
