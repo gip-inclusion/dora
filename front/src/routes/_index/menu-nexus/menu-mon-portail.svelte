@@ -2,10 +2,13 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
 
   import { userInfo } from "$lib/utils/auth";
+
   import { EMPLOIS_PORTAL_PAGE_URL } from "$lib/env";
 
   import type { NexusServiceID } from "$lib/requests/nexus";
   import type { NexusDropDownStatus } from "$lib/requests/nexus";
+
+  import { trackMatomoEvent } from "$lib/utils/matomo";
 
   import { ALL_SERVICES } from "./consts";
 
@@ -33,6 +36,10 @@
       (service) => !dropdownStatus.activatedServices.includes(service.id)
     )
   );
+
+  function handleClick() {
+    trackMatomoEvent("Nexus", "acceder-mon-portail", "dora");
+  }
 </script>
 
 <div class="flex flex-col">
@@ -49,6 +56,7 @@
     wFull
     extraClass="mb-s16"
     label="Accéder à mon portail"
+    onclick={handleClick}
   />
 
   {#each enabledServices as service}
