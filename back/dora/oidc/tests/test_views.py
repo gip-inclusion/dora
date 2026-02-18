@@ -1,6 +1,5 @@
 from urllib.parse import parse_qs, urlparse
 
-import pytest
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -23,10 +22,6 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
 
     cookie = response.cookies["token"]
     assert cookie.value == token.key
-    assert cookie["path"] == "/"
-    assert cookie["samesite"] == "Lax"
-    assert cookie["secure"] is True
-    assert cookie.get("httponly", "") != "HttpOnly"
 
     parsed_url = urlparse(response.url)
     query_params = parse_qs(parsed_url.query)

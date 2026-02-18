@@ -59,14 +59,9 @@ def test_authenticate_with_link_sets_cookie(client):
     )
 
     assert response.status_code == 302
-    assert "token" in response.cookies
 
     cookie = response.cookies["token"]
     assert cookie.value == token.key
-    assert cookie["path"] == "/"
-    assert cookie["samesite"] == "Lax"
-    assert cookie["secure"] is True
-    assert cookie.get("httponly", "") != "HttpOnly"
 
 
 def test_authenticate_with_link_creates_token_if_not_exists(client):
@@ -84,5 +79,4 @@ def test_authenticate_with_link_creates_token_if_not_exists(client):
     assert response.status_code == 302
     assert Token.objects.filter(user=user).exists()
     token = Token.objects.get(user=user)
-    assert "token" in response.cookies
     assert response.cookies["token"].value == token.key

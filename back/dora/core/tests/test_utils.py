@@ -234,12 +234,9 @@ def test_set_auth_token_cookie():
 
     set_auth_token_cookie(response, token_key)
 
-    assert "token" in response.cookies
-
     cookie = response.cookies["token"]
-    assert cookie.value == token_key
-    assert cookie["path"] == "/"
-    assert cookie["samesite"] == "Lax"
-    assert cookie["secure"] is True
-    assert cookie.get("httponly", "") != "HttpOnly"
-    assert cookie["domain"] == "subdomain.example.com"
+
+    assert (
+        cookie.OutputString()
+        == f"token={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
+    )
