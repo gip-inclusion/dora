@@ -12,6 +12,7 @@ from sesame.utils import get_token, get_user
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.utils import set_auth_token_cookie
 from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
@@ -70,8 +71,10 @@ def authenticate_with_link(request, sesame):
             # pour ne pas effectuer le flow de déconnexion OIDC en entier
             request.session[settings.SESAME_SESSION_NAME] = True
 
-            redirect_uri = f"{FRONTEND_PC_CALLBACK_URL}#{token.key}"
-            return HttpResponseRedirect(redirect_uri)
+            response = HttpResponseRedirect(FRONTEND_PC_CALLBACK_URL)
+            set_auth_token_cookie(response, token.key)
+
+            return response
 
     logger.warning(
         "Lien direct invalide ou expiré",
