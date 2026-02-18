@@ -20,7 +20,6 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
     response = client.get(reverse("oidc_logged_in"), {"next": next_url})
 
     assert response.status_code == 302
-    assert "token" in response.cookies
 
     cookie = response.cookies["token"]
     assert cookie.value == token.key
@@ -31,5 +30,4 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
 
     parsed_url = urlparse(response.url)
     query_params = parse_qs(parsed_url.query)
-    assert "next" in query_params
     assert query_params["next"][0] == next_url
