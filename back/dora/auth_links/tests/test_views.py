@@ -68,7 +68,7 @@ def test_authenticate_with_link_creates_token_if_not_exists(client):
     """authenticate_with_link crée un token s'il n'en existe pas."""
     user = make_user(is_active=True)
 
-    Token.objects.filter(user=user).delete()
+    assert not Token.objects.filter(user=user).exists()
 
     response = client.get(
         reverse(
