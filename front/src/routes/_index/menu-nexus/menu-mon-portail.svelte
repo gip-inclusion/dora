@@ -46,7 +46,7 @@
   }
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col lg:w-[344px]">
   <p class="text-f14 text-gray-text leading-24">
     <strong>{$userInfo?.firstName} {$userInfo?.lastName}</strong><br
     />{$userInfo?.email}

@@ -37,7 +37,7 @@
   onclick={handleClick}
   target="_blank"
   rel="noopener"
-  class="w-s344 p-s12 text-gray-text hover:bg-magenta-10 flex items-center justify-between rounded-sm"
+  class="p-s12 text-gray-text hover:bg-magenta-10 flex items-center justify-between rounded-sm"
 >
   <img src={service.icon} alt={service.label} class="h-s40" />
   {#if activated}
