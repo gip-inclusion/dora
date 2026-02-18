@@ -7,13 +7,9 @@ from rest_framework.authtoken.models import Token
 from dora.core.test_utils import make_user
 
 
-@pytest.fixture
-def user():
-    return make_user()
-
-
-def test_oidc_logged_in_sets_cookie_and_handles_next(client, user):
+def test_oidc_logged_in_sets_cookie_and_handles_next(client):
     """oidc_logged_in définit le cookie d'authentification et gère le paramètre next."""
+    user = make_user()
     token, _ = Token.objects.get_or_create(user=user)
 
     session = client.session
