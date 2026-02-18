@@ -7,24 +7,24 @@ declare global {
   }
 }
 
-interface MatomoTarget {
+type MatomoTarget = {
   attribute: string;
   inverted: string;
   type: string;
   value: string;
-}
+};
 
-interface MatomoVariation {
+type MatomoVariation = {
   name: string;
   activate: (event: unknown) => void;
-}
+};
 
-interface MatomoExperiment {
+type MatomoExperiment = {
   name: string;
   includedTargets: MatomoTarget[];
   excludedTargets: MatomoTarget[];
   variations: MatomoVariation[];
-}
+};
 
 export function registerMatomoExperiment(experiment: MatomoExperiment) {
   function createExperiment() {
