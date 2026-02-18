@@ -40,11 +40,11 @@
       <a
         class="text-magenta-cta underline"
         target="_blank"
-        title="Qu’est-ce que ProConnect&#8239;? nouvelle fenêtre"
+        title="Qu’est-ce que ProConnect&#8239;? - ouverture dans une nouvelle fenêtre"
         rel="noopener noreferrer"
         href={PROCONNECT_MORE_INFO_URL}
       >
-        Qu'est que ProConnect&#8239;?
+        Qu’est-ce que ProConnect&#8239;?
       </a>
     </div>
   {/if}
