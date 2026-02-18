@@ -24,11 +24,11 @@
   );
 
   function handleClick() {
-    trackMatomoEvent(
-      "Nexus",
-      activated ? "portail-acceder-service" : "portail-activer-service",
-      service.id
-    );
+    trackMatomoEvent({
+      category: "Nexus",
+      action: activated ? "portail-acceder-service" : "portail-activer-service",
+      name: service.id,
+    });
   }
 </script>
 

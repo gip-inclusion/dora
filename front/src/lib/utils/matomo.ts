@@ -26,6 +26,13 @@ type MatomoExperiment = {
   variations: MatomoVariation[];
 };
 
+type MatomoEvent = {
+  category: string;
+  action: string;
+  name?: string;
+  value?: number;
+};
+
 export function registerMatomoExperiment(experiment: MatomoExperiment) {
   function createExperiment() {
     const Experiment = Matomo.AbTesting.Experiment;
@@ -44,12 +51,12 @@ export function registerMatomoExperiment(experiment: MatomoExperiment) {
   }
 }
 
-export function trackMatomoEvent(
-  category: string,
-  action: string,
-  name?: string,
-  value?: number
-): void {
+export function trackMatomoEvent({
+  category,
+  action,
+  name,
+  value,
+}: MatomoEvent): void {
   if (typeof window === "undefined" || !(window as any)._paq) {
     return;
   }

@@ -38,7 +38,11 @@
   );
 
   function handleClick() {
-    trackMatomoEvent("Nexus", "acceder-mon-portail", "dora");
+    trackMatomoEvent({
+      category: "Nexus",
+      action: "acceder-mon-portail",
+      name: "dora",
+    });
   }
 </script>
 
