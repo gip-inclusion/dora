@@ -3,6 +3,9 @@ import LogoDoraFull from "$lib/assets/logos/logo-dora-full.svg";
 import LogoLeMarche from "$lib/assets/logos/logo-marche-inclusion.svg";
 import LogoPilotage from "$lib/assets/logos/logo-pilotage-inclusion.svg";
 import LogoMonRecap from "$lib/assets/logos/logo-monrecap.svg";
+
+import { CANONICAL_URL } from "$lib/env";
+
 import type { NexusServiceID } from "$lib/requests/nexus";
 
 export type NexusService = {
@@ -22,7 +25,7 @@ export const ALL_SERVICES: NexusService[] = [
   {
     id: "dora",
     label: "DORA",
-    url: "https://dora.inclusion.gouv.fr/structures/",
+    url: CANONICAL_URL,
     icon: LogoDoraFull,
   },
   {
