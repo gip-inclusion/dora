@@ -25,13 +25,30 @@
 
   let isDI = $derived("source" in service);
 
-  let searchIdStr = $derived($page.url.searchParams.get("searchId"));
+  let searchIdParam = $derived($page.url.searchParams.get("searchId"));
   let searchIdNumber = $derived(
-    searchIdStr ? parseInt(searchIdStr) : undefined
+    searchIdParam ? parseInt(searchIdParam) : undefined
   );
-  let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
+  let opParam = $derived($page.url.searchParams.get("op"));
+  let orientationQueryString = $derived(
+    (() => {
+      const params = new URLSearchParams();
+
+      if (searchIdParam) {
+        params.set("searchId", searchIdParam);
+      }
+
+      if (opParam) {
+        params.set("op", opParam);
+      }
+
+      const query = params.toString();
+
+      return query ? `?${query}` : "";
+    })()
+  );
   let orientationFormUrl = $derived(
-    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
 
   let isServiceFromOwnStructure = $derived(

@@ -13,6 +13,7 @@
   import { orientationStep2Schema } from "../schema";
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
@@ -26,6 +27,8 @@
   const isDI = !!data.isDI;
 
   let requesting = $state(false);
+
+  let opJwt = $derived($page.url.searchParams.get("op"));
 
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])
@@ -106,7 +109,11 @@
       </p>
 
       <div class="gap-x-s24 flex flex-col justify-between md:flex-row">
-        <OrientationForm {credentials} {service} />
+        <OrientationForm
+          {credentials}
+          {service}
+          beneficiaryFieldsDisabled={!!opJwt}
+        />
         <div class="mb-s32 w-full shrink-0 md:w-[384px]">
           <ContactBox {service} {isDI} />
         </div>
