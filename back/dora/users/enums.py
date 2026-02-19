@@ -22,4 +22,8 @@ class DiscoveryMethod(models.TextChoices):
         "evenements-dora",
         "Événements DORA (démonstration, webinaires, open labs, etc.)",
     )
+    EMPLOIS_DE_L_INCLUSION = (
+        "emplois-de-l-inclusion",
+        "Emplois de l'inclusion",
+    )
     AUTRE = "autre", "Autre (préciser)"
