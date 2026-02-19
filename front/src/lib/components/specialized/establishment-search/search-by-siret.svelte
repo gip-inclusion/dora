@@ -13,6 +13,7 @@
     establishment: Establishment | null;
     proposedSiret: string;
     description?: Snippet;
+    disabled?: boolean;
   }
 
   let {
@@ -20,6 +21,7 @@
     establishment = $bindable(),
     proposedSiret,
     description,
+    disabled = false,
   }: Props = $props();
 
   let siretInput = $state(proposedSiret);
@@ -70,7 +72,7 @@
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input
-        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
+        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden disabled:bg-gray-01 disabled:cursor-not-allowed"
         id="siret-select"
         type="text"
         oninput={() => (serverErrorMsg = "")}
@@ -78,11 +80,12 @@
         bind:value={siretInput}
         placeholder="1234567891234"
         maxlength="14"
+        {disabled}
       />
 
       <Button
         label="Rechercher"
-        disabled={!siretIsValid}
+        disabled={disabled || !siretIsValid}
         onclick={handleValidateSiret}
         small
       />

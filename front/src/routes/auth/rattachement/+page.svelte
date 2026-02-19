@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
@@ -21,9 +23,18 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
-  const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
+  const { proposedSiret, knownSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
   let loading = $state(false);
+
+  onMount(() => {
+    // Remove known_siret from URL to prevent re-enabling input on refresh
+    if ($page.url.searchParams.has("known_siret")) {
+      const newUrl = new URL($page.url);
+      newUrl.searchParams.delete("known_siret");
+      history.replaceState({}, "", newUrl);
+    }
+  });
 
   async function handleJoin() {
     loading = true;
@@ -98,6 +109,7 @@
       {proposedSafir}
       {proposedSiret}
       showSafir={userIsFranceTravail}
+      siretInputDisabled={knownSiret}
     >
       {#snippet cta()}
         <div>
