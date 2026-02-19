@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import include, path, register_converter
 from rest_framework.routers import SimpleRouter
 
+import dora.api.views
 import dora.core.views
 import dora.decoupage_administratif.views
 import dora.orientations.views
@@ -113,6 +114,10 @@ private_api_patterns = [
     path(
         "structures/<slug:structure_slug>/orientations/export/",
         dora.orientations.views.OrientationExportView.as_view(),
+    ),
+    path(
+        "orientations/emplois/<slug:service_slug>/",
+        dora.api.views.handle_emplois_orientation,
     ),
 ]
 
