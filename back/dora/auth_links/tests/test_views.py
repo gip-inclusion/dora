@@ -1,6 +1,7 @@
 import sesame.utils
 from django.conf import settings
-from django.shortcuts import reverse
+from django.urls import reverse
+from rest_framework.authtoken.models import Token
 
 from dora.core.test_utils import make_user
 
@@ -44,3 +45,38 @@ def test_authenticate_with_link(client):
     assert "auth/pc-callback" in response.url, (
         "On doit rediriger vers l'idetification du frontend"
     )
+
+
+def test_authenticate_with_link_sets_cookie(client):
+    """authenticate_with_link définit le cookie d'authentification."""
+    user = make_user(is_active=True)
+    token, _ = Token.objects.get_or_create(user=user)
+
+    response = client.get(
+        reverse(
+            "authenticate_with_link", kwargs={"sesame": sesame.utils.get_token(user)}
+        ),
+    )
+
+    assert response.status_code == 302
+
+    cookie = response.cookies["token"]
+    assert cookie.value == token.key
+
+
+def test_authenticate_with_link_creates_token_if_not_exists(client):
+    """authenticate_with_link crée un token s'il n'en existe pas."""
+    user = make_user(is_active=True)
+
+    assert not Token.objects.filter(user=user).exists()
+
+    response = client.get(
+        reverse(
+            "authenticate_with_link", kwargs={"sesame": sesame.utils.get_token(user)}
+        ),
+    )
+
+    assert response.status_code == 302
+    assert Token.objects.filter(user=user).exists()
+    token = Token.objects.get(user=user)
+    assert response.cookies["token"].value == token.key

@@ -1,5 +1,4 @@
 import logging
-from urllib.parse import urlparse
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
@@ -19,6 +18,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.utils import set_auth_token_cookie
 
 logger = logging.getLogger(__name__)
 
@@ -59,17 +59,7 @@ def oidc_logged_in(request):
 
     response = HttpResponseRedirect(redirect_to=redirect_uri)
 
-    cookie_kwargs = {
-        "path": "/",
-        "samesite": "Lax",
-        "secure": True,
-        "httponly": False,
-    }
-
-    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
-    cookie_kwargs["domain"] = parsed_frontend_url.hostname
-
-    response.set_cookie("token", token.key, **cookie_kwargs)
+    set_auth_token_cookie(response, token.key)
 
     return response
 
