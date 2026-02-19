@@ -2,6 +2,40 @@ import { redirect } from "@sveltejs/kit";
 
 import { getApiURL } from "./api";
 
+export async function handleEmploisOrientation(url: URL, token?: string) {
+  const opJwt = url.searchParams.get("op");
+
+  if (!opJwt) {
+    return;
+  }
+
+  // Only handle orientation on service detail pages
+  const serviceMatch = url.pathname.match(/^\/services\/([^/]+)\/?$/);
+  if (!serviceMatch) {
+    return;
+  }
+
+  const serviceSlug = serviceMatch[1];
+  const apiUrl = new URL(`/orientations/emplois/${serviceSlug}/`, getApiURL());
+  apiUrl.searchParams.set("op", opJwt);
+
+  const response = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json; version=1.0",
+      ...(token && { Authorization: `Token ${token}` }),
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    if (data.nextUrl) {
+      redirect(302, data.nextUrl);
+    }
+  }
+}
+
 export async function handleNexusAutoLogin(url: URL, token?: string) {
   const autoLoginJwt = url.searchParams.get("auto_login");
 

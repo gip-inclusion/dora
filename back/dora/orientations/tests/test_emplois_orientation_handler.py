@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from urllib.parse import parse_qs, urlparse
 
 from django.conf import settings
 from model_bakery import baker
@@ -30,15 +31,16 @@ class HandleEmploisOrientationTestCase(APITestCase):
 
         self.url = f"/orientations/emplois/{self.service.slug}/"
 
-    def test_expired_token_redirects_to_login(self):
+    def test_expired_token_redirects_to_login_with_toast(self):
         with patch(
             "dora.orientations.views.decode_token", side_effect=ValueError("Expired")
         ):
             response = self.client.get(f"{self.url}?op=expired_token")
 
         assert response.status_code == 200
-        assert response.data["toast_message"] == "Lien expiré"
-        assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/connexion"
+        parsed = urlparse(response.data["next_url"])
+        assert parsed.path == "/auth/connexion"
+        assert parse_qs(parsed.query)["toast"] == ["Lien expiré"]
 
     def test_authenticated_user_with_different_email_redirects_to_login(self):
         other_user = make_user(email="other@example.com")
@@ -93,13 +95,13 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["known_siret"] is False
-        assert (
-            response.data["next_url"]
-            == f"{settings.FRONTEND_URL}/auth/rattachement?siret={unknown_siret}"
-        )
+        parsed = urlparse(response.data["next_url"])
+        query_params = parse_qs(parsed.query)
+        assert parsed.path == "/auth/rattachement"
+        assert query_params["siret"] == [unknown_siret]
+        assert query_params["known_siret"] == ["false"]
 
-    def test_known_establishment_but_no_structure_returns_admin_flag_and_op_token(self):
+    def test_known_establishment_but_no_structure_returns_rattachement_with_op(self):
         orphan_siret = "11111111111111"
         baker.make(Establishment, siret=orphan_siret)
 
@@ -118,14 +120,15 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["known_siret"] is False
-        assert response.data["user_is_admin"] is True
-        assert (
-            response.data["next_url"]
-            == f"{settings.FRONTEND_URL}/auth/rattachement?siret={orphan_siret}&op=valid_token"
-        )
+        parsed = urlparse(response.data["next_url"])
+        query_params = parse_qs(parsed.query)
+        assert parsed.path == "/auth/rattachement"
+        assert query_params["siret"] == [orphan_siret]
+        assert query_params["op"] == ["valid_token"]
+        assert query_params["known_siret"] == ["false"]
+        assert query_params["user_is_admin"] == ["true"]
 
-    def test_user_not_structure_member_returns_rattachement_with_token(self):
+    def test_user_not_structure_member_returns_rattachement_with_op(self):
         non_member = make_user(email="nonmember@example.com")
         self.client.force_authenticate(user=non_member)
 
@@ -144,11 +147,15 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["known_siret"] is True
-        assert response.data["user_is_admin"] is False
-        assert "op=valid_token" in response.data["next_url"]
+        parsed = urlparse(response.data["next_url"])
+        query_params = parse_qs(parsed.query)
+        assert parsed.path == "/auth/rattachement"
+        assert query_params["siret"] == [self.structure.siret]
+        assert query_params["op"] == ["valid_token"]
+        assert query_params["known_siret"] == ["true"]
+        assert query_params["user_is_admin"] == ["false"]
 
-    def test_valid_member_returns_service_url_with_orientation_token(self):
+    def test_valid_member_returns_service_url_with_orientation(self):
         self.client.force_authenticate(user=self.user)
 
         with patch(
@@ -158,8 +165,8 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["user_structure_slug"] == self.structure.slug
-        assert (
-            response.data["next_url"]
-            == f"{settings.FRONTEND_URL}/services/{self.service.slug}?orientation=valid_token"
-        )
+        parsed = urlparse(response.data["next_url"])
+        query_params = parse_qs(parsed.query)
+        assert parsed.path == f"/services/{self.service.slug}"
+        assert query_params["orientation"] == ["valid_token"]
+        assert query_params["user_structure_slug"] == [self.structure.slug]

@@ -1,5 +1,6 @@
 import functools
 import logging
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -349,13 +350,15 @@ class OrientationExportView(APIView):
 @permission_classes([permissions.AllowAny])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
-
     login_url = f"{settings.FRONTEND_URL}/auth/connexion"
+    rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
 
     try:
         orientation_data = decode_token(op_jwt)
     except ValueError:
-        return Response({"toast_message": "Lien expiré", "next_url": login_url})
+        return Response(
+            {"next_url": f"{login_url}?{urlencode({'toast': 'Lien expiré'})}"}
+        )
 
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")
@@ -378,17 +381,14 @@ def handle_emplois_orientation(request, service_slug):
     if not is_siret_recognized:
         return Response(
             {
-                "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}",
-                "known_siret": False,
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'known_siret': 'false'})}"
             }
         )
 
     if not Structure.objects.filter(siret=structure_siret).exists():
         return Response(
             {
-                "known_siret": False,
-                "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}&op={op_jwt}",
-                "user_is_admin": True,
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'false', 'user_is_admin': 'true'})}"
             }
         )
 
@@ -400,17 +400,14 @@ def handle_emplois_orientation(request, service_slug):
     ):
         return Response(
             {
-                "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}&op={op_jwt}",
-                "known_siret": True,
-                "user_is_admin": False,
-            },
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true', 'user_is_admin': 'false'})}"
+            }
         )
 
     structure = Structure.objects.filter(siret=structure_siret).first()
 
     return Response(
         {
-            "user_structure_slug": structure.slug,
-            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?orientation={op_jwt}",
+            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'orientation': op_jwt, 'user_structure_slug': structure.slug})}"
         }
     )
