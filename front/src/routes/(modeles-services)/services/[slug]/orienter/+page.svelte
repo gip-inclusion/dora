@@ -19,6 +19,7 @@
   import { page } from "$app/stores";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
   import type { Service } from "$lib/types";
+  import { getOrientationBeneficiaryInfo } from "$lib/requests/nexus";
 
   interface Props {
     data: { service: Service; isDI: boolean };
@@ -46,6 +47,23 @@
 
   onMount(() => {
     $orientation.firstStepDone = true;
+  });
+
+  async function prefillBeneficiaryFromJwt(jwt: string) {
+    const beneficiary = await getOrientationBeneficiaryInfo(jwt);
+    $orientation.beneficiaryFirstName = beneficiary.firstName || "";
+    $orientation.beneficiaryLastName = beneficiary.lastName || "";
+    $orientation.beneficiaryEmail = beneficiary.email || "";
+    $orientation.beneficiaryPhone = beneficiary.phone || "";
+    $orientation.beneficiaryFranceTravailNumber =
+      beneficiary.franceTravailId || "";
+  }
+
+  onMount(() => {
+    const orientationJwt = $page.url.searchParams.get("orientation");
+    if (orientationJwt) {
+      prefillBeneficiaryFromJwt(orientationJwt);
+    }
   });
 
   function handleChange(validatedData) {
