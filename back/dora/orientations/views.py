@@ -360,11 +360,10 @@ def handle_emplois_orientation(request, service_slug):
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")
 
-    user_has_dora_account = User.objects.filter(email=prescriber_email).exists()
-
     if request.user.is_authenticated and request.user.email != prescriber_email:
         return Response({"next_url": login_url})
 
+    user_has_dora_account = User.objects.filter(email=prescriber_email).exists()
     if not user_has_dora_account:
         User.objects.create_user(
             prescriber_email,
@@ -388,14 +387,17 @@ def handle_emplois_orientation(request, service_slug):
         return Response(
             {
                 "known_siret": False,
-                "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}",
+                "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}&op={op_jwt}",
                 "user_is_admin": True,
             }
         )
 
-    if not StructureMember.objects.filter(
-        structure__siret=structure_siret, user=request.user
-    ).exists():
+    if (
+        not user_has_dora_account
+        or not StructureMember.objects.filter(
+            structure__siret=structure_siret, user=request.user
+        ).exists()
+    ):
         return Response(
             {
                 "next_url": f"{settings.FRONTEND_URL}/auth/rattachement?siret={structure_siret}&op={op_jwt}",
