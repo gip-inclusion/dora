@@ -116,6 +116,10 @@ private_api_patterns = [
         dora.orientations.views.OrientationExportView.as_view(),
     ),
     path(
+        "orientations/emplois/beneficiary-info/",
+        dora.orientations.views.orientation_beneficiary_info,
+    ),
+    path(
         "orientations/emplois/<slug:service_slug>/",
         dora.orientations.views.handle_emplois_orientation,
     ),

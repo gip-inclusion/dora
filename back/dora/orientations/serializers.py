@@ -1,5 +1,6 @@
 import requests
 from django.core.files.storage import default_storage
+from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
 
 import dora.data_inclusion.client
@@ -256,3 +257,26 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     @staticmethod
     def get_detail_page_url(obj: Orientation) -> str:
         return obj.get_magic_link()
+
+
+class OrientationBeneficiaryInfoInputSerializer(serializers.Serializer):
+    op = serializers.CharField(required=True)
+
+    def validate_op(self, value):
+        try:
+            claims = decode_token(value)
+        except ValueError:
+            raise serializers.ValidationError("Token JWT invalide.")
+
+        if "beneficiary" not in claims:
+            raise serializers.ValidationError("Données bénéficiaire absentes du token.")
+
+        return claims
+
+
+class OrientationBeneficiaryInfoOutputSerializer(serializers.Serializer):
+    first_name = serializers.CharField(default="")
+    last_name = serializers.CharField(default="")
+    email = serializers.CharField(default="")
+    phone = serializers.CharField(default="")
+    france_travail_id = serializers.CharField(default="")

@@ -41,6 +41,8 @@ from .models import (
     SentContactEmail,
 )
 from .serializers import (
+    OrientationBeneficiaryInfoInputSerializer,
+    OrientationBeneficiaryInfoOutputSerializer,
     OrientationSerializer,
     ReceivedOrientationExportSerializer,
     SentOrientationExportSerializer,
@@ -411,3 +413,18 @@ def handle_emplois_orientation(request, service_slug):
             "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure.slug})}"
         }
     )
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def orientation_beneficiary_info(request):
+    input_serializer = OrientationBeneficiaryInfoInputSerializer(
+        data=request.query_params
+    )
+    input_serializer.is_valid(raise_exception=True)
+
+    claims = input_serializer.validated_data["op"]
+    output_serializer = OrientationBeneficiaryInfoOutputSerializer(
+        claims["beneficiary"]
+    )
+    return Response(output_serializer.data)
