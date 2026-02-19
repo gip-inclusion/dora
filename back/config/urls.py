@@ -117,7 +117,7 @@ private_api_patterns = [
     ),
     path(
         "orientations/emplois/<slug:service_slug>/",
-        dora.api.views.handle_emplois_orientation,
+        dora.orientations.views.handle_emplois_orientation,
     ),
 ]
 
