@@ -1163,6 +1163,25 @@ class StructureMemberTestCase(APITestCase):
         self.assertIn("Demande d’accès à votre structure", mail.outbox[0].subject)
         self.assertIn(self.my_struct.slug, mail.outbox[0].body)
 
+    def test_admin_notified_when_fast_track_user_joins(self):
+        baker.make("Establishment", siret=self.my_struct.siret)
+        user = baker.make("users.User", is_valid=True)
+
+        self.client.force_authenticate(user=user)
+        response = self.client.post(
+            "/auth/join-structure/",
+            {
+                "siret": self.my_struct.siret,
+                "cguVersion": "20230805",
+                "fastTrack": True,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        StructureMember.objects.get(structure__siret=self.my_struct.siret, user=user)
+        self.assertGreater(len(mail.outbox), 0)
+        self.assertIn("Utilisateur rattaché à votre structure", mail.outbox[0].subject)
+        self.assertIn(user.email, mail.outbox[0].body)
+
 
 # Tests au format pytest
 

@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { SvelteToast } from "@zerodevx/svelte-toast";
+  import { browser } from "$app/environment";
+  import { beforeNavigate } from "$app/navigation";
+  import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.css";
@@ -12,6 +14,7 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+  import { handleEmploisOrientation } from "$lib/utils/nexus";
 
   interface Props {
     children?: Snippet;
@@ -26,6 +29,35 @@
   $effect(() => {
     $page.url;
     enforceCrispConsent();
+  });
+
+  $effect(() => {
+    if (browser && $page.url.searchParams.get("link_expired") === "true") {
+      toast.push("Lien expiré");
+    }
+  });
+
+  $effect(() => {
+    if (browser && $page.url.searchParams.has("op")) {
+      handleEmploisOrientation($page.url);
+    }
+  });
+
+  beforeNavigate(({ from, to }) => {
+    if (!from || !to) return;
+
+    const hasOrientation = from.url.searchParams.has("orientation");
+    if (!hasOrientation) return;
+
+    const isGoingToOrienter = to.url.pathname.match(
+      /^\/services\/[^/]+\/orienter/
+    );
+    if (!isGoingToOrienter) {
+      // Remove orientation param from history so back button doesn't retain it
+      const cleanUrl = new URL(from.url);
+      cleanUrl.searchParams.delete("orientation");
+      history.replaceState({}, "", cleanUrl);
+    }
   });
 </script>
 
