@@ -72,7 +72,7 @@
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input
-        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden disabled:bg-gray-01 disabled:cursor-not-allowed"
+        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus disabled:bg-gray-01 grow rounded-sm border outline-hidden disabled:cursor-not-allowed"
         id="siret-select"
         type="text"
         oninput={() => (serverErrorMsg = "")}

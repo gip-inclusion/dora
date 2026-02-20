@@ -49,7 +49,9 @@
     const hasOrientation = from.url.searchParams.has("orientation");
     if (!hasOrientation) return;
 
-    const isGoingToOrienter = to.url.pathname.match(/^\/services\/[^/]+\/orienter/);
+    const isGoingToOrienter = to.url.pathname.match(
+      /^\/services\/[^/]+\/orienter/
+    );
     if (!isGoingToOrienter) {
       // Remove orientation param from history so back button doesn't retain it
       const cleanUrl = new URL(from.url);
