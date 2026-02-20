@@ -52,7 +52,9 @@
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
     trackService(service, $page.url, searchId, isDI);
+  });
 
+  $effect(() => {
     const userStructureSlug = $page.url.searchParams.get("user_structure_slug");
     if (userStructureSlug && $userInfo) {
       const userStructure = [

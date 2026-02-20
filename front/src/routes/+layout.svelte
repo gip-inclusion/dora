@@ -13,6 +13,7 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+  import { handleEmploisOrientation } from "$lib/utils/nexus";
 
   interface Props {
     children?: Snippet;
@@ -33,6 +34,12 @@
     const toastMessage = $page.url.searchParams.get("toast");
     if (browser && toastMessage) {
       toast.push(toastMessage);
+    }
+  });
+
+  $effect(() => {
+    if (browser && $page.url.searchParams.has("op")) {
+      handleEmploisOrientation($page.url);
     }
   });
 </script>

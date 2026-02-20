@@ -7,10 +7,7 @@ import * as Sentry from "@sentry/sveltekit";
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
-import {
-  handleEmploisOrientation,
-  handleNexusAutoLogin,
-} from "$lib/utils/nexus";
+import { handleNexusAutoLogin } from "$lib/utils/nexus";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
 
@@ -52,7 +49,6 @@ export const handle: Handle = sequence(
     }
 
     const token = event.cookies.get("token");
-    await handleEmploisOrientation(event.url, token);
     await handleNexusAutoLogin(event.url, token);
 
     const response = await resolve(event);
