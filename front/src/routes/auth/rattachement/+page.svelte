@@ -23,15 +23,25 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
-  const { proposedSiret, knownSiret, proposedSafir, userIsFranceTravail } = data;
+  const {
+    proposedSiret,
+    knownSiret,
+    fastTrack,
+    proposedSafir,
+    userIsFranceTravail,
+  } = data;
   let joinError = $state("");
   let loading = $state(false);
 
   onMount(() => {
-    // Remove known_siret from URL to prevent re-enabling input on refresh
-    if ($page.url.searchParams.has("known_siret")) {
+    // Remove query params to prevent re-triggering on refresh
+    if (
+      $page.url.searchParams.has("known_siret") ||
+      $page.url.searchParams.has("fast_track")
+    ) {
       const newUrl = new URL($page.url);
       newUrl.searchParams.delete("known_siret");
+      newUrl.searchParams.delete("fast_track");
       history.replaceState({}, "", newUrl);
     }
   });
@@ -50,6 +60,7 @@
         siret: establishment.slug ? undefined : establishment.siret,
         structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
+        fastTrack,
       }),
     });
 
@@ -60,7 +71,11 @@
     if (response.ok) {
       result.data = await response.json();
       await refreshUserInfo();
-      await goto(`/structures/${result.data.slug}`);
+      const op = $page.url.searchParams.get("op");
+      const redirectUrl = op
+        ? `/structures/${result.data.slug}?op=${encodeURIComponent(op)}`
+        : `/structures/${result.data.slug}`;
+      await goto(redirectUrl);
       loading = false;
     } else {
       try {

@@ -1,0 +1,16 @@
+{% extends "email_notif.html" %}
+
+{% block notification %}
+  <p>
+    {{ new_member_full_name }} ({{ new_member_email }}) a été rattaché à votre structure “{{ structure_name }}”&nbsp;! Cette personne a désormais accès à Dora et au tableau de bord de cette structure.
+  </p>
+  <p>
+    Si cette personne ne fait pas partie de votre organisation, voici le pas à pas à réaliser pour la retirer&nbsp;: <a href="https://aide.dora.inclusion.gouv.fr/fr/article/gerer-le-compte-ses-collaborateurs-en-tant-quadministrateur-xkonvm/">Gérer vos collaborateurs</a>
+  </p>
+  <p>
+    Cordialement,
+  </p>
+  <p>
+    Dora
+  </p>
+{% endblock %}
