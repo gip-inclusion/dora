@@ -18,6 +18,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         self.structure = make_structure(siret="12345678901234")
         self.establishment = baker.make(Establishment, siret=self.structure.siret)
         self.user = make_user(email="prescriber@example.com")
+        self.client.force_authenticate(user=self.user)
         baker.make(StructureMember, structure=self.structure, user=self.user)
 
         self.valid_orientation_data = {
@@ -42,7 +43,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/connexion"
         assert parse_qs(parsed.query)["link_expired"] == ["true"]
 
-    def test_authenticated_user_with_different_email_redirects_to_login(self):
+    def test_user_with_different_email_redirects_to_login(self):
         other_user = make_user(email="other@example.com")
         self.client.force_authenticate(user=other_user)
 
@@ -56,6 +57,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/pc-logout"
 
     def test_creates_user_if_not_exists(self):
+        self.client.logout()
         new_email = "newuser@example.com"
         orientation_data = {
             "prescriber": {
@@ -169,3 +171,14 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == f"/services/{self.service.slug}"
         assert query_params["orientation"] == ["valid_token"]
         assert query_params["user_structure_slug"] == [self.structure.slug]
+
+    def test_existing_user_not_authenticated_returns_403(self):
+        self.client.force_authenticate(user=None)
+
+        with patch(
+            "dora.orientations.views.decode_token",
+            return_value=self.valid_orientation_data,
+        ):
+            response = self.client.get(f"{self.url}?op=valid_token")
+
+        assert response.status_code == 403

@@ -8,7 +8,7 @@ from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from itoutils.django.nexus.token import decode_token
-from rest_framework import mixins, permissions, serializers, viewsets
+from rest_framework import exceptions, mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -347,7 +347,7 @@ class OrientationExportView(APIView):
 
 
 @api_view(["GET"])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
     rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
@@ -362,7 +362,7 @@ def handle_emplois_orientation(request, service_slug):
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")
 
-    if request.user.email != prescriber_email:
+    if request.user.is_authenticated and request.user.email != prescriber_email:
         return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
 
     has_dora_account = User.objects.filter(email=prescriber_email).exists()
@@ -373,6 +373,9 @@ def handle_emplois_orientation(request, service_slug):
             main_activity=MainActivity.ACCOMPAGNATEUR,
             discovery_method=DiscoveryMethod.EMPLOIS_DE_L_INCLUSION,
         )
+    else:
+        if not request.user.is_authenticated:
+            raise exceptions.PermissionDenied("Utilisateur non authentifié")
 
     structure_siret = prescriber_data.get("organization").get("siret")
     is_siret_recognized = Establishment.objects.filter(siret=structure_siret).exists()
