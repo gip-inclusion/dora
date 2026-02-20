@@ -356,9 +356,7 @@ def handle_emplois_orientation(request, service_slug):
     try:
         orientation_data = decode_token(op_jwt)
     except ValueError:
-        return Response(
-            {"next_url": f"{login_url}?{urlencode({'toast': 'Lien expiré'})}"}
-        )
+        return Response({"next_url": f"{login_url}?link_expired=true"})
 
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")

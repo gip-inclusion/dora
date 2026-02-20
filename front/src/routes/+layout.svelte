@@ -31,9 +31,8 @@
   });
 
   $effect(() => {
-    const toastMessage = $page.url.searchParams.get("toast");
-    if (browser && toastMessage) {
-      toast.push(toastMessage);
+    if (browser && $page.url.searchParams.get("link_expired") === "true") {
+      toast.push("Lien expiré");
     }
   });
 

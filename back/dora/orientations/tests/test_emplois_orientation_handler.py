@@ -40,7 +40,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert response.status_code == 200
         parsed = urlparse(response.data["next_url"])
         assert parsed.path == "/auth/connexion"
-        assert parse_qs(parsed.query)["toast"] == ["Lien expiré"]
+        assert parse_qs(parsed.query)["link_expired"] == ["true"]
 
     def test_authenticated_user_with_different_email_redirects_to_login(self):
         other_user = make_user(email="other@example.com")
