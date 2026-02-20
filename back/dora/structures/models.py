@@ -42,6 +42,7 @@ from dora.structures.emails import (
     send_access_rejected_notification,
     send_access_requested_notification,
     send_branch_created_notification,
+    send_invitation_accepted_notification,
     send_member_fast_tracked_notification,
 )
 from dora.users.models import User
@@ -147,7 +148,7 @@ class StructureMember(models.Model):
             if is_fast_track:
                 send_member_fast_tracked_notification(self, admin.user)
             else:
-                send_access_requested_notification(self, admin.user)
+                send_invitation_accepted_notification(self, admin.user)
 
     def notify_access_granted(self):
         send_access_granted_notification(self)
