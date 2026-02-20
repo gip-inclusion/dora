@@ -347,7 +347,7 @@ class OrientationExportView(APIView):
 
 
 @api_view(["GET"])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
     rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
@@ -362,7 +362,7 @@ def handle_emplois_orientation(request, service_slug):
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")
 
-    if request.user.is_authenticated and request.user.email != prescriber_email:
+    if request.user.email != prescriber_email:
         return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
 
     has_dora_account = User.objects.filter(email=prescriber_email).exists()
