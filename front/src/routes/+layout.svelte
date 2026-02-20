@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { browser } from "$app/environment";
+  import { beforeNavigate } from "$app/navigation";
   import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
@@ -39,6 +40,21 @@
   $effect(() => {
     if (browser && $page.url.searchParams.has("op")) {
       handleEmploisOrientation($page.url);
+    }
+  });
+
+  beforeNavigate(({ from, to }) => {
+    if (!from || !to) return;
+
+    const hasOrientation = from.url.searchParams.has("orientation");
+    if (!hasOrientation) return;
+
+    const isGoingToOrienter = to.url.pathname.match(/^\/services\/[^/]+\/orienter/);
+    if (!isGoingToOrienter) {
+      // Remove orientation param from history so back button doesn't retain it
+      const cleanUrl = new URL(from.url);
+      cleanUrl.searchParams.delete("orientation");
+      history.replaceState({}, "", cleanUrl);
     }
   });
 </script>
