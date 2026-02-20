@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -143,3 +145,31 @@ class AuthenticationTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         structure = Structure.objects.get(siret=response.data["siret"])
         self.assertEqual(structure.moderation_status, ModerationStatus.VALIDATED)
+
+    @patch("dora.structures.models.StructureMember.notify_admins_invitation_accepted")
+    def test_fast_track_user_becomes_member_directly(self, mock_notify):
+        baker.make("Establishment", siret=DUMMY_SIRET)
+        struct = make_structure(siret=DUMMY_SIRET)
+        admin = baker.make("users.User", is_valid=True)
+        struct.members.add(
+            admin,
+            through_defaults={
+                "is_admin": True,
+            },
+        )
+        user = baker.make("users.User", is_valid=True)
+        self.client.force_authenticate(user=user)
+        response = self.client.post(
+            "/auth/join-structure/",
+            {"siret": DUMMY_SIRET, "cguVersion": "20230805", "fastTrack": True},
+        )
+        self.assertEqual(response.status_code, 200)
+        # User should be a direct member, not putative
+        StructureMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
+        self.assertFalse(
+            StructurePutativeMember.objects.filter(
+                structure__siret=DUMMY_SIRET, user=user
+            ).exists()
+        )
+        # Notification should be sent with is_fast_track=True
+        mock_notify.assert_called_once_with(is_fast_track=True)

@@ -125,8 +125,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [orphan_siret]
         assert query_params["op"] == ["valid_token"]
-        assert query_params["known_siret"] == ["false"]
-        assert query_params["user_is_admin"] == ["true"]
+        assert query_params["known_siret"] == ["true"]
 
     def test_user_not_structure_member_returns_rattachement_with_op(self):
         non_member = make_user(email="nonmember@example.com")
@@ -153,7 +152,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert query_params["siret"] == [self.structure.siret]
         assert query_params["op"] == ["valid_token"]
         assert query_params["known_siret"] == ["true"]
-        assert query_params["user_is_admin"] == ["false"]
+        assert query_params["fast_track"] == ["true"]
 
     def test_valid_member_returns_service_url_with_orientation(self):
         self.client.force_authenticate(user=self.user)

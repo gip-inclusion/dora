@@ -388,14 +388,17 @@ def handle_emplois_orientation(request, service_slug):
     if not Structure.objects.filter(siret=structure_siret).exists():
         return Response(
             {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'false'})}"
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true'})}"
             }
         )
 
-    is_structure_member = StructureMember.objects.filter(
-        structure__siret=structure_siret, user=request.user
-    ).exists()
-    if not has_dora_account or not is_structure_member:
+    is_structure_member = (
+        has_dora_account
+        and StructureMember.objects.filter(
+            structure__siret=structure_siret, user=request.user
+        ).exists()
+    )
+    if not is_structure_member:
         return Response(
             {
                 "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true', 'fast_track': 'true'})}"
