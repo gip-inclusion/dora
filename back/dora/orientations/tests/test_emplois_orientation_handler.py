@@ -53,7 +53,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/connexion"
+        assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/pc-logout"
 
     def test_creates_user_if_not_exists(self):
         new_email = "newuser@example.com"

@@ -350,19 +350,20 @@ class OrientationExportView(APIView):
 @permission_classes([permissions.AllowAny])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
-    login_url = f"{settings.FRONTEND_URL}/auth/connexion"
     rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
 
     try:
         orientation_data = decode_token(op_jwt)
     except ValueError:
-        return Response({"next_url": f"{login_url}?link_expired=true"})
+        return Response(
+            {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_expired=true"}
+        )
 
     prescriber_data = orientation_data.get("prescriber")
     prescriber_email = prescriber_data.get("email")
 
     if request.user.is_authenticated and request.user.email != prescriber_email:
-        return Response({"next_url": login_url})
+        return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
 
     has_dora_account = User.objects.filter(email=prescriber_email).exists()
     if not has_dora_account:
