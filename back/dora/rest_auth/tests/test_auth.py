@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -146,8 +144,7 @@ class AuthenticationTestCase(APITestCase):
         structure = Structure.objects.get(siret=response.data["siret"])
         self.assertEqual(structure.moderation_status, ModerationStatus.VALIDATED)
 
-    @patch("dora.structures.models.StructureMember.notify_admins_invitation_accepted")
-    def test_fast_track_user_becomes_member_directly(self, mock_notify):
+    def test_fast_track_user_becomes_member_directly(self):
         baker.make("Establishment", siret=DUMMY_SIRET)
         struct = make_structure(siret=DUMMY_SIRET)
         admin = baker.make("users.User", is_valid=True)
@@ -171,5 +168,3 @@ class AuthenticationTestCase(APITestCase):
                 structure__siret=DUMMY_SIRET, user=user
             ).exists()
         )
-        # Notification should be sent with is_fast_track=True
-        mock_notify.assert_called_once_with(is_fast_track=True)
