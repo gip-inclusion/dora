@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import logoNexusDropdownIcon from "$lib/assets/logos/logo-nexus-dropdown.svg";
+  import logoNexusMenuIcon from "$lib/assets/logos/logo-nexus-menu.svg";
 
   import {
     getNexusMenuStatus,
-    type NexusDropDownStatus,
+    type NexusMenuStatus,
   } from "$lib/requests/nexus";
 
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
@@ -20,21 +20,21 @@
 
   let { mobileDesign = false }: Props = $props();
 
-  let dropdownStatus: NexusDropDownStatus | undefined = $state(undefined);
+  let nexusMenuStatus: NexusMenuStatus | undefined = $state(undefined);
 
   onMount(() => {
     getNexusMenuStatus().then((status) => {
-      dropdownStatus = status;
+      nexusMenuStatus = status;
     });
   });
 </script>
 
-{#if dropdownStatus && dropdownStatus.enabled}
+{#if nexusMenuStatus && nexusMenuStatus.enabled}
   <DropdownMenu withBorders withSeparator={false} {mobileDesign}>
     {#snippet label()}
       <span class="gap-s10 text-magenta-cta flex items-center font-bold">
         <img
-          src={logoNexusDropdownIcon}
+          src={logoNexusMenuIcon}
           class="h-s24 w-s24"
           alt=""
           aria-hidden="true"
@@ -42,12 +42,12 @@
         Mon portail
       </span>
     {/snippet}
-    {#if !dropdownStatus.activatedServices.includes("les-emplois")}
+    {#if !nexusMenuStatus.activatedServices.includes("les-emplois")}
       <MenuInscriptionEmplois />
-    {:else if !dropdownStatus.proconnect}
+    {:else if !nexusMenuStatus.proconnect}
       <MenuInscriptionProconnect />
     {:else}
-      <MenuMonPortail {dropdownStatus} />
+      <MenuMonPortail {nexusMenuStatus} />
     {/if}
   </DropdownMenu>
 {/if}
