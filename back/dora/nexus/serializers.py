@@ -13,7 +13,7 @@ class NexusMenuStatusSerializer(serializers.Serializer):
     enabled = serializers.SerializerMethodField()
 
     def get_enabled(self, obj):
-        if not obj.get("mvp-enabled", False):
+        if not obj.get("mvp_enabled", False):
             return False
 
         request = self.context.get("request")

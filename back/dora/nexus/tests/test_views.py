@@ -278,15 +278,15 @@ def test_nexus_menu_status_user_not_authenticated(api_client):
 @pytest.mark.parametrize(
     "mvp_enabled,department,proconnect,activated_services,expected_enabled",
     [
-        # mvp-enabled=False → enabled doit être False peu importe le reste
+        # mvp_enabled=False → enabled doit être False peu importe le reste
         (False, None, True, ["les-emplois"], False),
         (False, "29", True, ["les-emplois"], False),
         (False, "75", False, [], False),
-        # mvp-enabled=True mais pas de structure → enabled doit être False
+        # mvp_enabled=True mais pas de structure → enabled doit être False
         (True, None, True, ["les-emplois"], False),
-        # mvp-enabled=True avec structure dans département non autorisé → enabled doit être False
+        # mvp_enabled=True avec structure dans département non autorisé → enabled doit être False
         (True, "75", True, ["les-emplois"], False),
-        # mvp-enabled=True avec structure dans département autorisé → enabled doit être True
+        # mvp_enabled=True avec structure dans département autorisé → enabled doit être True
         (True, "29", True, ["les-emplois"], True),
         (True, "29", False, [], True),
         (True, "31", True, ["les-emplois"], True),
@@ -312,7 +312,7 @@ def test_nexus_menu_status_authenticated(
     mock_data = {
         "proconnect": proconnect,
         "activated_services": activated_services,
-        "mvp-enabled": mvp_enabled,
+        "mvp_enabled": mvp_enabled,
     }
 
     with patch("dora.nexus.views.NexusAPIClient") as mock_client_class:
