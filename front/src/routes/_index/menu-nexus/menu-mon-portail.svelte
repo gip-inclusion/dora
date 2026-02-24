@@ -6,7 +6,7 @@
   import { EMPLOIS_PORTAL_PAGE_URL } from "$lib/env";
 
   import type { NexusServiceID } from "$lib/requests/nexus";
-  import type { NexusDropDownStatus } from "$lib/requests/nexus";
+  import type { NexusMenuStatus } from "$lib/requests/nexus";
 
   import { trackMatomoEvent } from "$lib/utils/matomo";
 
@@ -21,19 +21,19 @@
   ];
 
   interface Props {
-    dropdownStatus: NexusDropDownStatus;
+    nexusMenuStatus: NexusMenuStatus;
   }
 
-  let { dropdownStatus }: Props = $props();
+  let { nexusMenuStatus }: Props = $props();
 
   let enabledServices = $derived(
     ALL_SERVICES.filter((service) =>
-      dropdownStatus.activatedServices.includes(service.id)
+      nexusMenuStatus.activatedServices.includes(service.id)
     )
   );
   let disabledServices = $derived(
     ALL_SERVICES.filter(
-      (service) => !dropdownStatus.activatedServices.includes(service.id)
+      (service) => !nexusMenuStatus.activatedServices.includes(service.id)
     )
   );
 

@@ -3,6 +3,7 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 import pytest
 from django.conf import settings
+from django.test import override_settings
 from django.urls import reverse
 from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from rest_framework import status
@@ -291,6 +292,7 @@ def test_nexus_menu_status_user_not_authenticated(api_client):
         (True, "31", True, ["les-emplois"], True),
     ],
 )
+@override_settings(NEXUS_MENU_ENABLED=True)
 def test_nexus_menu_status_authenticated(
     api_client,
     user,

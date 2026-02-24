@@ -8,7 +8,7 @@ export type NexusServiceID =
   | "mon-recap"
   | "pilotage";
 
-export type NexusDropDownStatus = {
+export type NexusMenuStatus = {
   proconnect: boolean;
   activatedServices: NexusServiceID[];
   enabled: boolean;
@@ -24,7 +24,7 @@ export const getNexusMenuStatus = async () => {
     },
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch Nexus dropdown status");
+    throw new Error("Failed to fetch Nexus menu status");
   }
-  return response.json() as Promise<NexusDropDownStatus>;
+  return response.json() as Promise<NexusMenuStatus>;
 };
