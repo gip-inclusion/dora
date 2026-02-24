@@ -11,8 +11,6 @@ from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .serializers import NexusMenuStatusSerializer
-
 logger = logging.getLogger(__name__)
 
 
@@ -83,5 +81,4 @@ def nexus_menu_status(request):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     data = NexusAPIClient().dropdown_status(request.user.email)
-    serializer = NexusMenuStatusSerializer(data, context={"request": request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(data, status=status.HTTP_200_OK)

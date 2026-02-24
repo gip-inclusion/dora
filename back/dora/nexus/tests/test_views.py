@@ -8,7 +8,7 @@ from django.urls import reverse
 from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from rest_framework import status
 
-from dora.core.test_utils import make_structure, make_user
+from dora.core.test_utils import make_user
 
 
 @pytest.fixture
@@ -276,20 +276,12 @@ def test_nexus_menu_status_user_not_authenticated(api_client):
 
 
 @pytest.mark.parametrize(
-    "mvp_enabled,department,proconnect,activated_services,expected_enabled",
+    "mvp_enabled,proconnect,activated_services",
     [
-        # mvp_enabled=False → enabled doit être False peu importe le reste
-        (False, None, True, ["les-emplois"], False),
-        (False, "29", True, ["les-emplois"], False),
-        (False, "75", False, [], False),
-        # mvp_enabled=True mais pas de structure → enabled doit être False
-        (True, None, True, ["les-emplois"], False),
-        # mvp_enabled=True avec structure dans département non autorisé → enabled doit être False
-        (True, "75", True, ["les-emplois"], False),
-        # mvp_enabled=True avec structure dans département autorisé → enabled doit être True
-        (True, "29", True, ["les-emplois"], True),
-        (True, "29", False, [], True),
-        (True, "31", True, ["les-emplois"], True),
+        (False, True, ["les-emplois"]),
+        (False, False, []),
+        (True, True, ["les-emplois"]),
+        (True, False, []),
     ],
 )
 @override_settings(NEXUS_MENU_ENABLED=True)
@@ -297,17 +289,11 @@ def test_nexus_menu_status_authenticated(
     api_client,
     user,
     mvp_enabled,
-    department,
     proconnect,
     activated_services,
-    expected_enabled,
 ):
     """Test paramétré pour différents scénarios de nexus_menu_status"""
     api_client.force_authenticate(user=user)
-
-    # Création d'une structure si un département est spécifié
-    if department:
-        make_structure(user=user, department=department)
 
     mock_data = {
         "proconnect": proconnect,
@@ -324,5 +310,5 @@ def test_nexus_menu_status_authenticated(
         assert response.status_code == status.HTTP_200_OK
         assert response.data["proconnect"] == proconnect
         assert response.data["activated_services"] == activated_services
-        assert response.data["enabled"] == expected_enabled
+        assert response.data["mvp_enabled"] == mvp_enabled
         mock_client_instance.dropdown_status.assert_called_once_with(user.email)
