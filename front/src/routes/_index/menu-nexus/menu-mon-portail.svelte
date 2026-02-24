@@ -36,6 +36,9 @@
       (service) => !nexusMenuStatus.activatedServices.includes(service.id)
     )
   );
+  let showSeparator = $derived(
+    enabledServices.length > 0 && disabledServices.length > 0
+  );
 
   function handleClick() {
     trackMatomoEvent({
@@ -67,7 +70,9 @@
     <MenuMonPortailServiceItem {service} activated />
   {/each}
 
-  <hr />
+  {#if showSeparator}
+    <hr />
+  {/if}
 
   {#each disabledServices as service}
     <MenuMonPortailServiceItem
