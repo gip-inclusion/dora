@@ -1,13 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   import logoNexusMenuIcon from "$lib/assets/logos/logo-nexus-menu.svg";
-
-  import {
-    getNexusMenuStatus,
-    type NexusMenuStatus,
-  } from "$lib/requests/nexus";
-
+  import type { NexusMenuStatus } from "$lib/requests/nexus";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
 
   import MenuInscriptionEmplois from "./menu-inscription-emplois.svelte";
@@ -15,18 +8,11 @@
   import MenuMonPortail from "./menu-mon-portail.svelte";
 
   interface Props {
+    nexusMenuStatus: NexusMenuStatus | undefined;
     mobileDesign?: boolean;
   }
 
-  let { mobileDesign = false }: Props = $props();
-
-  let nexusMenuStatus: NexusMenuStatus | undefined = $state(undefined);
-
-  onMount(() => {
-    getNexusMenuStatus().then((status) => {
-      nexusMenuStatus = status;
-    });
-  });
+  let { nexusMenuStatus, mobileDesign = false }: Props = $props();
 </script>
 
 {#if nexusMenuStatus && nexusMenuStatus.mvpEnabled}
