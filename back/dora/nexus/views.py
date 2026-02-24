@@ -79,6 +79,9 @@ def auto_login_out(request):
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
 def nexus_menu_status(request):
+    if not settings.NEXUS_MENU_ENABLED:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     data = NexusAPIClient().dropdown_status(request.user.email)
     serializer = NexusMenuStatusSerializer(data, context={"request": request})
     return Response(serializer.data, status=status.HTTP_200_OK)
