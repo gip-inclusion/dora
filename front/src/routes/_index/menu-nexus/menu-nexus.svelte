@@ -29,7 +29,7 @@
   });
 </script>
 
-{#if nexusMenuStatus && nexusMenuStatus.enabled}
+{#if nexusMenuStatus && nexusMenuStatus.mvpEnabled}
   <DropdownMenu withBorders withSeparator={false} {mobileDesign}>
     {#snippet label()}
       <span class="gap-s10 text-magenta-cta flex items-center font-bold">

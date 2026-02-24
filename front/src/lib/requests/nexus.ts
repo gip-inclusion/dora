@@ -11,7 +11,7 @@ export type NexusServiceID =
 export type NexusMenuStatus = {
   proconnect: boolean;
   activatedServices: NexusServiceID[];
-  enabled: boolean;
+  mvpEnabled: boolean;
 };
 
 export const getNexusMenuStatus = async () => {
