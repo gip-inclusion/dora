@@ -1,6 +1,7 @@
 from logging import getLogger
 
 import requests
+from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
 from mozilla_django_oidc.auth import (
     OIDCAuthenticationBackend as MozillaOIDCAuthenticationBackend,
@@ -134,7 +135,6 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
             )
             if user.email == email:
                 user.sub_pc = sub
-                user.save()
             else:
                 raise SuspiciousOperation(
                     "Le sub et l'adresse e-mail fournis par ProConnect sont différents de ceux enregistrés"
@@ -145,7 +145,16 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
             user.sub_pc = sub
             # on considère que si l'utilisateur s'est connecté via ProConnect, son e-mail est valide
             user.is_valid = True
-            user.save()
+
+        if settings.ENVIRONMENT == "production":
+            # On ne met pas à jour les prénom et nom en local et en recette car
+            # avec le contournement de France Connect, c'est toujours « John Doe »
+            if given_name := claims.get("given_name"):
+                user.first_name = given_name
+            if usual_name := claims.get("usual_name"):
+                user.last_name = usual_name
+
+        user.save()
 
         return user
 
