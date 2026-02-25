@@ -20,7 +20,7 @@ USER_TRACKED_FIELDS = [
 def serialize_user(user):
     return {
         "id": str(user.pk),
-        "kind": user.get_main_activity_display().lower(),
+        "kind": user.main_activity,
         "first_name": user.first_name,
         "last_name": user.last_name,
         "email": user.email,
