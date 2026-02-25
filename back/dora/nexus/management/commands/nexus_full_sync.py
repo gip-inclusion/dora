@@ -7,6 +7,7 @@ from dora.users.models import User
 
 
 class Command(BaseNexusFullSyncCommand):
+    CHUNK_SIZE = settings.NEXUS_SYNC_CHUNK_SIZE
     structure_serializer = staticmethod(serialize_structure)
     user_serializer = staticmethod(serialize_user)
     membership_serializer = staticmethod(serialize_membership)
