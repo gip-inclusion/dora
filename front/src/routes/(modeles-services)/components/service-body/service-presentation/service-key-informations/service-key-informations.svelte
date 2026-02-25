@@ -13,6 +13,7 @@
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isNotFreeService, isDurationValid } from "$lib/utils/service";
+  import { isService } from "$lib/utils/typeguards";
 
   import ServiceFeedbackButton from "../../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDuration from "./service-duration.svelte";
@@ -37,6 +38,17 @@
     ...(service.requirementsDisplay || []),
     ...(service.qpvOrZrr ? ["Uniquement QPV ou ZRR"] : []),
   ]);
+
+  let addressForMapLink = $derived(
+    isService(service)
+      ? `${service.address1} ${service.postalCode} - ${service.city}`
+      : null
+  );
+  let mapLink = $derived(
+    addressForMapLink
+      ? `https://nominatim.openstreetmap.org/ui/search.html?q=${encodeURIComponent(addressForMapLink)}`
+      : null
+  );
 </script>
 
 <section>
@@ -103,12 +115,14 @@
                       <address class="not-italic">
                         {service.addressLine}
                       </address>
-                      <a
-                        class="text-magenta-cta mt-s4 font-bold"
-                        href={`https://nominatim.openstreetmap.org/ui/search.html?q=${encodeURIComponent(service.addressLine)}`}
-                        target="_blank"
-                        rel="noopener ugc">Voir sur la carte</a
-                      >
+                      {#if mapLink}
+                        <a
+                          class="text-magenta-cta mt-s4 font-bold"
+                          href={mapLink}
+                          target="_blank"
+                          rel="noopener ugc">Voir sur la carte</a
+                        >
+                      {/if}
                     {/if}
                   </div>
                 {/if}
