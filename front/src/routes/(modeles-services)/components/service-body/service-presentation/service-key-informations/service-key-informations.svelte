@@ -3,6 +3,7 @@
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
   import Compass3FillMap from "svelte-remix/Compass3FillMap.svelte";
   import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import GroupFillUserFaces from "svelte-remix/GroupFillUserFaces.svelte";
   import MapPin2FillMap from "svelte-remix/MapPin2FillMap.svelte";
   import MoneyEuroCircleFillFinance from "svelte-remix/MoneyEuroCircleFillFinance.svelte";
@@ -117,10 +118,13 @@
                       </address>
                       {#if mapLink}
                         <a
-                          class="text-magenta-cta mt-s4 font-bold"
+                          class="text-magenta-cta mt-s4 gap-s4 flex items-center font-bold"
                           href={mapLink}
                           target="_blank"
-                          rel="noopener ugc">Voir sur la carte</a
+                          rel="noopener ugc"
+                          >Voir sur la carte <ExternalLinkLineSystem
+                            class="w-s18 h-s18"
+                          /></a
                         >
                       {/if}
                     {/if}
