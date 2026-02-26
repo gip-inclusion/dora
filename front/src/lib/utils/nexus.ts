@@ -37,3 +37,7 @@ export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
     }
   }
 }
+
+export function generateOutboundNexusAutoLoginUrl(url: URL | string) {
+  return `/nexus/auto-login/?next=${encodeURIComponent(url.toString())}`;
+}
