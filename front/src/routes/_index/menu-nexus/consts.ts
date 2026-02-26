@@ -89,13 +89,17 @@ export const ALL_SERVICES: NexusService[] = [
     icon: LogoMonRecap,
     activated: {
       autologin: false,
-      prodUrl: "https://mon-recap.inclusion.beta.gouv.fr/formulaire-commande-carnets",
-      stagingUrl: "https://mon-recap.inclusion.beta.gouv.fr/formulaire-commande-carnets",
+      prodUrl:
+        "https://mon-recap.inclusion.beta.gouv.fr/formulaire-commande-carnets",
+      stagingUrl:
+        "https://mon-recap.inclusion.beta.gouv.fr/formulaire-commande-carnets",
     },
     deactivated: {
       autologin: true,
-      prodUrl: "https://emplois.inclusion.beta.gouv.fr/portal/service/mon-recap",
-      stagingUrl: "https://demo.emplois.inclusion.beta.gouv.fr/portal/service/mon-recap",
+      prodUrl:
+        "https://emplois.inclusion.beta.gouv.fr/portal/service/mon-recap",
+      stagingUrl:
+        "https://demo.emplois.inclusion.beta.gouv.fr/portal/service/mon-recap",
     },
   },
 ];
