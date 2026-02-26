@@ -1,9 +1,10 @@
 <script lang="ts">
   import Tag from "$lib/components/display/tag.svelte";
 
-  import { EMPLOIS_PORTAL_PAGE_URL } from "$lib/env";
+  import { ENVIRONMENT } from "$lib/env";
 
   import { trackMatomoEvent } from "$lib/utils/matomo";
+  import { generateOutboundNexusAutoLoginUrl } from "$lib/utils/nexus";
 
   import type { NexusService } from "./consts";
 
@@ -19,8 +20,17 @@
     activableInOneClick = false,
   }: Props = $props();
 
-  let url = $derived(
-    activated ? service.url : `${EMPLOIS_PORTAL_PAGE_URL}/service/${service.id}`
+  let serviceUrlConfig = $derived(
+    activated ? service.activated : service.deactivated
+  );
+  let isProd = $derived(ENVIRONMENT === "production");
+  let serviceUrl = $derived(
+    isProd ? serviceUrlConfig.prodUrl : serviceUrlConfig.stagingUrl
+  );
+  let finalServiceUrl = $derived(
+    serviceUrlConfig.autologin
+      ? generateOutboundNexusAutoLoginUrl(serviceUrl)
+      : serviceUrl
   );
 
   function handleClick() {
@@ -33,7 +43,7 @@
 </script>
 
 <a
-  href={url}
+  href={finalServiceUrl}
   onclick={handleClick}
   target="_blank"
   rel="noopener"

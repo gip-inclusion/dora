@@ -14,3 +14,5 @@ export const EMPLOIS_SIGNUP_PAGE_URL = import.meta.env
   .VITE_EMPLOIS_SIGNUP_PAGE_URL;
 export const EMPLOIS_PORTAL_PAGE_URL = import.meta.env
   .VITE_EMPLOIS_PORTAL_PAGE_URL;
+export const NEXUS_MENU_ENABLED =
+  import.meta.env.VITE_NEXUS_MENU_ENABLED === "true";

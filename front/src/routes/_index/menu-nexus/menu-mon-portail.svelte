@@ -26,18 +26,18 @@
 
   let { nexusMenuStatus }: Props = $props();
 
-  let enabledServices = $derived(
+  let activatedServices = $derived(
     ALL_SERVICES.filter((service) =>
       nexusMenuStatus.activatedServices.includes(service.id)
     )
   );
-  let disabledServices = $derived(
+  let deactivatedServices = $derived(
     ALL_SERVICES.filter(
       (service) => !nexusMenuStatus.activatedServices.includes(service.id)
     )
   );
   let showSeparator = $derived(
-    enabledServices.length > 0 && disabledServices.length > 0
+    activatedServices.length > 0 && deactivatedServices.length > 0
   );
 
   function handleClick() {
@@ -66,7 +66,7 @@
     onclick={handleClick}
   />
 
-  {#each enabledServices as service}
+  {#each activatedServices as service}
     <MenuMonPortailServiceItem {service} activated />
   {/each}
 
@@ -74,7 +74,7 @@
     <hr />
   {/if}
 
-  {#each disabledServices as service}
+  {#each deactivatedServices as service}
     <MenuMonPortailServiceItem
       {service}
       activableInOneClick={ACTIVABLE_IN_ONE_CLICK_SERVICES.includes(service.id)}

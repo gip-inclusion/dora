@@ -5,6 +5,7 @@
 
   import HamburgerMenu from "$lib/components/display/hamburger.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import { NEXUS_MENU_ENABLED } from "$lib/env";
   import {
     getNexusMenuStatus,
     type NexusMenuStatus,
@@ -23,9 +24,11 @@
   let nexusMenuStatus = $state<NexusMenuStatus | undefined>(undefined);
 
   onMount(() => {
-    getNexusMenuStatus().then((status) => {
-      nexusMenuStatus = status;
-    });
+    if (NEXUS_MENU_ENABLED) {
+      getNexusMenuStatus().then((status) => {
+        nexusMenuStatus = status;
+      });
+    }
   });
 
   let structures: ShortStructure[] = $derived(
@@ -55,7 +58,9 @@
       <div class="gap-s10 hidden lg:flex">
         <MenuMesStructures {structures} {lastVisitedStructure} />
         <MenuMonCompte />
-        <MenuNexus {nexusMenuStatus} />
+        {#if NEXUS_MENU_ENABLED}
+          <MenuNexus {nexusMenuStatus} />
+        {/if}
       </div>
     {/if}
 
@@ -63,7 +68,9 @@
       {#if $userInfo}
         <MenuMesStructures {structures} {lastVisitedStructure} mobileDesign />
         <MenuMonCompte mobileDesign />
-        <MenuNexus {nexusMenuStatus} mobileDesign />
+        {#if NEXUS_MENU_ENABLED}
+          <MenuNexus {nexusMenuStatus} mobileDesign />
+        {/if}
       {/if}
       <hr class="-mx-s32 mb-s16 mt-s64" />
       <SubMenu mobileDesign />
