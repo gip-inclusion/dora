@@ -183,6 +183,8 @@ class User(NexusModelMixin, AbstractBaseUser):
             self.is_active
             and not self.is_staff
             and self.email != settings.DORA_BOT_USER
+            and self.first_name != ""
+            and self.last_name != ""
         )
 
     def clean(self):

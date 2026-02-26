@@ -11,7 +11,7 @@ from dora.nexus.management.commands.populate_metabase_nexus import (
     create_table,
     get_connection,
 )
-from dora.nexus.tests.test_sync import assert_call_content
+from dora.nexus.tests.test_sync import assert_call_content, make_syncable_user
 
 
 @freeze_time()
@@ -87,8 +87,10 @@ def test_full_sync(db, mock_nexus_api, snapshot):
     to_ignore_user = make_user(is_staff=True)
     structure_1 = make_structure(putative_member=to_ignore_user)
     structure_2 = make_structure()
-    user_1 = make_user(structure=structure_1, is_admin=True)
-    user_2 = make_user(structure=structure_2, is_admin=False, sub_pc=uuid.uuid4())
+    user_1 = make_syncable_user(structure=structure_1, is_admin=True)
+    user_2 = make_syncable_user(
+        structure=structure_2, is_admin=False, sub_pc=uuid.uuid4()
+    )
     membership_1 = structure_1.membership.get()
     membership_2 = structure_2.membership.get()
 
