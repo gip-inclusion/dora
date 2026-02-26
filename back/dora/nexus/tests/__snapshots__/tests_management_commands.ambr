@@ -83,7 +83,9 @@
           FROM "users_user"
           WHERE ("users_user"."is_active"
                  AND NOT "users_user"."is_staff"
-                 AND NOT ("users_user"."email" = %s))
+                 AND NOT ("users_user"."email" = %s)
+                 AND NOT ("users_user"."first_name" = %s)
+                 AND NOT ("users_user"."last_name" = %s))
         ''',
       }),
       dict({
@@ -104,7 +106,9 @@
           WHERE (NOT "structures_structure"."is_obsolete"
                  AND "users_user"."is_active"
                  AND NOT "users_user"."is_staff"
-                 AND NOT ("users_user"."email" = %s))
+                 AND NOT ("users_user"."email" = %s)
+                 AND NOT ("users_user"."first_name" = %s)
+                 AND NOT ("users_user"."last_name" = %s))
         ''',
       }),
     ]),

@@ -15,12 +15,21 @@ def assert_call_content(call, expected_data):
     )
 
 
+def make_syncable_user(**kwargs):
+    return make_user(first_name="John", last_name="Doe", **kwargs)
+
+
+def make_syncable_member(**kwargs):
+    user = make_syncable_user()
+    return make_structure_member(user=user, **kwargs)
+
+
 class TestUserSync:
     def test_sync_on_model_save_new_instance(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
         with django_capture_on_commit_callbacks(execute=True):
-            user = make_user()
+            user = make_syncable_user()
 
         [call] = mock_nexus_api.calls
         assert call.request.method == "POST"
@@ -44,7 +53,7 @@ class TestUserSync:
     def test_sync_on_model_save_tracked_field(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user = make_user()
+        user = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             user.email = "another@email.com"
@@ -72,7 +81,7 @@ class TestUserSync:
     def test_no_sync_on_model_save_no_changed_data(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user = make_user()
+        user = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             user.save()
@@ -81,7 +90,7 @@ class TestUserSync:
     def test_no_sync_on_model_save_non_tracked_field(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user = make_user()
+        user = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             user.partner_kind = "AUTRE"
@@ -92,8 +101,8 @@ class TestUserSync:
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
         with django_capture_on_commit_callbacks(execute=True):
-            user_1 = make_user(is_active=False)
-            user_2 = make_user(is_staff=True)
+            user_1 = make_syncable_user(is_active=False)
+            user_2 = make_syncable_user(is_staff=True)
 
         [call_1, call_2] = mock_nexus_api.calls
         assert call_1.request.method == "DELETE"
@@ -106,7 +115,7 @@ class TestUserSync:
     def test_delete_on_model_delete(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user = make_user()
+        user = make_syncable_user()
         user_id = user.pk
 
         with django_capture_on_commit_callbacks(execute=True):
@@ -119,8 +128,8 @@ class TestUserSync:
     def test_sync_on_manager_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user_1 = make_user()
-        user_2 = make_user()
+        user_1 = make_syncable_user()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             User.objects.filter(pk__in=[user_1.pk, user_2.pk]).order_by("pk").update(
@@ -159,8 +168,8 @@ class TestUserSync:
     def test_delete_on_manager_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user_1 = make_user()
-        user_2 = make_user()
+        user_1 = make_syncable_user()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             User.objects.filter(pk__in=[user_1.pk, user_2.pk]).order_by("pk").update(
@@ -180,8 +189,8 @@ class TestUserSync:
     def test_delete_on_manager_delete(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user_1 = make_user()
-        user_2 = make_user()
+        user_1 = make_syncable_user()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             User.objects.filter(pk__in=[user_1.pk, user_2.pk]).order_by("pk").delete()
@@ -199,8 +208,8 @@ class TestUserSync:
     def test_sync_on_manager_bulk_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user_1 = make_user()
-        user_2 = make_user()
+        user_1 = make_syncable_user()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             user_1.first_name = "John"
@@ -240,8 +249,8 @@ class TestUserSync:
     def test_delete_on_manager_bulk_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user_1 = make_user()
-        user_2 = make_user()
+        user_1 = make_syncable_user()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             user_1.is_active = False
@@ -545,7 +554,7 @@ class TestStructureMemberSync:
     def test_sync_on_model_save_new_instance(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        user = make_user()
+        user = make_syncable_user()
         structure = make_structure()
 
         with django_capture_on_commit_callbacks(execute=True):
@@ -568,7 +577,7 @@ class TestStructureMemberSync:
     def test_sync_on_model_save_tracked_field(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
+        membership = make_syncable_member()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership.is_admin = True
@@ -591,7 +600,7 @@ class TestStructureMemberSync:
     def test_no_sync_on_model_save_no_change(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
+        membership = make_syncable_member()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership.save()
@@ -600,7 +609,7 @@ class TestStructureMemberSync:
     def test_no_sync_on_model_save_non_tracked_field(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
+        membership = make_syncable_member()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership.created_at = timezone.now()
@@ -610,10 +619,10 @@ class TestStructureMemberSync:
     def test_delete_on_model_save(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
+        membership = make_syncable_member()
         membership.structure.is_obsolete = True
         membership.structure.save()
-        other_user = make_user()
+        other_user = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership.user = other_user
@@ -626,7 +635,7 @@ class TestStructureMemberSync:
     def test_sync_on_model_delete(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
+        membership = make_syncable_member()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership_id = membership.pk
@@ -639,8 +648,8 @@ class TestStructureMemberSync:
     def test_sync_on_manager_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
-        user_2 = make_user()
+        membership = make_syncable_member()
+        user_2 = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             StructureMember.objects.update(user=user_2)
@@ -662,8 +671,8 @@ class TestStructureMemberSync:
     def test_delete_on_manager_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership = make_structure_member()
-        inactive_user = make_user(is_active=False)
+        membership = make_syncable_member()
+        inactive_user = make_syncable_user(is_active=False)
 
         with django_capture_on_commit_callbacks(execute=True):
             StructureMember.objects.order_by("pk").update(user=inactive_user)
@@ -675,8 +684,8 @@ class TestStructureMemberSync:
     def test_delete_on_manager_delete(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership_1 = make_structure_member()
-        membership_2 = make_structure_member()
+        membership_1 = make_syncable_member()
+        membership_2 = make_syncable_member()
 
         with django_capture_on_commit_callbacks(execute=True):
             StructureMember.objects.order_by("pk").delete()
@@ -694,9 +703,9 @@ class TestStructureMemberSync:
     def test_sync_on_manager_bulk_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership_1 = make_structure_member()
-        membership_2 = make_structure_member()
-        other_user = make_user()
+        membership_1 = make_syncable_member()
+        membership_2 = make_syncable_member()
+        other_user = make_syncable_user()
 
         with django_capture_on_commit_callbacks(execute=True):
             membership_1.user = other_user
@@ -726,8 +735,8 @@ class TestStructureMemberSync:
     def test_delete_on_manager_bulk_update(
         self, db, django_capture_on_commit_callbacks, mock_nexus_api
     ):
-        membership_1 = make_structure_member()
-        membership_2 = make_structure_member()
+        membership_1 = make_syncable_member()
+        membership_2 = make_syncable_member()
         obsolete_structure = make_structure(is_obsolete=True)
 
         with django_capture_on_commit_callbacks(execute=True):
