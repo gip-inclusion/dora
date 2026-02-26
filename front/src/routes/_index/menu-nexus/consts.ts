@@ -60,12 +60,14 @@ export const ALL_SERVICES: NexusService[] = [
     activated: {
       autologin: false,
       prodUrl: "https://lemarche.inclusion.gouv.fr/accounts/login",
-      stagingUrl: "https://staging.lemarche.inclusion.gouv.fr/accounts/login",
+      stagingUrl:
+        "https://staging.lemarche.inclusion.beta.gouv.fr/accounts/login",
     },
     deactivated: {
       autologin: false,
       prodUrl: "https://lemarche.inclusion.gouv.fr/accounts/signup",
-      stagingUrl: "https://staging.lemarche.inclusion.gouv.fr/accounts/signup",
+      stagingUrl:
+        "https://staging.lemarche.inclusion.beta.gouv.fr/accounts/signup",
     },
   },
   {
