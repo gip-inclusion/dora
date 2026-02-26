@@ -13,7 +13,9 @@ class Command(BaseNexusFullSyncCommand):
     membership_serializer = staticmethod(serialize_membership)
 
     def get_structures_queryset(self):
-        return Structure.objects.filter(is_obsolete=False)
+        return Structure.objects.filter(is_obsolete=False).exclude(
+            name__icontains="[ND]"
+        )
 
     def get_users_queryset(self):
         return (

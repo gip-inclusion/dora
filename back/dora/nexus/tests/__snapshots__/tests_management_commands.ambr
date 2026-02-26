@@ -51,7 +51,8 @@
                  "structures_structure"."is_obsolete",
                  "structures_structure"."admin_already_invited"
           FROM "structures_structure"
-          WHERE NOT "structures_structure"."is_obsolete"
+          WHERE (NOT "structures_structure"."is_obsolete"
+                 AND NOT (UPPER("structures_structure"."name"::text) LIKE UPPER(%s)))
         ''',
       }),
       dict({

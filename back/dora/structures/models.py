@@ -496,7 +496,7 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         return super().save(*args, **kwargs)
 
     def should_sync_to_nexus(self):
-        return not self.is_obsolete
+        return not self.is_obsolete and "[ND]" not in self.name
 
     def can_edit_informations(self, user: User):
         return user.is_authenticated and (
