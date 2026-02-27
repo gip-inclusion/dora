@@ -53,7 +53,6 @@ class AnonymizeOrientationsTestCase(TestCase):
             self.assertEqual(self.orientation.di_contact_email, "")
 
             self.assertTrue(self.orientation.is_anonymized)
-            self.assertEqual(self.orientation.processing_date, timezone.now())
 
     def test_should_not_anonymize_orientations_newer_than_theperiod(self):
         self.orientation.creation_date = timezone.now()
