@@ -28,11 +28,11 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.4",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^1.2.10",
-    "@sveltejs/adapter-node": "^5.5.3",
-    "@sveltejs/kit": "^2.53.0",
+    "@sveltejs/adapter-node": "^5.5.4",
+    "@sveltejs/kit": "^2.53.3",
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.1",
@@ -45,11 +45,11 @@
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
-    "@typescript-eslint/parser": "^8.48.0",
+    "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.16.2",
     "dayjs": "^1.11.19",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.15.0",
     "globals": "^17.3.0",
@@ -65,13 +65,13 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "remixicon": "^4.9.1",
     "showdown": "^2.1.0",
-    "svelte": "^5.45.2",
-    "svelte-check": "^4.4.3",
+    "svelte": "^5.53.5",
+    "svelte-check": "^4.4.4",
     "svelte-portal": "^2.2.1",
     "svelte-remix": "^3.0.1",
     "sveltekit-rate-limiter": "^0.7.0",
     "svgo": "^4.0.0",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.2.1",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
@@ -96,6 +96,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.39.0"
+    "@sentry/sveltekit": "^10.40.0"
   }
 }
