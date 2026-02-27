@@ -15,6 +15,7 @@ import os
 
 from botocore.config import Config
 from corsheaders.defaults import default_headers
+from django.utils.csp import CSP
 
 from . import BASE_DIR
 
@@ -72,7 +73,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "csp.middleware.CSPMiddleware",
+    "django.middleware.csp.ContentSecurityPolicyMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
     "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
@@ -107,6 +108,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.csp",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -473,13 +475,10 @@ ADMINS = (
 )
 
 # CSP :
-# règles pour l'admin et les versions d'API
-PUBLIC_API_VERSIONS = ["1", "2"]
-CONTENT_SECURITY_POLICY = {
-    "EXCLUDE_URL_PREFIXES": [
-        "/admin",
-        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-    ],
+SECURE_CSP = {
+    "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF, CSP.NONCE],
+    "style-src": [CSP.SELF, CSP.NONCE],
 }
 
 # Envoi d'e-mails transactionnels :

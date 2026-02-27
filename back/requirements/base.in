@@ -3,7 +3,6 @@ dj-database-url
 Django
 django-cors-headers
 django-otp[segno]
-django-csp
 django-filter
 django-storages[s3]
 django-datadog-logger

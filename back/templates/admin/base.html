@@ -1,8 +1,10 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 
 {% block extrahead %}
   {{ block.super }}
-  <style nonce="{{request.csp_nonce}}">
+  <link rel="icon" type="image/x-icon" href="{% static 'favicon.v2.ico' %}">
+  <style nonce="{{ csp_nonce }}">
     #branding h1::before {
       font-weight: bold;
       text-transform: uppercase;

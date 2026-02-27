@@ -246,6 +246,15 @@
     background: none;
 }
 
+/* Utilitaire pour éléments masqués (évite style="display:none" bloqué par CSP) */
+.import-hidden {
+    display: none !important;
+}
+
+.spinner-overlay.is-visible {
+    display: flex;
+}
+
 .spinner-overlay {
       display: none;
       position: fixed;
