@@ -72,7 +72,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "csp.middleware.CSPMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
     "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
@@ -471,16 +470,6 @@ ADMINS = (
     if os.getenv("DJANGO_ADMINS")
     else None
 )
-
-# CSP :
-# règles pour l'admin et les versions d'API
-PUBLIC_API_VERSIONS = ["1", "2"]
-CONTENT_SECURITY_POLICY = {
-    "EXCLUDE_URL_PREFIXES": [
-        "/admin",
-        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-    ],
-}
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
