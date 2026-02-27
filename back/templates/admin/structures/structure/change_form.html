@@ -1,19 +1,25 @@
 {% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/css/moderation_change_form.css' %}">
+{% endblock %}
 
 {% block content_title %}
   {{ block.super }}
   {% if moderation_pending %}
     <fieldset class="module">
-      <h2 style="background-color: #ef972c; color: black; font-weight: bold; text-transform: uppercase;">Modération du rattachement</h2>
-      <div class="submit-row" style="flex-direction: column;">
+      <h2 class="moderation-banner-title">Modération du rattachement</h2>
+      <div class="submit-row moderation-vertical">
         <p>Vérifier la légitimité du rattachement à partir de l’identité des utilisateurs rattachés et du détail des demandes d’orientation émises (en bas de la page).</p>
         <p>En fonction du résultat de ces vérifications, <b>approuver</b> ou <b>rejeter</b> le rattachement en cliquant sur l’un des boutons ci-dessous.</p>
-        <div style="display: flex; justify-content: flex-start;">
-          <form method="post" action="{% url 'admin:moderation_approve' original.pk %}" style="flex-basis: 100%;">
+        <div class="moderation-actions-row">
+          <form method="post" action="{% url 'admin:moderation_approve' original.pk %}" class="moderation-action-form">
             {% csrf_token %}
-            <div style="display: flex; flex-direction: column; align-items: center;">
-              <input type="submit" value="Approuver" onclick="return confirm('Êtes-vous sûr de vouloir approuver ce rattachement ?');" style="--button-bg: #16a34a; --button-hover-bg: #4ade80; font-weight: bold;" />
-              <div style="margin-top: 1em;">
+            <div class="moderation-action-column">
+              <input type="submit" value="Approuver" class="moderation-approve-button" />
+              <div class="moderation-help">
                 <p>Effets de l’action <i>Approuver</i> :</p>
                 <ul>
                   <li>la structure passe au statut de modération <i>Validé</i> ;</li>
@@ -23,15 +29,15 @@
               </div>
             </div>
           </form>
-          <form method="post" action="{% url 'admin:moderation_reject' original.pk %}" style="flex-basis: 100%;">
+          <form method="post" action="{% url 'admin:moderation_reject' original.pk %}" class="moderation-action-form">
             {% csrf_token %}
-            <div style="display: flex; flex-direction: column; align-items: center;">
-              <div style="display: flex; align-items: center; gap: 1em;">
+            <div class="moderation-action-column">
+              <div class="moderation-reject-row">
                 <label for="reason" class="required">Motif du rejet :</label>
-                <input type="text" id="moderation-reject-reason-field" name="reason" required style="padding: 2px; height: 2em; width: 30em; color: var(--body-fg); background-color: var(--body-bg); border: 2px solid var(--border-color); cursor: text;" />
-                <input type="submit" id="moderation-reject-submit-button" disabled value="Rejeter" onclick="return confirm('Êtes-vous sûr de vouloir rejeter ce rattachement ?');" style="--button-bg: #dc2626; --button-hover-bg: #f87171; font-weight: bold;" />
+                <input type="text" id="moderation-reject-reason-field" name="reason" required class="moderation-reject-input" />
+                <input type="submit" id="moderation-reject-submit-button" disabled value="Rejeter" class="moderation-reject-button" />
               </div>
-              <div style="margin-top: 1em;">
+              <div class="moderation-help">
                 <p>Effets de l’action <i>Rejeter</i> :</p>
                 <ul>
                   <li>tous les membres (réels ou potentiels, admins ou non) sont détachés de la structure ;</li>
@@ -46,12 +52,31 @@
         </div>
       </div>
     </fieldset>
-    <script>
-      const reasonField = document.getElementById('moderation-reject-reason-field');
-      const rejectButton = document.getElementById('moderation-reject-submit-button');
-      reasonField.addEventListener('input', function () {
-        rejectButton.disabled = reasonField.value.trim() === '';
-      });
+    <script nonce="{{ csp_nonce }}">
+      (function() {
+        const reasonField = document.getElementById('moderation-reject-reason-field');
+        const rejectButton = document.getElementById('moderation-reject-submit-button');
+        reasonField.addEventListener('input', function () {
+          rejectButton.disabled = reasonField.value.trim() === '';
+        });
+
+        const approveForm = document.querySelector('form[action*="moderation_approve"]');
+        if (approveForm) {
+          approveForm.addEventListener('submit', function (e) {
+            if (!confirm('Êtes-vous sûr de vouloir approuver ce rattachement ?')) {
+              e.preventDefault();
+            }
+          });
+        }
+        const rejectForm = document.querySelector('form[action*="moderation_reject"]');
+        if (rejectForm) {
+          rejectForm.addEventListener('submit', function (e) {
+            if (!confirm('Êtes-vous sûr de vouloir rejeter ce rattachement ?')) {
+              e.preventDefault();
+            }
+          });
+        }
+      })();
     </script>
   {% endif %}
 {% endblock %}

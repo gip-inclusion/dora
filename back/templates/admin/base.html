@@ -2,7 +2,7 @@
 
 {% block extrahead %}
   {{ block.super }}
-  <style>
+  <style nonce="{{ csp_nonce }}">
     #branding h1::before {
       font-weight: bold;
       text-transform: uppercase;

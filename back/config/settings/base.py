@@ -108,6 +108,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.csp",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -476,8 +477,9 @@ ADMINS = (
 # CSP :
 SECURE_CSP = {
     "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF, CSP.NONCE],
+    "style-src": [CSP.SELF, CSP.NONCE],
 }
-
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
