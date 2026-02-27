@@ -165,6 +165,9 @@ export default [
 
     rules: {
       "@typescript-eslint/no-unused-expressions": "off",
+      // Les props bindables ($bindable()) sont écrites dans le composant mais lues par le parent via le binding ;
+      // la règle ne voit pas cet usage et signale de faux positifs.
+      "no-useless-assignment": "off",
     },
   },
 ];
