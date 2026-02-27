@@ -31,26 +31,18 @@
   ];
 
   const order = orders[0].value;
-  let filters;
 
   function modelsOrder(allModels) {
-    let sortedModels = allModels
-      .sort((a, b) => {
-        if (order === "alpha") {
-          return a.name.localeCompare(b.name, "fr", { numeric: true });
-        }
+    let sortedModels = allModels.sort((a, b) => {
+      if (order === "alpha") {
+        return a.name.localeCompare(b.name, "fr", { numeric: true });
+      }
 
-        return new Date(b.modificationDate) - new Date(a.modificationDate);
-      })
-      .filter(
-        (model) =>
-          !filters ||
-          filters
-            .split(" ")
-            .every((filter) =>
-              model.name.toLowerCase().includes(filter.toLowerCase())
-            )
+      return (
+        new Date(b.modificationDate).getTime() -
+        new Date(a.modificationDate).getTime()
       );
+    });
 
     if (limit) {
       sortedModels = sortedModels.slice(0, limit);
@@ -83,22 +75,6 @@
         to="/modeles/creer?structure={structure.slug}"
       />
     {/if}
-    <!-- {#if hasOptions}
-      <div class="flex flex-col gap-s16 md:flex-row md:items-center">
-        <div>Trier par</div>
-        <div>
-          <Select
-            choices={orders}
-            bind:value={order}
-            initialValue={order}
-            on:blur
-            showClear={false}
-          />
-        </div>
-
-        <Input type="text" bind:value={filters} placeholder="Mots-clé" />
-      </div>
-    {/if} -->
   </div>
 </div>
 

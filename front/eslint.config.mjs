@@ -7,8 +7,6 @@ import { fileURLToPath } from "node:url";
 import eslintJs from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import sveltePlugin from "eslint-plugin-svelte";
-import importPlugin from "eslint-plugin-import";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
@@ -45,11 +43,11 @@ export default [
     plugins: {
       "@typescript-eslint": typescriptEslint,
       svelte: sveltePlugin,
-      import: importPlugin,
     },
 
     languageOptions: {
       globals: {
+        ...globals.builtin,
         ...globals.browser,
         ...globals.node,
       },
@@ -84,8 +82,6 @@ export default [
           exceptions: ["i", "a", "b", "v", "x", "y", "id", "ok", "to"],
         },
       ],
-
-      "import/newline-after-import": ["error", { count: 1 }],
 
       "func-style": [
         "error",
@@ -169,6 +165,9 @@ export default [
 
     rules: {
       "@typescript-eslint/no-unused-expressions": "off",
+      // Les props bindables ($bindable()) sont écrites dans le composant mais lues par le parent via le binding ;
+      // la règle ne voit pas cet usage et signale de faux positifs.
+      "no-useless-assignment": "off",
     },
   },
 ];

@@ -25,30 +25,6 @@
   }: Props = $props();
 
   let newBranchModalOpen = $state(false);
-
-  const departement = "tous";
-  let filters;
-
-  function branchesFilter(allBranches) {
-    let filteredBranches = allBranches.filter(
-      (b) =>
-        (departement === "tous" || b.department === departement) &&
-        (!filters ||
-          filters
-            .split(" ")
-            .every((filter) =>
-              b.name.toLowerCase().includes(filter.toLowerCase())
-            ))
-    );
-
-    if (limit) {
-      filteredBranches = filteredBranches.slice(0, limit);
-    }
-
-    return filteredBranches;
-  }
-
-  let branchesFiltered = $derived(branchesFilter(branches));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -76,7 +52,7 @@
 </div>
 
 <div class="mb-s48 gap-s16 grid md:grid-cols-2 lg:grid-cols-3">
-  {#each branchesFiltered as branch}
+  {#each branches as branch}
     <StructureCard structure={branch} />
   {/each}
 </div>

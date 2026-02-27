@@ -28,21 +28,17 @@ import { log } from "./logger";
 export function getAvailableOptionsForStatus(
   status: ServiceStatus
 ): (ServiceStatus | "DELETE")[] {
-  let result: (ServiceStatus | "DELETE")[] = [];
-
   if (status === "SUGGESTION") {
-    result = ["DRAFT", "DELETE"];
+    return ["DRAFT", "DELETE"];
   } else if (status === "PUBLISHED") {
-    result = ["DRAFT", "ARCHIVED"];
+    return ["DRAFT", "ARCHIVED"];
   } else if (status === "DRAFT") {
-    result = ["PUBLISHED", "ARCHIVED"];
+    return ["PUBLISHED", "ARCHIVED"];
   } else if (status === "ARCHIVED") {
-    result = ["DRAFT"];
-  } else {
-    throw new Error(`Unknown status ${status}`);
+    return ["DRAFT"];
   }
 
-  return result;
+  throw new Error(`Unknown status ${status}`);
 }
 const CATEGORY_ICONS = {
   "choisir-un-metier": ServiceLineBusiness,
