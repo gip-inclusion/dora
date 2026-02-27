@@ -47,6 +47,7 @@ export default [
 
     languageOptions: {
       globals: {
+        ...globals.builtin,
         ...globals.browser,
         ...globals.node,
       },
