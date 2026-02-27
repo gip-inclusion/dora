@@ -15,6 +15,7 @@ import os
 
 from botocore.config import Config
 from corsheaders.defaults import default_headers
+from django.utils.csp import CSP
 
 from . import BASE_DIR
 
@@ -72,6 +73,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.csp.ContentSecurityPolicyMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
     "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
@@ -470,6 +472,12 @@ ADMINS = (
     if os.getenv("DJANGO_ADMINS")
     else None
 )
+
+# CSP :
+SECURE_CSP = {
+    "default-src": [CSP.SELF],
+}
+
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
