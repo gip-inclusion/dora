@@ -38,7 +38,10 @@
         return a.name.localeCompare(b.name, "fr", { numeric: true });
       }
 
-      return new Date(b.modificationDate) - new Date(a.modificationDate);
+      return (
+        new Date(b.modificationDate).getTime() -
+        new Date(a.modificationDate).getTime()
+      );
     });
 
     if (limit) {
