@@ -1,6 +1,52 @@
+import { goto } from "$app/navigation";
 import { redirect } from "@sveltejs/kit";
 
 import { getApiURL } from "./api";
+import { getToken } from "$lib/utils/auth";
+
+async function fetchEmploisOrientationNextUrl(url: URL, token?: string) {
+  const opJwt = url.searchParams.get("op");
+
+  if (!opJwt) {
+    return null;
+  }
+
+  // Only handle orientation on service detail pages
+  const serviceMatch = url.pathname.match(/^\/services\/([^/]+)\/?$/);
+  if (!serviceMatch) {
+    return null;
+  }
+
+  const serviceSlug = serviceMatch[1];
+  const apiUrl = new URL(`/orientations/emplois/${serviceSlug}/`, getApiURL());
+  apiUrl.searchParams.set("op", opJwt);
+
+  const response = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json; version=1.0",
+      ...(token && { Authorization: `Token ${token}` }),
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    return data.nextUrl || null;
+  }
+
+  return null;
+}
+
+export async function handleEmploisOrientation(url: URL) {
+  const nextUrl = await fetchEmploisOrientationNextUrl(
+    url,
+    getToken() ?? undefined
+  );
+  if (nextUrl) {
+    await goto(nextUrl);
+  }
+}
 
 export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
   const autoLoginJwt = url.searchParams.get("auto_login");

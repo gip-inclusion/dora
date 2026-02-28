@@ -1,11 +1,14 @@
 import functools
 import logging
+from urllib.parse import urlencode
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins, permissions, serializers, viewsets
+from itoutils.django.nexus.token import decode_token
+from rest_framework import exceptions, mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -17,7 +20,10 @@ from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..services.models import Service
-from ..structures.models import Structure
+from ..sirene.models import Establishment
+from ..structures.models import Structure, StructureMember
+from ..users.enums import DiscoveryMethod, MainActivity
+from ..users.models import User
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -338,3 +344,73 @@ class OrientationExportView(APIView):
         serializer = ReceivedOrientationExportSerializer(orientations, many=True)
 
         return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def handle_emplois_orientation(request, service_slug):
+    op_jwt = request.GET.get("op")
+    rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
+
+    try:
+        orientation_data = decode_token(op_jwt)
+    except ValueError:
+        return Response(
+            {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_expired=true"}
+        )
+
+    prescriber_data = orientation_data.get("prescriber")
+    prescriber_email = prescriber_data.get("email")
+
+    if request.user.is_authenticated and request.user.email != prescriber_email:
+        return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
+
+    has_dora_account = User.objects.filter(email=prescriber_email).exists()
+    if not has_dora_account:
+        User.objects.create_user(
+            prescriber_email,
+            is_valid=True,
+            main_activity=MainActivity.ACCOMPAGNATEUR,
+            discovery_method=DiscoveryMethod.EMPLOIS_DE_L_INCLUSION,
+        )
+    else:
+        if not request.user.is_authenticated:
+            raise exceptions.PermissionDenied("Utilisateur non authentifié")
+
+    structure_siret = prescriber_data.get("organization").get("siret")
+    is_siret_recognized = Establishment.objects.filter(siret=structure_siret).exists()
+
+    if not is_siret_recognized:
+        return Response(
+            {
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'known_siret': 'false'})}"
+            }
+        )
+
+    if not Structure.objects.filter(siret=structure_siret).exists():
+        return Response(
+            {
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true'})}"
+            }
+        )
+
+    is_structure_member = (
+        has_dora_account
+        and StructureMember.objects.filter(
+            structure__siret=structure_siret, user=request.user
+        ).exists()
+    )
+    if not is_structure_member:
+        return Response(
+            {
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true', 'fast_track': 'true'})}"
+            }
+        )
+
+    structure = Structure.objects.filter(siret=structure_siret).first()
+
+    return Response(
+        {
+            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'orientation': op_jwt, 'user_structure_slug': structure.slug})}"
+        }
+    )

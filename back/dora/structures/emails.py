@@ -87,6 +87,26 @@ def send_invitation_accepted_notification(member, admin_user):
     )
 
 
+def send_member_fast_tracked_notification(member, admin_user):
+    params = {
+        "recipient_email": admin_user.email,
+        "recipient_name": admin_user.get_short_name(),
+        "new_member_full_name": member.user.get_full_name(),
+        "new_member_email": member.user.email,
+        "structure_name": member.structure.name,
+    }
+
+    body = render_to_string("notification-member-fast-tracked.html", params)
+
+    send_mail(
+        "[DORA] Utilisateur rattaché à votre structure",
+        admin_user.email,
+        body,
+        from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
+        tags=["invitation-accepted"],
+    )
+
+
 def send_access_requested_notification(member, admin_user):
     params = {
         "recipient_email": admin_user.email,

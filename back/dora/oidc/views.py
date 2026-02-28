@@ -46,8 +46,13 @@ def oidc_logged_in(request):
     redirect_uri = FRONTEND_PC_CALLBACK_URL
 
     # gestion du `next` :
-    if request.GET.get("next"):
-        redirect_uri = add_url_params(redirect_uri, request.GET)
+    if next_url := request.GET.get("next"):
+        # Extraire le chemin relatif de l'URL complète
+        parsed_next = urlparse(next_url)
+        relative_next = parsed_next.path
+        if parsed_next.query:
+            relative_next += "?" + parsed_next.query
+        redirect_uri = add_url_params(redirect_uri, {"next": relative_next})
 
     # Passage au front des informations complémentaires de l'utilisateur
     # ici : SAFIR et / ou SIRET

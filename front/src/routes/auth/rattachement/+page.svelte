@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
@@ -21,9 +23,28 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
-  const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
+  const {
+    proposedSiret,
+    knownSiret,
+    fastTrack,
+    proposedSafir,
+    userIsFranceTravail,
+  } = data;
   let joinError = $state("");
   let loading = $state(false);
+
+  onMount(() => {
+    // Remove query params to prevent re-triggering on refresh
+    if (
+      $page.url.searchParams.has("known_siret") ||
+      $page.url.searchParams.has("fast_track")
+    ) {
+      const newUrl = new URL($page.url);
+      newUrl.searchParams.delete("known_siret");
+      newUrl.searchParams.delete("fast_track");
+      history.replaceState({}, "", newUrl);
+    }
+  });
 
   async function handleJoin() {
     loading = true;
@@ -39,6 +60,7 @@
         siret: establishment.slug ? undefined : establishment.siret,
         structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
+        fastTrack,
       }),
     });
 
@@ -49,7 +71,11 @@
     if (response.ok) {
       result.data = await response.json();
       await refreshUserInfo();
-      await goto(`/structures/${result.data.slug}`);
+      const op = $page.url.searchParams.get("op");
+      const redirectUrl = op
+        ? `/structures/${result.data.slug}?op=${encodeURIComponent(op)}`
+        : `/structures/${result.data.slug}`;
+      await goto(redirectUrl);
       loading = false;
     } else {
       try {
@@ -98,6 +124,7 @@
       {proposedSafir}
       {proposedSiret}
       showSafir={userIsFranceTravail}
+      siretInputDisabled={knownSiret}
     >
       {#snippet cta()}
         <div>
