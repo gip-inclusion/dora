@@ -5,6 +5,8 @@ from django.core.exceptions import SuspiciousOperation
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from furl import furl
 from itoutils.urls import add_url_params
 from mozilla_django_oidc.views import (
@@ -96,12 +98,17 @@ def oidc_pre_logout(request):
     return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
 
 
+@method_decorator(never_cache, name="dispatch")
 class CustomAuthenticationRequestView(OIDCAuthenticationRequestView):
     """
     Vue d'authentification OIDC personnalisée :
         Surcharge la vue par défaut de `mozilla-django-oidc` pour ajouter
         le paramètre `login_hint` à la requête d'autorisation si celui-ci
         est présent dans les paramètres de la requête HTTP.
+
+        Le décorateur `never_cache` est essentiel pour éviter que les redirections
+        302 (contenant state, nonce et login_hint) ne soient mises en cache par
+        un CDN ou proxy, ce qui causerait des problèmes de sécurité OIDC.
     """
 
     def get_extra_params(self, request):
