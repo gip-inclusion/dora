@@ -5,24 +5,15 @@
   import Button from "$lib/components/display/button.svelte";
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
 
-  import Count from "../count.svelte";
   import NewBranchModal from "./new-branch-modal.svelte";
 
   interface Props {
     structure: any;
     branches: any;
-    total: any;
     tabDisplay?: boolean;
-    limit: any;
   }
 
-  let {
-    structure,
-    branches,
-    total,
-    tabDisplay = true,
-    limit,
-  }: Props = $props();
+  let { structure, branches, tabDisplay = true }: Props = $props();
 
   let newBranchModalOpen = $state(false);
 </script>
@@ -30,7 +21,6 @@
 <div class="mb-s24 md:flex md:items-center md:justify-between">
   <div class="gap-s8 flex flex-row">
     <h2 class="mb-s0 text-france-blue">Antennes</h2>
-    {#if limit}<Count>{total}</Count>{/if}
   </div>
   <div class="gap-s16 flex">
     {#if !!branches.length && !tabDisplay}
