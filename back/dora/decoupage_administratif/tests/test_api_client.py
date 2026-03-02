@@ -1,14 +1,12 @@
 from unittest import mock
 
-import pytest
 import requests
-from django.test import SimpleTestCase
+from django.test import TestCase
 
 from dora.decoupage_administratif.api_client import DecoupageAdministratifAPIClient
 
 
-@pytest.mark.no_django_db
-class DecoupageAdministratifAPIClientTests(SimpleTestCase):
+class DecoupageAdministratifAPIClientTests(TestCase):
     def setUp(self):
         self.session = mock.Mock()
         self.response = mock.Mock()
