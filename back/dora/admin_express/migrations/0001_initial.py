@@ -3,6 +3,7 @@
 import django.contrib.gis.db.models.fields
 import django.contrib.postgres.fields
 import django.contrib.postgres.indexes
+import django.contrib.postgres.operations
 from django.db import migrations, models
 
 
@@ -12,6 +13,7 @@ class Migration(migrations.Migration):
     dependencies = []
 
     operations = [
+        django.contrib.postgres.operations.TrigramExtension(),
         migrations.CreateModel(
             name="City",
             fields=[
