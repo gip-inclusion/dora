@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs, urlparse
 
+import pytest
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -26,3 +27,21 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
     parsed_url = urlparse(response.url)
     query_params = parse_qs(parsed_url.query)
     assert query_params["next"][0] == next_url
+
+
+@pytest.mark.parametrize(
+    "url_name",
+    [
+        "oidc_authentication_init",
+    ],
+)
+def test_oidc_authentication_views_have_no_cache_headers(client, url_name):
+    """Les vues d'authentification OIDC ne doivent pas être mises en cache.
+
+    C'est essentiel pour éviter que les redirections 302 (contenant state,
+    nonce et login_hint) ne soient mises en cache par un CDN ou proxy.
+    """
+    response = client.get(reverse(url_name))
+
+    cache_control = response.get("Cache-Control", "")
+    assert "no-store" in cache_control or "no-cache" in cache_control
