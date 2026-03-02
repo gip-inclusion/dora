@@ -112,7 +112,7 @@ class CustomAuthenticationRequestView(OIDCAuthenticationRequestView):
     """
 
     def get_extra_params(self, request):
-        extra_params = super().get_extra_params(request) or {}
+        extra_params = dict(super().get_extra_params(request) or {})
 
         login_hint = request.GET.get("login_hint")
         if login_hint:
