@@ -1,0 +1,63 @@
+/* Styles pour le bloc de modération de rattachement dans l'admin structures. */
+
+.moderation-banner-title {
+    background-color: #ef972c !important;
+    color: black !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+    display: block;
+    padding: 4px 10px;
+    margin: 0 0 10px 0;
+}
+
+.submit-row.moderation-vertical {
+    flex-direction: column;
+}
+
+.moderation-actions-row {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.moderation-action-form {
+    flex-basis: 100%;
+}
+
+.moderation-action-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.moderation-help {
+    margin-top: 1em;
+}
+
+.moderation-reject-row {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.moderation-reject-input {
+    padding: 2px !important;
+    height: 2em !important;
+    width: 30em !important;
+    color: var(--body-fg) !important;
+    background-color: var(--body-bg) !important;
+    border: 2px solid var(--border-color) !important;
+    cursor: text !important;
+}
+
+.moderation-approve-button {
+    --button-bg: #16a34a;
+    --button-hover-bg: #4ade80;
+    font-weight: bold;
+}
+
+.moderation-reject-button {
+    --button-bg: #dc2626;
+    --button-hover-bg: #f87171;
+    font-weight: bold;
+}
+
