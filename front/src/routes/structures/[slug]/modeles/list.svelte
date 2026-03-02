@@ -10,10 +10,10 @@
   interface Props {
     structure: any;
     models: any;
-    total: any;
+    total: number;
     tabDisplay?: boolean;
     withEmptyNotice?: boolean;
-    limit: any;
+    limit?: number;
   }
 
   let {
