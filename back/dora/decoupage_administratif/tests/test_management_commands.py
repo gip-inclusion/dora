@@ -1,13 +1,11 @@
 import io
 from unittest import mock
 
-import pytest
 from django.core.management import call_command
-from django.test import SimpleTestCase
+from django.test import TestCase
 
 
-@pytest.mark.no_django_db
-class ImportDecoupageAdministratifCommandTests(SimpleTestCase):
+class ImportDecoupageAdministratifCommandTests(TestCase):
     @mock.patch(
         "dora.decoupage_administratif.management.commands.import_decoupage_administratif.DecoupageAdministratifImporter"
     )
