@@ -14,7 +14,6 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
-  import { handleEmploisOrientation } from "$lib/utils/nexus";
 
   interface Props {
     children?: Snippet;
@@ -37,17 +36,15 @@
     }
   });
 
-  $effect(() => {
-    if (browser && $page.url.searchParams.has("op")) {
-      handleEmploisOrientation($page.url);
-    }
-  });
-
   beforeNavigate(({ from, to }) => {
-    if (!from || !to) return;
+    if (!from || !to) {
+      return;
+    }
 
     const hasOrientation = from.url.searchParams.has("orientation");
-    if (!hasOrientation) return;
+    if (!hasOrientation) {
+      return;
+    }
 
     const isGoingToOrienter = to.url.pathname.match(
       /^\/services\/[^/]+\/orienter/

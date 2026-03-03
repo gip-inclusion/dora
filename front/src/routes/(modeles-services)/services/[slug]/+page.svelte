@@ -14,6 +14,7 @@
   import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
   import { userPreferences } from "$lib/utils/preferences";
   import { trackService } from "$lib/utils/stats";
+  import { handleEmploisOrientation } from "$lib/utils/nexus";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
   import ServiceFeedbackModal from "./service-feedback-modal.svelte";
@@ -52,6 +53,12 @@
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
     trackService(service, $page.url, searchId, isDI);
+  });
+
+  $effect(() => {
+    if (browser && $page.url.searchParams.has("op")) {
+      handleEmploisOrientation($page.url);
+    }
   });
 
   $effect(() => {

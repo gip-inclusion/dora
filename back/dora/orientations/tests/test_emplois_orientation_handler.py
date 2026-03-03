@@ -169,7 +169,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         parsed = urlparse(response.data["next_url"])
         query_params = parse_qs(parsed.query)
         assert parsed.path == f"/services/{self.service.slug}"
-        assert query_params["orientation"] == ["valid_token"]
+        assert query_params["op"] == ["valid_token"]
         assert query_params["user_structure_slug"] == [self.structure.slug]
 
     def test_existing_user_not_authenticated_returns_403(self):
