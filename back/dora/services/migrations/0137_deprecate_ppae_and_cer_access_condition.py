@@ -1,10 +1,11 @@
+import logging
+
 from django.db import migrations
+
+logger = logging.getLogger(__name__)
 
 
 def forward(apps, schema_editor):
-    # Newline to not concatenate our output with Django's ("Applying migration ...")
-    print("")
-
     AccessCondition = apps.get_model("services", "AccessCondition")
     ServiceAccessConditions = AccessCondition.service_set.through
 
@@ -32,12 +33,14 @@ def forward(apps, schema_editor):
             accesscondition=new_access_condition, service=link.service
         )
 
-    print(
-        f"Create {len(new_m2m_objects)} new objects to replace the {len(qs)} old ones"
+    logger.info(
+        "Create %s new objects to replace the %s old ones",
+        len(new_m2m_objects),
+        len(qs),
     )
     ServiceAccessConditions.objects.bulk_create(new_m2m_objects.values())
     deleted, _ = qs.delete()
-    print(f"{deleted} old objects deleted")
+    logger.info("%s old objects deleted", deleted)
 
 
 class Migration(migrations.Migration):
