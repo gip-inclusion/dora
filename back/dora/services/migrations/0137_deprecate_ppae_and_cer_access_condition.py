@@ -34,13 +34,13 @@ def forward(apps, schema_editor):
         )
 
     logger.info(
-        "Create %s new objects to replace the %s old ones",
+        "Création de %s nouvelles relations M2M pour remplacer les %s anciennes",
         len(new_m2m_objects),
         len(qs),
     )
     ServiceAccessConditions.objects.bulk_create(new_m2m_objects.values())
     deleted, _ = qs.delete()
-    logger.info("%s old objects deleted", deleted)
+    logger.info("%s anciennes relations M2M supprimées", deleted)
 
 
 class Migration(migrations.Migration):
