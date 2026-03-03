@@ -16,7 +16,7 @@ def forward(apps, schema_editor):
             "Personnes accompagnées dans le cadre d’un Contrat d’Engagement Réciproque (CER)",
         ],
     )
-    new_access_condition = AccessCondition.objects.create(
+    new_access_condition, _ = AccessCondition.objects.get_or_create(
         structure=None,
         name="Contrat d’engagement",
     )
