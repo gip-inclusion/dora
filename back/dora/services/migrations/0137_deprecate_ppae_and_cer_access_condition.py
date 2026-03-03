@@ -42,6 +42,9 @@ def forward(apps, schema_editor):
     deleted, _ = qs.delete()
     logger.info("%s anciennes relations M2M supprimées", deleted)
 
+    deleted, _ = deprecated_access_conditions.delete()
+    logger.info("%s anciennes conditions d'accès supprimées", deleted)
+
 
 class Migration(migrations.Migration):
     dependencies = [
