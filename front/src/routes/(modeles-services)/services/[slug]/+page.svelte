@@ -56,8 +56,11 @@
   });
 
   $effect(() => {
-    if (browser && $page.url.searchParams.has("op")) {
-      handleEmploisOrientation($page.url);
+    if (browser && $page.url.searchParams.has("op") && service) {
+      handleEmploisOrientation({
+        serviceSlug: service.slug,
+        opJwt: $page.url.searchParams.get("op")!,
+      });
     }
   });
 

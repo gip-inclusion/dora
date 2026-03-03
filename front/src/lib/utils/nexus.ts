@@ -4,23 +4,19 @@ import { redirect } from "@sveltejs/kit";
 import { getApiURL } from "./api";
 import { getToken } from "$lib/utils/auth";
 
-async function fetchEmploisOrientationNextUrl(url: URL, token?: string) {
-  const opJwt = url.searchParams.get("op");
+interface EmploisOrientationParams {
+  serviceSlug: string;
+  opJwt: string;
+}
 
-  if (!opJwt) {
-    return null;
-  }
-
-  // Only handle orientation on service detail pages
-  const serviceMatch = url.pathname.match(/^\/services\/([^/]+)\/?$/);
-  if (!serviceMatch) {
-    return null;
-  }
-
-  const serviceSlug = serviceMatch[1];
+async function fetchEmploisOrientationNextUrl({
+  serviceSlug,
+  opJwt,
+}: EmploisOrientationParams) {
   const apiUrl = new URL(`/orientations/emplois/${serviceSlug}/`, getApiURL());
   apiUrl.searchParams.set("op", opJwt);
 
+  const token = getToken();
   const response = await fetch(apiUrl, {
     method: "GET",
     headers: {
@@ -38,11 +34,10 @@ async function fetchEmploisOrientationNextUrl(url: URL, token?: string) {
   return null;
 }
 
-export async function handleEmploisOrientation(url: URL) {
-  const nextUrl = await fetchEmploisOrientationNextUrl(
-    url,
-    getToken() ?? undefined
-  );
+export async function handleEmploisOrientation(
+  params: EmploisOrientationParams
+) {
+  const nextUrl = await fetchEmploisOrientationNextUrl(params);
   if (nextUrl) {
     await goto(nextUrl);
   }
