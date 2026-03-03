@@ -411,6 +411,6 @@ def handle_emplois_orientation(request, service_slug):
 
     return Response(
         {
-            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure.slug})}"
+            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'orientation': op_jwt, 'user_structure_slug': structure.slug})}"
         }
     )
