@@ -14,6 +14,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { URL_HELP_SITE } from "$lib/consts";
+  import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
     data: PageData;
@@ -43,6 +44,14 @@
       newUrl.searchParams.delete("known_siret");
       newUrl.searchParams.delete("fast_track");
       history.replaceState({}, "", newUrl);
+    }
+  });
+
+  $effect(() => {
+    if (!knownSiret) {
+      toast.push(
+        "Le SIRET de votre structure n'est pas reconnu. Par conséquent, toutes les données de votre orientation ont été perdues."
+      );
     }
   });
 
