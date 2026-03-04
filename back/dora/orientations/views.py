@@ -354,7 +354,7 @@ def handle_emplois_orientation(request, service_slug):
         orientation_data = decode_token(op_jwt)
     except ValueError:
         return Response(
-            {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_expired=true"}
+            {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_invalid=true"}
         )
 
     prescriber_data = orientation_data["prescriber"]
