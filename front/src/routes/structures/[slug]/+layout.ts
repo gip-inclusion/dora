@@ -5,7 +5,11 @@ import {
 } from "$lib/requests/structures";
 import { userInfo, type UserInfo } from "$lib/utils/auth";
 import { trackStructure } from "$lib/utils/stats";
-import { userPreferences, type UserPreferences } from "$lib/utils/preferences";
+import {
+  setCurrentStructure,
+  userPreferences,
+  type UserPreferences,
+} from "$lib/utils/preferences";
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 import { structure } from "./store";
@@ -34,24 +38,13 @@ export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
       ...info.structures,
     ].map((struct) => struct.slug);
 
-    if (userStructuresSlugs.includes(currentStructure.slug)) {
-      preferences.visitedStructures = preferences.visitedStructures.filter(
-        (slug) => slug !== currentStructure.slug
-      );
-
-      preferences.visitedStructures.unshift(currentStructure.slug);
-
-      localStorage.setItem(
-        "visitedStructures",
-        JSON.stringify(preferences.visitedStructures)
-      );
-
-      userPreferences.set(preferences);
+    if (!currentStructure) {
+      error(404, "Page Not Found");
     }
-  }
 
-  if (!currentStructure) {
-    error(404, "Page Not Found");
+    if (userStructuresSlugs.includes(currentStructure.slug)) {
+      setCurrentStructure(currentStructure.slug);
+    }
   }
 
   // Récupération des membres

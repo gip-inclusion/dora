@@ -12,7 +12,7 @@
   import type { Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
-  import { userPreferences } from "$lib/utils/preferences";
+  import { setCurrentStructure } from "$lib/utils/preferences";
   import { trackService } from "$lib/utils/stats";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
@@ -62,23 +62,7 @@
         ...$userInfo.structures,
       ].find((struct) => struct.slug === userStructureSlug);
 
-      if (
-        userStructure &&
-        $userPreferences.visitedStructures[0] !== userStructureSlug
-      ) {
-        const updatedVisitedStructures =
-          $userPreferences.visitedStructures.filter(
-            (slug) => slug !== userStructureSlug
-          );
-        updatedVisitedStructures.unshift(userStructureSlug);
-
-        localStorage.setItem(
-          "visitedStructures",
-          JSON.stringify(updatedVisitedStructures)
-        );
-
-        userPreferences.set({ visitedStructures: updatedVisitedStructures });
-
+      if (userStructure && setCurrentStructure(userStructureSlug)) {
         toast.push({
           msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}. Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
           duration: 6000,
