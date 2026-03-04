@@ -115,6 +115,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [unknown_siret]
         assert query_params["known_siret"] == ["false"]
+        assert "op" not in query_params
 
     def test_known_establishment_but_no_structure_returns_rattachement_with_op(self):
         orphan_siret = "11111111111111"
@@ -176,7 +177,8 @@ class HandleEmploisOrientationTestCase(APITestCase):
             "dora.orientations.views.decode_token",
             return_value=self.valid_orientation_data,
         ):
-            response = self.client.get(f"{self.url}?op=valid_token")
+            with self.assertNumQueries(3):
+                response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
         parsed = urlparse(response.data["next_url"])

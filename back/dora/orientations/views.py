@@ -21,7 +21,7 @@ from dora.core.utils import TRUTHY_VALUES
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..services.models import Service
 from ..sirene.models import Establishment
-from ..structures.models import Structure, StructureMember
+from ..structures.models import Structure
 from ..users.enums import DiscoveryMethod, MainActivity
 from .emails import (
     send_message_to_beneficiary,
@@ -357,8 +357,8 @@ def handle_emplois_orientation(request, service_slug):
             {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_expired=true"}
         )
 
-    prescriber_data = orientation_data.get("prescriber")
-    prescriber_email = prescriber_data.get("email")
+    prescriber_data = orientation_data["prescriber"]
+    prescriber_email = prescriber_data["email"]
 
     if request.user.is_authenticated and request.user.email != prescriber_email:
         return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
@@ -371,7 +371,7 @@ def handle_emplois_orientation(request, service_slug):
         request.user.discovery_method = DiscoveryMethod.EMPLOIS_DE_L_INCLUSION
         request.user.save()
 
-    structure_siret = prescriber_data.get("organization").get("siret")
+    structure_siret = prescriber_data["organization"]["siret"]
     is_siret_recognized = Establishment.objects.filter(siret=structure_siret).exists()
 
     rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
@@ -383,24 +383,23 @@ def handle_emplois_orientation(request, service_slug):
             }
         )
 
-    if not Structure.objects.filter(siret=structure_siret).exists():
+    try:
+        structure = Structure.objects.get(siret=structure_siret)
+    except Structure.DoesNotExist:
         return Response(
             {
                 "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true'})}"
             }
         )
 
-    is_structure_member = StructureMember.objects.filter(
-        structure__siret=structure_siret, user=request.user
-    ).exists()
+    is_structure_member = structure.membership.filter(user=request.user).exists()
+
     if not is_structure_member:
         return Response(
             {
                 "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true', 'fast_track': 'true'})}"
             }
         )
-
-    structure = Structure.objects.filter(siret=structure_siret).first()
 
     return Response(
         {
