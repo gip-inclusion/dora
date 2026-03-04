@@ -4,6 +4,7 @@ from django.db import transaction
 from django.http.response import Http404
 from django.utils import timezone
 from django.views.decorators.debug import sensitive_post_parameters
+from itoutils.django.nexus.token import decode_token
 from rest_framework import exceptions, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes
@@ -155,7 +156,14 @@ def join_structure(request):
     data = serializer.validated_data
     establishment = data.get("establishment")
     structure = data.get("structure")
-    fast_track = data.get("fast_track")
+    op_token = data.get("op")
+    fast_track = False
+    if op_token:
+        try:
+            op_claims = decode_token(op_token)
+            fast_track = op_claims.get("fast_track", False)
+        except ValueError:
+            pass
     siret = establishment.siret if establishment else structure.siret
     if (
         siret

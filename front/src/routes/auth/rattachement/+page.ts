@@ -38,7 +38,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   const proposedSiret = url.searchParams.get("siret");
   const knownSiret = url.searchParams.get("known_siret") === "true";
-  const fastTrack = url.searchParams.get("fast_track") === "true";
+  const op = url.searchParams.get("op");
   const proposedSafir = userIsFranceTravail
     ? url.searchParams.get("safir")
     : "";
@@ -60,7 +60,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     establishment,
     proposedSiret,
     knownSiret,
-    fastTrack,
+    op,
     proposedSafir,
     userIsFranceTravail,
   };

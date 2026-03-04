@@ -2,6 +2,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs, urlparse
 
 from django.conf import settings
+from itoutils.django.nexus.token import decode_token
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -143,7 +144,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert query_params["op"] == ["valid_token"]
         assert query_params["known_siret"] == ["true"]
 
-    def test_user_not_structure_member_returns_rattachement_with_op(self):
+    def test_user_not_structure_member_returns_rattachement_with_fast_track_in_op(self):
         non_member = make_user(email="nonmember@example.com")
         self.client.force_authenticate(user=non_member)
 
@@ -166,9 +167,10 @@ class HandleEmploisOrientationTestCase(APITestCase):
         query_params = parse_qs(parsed.query)
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [self.structure.siret]
-        assert query_params["op"] == ["valid_token"]
         assert query_params["known_siret"] == ["true"]
-        assert query_params["fast_track"] == ["true"]
+        op_token = query_params["op"][0]
+        op_claims = decode_token(op_token)
+        assert op_claims["fast_track"] is True
 
     def test_valid_member_returns_service_url_with_orientation(self):
         self.client.force_authenticate(user=self.user)

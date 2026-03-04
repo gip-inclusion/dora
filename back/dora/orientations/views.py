@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
-from itoutils.django.nexus.token import decode_token
+from itoutils.django.nexus.token import decode_token, generate_token
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -395,9 +395,12 @@ def handle_emplois_orientation(request, service_slug):
     is_structure_member = structure.membership.filter(user=request.user).exists()
 
     if not is_structure_member:
+        claims = decode_token(op_jwt)
+        claims["fast_track"] = True
+        op_jwt_with_fast_track = generate_token(claims)
         return Response(
             {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'known_siret': 'true', 'fast_track': 'true'})}"
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'known_siret': 'true'})}"
             }
         )
 
