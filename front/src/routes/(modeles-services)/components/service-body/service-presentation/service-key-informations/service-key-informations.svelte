@@ -37,7 +37,7 @@
   let eligibilityRequirements = $derived([
     ...(service.accessConditionsDisplay || []),
     ...(service.requirementsDisplay || []),
-    ...(service.qpvOrZrr ? ["Uniquement QPV ou ZRR"] : []),
+    ...(service.qpvOrZrr ? ["Uniquement QPV ou ZFRR"] : []),
   ]);
 
   let addressForMapLink = $derived(

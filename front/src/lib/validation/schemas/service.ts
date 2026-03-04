@@ -363,7 +363,7 @@ export const serviceSchema: v.Schema = {
     },
   },
   qpvOrZrr: {
-    label: "Uniquement QPV ou ZRR",
+    label: "Uniquement QPV ou ZFRR",
     default: false,
     rules: [v.isBool()],
   },
