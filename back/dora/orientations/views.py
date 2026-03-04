@@ -8,7 +8,7 @@ from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from itoutils.django.nexus.token import decode_token
-from rest_framework import exceptions, mixins, permissions, serializers, viewsets
+from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -23,7 +23,6 @@ from ..services.models import Service
 from ..sirene.models import Establishment
 from ..structures.models import Structure, StructureMember
 from ..users.enums import DiscoveryMethod, MainActivity
-from ..users.models import User
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -347,10 +346,9 @@ class OrientationExportView(APIView):
 
 
 @api_view(["GET"])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
-    rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
 
     try:
         orientation_data = decode_token(op_jwt)
@@ -365,20 +363,18 @@ def handle_emplois_orientation(request, service_slug):
     if request.user.is_authenticated and request.user.email != prescriber_email:
         return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
 
-    has_dora_account = User.objects.filter(email=prescriber_email).exists()
-    if not has_dora_account:
-        User.objects.create_user(
-            prescriber_email,
-            is_valid=True,
-            main_activity=MainActivity.ACCOMPAGNATEUR,
-            discovery_method=DiscoveryMethod.EMPLOIS_DE_L_INCLUSION,
-        )
-    else:
-        if not request.user.is_authenticated:
-            raise exceptions.PermissionDenied("Utilisateur non authentifié")
+    user_has_new_dora_account = (
+        not request.user.main_activity and not request.user.discovery_method
+    )
+    if user_has_new_dora_account:
+        request.user.main_activity = MainActivity.ACCOMPAGNATEUR
+        request.user.discovery_method = DiscoveryMethod.EMPLOIS_DE_L_INCLUSION
+        request.user.save()
 
     structure_siret = prescriber_data.get("organization").get("siret")
     is_siret_recognized = Establishment.objects.filter(siret=structure_siret).exists()
+
+    rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
 
     if not is_siret_recognized:
         return Response(
@@ -394,12 +390,9 @@ def handle_emplois_orientation(request, service_slug):
             }
         )
 
-    is_structure_member = (
-        has_dora_account
-        and StructureMember.objects.filter(
-            structure__siret=structure_siret, user=request.user
-        ).exists()
-    )
+    is_structure_member = StructureMember.objects.filter(
+        structure__siret=structure_siret, user=request.user
+    ).exists()
     if not is_structure_member:
         return Response(
             {

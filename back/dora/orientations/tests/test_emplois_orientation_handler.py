@@ -17,7 +17,11 @@ class HandleEmploisOrientationTestCase(APITestCase):
         self.service = make_service()
         self.structure = make_structure(siret="12345678901234")
         self.establishment = baker.make(Establishment, siret=self.structure.siret)
-        self.user = make_user(email="prescriber@example.com")
+        self.user = make_user(
+            email="prescriber@example.com",
+            main_activity=MainActivity.ACCOMPAGNATEUR_OFFREUR,
+            discovery_method=DiscoveryMethod.AUTRE,
+        )
         self.client.force_authenticate(user=self.user)
         baker.make(StructureMember, structure=self.structure, user=self.user)
 
@@ -56,9 +60,11 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert response.status_code == 200
         assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/pc-logout"
 
-    def test_creates_user_if_not_exists(self):
-        self.client.logout()
+    def test_updates_user_if_newly_created_account(self):
         new_email = "newuser@example.com"
+        new_user = make_user(email=new_email)
+        self.client.force_authenticate(user=new_user)
+
         orientation_data = {
             "prescriber": {
                 "email": new_email,
@@ -68,17 +74,24 @@ class HandleEmploisOrientationTestCase(APITestCase):
             },
         }
 
-        assert not User.objects.filter(email=new_email).exists()
-
         with patch(
             "dora.orientations.views.decode_token", return_value=orientation_data
         ):
             self.client.get(f"{self.url}?op=valid_token")
 
         user = User.objects.get(email=new_email)
-        assert user.is_valid
         assert user.main_activity == MainActivity.ACCOMPAGNATEUR
         assert user.discovery_method == DiscoveryMethod.EMPLOIS_DE_L_INCLUSION
+
+    def test_does_not_update_user_if_existing_account(self):
+        with patch(
+            "dora.orientations.views.decode_token",
+            return_value=self.valid_orientation_data,
+        ):
+            self.client.get(f"{self.url}?op=valid_token")
+
+        assert self.user.main_activity == MainActivity.ACCOMPAGNATEUR_OFFREUR
+        assert self.user.discovery_method == DiscoveryMethod.AUTRE
 
     def test_unknown_siret_returns_rattachement_url(self):
         unknown_siret = "99999999999999"
@@ -171,14 +184,3 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == f"/services/{self.service.slug}"
         assert query_params["op"] == ["valid_token"]
         assert query_params["user_structure_slug"] == [self.structure.slug]
-
-    def test_existing_user_not_authenticated_returns_403(self):
-        self.client.force_authenticate(user=None)
-
-        with patch(
-            "dora.orientations.views.decode_token",
-            return_value=self.valid_orientation_data,
-        ):
-            response = self.client.get(f"{self.url}?op=valid_token")
-
-        assert response.status_code == 403
