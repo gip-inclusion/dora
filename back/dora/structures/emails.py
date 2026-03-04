@@ -103,7 +103,7 @@ def send_member_fast_tracked_notification(member, admin_user):
         admin_user.email,
         body,
         from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
-        tags=["invitation-accepted"],
+        tags=["member-fast-tracked"],
     )
 
 
