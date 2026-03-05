@@ -31,7 +31,7 @@
 
   $effect(() => {
     if (browser && $page.url.searchParams.get("link_invalid") === "true") {
-      toast.push("Lien expiré");
+      toast.push("Lien expiré ou invalide");
     }
   });
 </script>
