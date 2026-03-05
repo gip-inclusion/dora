@@ -158,13 +158,16 @@ def join_structure(request):
     structure = data.get("structure")
     op_token = data.get("op")
     fast_track = False
+    siret = establishment.siret if establishment else structure.siret
+
     if op_token:
         try:
             op_claims = decode_token(op_token)
-            fast_track = op_claims.get("fast_track", False)
+
+            if op_claims["prescriber"]["organization"]["siret"] == siret:
+                fast_track = op_claims.get("fast_track", False)
         except ValueError:
             pass
-    siret = establishment.siret if establishment else structure.siret
     if (
         siret
         and siret.startswith(SIREN_FRANCE_TRAVAIL)
