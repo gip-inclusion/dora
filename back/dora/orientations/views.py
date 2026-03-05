@@ -395,7 +395,7 @@ def handle_emplois_orientation(request, service_slug):
     is_structure_member = structure.membership.filter(user=request.user).exists()
 
     if not is_structure_member:
-        claims = decode_token(op_jwt)
+        claims = orientation_data.copy()
         claims["fast_track"] = True
         op_jwt_with_fast_track = generate_token(claims)
         return Response(
