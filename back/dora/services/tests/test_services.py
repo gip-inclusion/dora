@@ -10,6 +10,7 @@ from data_inclusion.schema.v1 import (
 )
 from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.test import override_settings
 from django.utils import timezone
@@ -118,6 +119,11 @@ class ServiceTestCase(APITestCase):
         self.struct_31_condition2 = baker.make(
             "AccessCondition", structure=self.struct_31
         )
+
+        cache.delete("options:anon")
+        cache.delete(f"options:user:{self.me.pk}")
+        cache.delete(f"options:user:{self.superuser.pk}")
+        cache.delete(f"options:user:{self.manager.pk}")
 
         self.struct_44 = make_structure(department="44")
         self.service_44 = make_service(
@@ -473,6 +479,7 @@ class ServiceTestCase(APITestCase):
     # CustomizableChoices
     def test_anonymous_user_see_global_choices(self):
         self.client.force_authenticate(user=None)
+        cache.delete("options:anon")
         response = self.client.get(
             "/services-options/",
         )
@@ -1874,10 +1881,6 @@ class ServiceSearchTestCase(APITestCase):
         baker.make("ServiceSubCategory", value="cat2--sub2", label="cat2--sub2")
         baker.make("ServiceSubCategory", value="cat2--autre", label="cat2--autre")
         baker.make("ServiceCategory", value="cat3", label="cat3")
-
-        baker.make("FundingLabel", value="funding-label-1", label="Funding label 1")
-        baker.make("FundingLabel", value="funding-label-2", label="Funding label 2")
-        baker.make("FundingLabel", value="funding-label-3", label="Funding label 3")
 
     def tearDown(self):
         self.patcher.stop()

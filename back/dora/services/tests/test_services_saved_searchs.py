@@ -35,7 +35,7 @@ SAVE_SEARCH_ARGS = {
     "city_label": "Poil (58)",
     "kinds": ["aide-financiere", "aide-materielle"],
     "fees": ["gratuit", "payant"],
-    "funding_labels": ["funding-label-1", "funding-label-2"],
+    "funding_labels": ["cd-charente-maritime", "cd-drome"],
 }
 
 
@@ -64,17 +64,6 @@ class ServiceSavedSearchTestCase(APITestCase):
             self.assertEqual(response.status_code, 400)
 
     def test_create_search(self):
-        baker.make(
-            "FundingLabel",
-            value=SAVE_SEARCH_ARGS.get("funding_labels")[0],
-            label=SAVE_SEARCH_ARGS.get("funding_labels")[0],
-        )
-        baker.make(
-            "FundingLabel",
-            value=SAVE_SEARCH_ARGS.get("funding_labels")[1],
-            label=SAVE_SEARCH_ARGS.get("funding_labels")[1],
-        )
-
         self.assertEqual(SavedSearch.objects.all().count(), 0)
 
         user = baker.make("users.User", is_valid=True)
