@@ -36,7 +36,6 @@
   let loading = $state(false);
 
   onMount(() => {
-    // Remove query params to prevent re-triggering on refresh
     if ($page.url.searchParams.has("known_siret")) {
       const newUrl = new URL($page.url);
       newUrl.searchParams.delete("known_siret");
