@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import json
 import os
+from urllib.parse import urlparse
 
 from botocore.config import Config
 from corsheaders.defaults import default_headers
@@ -440,6 +441,10 @@ OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 # OIDC : permet de préciser quelle est la class/vue en charge de l'initiation de l'authentification
 # (pour l'ajout du paramètre `login_hint`).
 OIDC_AUTHENTICATE_CLASS = "dora.oidc.views.CustomAuthenticationRequestView"
+
+# OIDC : autorise la redirection vers le frontend après authentification
+# (nécessaire car le frontend est sur un host différent du backend)
+OIDC_REDIRECT_ALLOWED_HOSTS = [urlparse(FRONTEND_URL).netloc] if FRONTEND_URL else []
 
 # Notifications :
 # voir management command `process_notification_tasks`
