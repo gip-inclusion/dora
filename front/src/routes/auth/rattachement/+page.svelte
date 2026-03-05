@@ -27,7 +27,7 @@
   const {
     proposedSiret,
     knownSiret,
-    op,
+    opJwt,
     proposedSafir,
     userIsFranceTravail,
   } = data;
@@ -65,7 +65,8 @@
         siret: establishment.slug ? undefined : establishment.siret,
         structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
-        op,
+        // eslint-disable-next-line id-length
+        op: opJwt,
       }),
     });
 
@@ -76,8 +77,8 @@
     if (response.ok) {
       result.data = await response.json();
       await refreshUserInfo();
-      const redirectUrl = op
-        ? `/structures/${result.data.slug}?op=${encodeURIComponent(op)}`
+      const redirectUrl = opJwt
+        ? `/structures/${result.data.slug}?op=${encodeURIComponent(opJwt)}`
         : `/structures/${result.data.slug}`;
       await goto(redirectUrl);
       loading = false;

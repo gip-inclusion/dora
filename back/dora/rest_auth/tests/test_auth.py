@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -156,12 +158,20 @@ class AuthenticationTestCase(APITestCase):
         )
         user = baker.make("users.User", is_valid=True)
         self.client.force_authenticate(user=user)
-        response = self.client.post(
-            "/auth/join-structure/",
-            {"siret": DUMMY_SIRET, "cguVersion": "20230805", "fastTrack": True},
-        )
+
+        with patch(
+            "dora.rest_auth.views.decode_token", return_value={"fast_track": True}
+        ):
+            response = self.client.post(
+                "/auth/join-structure/",
+                {
+                    "siret": DUMMY_SIRET,
+                    "cguVersion": "20230805",
+                    "op": "fast_track_token",
+                },
+            )
         self.assertEqual(response.status_code, 200)
-        # User should be a direct member, not putative
+        # Le membre doit être un membre direct, pas un membre putatif
         StructureMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
         self.assertFalse(
             StructurePutativeMember.objects.filter(

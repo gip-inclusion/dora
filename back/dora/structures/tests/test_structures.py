@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.core import mail
 from model_bakery import baker
 from rest_framework.test import APITestCase
@@ -1208,14 +1210,18 @@ class StructureMemberTestCase(APITestCase):
         user = baker.make("users.User", is_valid=True)
 
         self.client.force_authenticate(user=user)
-        response = self.client.post(
-            "/auth/join-structure/",
-            {
-                "siret": self.my_struct.siret,
-                "cguVersion": "20230805",
-                "fastTrack": True,
-            },
-        )
+
+        with patch(
+            "dora.rest_auth.views.decode_token", return_value={"fast_track": True}
+        ):
+            response = self.client.post(
+                "/auth/join-structure/",
+                {
+                    "siret": self.my_struct.siret,
+                    "cguVersion": "20230805",
+                    "op": "fast_track_token",
+                },
+            )
         self.assertEqual(response.status_code, 200)
         StructureMember.objects.get(structure__siret=self.my_struct.siret, user=user)
         self.assertGreater(len(mail.outbox), 0)
