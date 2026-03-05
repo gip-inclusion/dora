@@ -1,7 +1,5 @@
 import { redirect } from "@sveltejs/kit";
 
-import { getApiURL } from "$lib/utils/api";
-
 import type { PageServerLoad } from "./$types";
 import { handleEmploisOrientation } from "$lib/requests/emplois-orientation";
 
