@@ -395,9 +395,8 @@ def handle_emplois_orientation(request, service_slug):
     is_structure_member = structure.membership.filter(user=request.user).exists()
 
     if not is_structure_member:
-        claims = orientation_data.copy()
-        claims["fast_track"] = True
-        op_jwt_with_fast_track = generate_token(claims)
+        orientation_data["fast_track"] = True
+        op_jwt_with_fast_track = generate_token(orientation_data)
         return Response(
             {
                 "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'known_siret': 'true', 'service_slug': service_slug, 'fast_track': 'true'})}"
