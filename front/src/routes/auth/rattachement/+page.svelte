@@ -28,6 +28,7 @@
     proposedSiret,
     knownSiret,
     opJwt,
+    serviceSlug,
     proposedSafir,
     userIsFranceTravail,
   } = data;
@@ -78,7 +79,7 @@
       result.data = await response.json();
       await refreshUserInfo();
       const redirectUrl = opJwt
-        ? `/structures/${result.data.slug}?op=${encodeURIComponent(opJwt)}`
+        ? `/services/${serviceSlug}?op=${encodeURIComponent(opJwt)}`
         : `/structures/${result.data.slug}`;
       await goto(redirectUrl);
       loading = false;

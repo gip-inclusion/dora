@@ -168,6 +168,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [self.structure.siret]
         assert query_params["known_siret"] == ["true"]
+        assert query_params["service_slug"] == [self.service.slug]
         op_token = query_params["op"][0]
         op_claims = decode_token(op_token)
         assert op_claims["fast_track"] is True

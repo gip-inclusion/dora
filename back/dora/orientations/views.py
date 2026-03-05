@@ -400,7 +400,7 @@ def handle_emplois_orientation(request, service_slug):
         op_jwt_with_fast_track = generate_token(claims)
         return Response(
             {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'known_siret': 'true'})}"
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'known_siret': 'true', 'service_slug': service_slug, 'fast_track': 'true'})}"
             }
         )
 

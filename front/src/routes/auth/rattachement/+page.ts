@@ -39,6 +39,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   const proposedSiret = url.searchParams.get("siret");
   const knownSiret = url.searchParams.get("known_siret") === "true";
   const opJwt = url.searchParams.get("op");
+  const serviceSlug = url.searchParams.get("service_slug");
   const proposedSafir = userIsFranceTravail
     ? url.searchParams.get("safir")
     : "";
@@ -61,6 +62,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     proposedSiret,
     knownSiret,
     opJwt,
+    serviceSlug,
     proposedSafir,
     userIsFranceTravail,
   };
