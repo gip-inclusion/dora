@@ -11,6 +11,11 @@ from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
+from .serializers import (
+    OrientationBeneficiaryInfoInputSerializer,
+    OrientationBeneficiaryInfoOutputSerializer,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -82,3 +87,18 @@ def nexus_menu_status(request):
 
     data = NexusAPIClient().dropdown_status(request.user.email)
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def orientation_beneficiary_info(request):
+    input_serializer = OrientationBeneficiaryInfoInputSerializer(
+        data=request.query_params
+    )
+    input_serializer.is_valid(raise_exception=True)
+
+    claims = input_serializer.validated_data["jwt"]
+    output_serializer = OrientationBeneficiaryInfoOutputSerializer(
+        claims["beneficiary"]
+    )
+    return Response(output_serializer.data, status=status.HTTP_200_OK)

@@ -28,3 +28,29 @@ export const getNexusMenuStatus = async () => {
   }
   return response.json() as Promise<NexusMenuStatus>;
 };
+
+export type OrientationBeneficiaryInfo = {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  franceTravailId: string;
+};
+
+export const getOrientationBeneficiaryInfo = async (jwt: string) => {
+  const url = new URL("/nexus/orientation-beneficiary-info/", getApiURL());
+  url.searchParams.set("jwt", jwt);
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${getToken()}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch orientation beneficiary info");
+  }
+  return response.json() as Promise<OrientationBeneficiaryInfo>;
+};
