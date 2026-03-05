@@ -115,7 +115,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         query_params = parse_qs(parsed.query)
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [unknown_siret]
-        assert query_params["known_siret"] == ["false"]
+        assert query_params["unknown_siret"] == ["true"]
         assert "op" not in query_params
 
     def test_known_establishment_but_no_structure_returns_rattachement_with_op(self):
@@ -142,7 +142,6 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [orphan_siret]
         assert query_params["op"] == ["valid_token"]
-        assert query_params["known_siret"] == ["true"]
 
     def test_user_not_structure_member_returns_rattachement_with_fast_track_in_op(self):
         non_member = make_user(email="nonmember@example.com")

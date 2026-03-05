@@ -38,7 +38,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   let establishment: Establishment | undefined;
 
   const proposedSiret = url.searchParams.get("siret");
-  const knownSiret = url.searchParams.get("known_siret") === "true";
+  const unknownSiret = url.searchParams.get("unknown_siret") === "true";
   const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
   const serviceSlug = url.searchParams.get("service_slug");
   const proposedSafir = userIsFranceTravail
@@ -61,7 +61,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     noIndex: true,
     establishment,
     proposedSiret,
-    knownSiret,
+    unknownSiret,
     opJwt,
     serviceSlug,
     proposedSafir,

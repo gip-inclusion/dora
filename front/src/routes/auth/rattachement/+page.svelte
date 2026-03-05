@@ -26,7 +26,7 @@
   let { establishment } = $state(data);
   const {
     proposedSiret,
-    knownSiret,
+    unknownSiret,
     opJwt,
     serviceSlug,
     proposedSafir,
@@ -36,15 +36,15 @@
   let loading = $state(false);
 
   onMount(() => {
-    if ($page.url.searchParams.has("known_siret")) {
+    if ($page.url.searchParams.has("unknown_siret")) {
       const newUrl = new URL($page.url);
-      newUrl.searchParams.delete("known_siret");
+      newUrl.searchParams.delete("unknown_siret");
       history.replaceState({}, "", newUrl);
     }
   });
 
   $effect(() => {
-    if (!knownSiret) {
+    if (unknownSiret) {
       toast.push(
         "Le SIRET de votre structure n'est pas reconnu. Par conséquent, toutes les données de votre orientation ont été perdues."
       );
@@ -129,7 +129,7 @@
       {proposedSafir}
       {proposedSiret}
       showSafir={userIsFranceTravail}
-      siretInputDisabled={knownSiret}
+      siretInputDisabled={unknownSiret}
     >
       {#snippet cta()}
         <div>
