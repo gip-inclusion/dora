@@ -70,7 +70,7 @@
     "svelte-portal": "^2.2.1",
     "svelte-remix": "^3.0.1",
     "sveltekit-rate-limiter": "^0.7.0",
-    "svgo": "^4.0.0",
+    "svgo": "^4.0.1",
     "tailwindcss": "^4.2.1",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
