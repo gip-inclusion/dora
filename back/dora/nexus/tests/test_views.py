@@ -3,6 +3,7 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 import pytest
 from django.conf import settings
+from django.test import override_settings
 from django.urls import reverse
 from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from rest_framework import status
@@ -266,3 +267,48 @@ class TestAutoLoginOut:
         auto_login_token = query_params["auto_login"][0]
         claims = decode_token(auto_login_token)
         assert claims["email"] == user.email
+
+
+def test_nexus_menu_status_user_not_authenticated(api_client):
+    """Test avec un utilisateur non authentifié"""
+    response = api_client.get(reverse("nexus-menu-status"))
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.parametrize(
+    "mvp_enabled,proconnect,activated_services",
+    [
+        (False, True, ["les-emplois"]),
+        (False, False, []),
+        (True, True, ["les-emplois"]),
+        (True, False, []),
+    ],
+)
+@override_settings(NEXUS_MENU_ENABLED=True)
+def test_nexus_menu_status_authenticated(
+    api_client,
+    user,
+    mvp_enabled,
+    proconnect,
+    activated_services,
+):
+    """Test paramétré pour différents scénarios de nexus_menu_status"""
+    api_client.force_authenticate(user=user)
+
+    mock_data = {
+        "proconnect": proconnect,
+        "activated_services": activated_services,
+        "mvp_enabled": mvp_enabled,
+    }
+
+    with patch("dora.nexus.views.NexusAPIClient") as mock_client_class:
+        mock_client_instance = mock_client_class.return_value
+        mock_client_instance.dropdown_status.return_value = mock_data
+
+        response = api_client.get(reverse("nexus-menu-status"))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["proconnect"] == proconnect
+        assert response.data["activated_services"] == activated_services
+        assert response.data["mvp_enabled"] == mvp_enabled
+        mock_client_instance.dropdown_status.assert_called_once_with(user.email)

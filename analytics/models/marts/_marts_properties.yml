@@ -29,6 +29,9 @@ models:
       - name: last_notification_email_sent
       - name: is_activated
         description: Un utilisateur est activé s'il s'est connecté au moins une fois.
+      - name: user_is_structure_member
+      - name: first_date_as_structure_member
+        description: Date à laquelle l'utilisateur est devenu membre d'une structure pour la prémière fois. En effet, un utilisateur peut être membre de plusieurs structures.
   - name: fact_iMer
     description: |
       Table fact contenant les informations sur les intentions de mise en rélation.

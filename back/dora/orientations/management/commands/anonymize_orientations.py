@@ -37,7 +37,6 @@ class Command(BaseCommand):
             di_contact_name="",
             di_contact_email="",
             is_anonymized=True,
-            processing_date=timezone.now(),
         )
 
         self.logger.info(

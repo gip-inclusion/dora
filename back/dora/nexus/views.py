@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from itoutils.django.nexus.api import NexusAPIClient
 from itoutils.django.nexus.token import decode_token, generate_auto_login_token
 from itoutils.urls import add_url_params
 from rest_framework import exceptions, permissions, status
@@ -71,3 +72,13 @@ def auto_login_out(request):
         return Response({"redirect_url": redirect_url}, status=status.HTTP_200_OK)
 
     raise exceptions.NotFound
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def nexus_menu_status(request):
+    if not settings.NEXUS_MENU_ENABLED:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    data = NexusAPIClient().dropdown_status(request.user.email)
+    return Response(data, status=status.HTTP_200_OK)

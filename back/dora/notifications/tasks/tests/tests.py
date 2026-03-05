@@ -1,6 +1,6 @@
 import pytest
 
-from dora.core.test_utils import make_structure, make_user
+from dora.core.test_utils import make_structure, make_structure_member, make_user
 from dora.notifications.enums import NotificationStatus
 from dora.notifications.models import Notification
 from dora.structures.models import Structure
@@ -165,7 +165,7 @@ def test_complete_obsolete_notifications(structure_task):
     assert len(structure_task.candidates()) == 2
 
     # on rend la notification obsolète en ajoutant un membre après la création de la notification
-    structure.members.add(make_user())
+    make_structure_member(user=make_user(), structure=structure)
 
     ok, _, obs = structure_task.run()
     obsolete.refresh_from_db()

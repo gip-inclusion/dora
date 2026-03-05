@@ -1,11 +1,12 @@
 import logging
-from urllib.parse import urlparse
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from furl import furl
 from itoutils.urls import add_url_params
 from mozilla_django_oidc.views import (
@@ -19,6 +20,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.utils import set_auth_token_cookie
 
 logger = logging.getLogger(__name__)
 
@@ -67,17 +69,7 @@ def oidc_logged_in(request):
 
     response = HttpResponseRedirect(redirect_to=redirect_uri)
 
-    cookie_kwargs = {
-        "path": "/",
-        "samesite": "Lax",
-        "secure": True,
-        "httponly": False,
-    }
-
-    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
-    cookie_kwargs["domain"] = parsed_frontend_url.hostname
-
-    response.set_cookie("token", token.key, **cookie_kwargs)
+    set_auth_token_cookie(response, token.key)
 
     return response
 
@@ -114,16 +106,21 @@ def oidc_pre_logout(request):
     return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
 
 
+@method_decorator(never_cache, name="dispatch")
 class CustomAuthenticationRequestView(OIDCAuthenticationRequestView):
     """
     Vue d'authentification OIDC personnalisée :
         Surcharge la vue par défaut de `mozilla-django-oidc` pour ajouter
         le paramètre `login_hint` à la requête d'autorisation si celui-ci
         est présent dans les paramètres de la requête HTTP.
+
+        Le décorateur `never_cache` est essentiel pour éviter que les redirections
+        302 (contenant state, nonce et login_hint) ne soient mises en cache par
+        un CDN ou proxy, ce qui causerait des problèmes de sécurité OIDC.
     """
 
     def get_extra_params(self, request):
-        extra_params = super().get_extra_params(request) or {}
+        extra_params = dict(super().get_extra_params(request) or {})
 
         login_hint = request.GET.get("login_hint")
         if login_hint:

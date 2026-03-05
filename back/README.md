@@ -28,10 +28,16 @@ Créer et démarrer les conteneurs :
 docker compose up
 ```
 
-Importer une sauvegarde de base de données anonymisée :
+Importer une sauvegarde de base de données anonymisée à partir d'un fichier `.sql` (texte) :
 
 ```bash
 docker compose exec -T db psql dora -U POSTGRES_USER < dump-anon.sql
+```
+
+Ou à partir d'un fichier `.pgsql` (binaire) :
+
+```bash
+docker compose exec -T db pg_restore -d dora -U POSTGRES_USER < dump-anon.pgsql
 ```
 
 Utiliser _psql_ :

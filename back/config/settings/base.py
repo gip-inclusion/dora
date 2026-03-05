@@ -16,9 +16,11 @@ from urllib.parse import urlparse
 
 from botocore.config import Config
 from corsheaders.defaults import default_headers
+from django.utils.csp import CSP
 
 from . import BASE_DIR
 
+APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
 # Voir : https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -72,7 +74,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "csp.middleware.CSPMiddleware",
+    "django.middleware.csp.ContentSecurityPolicyMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
     "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
@@ -107,6 +109,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.csp",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -380,9 +383,6 @@ BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST = int(
 )
 BREVO_ONBOARDING_MEMBER_LIST = int(os.getenv("BREVO_ONBOARDING_MEMBER_LIST", 0))
 
-# Modération :
-MATTERMOST_HOOK_KEY = os.getenv("MATTERMOST_HOOK_KEY")
-
 # OIDC / PROCONNECT
 PC_CLIENT_ID = os.getenv("PC_CLIENT_ID")
 PC_CLIENT_SECRET = os.getenv("PC_CLIENT_SECRET")
@@ -480,13 +480,10 @@ ADMINS = (
 )
 
 # CSP :
-# règles pour l'admin et les versions d'API
-PUBLIC_API_VERSIONS = ["1", "2"]
-CONTENT_SECURITY_POLICY = {
-    "EXCLUDE_URL_PREFIXES": [
-        "/admin",
-        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-    ],
+SECURE_CSP = {
+    "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF, CSP.NONCE],
+    "style-src": [CSP.SELF, CSP.NONCE],
 }
 
 # Envoi d'e-mails transactionnels :
@@ -674,6 +671,13 @@ NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
 NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
+NEXUS_SYNC_CHUNK_SIZE = int(os.getenv("NEXUS_SYNC_CHUNK_SIZE", 5000))
+
+NEXUS_API_BASE_URL = os.getenv("NEXUS_API_BASE_URL")
+NEXUS_API_TOKEN = os.getenv("NEXUS_API_TOKEN")
+
+NEXUS_MENU_ENABLED = os.getenv("NEXUS_MENU_ENABLED") == "true"
+
 pdi_jwt_key = os.getenv("PDI_JWT_KEY")
 PDI_JWT_KEY = json.loads(pdi_jwt_key) if pdi_jwt_key else None
 

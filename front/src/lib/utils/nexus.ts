@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit";
 
 import { getApiURL } from "./api";
 
-export async function handleNexusAutoLogin(url: URL, token?: string) {
+export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
   const autoLoginJwt = url.searchParams.get("auto_login");
 
   if (!autoLoginJwt) {
@@ -36,4 +36,8 @@ export async function handleNexusAutoLogin(url: URL, token?: string) {
       redirect(302, data.redirectUrl);
     }
   }
+}
+
+export function generateOutboundNexusAutoLoginUrl(url: URL | string) {
+  return `/nexus/auto-login/?next=${encodeURIComponent(url.toString())}`;
 }

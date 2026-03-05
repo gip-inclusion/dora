@@ -36,11 +36,11 @@
         territoire spécifique.
       </p>
 
-      <h5 class="mb-s0">QPV et ZRR</h5>
+      <h5 class="mb-s0">QPV et ZFRR</h5>
       <p class="text-f14">
         Activez cette option si votre offre s’adresse uniquement aux
-        bénéficiaires résidants dans des Quartiers Prioritaires de la politique
-        de la Ville ou des Zones de Revitalisation Rurale.
+        bénéficiaires résidants dans des quartiers prioritaires de la politique
+        de la ville (QPV) ou des zones France ruralités revitalisation (ZFRR).
       </p>
     </div>
   {/snippet}
@@ -67,6 +67,6 @@
   <BooleanRadioButtonsField
     id="qpvOrZrr"
     bind:value={service.qpvOrZrr}
-    description="Le service est destiné aux Quartiers prioritaire de la politique de la ville ou aux Zones de revitalisation rurale."
+    description="Le service est destiné aux quartiers prioritaire de la politique de la ville (QPV) ou aux zones France ruralités revitalisation (ZFRR)."
   />
 </FieldSet>
