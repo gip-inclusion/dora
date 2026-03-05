@@ -34,3 +34,5 @@ export const DI_METABASE_LIST_DASHBOARD_URL = (
 
 export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
+
+export const ORIENTATION_JWT_QUERY_PARAM = "op";

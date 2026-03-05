@@ -8,7 +8,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { TallyFormId } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "$lib/consts";
   import { getService } from "$lib/requests/services";
   import type { Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
@@ -77,7 +77,9 @@
       return;
     }
 
-    const hasEmploisOrientation = from.url.searchParams.has("op");
+    const hasEmploisOrientation = from.url.searchParams.has(
+      ORIENTATION_JWT_QUERY_PARAM
+    );
     if (!hasEmploisOrientation) {
       return;
     }
@@ -87,7 +89,7 @@
     );
     if (!isGoingToOrienter) {
       const cleanUrl = new URL(from.url);
-      cleanUrl.searchParams.delete("op");
+      cleanUrl.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
       cleanUrl.searchParams.delete("user_structure_slug");
       history.replaceState({}, "", cleanUrl);
     }

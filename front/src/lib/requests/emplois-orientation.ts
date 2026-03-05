@@ -1,4 +1,5 @@
 import { getApiURL } from "$lib/utils/api";
+import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 
 interface EmploisOrientationParams {
   serviceSlug: string;
@@ -12,7 +13,7 @@ export function handleEmploisOrientation({
   token,
 }: EmploisOrientationParams) {
   const apiUrl = new URL(`/orientations/emplois/${serviceSlug}/`, getApiURL());
-  apiUrl.searchParams.set("op", opJwt);
+  apiUrl.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
 
   return fetch(apiUrl, {
     headers: {

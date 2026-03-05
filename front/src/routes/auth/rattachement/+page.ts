@@ -3,6 +3,7 @@ import { getApiURL } from "$lib/utils/api";
 import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
+import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 
 function siretSearch(siret: string, fetchFunction: typeof fetch) {
   const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
@@ -38,7 +39,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   const proposedSiret = url.searchParams.get("siret");
   const knownSiret = url.searchParams.get("known_siret") === "true";
-  const opJwt = url.searchParams.get("op");
+  const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
   const serviceSlug = url.searchParams.get("service_slug");
   const proposedSafir = userIsFranceTravail
     ? url.searchParams.get("safir")
