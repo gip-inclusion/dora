@@ -1,7 +1,19 @@
 export function getNextPage(url: URL) {
   const next = url.searchParams.get("next");
-  if (next && next.startsWith("/")) {
-    return next;
+  const basePath = next && next.startsWith("/") ? next : "/";
+
+  // Préserver les query params (sauf "next") dans l'url renovoyé
+  const paramsToForward = new URLSearchParams();
+  for (const [key, value] of url.searchParams) {
+    if (key !== "next") {
+      paramsToForward.set(key, value);
+    }
   }
-  return "/";
+
+  if (paramsToForward.size === 0) {
+    return basePath;
+  }
+
+  const separator = basePath.includes("?") ? "&" : "?";
+  return `${basePath}${separator}${paramsToForward.toString()}`;
 }
