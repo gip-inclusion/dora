@@ -2,6 +2,7 @@
   import { onMount, setContext } from "svelte";
 
   import { browser } from "$app/environment";
+  import { beforeNavigate } from "$app/navigation";
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -68,6 +69,27 @@
           duration: 6000,
         });
       }
+    }
+  });
+
+  beforeNavigate(({ from, to }) => {
+    if (!from || !to) {
+      return;
+    }
+
+    const hasEmploisOrientation = from.url.searchParams.has("op");
+    if (!hasEmploisOrientation) {
+      return;
+    }
+
+    const isGoingToOrienter = to.url.pathname.match(
+      /^\/services\/[^/]+\/orienter/
+    );
+    if (!isGoingToOrienter) {
+      const cleanUrl = new URL(from.url);
+      cleanUrl.searchParams.delete("op");
+      cleanUrl.searchParams.delete("user_structure_slug");
+      history.replaceState({}, "", cleanUrl);
     }
   });
 
