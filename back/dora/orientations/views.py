@@ -1,5 +1,7 @@
 import functools
 import logging
+import time
+from math import ceil
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -396,10 +398,11 @@ def handle_emplois_orientation(request, service_slug):
 
     if not is_structure_member:
         orientation_data["fast_track"] = True
+        orientation_data["exp"] = ceil(time.time()) + 3600
         op_jwt_with_fast_track = generate_token(orientation_data)
         return Response(
             {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'known_siret': 'true', 'service_slug': service_slug, 'fast_track': 'true'})}"
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'service_slug': service_slug, 'fast_track': 'true'})}"
             }
         )
 
