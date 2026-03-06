@@ -2,16 +2,18 @@
   import { onMount, setContext } from "svelte";
 
   import { browser } from "$app/environment";
+  import { beforeNavigate } from "$app/navigation";
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { TallyFormId } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "$lib/consts";
   import { getService } from "$lib/requests/services";
   import type { Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
+  import { setCurrentStructure } from "$lib/utils/preferences";
   import { trackService } from "$lib/utils/stats";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
@@ -19,6 +21,7 @@
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
   import type { PageData } from "./$types";
+  import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
     data: PageData;
@@ -50,6 +53,46 @@
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
     trackService(service, $page.url, searchId, isDI);
+  });
+
+  $effect(() => {
+    const userStructureSlug = $page.url.searchParams.get("user_structure_slug");
+    if (userStructureSlug && $userInfo) {
+      const userStructure = [
+        ...$userInfo.pendingStructures,
+        ...$userInfo.structures,
+      ].find((struct) => struct.slug === userStructureSlug);
+
+      if (userStructure && setCurrentStructure(userStructureSlug)) {
+        toast.push({
+          msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}. Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
+          duration: 6000,
+        });
+      }
+    }
+  });
+
+  beforeNavigate(({ from, to }) => {
+    if (!from || !to) {
+      return;
+    }
+
+    const hasEmploisOrientation = from.url.searchParams.has(
+      ORIENTATION_JWT_QUERY_PARAM
+    );
+    if (!hasEmploisOrientation) {
+      return;
+    }
+
+    const isGoingToOrienter = to.url.pathname.match(
+      /^\/services\/[^/]+\/orienter/
+    );
+    if (!isGoingToOrienter) {
+      const cleanUrl = new URL(from.url);
+      cleanUrl.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
+      cleanUrl.searchParams.delete("user_structure_slug");
+      history.replaceState({}, "", cleanUrl);
+    }
   });
 
   async function handleRefresh() {
