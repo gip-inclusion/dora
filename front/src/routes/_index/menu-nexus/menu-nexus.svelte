@@ -2,6 +2,7 @@
   import logoNexusMenuIcon from "$lib/assets/logos/logo-nexus-menu.svg";
   import type { NexusMenuStatus } from "$lib/requests/nexus";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
+  import { trackMatomoEvent } from "$lib/utils/matomo";
 
   import MenuInscriptionEmplois from "./menu-inscription-emplois.svelte";
   import MenuInscriptionProconnect from "./menu-inscription-proconnect.svelte";
@@ -12,11 +13,49 @@
     mobileDesign?: boolean;
   }
 
+  type CurrentMenu =
+    | "inscription-emplois"
+    | "inscription-proconnect"
+    | "mon-portail"
+    | null;
+
   let { nexusMenuStatus, mobileDesign = false }: Props = $props();
+
+  function getCurrentMenu(status: NexusMenuStatus | undefined): CurrentMenu {
+    if (!status) {
+      return null;
+    }
+
+    if (!status.activatedServices.includes("les-emplois")) {
+      return "inscription-emplois";
+    }
+
+    if (!status.proconnect) {
+      return "inscription-proconnect";
+    }
+
+    return "mon-portail";
+  }
+
+  let currentMenu = $derived(getCurrentMenu(nexusMenuStatus));
+
+  function handleClick(isOpen: boolean) {
+    if (isOpen && currentMenu === "mon-portail") {
+      trackMatomoEvent({
+        category: "Nexus",
+        action: "mon-portail",
+      });
+    }
+  }
 </script>
 
 {#if nexusMenuStatus && nexusMenuStatus.mvpEnabled}
-  <DropdownMenu withBorders withSeparator={false} {mobileDesign}>
+  <DropdownMenu
+    withBorders
+    withSeparator={false}
+    {mobileDesign}
+    onclick={handleClick}
+  >
     {#snippet label()}
       <span class="gap-s10 text-magenta-cta flex items-center font-bold">
         <img
@@ -28,11 +67,11 @@
         Mon portail
       </span>
     {/snippet}
-    {#if !nexusMenuStatus.activatedServices.includes("les-emplois")}
+    {#if currentMenu === "inscription-emplois"}
       <MenuInscriptionEmplois />
-    {:else if !nexusMenuStatus.proconnect}
+    {:else if currentMenu === "inscription-proconnect"}
       <MenuInscriptionProconnect />
-    {:else}
+    {:else if currentMenu === "mon-portail"}
       <MenuMonPortail {nexusMenuStatus} />
     {/if}
   </DropdownMenu>
