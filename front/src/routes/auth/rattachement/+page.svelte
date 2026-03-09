@@ -65,8 +65,7 @@
         siret: establishment.slug ? undefined : establishment.siret,
         structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
-        // eslint-disable-next-line id-length
-        op: opJwt,
+        [ORIENTATION_JWT_QUERY_PARAM]: opJwt,
       }),
     });
 
