@@ -97,7 +97,7 @@ STRUCTURE_NATIONAL_LABELS = [
         "structures-d-insertion-par-l-activite-economique",
         "Structures d'insertion par l'activité économique",
     ),
-    ("tous-les-possibles", "Tous Tes Possibles"),
+    ("tous-tes-possibles", "Tous Tes Possibles"),
     ("120ld", "120LD"),
     ("uniae", "UNIAE"),
     ("univa", "UNIVA"),
