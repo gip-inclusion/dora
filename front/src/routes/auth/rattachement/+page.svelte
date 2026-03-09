@@ -13,7 +13,7 @@
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "$lib/consts";
   import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
