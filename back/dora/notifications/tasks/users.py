@@ -1,6 +1,7 @@
 import logging
 
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
 from django.utils import timezone
 
 from dora.notifications.enums import TaskType
@@ -39,7 +40,7 @@ class UsersWithoutStructureTask(Task):
             membership=None,
             putative_membership=None,
             date_joined__gt=timezone.now() - relativedelta(months=4, days=1),
-        )
+        ).exclude(email=settings.DORA_BOT_USER)
 
     @classmethod
     def should_trigger(cls, notification: Notification) -> bool:

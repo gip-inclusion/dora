@@ -13,6 +13,27 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.django_db)
 
 
+STRUCTURE_SOURCES = [
+    ("porteur", "Porteur"),
+    ("equipe-dora", "Équipe DORA"),
+    ("dr-dt-france-travail", "DR/DT France Travail"),
+    ("invitations-masse", "Invitations en masse"),
+    ("solidagregateur", "Solidagrégateur"),
+]
+
+
+@pytest.fixture(autouse=True)
+def structure_sources(db):
+    """Ensure structure sources exist for tests that create or join structures."""
+    from dora.structures.models import StructureSource
+
+    for value, label in STRUCTURE_SOURCES:
+        StructureSource.objects.get_or_create(
+            value=value,
+            defaults={"label": label},
+        )
+
+
 @pytest.fixture(autouse=True, scope="session")
 def patch_di_client():
     # Remplace le client D·I par défaut :

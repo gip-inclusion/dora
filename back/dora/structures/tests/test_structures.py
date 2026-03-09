@@ -173,7 +173,7 @@ class StructureTestCase(APITestCase):
 
     def test_update_national_labels_accepted(self):
         slug = self.my_struct.slug
-        national_labels = ["mobin", "france-travail"]
+        national_labels = ["cnaf", "france-travail"]
         response = self.client.patch(
             f"/structures/{slug}/",
             {"national_labels": national_labels},

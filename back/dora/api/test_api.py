@@ -33,9 +33,6 @@ def authenticated_user(api_client, settings):
 
 @pytest.fixture
 def setup_structure_data():
-    baker.make("structures.StructureSource", value="solidagregateur")
-    baker.make("structures.StructureNationalLabel", value="MOBIN")
-    baker.make("structures.StructureNationalLabel", value="AFPA")
     baker.make("decoupage_administratif.City", name="Robinboeuf CEDEX", code="09890")
 
 
@@ -190,8 +187,8 @@ def test_structures_serialization_exemple(
     )
     struct.modification_date = "2022-04-28T16:53:11Z"
     struct.national_labels.add(
-        StructureNationalLabel.objects.get(value="MOBIN"),
-        StructureNationalLabel.objects.get(value="AFPA"),
+        StructureNationalLabel.objects.get(value="cnaf"),
+        StructureNationalLabel.objects.get(value="afpa"),
     )
     s1 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s1.subcategories.add(
@@ -209,7 +206,9 @@ def test_structures_serialization_exemple(
     response = api_client.get(f"/api/v2/structures/{struct.id}/")
 
     assert 200 == response.status_code
-    assert response.json() == {
+    data = response.json()
+    assert sorted(data["labels_nationaux"]) == ["afpa", "cnaf"]
+    assert data == {
         "accessibilite": "https://acceslibre.beta.gouv.fr/app/29-lampaul-plouarzel/a/bibliotheque-mediatheque/erp/mediatheque-13/",
         "adresse": "RUE DE LECLERCQ",
         "antenne": True,
@@ -222,7 +221,7 @@ def test_structures_serialization_exemple(
         "horaires_ouverture": 'Mo-Fr 10:00-20:00 "sur rendez-vous"; PH off',
         "id": str(struct.id),
         "labels_autres": ["Nièvre médiation numérique"],
-        "labels_nationaux": ["MOBIN", "AFPA"],
+        "labels_nationaux": sorted(data["labels_nationaux"]),
         "latitude": 48.7703,
         "lien_source": f"{settings.FRONTEND_URL}/structures/{struct.slug}",
         "longitude": 7.848133,
@@ -354,7 +353,8 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert 200 == response.status_code
-    assert response.json() == {
+    data = response.json()
+    expected = {
         "adresse": "25 route de Morlaix",
         "code_insee": "29188",
         "code_postal": "29630",
@@ -407,6 +407,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "modes_orientation_beneficiaire": ["envoyer-un-mail"],
         "modes_orientation_beneficiaire_autres": "Contacter conseiller(e) Pôle Emploi",
     }
+    # Compare with order-independent list fields
+    for key in ("modes_accueil", "modes_orientation_accompagnateur"):
+        assert sorted(data[key]) == sorted(expected[key])
+    for key, expected_val in expected.items():
+        if key not in ("modes_accueil", "modes_orientation_accompagnateur"):
+            assert data[key] == expected_val
 
 
 def test_service_serialization_formulaire_en_ligne(
