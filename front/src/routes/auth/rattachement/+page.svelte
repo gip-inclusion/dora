@@ -77,7 +77,7 @@
       result.data = await response.json();
       await refreshUserInfo();
       const redirectUrl = opJwt
-        ? `/services/${serviceSlug}?op=${encodeURIComponent(opJwt)}`
+        ? `/services/${serviceSlug}?${ORIENTATION_JWT_QUERY_PARAM}=${encodeURIComponent(opJwt)}`
         : `/structures/${result.data.slug}`;
       await goto(redirectUrl);
       loading = false;
