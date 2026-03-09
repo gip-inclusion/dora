@@ -3,13 +3,13 @@
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { getToken, validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
+  import CguCheckboxes from "../cgu-checkboxes.svelte";
 
   interface Props {
     data: PageData;
@@ -17,6 +17,7 @@
 
   let { data }: Props = $props();
   let cguAccepted = $state(false);
+  let coResponsibilityAccepted = $state(data.structure.hasAdmin);
   let joinError = $state("");
   let loading = $state(false);
 
@@ -100,18 +101,11 @@
         {/if}
       </div>
       <div class="mt-s24">
-        <div class="legend">
-          <label class="flex flex-row items-start">
-            <input bind:checked={cguAccepted} type="checkbox" class="hidden" />
-            <CheckboxMark />
-            <span class="ml-s16 text-f14 text-gray-text inline-block">
-              Je déclare avoir lu les
-              <a href="/cgu" class="underline" target="_blank" rel="noopener"
-                >Conditions générales d’utilisation</a
-              > et faire partie de la structure mentionnée ci-dessus.</span
-            >
-          </label>
-        </div>
+        <CguCheckboxes
+          bind:cguAccepted
+          bind:coResponsibilityAccepted
+          showCoResponsibilityCheckbox={!data.structure.hasAdmin}
+        />
         <div class="mt-s24">
           {#if joinError}
             <Notice title={joinError} type="error" />
