@@ -10,7 +10,7 @@
   import { CGU_VERSION } from "../../(static)/cgu/version";
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
-  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import CguCheckboxes from "../cgu-checkboxes.svelte";
   import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
@@ -21,8 +21,8 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
-  let accordCoResponsabiliteAccepted = $state(
-    establishment?.linkedStructureHasAdmin
+  let coResponsibilityAccepted = $state(
+    !establishment?.linkedStructureHasAdmin
   );
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
@@ -89,7 +89,7 @@
   let submitButtonDisabled = $derived(
     !alreadyMember &&
       !alreadyRequested &&
-      (!cguAccepted || !accordCoResponsabiliteAccepted)
+      (!cguAccepted || !coResponsibilityAccepted)
   );
 
   $effect(() => {
@@ -118,48 +118,11 @@
                 Votre précédente demande d’adhésion est en attente de validation
                 par l’administrateur de la structure.
               {:else}
-                {#if !establishment?.linkedStructureHasAdmin}
-                  <div class="legend">
-                    <label class="flex flex-row items-start">
-                      <input
-                        bind:checked={accordCoResponsabiliteAccepted}
-                        type="checkbox"
-                        class="hidden"
-                      />
-                      <CheckboxMark />
-                      <span class="ml-s16 text-f14 text-gray-text inline-block">
-                        Je déclare être habilité à engager la responsabilité de
-                        ma structure en acceptant l’accord de responsabilité
-                        conjointe présent dans les
-                        <a
-                          href="/cgu#accord_co_responsabilite"
-                          class="underline"
-                          target="_blank"
-                          rel="noopener">Conditions générales d’utilisation</a
-                        >
-                      </span></label
-                    >
-                  </div>
-                {/if}
-                <div class="legend">
-                  <label class="flex flex-row items-start">
-                    <input
-                      bind:checked={cguAccepted}
-                      type="checkbox"
-                      class="hidden"
-                    />
-                    <CheckboxMark />
-                    <span class="ml-s16 text-f14 text-gray-text inline-block">
-                      Je déclare accepter les
-                      <a
-                        href="/cgu"
-                        class="underline"
-                        target="_blank"
-                        rel="noopener">Conditions générales d’utilisation</a
-                      > et faire partie de la structure mentionnée ci-dessus.</span
-                    >
-                  </label>
-                </div>
+                <CguCheckboxes
+                  bind:cguAccepted
+                  bind:coResponsibilityAccepted
+                  showCoResponsibilityCheckbox={!establishment?.linkedStructureHasAdmin}
+                />
               {/if}
               <div class="mt-s24">
                 {#if joinError}
