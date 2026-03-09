@@ -21,6 +21,9 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
+  let accordCoResponsabiliteAccepted = $state(
+    establishment?.linkedStructureHasAdmin
+  );
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
   let loading = $state(false);
@@ -83,6 +86,12 @@
     return "Rejoindre la structure";
   });
 
+  let submitButtonDisabled = $derived(
+    !alreadyMember &&
+      !alreadyRequested &&
+      (!cguAccepted || !accordCoResponsabiliteAccepted)
+  );
+
   $effect(() => {
     establishment;
     joinError = "";
@@ -109,6 +118,29 @@
                 Votre précédente demande d’adhésion est en attente de validation
                 par l’administrateur de la structure.
               {:else}
+                {#if !establishment?.linkedStructureHasAdmin}
+                  <div class="legend">
+                    <label class="flex flex-row items-start">
+                      <input
+                        bind:checked={accordCoResponsabiliteAccepted}
+                        type="checkbox"
+                        class="hidden"
+                      />
+                      <CheckboxMark />
+                      <span class="ml-s16 text-f14 text-gray-text inline-block">
+                        Je déclare être habilité à engager la responsabilité de
+                        ma structure en acceptant l’accord de responsabilité
+                        conjointe présent dans les
+                        <a
+                          href="/cgu#accord_co_responsabilite"
+                          class="underline"
+                          target="_blank"
+                          rel="noopener">Conditions générales d’utilisation</a
+                        >
+                      </span></label
+                    >
+                  </div>
+                {/if}
                 <div class="legend">
                   <label class="flex flex-row items-start">
                     <input
@@ -118,7 +150,7 @@
                     />
                     <CheckboxMark />
                     <span class="ml-s16 text-f14 text-gray-text inline-block">
-                      Je déclare avoir lu les
+                      Je déclare accepter les
                       <a
                         href="/cgu"
                         class="underline"
@@ -140,7 +172,7 @@
                   label={ctaLabel}
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
-                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  disabled={submitButtonDisabled}
                   {loading}
                 />
               </div>

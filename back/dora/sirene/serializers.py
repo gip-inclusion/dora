@@ -5,6 +5,7 @@ from .models import Establishment
 
 class EstablishmentSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
+    linked_structure_has_admin = serializers.SerializerMethodField()
 
     class Meta:
         model = Establishment
@@ -21,6 +22,7 @@ class EstablishmentSerializer(serializers.ModelSerializer):
             "postal_code",
             "siren",
             "siret",
+            "linked_structure_has_admin",
         ]
 
     def get_name(self, obj):
@@ -31,3 +33,6 @@ class EstablishmentSerializer(serializers.ModelSerializer):
             return obj.name
 
         return f"{obj.name} ({obj.parent_name})"[:255]
+
+    def get_linked_structure_has_admin(self, obj):
+        return getattr(obj, "has_admin", False)

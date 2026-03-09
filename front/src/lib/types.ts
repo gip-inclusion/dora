@@ -227,6 +227,7 @@ export interface Establishment {
   isSiege: boolean;
   latitude: number;
   longitude: number;
+  linkedStructureHasAdmin: boolean;
   name: "string";
   postalCode: "string";
   siren: "string";

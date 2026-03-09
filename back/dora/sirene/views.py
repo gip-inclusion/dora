@@ -1,16 +1,28 @@
 import unicodedata
 
 from django.contrib.postgres.search import TrigramSimilarity, TrigramWordSimilarity
+from django.db.models import Exists, OuterRef
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 
 from dora.decoupage_administratif.utils import main_insee_code_to_arrdts
-from dora.structures.models import Structure
+from dora.structures.models import Structure, StructureMember
 
 from .models import Establishment
 from .serializers import EstablishmentSerializer
+
+
+def _annotate_has_admin(qs):
+    return qs.annotate(
+        has_admin=Exists(
+            StructureMember.objects.filter(
+                structure__siret=OuterRef("siret"),
+                is_admin=True,
+            )
+        )
+    )
 
 
 def normalize_query(q: str) -> str:
@@ -70,7 +82,7 @@ def search_sirene(request, citycode):
 
     return Response(
         EstablishmentSerializer(
-            results[:30], many=True, context={"request": request}
+            _annotate_has_admin(results)[:30], many=True, context={"request": request}
         ).data
     )
 
@@ -83,7 +95,7 @@ def search_siret(request):
         return Response("need siret")
 
     try:
-        establishment = Establishment.objects.get(siret=siret)
+        establishment = _annotate_has_admin(Establishment.objects).get(siret=siret)
     except Establishment.DoesNotExist:
         raise NotFound
 
