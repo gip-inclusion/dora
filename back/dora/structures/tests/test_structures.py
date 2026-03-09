@@ -1172,7 +1172,11 @@ class StructureMemberTestCase(APITestCase):
         self.client.force_authenticate(user=user)
 
         with patch(
-            "dora.rest_auth.views.decode_token", return_value={"fast_track": True}
+            "dora.rest_auth.views.decode_token",
+            return_value={
+                "fast_track": True,
+                "prescriber": {"organization": {"siret": self.my_struct.siret}},
+            },
         ):
             response = self.client.post(
                 "/auth/join-structure/",
