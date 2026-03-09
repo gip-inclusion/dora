@@ -1,7 +1,6 @@
 from unittest import mock
 
-import pytest
-from django.test import SimpleTestCase, TestCase
+from django.test import TestCase
 
 from dora.decoupage_administratif.importer import (
     DecoupageAdministratifImporter,
@@ -169,8 +168,7 @@ class DecoupageAdministratifImporterTests(TestCase):
         import_communes.assert_called_once_with()
 
 
-@pytest.mark.no_django_db
-class ParseCenterTests(SimpleTestCase):
+class ParseCenterTests(TestCase):
     def test_parse_center_with_valid_point(self):
         center_data = {"type": "Point", "coordinates": [2.347, 48.8589]}
 

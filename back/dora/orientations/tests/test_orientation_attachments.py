@@ -35,8 +35,32 @@ def orientation():
     )
 
 
+@pytest.fixture
+def mock_storage():
+    """Mock S3/storage so attachment tests don't need real credentials."""
+    stored = {}
+
+    def save(name, content):
+        stored[name] = content.read() if hasattr(content, "read") else content
+
+    def exists(name):
+        return name in stored
+
+    def delete(name):
+        stored.pop(name, None)
+
+    with patch("dora.orientations.models.default_storage") as m:
+        with patch(
+            "dora.orientations.tests.test_orientation_attachments.default_storage", m
+        ):
+            m.save.side_effect = save
+            m.exists.side_effect = exists
+            m.delete.side_effect = delete
+            yield m
+
+
 @only_local
-def test_delete_attachment_existing(orientation):
+def test_delete_attachment_existing(orientation, mock_storage):
     # Créer une pièce jointe factice
     attachment_path = "test_attachment.txt"
     default_storage.save(attachment_path, ContentFile("Test content"))
@@ -58,7 +82,7 @@ def test_delete_attachment_existing(orientation):
 
 
 @only_local
-def test_delete_attachment_non_existing(orientation):
+def test_delete_attachment_non_existing(orientation, mock_storage):
     # Essayer de supprimer une pièce jointe qui n'existe pas
     non_existing_path = "non_existing_attachment.txt"
     deleted_path, success = orientation.delete_attachment(non_existing_path)
@@ -69,7 +93,7 @@ def test_delete_attachment_non_existing(orientation):
 
 
 @only_local
-def test_delete_attachments(orientation):
+def test_delete_attachments(orientation, mock_storage):
     # Créer plusieurs pièces jointes factices
     attachment_paths = ["test_attachment1.txt", "test_attachment2.txt"]
     for path in attachment_paths:
