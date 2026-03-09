@@ -25,6 +25,7 @@
       ]
     >;
     bottom?: Snippet;
+    onclick?: (isOpen: boolean) => void;
   }
 
   let {
@@ -37,6 +38,7 @@
     label,
     children,
     bottom,
+    onclick,
   }: Props = $props();
 
   const id = `dropdown-menu-${randomId()}`;
@@ -74,7 +76,10 @@
         withBorders && "border-gray-03 border",
         isOpen && "bg-magenta-10 border-magenta-cta",
       ]}
-      onclick={() => (isOpen = !isOpen)}
+      onclick={() => {
+        isOpen = !isOpen;
+        onclick?.(isOpen);
+      }}
     >
       {#if label}
         <div
