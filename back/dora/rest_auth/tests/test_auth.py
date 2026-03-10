@@ -189,11 +189,12 @@ class AuthenticationTestCase(APITestCase):
         user = baker.make("users.User", is_valid=True)
         self.client.force_authenticate(user=user)
 
+        request_siret = "00000000000000"
         with patch(
             "dora.rest_auth.views.decode_token",
             return_value={
                 "fast_track": True,
-                "prescriber": {"organization": {"siret": "00000000000000"}},
+                "prescriber": {"organization": {"siret": request_siret}},
             },
         ):
             response = self.client.post(
@@ -205,7 +206,7 @@ class AuthenticationTestCase(APITestCase):
                 },
             )
         self.assertEqual(response.status_code, 200)
-        # Le membre doit être un membre direct, pas un membre putatif
+        # Le fast_track ne marche pas dans ce cas donc le membre doit être un membre putatif
         StructurePutativeMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
         self.assertFalse(
             StructureMember.objects.filter(
@@ -214,6 +215,6 @@ class AuthenticationTestCase(APITestCase):
         )
         self.assertFalse(
             StructureMember.objects.filter(
-                structure__siret=struct.siret, user=user
+                structure__siret=request_siret, user=user
             ).exists()
         )
