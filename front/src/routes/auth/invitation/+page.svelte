@@ -116,7 +116,7 @@
             label="Adhérer à la structure"
             onclick={handleJoin}
             preventDefaultOnMouseDown
-            disabled={!cguAccepted}
+            disabled={!cguAccepted || !coResponsibilityAccepted}
             {loading}
           />
         </div>
