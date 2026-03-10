@@ -20,6 +20,8 @@ def _annotate_has_admin(qs):
             StructureMember.objects.filter(
                 structure__siret=OuterRef("siret"),
                 is_admin=True,
+                user__is_active=True,
+                user__is_valid=True,
             )
         )
     )
