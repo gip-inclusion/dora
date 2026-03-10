@@ -232,6 +232,14 @@ def send_orientation_rejected_emails(orientation, message):
         tags=["orientation"],
     )
 
+    send_mail(
+        f"{'[Refusée - Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée"[
+            orientation.beneficiary_email
+        ],
+        mjml2html(render_to_string("orientation-rejected-beneficiary.mjml", context)),
+        tags=["orientation"],
+    )
+
     # Prescripteur
     send_mail(
         f"{'[Refusée - Prescripteur] ' if debug else ''}Votre demande d’orientation a été refusée",
