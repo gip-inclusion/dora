@@ -13,15 +13,11 @@
     mobileDesign?: boolean;
   }
 
-  type CurrentMenu =
-    | "inscription-emplois"
-    | "inscription-proconnect"
-    | "mon-portail"
-    | null;
+  type Menu = "inscription-emplois" | "inscription-proconnect" | "mon-portail";
 
   let { nexusMenuStatus, mobileDesign = false }: Props = $props();
 
-  function getCurrentMenu(status: NexusMenuStatus | undefined): CurrentMenu {
+  function getCurrentMenu(status: NexusMenuStatus | undefined): Menu | null {
     if (!status) {
       return null;
     }
