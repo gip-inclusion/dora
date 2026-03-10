@@ -15,7 +15,7 @@
 </script>
 
 {#if showCoResponsibilityCheckbox}
-  <div class="legend mb-s16">
+  <div class="legend mb-s24">
     <label class="flex flex-row items-start">
       <input
         bind:checked={coResponsibilityAccepted}
@@ -23,7 +23,7 @@
         class="hidden"
       />
       <CheckboxMark />
-      <span class="ml-s24 text-f14 text-gray-text inline-block">
+      <span class="ml-s16 text-f14 text-gray-text inline-block">
         Je déclare être habilité à engager la responsabilité de ma structure en
         acceptant l’accord de responsabilité conjointe présent dans les
         <a
