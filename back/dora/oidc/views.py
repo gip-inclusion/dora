@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
@@ -25,6 +26,18 @@ from dora.core.utils import set_auth_token_cookie
 logger = logging.getLogger(__name__)
 
 
+def _sanitize_next_url(next_url: str) -> str | None:
+    try:
+        parsed_next = urlparse(next_url)
+        relative_next = parsed_next.path
+        if parsed_next.query:
+            relative_next += "?" + parsed_next.query
+        return relative_next
+    except ValueError:
+        # URL malformée (ex: IPv6 invalide), on ignore le paramètre next
+        return None
+
+
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def oidc_login(request):
@@ -48,8 +61,9 @@ def oidc_logged_in(request):
     redirect_uri = FRONTEND_PC_CALLBACK_URL
 
     # gestion du `next` :
-    if request.GET.get("next"):
-        redirect_uri = add_url_params(redirect_uri, request.GET)
+    if next_url := request.GET.get("next"):
+        if relative_next := _sanitize_next_url(next_url):
+            redirect_uri = add_url_params(redirect_uri, {"next": relative_next})
 
     # Passage au front des informations complémentaires de l'utilisateur
     # ici : SAFIR et / ou SIRET

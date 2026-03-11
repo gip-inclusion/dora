@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { SvelteToast } from "@zerodevx/svelte-toast";
+  import { browser } from "$app/environment";
+  import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.css";
@@ -26,6 +27,12 @@
   $effect(() => {
     $page.url;
     enforceCrispConsent();
+  });
+
+  $effect(() => {
+    if (browser && $page.url.searchParams.get("link_invalid") === "true") {
+      toast.push("Lien expiré ou invalide");
+    }
   });
 </script>
 

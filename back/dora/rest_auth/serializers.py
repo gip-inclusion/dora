@@ -78,6 +78,7 @@ class JoinStructureSerializer(serializers.Serializer):
     siret = serializers.CharField(required=False)
     structure_slug = serializers.CharField(required=False)
     cgu_version = serializers.CharField(required=True)
+    op = serializers.CharField(required=False, allow_null=True)
 
     def validate(self, data):
         siret = data.get("siret")

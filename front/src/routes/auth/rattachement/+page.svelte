@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
@@ -11,7 +13,8 @@
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CguCheckboxes from "../cgu-checkboxes.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "$lib/consts";
+  import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
     data: PageData;
@@ -27,9 +30,32 @@
     coResponsibilityAccepted = !!establishment?.linkedStructureHasAdmin;
   });
 
-  const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
+  const {
+    proposedSiret,
+    unknownSiret,
+    opJwt,
+    serviceSlug,
+    proposedSafir,
+    userIsFranceTravail,
+  } = data;
   let joinError = $state("");
   let loading = $state(false);
+
+  onMount(() => {
+    if ($page.url.searchParams.has("unknown_siret")) {
+      const newUrl = new URL($page.url);
+      newUrl.searchParams.delete("unknown_siret");
+      history.replaceState({}, "", newUrl);
+    }
+  });
+
+  $effect(() => {
+    if (unknownSiret) {
+      toast.push(
+        "Le SIRET de votre structure n'est pas reconnu. Par conséquent, toutes les données de votre orientation ont été perdues."
+      );
+    }
+  });
 
   async function handleJoin() {
     loading = true;
@@ -45,6 +71,7 @@
         siret: establishment.slug ? undefined : establishment.siret,
         structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
+        [ORIENTATION_JWT_QUERY_PARAM]: opJwt,
       }),
     });
 
@@ -55,7 +82,10 @@
     if (response.ok) {
       result.data = await response.json();
       await refreshUserInfo();
-      await goto(`/structures/${result.data.slug}`);
+      const redirectUrl = opJwt
+        ? `/services/${serviceSlug}?${ORIENTATION_JWT_QUERY_PARAM}=${encodeURIComponent(opJwt)}`
+        : `/structures/${result.data.slug}`;
+      await goto(redirectUrl);
       loading = false;
     } else {
       try {
@@ -110,6 +140,7 @@
       {proposedSafir}
       {proposedSiret}
       showSafir={userIsFranceTravail}
+      siretInputDisabled={unknownSiret}
     >
       {#snippet cta()}
         <div>

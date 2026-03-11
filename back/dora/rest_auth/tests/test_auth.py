@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -133,3 +135,86 @@ class AuthenticationTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         structure = Structure.objects.get(siret=response.data["siret"])
         self.assertEqual(structure.moderation_status, ModerationStatus.VALIDATED)
+
+    def test_fast_track_user_becomes_member_directly(self):
+        baker.make("Establishment", siret=DUMMY_SIRET)
+        struct = make_structure(siret=DUMMY_SIRET)
+        admin = baker.make("users.User", is_valid=True)
+        struct.members.add(
+            admin,
+            through_defaults={
+                "is_admin": True,
+            },
+        )
+        user = baker.make("users.User", is_valid=True)
+        self.client.force_authenticate(user=user)
+
+        with patch(
+            "dora.rest_auth.views.decode_token",
+            return_value={
+                "fast_track": True,
+                "prescriber": {"organization": {"siret": DUMMY_SIRET}},
+            },
+        ):
+            response = self.client.post(
+                "/auth/join-structure/",
+                {
+                    "siret": DUMMY_SIRET,
+                    "cguVersion": "20230805",
+                    "op": "fast_track_token",
+                },
+            )
+        self.assertEqual(response.status_code, 200)
+        # Le membre doit être un membre direct, pas un membre putatif
+        StructureMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
+        self.assertFalse(
+            StructurePutativeMember.objects.filter(
+                structure__siret=DUMMY_SIRET, user=user
+            ).exists()
+        )
+
+    def test_fast_track_user_becomes_putative_member_when_siret_does_not_match_token(
+        self,
+    ):
+        baker.make("Establishment", siret=DUMMY_SIRET)
+        struct = make_structure(siret=DUMMY_SIRET)
+        admin = baker.make("users.User", is_valid=True)
+        struct.members.add(
+            admin,
+            through_defaults={
+                "is_admin": True,
+            },
+        )
+
+        user = baker.make("users.User", is_valid=True)
+        self.client.force_authenticate(user=user)
+
+        request_siret = "00000000000000"
+        with patch(
+            "dora.rest_auth.views.decode_token",
+            return_value={
+                "fast_track": True,
+                "prescriber": {"organization": {"siret": request_siret}},
+            },
+        ):
+            response = self.client.post(
+                "/auth/join-structure/",
+                {
+                    "siret": DUMMY_SIRET,
+                    "cguVersion": "20230805",
+                    "op": "fast_track_token",
+                },
+            )
+        self.assertEqual(response.status_code, 200)
+        # Le fast_track ne marche pas dans ce cas donc le membre doit être un membre putatif
+        StructurePutativeMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
+        self.assertFalse(
+            StructureMember.objects.filter(
+                structure__siret=DUMMY_SIRET, user=user
+            ).exists()
+        )
+        self.assertFalse(
+            StructureMember.objects.filter(
+                structure__siret=request_siret, user=user
+            ).exists()
+        )
