@@ -26,6 +26,13 @@ class OrientationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
+    op_jwt = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        write_only=True,
+        help_text="JWT des Emplois contenant des données d'orientation pré-remplies",
+    )
+
     # TODO: utiliser un vrai champ pour stocker l'état initial
     # TODO: est-ce qu'il faut la même chose pour la structure?
     service = serializers.SerializerMethodField()
@@ -56,7 +63,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_contact_phone",
             "di_structure_name",
             "id",
+            "les_emplois_beneficiary_uid",
+            "les_emplois_structure_uid",
             "orientation_reasons",
+            "op_jwt",
             "prescriber",
             "prescriber_structure",
             "prescriber_structure_slug",
@@ -85,7 +95,30 @@ class OrientationSerializer(serializers.ModelSerializer):
         S'il n'y en a pas, une erreur est levée.
 
         À la fois les services Dora et DI sont supportés.
+
+        Si un JWT des Emplois (`op_jwt`) est fourni à la création, il est décodé et les informations
+        bénéficiaire ainsi que les UIDs (les_emplois_beneficiary_uid, les_emplois_structure_uid) sont préremplies.
         """
+        # Préremplissage depuis le JWT des Emplois
+        if not self.instance and orientation.get("op_jwt"):
+            try:
+                claims = decode_token(orientation["op_jwt"])
+            except ValueError:
+                raise serializers.ValidationError(
+                    {"op_jwt": "Token JWT invalide ou expiré."}
+                )
+            orientation["beneficiary_first_name"] = claims["beneficiary"]["first_name"]
+            orientation["beneficiary_last_name"] = claims["beneficiary"]["last_name"]
+            orientation["beneficiary_email"] = claims["beneficiary"]["email"]
+            orientation["beneficiary_phone"] = claims["beneficiary"]["phone"]
+            orientation["beneficiary_france_travail_number"] = claims["beneficiary"][
+                "france_travail_id"
+            ]
+            orientation["les_emplois_beneficiary_uid"] = claims["beneficiary"]["uid"]
+            orientation["les_emplois_structure_uid"] = claims["prescriber"][
+                "organization"
+            ]["uid"]
+
         # Validation de l'engagement de protection des données
         if not self.instance and not orientation.get("data_protection_commitment"):
             raise serializers.ValidationError(
@@ -141,6 +174,16 @@ class OrientationSerializer(serializers.ModelSerializer):
             )
 
         return orientation
+
+    def create(self, validated_data):
+        # Champ purement technique, non stocké en base
+        validated_data.pop("op_jwt", None)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Champ purement technique, non stocké en base
+        validated_data.pop("op_jwt", None)
+        return super().update(instance, validated_data)
 
     def get_service(self, orientation):
         return {

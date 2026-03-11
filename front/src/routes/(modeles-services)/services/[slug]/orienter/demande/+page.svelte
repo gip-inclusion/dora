@@ -71,6 +71,7 @@
         diContactPhone: isDI ? service.contactPhone || "" : "",
         diStructureName: isDI ? service.structureInfo.name || "" : "",
         beneficiaryAttachments,
+        opJwt: opJwt,
       }),
     });
   }
