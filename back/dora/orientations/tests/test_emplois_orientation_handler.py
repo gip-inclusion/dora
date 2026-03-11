@@ -142,6 +142,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert parsed.path == "/auth/rattachement"
         assert query_params["siret"] == [orphan_siret]
         assert query_params["op"] == ["valid_token"]
+        assert query_params["service_slug"] == [self.service.slug]
 
     def test_user_not_structure_member_returns_rattachement_with_fast_track_in_op(self):
         non_member = make_user(email="nonmember@example.com")

@@ -390,7 +390,7 @@ def handle_emplois_orientation(request, service_slug):
     except Structure.DoesNotExist:
         return Response(
             {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt})}"
+                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'service_slug': service_slug})}"
             }
         )
 
