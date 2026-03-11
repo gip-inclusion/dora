@@ -66,7 +66,7 @@
       if (userStructure && setCurrentStructure(userStructureSlug)) {
         toast.push({
           msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}. Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
-          duration: 6000,
+          duration: 9000,
         });
       }
     }
