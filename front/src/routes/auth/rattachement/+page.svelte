@@ -21,9 +21,12 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
-  let coResponsibilityAccepted = $state(
-    !establishment?.linkedStructureHasAdmin
-  );
+  let coResponsibilityAccepted = $state(false);
+
+  $effect(() => {
+    coResponsibilityAccepted = !!establishment?.linkedStructureHasAdmin;
+  });
+
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
   let loading = $state(false);
