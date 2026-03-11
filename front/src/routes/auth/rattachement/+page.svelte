@@ -10,7 +10,7 @@
   import { CGU_VERSION } from "../../(static)/cgu/version";
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
-  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import CguCheckboxes from "../cgu-checkboxes.svelte";
   import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
@@ -21,6 +21,12 @@
 
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
+  let coResponsibilityAccepted = $state(false);
+
+  $effect(() => {
+    coResponsibilityAccepted = !!establishment?.linkedStructureHasAdmin;
+  });
+
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
   let loading = $state(false);
@@ -83,6 +89,12 @@
     return "Rejoindre la structure";
   });
 
+  let submitButtonDisabled = $derived(
+    !alreadyMember &&
+      !alreadyRequested &&
+      (!cguAccepted || !coResponsibilityAccepted)
+  );
+
   $effect(() => {
     establishment;
     joinError = "";
@@ -109,25 +121,11 @@
                 Votre précédente demande d’adhésion est en attente de validation
                 par l’administrateur de la structure.
               {:else}
-                <div class="legend">
-                  <label class="flex flex-row items-start">
-                    <input
-                      bind:checked={cguAccepted}
-                      type="checkbox"
-                      class="hidden"
-                    />
-                    <CheckboxMark />
-                    <span class="ml-s16 text-f14 text-gray-text inline-block">
-                      Je déclare avoir lu les
-                      <a
-                        href="/cgu"
-                        class="underline"
-                        target="_blank"
-                        rel="noopener">Conditions générales d’utilisation</a
-                      > et faire partie de la structure mentionnée ci-dessus.</span
-                    >
-                  </label>
-                </div>
+                <CguCheckboxes
+                  bind:cguAccepted
+                  bind:coResponsibilityAccepted
+                  showCoResponsibilityCheckbox={!establishment?.linkedStructureHasAdmin}
+                />
               {/if}
               <div class="mt-s24">
                 {#if joinError}
@@ -140,7 +138,7 @@
                   label={ctaLabel}
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
-                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  disabled={submitButtonDisabled}
                   {loading}
                 />
               </div>
