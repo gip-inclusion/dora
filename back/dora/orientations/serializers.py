@@ -102,7 +102,7 @@ class OrientationSerializer(serializers.ModelSerializer):
         # Préremplissage depuis le JWT des Emplois
         if not self.instance and orientation.get("op_jwt"):
             try:
-                claims = decode_token(orientation["op_jwt"])
+                claims = decode_token(orientation.pop("op_jwt"))
             except ValueError:
                 raise serializers.ValidationError(
                     {"op_jwt": "Token JWT invalide ou expiré."}
@@ -174,16 +174,6 @@ class OrientationSerializer(serializers.ModelSerializer):
             )
 
         return orientation
-
-    def create(self, validated_data):
-        # Champ purement technique, non stocké en base
-        validated_data.pop("op_jwt", None)
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        # Champ purement technique, non stocké en base
-        validated_data.pop("op_jwt", None)
-        return super().update(instance, validated_data)
 
     def get_service(self, orientation):
         return {
