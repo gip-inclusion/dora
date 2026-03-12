@@ -240,6 +240,7 @@ def send_orientation_rejected_emails(orientation, message):
             settings.DEFAULT_FROM_EMAIL,
         ),
         tags=["orientation"],
+        reply_to=[orientation.prescriber.email],
     )
 
     send_mail(
