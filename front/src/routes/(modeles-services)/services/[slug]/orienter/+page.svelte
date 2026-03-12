@@ -22,10 +22,19 @@
     URL_DOCUMENTATION_ORIENTATION,
   } from "$lib/consts";
   import type { Service } from "$lib/types";
-  import { getOrientationBeneficiaryInfo } from "$lib/requests/nexus";
 
   interface Props {
-    data: { service: Service; isDI: boolean };
+    data: {
+      service: Service;
+      isDI: boolean;
+      beneficiaryInfo: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        franceTravailId: string;
+      } | null;
+    };
   }
 
   let { data }: Props = $props();
@@ -50,22 +59,14 @@
 
   onMount(() => {
     $orientation.firstStepDone = true;
-  });
 
-  async function prefillBeneficiaryFromJwt(jwt: string) {
-    const beneficiary = await getOrientationBeneficiaryInfo(jwt);
-    $orientation.beneficiaryFirstName = beneficiary.firstName || "";
-    $orientation.beneficiaryLastName = beneficiary.lastName || "";
-    $orientation.beneficiaryEmail = beneficiary.email || "";
-    $orientation.beneficiaryPhone = beneficiary.phone || "";
-    $orientation.beneficiaryFranceTravailNumber =
-      beneficiary.franceTravailId || "";
-  }
-
-  onMount(() => {
-    const opJwt = $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
-    if (opJwt) {
-      prefillBeneficiaryFromJwt(opJwt);
+    if (data.beneficiaryInfo) {
+      $orientation.beneficiaryFirstName = data.beneficiaryInfo.firstName;
+      $orientation.beneficiaryLastName = data.beneficiaryInfo.lastName;
+      $orientation.beneficiaryEmail = data.beneficiaryInfo.email;
+      $orientation.beneficiaryPhone = data.beneficiaryInfo.phone;
+      $orientation.beneficiaryFranceTravailNumber =
+        data.beneficiaryInfo.franceTravailId;
     }
   });
 
