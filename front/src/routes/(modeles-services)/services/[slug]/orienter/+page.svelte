@@ -67,6 +67,9 @@
       $orientation.beneficiaryPhone = data.beneficiaryInfo.phone;
       $orientation.beneficiaryFranceTravailNumber =
         data.beneficiaryInfo.franceTravailId;
+    } else {
+      $page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
+      history.replaceState(null, "", $page.url.pathname + $page.url.search);
     }
   });
 
