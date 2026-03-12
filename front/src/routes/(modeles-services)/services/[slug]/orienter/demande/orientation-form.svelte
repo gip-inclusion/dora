@@ -23,9 +23,10 @@
   interface Props {
     service: Service;
     credentials: any;
+    beneficiaryFieldsDisabled: boolean;
   }
 
-  let { service, credentials }: Props = $props();
+  let { service, credentials, beneficiaryFieldsDisabled }: Props = $props();
 
   let contactPrefOptions: Choice[] = $state([]);
 
@@ -130,6 +131,7 @@
       placeholder=""
       descriptionText="Numéro unique à 11 chiffres"
       bind:value={$orientation.beneficiaryFranceTravailNumber}
+      disabled={beneficiaryFieldsDisabled}
       vertical
     />
 
@@ -139,6 +141,7 @@
           id="beneficiaryLastName"
           placeholder=""
           bind:value={$orientation.beneficiaryLastName}
+          disabled={beneficiaryFieldsDisabled}
           vertical
         />
       </div>
@@ -147,6 +150,7 @@
           id="beneficiaryFirstName"
           placeholder=""
           bind:value={$orientation.beneficiaryFirstName}
+          disabled={beneficiaryFieldsDisabled}
           vertical
         />
       </div>
@@ -227,6 +231,7 @@
           placeholder="0123456789"
           descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
+          disabled={beneficiaryFieldsDisabled}
           vertical
         />
       </div>
@@ -237,6 +242,7 @@
           placeholder="nom@domaine.fr"
           descriptionText="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
+          disabled={beneficiaryFieldsDisabled}
           vertical
         />
       </div>

@@ -13,8 +13,10 @@
   import { orientationStep2Schema } from "../schema";
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -26,6 +28,8 @@
   const isDI = !!data.isDI;
 
   let requesting = $state(false);
+
+  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])
@@ -68,6 +72,7 @@
         diContactPhone: isDI ? service.contactPhone || "" : "",
         diStructureName: isDI ? service.structureInfo.name || "" : "",
         beneficiaryAttachments,
+        opJwt,
       }),
     });
   }
@@ -106,7 +111,11 @@
       </p>
 
       <div class="gap-x-s24 flex flex-col justify-between md:flex-row">
-        <OrientationForm {credentials} {service} />
+        <OrientationForm
+          {credentials}
+          {service}
+          beneficiaryFieldsDisabled={!!opJwt}
+        />
         <div class="mb-s32 w-full shrink-0 md:w-[384px]">
           <ContactBox {service} {isDI} />
         </div>

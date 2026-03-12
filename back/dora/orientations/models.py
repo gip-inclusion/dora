@@ -205,6 +205,13 @@ class Orientation(models.Model):
         verbose_name="Orientation anonymisée", default=False
     )
 
+    les_emplois_structure_id = models.UUIDField(
+        verbose_name="Identifiant structure Les Emplois", blank=True, null=True
+    )
+    les_emplois_beneficiary_id = models.UUIDField(
+        verbose_name="Identifiant bénéficiaire Les Emplois", blank=True, null=True
+    )
+
     class Meta:
         constraints = (
             # service lié à l'orientation : DORA ou D·I, mais pas les deux

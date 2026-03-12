@@ -1,5 +1,6 @@
 import requests
 from django.core.files.storage import default_storage
+from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
 
 import dora.data_inclusion.client
@@ -25,8 +26,13 @@ class OrientationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    # TODO: utiliser un vrai champ pour stocker l'état initial
-    # TODO: est-ce qu'il faut la même chose pour la structure?
+    op_jwt = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        write_only=True,
+        help_text="JWT des Emplois contenant des données d'orientation pré-remplies",
+    )
+
     service = serializers.SerializerMethodField()
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
@@ -55,7 +61,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_contact_phone",
             "di_structure_name",
             "id",
+            "les_emplois_beneficiary_id",
+            "les_emplois_structure_id",
             "orientation_reasons",
+            "op_jwt",
             "prescriber",
             "prescriber_structure",
             "prescriber_structure_slug",
@@ -84,7 +93,30 @@ class OrientationSerializer(serializers.ModelSerializer):
         S'il n'y en a pas, une erreur est levée.
 
         À la fois les services Dora et DI sont supportés.
+
+        Si un JWT des Emplois (`op_jwt`) est fourni à la création, il est décodé et les informations
+        bénéficiaire ainsi que les ID (les_emplois_beneficiary_id, les_emplois_structure_id) sont préremplies.
         """
+        # Préremplissage depuis le JWT des Emplois
+        if not self.instance and orientation.get("op_jwt"):
+            try:
+                claims = decode_token(orientation.pop("op_jwt"))
+            except ValueError:
+                raise serializers.ValidationError(
+                    {"op_jwt": "Token JWT invalide ou expiré."}
+                )
+            orientation["beneficiary_first_name"] = claims["beneficiary"]["first_name"]
+            orientation["beneficiary_last_name"] = claims["beneficiary"]["last_name"]
+            orientation["beneficiary_email"] = claims["beneficiary"]["email"]
+            orientation["beneficiary_phone"] = claims["beneficiary"]["phone"]
+            orientation["beneficiary_france_travail_number"] = claims["beneficiary"][
+                "france_travail_id"
+            ]
+            orientation["les_emplois_beneficiary_id"] = claims["beneficiary"]["uid"]
+            orientation["les_emplois_structure_id"] = claims["prescriber"][
+                "organization"
+            ]["uid"]
+
         # Validation de l'engagement de protection des données
         if not self.instance and not orientation.get("data_protection_commitment"):
             raise serializers.ValidationError(
@@ -256,3 +288,26 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     @staticmethod
     def get_detail_page_url(obj: Orientation) -> str:
         return obj.get_magic_link()
+
+
+class OrientationBeneficiaryInfoInputSerializer(serializers.Serializer):
+    op = serializers.CharField(required=True)
+
+    def validate_op(self, value):
+        try:
+            claims = decode_token(value)
+        except ValueError:
+            raise serializers.ValidationError("Token JWT invalide.")
+
+        if "beneficiary" not in claims:
+            raise serializers.ValidationError("Données bénéficiaire absentes du token.")
+
+        return claims
+
+
+class OrientationBeneficiaryInfoOutputSerializer(serializers.Serializer):
+    first_name = serializers.CharField(default="")
+    last_name = serializers.CharField(default="")
+    email = serializers.CharField(default="")
+    phone = serializers.CharField(default="")
+    france_travail_id = serializers.CharField(default="")

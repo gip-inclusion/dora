@@ -1,3 +1,5 @@
+import { toast } from "@zerodevx/svelte-toast";
+import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
 import { getToken } from "$lib/utils/auth";
 
@@ -27,4 +29,38 @@ export const getNexusMenuStatus = async () => {
     throw new Error("Failed to fetch Nexus menu status");
   }
   return response.json() as Promise<NexusMenuStatus>;
+};
+
+export type OrientationBeneficiaryInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  franceTravailId: string;
+};
+
+export const getOrientationBeneficiaryInfo = async (opJwt: string) => {
+  const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
+  url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${getToken()}`,
+    },
+  });
+
+  if (!response.ok) {
+    const body = await response.json();
+    const errorDetails =
+      body.op && body.op.length > 0 ? body.op[0].message : "";
+    toast.push(
+      "Une erreur est survenue lors de la récupération des informations du bénéficiaire" +
+        (errorDetails ? ` : ${errorDetails}` : "")
+    );
+    throw new Error("Failed to fetch orientation beneficiary info");
+  }
+
+  return response.json() as Promise<OrientationBeneficiaryInfo>;
 };

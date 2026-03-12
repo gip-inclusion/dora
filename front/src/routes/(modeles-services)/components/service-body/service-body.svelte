@@ -4,6 +4,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
   import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getToken, userInfo } from "$lib/utils/auth";
@@ -25,13 +26,30 @@
 
   let isDI = $derived("source" in service);
 
-  let searchIdStr = $derived($page.url.searchParams.get("searchId"));
+  let searchIdParam = $derived($page.url.searchParams.get("searchId"));
   let searchIdNumber = $derived(
-    searchIdStr ? parseInt(searchIdStr) : undefined
+    searchIdParam ? parseInt(searchIdParam) : undefined
   );
-  let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
+  let opParam = $derived(
+    $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
+  );
+  let orientationQueryString = $derived.by(() => {
+    const params = new URLSearchParams();
+
+    if (searchIdParam) {
+      params.set("searchId", searchIdParam);
+    }
+
+    if (opParam) {
+      params.set(ORIENTATION_JWT_QUERY_PARAM, opParam);
+    }
+
+    const query = params.toString();
+
+    return query ? `?${query}` : "";
+  });
   let orientationFormUrl = $derived(
-    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
 
   let isServiceFromOwnStructure = $derived(

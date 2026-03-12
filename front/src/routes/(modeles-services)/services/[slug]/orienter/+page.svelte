@@ -17,11 +17,24 @@
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
-  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
+  import {
+    ORIENTATION_JWT_QUERY_PARAM,
+    URL_DOCUMENTATION_ORIENTATION,
+  } from "$lib/consts";
   import type { Service } from "$lib/types";
 
   interface Props {
-    data: { service: Service; isDI: boolean };
+    data: {
+      service: Service;
+      isDI: boolean;
+      beneficiaryInfo: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        franceTravailId: string;
+      } | null;
+    };
   }
 
   let { data }: Props = $props();
@@ -46,6 +59,18 @@
 
   onMount(() => {
     $orientation.firstStepDone = true;
+
+    if (data.beneficiaryInfo) {
+      $orientation.beneficiaryFirstName = data.beneficiaryInfo.firstName;
+      $orientation.beneficiaryLastName = data.beneficiaryInfo.lastName;
+      $orientation.beneficiaryEmail = data.beneficiaryInfo.email;
+      $orientation.beneficiaryPhone = data.beneficiaryInfo.phone;
+      $orientation.beneficiaryFranceTravailNumber =
+        data.beneficiaryInfo.franceTravailId;
+    } else {
+      $page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
+      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+    }
   });
 
   function handleChange(validatedData) {
@@ -58,7 +83,10 @@
   }
 
   function handleSuccess(_result) {
-    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande`);
+    const opJwt = $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
+    goto(
+      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande${opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""}`
+    );
   }
 
   onMount(async () => {
