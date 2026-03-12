@@ -33,8 +33,6 @@ class OrientationSerializer(serializers.ModelSerializer):
         help_text="JWT des Emplois contenant des données d'orientation pré-remplies",
     )
 
-    # TODO: utiliser un vrai champ pour stocker l'état initial
-    # TODO: est-ce qu'il faut la même chose pour la structure?
     service = serializers.SerializerMethodField()
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
