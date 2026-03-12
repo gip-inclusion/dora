@@ -1,7 +1,7 @@
 <script lang="ts">
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
-  import logoNexus from "$lib/assets/logos/logo-nexus.png";
+  import logoNexus from "$lib/assets/logos/logo-plateforme-inclusion.svg";
 
   import LinkButton from "$lib/components/display/link-button.svelte";
 
