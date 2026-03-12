@@ -1,3 +1,4 @@
+import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
 import { getToken } from "$lib/utils/auth";
 
@@ -39,7 +40,7 @@ export type OrientationBeneficiaryInfo = {
 
 export const getOrientationBeneficiaryInfo = async (opJwt: string) => {
   const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
-  url.searchParams.set("op", opJwt);
+  url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
 
   const response = await fetch(url, {
     method: "GET",

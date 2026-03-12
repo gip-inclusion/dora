@@ -16,6 +16,7 @@
   import { page } from "$app/stores";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -28,7 +29,7 @@
 
   let requesting = $state(false);
 
-  let opJwt = $derived($page.url.searchParams.get("op"));
+  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])

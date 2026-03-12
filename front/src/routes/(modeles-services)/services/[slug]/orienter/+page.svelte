@@ -17,7 +17,10 @@
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
-  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
+  import {
+    ORIENTATION_JWT_QUERY_PARAM,
+    URL_DOCUMENTATION_ORIENTATION,
+  } from "$lib/consts";
   import type { Service } from "$lib/types";
   import { getOrientationBeneficiaryInfo } from "$lib/requests/nexus";
 
@@ -60,7 +63,7 @@
   }
 
   onMount(() => {
-    const opJwt = $page.url.searchParams.get("op");
+    const opJwt = $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
     if (opJwt) {
       prefillBeneficiaryFromJwt(opJwt);
     }
@@ -76,9 +79,9 @@
   }
 
   function handleSuccess(_result) {
-    const opJwt = $page.url.searchParams.get("op");
+    const opJwt = $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
     goto(
-      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande${opJwt ? `?op=${opJwt}` : ""}`
+      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande${opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""}`
     );
   }
 
