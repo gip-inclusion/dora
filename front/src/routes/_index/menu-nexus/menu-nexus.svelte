@@ -1,5 +1,5 @@
 <script lang="ts">
-  import logoNexusMenuIcon from "$lib/assets/logos/logo-nexus-menu.svg";
+  import logoNexusMenuIcon from "$lib/assets/logos/logo-plateforme-inclusion-mono.svg";
   import type { NexusMenuStatus } from "$lib/requests/nexus";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
   import { trackMatomoEvent } from "$lib/utils/matomo";
