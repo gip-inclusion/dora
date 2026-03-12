@@ -30,23 +30,21 @@
     searchIdParam ? parseInt(searchIdParam) : undefined
   );
   let opParam = $derived($page.url.searchParams.get("op"));
-  let orientationQueryString = $derived(
-    (() => {
-      const params = new URLSearchParams();
+  let orientationQueryString = $derived.by(() => {
+    const params = new URLSearchParams();
 
-      if (searchIdParam) {
-        params.set("searchId", searchIdParam);
-      }
+    if (searchIdParam) {
+      params.set("searchId", searchIdParam);
+    }
 
-      if (opParam) {
-        params.set("op", opParam);
-      }
+    if (opParam) {
+      params.set("op", opParam);
+    }
 
-      const query = params.toString();
+    const query = params.toString();
 
-      return query ? `?${query}` : "";
-    })()
-  );
+    return query ? `?${query}` : "";
+  });
   let orientationFormUrl = $derived(
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
