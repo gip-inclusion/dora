@@ -63,8 +63,8 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_contact_phone",
             "di_structure_name",
             "id",
-            "les_emplois_beneficiary_uid",
-            "les_emplois_structure_uid",
+            "les_emplois_beneficiary_id",
+            "les_emplois_structure_id",
             "orientation_reasons",
             "op_jwt",
             "prescriber",
@@ -97,7 +97,7 @@ class OrientationSerializer(serializers.ModelSerializer):
         À la fois les services Dora et DI sont supportés.
 
         Si un JWT des Emplois (`op_jwt`) est fourni à la création, il est décodé et les informations
-        bénéficiaire ainsi que les UIDs (les_emplois_beneficiary_uid, les_emplois_structure_uid) sont préremplies.
+        bénéficiaire ainsi que les ID (les_emplois_beneficiary_id, les_emplois_structure_id) sont préremplies.
         """
         # Préremplissage depuis le JWT des Emplois
         if not self.instance and orientation.get("op_jwt"):
@@ -114,8 +114,8 @@ class OrientationSerializer(serializers.ModelSerializer):
             orientation["beneficiary_france_travail_number"] = claims["beneficiary"][
                 "france_travail_id"
             ]
-            orientation["les_emplois_beneficiary_uid"] = claims["beneficiary"]["uid"]
-            orientation["les_emplois_structure_uid"] = claims["prescriber"][
+            orientation["les_emplois_beneficiary_id"] = claims["beneficiary"]["uid"]
+            orientation["les_emplois_structure_id"] = claims["prescriber"][
                 "organization"
             ]["uid"]
 

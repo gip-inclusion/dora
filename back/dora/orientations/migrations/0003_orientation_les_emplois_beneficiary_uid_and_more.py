@@ -11,16 +11,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="orientation",
-            name="les_emplois_beneficiary_uid",
+            name="les_emplois_beneficiary_id",
             field=models.UUIDField(
-                blank=True, null=True, verbose_name="UID bénéficiaire Les Emplois"
+                blank=True,
+                null=True,
+                verbose_name="Identifiant bénéficiaire Les Emplois",
             ),
         ),
         migrations.AddField(
             model_name="orientation",
-            name="les_emplois_structure_uid",
+            name="les_emplois_structure_id",
             field=models.UUIDField(
-                blank=True, null=True, verbose_name="UID structure Les Emplois"
+                blank=True, null=True, verbose_name="Identifiant structure Les Emplois"
             ),
         ),
     ]

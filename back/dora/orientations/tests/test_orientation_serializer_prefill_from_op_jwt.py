@@ -48,8 +48,8 @@ def test_validate_prefills_beneficiary_data_from_op_jwt(monkeypatch):
     assert result["beneficiary_email"] == "john.doe@example.com"
     assert result["beneficiary_phone"] == "0102030405"
     assert result["beneficiary_france_travail_number"] == "1234567890"
-    assert result["les_emplois_beneficiary_uid"] == "beneficiary-uid"
-    assert result["les_emplois_structure_uid"] == "structure-uid"
+    assert result["les_emplois_beneficiary_id"] == "beneficiary-uid"
+    assert result["les_emplois_structure_id"] == "structure-uid"
 
 
 def test_validate_with_invalid_op_jwt_raises_error(monkeypatch):
