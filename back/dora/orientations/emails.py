@@ -224,7 +224,6 @@ def send_orientation_rejected_emails(orientation, message):
         "message": message,
     }
 
-    # Structure
     send_mail(
         f"{'[Refusée - Structure porteuse] ' if debug else ''}Vous venez de refuser une demande",
         [orientation.get_contact_email()],
@@ -232,7 +231,18 @@ def send_orientation_rejected_emails(orientation, message):
         tags=["orientation"],
     )
 
-    # Prescripteur
+    send_mail(
+        f"{'[Refusée - Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée",
+        [orientation.beneficiary_email],
+        mjml2html(render_to_string("orientation-rejected-beneficiary.mjml", context)),
+        from_email=(
+            f"{orientation.get_structure_name()} via DORA",
+            settings.DEFAULT_FROM_EMAIL,
+        ),
+        tags=["orientation"],
+        reply_to=[orientation.prescriber.email],
+    )
+
     send_mail(
         f"{'[Refusée - Prescripteur] ' if debug else ''}Votre demande d’orientation a été refusée",
         [orientation.prescriber.email],
@@ -249,7 +259,6 @@ def send_orientation_rejected_emails(orientation, message):
         orientation.referent_email
         and orientation.referent_email != orientation.prescriber.email
     ):
-        # Referent
         send_mail(
             f"{'[Refusée - Conseiller référent] ' if debug else ''}Votre demande d’orientation a été refusée",
             [orientation.referent_email],

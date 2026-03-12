@@ -150,9 +150,10 @@
         {orientation.service?.name}
       </a>&nbsp;».<br />
       <div class="mt-s16">
-        Le ou la bénéficiaire, {orientation.beneficiaryFirstName}
-        {orientation.beneficiaryLastName}, sera informé•e de la décision par {orientation.referentFirstName}
-        {orientation.referentLastName}.
+        L’usager {orientation.beneficiaryFirstName}
+        {orientation.beneficiaryLastName} recevra la décision par e-mail. Pour des
+        raisons de confidentialité, le motif et le détail du refus ne lui seront pas
+        transmis.
       </div>
     </div>
   {/snippet}

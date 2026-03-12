@@ -108,10 +108,11 @@ def test_query_reject(api_client, orientation):
 
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
-    assert len(mail.outbox) == 3
+    assert len(mail.outbox) == 4
     assert mail.outbox[0].to == [orientation.get_contact_email()]
-    assert mail.outbox[1].to == [orientation.prescriber.email]
-    assert mail.outbox[2].to == [orientation.referent_email]
+    assert mail.outbox[1].to == [orientation.beneficiary_email]
+    assert mail.outbox[2].to == [orientation.prescriber.email]
+    assert mail.outbox[3].to == [orientation.referent_email]
 
 
 def test_contact_beneficiary(api_client, orientation):
