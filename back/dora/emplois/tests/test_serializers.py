@@ -6,7 +6,10 @@ from django.utils import timezone
 from model_bakery import baker
 
 from dora.core.test_utils import make_orientation, make_published_service
-from dora.emplois.serializers import ServiceSerializer
+from dora.emplois.serializers import (
+    DisabledDoraFormDIStructureSerializer,
+    ServiceSerializer,
+)
 from dora.emplois.views import PREFETCH_RELATED_SERVICE_LIST
 from dora.orientations.models import OrientationStatus
 from dora.services.models import (
@@ -526,3 +529,19 @@ def test_service_serializer_does_not_add_queries_when_relations_prefetched(
 
     with django_assert_max_num_queries(0):
         ServiceSerializer(service).data
+
+
+def test_disabled_dora_form_di_structure_serializer_fields():
+    item = baker.make(
+        "structures.DisabledDoraFormDIStructure",
+        source="foobar",
+        structure_id="structure-1",
+        comment="Commentaire",
+    )
+
+    data = DisabledDoraFormDIStructureSerializer(item).data
+
+    assert data == {
+        "source": "foobar",
+        "structure_id": "structure-1",
+    }
