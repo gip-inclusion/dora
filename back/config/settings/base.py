@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "dora.auth_links",
     "dora.nexus",
     "dora.decoupage_administratif",
+    "dora.emplois",
 ]
 
 MIDDLEWARE = [
