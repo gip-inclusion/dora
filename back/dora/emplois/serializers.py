@@ -1,8 +1,11 @@
 import itertools
 
 from django.core.files.storage import default_storage
+from django.db.models import Avg, DurationField, F
+from django.db.models.expressions import ExpressionWrapper
 from rest_framework import serializers
 
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 
 COACH_ORIENTATION_MODES_ORDER = {
@@ -40,6 +43,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     kinds = serializers.SerializerMethodField()
     is_orientable_with_dora_form = serializers.SerializerMethodField()
     is_contact_info_public = serializers.BooleanField(read_only=True)
+    average_orientation_response_delay_days = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -60,6 +64,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "kinds",
             "is_orientable_with_dora_form",
             "is_contact_info_public",
+            "average_orientation_response_delay_days",
         ]
 
     def get_id(self, obj):
@@ -173,3 +178,31 @@ class ServiceSerializer(serializers.ModelSerializer):
             mode.value == "formulaire-dora"
             for mode in obj.coach_orientation_modes.all()
         )
+
+    def get_average_orientation_response_delay_days(self, obj):
+        """Délai moyen de réponse aux demandes d'orientation, en jours."""
+        prefetched = getattr(obj, "_prefetched_objects_cache", {}).get("orientations")
+        if prefetched is not None:
+            delays = [(o.processing_date - o.creation_date).days for o in prefetched]
+            return round(sum(delays) / len(delays)) if delays else None
+        result = (
+            Orientation.objects.filter(
+                service=obj,
+                status__in=[
+                    OrientationStatus.ACCEPTED,
+                    OrientationStatus.REJECTED,
+                ],
+                processing_date__isnull=False,
+            )
+            .annotate(
+                delay=ExpressionWrapper(
+                    F("processing_date") - F("creation_date"),
+                    output_field=DurationField(),
+                ),
+            )
+            .aggregate(avg_delay=Avg("delay"))
+        )
+        avg_delay = result["avg_delay"]
+        if avg_delay is None:
+            return None
+        return round(avg_delay.total_seconds() / 86400)

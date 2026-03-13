@@ -1,10 +1,14 @@
+from datetime import timedelta
+
 import pytest
 from data_inclusion.schema.v1.publics import Public as DiPublic
+from django.utils import timezone
 from model_bakery import baker
 
-from dora.core.test_utils import make_published_service
+from dora.core.test_utils import make_orientation, make_published_service
 from dora.emplois.serializers import ServiceSerializer
 from dora.emplois.views import PREFETCH_RELATED_SERVICE_LIST
+from dora.orientations.models import OrientationStatus
 from dora.services.models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -413,6 +417,99 @@ def test_service_serializer_is_orientable_with_dora_form_when_ft_whitelisted(
 
     data = ServiceSerializer(service).data
     assert data["is_orientable_with_dora_form"] is True
+
+
+def test_average_orientation_response_delay_days_none_when_no_orientations():
+    service = make_published_service()
+    data = ServiceSerializer(service).data
+    assert data["average_orientation_response_delay_days"] is None
+
+
+def test_average_orientation_response_delay_days_none_when_only_pending_orientations():
+    service = make_published_service()
+    now = timezone.now()
+    make_orientation(
+        service=service,
+        status=OrientationStatus.PENDING,
+        creation_date=now - timedelta(days=5),
+        processing_date=None,
+    )
+    data = ServiceSerializer(service).data
+    assert data["average_orientation_response_delay_days"] is None
+
+
+def test_average_orientation_response_delay_days_single_orientation():
+    service = make_published_service()
+    creation = timezone.now() - timedelta(days=10)
+    processing = creation + timedelta(days=3)
+    make_orientation(
+        service=service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=creation,
+        processing_date=processing,
+    )
+    data = ServiceSerializer(service).data
+    assert data["average_orientation_response_delay_days"] == 3
+
+
+def test_average_orientation_response_delay_days_average_of_multiple_orientations():
+    service = make_published_service()
+    base = timezone.now() - timedelta(days=30)
+    make_orientation(
+        service=service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=base,
+        processing_date=base + timedelta(days=2),
+    )
+    make_orientation(
+        service=service,
+        status=OrientationStatus.REJECTED,
+        creation_date=base - timedelta(days=10),
+        processing_date=base - timedelta(days=10) + timedelta(days=4),
+    )
+    data = ServiceSerializer(service).data
+    # (2 + 4) / 2 = 3
+    assert data["average_orientation_response_delay_days"] == 3
+
+
+def test_average_orientation_response_delay_days_rounds_to_nearest_integer():
+    service = make_published_service()
+    base = timezone.now() - timedelta(days=20)
+    make_orientation(
+        service=service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=base,
+        processing_date=base + timedelta(days=1),
+    )
+    make_orientation(
+        service=service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=base - timedelta(days=5),
+        processing_date=base - timedelta(days=5) + timedelta(days=2),
+    )
+    data = ServiceSerializer(service).data
+    # (1 + 2) / 2 = 1.5 -> round to 2
+    assert data["average_orientation_response_delay_days"] == 2
+
+
+def test_average_orientation_response_delay_days_only_counts_this_service():
+    service = make_published_service()
+    other_service = make_published_service()
+    creation = timezone.now() - timedelta(days=10)
+    make_orientation(
+        service=service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=creation,
+        processing_date=creation + timedelta(days=2),
+    )
+    make_orientation(
+        service=other_service,
+        status=OrientationStatus.ACCEPTED,
+        creation_date=creation,
+        processing_date=creation + timedelta(days=10),
+    )
+    data = ServiceSerializer(service).data
+    assert data["average_orientation_response_delay_days"] == 2
 
 
 def test_service_serializer_does_not_add_queries_when_relations_prefetched(
