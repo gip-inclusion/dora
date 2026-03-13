@@ -1,12 +1,19 @@
 from django.conf import settings
+from django.db.models import Prefetch
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.versioning import NamespaceVersioning
 
 from dora.core.pagination import OptionalPageNumberPagination
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 
 from .serializers import ServiceSerializer
+
+_ANSWERED_ORIENTATIONS_QUERYSET = Orientation.objects.filter(
+    status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
+    processing_date__isnull=False,
+).only("creation_date", "processing_date")
 
 PREFETCH_RELATED_SERVICE_LIST = [
     "publics",
@@ -18,6 +25,7 @@ PREFETCH_RELATED_SERVICE_LIST = [
     "coach_orientation_modes",
     "orientable_ft_services",
     "beneficiaries_access_modes",
+    Prefetch("orientations", queryset=_ANSWERED_ORIENTATIONS_QUERYSET),
 ]
 
 
