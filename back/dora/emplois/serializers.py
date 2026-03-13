@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
+from dora.structures.models import DisabledDoraFormDIStructure
 
 COACH_ORIENTATION_MODES_ORDER = {
     "formulaire-dora": 0,
@@ -206,3 +207,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         if avg_delay is None:
             return None
         return round(avg_delay.total_seconds() / 86400)
+
+
+class DisabledDoraFormDIStructureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DisabledDoraFormDIStructure
+        fields = ["source", "structure_id"]

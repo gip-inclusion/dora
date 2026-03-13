@@ -7,8 +7,9 @@ from rest_framework.versioning import NamespaceVersioning
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
+from dora.structures.models import DisabledDoraFormDIStructure
 
-from .serializers import ServiceSerializer
+from .serializers import DisabledDoraFormDIStructureSerializer, ServiceSerializer
 
 _ANSWERED_ORIENTATIONS_QUERYSET = Orientation.objects.filter(
     status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
@@ -56,3 +57,12 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             .prefetch_related(*PREFETCH_RELATED_SERVICE_LIST)
             .order_by("pk")
         )
+
+
+class DisabledDoraFormDIStructureViewSet(viewsets.ReadOnlyModelViewSet):
+    versioning_class = NamespaceVersioning
+    permission_classes = (APIPermission,)
+    serializer_class = DisabledDoraFormDIStructureSerializer
+    renderer_classes = (JSONRenderer,)
+    pagination_class = OptionalPageNumberPagination
+    queryset = DisabledDoraFormDIStructure.objects.all().order_by("pk")

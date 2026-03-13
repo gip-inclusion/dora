@@ -90,3 +90,52 @@ def test_services_api_detail_queries_are_bounded(
         )
 
     assert response.status_code == 200
+
+
+def test_disabled_dora_form_di_structures_api_requires_authentication(api_client):
+    response = api_client.get(reverse("emplois:disabled-dora-form-di-structure-list"))
+
+    assert response.status_code == 401
+
+
+def test_disabled_dora_form_di_structures_api_requires_emplois_email(api_client):
+    user = baker.make("users.User", is_valid=True, email="other@example.com")
+    api_client.force_authenticate(user=user)
+
+    response = api_client.get(reverse("emplois:disabled-dora-form-di-structure-list"))
+
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "method,use_detail,data",
+    [
+        ("post", False, {"source": "foobar", "structure_id": "structure-1"}),
+        ("patch", True, {"comment": "Commentaire"}),
+        ("delete", True, None),
+    ],
+    ids=["post", "patch", "delete"],
+)
+def test_disabled_dora_form_di_structures_api_is_read_only(
+    emplois_user,
+    api_client,
+    method,
+    use_detail,
+    data,
+):
+    item = baker.make("structures.DisabledDoraFormDIStructure")
+
+    if use_detail:
+        url = reverse(
+            "emplois:disabled-dora-form-di-structure-detail", kwargs={"pk": item.id}
+        )
+    else:
+        url = reverse("emplois:disabled-dora-form-di-structure-list")
+
+    client_method = getattr(api_client, method)
+    if data is not None:
+        response = client_method(url, data=data)
+    else:
+        response = client_method(url)
+
+    assert response.status_code == 403
