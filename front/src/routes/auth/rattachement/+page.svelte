@@ -140,7 +140,7 @@
       {proposedSafir}
       {proposedSiret}
       showSafir={userIsFranceTravail}
-      siretInputDisabled={unknownSiret}
+      siretInputDisabled={!unknownSiret && !!opJwt}
     >
       {#snippet cta()}
         <div>
