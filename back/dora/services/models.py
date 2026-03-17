@@ -707,7 +707,7 @@ class Service(ModerationMixin, models.Model):
     def is_orientable_ft_service(self) -> bool:
         # indique si le service est inclus dans la "white-list" des services FT orientables
         # voir FranceTravailOrientableService
-        return any(self.orientable_ft_services.all())
+        return self.orientable_ft_services.exists()
 
     def get_missing_properties_for_publishing(self) -> list[str]:
         missing = []
