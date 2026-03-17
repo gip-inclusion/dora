@@ -2,9 +2,15 @@ from django.conf import settings
 from django.db.models import Prefetch
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
 
 from dora.core.pagination import OptionalPageNumberPagination
+from dora.decoupage_administratif.models import (
+    EPCI,
+    AdminDivisionType,
+    City,
+)
 from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import DisabledDoraFormDIStructure
@@ -57,6 +63,31 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             .prefetch_related(*PREFETCH_RELATED_SERVICE_LIST)
             .order_by("pk")
         )
+
+    def _warm_geo_caches(self, services):
+        city_codes = [
+            s.diffusion_zone_details
+            for s in services
+            if s.diffusion_zone_type == AdminDivisionType.CITY
+        ]
+        epci_codes = [
+            s.diffusion_zone_details
+            for s in services
+            if s.diffusion_zone_type == AdminDivisionType.EPCI
+        ]
+        City.objects.warm_cache(city_codes)
+        EPCI.objects.warm_cache(epci_codes)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            self._warm_geo_caches(page)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        self._warm_geo_caches(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class DisabledDoraFormDIStructureViewSet(viewsets.ReadOnlyModelViewSet):
