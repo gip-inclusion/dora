@@ -3,6 +3,7 @@ from django.urls import reverse
 from model_bakery import baker
 
 from dora.core.test_utils import make_published_service
+from dora.decoupage_administratif.models import AdminDivisionType, City
 
 
 def test_services_api_requires_authentication(api_client):
@@ -66,14 +67,21 @@ def test_services_api_list_queries_are_bounded(
     api_client,
     django_assert_num_queries,
 ):
-    for _ in range(3):
-        make_published_service()
+    """
+    Il faut assurer qu'il n'y a qu'un seul query pour toutes les villes
+    """
+    for i in range(5):
+        city_code = f"7500{i}"
+        baker.make(City, code=city_code, name="Paris")
+        make_published_service(
+            diffusion_zone_details=city_code, diffusion_zone_type=AdminDivisionType.CITY
+        )
 
-    with django_assert_num_queries(11):
+    with django_assert_num_queries(12):
         response = api_client.get(reverse("emplois:service-list"))
 
     assert response.status_code == 200
-    assert len(response.data) == 3
+    assert len(response.data) == 5
 
 
 def test_services_api_detail_queries_are_bounded(

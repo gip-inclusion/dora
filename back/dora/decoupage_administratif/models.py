@@ -38,6 +38,14 @@ class ManyGeoManager(GeoManager):
         self._cache[code] = value
         return value
 
+    def warm_cache(self, codes):
+        codes_to_fetch = {c.upper() for c in codes if c} - self._cache.keys()
+        if not codes_to_fetch:
+            return
+        found = {obj.code.upper(): obj for obj in self.filter(code__in=codes_to_fetch)}
+        for code in codes_to_fetch:
+            self._cache[code] = found.get(code)
+
 
 # Cache instantané pour les tables comportant peu d'entités
 # on fait la requête une fois pour toute
