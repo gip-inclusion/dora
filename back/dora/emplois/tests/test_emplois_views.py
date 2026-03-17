@@ -4,8 +4,6 @@ from model_bakery import baker
 
 from dora.core.test_utils import make_published_service
 
-MAX_QUERIES_LIST_OR_DETAIL = 20
-
 
 def test_services_api_requires_authentication(api_client):
     response = api_client.get(reverse("emplois:service-list"))
@@ -66,12 +64,12 @@ def test_services_api_is_read_only(
 def test_services_api_list_queries_are_bounded(
     emplois_user,
     api_client,
-    django_assert_max_num_queries,
+    django_assert_num_queries,
 ):
     for _ in range(3):
         make_published_service()
 
-    with django_assert_max_num_queries(MAX_QUERIES_LIST_OR_DETAIL):
+    with django_assert_num_queries(11):
         response = api_client.get(reverse("emplois:service-list"))
 
     assert response.status_code == 200
@@ -81,10 +79,10 @@ def test_services_api_list_queries_are_bounded(
 def test_services_api_detail_queries_are_bounded(
     emplois_user,
     api_client,
-    django_assert_max_num_queries,
+    django_assert_num_queries,
     published_service,
 ):
-    with django_assert_max_num_queries(MAX_QUERIES_LIST_OR_DETAIL):
+    with django_assert_num_queries(11):
         response = api_client.get(
             reverse("emplois:service-detail", kwargs={"pk": published_service.id})
         )
