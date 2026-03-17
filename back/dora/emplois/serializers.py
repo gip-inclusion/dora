@@ -29,21 +29,23 @@ BENEFICIARIES_ACCESS_MODES_ORDER = {
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    id = serializers.SerializerMethodField()
-    diffusion_zone = serializers.SerializerMethodField()
-    short_desc = serializers.CharField(read_only=True)
+    diffusion_zone = serializers.CharField(
+        source="get_diffusion_zone_details_display", read_only=True
+    )
     publics = serializers.SerializerMethodField()
     eligibility_requirements = serializers.SerializerMethodField()
-    is_cumulative = serializers.BooleanField(read_only=True)
-    funding_labels = serializers.SerializerMethodField()
+    funding_labels = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="label"
+    )
     mobilization_modes_professionals = serializers.SerializerMethodField()
     mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
     online_form = serializers.SerializerMethodField()
-    credentials = serializers.SerializerMethodField()
-    kinds = serializers.SerializerMethodField()
+    credentials = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="name"
+    )
+    kinds = serializers.SlugRelatedField(many=True, read_only=True, slug_field="label")
     is_orientable_with_dora_form = serializers.SerializerMethodField()
-    is_contact_info_public = serializers.BooleanField(read_only=True)
     average_orientation_response_delay_days = serializers.SerializerMethodField()
 
     class Meta:
@@ -68,12 +70,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "average_orientation_response_delay_days",
         ]
 
-    def get_id(self, obj):
-        return str(obj.id)
-
-    def get_diffusion_zone(self, obj):
-        return obj.get_diffusion_zone_details_display()
-
     def get_publics(self, obj):
         publics = list(obj.publics.all())
         if not publics:
@@ -90,9 +86,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         if obj.qpv_or_zrr:
             eligibility_requirements.append("Uniquement QPV ou ZFRR")
         return eligibility_requirements
-
-    def get_funding_labels(self, obj):
-        return [label.label for label in obj.funding_labels.all()]
 
     def get_mobilization_modes_professionals(self, obj):
         modes = sorted(
@@ -167,12 +160,6 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_online_form(self, obj):
         return obj.online_form or None
-
-    def get_credentials(self, obj):
-        return [c.name for c in obj.credentials.all()]
-
-    def get_kinds(self, obj):
-        return [k.label for k in obj.kinds.all()]
 
     def get_is_orientable_with_dora_form(self, obj):
         return obj.is_orientable() and any(
