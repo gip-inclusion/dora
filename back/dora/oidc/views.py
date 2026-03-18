@@ -159,7 +159,8 @@ class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):
         next_fieldname = self.get_settings("OIDC_REDIRECT_FIELD_NAME", "next")
 
         success_url = resolve_url(self.get_settings("LOGIN_REDIRECT_URL"))
-        success_url += f"?{next_fieldname}={next_url}" if next_url else ""
+        if next_url:
+            success_url = add_url_params(success_url, {next_fieldname: next_url})
 
         # redirection vers le front via `oidc/logged_in`
         return success_url
