@@ -1,7 +1,7 @@
-from unittest.mock import MagicMock
 from urllib.parse import parse_qs, urlparse
 
 import pytest
+from django.test import RequestFactory
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -59,8 +59,9 @@ class TestOidcLoggedIn:
 class TestCustomAuthorizationCallbackView:
     def _make_view(self, next_url):
         """Instancie la vue avec une session contenant oidc_login_next."""
-        view = CustomAuthorizationCallbackView()
-        view.request = MagicMock()
+        view = CustomAuthorizationCallbackView(
+            request=RequestFactory().get("an-oidc-callback-url")
+        )
         view.request.session = {"oidc_login_next": next_url}
         return view
 
@@ -74,7 +75,9 @@ class TestCustomAuthorizationCallbackView:
         de paramètres de premier niveau, ce qui fait perdre `op` (et les autres
         paramètres) lors du parsing dans oidc_logged_in.
         """
-        next_url = "https://staging.dora.inclusion.gouv.fr/services/my-service?mtm_campaign=lesemplois&mtm_kwd=rechservice-prescriber&op=TOKEN123"
+        next_url = (
+            "/services/my-service?mtm_campaign=campaign&mtm_kwd=keyword&op=TOKEN123"
+        )
 
         success_url = self._make_view(next_url).success_url
 
