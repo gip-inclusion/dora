@@ -185,6 +185,6 @@ class HandleEmploisOrientationTestCase(APITestCase):
         assert response.status_code == 200
         parsed = urlparse(response.data["next_url"])
         query_params = parse_qs(parsed.query)
-        assert parsed.path == f"/services/{self.service.slug}"
+        assert parsed.path == f"/services/{self.service.slug}/orienter"
         assert query_params["op"] == ["valid_token"]
         assert query_params["user_structure_slug"] == [self.structure.slug]
