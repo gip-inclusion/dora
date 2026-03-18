@@ -134,6 +134,7 @@ def test_service_serializer_eligibility_requirements(
 def test_service_serializer_basic_fields():
     service = make_published_service(
         short_desc="Une courte description",
+        full_desc="Une longue description",
         is_cumulative=True,
         online_form="https://example.org/formulaire",
         is_contact_info_public=True,
@@ -146,6 +147,7 @@ def test_service_serializer_basic_fields():
     assert data["id"] == str(service.id)
     assert data["diffusion_zone"] == "Zone de diffusion"
     assert data["short_desc"] == "Une courte description"
+    assert data["full_desc"] == "Une longue description"
     assert data["is_cumulative"] is True
     assert data["online_form"] == "https://example.org/formulaire"
     assert data["is_contact_info_public"] is True
