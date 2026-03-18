@@ -54,6 +54,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "id",
             "diffusion_zone",
             "short_desc",
+            "full_desc",
             "publics",
             "eligibility_requirements",
             "is_cumulative",
