@@ -145,3 +145,42 @@ def test_disabled_dora_form_di_structures_api_is_read_only(
         response = client_method(url)
 
     assert response.status_code == 403
+
+
+def test_disabled_dora_form_di_structures_api_list(
+    emplois_user, api_client, django_assert_num_queries
+):
+    baker.make("structures.DisabledDoraFormDIStructure", source="source-1")
+    baker.make("structures.DisabledDoraFormDIStructure", source="source-2")
+
+    api_client.force_authenticate(user=emplois_user)
+
+    with django_assert_num_queries(1):
+        response = api_client.get(
+            reverse("emplois:disabled-dora-form-di-structure-list")
+        )
+
+    assert response.status_code == 200
+    assert len(response.data) == 2
+
+
+def test_disabled_dora_form_di_structures_api_detail(
+    emplois_user, api_client, django_assert_num_queries
+):
+    api_client.force_authenticate(user=emplois_user)
+
+    di_structure = baker.make(
+        "structures.DisabledDoraFormDIStructure", source="source-1"
+    )
+
+    with django_assert_num_queries(1):
+        response = api_client.get(
+            reverse(
+                "emplois:disabled-dora-form-di-structure-detail",
+                kwargs={"pk": di_structure.id},
+            )
+        )
+
+    assert response.status_code == 200
+    assert response.data["source"] == "source-1"
+    assert response.data["structure_id"] == di_structure.structure_id
