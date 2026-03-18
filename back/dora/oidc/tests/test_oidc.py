@@ -1,8 +1,12 @@
+from urllib.parse import parse_qs, urlparse
+
 import pytest
+from django.test import RequestFactory
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 from dora.core.test_utils import make_user
+from dora.oidc.views import CustomAuthorizationCallbackView
 
 
 @pytest.fixture
@@ -50,3 +54,35 @@ class TestOidcLoggedIn:
 
         assert response.status_code == 302
         assert "next=" not in response.url
+
+
+class TestCustomAuthorizationCallbackView:
+    def _make_view(self, next_url):
+        """Instancie la vue avec une session contenant oidc_login_next."""
+        view = CustomAuthorizationCallbackView(
+            request=RequestFactory().get("an-oidc-callback-url")
+        )
+        view.request.session = {"oidc_login_next": next_url}
+        return view
+
+    def test_success_url_preserves_all_query_params_in_next(self):
+        """
+        Régression : le next_url contenant plusieurs paramètres de requête
+        (ex: &op=TOKEN&mtm_kwd=...) doit être entièrement encodé dans le
+        paramètre `next` de l'URL de redirection.
+
+        Sans encodage, les `&` du next_url sont interprétés comme des séparateurs
+        de paramètres de premier niveau, ce qui fait perdre `op` (et les autres
+        paramètres) lors du parsing dans oidc_logged_in.
+        """
+        next_url = (
+            "/services/my-service?mtm_campaign=campaign&mtm_kwd=keyword&op=TOKEN123"
+        )
+
+        success_url = self._make_view(next_url).success_url
+
+        parsed = urlparse(success_url)
+        query_params = parse_qs(parsed.query)
+
+        assert "next" in query_params
+        assert query_params["next"][0] == next_url
