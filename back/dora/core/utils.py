@@ -161,4 +161,4 @@ def set_auth_token_cookie(response: HttpResponse, token_key: str):
     parsed_frontend_url = urlparse(settings.FRONTEND_URL)
     cookie_kwargs["domain"] = parsed_frontend_url.hostname
 
-    response.set_cookie("token", token_key, **cookie_kwargs)
+    response.set_cookie(settings.AUTH_COOKIE_NAME, token_key, **cookie_kwargs)
