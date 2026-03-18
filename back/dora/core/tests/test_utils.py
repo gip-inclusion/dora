@@ -226,9 +226,7 @@ def test_address_to_one_line(address1, address2, postal_code, city, expected):
     assert address_to_one_line(address1, address2, postal_code, city) == expected
 
 
-@override_settings(
-    FRONTEND_URL="https://subdomain.example.com", AUTH_COOKIE_NAME="token_test"
-)
+@override_settings(FRONTEND_URL="https://subdomain.example.com")
 def test_set_auth_token_cookie():
     """set_auth_token_cookie définit le cookie avec les bons attributs."""
     response = HttpResponse()
@@ -236,9 +234,9 @@ def test_set_auth_token_cookie():
 
     set_auth_token_cookie(response, token_key)
 
-    cookie = response.cookies["token_test"]
+    cookie = response.cookies["token"]
 
     assert (
         cookie.OutputString()
-        == f"token_test={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
+        == f"token={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
     )
