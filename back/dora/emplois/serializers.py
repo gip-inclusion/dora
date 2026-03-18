@@ -40,7 +40,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilization_modes_professionals = serializers.SerializerMethodField()
     mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
-    online_form = serializers.SerializerMethodField()
     credentials = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
     )
@@ -157,9 +156,6 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
-
-    def get_online_form(self, obj):
-        return obj.online_form or None
 
     def get_is_orientable_with_dora_form(self, obj):
         return obj.is_orientable() and any(
