@@ -357,7 +357,7 @@ def test_service_serializer_kinds():
     ]
 
 
-def test_service_serializer_is_orientable_with_dora_form_when_orientable_and_mode(
+def test_service_serializer_is_orientable_with_form_when_orientable_and_mode(
     orientable_service_via_dora_form,
 ):
     service = orientable_service_via_dora_form
@@ -369,10 +369,10 @@ def test_service_serializer_is_orientable_with_dora_form_when_orientable_and_mod
     assert service.is_orientable() is True
 
     data = ServiceSerializer(service).data
-    assert data["is_orientable_with_dora_form"] is True
+    assert data["is_orientable_with_form"] is True
 
 
-def test_service_serializer_is_not_orientable_with_dora_form_when_not_orientable():
+def test_service_serializer_is_not_orientable_with_form_when_not_orientable():
     service = make_published_service()
     service.contact_email = ""
     service.structure.disable_orientation_form = True
@@ -385,10 +385,10 @@ def test_service_serializer_is_not_orientable_with_dora_form_when_not_orientable
     assert service.is_orientable() is False
 
     data = ServiceSerializer(service).data
-    assert data["is_orientable_with_dora_form"] is False
+    assert data["is_orientable_with_form"] is False
 
 
-def test_service_serializer_is_not_orientable_with_dora_form_without_dora_mode(
+def test_service_serializer_is_not_orientable_with_form_without_dora_mode(
     orientable_service_via_dora_form,
 ):
     service = orientable_service_via_dora_form
@@ -400,10 +400,10 @@ def test_service_serializer_is_not_orientable_with_dora_form_without_dora_mode(
     )
 
     data = ServiceSerializer(service).data
-    assert data["is_orientable_with_dora_form"] is False
+    assert data["is_orientable_with_form"] is False
 
 
-def test_service_serializer_is_orientable_with_dora_form_when_ft_whitelisted(
+def test_service_serializer_is_orientable_with_form_when_ft_whitelisted(
     ft_orientable_service,
 ):
     service = ft_orientable_service
@@ -421,7 +421,7 @@ def test_service_serializer_is_orientable_with_dora_form_when_ft_whitelisted(
     assert service.is_orientable() is True
 
     data = ServiceSerializer(service).data
-    assert data["is_orientable_with_dora_form"] is True
+    assert data["is_orientable_with_form"] is True
 
 
 def test_average_orientation_response_delay_days_none_when_no_orientations():
