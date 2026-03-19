@@ -42,7 +42,6 @@ else:
 # pas nécessaire pour un environnement de dev, peut éventuellement être
 # modifié dans un environnement de test / custom / local
 AUTH_PASSWORD_VALIDATORS = []
-AUTH_COOKIE_NAME = "token_dev"
 
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += (  # noqa F405
     "rest_framework.renderers.BrowsableAPIRenderer",
