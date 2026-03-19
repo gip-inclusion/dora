@@ -1,9 +1,10 @@
 import { getApiURL } from "$lib/utils/api";
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
+import { TOKEN_KEY } from "$lib/utils/auth";
 
 export const load = async ({ cookies, url }: RequestEvent) => {
-  const token = cookies.get("token") ?? null;
+  const token = cookies.get(TOKEN_KEY) ?? null;
 
   const nextUrl = url.searchParams.get("next");
 

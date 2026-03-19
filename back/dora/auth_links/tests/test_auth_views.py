@@ -60,7 +60,7 @@ def test_authenticate_with_link_sets_cookie(client):
 
     assert response.status_code == 302
 
-    cookie = response.cookies["token"]
+    cookie = response.cookies["token_test"]
     assert cookie.value == token.key
 
 
@@ -79,4 +79,4 @@ def test_authenticate_with_link_creates_token_if_not_exists(client):
     assert response.status_code == 302
     assert Token.objects.filter(user=user).exists()
     token = Token.objects.get(user=user)
-    assert response.cookies["token"].value == token.key
+    assert response.cookies["token_test"].value == token.key

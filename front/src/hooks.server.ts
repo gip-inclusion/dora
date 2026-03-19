@@ -10,6 +10,7 @@ import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
+import { TOKEN_KEY } from "$lib/utils/auth";
 
 const rateLimiter = new RetryAfterRateLimiter({
   IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
@@ -48,7 +49,7 @@ export const handle: Handle = sequence(
       );
     }
 
-    const token = event.cookies.get("token");
+    const token = event.cookies.get(TOKEN_KEY);
     await handleInboundNexusAutoLogin(event.url, token);
 
     const response = await resolve(event);

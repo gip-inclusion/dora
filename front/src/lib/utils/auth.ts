@@ -9,7 +9,10 @@ import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
-const TOKEN_KEY = "token";
+export const TOKEN_KEY =
+  import.meta.env.VITE_ENVIRONMENT === "production"
+    ? "token"
+    : `token_${import.meta.env.VITE_ENVIRONMENT}`;
 
 export type UserMainActivity =
   | "accompagnateur"
