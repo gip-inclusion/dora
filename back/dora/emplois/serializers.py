@@ -44,7 +44,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         many=True, read_only=True, slug_field="name"
     )
     kinds = serializers.SlugRelatedField(many=True, read_only=True, slug_field="label")
-    is_orientable_with_dora_form = serializers.SerializerMethodField()
+    is_orientable_with_form = serializers.SerializerMethodField()
     average_orientation_response_delay_days = serializers.SerializerMethodField()
 
     class Meta:
@@ -65,7 +65,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "online_form",
             "credentials",
             "kinds",
-            "is_orientable_with_dora_form",
+            "is_orientable_with_form",
             "is_contact_info_public",
             "average_orientation_response_delay_days",
         ]
@@ -158,7 +158,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
 
-    def get_is_orientable_with_dora_form(self, obj):
+    def get_is_orientable_with_form(self, obj):
         return obj.is_orientable() and any(
             mode.value == "formulaire-dora"
             for mode in obj.coach_orientation_modes.all()
