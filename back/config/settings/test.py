@@ -30,7 +30,7 @@ DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.0.1", "0.0.0.0"]
 AUTH_PASSWORD_VALIDATORS = []
-AUTH_COOKIE_NAME = "token"
+AUTH_COOKIE_NAME = "token_test"
 
 
 # Configuration nécessaire pour les tests :

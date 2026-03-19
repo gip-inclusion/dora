@@ -21,7 +21,7 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
 
     assert response.status_code == 302
 
-    cookie = response.cookies["token"]
+    cookie = response.cookies["token_test"]
     assert cookie.value == token.key
 
     parsed_url = urlparse(response.url)
