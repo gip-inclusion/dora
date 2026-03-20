@@ -91,7 +91,7 @@ fetch_and_export_dora_data() {
     shred -u -z /tmp/out.dump/*
     rmdir /tmp/out.dump
 
-    # Suppression des colonnes sensibles ou pas utiles
+    # Suppression des colonnes sensibles ou inutiles
     time psql "$DATABASE_URL" <<SQL
 ALTER TABLE public.orientations_orientation 
 DROP COLUMN IF EXISTS beneficiary_last_name,
