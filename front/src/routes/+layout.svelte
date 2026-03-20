@@ -16,9 +16,10 @@
 
   interface Props {
     children?: Snippet;
+    data;
   }
 
-  let { children }: Props = $props();
+  let { children, data }: Props = $props();
 
   $effect(() => {
     trackPageView($page.url.pathname, $page.data.title);
@@ -61,7 +62,7 @@
 <Header />
 
 <main id="main-content">
-  {#if $userInfo && !$userInfo.mainActivity}
+  {#if $userInfo && !$userInfo.mainActivity && !data.hasOpJwt}
     <UserOnboardingModal />
   {/if}
 
