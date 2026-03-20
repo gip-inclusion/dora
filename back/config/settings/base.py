@@ -632,6 +632,10 @@ ORIENTATION_SIRENE_BLACKLIST = [
 # et pour activer le SSL sur la connexion à la base de données.
 ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 
+# Nom du cookie d'authentification : différencié par environnement pour éviter
+# les collisions de cookies entre prod et staging (même domaine parent).
+AUTH_COOKIE_NAME = "token" if ENVIRONMENT == "production" else f"token_{ENVIRONMENT}"
+
 # Profiling (Silk) :
 # Doit être explicitement activé (via env var)
 PROFILE = False

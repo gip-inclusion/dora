@@ -234,9 +234,9 @@ def test_set_auth_token_cookie():
 
     set_auth_token_cookie(response, token_key)
 
-    cookie = response.cookies["token"]
+    cookie = response.cookies["token_test"]
 
     assert (
         cookie.OutputString()
-        == f"token={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
+        == f"token_test={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
     )
