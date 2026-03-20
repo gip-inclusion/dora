@@ -56,6 +56,7 @@ def send_link(request):
 def authenticate_with_link(request, sesame):
     if sesame:
         if user := get_user(sesame):
+            # un élément du script sync-analytics.sh dépend de ce log, notamment du message et de la clé userId du payload.
             logger.info(
                 "Connexion par lien direct",
                 {

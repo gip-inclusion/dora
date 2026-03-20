@@ -91,7 +91,7 @@ fetch_and_export_dora_data() {
     shred -u -z /tmp/out.dump/*
     rmdir /tmp/out.dump
 
-    # Suppression des colonnes sensibles
+    # Suppression des colonnes sensibles ou inutiles
     time psql "$DATABASE_URL" <<SQL
 ALTER TABLE public.orientations_orientation 
 DROP COLUMN IF EXISTS beneficiary_last_name,
@@ -115,9 +115,24 @@ DROP COLUMN IF EXISTS is_contact_info_public;
 ALTER TABLE public.users_user 
 DROP COLUMN IF EXISTS password;
 
+ALTER TABLE public.logs_actionlog
+ADD COLUMN userId INTEGER;
+
+UPDATE public.logs_actionlog
+SET userId = (payload->>'userId')::INTEGER
+WHERE payload IS NOT NULL;
+
+ALTER TABLE public.logs_actionlog
+DROP COLUMN payload;
+
+DELETE FROM public.logs_actionlog
+WHERE ((created_at < NOW() - INTERVAL '3 months')
+OR msg NOT IN ('Connexion par lien direct', 'Connexion utilisateur via ProConnect'));
+
 VACUUM FULL public.orientations_orientation;
 VACUUM FULL public.services_service;
 VACUUM FULL public.users_user;
+VACUUM FULL public.logs_actionlog
 SQL
 
     echo "✔️ Fait."
