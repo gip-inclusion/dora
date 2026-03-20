@@ -4,6 +4,7 @@ import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
 import { needToAcceptCgu } from "$lib/utils/cgu";
+import { doesUrlHaveOrientationJwt } from "./auth/utils";
 
 export const prerender = false;
 
@@ -33,7 +34,9 @@ export const load: LayoutLoad = async ({ url }) => {
     currentUserInfo = get(userInfo);
   }
 
-  if (currentUserInfo) {
+  const hasOrientationJwt = doesUrlHaveOrientationJwt(url);
+
+  if (currentUserInfo && !hasOrientationJwt) {
     // ⚠ Il est nécessaire d'acceder à url.pathname ici pour que cette fonction `load`
     // soit rappelée quand l'URL change, sans quoi SvelteKit optimise l'appel.
     // Voir: https://kit.svelte.dev/docs/load#rerunning-load-functions
@@ -77,5 +80,7 @@ export const load: LayoutLoad = async ({ url }) => {
     }
   }
 
-  return {};
+  return {
+    hasOpJwt: hasOrientationJwt,
+  };
 };
