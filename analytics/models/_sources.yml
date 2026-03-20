@@ -280,6 +280,9 @@ sources:
         - name: sub_pc
           description: |
             Identifiant pro connect.
+        - name: logs_actionlog
+          description: | 
+            Table contenant les connexions des utilisateurs sur les derniers trois mois
 
   - name: matomo
     schema: public

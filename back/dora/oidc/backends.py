@@ -162,6 +162,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         # simplement surchargé pour ajout du token DRF
         # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
         if user := super().get_user(user_id):
+            # un élément du script sync-analytics.sh dépend de ce log, notamment du message et de la clé userId du payload.
             core_logger.info(
                 "Connexion utilisateur via ProConnect",
                 {
