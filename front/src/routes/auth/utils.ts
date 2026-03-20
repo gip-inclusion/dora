@@ -1,3 +1,17 @@
+import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+
+export function doesUrlHaveOrientationJwt(url: URL): boolean {
+  if (url.searchParams.has(ORIENTATION_JWT_QUERY_PARAM)) {
+    return true;
+  }
+  const nextParam = url.searchParams.get("next");
+  if (nextParam) {
+    const nextUrl = new URL(nextParam, url.origin);
+    return nextUrl.searchParams.has(ORIENTATION_JWT_QUERY_PARAM);
+  }
+  return false;
+}
+
 export function getNextPage(url: URL) {
   const next = url.searchParams.get("next");
   const basePath = next && next.startsWith("/") ? next : "/";
