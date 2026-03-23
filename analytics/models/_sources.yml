@@ -143,7 +143,7 @@ sources:
         columns:
         - name: id
           description: |
-          Identifiant de l'événement de mobilisation.
+            Identifiant de l'événement de mobilisation.
         - name: path
           description: |
             Slug de la page concernée.
@@ -220,7 +220,7 @@ sources:
 
       - name: structures_structuremember
         description: |
-        Table de correspondance entre les utilisateurs et leur structures de rattachement pour les utilisateurs rattachés.
+          Table de correspondance entre les utilisateurs et leur structures de rattachement pour les utilisateurs rattachés.
         columns: 
         - name: is_admin
           description: |
