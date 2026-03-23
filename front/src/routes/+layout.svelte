@@ -63,7 +63,7 @@
 <Header />
 
 <main id="main-content">
-  {#if $userInfo && !$userInfo.mainActivity && !data.hasOpJwt}
+  {#if $userInfo && !$userInfo.mainActivity && !data.hasOrientationJwt}
     <UserOnboardingModal />
   {/if}
 

@@ -81,6 +81,6 @@ export const load: LayoutLoad = async ({ url }) => {
   }
 
   return {
-    hasOpJwt: hasOrientationJwt,
+    hasOrientationJwt,
   };
 };
