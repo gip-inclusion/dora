@@ -13,10 +13,11 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+  import type { PageData } from "./$types";
 
   interface Props {
     children?: Snippet;
-    data;
+    data: PageData;
   }
 
   let { children, data }: Props = $props();
