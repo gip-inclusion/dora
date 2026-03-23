@@ -65,8 +65,10 @@
 
       if (userStructure && setCurrentStructure(userStructureSlug)) {
         toast.push({
-          msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}. Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
-          duration: 9000,
+          msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}.<br/><br/>Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
+          theme: {
+            "--toastWidth": "50%",
+          },
         });
       }
     }
@@ -148,3 +150,12 @@
 
   <MonRecapPopup />
 {/if}
+
+<style>
+  :global(._toastItem) {
+    top: 5.1rem !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+</style>
