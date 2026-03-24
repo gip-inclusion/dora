@@ -37,18 +37,18 @@ class HandleEmploisOrientationTestCase(APITestCase):
 
         self.url = f"/orientations/emplois/{self.service.slug}/"
 
-    def test_expired_token_redirects_to_login_with_toast(self):
+    def test_expired_token_redirects_to_homepage_with_link_invalid_param(self):
         with patch(
             "dora.orientations.views.decode_token", side_effect=ValueError("Expired")
         ):
             response = self.client.get(f"{self.url}?op=expired_token")
 
         assert response.status_code == 200
-        parsed = urlparse(response.data["next_url"])
-        assert parsed.path == "/auth/connexion"
-        assert parse_qs(parsed.query)["link_invalid"] == ["true"]
+        assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
 
-    def test_user_with_different_email_redirects_to_login(self):
+    def test_user_with_different_email_redirects_to_homepage_with_link_invalid_param(
+        self,
+    ):
         other_user = make_user(email="other@example.com")
         self.client.force_authenticate(user=other_user)
 
@@ -59,7 +59,7 @@ class HandleEmploisOrientationTestCase(APITestCase):
             response = self.client.get(f"{self.url}?op=valid_token")
 
         assert response.status_code == 200
-        assert response.data["next_url"] == f"{settings.FRONTEND_URL}/auth/pc-logout"
+        assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
 
     def test_updates_user_if_newly_created_account(self):
         new_email = "newuser@example.com"

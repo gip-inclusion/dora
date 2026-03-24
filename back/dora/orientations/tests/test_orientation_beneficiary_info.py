@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from dora.core.test_utils import make_user
 
 
@@ -84,3 +86,34 @@ def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
     assert (
         response.data["op"][0]["message"] == "Données bénéficiaire absentes du token."
     )
+
+
+def test_user_with_different_email_redirects_to_homepage_with_link_invalid_param(
+    api_client, monkeypatch
+):
+    user = make_user()
+    api_client.force_authenticate(user=user)
+
+    claims = {
+        "prescriber": {
+            "email": "different@invalid.com",
+        },
+        "beneficiary": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com",
+            "phone": "0102030405",
+            "france_travail_id": "1234567890",
+        },
+    }
+
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda value: claims,
+    )
+
+    url = "/orientations/emplois/beneficiary-info/?op=fake-token"
+    response = api_client.get(url)
+
+    assert response.status_code == 200
+    assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"

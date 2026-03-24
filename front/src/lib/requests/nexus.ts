@@ -37,6 +37,7 @@ export type OrientationBeneficiaryInfo = {
   email: string;
   phone: string;
   franceTravailId: string;
+  nextUrl?: string;
 };
 
 export const getOrientationBeneficiaryInfo = async (opJwt: string) => {

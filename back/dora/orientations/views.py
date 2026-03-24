@@ -357,15 +357,13 @@ def handle_emplois_orientation(request, service_slug):
     try:
         orientation_data = decode_token(op_jwt)
     except ValueError:
-        return Response(
-            {"next_url": f"{settings.FRONTEND_URL}/auth/connexion?link_invalid=true"}
-        )
+        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
 
     prescriber_data = orientation_data["prescriber"]
     prescriber_email = prescriber_data["email"]
 
     if request.user.is_authenticated and request.user.email != prescriber_email:
-        return Response({"next_url": f"{settings.FRONTEND_URL}/auth/pc-logout"})
+        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
 
     user_has_new_dora_account = (
         not request.user.main_activity and not request.user.discovery_method
@@ -424,6 +422,10 @@ def orientation_beneficiary_info(request):
     input_serializer.is_valid(raise_exception=True)
 
     claims = input_serializer.validated_data["op"]
+
+    if claims["prescriber"]["email"] != request.user.email:
+        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
+
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
         claims["beneficiary"]
     )
