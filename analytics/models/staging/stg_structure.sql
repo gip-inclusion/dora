@@ -6,7 +6,8 @@ WITH structures AS (
 final AS (
     SELECT
         structures.*,
-        CONCAT('https://dora.inclusion.beta.gouv.fr/structures/', structures.slug) AS dora_url
+        'dora--' || structures.id as id_jointure_di,
+        CONCAT('https://dora.inclusion.gouv.fr/structures/', structures.slug) AS dora_url
     FROM structures
 )
 

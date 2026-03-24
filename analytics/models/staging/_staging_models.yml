@@ -38,7 +38,9 @@ models:
         data_tests:
           - unique
           - not_null
-
+      - name: id_jointure_di
+        description: >
+          id prefixé par "dora--" permettant une jointure facile est immédiate avec les données data inclusion.
   - name: stg_pageview
     config:
       indexes:
@@ -109,3 +111,6 @@ models:
         data_tests:
           - unique
           - not_null
+      - name: id_jointure_di
+        description: >
+          id prefixé par "dora--" permettant une jointure facile est immédiate avec les données data inclusion.
