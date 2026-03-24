@@ -19,6 +19,7 @@
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
   import { formErrors } from "$lib/validation/validation";
   import type { Service } from "$lib/types";
+  import { orientationStep2Schema } from "../schema";
 
   interface Props {
     service: Service;
@@ -53,6 +54,14 @@
     $orientation.referentFirstName = $userInfo.firstName;
     $orientation.referentEmail = $userInfo.email;
   });
+
+  let phoneInputDisabled =
+    beneficiaryFieldsDisabled &&
+    orientationStep2Schema.beneficiaryPhone.rules.every(
+      (rule) =>
+        rule("beneficiaryPhone", $orientation.beneficiaryPhone, $orientation)
+          .valid
+    );
 
   let testWordDetected = $derived(orientationContainsTestWords($orientation));
 </script>
@@ -231,7 +240,7 @@
           placeholder="0123456789"
           descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
-          disabled={beneficiaryFieldsDisabled}
+          disabled={phoneInputDisabled}
           vertical
         />
       </div>
