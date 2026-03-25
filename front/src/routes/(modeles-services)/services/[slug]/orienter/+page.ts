@@ -1,4 +1,4 @@
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import {
   getOrientationBeneficiaryInfo,
@@ -27,6 +27,9 @@ export const load = async ({ parent, url }) => {
       beneficiaryInfo = await getOrientationBeneficiaryInfo(opJwt);
     } catch {
       beneficiaryInfo = null;
+    }
+    if (beneficiaryInfo && "nextUrl" in beneficiaryInfo) {
+      redirect(302, beneficiaryInfo.nextUrl);
     }
   }
 
