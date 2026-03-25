@@ -1,5 +1,7 @@
 # Politique de confidentialité de DORA
 
+Version au 4 avril 2026
+
 ## Qui est responsable de DORA ?
 
 DORA est développé au sein du GIP Plateforme de l’inclusion. DORA est une plateforme numérique alimentée par les offreurs de solution d’insertion locales, nationales et numériques.
@@ -12,14 +14,16 @@ DORA manipule des données à caractère personnel pour :
 
 - Permettre aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent via une recherche simple et personnalisée, des résultats qualifiées et des fiches solutions claires et actionnables ;
 - Avoir une visibilité au niveau territorial sur le déploiement de la plateforme DORA.
+- Suivre les activités des utilisateurs
 
 ## Quelles sont les données à caractère personnel que nous manipulons ?
 
-DORA manipule les données à caractère personnel suivantes relatives aux utilisateurs de la plateforme:
+DORA manipule les données à caractère personnel suivantes relatives aux utilisateurs de la plateforme :
 
 - **Données relatives aux utilisateurs de la plateforme** (nom, prénom, adresse e-mail, numéro de téléphone) ;
 - **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, identifiant unique France Travail, pièces justificatives relatives au dossier proposé par l’agent accompagnateur qui peuvent contenir des informations financières, des informations relatives à l’insertion sociale et l’emploi, des informations relatives à la situation familiale, RQTH ) ;
 - **Données relatives aux personnes à contacter pour référencer une structure** (prénom, nom, adresse e-mail, numéro de téléphone).
+- **Données relatives à la traçabilité des utilisateurs** (identifiant utilisateur, localisation, logs et adresse IP).
 
 ## Qu’est-ce qui nous autorise à manipuler ces données ?
 
@@ -38,6 +42,7 @@ Cette mission constitue des motifs d’intérêts publics importants au sens de 
 | Données relatives aux utilisateurs de la plateforme                       | 2 ans à compter du dernier contact avec l’utilisateur de la plateforme DORA. |
 | Données relatives aux personnes suivies par les agents accompagnateurs    | 6 mois après traitement de la demande, ou 2 ans en l’absence de traitement   |
 | Données relatives aux personnes à contacter pour référencer une structure | 2 ans à compter du dernier contact avec le référent.                         |
+| Données relatives à la traçabilité des utilisateurs                       | 1 an à compter du dernier contact avec l’utilisateur.                        |
 
 ## Quels droits avez-vous ?
 
@@ -52,7 +57,7 @@ Pour les exercer, contactez-nous à : [rgpd@inclusion.gouv.fr](mailto:rgpd@inclu
 
 Par voie postale :
 
-GIP Plateforme de l’inclusion  
+GIP Plateforme de l’inclusion
 6 Boulevard Saint-Denis
 75010 Paris
 
