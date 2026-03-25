@@ -16,13 +16,14 @@ def test_orientation_beneficiary_info_returns_beneficiary_data(api_client, monke
     api_client.force_authenticate(user=user)
 
     claims = {
+        "prescriber": {"email": user.email},
         "beneficiary": {
             "first_name": "John",
             "last_name": "Doe",
             "email": "john.doe@example.com",
             "phone": "0102030405",
             "france_travail_id": "1234567890",
-        }
+        },
     }
 
     monkeypatch.setattr(
