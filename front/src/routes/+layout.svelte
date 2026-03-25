@@ -13,12 +13,14 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+  import type { PageData } from "./$types";
 
   interface Props {
     children?: Snippet;
+    data: PageData;
   }
 
-  let { children }: Props = $props();
+  let { children, data }: Props = $props();
 
   $effect(() => {
     trackPageView($page.url.pathname, $page.data.title);
@@ -61,7 +63,7 @@
 <Header />
 
 <main id="main-content">
-  {#if $userInfo && !$userInfo.mainActivity}
+  {#if $userInfo && !$userInfo.mainActivity && !data.hasOrientationJwt}
     <UserOnboardingModal />
   {/if}
 
