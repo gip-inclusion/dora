@@ -72,8 +72,8 @@ Nous nous engageons à vous répondre dans un délai raisonnable qui ne saurait 
 Les accès aux données sont strictement encadrés et juridiquement justifiés. Les personnes suivantes vont avoir accès aux données :
 
 - Les membres de l’équipe DORA qui ont besoin des données dans leurs missions ou qui y ont accès de fait (développeur, etc.) ;
-- Agent ou toute personne désigné comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora ;
-- Agent ou toute personne désigné comme "accompagnateur" recevant les dossiers ou demande d’insertion ;
+- Agent ou toute personne désignée comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora ;
+- Agent ou toute personne désignée comme "accompagnateur" recevant les dossiers ou demande d’insertion ;
 - Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l’API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l’API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion).
 - Les données peuvent être transmises via France Transfert.
 
