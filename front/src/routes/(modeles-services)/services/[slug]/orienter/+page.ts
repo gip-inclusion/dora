@@ -28,7 +28,7 @@ export const load = async ({ parent, url }) => {
     } catch {
       beneficiaryInfo = null;
     }
-    if (beneficiaryInfo?.nextUrl) {
+    if (beneficiaryInfo && "nextUrl" in beneficiaryInfo) {
       redirect(302, beneficiaryInfo.nextUrl);
     }
   }

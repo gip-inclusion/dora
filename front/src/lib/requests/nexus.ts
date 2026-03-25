@@ -31,14 +31,21 @@ export const getNexusMenuStatus = async () => {
   return response.json() as Promise<NexusMenuStatus>;
 };
 
-export type OrientationBeneficiaryInfo = {
+type OrientationBeneficiaryInfoData = {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   franceTravailId: string;
-  nextUrl?: string;
 };
+
+type OrientationBeneficiaryInfoRedirect = {
+  nextUrl: string;
+};
+
+export type OrientationBeneficiaryInfo =
+  | OrientationBeneficiaryInfoData
+  | OrientationBeneficiaryInfoRedirect;
 
 export const getOrientationBeneficiaryInfo = async (opJwt: string) => {
   const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
