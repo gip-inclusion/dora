@@ -113,10 +113,14 @@
               onclick={() => (textInputVisible = true)}
             />
           </div>
-          <div class="gap-s16 flex flex-row" class:hidden={!textInputVisible}>
+          <div
+            class="gap-s16 flex flex-row items-center"
+            class:hidden={!textInputVisible}
+          >
             <div class="grow">
               <div class="flex flex-col">
                 <input
+                  class="border-gray-03 rounded-sm border-1"
                   id={`${id}-text-input`}
                   name={`${id}-text-input`}
                   type="text"
