@@ -39,7 +39,7 @@ PREFETCH_RELATED_SERVICE_LIST = [
 class APIPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
-        return (
+        return settings.ENVIRONMENT == "local" or (
             user.is_authenticated
             and user.email == settings.EMPLOIS_EMAIL
             and request.method in permissions.SAFE_METHODS

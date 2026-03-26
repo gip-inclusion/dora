@@ -1,4 +1,3 @@
-import itertools
 
 from django.core.files.storage import default_storage
 from django.db.models import Avg, DurationField, F
@@ -29,21 +28,13 @@ BENEFICIARIES_ACCESS_MODES_ORDER = {
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    diffusion_zone = serializers.CharField(
-        source="get_diffusion_zone_details_display", read_only=True
-    )
-    publics = serializers.SerializerMethodField()
-    eligibility_requirements = serializers.SerializerMethodField()
     funding_labels = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="label"
     )
-    mobilization_modes_professionals = serializers.SerializerMethodField()
-    mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
     credentials = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
     )
-    kinds = serializers.SlugRelatedField(many=True, read_only=True, slug_field="label")
     is_orientable_with_form = serializers.SerializerMethodField()
     average_orientation_response_delay_days = serializers.SerializerMethodField()
 
@@ -52,108 +43,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 
         fields = [
             "id",
-            "diffusion_zone",
             "short_desc",
-            "full_desc",
-            "publics",
-            "eligibility_requirements",
-            "is_cumulative",
-            "funding_labels",
-            "mobilization_modes_professionals",
-            "mobilization_modes_individuals",
-            "forms_info",
-            "online_form",
-            "credentials",
-            "kinds",
+            "funding_labels",  # TODO: We need a reference API for the label
+            "forms_info",  # TODO: Need `credentials` reference API
+            "online_form",  # TODO: Need `credentials` reference API
+            "credentials",  # TODO: We need a reference API for the label
             "is_orientable_with_form",
-            "is_contact_info_public",
             "average_orientation_response_delay_days",
         ]
-
-    def get_publics(self, obj):
-        publics = list(obj.publics.all())
-        if not publics:
-            return ["Tous publics"]
-        return [p.name for p in publics]
-
-    def get_eligibility_requirements(self, obj):
-        eligibility_requirements = list(
-            itertools.chain(
-                (ac.name for ac in obj.access_conditions.all()),
-                (r.name for r in obj.requirements.all()),
-            )
-        )
-        if obj.qpv_or_zrr:
-            eligibility_requirements.append("Uniquement QPV ou ZFRR")
-        return eligibility_requirements
-
-    def get_mobilization_modes_professionals(self, obj):
-        modes = sorted(
-            obj.coach_orientation_modes.all(),
-            key=lambda m: COACH_ORIENTATION_MODES_ORDER.get(m.value, 999),
-        )
-        result = []
-        for m in modes:
-            if m.value == "formulaire-dora":
-                name = "Orienter votre bénéficiaire via le formulaire DORA"
-            elif (
-                m.value == "envoyer-un-mail-avec-une-fiche-de-prescription"
-                and obj.contact_email
-            ):
-                name = "Envoyer un email avec une fiche de prescription"
-            elif m.value == "autre":
-                name = obj.coach_orientation_modes_other
-            else:
-                name = m.label
-
-            result.append(
-                {
-                    "name": name,
-                    "link": (
-                        obj.coach_orientation_modes_external_form_link
-                        if m.value == "completer-le-formulaire-dadhesion"
-                        and obj.coach_orientation_modes_external_form_link
-                        else None
-                    ),
-                    "custom": m.value == "autre",
-                }
-            )
-
-        return result
-
-    def get_mobilization_modes_individuals(self, obj):
-        modes = sorted(
-            obj.beneficiaries_access_modes.all(),
-            key=lambda m: BENEFICIARIES_ACCESS_MODES_ORDER.get(m.value, 999),
-        )
-        result = []
-        for m in modes:
-            if m.value == "completer-le-formulaire-dadhesion":
-                name = (
-                    obj.beneficiaries_access_modes_external_form_link_text
-                    or "Faire une demande"
-                )
-            elif m.value == "professionnel":
-                name = "Orientation par un professionnel"
-            elif m.value == "autre":
-                name = obj.beneficiaries_access_modes_other
-            else:
-                name = m.label
-
-            result.append(
-                {
-                    "name": name,
-                    "link": (
-                        obj.beneficiaries_access_modes_external_form_link
-                        if m.value == "completer-le-formulaire-dadhesion"
-                        and obj.beneficiaries_access_modes_external_form_link
-                        else None
-                    ),
-                    "custom": m.value == "autre",
-                }
-            )
-
-        return result
 
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
