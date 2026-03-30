@@ -366,6 +366,22 @@ def test_query_validate_service_duration_copy_on_orientation(api_client):
     assert orientation.duration_weeks == 4
 
 
+def test_create_with_null_op_jwt(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+    data["opJwt"] = None
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 201
+    assert structure.orientations.count() == 1
+
+
 def test_create_with_data_protection_commitment(api_client):
     user = make_user()
     structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
