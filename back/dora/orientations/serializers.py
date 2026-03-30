@@ -99,9 +99,10 @@ class OrientationSerializer(serializers.ModelSerializer):
         bénéficiaire ainsi que les ID (les_emplois_beneficiary_id, les_emplois_structure_id) sont préremplies.
         """
         # Préremplissage depuis le JWT des Emplois
-        if not self.instance and orientation.get("op_jwt"):
+        op_jwt = orientation.pop("op_jwt", None)
+        if not self.instance and op_jwt:
             try:
-                claims = decode_token(orientation.pop("op_jwt"))
+                claims = decode_token(op_jwt)
             except ValueError:
                 raise serializers.ValidationError(
                     {"op_jwt": "Token JWT invalide ou expiré."}
