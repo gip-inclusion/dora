@@ -21,6 +21,10 @@ export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
 
   const currentStructure = await getStructure(params.slug, fetch);
 
+  if (!currentStructure) {
+    error(404, "Page Not Found");
+  }
+
   let preferences: UserPreferences;
   let info: UserInfo;
 
@@ -37,10 +41,6 @@ export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
       ...info.pendingStructures,
       ...info.structures,
     ].map((struct) => struct.slug);
-
-    if (!currentStructure) {
-      error(404, "Page Not Found");
-    }
 
     if (userStructuresSlugs.includes(currentStructure.slug)) {
       setCurrentStructure(currentStructure.slug);
