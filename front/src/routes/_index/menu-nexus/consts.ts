@@ -1,5 +1,4 @@
 import LogoLesEmplois from "$lib/assets/logos/logo-emploi-inclusion.svg";
-import LogoDoraFull from "$lib/assets/logos/logo-dora-full.svg";
 import LogoLeMarche from "$lib/assets/logos/logo-marche-inclusion.svg";
 import LogoPilotage from "$lib/assets/logos/logo-pilotage-inclusion.svg";
 import LogoMonRecap from "$lib/assets/logos/logo-monrecap.svg";
@@ -36,21 +35,6 @@ export const ALL_SERVICES: NexusService[] = [
       autologin: true,
       prodUrl: "https://emplois.inclusion.beta.gouv.fr/dashboard/",
       stagingUrl: "https://demo.emplois.inclusion.beta.gouv.fr/dashboard/",
-    },
-  },
-  {
-    id: "dora",
-    label: "DORA",
-    icon: LogoDoraFull,
-    activated: {
-      autologin: true,
-      prodUrl: "https://dora.inclusion.gouv.fr/",
-      stagingUrl: "https://staging.dora.inclusion.gouv.fr/",
-    },
-    deactivated: {
-      autologin: true,
-      prodUrl: "https://dora.inclusion.gouv.fr/",
-      stagingUrl: "https://staging.dora.inclusion.gouv.fr/",
     },
   },
   {
