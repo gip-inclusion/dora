@@ -29,6 +29,7 @@ class OrientationSerializer(serializers.ModelSerializer):
     op_jwt = serializers.CharField(
         required=False,
         allow_blank=True,
+        allow_null=True,
         write_only=True,
         help_text="JWT des Emplois contenant des données d'orientation pré-remplies",
     )
