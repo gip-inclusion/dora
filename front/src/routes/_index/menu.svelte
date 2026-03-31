@@ -24,7 +24,7 @@
   let nexusMenuStatus = $state<NexusMenuStatus | undefined>(undefined);
 
   onMount(() => {
-    if (NEXUS_MENU_ENABLED) {
+    if (NEXUS_MENU_ENABLED && $userInfo) {
       getNexusMenuStatus().then((status) => {
         nexusMenuStatus = status;
       });
