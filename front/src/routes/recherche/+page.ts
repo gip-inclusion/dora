@@ -6,7 +6,7 @@ import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/stats";
 import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
-import { SEARCH_RADIUS_KM, TOAST_DURATION_MS } from "$lib/consts";
+import { SEARCH_RADIUS_KM } from "$lib/consts";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées
@@ -68,10 +68,7 @@ async function getResults(
     const error = errors[0];
     if (error?.code === "invalid_categories_or_subcategories") {
       toast.push(
-        "Les thématiques et besoins sélectionnés étaient invalides. Ils ont été désélectionnés.",
-        {
-          duration: TOAST_DURATION_MS,
-        }
+        "Les thématiques et besoins sélectionnés étaient invalides. Ils ont été désélectionnés."
       );
       return {
         searchCenter: null,

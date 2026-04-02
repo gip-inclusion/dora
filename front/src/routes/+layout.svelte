@@ -34,9 +34,7 @@
 
   $effect(() => {
     if (browser && $page.url.searchParams.get("link_invalid") === "true") {
-      toast.push("Lien expiré ou invalide", {
-        duration: TOAST_DURATION_MS,
-      });
+      toast.push("Lien expiré ou invalide");
     }
   });
 </script>
@@ -75,4 +73,4 @@
 
 <Footer />
 <CookieBanner />
-<SvelteToast />
+<SvelteToast options={{ duration: TOAST_DURATION_MS }} />

@@ -13,11 +13,7 @@
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CguCheckboxes from "../cgu-checkboxes.svelte";
-  import {
-    ORIENTATION_JWT_QUERY_PARAM,
-    TOAST_DURATION_MS,
-    URL_HELP_SITE,
-  } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "$lib/consts";
   import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
@@ -56,10 +52,7 @@
   $effect(() => {
     if (unknownSiret) {
       toast.push(
-        "Le SIRET de votre structure n'est pas reconnu. Par conséquent, toutes les données de votre orientation ont été perdues.",
-        {
-          duration: TOAST_DURATION_MS,
-        }
+        "Le SIRET de votre structure n'est pas reconnu. Par conséquent, toutes les données de votre orientation ont été perdues."
       );
     }
   });
