@@ -79,7 +79,7 @@
   });
 
   const inputClasses =
-    "h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden read-only:text-gray-03 disabled:bg-gray-00 grow";
+    "h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden read-only:text-gray-03 disabled:bg-gray-00 disabled:text-gray-text-alt2 grow";
 </script>
 
 {#if $currentSchema && id in $currentSchema}
