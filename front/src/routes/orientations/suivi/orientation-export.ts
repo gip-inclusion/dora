@@ -3,6 +3,7 @@ import { getApiURL } from "$lib/utils/api";
 import { toast } from "@zerodevx/svelte-toast";
 import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 import { orientationState } from "./state.svelte";
+import { TOAST_DURATION_MS } from "$lib/consts";
 
 interface SentOrientationExportData {
   creationDate: string;
@@ -69,7 +70,9 @@ export async function generateOrientationExport(structureSlug: string) {
   let sheetData;
 
   if (!exportData) {
-    toast.push("Une erreur est survenue lors de l’export des orientations.");
+    toast.push("Une erreur est survenue lors de l’export des orientations.", {
+      duration: TOAST_DURATION_MS,
+    });
     return;
   }
 

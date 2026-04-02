@@ -13,6 +13,7 @@
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
+  import { TOAST_DURATION_MS } from "$lib/consts";
   import type { PageData } from "./$types";
 
   interface Props {
@@ -33,7 +34,9 @@
 
   $effect(() => {
     if (browser && $page.url.searchParams.get("link_invalid") === "true") {
-      toast.push("Lien expiré ou invalide");
+      toast.push("Lien expiré ou invalide", {
+        duration: TOAST_DURATION_MS,
+      });
     }
   });
 </script>

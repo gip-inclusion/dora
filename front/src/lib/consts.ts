@@ -41,3 +41,5 @@ export const EMPLOIS_MORE_INFO_URL =
 export const PROCONNECT_MORE_INFO_URL = "https://www.proconnect.gouv.fr/";
 
 export const ORIENTATION_JWT_QUERY_PARAM = "op";
+
+export const TOAST_DURATION_MS = 30000;

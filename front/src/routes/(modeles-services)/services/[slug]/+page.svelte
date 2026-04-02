@@ -8,7 +8,11 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "$lib/consts";
+  import {
+    ORIENTATION_JWT_QUERY_PARAM,
+    TallyFormId,
+    TOAST_DURATION_MS,
+  } from "$lib/consts";
   import { getService } from "$lib/requests/services";
   import type { Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
@@ -69,6 +73,7 @@
           theme: {
             "--toastWidth": "50%",
           },
+          duration: TOAST_DURATION_MS,
         });
       }
     }

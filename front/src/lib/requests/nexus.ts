@@ -1,5 +1,5 @@
 import { toast } from "@zerodevx/svelte-toast";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { ORIENTATION_JWT_QUERY_PARAM, TOAST_DURATION_MS } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
 import { getToken } from "$lib/utils/auth";
 
@@ -65,7 +65,10 @@ export const getOrientationBeneficiaryInfo = async (opJwt: string) => {
       body.op && body.op.length > 0 ? body.op[0].message : "";
     toast.push(
       "Une erreur est survenue lors de la récupération des informations du bénéficiaire" +
-        (errorDetails ? ` : ${errorDetails}` : "")
+        (errorDetails ? ` : ${errorDetails}` : ""),
+      {
+        duration: TOAST_DURATION_MS,
+      }
     );
     throw new Error("Failed to fetch orientation beneficiary info");
   }
