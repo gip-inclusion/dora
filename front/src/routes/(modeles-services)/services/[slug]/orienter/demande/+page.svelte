@@ -31,6 +31,12 @@
 
   let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
+  let previsousStepUrl = $derived(
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${
+      opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""
+    }`
+  );
+
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])
     .filter(
@@ -125,7 +131,7 @@
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
         icon={ArrowLeftSLineArrows}
-        to="/services/{data.service.slug}/orienter"
+        to={previsousStepUrl}
         label="Revenir à l’étape précédente"
         secondary
       />
