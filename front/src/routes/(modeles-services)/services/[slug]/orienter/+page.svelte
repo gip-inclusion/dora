@@ -47,6 +47,20 @@
   // tracking activé sur la page courante :
   const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));
 
+  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
+
+  let previousStepUrl = $derived(
+    `/services/${isDI ? "di--" : ""}${service.slug}${
+      opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""
+    }`
+  );
+
+  let nextStepUrl = $derived(
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande${
+      opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""
+    }`
+  );
+
   // On ne doit pas tracker la mobilisation sur affichage de contacts
   // (ou toute autre action)
   // si on se trouve sur la page du formulaire d'orientation :
@@ -83,10 +97,7 @@
   }
 
   function handleSuccess(_result) {
-    const opJwt = $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
-    goto(
-      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande${opJwt ? `?${ORIENTATION_JWT_QUERY_PARAM}=${opJwt}` : ""}`
-    );
+    goto(nextStepUrl);
   }
 
   onMount(async () => {
@@ -146,7 +157,7 @@
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
         icon={ArrowLeftSLineArrows}
-        to="/services/{isDI ? 'di--' : ''}{service.slug}"
+        to={previousStepUrl}
         label="Retour à la fiche"
         secondary
       />
