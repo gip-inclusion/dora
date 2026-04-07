@@ -482,8 +482,18 @@ ADMINS = (
 # CSP :
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE],
-    "style-src": [CSP.SELF, CSP.NONCE],
+    # Le widget cartographique de l'admin Django GIS charge OpenLayers (jsDelivr) et les tuiles OSM.
+    "script-src": [
+        CSP.SELF,
+        CSP.NONCE,
+        "https://cdn.jsdelivr.net",
+        "'sha256-wT8A7+MN/p4Bz/w+R+COOHf9HZ+xYskWOIu/JDwIvkg='",
+    ],
+    "style-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net"],
+    "img-src": [
+        CSP.SELF,
+        "https://tile.openstreetmap.org",
+    ],
 }
 
 # Envoi d'e-mails transactionnels :
