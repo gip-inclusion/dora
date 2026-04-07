@@ -1015,9 +1015,9 @@ sqlparse==0.5.5 \
     # via
     #   django
     #   itoutils
-syrupy==5.1.0 \
-    --hash=sha256:95162d2b05e61ed3e13f117b88dfab7c58bd6f90e66ebbf918e8a77114ad51c5 \
-    --hash=sha256:df543c7aa50d3cf1246e83d58fe490afe5f7dab7b41e74ecc0d8d23ae19bd4b8
+syrupy==2026.4.6.124150327040 \
+    --hash=sha256:7618c13733a6ff4cd3021880f09696405dc28b3f3d32dadd2ed56694641acf6e \
+    --hash=sha256:d6a97ab230bada31f80934ef615f3ebc3ecd73635ebb2f4f72ca54d54e76dc2f
     # via
     #   -r requirements/test.in
     #   itoutils
