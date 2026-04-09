@@ -410,19 +410,21 @@ def _resolve_emplois_orientation(
             params["orienter"] = "true"
         return Response({"next_url": f"{rattachement_url}?{urlencode(params)}"}), None
 
-    return None, structure
+    return None, structure.slug
 
 
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
 def handle_emplois_orientation(request, service_slug):
     op_jwt = request.GET.get("op")
-    response, structure = _resolve_emplois_orientation(request, op_jwt, service_slug)
+    response, structure_slug = _resolve_emplois_orientation(
+        request, op_jwt, service_slug
+    )
     if response is not None:
         return response
     return Response(
         {
-            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure.slug})}"
+            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure_slug})}"
         }
     )
 
@@ -439,7 +441,7 @@ def orientation_beneficiary_info(request):
     op_jwt = request.GET.get("op")
     service_slug = request.GET.get("service_slug", "")
 
-    response, structure = _resolve_emplois_orientation(
+    response, structure_slug = _resolve_emplois_orientation(
         request, op_jwt, service_slug, direct_to_orientation=True
     )
     if response is not None:
@@ -448,4 +450,4 @@ def orientation_beneficiary_info(request):
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
         claims["beneficiary"]
     )
-    return Response({**output_serializer.data, "user_structure_slug": structure.slug})
+    return Response({**output_serializer.data, "user_structure_slug": structure_slug})
