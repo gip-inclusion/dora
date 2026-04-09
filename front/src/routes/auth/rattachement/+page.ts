@@ -41,7 +41,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   const unknownSiret = url.searchParams.get("unknown_siret") === "true";
   const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
   const serviceSlug = url.searchParams.get("service_slug");
-  const isOrienter = url.searchParams.get("orienter") === "true";
+  const directToOrientationPage = url.searchParams.get("orienter") === "true";
   const proposedSafir = userIsFranceTravail
     ? url.searchParams.get("safir")
     : "";
@@ -65,7 +65,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     unknownSiret,
     opJwt,
     serviceSlug,
-    isOrienter,
+    directToOrientationPage,
     proposedSafir,
     userIsFranceTravail,
   };
