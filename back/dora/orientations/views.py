@@ -349,21 +349,25 @@ class OrientationExportView(APIView):
         return Response(serializer.data)
 
 
-@api_view(["GET"])
-@permission_classes([permissions.IsAuthenticated])
-def handle_emplois_orientation(request, service_slug):
-    op_jwt = request.GET.get("op")
-
+def _resolve_emplois_orientation(
+    request, op_jwt, service_slug, direct_to_orientation=False
+):
+    """
+    Logique métier partagé entre les routes appelé pour diriger l'utilisateur avec un jwt "OP" vers la bonne page
+    """
     try:
         orientation_data = decode_token(op_jwt)
     except ValueError:
-        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
+        return Response(
+            {"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"}
+        ), None
 
     prescriber_data = orientation_data["prescriber"]
-    prescriber_email = prescriber_data["email"]
 
-    if request.user.is_authenticated and request.user.email != prescriber_email:
-        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
+    if request.user.email != prescriber_data["email"]:
+        return Response(
+            {"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"}
+        ), None
 
     user_has_new_dora_account = (
         not request.user.main_activity and not request.user.discovery_method
@@ -374,38 +378,47 @@ def handle_emplois_orientation(request, service_slug):
         request.user.save()
 
     structure_siret = prescriber_data["organization"]["siret"]
-    is_siret_recognized = Establishment.objects.filter(siret=structure_siret).exists()
-
     rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
 
-    if not is_siret_recognized:
+    if not Establishment.objects.filter(siret=structure_siret).exists():
         return Response(
             {
                 "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'unknown_siret': 'true'})}"
             }
-        )
+        ), None
 
     try:
         structure = Structure.objects.get(siret=structure_siret)
     except Structure.DoesNotExist:
-        return Response(
-            {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt, 'service_slug': service_slug})}"
-            }
-        )
+        params = {"siret": structure_siret, "op": op_jwt, "service_slug": service_slug}
+        if direct_to_orientation:
+            params["orienter"] = "true"
+        return Response({"next_url": f"{rattachement_url}?{urlencode(params)}"}), None
 
-    is_structure_member = structure.membership.filter(user=request.user).exists()
-
-    if not is_structure_member:
+    if not structure.membership.filter(user=request.user).exists():
         orientation_data["fast_track"] = True
         orientation_data["exp"] = ceil(time.time()) + 3600
         op_jwt_with_fast_track = generate_token(orientation_data)
-        return Response(
-            {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'op': op_jwt_with_fast_track, 'service_slug': service_slug, 'fast_track': 'true'})}"
-            }
-        )
+        params = {
+            "siret": structure_siret,
+            "op": op_jwt_with_fast_track,
+            "service_slug": service_slug,
+            "fast_track": "true",
+        }
+        if direct_to_orientation:
+            params["orienter"] = "true"
+        return Response({"next_url": f"{rattachement_url}?{urlencode(params)}"}), None
 
+    return None, structure
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def handle_emplois_orientation(request, service_slug):
+    op_jwt = request.GET.get("op")
+    response, structure = _resolve_emplois_orientation(request, op_jwt, service_slug)
+    if response is not None:
+        return response
     return Response(
         {
             "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure.slug})}"
@@ -422,9 +435,14 @@ def orientation_beneficiary_info(request):
     input_serializer.is_valid(raise_exception=True)
 
     claims = input_serializer.validated_data["op"]
+    op_jwt = request.GET.get("op")
+    service_slug = request.GET.get("service_slug", "")
 
-    if claims["prescriber"]["email"] != request.user.email:
-        return Response({"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"})
+    response, _ = _resolve_emplois_orientation(
+        request, op_jwt, service_slug, direct_to_orientation=True
+    )
+    if response is not None:
+        return response
 
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
         claims["beneficiary"]
