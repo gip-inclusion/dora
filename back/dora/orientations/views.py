@@ -350,10 +350,11 @@ class OrientationExportView(APIView):
 
 
 def _resolve_emplois_orientation(
-    request, op_jwt, service_slug, direct_to_orientation=False
-):
+    request: Request, op_jwt: str, service_slug: str, direct_to_orientation=False
+) -> (str | None, str | None):
     """
     Logique métier partagé entre les routes appelé pour diriger l'utilisateur avec un jwt "OP" vers la bonne page
+    Ça renvoie un tuple qui est soit (<next_url>, None) soit (None, <structure_slug>)
     """
     try:
         orientation_data = decode_token(op_jwt)
