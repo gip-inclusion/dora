@@ -129,12 +129,3 @@
 
   <MonRecapPopup />
 {/if}
-
-<style>
-  :global(._toastItem) {
-    top: 5.1rem !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-  }
-</style>

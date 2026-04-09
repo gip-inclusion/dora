@@ -48,12 +48,10 @@
       ].find((struct) => struct.slug === userStructureSlug);
 
       if (userStructure && setCurrentStructure(userStructureSlug)) {
-        toast.push({
-          msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}.<br/><br/>Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
-          theme: {
-            "--toastWidth": "50%",
-          },
-        });
+        toast.push(
+          `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}.<br/><br/>Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
+          { target: "structure-switch" }
+        );
       }
     }
   });
@@ -94,3 +92,18 @@
 <Footer />
 <CookieBanner />
 <SvelteToast options={{ duration: TOAST_DURATION_MS }} />
+<div class="structure-switch-toast">
+  <SvelteToast target="structure-switch" options={{ duration: TOAST_DURATION_MS }} />
+</div>
+
+<style>
+  .structure-switch-toast :global(._toastContainer) {
+    top: 6.6rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+  .structure-switch-toast :global(._toastItem) {
+    width: 50vw
+  }
+</style>
