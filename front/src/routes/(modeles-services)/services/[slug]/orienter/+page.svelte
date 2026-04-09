@@ -33,6 +33,7 @@
         email: string;
         phone: string;
         franceTravailId: string;
+        userStructureSlug: string;
       } | null;
     };
   }
@@ -81,6 +82,13 @@
       $orientation.beneficiaryPhone = data.beneficiaryInfo.phone;
       $orientation.beneficiaryFranceTravailNumber =
         data.beneficiaryInfo.franceTravailId;
+      if (data.beneficiaryInfo.userStructureSlug) {
+        $page.url.searchParams.set(
+          "user_structure_slug",
+          data.beneficiaryInfo.userStructureSlug
+        );
+        history.replaceState(null, "", $page.url.pathname + $page.url.search);
+      }
     } else {
       $page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
       history.replaceState(null, "", $page.url.pathname + $page.url.search);

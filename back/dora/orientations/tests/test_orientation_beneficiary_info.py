@@ -51,7 +51,7 @@ def test_orientation_beneficiary_info_returns_beneficiary_data(api_client):
         )
 
     assert response.status_code == 200
-    assert response.data == BENEFICIARY_DATA
+    assert response.data == {**BENEFICIARY_DATA, "user_structure_slug": structure.slug}
 
 
 def test_orientation_beneficiary_info_invalid_token_returns_error(

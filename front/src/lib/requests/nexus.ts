@@ -37,6 +37,7 @@ type OrientationBeneficiaryInfoData = {
   email: string;
   phone: string;
   franceTravailId: string;
+  userStructureSlug: string;
 };
 
 type OrientationBeneficiaryInfoRedirect = {

@@ -439,7 +439,7 @@ def orientation_beneficiary_info(request):
     op_jwt = request.GET.get("op")
     service_slug = request.GET.get("service_slug", "")
 
-    response, _ = _resolve_emplois_orientation(
+    response, structure = _resolve_emplois_orientation(
         request, op_jwt, service_slug, direct_to_orientation=True
     )
     if response is not None:
@@ -448,4 +448,4 @@ def orientation_beneficiary_info(request):
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
         claims["beneficiary"]
     )
-    return Response(output_serializer.data)
+    return Response({**output_serializer.data, "user_structure_slug": structure.slug})
