@@ -5,7 +5,7 @@ import {
   type OrientationBeneficiaryInfo,
 } from "$lib/requests/nexus";
 
-export const load = async ({ parent, url, params }) => {
+export const load = async ({ parent, url, params, fetch }) => {
   const data = await parent();
   const { service } = data;
 
@@ -24,7 +24,11 @@ export const load = async ({ parent, url, params }) => {
   const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
   if (opJwt) {
     try {
-      beneficiaryInfo = await getOrientationBeneficiaryInfo(opJwt, params.slug);
+      beneficiaryInfo = await getOrientationBeneficiaryInfo(
+        opJwt,
+        params.slug,
+        fetch
+      );
     } catch {
       beneficiaryInfo = null;
     }
