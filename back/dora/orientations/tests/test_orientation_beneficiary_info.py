@@ -8,7 +8,6 @@ from dora.core.test_utils import make_service, make_structure, make_user
 from dora.sirene.models import Establishment
 from dora.structures.models import StructureMember
 
-
 URL = "/orientations/emplois/beneficiary-info/"
 
 BENEFICIARY_DATA = {
