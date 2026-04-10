@@ -5,6 +5,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import (
+    make_model,
     make_service,
     make_structure,
     make_structure_member,
@@ -187,6 +188,53 @@ class StructureTestCase(APITestCase):
         self.assertEqual(
             sorted(response.data["national_labels"]), sorted(national_labels)
         )
+
+    # Models can_user_edit
+
+    def test_user_can_see_and_edit_models_of_own_structure(self):
+        make_model(structure=self.my_struct)
+        response = self.client.get(f"/structures/{self.my_struct.slug}/")
+        self.assertEqual(response.status_code, 200)
+        models = response.data["models"]
+        self.assertEqual(len(models), 1)
+        self.assertTrue(models[0]["can_user_edit"])
+
+    def test_user_can_see_but_not_edit_model_when_not_structure_member(self):
+        make_model(structure=self.other_struct)
+        response = self.client.get(f"/structures/{self.other_struct.slug}/")
+        self.assertEqual(response.status_code, 200)
+        models = response.data["models"]
+        self.assertEqual(len(models), 1)
+        self.assertFalse(models[0]["can_user_edit"])
+
+    def test_user_can_see_models_of_parent_structure_but_cannot_edit_when_not_member_of_parent(
+        self,
+    ):
+        parent_struct = make_structure()
+        child_struct = make_structure(parent=parent_struct)
+        make_structure_member(user=self.me, structure=child_struct)
+        parent_model = make_model(structure=parent_struct)
+
+        response = self.client.get(f"/structures/{child_struct.slug}/")
+        self.assertEqual(response.status_code, 200)
+        models = response.data["models"]
+        self.assertEqual(len(models), 1)
+        self.assertEqual(parent_model.slug, models[0]["slug"])
+        self.assertFalse(models[0]["can_user_edit"])
+
+    def test_user_can_edit_parent_structure_models_when_member_of_parent(self):
+        parent_struct = make_structure()
+        child_struct = make_structure(parent=parent_struct)
+        make_structure_member(user=self.me, structure=child_struct)
+        make_structure_member(user=self.me, structure=parent_struct)
+        make_model(structure=parent_struct)
+
+        response = self.client.get(f"/structures/{child_struct.slug}/")
+        self.assertEqual(response.status_code, 200)
+        models = response.data["models"]
+        parent_models = [m for m in models if m["structure"] == parent_struct.slug]
+        self.assertEqual(len(parent_models), 1)
+        self.assertTrue(parent_models[0]["can_user_edit"])
 
     # Superuser
 
