@@ -53,7 +53,7 @@ def test_orientation_beneficiary_info_returns_beneficiary_data(api_client):
     assert response.data == {**BENEFICIARY_DATA, "user_structure_slug": structure.slug}
 
 
-def test_orientation_beneficiary_info_invalid_token_returns_error(
+def test_orientation_beneficiary_info_invalid_token_redirects_to_homepage_with_error(
     api_client, monkeypatch
 ):
     user = make_user()
@@ -69,25 +69,37 @@ def test_orientation_beneficiary_info_invalid_token_returns_error(
 
     response = api_client.get(f"{URL}?op=invalid-token")
 
-    assert response.status_code == 400
-    assert len(response.data["op"]) == 1
-    assert response.data["op"][0]["message"] == "Token JWT invalide."
+    assert response.status_code == 200
+    assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
 
 
 def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
-    api_client, monkeypatch
+    api_client,
 ):
     user = make_user()
     api_client.force_authenticate(user=user)
+    structure = make_structure()
+    baker.make(Establishment, siret=structure.siret)
+    baker.make(StructureMember, structure=structure, user=user)
 
-    claims_without_beneficiary = {"foo": "bar"}
+    claims_without_beneficiary = {
+        "prescriber": {
+            "email": user.email,
+            "organization": {"siret": structure.siret},
+        },
+    }
 
-    monkeypatch.setattr(
-        "dora.orientations.serializers.decode_token",
-        lambda value: claims_without_beneficiary,
-    )
-
-    response = api_client.get(f"{URL}?op=valid-token-without-beneficiary")
+    with (
+        patch(
+            "dora.orientations.serializers.decode_token",
+            return_value=claims_without_beneficiary,
+        ),
+        patch(
+            "dora.orientations.views.decode_token",
+            return_value=claims_without_beneficiary,
+        ),
+    ):
+        response = api_client.get(f"{URL}?op=token_without_beneficiary")
 
     assert response.status_code == 400
     assert len(response.data["op"]) == 1

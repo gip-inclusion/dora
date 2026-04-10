@@ -432,20 +432,22 @@ def handle_emplois_orientation(request, service_slug):
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
 def orientation_beneficiary_info(request):
-    input_serializer = OrientationBeneficiaryInfoInputSerializer(
-        data=request.query_params
-    )
-    input_serializer.is_valid(raise_exception=True)
-
-    claims = input_serializer.validated_data["op"]
     op_jwt = request.GET.get("op")
+
     service_slug = request.GET.get("service_slug", "")
 
     response, structure_slug = _resolve_emplois_orientation(
         request, op_jwt, service_slug, direct_to_orientation=True
     )
+
     if response is not None:
         return response
+
+    input_serializer = OrientationBeneficiaryInfoInputSerializer(
+        data=request.query_params
+    )
+    input_serializer.is_valid(raise_exception=True)
+    claims = input_serializer.validated_data["op"]
 
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
         claims["beneficiary"]
