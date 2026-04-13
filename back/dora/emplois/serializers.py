@@ -30,6 +30,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="label"
     )
+    custom_mobilization_form = serializers.SerializerMethodField()
     mobilization_modes_professionals = serializers.SerializerMethodField()
     mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
@@ -46,6 +47,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "id",
             "short_desc",
             "funding_labels",  # TODO: We need a reference API for the label
+            "custom_mobilization_form",
             "mobilization_modes_professionals",
             "mobilization_modes_individuals",
             "forms_info",  # TODO: Need `credentials` reference API
@@ -54,6 +56,17 @@ class ServiceSerializer(serializers.ModelSerializer):
             "is_orientable_with_form",
             "average_orientation_response_delay_days",
         ]
+
+    def get_custom_mobilization_form(self, obj):
+        if any(
+            m.value == "completer-le-formulaire-dadhesion"
+            for m in obj.coach_orientation_modes.all()
+        ):
+            return {
+                "label": obj.coach_orientation_modes_external_form_link_text,
+                "link": obj.coach_orientation_modes_external_form_link,
+            }
+        return None
 
     def get_mobilization_modes_professionals(self, obj):
         modes = sorted(
