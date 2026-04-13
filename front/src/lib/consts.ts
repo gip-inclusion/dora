@@ -24,13 +24,7 @@ export const DI_METABASE_STATS_DASHBOARD_URL = (
   departmentName: string,
   dataSource: string = "dora"
 ) =>
-  `https://stats.inclusion.beta.gouv.fr/public/dashboard/bbe6a581-0ecc-40cb-84d3-b3f2e9625f5b?d%25C3%25A9partement=${departmentName}&producteur_de_donn%25C3%25A9es=${dataSource}`;
-
-export const DI_METABASE_LIST_DASHBOARD_URL = (
-  departmentName: string,
-  dataSource: string = "dora"
-) =>
-  `https://stats.inclusion.beta.gouv.fr/public/dashboard/e5baef58-cc06-4c9c-aec4-5919654b2534?d%25C3%25A9partement=${departmentName}&producteur_de_donn%25C3%25A9es=${dataSource}`;
+  `https://stats.inclusion.beta.gouv.fr/public/dashboard/3b0582bc-cdff-41a8-b94d-a57e4d97f512?d%25C3%25A9partement=${departmentName}&producteur_de_donn%25C3%25A9es=${dataSource}`;
 
 export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
