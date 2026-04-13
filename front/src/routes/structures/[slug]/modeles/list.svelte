@@ -83,10 +83,7 @@
 {:else}
   <div class="mb-s48 gap-s16 grid md:grid-cols-2 lg:grid-cols-3">
     {#each modelsOrdered as model}
-      <ModelCard
-        {model}
-        readOnly={!structure.canEditServices || !model.canUserEdit}
-      />
+      <ModelCard {model} readOnly={!model.canUserEdit} />
     {/each}
   </div>
 {/if}

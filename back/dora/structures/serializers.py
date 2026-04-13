@@ -309,24 +309,21 @@ class StructureSerializer(serializers.ModelSerializer):
                 return obj.can_user_edit
 
         user = self.context.get("request").user
-        structures = [structure]
+        target_structures = [structure]
 
-        can_user_edit_base_structure = Value(
-            structure.can_edit_services(user), output_field=BooleanField()
-        )
-        can_user_edit_parent_structure = can_user_edit_base_structure
+        can_edit_current = structure.can_edit_services(user)
+        can_edit_parent = False
+
         if structure.parent:
-            structures.append(structure.parent)
-            can_user_edit_parent_structure = Value(
-                structure.parent.can_edit_services(user), output_field=BooleanField()
-            )
+            target_structures.append(structure.parent)
+            can_edit_parent = structure.parent.can_edit_services(user)
 
         qs = (
-            ServiceModel.objects.filter(structure__in=structures)
+            ServiceModel.objects.filter(structure__in=target_structures)
             .annotate(
                 can_user_edit=Case(
-                    When(structure=structure, then=can_user_edit_base_structure),
-                    default=can_user_edit_parent_structure,
+                    When(structure=structure, then=Value(can_edit_current)),
+                    default=Value(can_edit_parent),
                     output_field=BooleanField(),
                 )
             )
