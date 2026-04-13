@@ -54,6 +54,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "online_form",  # TODO: Need `credentials` reference API
             "credentials",  # TODO: We need a reference API for the label
             "is_orientable_with_form",
+            "is_contact_info_public",
             "average_orientation_response_delay_days",
         ]
 
