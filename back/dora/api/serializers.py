@@ -1,5 +1,3 @@
-from django.conf import settings
-
 # from django.core.files.storage import default_storage
 from rest_framework import serializers
 
@@ -372,16 +370,19 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.get_frontend_url()
 
     def get_telephone(self, obj):
-        assert self.context.get("request").user.email == settings.DATA_INCLUSION_EMAIL
-        return obj.contact_phone
+        if obj.is_contact_info_public:
+            return obj.contact_phone
+        return None
 
     def get_courriel(self, obj):
-        assert self.context.get("request").user.email == settings.DATA_INCLUSION_EMAIL
-        return obj.contact_email
+        if obj.is_contact_info_public:
+            return obj.contact_email
+        return None
 
     def get_contact_nom_prenom(self, obj):
-        assert self.context.get("request").user.email == settings.DATA_INCLUSION_EMAIL
-        return obj.contact_name
+        if obj.is_contact_info_public:
+            return obj.contact_name
+        return None
 
     def get_contact_public(self, obj):
         return obj.is_contact_info_public
