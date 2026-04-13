@@ -34,6 +34,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilization_modes_professionals = serializers.SerializerMethodField()
     mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
+    access_conditions = serializers.SerializerMethodField()
     credentials = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
     )
@@ -46,14 +47,19 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "short_desc",
+            "recurrence",
             "funding_labels",  # TODO: We need a reference API for the label
             "custom_mobilization_form",
             "mobilization_modes_professionals",
             "mobilization_modes_individuals",
             "forms_info",  # TODO: Need `credentials` reference API
             "online_form",  # TODO: Need `credentials` reference API
+            "access_conditions",
             "credentials",  # TODO: We need a reference API for the label
             "is_orientable_with_form",
+            "contact_name",
+            "contact_phone",
+            "contact_email",
             "is_contact_info_public",
             "average_orientation_response_delay_days",
         ]
@@ -139,6 +145,9 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
+
+    def get_access_conditions(self, obj):
+        return [ac.name for ac in obj.access_conditions.all()]
 
     def get_is_orientable_with_form(self, obj):
         return obj.is_orientable() and any(
