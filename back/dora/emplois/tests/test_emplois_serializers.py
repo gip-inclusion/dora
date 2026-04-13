@@ -1,7 +1,5 @@
 from datetime import timedelta
 
-import pytest
-from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.utils import timezone
 from model_bakery import baker
 
@@ -13,143 +11,34 @@ from dora.emplois.serializers import (
 from dora.emplois.views import PREFETCH_RELATED_SERVICE_LIST
 from dora.orientations.models import OrientationStatus
 from dora.services.models import (
-    AccessCondition,
     BeneficiaryAccessMode,
     CoachOrientationMode,
     Credential,
     FundingLabel,
-    Public,
-    Requirement,
     Service,
-    ServiceKind,
 )
-
-
-def test_service_serializer_publics_defaults_to_all_publics():
-    service = make_published_service()
-    service.publics.clear()
-
-    data = ServiceSerializer(service).data
-
-    assert data["publics"] == ["Tous publics"]
-
-
-def test_service_serializer_publics_with_publics():
-    service = make_published_service()
-    service.publics.clear()
-
-    public_jeunes = baker.make(
-        Public,
-        name="Jeunes 18-25",
-        corresponding_di_publics=[DiPublic.JEUNES],
-        structure=service.structure,
-    )
-    public_seniors = baker.make(
-        Public,
-        name="Seniors 60+",
-        corresponding_di_publics=[DiPublic.SENIORS],
-        structure=service.structure,
-    )
-    service.publics.set([public_jeunes, public_seniors])
-
-    data = ServiceSerializer(service).data
-
-    assert data["publics"] == ["Jeunes 18-25", "Seniors 60+"]
-
-
-@pytest.mark.parametrize(
-    "add_access_conditions,add_requirements,qpv_or_zrr,expected",
-    [
-        (
-            True,
-            True,
-            False,
-            [
-                "Inscrit à Pôle emploi",
-                "Inscrit à la Mission Locale",
-                "Niveau bac",
-                "Permis B",
-            ],
-        ),
-        (
-            True,
-            True,
-            True,
-            [
-                "Inscrit à Pôle emploi",
-                "Inscrit à la Mission Locale",
-                "Niveau bac",
-                "Permis B",
-                "Uniquement QPV ou ZFRR",
-            ],
-        ),
-        (False, True, False, ["Niveau bac", "Permis B"]),
-        (
-            True,
-            False,
-            False,
-            ["Inscrit à Pôle emploi", "Inscrit à la Mission Locale"],
-        ),
-        (False, False, True, ["Uniquement QPV ou ZFRR"]),
-    ],
-    ids=[
-        "ac_and_req_no_qpv",
-        "ac_and_req_with_qpv",
-        "only_requirements",
-        "only_access_conditions",
-        "only_qpv_flag",
-    ],
-)
-def test_service_serializer_eligibility_requirements(
-    add_access_conditions, add_requirements, qpv_or_zrr, expected
-):
-    service = make_published_service()
-    service.access_conditions.clear()
-    service.requirements.clear()
-
-    if add_access_conditions:
-        ac_1 = baker.make(
-            AccessCondition,
-            name="Inscrit à Pôle emploi",
-            structure=service.structure,
-        )
-        ac_2 = baker.make(
-            AccessCondition,
-            name="Inscrit à la Mission Locale",
-            structure=service.structure,
-        )
-        service.access_conditions.add(ac_1, ac_2)
-    if add_requirements:
-        req_1 = baker.make(Requirement, name="Niveau bac", structure=service.structure)
-        req_2 = baker.make(Requirement, name="Permis B", structure=service.structure)
-        service.requirements.add(req_1, req_2)
-
-    service.qpv_or_zrr = qpv_or_zrr
-    service.save()
-
-    data = ServiceSerializer(service).data
-    assert data["eligibility_requirements"] == expected
 
 
 def test_service_serializer_basic_fields():
     service = make_published_service(
         short_desc="Une courte description",
-        full_desc="Une longue description",
-        is_cumulative=True,
+        recurrence="Tous les jours de 8h30 à 12h30",
         online_form="https://example.org/formulaire",
+        contact_name="John Doe",
+        contact_phone="0123456789",
+        contact_email="john.doe@example.org",
         is_contact_info_public=True,
     )
-
-    service.get_diffusion_zone_details_display = lambda: "Zone de diffusion"
 
     data = ServiceSerializer(service).data
 
     assert data["id"] == str(service.id)
-    assert data["diffusion_zone"] == "Zone de diffusion"
     assert data["short_desc"] == "Une courte description"
-    assert data["full_desc"] == "Une longue description"
-    assert data["is_cumulative"] is True
+    assert data["recurrence"] == "Tous les jours de 8h30 à 12h30"
     assert data["online_form"] == "https://example.org/formulaire"
+    assert data["contact_name"] == "John Doe"
+    assert data["contact_phone"] == "0123456789"
+    assert data["contact_email"] == "john.doe@example.org"
     assert data["is_contact_info_public"] is True
 
 
@@ -164,6 +53,26 @@ def test_service_serializer_funding_labels():
     data = ServiceSerializer(service).data
 
     assert sorted(data["funding_labels"]) == ["Label 1", "Label 2"]
+
+
+def test_service_serializer_custom_mobilization_form():
+    service = make_published_service()
+    service.coach_orientation_modes.clear()
+    service.coach_orientation_modes.add(
+        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion")
+    )
+    service.coach_orientation_modes_external_form_link = (
+        "https://example.org/external-form"
+    )
+    service.coach_orientation_modes_external_form_link_text = "Remplir le formulaire"
+    service.save()
+
+    data = ServiceSerializer(service).data
+
+    assert data["custom_mobilization_form"] == {
+        "label": "Remplir le formulaire",
+        "link": "https://example.org/external-form",
+    }
 
 
 def test_service_serializer_mobilization_modes_professionals():
@@ -204,34 +113,34 @@ def test_service_serializer_mobilization_modes_professionals():
     # COACH_ORIENTATION_MODES_ORDER
     assert data == [
         {
-            "name": "Orienter votre bénéficiaire via le formulaire DORA",
+            "label": "Orienter votre bénéficiaire via le formulaire DORA",
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": "Envoyer un email avec une fiche de prescription",
+            "label": "Envoyer un email avec une fiche de prescription",
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": mode_completer_formulaire.label,
+            "label": mode_completer_formulaire.label,
             "link": "https://example.org/external-form",
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": mode_envoyer_mail.label,
+            "label": mode_envoyer_mail.label,
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": mode_telephoner.label,
+            "label": mode_telephoner.label,
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": "Autre modalité personnalisée",
+            "label": "Autre modalité personnalisée",
             "link": None,
-            "custom": True,
+            "linkifyLabel": True,
         },
     ]
 
@@ -272,34 +181,34 @@ def test_service_serializer_mobilization_modes_individuals():
     # BENEFICIARIES_ACCESS_MODES_ORDER
     assert data == [
         {
-            "name": mode_se_presenter.label,
+            "label": mode_se_presenter.label,
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": "Remplir le formulaire",
+            "label": "Remplir le formulaire",
             "link": "https://example.org/beneficiary-form",
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": mode_envoyer_mail.label,
+            "label": mode_envoyer_mail.label,
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": mode_telephoner.label,
+            "label": mode_telephoner.label,
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": "Orientation par un professionnel",
+            "label": "Orientation par un professionnel",
             "link": None,
-            "custom": False,
+            "linkifyLabel": False,
         },
         {
-            "name": "Autre accès personnalisée",
+            "label": "Autre accès personnalisée",
             "link": None,
-            "custom": True,
+            "linkifyLabel": True,
         },
     ]
 
@@ -338,22 +247,6 @@ def test_service_serializer_credentials():
     assert sorted(data["credentials"]) == [
         "Carte d'identité",
         "Justificatif de domicile",
-    ]
-
-
-def test_service_serializer_kinds():
-    service = make_published_service()
-    service.kinds.clear()
-
-    kind_1, kind_2, kind_3 = ServiceKind.objects.all()[:3]
-    service.kinds.add(kind_1, kind_2, kind_3)
-
-    data = ServiceSerializer(service).data
-
-    assert sorted(data["kinds"]) == [
-        kind_1.label,
-        kind_2.label,
-        kind_3.label,
     ]
 
 
