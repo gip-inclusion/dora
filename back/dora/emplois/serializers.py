@@ -1,4 +1,3 @@
-
 from django.core.files.storage import default_storage
 from django.db.models import Avg, DurationField, F
 from django.db.models.expressions import ExpressionWrapper
@@ -31,6 +30,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="label"
     )
+    mobilization_modes_professionals = serializers.SerializerMethodField()
+    mobilization_modes_individuals = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
     credentials = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
@@ -45,12 +46,82 @@ class ServiceSerializer(serializers.ModelSerializer):
             "id",
             "short_desc",
             "funding_labels",  # TODO: We need a reference API for the label
+            "mobilization_modes_professionals",
+            "mobilization_modes_individuals",
             "forms_info",  # TODO: Need `credentials` reference API
             "online_form",  # TODO: Need `credentials` reference API
             "credentials",  # TODO: We need a reference API for the label
             "is_orientable_with_form",
             "average_orientation_response_delay_days",
         ]
+
+    def get_mobilization_modes_professionals(self, obj):
+        modes = sorted(
+            obj.coach_orientation_modes.all(),
+            key=lambda m: COACH_ORIENTATION_MODES_ORDER.get(m.value, 999),
+        )
+        result = []
+        for m in modes:
+            if m.value == "formulaire-dora":
+                label = "Orienter votre bénéficiaire via le formulaire DORA"
+            elif (
+                m.value == "envoyer-un-mail-avec-une-fiche-de-prescription"
+                and obj.contact_email
+            ):
+                label = "Envoyer un email avec une fiche de prescription"
+            elif m.value == "autre":
+                label = obj.coach_orientation_modes_other
+            else:
+                label = m.label
+
+            result.append(
+                {
+                    "label": label,
+                    "link": (
+                        obj.coach_orientation_modes_external_form_link
+                        if m.value == "completer-le-formulaire-dadhesion"
+                        and obj.coach_orientation_modes_external_form_link
+                        else None
+                    ),
+                    "linkifyLabel": m.value == "autre",
+                }
+            )
+
+        return result
+
+    def get_mobilization_modes_individuals(self, obj):
+        modes = sorted(
+            obj.beneficiaries_access_modes.all(),
+            key=lambda m: BENEFICIARIES_ACCESS_MODES_ORDER.get(m.value, 999),
+        )
+        result = []
+        for m in modes:
+            if m.value == "completer-le-formulaire-dadhesion":
+                label = (
+                    obj.beneficiaries_access_modes_external_form_link_text
+                    or "Faire une demande"
+                )
+            elif m.value == "professionnel":
+                label = "Orientation par un professionnel"
+            elif m.value == "autre":
+                label = obj.beneficiaries_access_modes_other
+            else:
+                label = m.label
+
+            result.append(
+                {
+                    "label": label,
+                    "link": (
+                        obj.beneficiaries_access_modes_external_form_link
+                        if m.value == "completer-le-formulaire-dadhesion"
+                        and obj.beneficiaries_access_modes_external_form_link
+                        else None
+                    ),
+                    "linkifyLabel": m.value == "autre",
+                }
+            )
+
+        return result
 
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
