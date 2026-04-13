@@ -592,3 +592,22 @@ def test_service_without_suspension_date_is_included(authenticated_user, api_cli
     service = make_service(status=ServiceStatus.PUBLISHED, suspension_date=None)
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert 200 == response.status_code
+
+
+def test_service_does_not_include_contact_info_when_contact_info_is_not_public(
+    authenticated_user, api_client
+):
+    service = make_service(
+        is_contact_info_public=False,
+        status=ServiceStatus.PUBLISHED,
+        contact_email="private@email.com",
+        contact_phone="0123456789",
+        contact_name="Test Person",
+    )
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+
+    assert response.data["courriel"] is None
+    assert response.data["telephone"] is None
+    assert response.data["contact_nom_prenom"] is None
