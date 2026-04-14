@@ -15,7 +15,7 @@
   import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
   import { TOAST_DURATION_MS } from "$lib/consts";
   import type { PageData } from "./$types";
-  import {setCurrentStructure} from "$lib/utils/preferences";
+  import { setCurrentStructure } from "$lib/utils/preferences";
 
   interface Props {
     children?: Snippet;
@@ -93,7 +93,10 @@
 <CookieBanner />
 <SvelteToast options={{ duration: TOAST_DURATION_MS }} />
 <div class="structure-switch-toast">
-  <SvelteToast target="structure-switch" options={{ duration: TOAST_DURATION_MS }} />
+  <SvelteToast
+    target="structure-switch"
+    options={{ duration: TOAST_DURATION_MS }}
+  />
 </div>
 
 <style>
@@ -104,6 +107,6 @@
     transform: translateX(-50%);
   }
   .structure-switch-toast :global(._toastItem) {
-    width: 50vw
+    width: 50vw;
   }
 </style>
