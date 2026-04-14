@@ -97,3 +97,12 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
     fundingLabels: savedSearch.fundingLabels.sort(),
   });
 }
+
+export async function getSavedSearches(fetchFunction = fetch) {
+  const url = `${getApiURL()}/saved-searches/`;
+  const result = await fetchData(url, fetchFunction);
+  if (result.ok) {
+    return result.data as Array<SavedSearch>;
+  }
+  return [];
+}
