@@ -197,11 +197,12 @@ class StructureTestCase(APITestCase):
             (self.superuser, True),
             (self.manager, True),
         ]
+
+        own_struct = make_structure(department="31")
+        make_structure_member(user=self.me, structure=own_struct)
+        make_model(structure=own_struct)
         for user, can_edit in cases:
             with self.subTest(user=user):
-                own_struct = make_structure()
-                make_structure_member(user=user, structure=own_struct)
-                make_model(structure=own_struct)
                 self.client.force_authenticate(user=user)
                 response = self.client.get(f"/structures/{own_struct.slug}/")
                 self.assertEqual(response.status_code, 200)
@@ -213,12 +214,13 @@ class StructureTestCase(APITestCase):
         """
         Le staff et les GTs (quand la structure est dans leur département) peuvent modifier les structures)
         """
-        make_model(structure=self.struct_31)
         cases = [
             (self.me, False),
             (self.superuser, True),
             (self.manager, True),
         ]
+        make_model(structure=self.struct_31)
+
         for user, can_edit in cases:
             with self.subTest(user=user):
                 self.client.force_authenticate(user=user)
@@ -236,13 +238,13 @@ class StructureTestCase(APITestCase):
             (self.superuser, True),
             (self.manager, True),
         ]
+        parent_struct = make_structure(department="31")
+        child_struct = make_structure(parent=parent_struct)
+        make_structure_member(user=self.me, structure=child_struct)
+        parent_model = make_model(structure=parent_struct)
 
         for user, can_edit in cases:
             with self.subTest(user=user):
-                parent_struct = make_structure(department="31")
-                child_struct = make_structure(parent=parent_struct)
-                make_structure_member(user=user, structure=child_struct)
-                parent_model = make_model(structure=parent_struct)
                 self.client.force_authenticate(user=user)
                 response = self.client.get(f"/structures/{child_struct.slug}/")
                 self.assertEqual(response.status_code, 200)
@@ -257,13 +259,14 @@ class StructureTestCase(APITestCase):
             (self.superuser, True),
             (self.manager, True),
         ]
+        parent_struct = make_structure(department="31")
+        child_struct = make_structure(parent=parent_struct)
+        make_structure_member(user=self.me, structure=child_struct)
+        make_structure_member(user=self.me, structure=parent_struct)
+        make_model(structure=parent_struct)
+
         for user, can_edit in cases:
             with self.subTest(user=user):
-                parent_struct = make_structure(department="31")
-                child_struct = make_structure(parent=parent_struct)
-                make_structure_member(user=user, structure=child_struct)
-                make_structure_member(user=user, structure=parent_struct)
-                make_model(structure=parent_struct)
                 self.client.force_authenticate(user=user)
                 response = self.client.get(f"/structures/{child_struct.slug}/")
                 self.assertEqual(response.status_code, 200)
