@@ -28,7 +28,10 @@ export default defineConfig(({ mode }) => {
         overlay: true,
       },
     },
-    optimizeDeps: {
+    resolve: {
+      conditions: ["svelte", "browser", "module"],
+    },
+optimizeDeps: {
       include: ["svelte"],
     },
     test: {
