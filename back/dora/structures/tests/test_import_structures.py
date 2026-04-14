@@ -494,7 +494,7 @@ class StructuresImportTestCase(APITestCase):
             name="My Establishment",
             parent_name="Parent",
         )
-        csv_content = f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,email@structure.com"
+        csv_content = f"{self.csv_headers}\nNew structure,12345678901234,,foo@buzz.com,,,,email@structure.com"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
@@ -505,7 +505,7 @@ class StructuresImportTestCase(APITestCase):
         self.assertTrue(
             Structure.objects.filter(
                 siret="12345678901234",
-                name="My Establishment (Parent)",
+                name="New structure",
                 email="email@structure.com",
             ).exists()
         )
@@ -517,7 +517,7 @@ class StructuresImportTestCase(APITestCase):
             name="My Establishment",
             parent_name="Parent",
         )
-        csv_content = f"{self.csv_headers}\nFoo,,12345678901234,foo@buzz.com,,,,email@structure.com"
+        csv_content = f"{self.csv_headers}\nNew structure,,12345678901234,foo@buzz.com,,,,email@structure.com"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
@@ -535,7 +535,9 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertTrue(
             Structure.objects.filter(
-                name="Foo", parent=parent_structure.first(), email="email@structure.com"
+                name="New structure",
+                parent=parent_structure.first(),
+                email="email@structure.com",
             ).exists()
         )
 

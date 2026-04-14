@@ -142,14 +142,14 @@ class ImportStructuresHelper:
     ) -> Structure:
         if parent_siret:
             parent_structure = self._get_or_create_structure_from_siret(
-                parent_siret, importing_user, is_parent=True, **kwargs
+                parent_siret, name, importing_user, is_parent=True, **kwargs
             )
             structure = self._get_or_create_branch(
                 name, siret, parent_structure, **kwargs
             )
         else:
             structure = self._get_or_create_structure_from_siret(
-                siret, importing_user, **kwargs
+                siret, name, importing_user, **kwargs
             )
 
         return structure
@@ -261,7 +261,12 @@ class ImportStructuresHelper:
         return branch
 
     def _get_or_create_structure_from_siret(
-        self, siret: str, importing_user: User, is_parent: bool = False, **kwargs
+        self,
+        siret: str,
+        name: str,
+        importing_user: User,
+        is_parent: bool = False,
+        **kwargs,
     ) -> Structure:
         try:
             structure = Structure.objects.get(siret=siret)
@@ -278,6 +283,8 @@ class ImportStructuresHelper:
             structure = Structure.objects.create_from_establishment(
                 establishment, **kwargs
             )
+            if not is_parent:
+                structure.name = name
             structure.creator = importing_user
             structure.last_editor = importing_user
             structure.source = self.source

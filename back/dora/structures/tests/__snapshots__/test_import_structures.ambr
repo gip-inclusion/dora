@@ -15,7 +15,7 @@
   list([
     '⚠️ PRODUCTION RUN ⚠️',
     '2. Import de la structure Foo (SIRET:12345678901234)',
-    'Création de la structure  My Establishment (Parent) (http://localhost:3000/structures/my-establishment-par)',
+    'Création de la structure  Foo (http://localhost:3000/structures/my-establishment-par)',
     'http://localhost:3000/structures/my-establishment-par',
     'foo@buzz.com invité·e comme administrateur·rice',
   ])
