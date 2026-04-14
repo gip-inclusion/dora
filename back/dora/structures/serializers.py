@@ -1,5 +1,5 @@
 from data_inclusion.schema.v0 import TypologieStructure
-from django.db.models import Count, Q
+from django.db.models import BooleanField, Case, Count, Q, Value, When
 from rest_framework import exceptions, serializers
 
 from dora.services.enums import ServiceStatus
@@ -284,12 +284,15 @@ class StructureSerializer(serializers.ModelSerializer):
                 required=False,
             )
 
+            can_user_edit = serializers.SerializerMethodField()
+
             num_services = serializers.SerializerMethodField()
 
             class Meta:
                 model = ServiceModel
                 fields = [
                     "categories_display",
+                    "can_user_edit",
                     "department",
                     "modification_date",
                     "name",
@@ -302,11 +305,33 @@ class StructureSerializer(serializers.ModelSerializer):
             def get_num_services(self, obj):
                 return obj.copies.exclude(status=ServiceStatus.ARCHIVED).count()
 
-        qs = ServiceModel.objects.filter(structure=structure)
+            def get_can_user_edit(self, obj):
+                return obj.can_user_edit
+
+        user = self.context.get("request").user
+        target_structures = [structure]
+
+        can_edit_current = structure.can_edit_services(user)
+        can_edit_parent = False
+
+        if structure.parent:
+            target_structures.append(structure.parent)
+            can_edit_parent = structure.parent.can_edit_services(user)
+
+        qs = (
+            ServiceModel.objects.filter(structure__in=target_structures)
+            .annotate(
+                can_user_edit=Case(
+                    When(structure=structure, then=Value(can_edit_current)),
+                    default=Value(can_edit_parent),
+                    output_field=BooleanField(),
+                )
+            )
+            .prefetch_related("categories")
+        )
+
         return StructureModelsSerializer(
-            qs.prefetch_related(
-                "categories",
-            ),
+            qs,
             many=True,
         ).data
 
