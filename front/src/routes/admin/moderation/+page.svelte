@@ -45,7 +45,7 @@
 
     {#await data.structures}
       Chargement…
-    {:then}
+    {:then _}
       {#if !entities.length}
         Rien à modérer 🎉
       {:else}
