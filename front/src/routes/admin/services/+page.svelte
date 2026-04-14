@@ -51,7 +51,7 @@
     </div>
 
     {#await data.services}
-      Chargement...
+      Chargement…
     {:then _}
       {#each filteredServices as service}
         <div
