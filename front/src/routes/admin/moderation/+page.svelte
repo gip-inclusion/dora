@@ -2,15 +2,18 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
-  import { getStructuresToModerate } from "$lib/requests/admin";
   import { capitalize, shortenString } from "$lib/utils/misc";
-  import { onMount } from "svelte";
   import ModerationLabel from "../moderation-label.svelte";
 
-  // let services,
-  let structures,
-    entities = $state();
-  let filteredEntities = $state([]);
+  let { data } = $props();
+
+  let entities = $state([]);
+  let searchString = $state("");
+  let filteredEntities = $derived(filterAndSortEntities(searchString));
+
+  data.structures.then((structures) => {
+    entities = [...structures];
+  });
 
   const STATUS_VALUE = {
     NEED_INITIAL_MODERATION: 1,
@@ -19,7 +22,7 @@
     VALIDATED: 4,
   };
 
-  function filterAndSortEntities(searchString) {
+  function filterAndSortEntities(searchString: string) {
     const result = (
       searchString
         ? entities.filter((entity) => {
@@ -84,16 +87,8 @@
   }
 
   function handleFilterChange(event) {
-    const searchString = event.target.value.toLowerCase().trim();
-    filteredEntities = filterAndSortEntities(searchString);
+    searchString = event.target.value.toLowerCase().trim();
   }
-
-  onMount(async () => {
-    structures = await getStructuresToModerate();
-    structures.forEach((struct) => (struct.isStructure = true));
-    entities = [...structures];
-    filteredEntities = filterAndSortEntities("");
-  });
 </script>
 
 <CenteredGrid>
@@ -116,7 +111,9 @@
       {/if}
     </div>
 
-    {#if entities}
+    {#await data.structures}
+      Chargement…
+    {:then}
       {#if !entities.length}
         Rien à modérer 🎉
       {:else}
@@ -171,8 +168,6 @@
           </div>
         {/each}
       {/if}
-    {:else}
-      Chargement…
-    {/if}
+    {/await}
   </div>
 </CenteredGrid>
