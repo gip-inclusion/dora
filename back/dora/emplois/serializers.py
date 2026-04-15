@@ -17,7 +17,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="value"
     )
-    custom_mobilization_form = serializers.SerializerMethodField()
     coach_orientation_modes = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="value"
     )
@@ -42,7 +41,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "short_desc",
             "recurrence",
             "funding_labels",
-            "custom_mobilization_form",
             "coach_orientation_modes",
             "coach_orientation_modes_other",
             "coach_orientation_modes_external_form_link",
@@ -62,17 +60,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "is_contact_info_public",
             "average_orientation_response_delay_days",
         ]
-
-    def get_custom_mobilization_form(self, obj):
-        if any(
-            m.value == "completer-le-formulaire-dadhesion"
-            for m in obj.coach_orientation_modes.all()
-        ):
-            return {
-                "label": obj.coach_orientation_modes_external_form_link_text,
-                "link": obj.coach_orientation_modes_external_form_link,
-            }
-        return None
 
     def get_is_orientable_with_form(self, obj):
         return obj.is_orientable() and any(

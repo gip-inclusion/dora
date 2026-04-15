@@ -96,26 +96,6 @@ def test_service_serializer_funding_labels():
     assert sorted(data["funding_labels"]) == ["label-1", "label-2"]
 
 
-def test_service_serializer_custom_mobilization_form():
-    service = make_published_service()
-    service.coach_orientation_modes.clear()
-    service.coach_orientation_modes.add(
-        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
-    service.coach_orientation_modes_external_form_link = (
-        "https://example.org/external-form"
-    )
-    service.coach_orientation_modes_external_form_link_text = "Remplir le formulaire"
-    service.save()
-
-    data = ServiceSerializer(service).data
-
-    assert data["custom_mobilization_form"] == {
-        "label": "Remplir le formulaire",
-        "link": "https://example.org/external-form",
-    }
-
-
 def test_service_serializer_coach_orientation_modes():
     service = make_published_service()
     service.coach_orientation_modes.clear()
