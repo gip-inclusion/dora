@@ -1,65 +1,34 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
   import Home6LineBuildings from "svelte-remix/Home6LineBuildings.svelte";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Label from "$lib/components/display/label.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { getServicesAdmin } from "$lib/requests/admin";
   import { shortenString } from "$lib/utils/misc";
+  import { filterAndSortServices } from "$lib/utils/moderation";
 
-  let services = $state(),
-    filteredServices = $state();
+  let { data } = $props();
 
-  function filterAndSortEntities(searchString) {
-    return (
-      searchString
-        ? services.filter(
-            (entity) =>
-              entity.name.toLowerCase().includes(searchString) ||
-              entity.structureName.toLowerCase().includes(searchString) ||
-              entity.structureDept === searchString
-          )
-        : services
-    )
-      .filter((entity) => !entity.parent)
-      .sort((entity1, entity2) => {
-        if (entity1.structureDept !== entity2.structureDept) {
-          return entity1.structureDept.localeCompare(
-            entity2.structureDept,
-            "fr",
-            {
-              numeric: true,
-            }
-          );
-        }
+  let services = $state([]);
+  let searchString = $state("");
+  let filteredServices = $derived(
+    filterAndSortServices(services, searchString)
+  );
 
-        if (
-          entity1.structureName.toLowerCase() !==
-          entity2.structureName.toLowerCase()
-        ) {
-          return entity1.structureName
-            .toLowerCase()
-            .localeCompare(entity2.structureName.toLowerCase(), "fr");
-        }
+  data.services.then((result) => {
+    services = result;
+  });
 
-        return entity1.name
-          .toLowerCase()
-          .localeCompare(entity2.name.toLowerCase(), "fr");
-      });
-  }
+  let debounceTimer: ReturnType<typeof setTimeout>;
 
   function handleFilterChange(event) {
-    const searchString = event.target.value.toLowerCase().trim();
-    filteredServices = filterAndSortEntities(searchString);
+    const value = event.target.value.toLowerCase().trim();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      searchString = value;
+    }, 300);
   }
-
-  onMount(async () => {
-    services = await getServicesAdmin();
-    filteredServices = filterAndSortEntities("");
-  });
 </script>
 
 <CenteredGrid>
@@ -81,7 +50,9 @@
       {/if}
     </div>
 
-    {#if services}
+    {#await data.services}
+      Chargement…
+    {:then _}
       {#each filteredServices as service}
         <div
           class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border bg-white"
@@ -114,8 +85,6 @@
           </div>
         </div>
       {/each}
-    {:else}
-      Chargement…
-    {/if}
+    {/await}
   </div>
 </CenteredGrid>
