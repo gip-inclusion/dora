@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       conditions: ["svelte", "browser", "module"],
     },
-optimizeDeps: {
+    optimizeDeps: {
       include: ["svelte"],
     },
     test: {
