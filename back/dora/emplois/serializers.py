@@ -74,9 +74,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             }
         return None
 
-    def get_access_conditions(self, obj):
-        return [ac.name for ac in obj.access_conditions.all()]
-
     def get_is_orientable_with_form(self, obj):
         return obj.is_orientable() and any(
             mode.value == "formulaire-dora"
