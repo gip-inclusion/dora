@@ -1,4 +1,3 @@
-from django.core.files.storage import default_storage
 from django.db.models import Avg, DurationField, F
 from django.db.models.expressions import ExpressionWrapper
 from rest_framework import serializers
@@ -25,8 +24,10 @@ class ServiceSerializer(serializers.ModelSerializer):
     beneficiaries_access_modes = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="value"
     )
-    forms_info = serializers.SerializerMethodField()
-    access_conditions = serializers.SerializerMethodField()
+    forms = serializers.ListField(child=serializers.CharField())
+    access_conditions = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="name"
+    )
     credentials = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="name"
     )
@@ -50,7 +51,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "beneficiaries_access_modes_other",
             "beneficiaries_access_modes_external_form_link",
             "beneficiaries_access_modes_external_form_link_text",
-            "forms_info",  # TODO: Need `credentials` reference API
+            "forms",
             "online_form",  # TODO: Need `credentials` reference API
             "access_conditions",
             "credentials",  # TODO: We need a reference API for the label
@@ -72,9 +73,6 @@ class ServiceSerializer(serializers.ModelSerializer):
                 "link": obj.coach_orientation_modes_external_form_link,
             }
         return None
-
-    def get_forms_info(self, obj):
-        return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]
 
     def get_access_conditions(self, obj):
         return [ac.name for ac in obj.access_conditions.all()]

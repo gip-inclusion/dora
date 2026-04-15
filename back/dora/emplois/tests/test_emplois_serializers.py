@@ -206,25 +206,14 @@ def test_service_serializer_beneficiaries_access_modes():
     )
 
 
-def test_service_serializer_forms_info_uses_storage_url(monkeypatch):
+def test_service_serializer_forms():
     service = make_published_service()
     service.forms = ["form1.pdf", "form2.pdf"]
     service.save()
 
-    def fake_url(path):
-        return f"https://files.example/{path}"
-
-    monkeypatch.setattr(
-        "dora.emplois.serializers.default_storage.url",
-        fake_url,
-    )
-
     data = ServiceSerializer(service).data
 
-    assert data["forms_info"] == [
-        {"name": "form1.pdf", "url": "https://files.example/form1.pdf"},
-        {"name": "form2.pdf", "url": "https://files.example/form2.pdf"},
-    ]
+    assert data["forms"] == ["form1.pdf", "form2.pdf"]
 
 
 def test_service_serializer_credentials():
