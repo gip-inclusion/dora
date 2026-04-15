@@ -15,7 +15,11 @@ from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import DisabledDoraFormDIStructure
 
-from .serializers import DisabledDoraFormDIStructureSerializer, ServiceSerializer
+from .serializers import (
+    DisabledDoraFormDIStructureSerializer,
+    ReferenceDataSerializer,
+    ServiceSerializer,
+)
 
 _ANSWERED_ORIENTATIONS_QUERYSET = Orientation.objects.filter(
     status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
@@ -47,6 +51,37 @@ class APIPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return self.has_permission(request, view)
+
+
+class ReferenceDataViewSet(viewsets.ReadOnlyModelViewSet):
+    versioning_class = NamespaceVersioning
+    permission_classes = (APIPermission,)
+    serializer_class = ReferenceDataSerializer
+    renderer_classes = (JSONRenderer,)
+    pagination_class = OptionalPageNumberPagination
+
+    def get_queryset(self):
+        from django.db.models import CharField, Value
+
+        from dora.services.models import (
+            BeneficiaryAccessMode,
+            CoachOrientationMode,
+            FundingLabel,
+        )
+
+        funding_label_qs = FundingLabel.objects.all().annotate(
+            kind=Value("funding_label", output_field=CharField())
+        )
+        beneficiary_access_mode_qs = BeneficiaryAccessMode.objects.all().annotate(
+            kind=Value("beneficiary_access_mode", output_field=CharField())
+        )
+        coach_orientation_mode_qs = CoachOrientationMode.objects.all().annotate(
+            kind=Value("coach_orientation_mode", output_field=CharField())
+        )
+
+        return funding_label_qs.union(
+            beneficiary_access_mode_qs, coach_orientation_mode_qs
+        )
 
 
 class ServiceViewSet(viewsets.ReadOnlyModelViewSet):

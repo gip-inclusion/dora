@@ -6,6 +6,7 @@ from model_bakery import baker
 from dora.core.test_utils import make_orientation, make_published_service
 from dora.emplois.serializers import (
     DisabledDoraFormDIStructureSerializer,
+    ReferenceDataSerializer,
     ServiceSerializer,
 )
 from dora.emplois.views import PREFETCH_RELATED_SERVICE_LIST
@@ -17,6 +18,22 @@ from dora.services.models import (
     FundingLabel,
     Service,
 )
+
+
+def test_reference_data_serializer_fields():
+    data = ReferenceDataSerializer(
+        {
+            "kind": "funding_label",
+            "value": "cd-drome",
+            "label": "CD Drome",
+        }
+    ).data
+
+    assert data == {
+        "kind": "funding_label",
+        "value": "cd-drome",
+        "label": "CD Drome",
+    }
 
 
 def test_service_serializer_basic_fields():

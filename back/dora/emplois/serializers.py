@@ -26,6 +26,12 @@ BENEFICIARIES_ACCESS_MODES_ORDER = {
 }
 
 
+class ReferenceDataSerializer(serializers.Serializer):
+    kind = serializers.CharField()
+    label = serializers.CharField()
+    value = serializers.CharField()
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="label"

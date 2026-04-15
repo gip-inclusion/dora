@@ -4,6 +4,75 @@ from model_bakery import baker
 
 from dora.core.test_utils import make_published_service
 from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.services.models import (
+    BeneficiaryAccessMode,
+    CoachOrientationMode,
+    FundingLabel,
+)
+
+
+def test_reference_data_api_requires_authentication(api_client):
+    response = api_client.get(reverse("emplois:reference-data-list"))
+
+    assert response.status_code == 401
+
+
+def test_reference_data_api_requires_emplois_email(api_client):
+    user = baker.make("users.User", is_valid=True, email="other@example.com")
+    api_client.force_authenticate(user=user)
+
+    response = api_client.get(reverse("emplois:reference-data-list"))
+
+    assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "method,data",
+    [
+        ("post", {"kind": "funding_label", "value": "v", "label": "l"}),
+        ("delete", None),
+    ],
+    ids=["post", "delete"],
+)
+def test_reference_data_api_is_read_only(emplois_user, api_client, method, data):
+    url = reverse("emplois:reference-data-list")
+    client_method = getattr(api_client, method)
+    response = client_method(url, data=data) if data is not None else client_method(url)
+
+    assert response.status_code == 403
+
+
+def test_reference_data_api_list(emplois_user, api_client):
+    response = api_client.get(reverse("emplois:reference-data-list"))
+
+    assert response.status_code == 200
+    response_items = {
+        (item["kind"], item["value"], item["label"]) for item in response.data
+    }
+    expected_items = {
+        *{
+            ("funding_label", item.value, item.label)
+            for item in FundingLabel.objects.all()
+        },
+        *{
+            ("beneficiary_access_mode", item.value, item.label)
+            for item in BeneficiaryAccessMode.objects.all()
+        },
+        *{
+            ("coach_orientation_mode", item.value, item.label)
+            for item in CoachOrientationMode.objects.all()
+        },
+    }
+    assert response_items == expected_items
+
+
+def test_reference_data_api_list_queries_are_bounded(
+    emplois_user, api_client, django_assert_num_queries
+):
+    with django_assert_num_queries(1):
+        response = api_client.get(reverse("emplois:reference-data-list"))
+
+    assert response.status_code == 200
 
 
 def test_services_api_requires_authentication(api_client):
