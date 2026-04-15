@@ -27,14 +27,14 @@ export async function getStructureAdmin(
   return (await fetchData<Structure>(url, fetchFunction)).data;
 }
 
-export async function getStructuresToModerate() {
+export async function getStructuresToModerate(fetchFunction = fetch) {
   const url = `${getApiURL()}/structures-admin/?moderation=1`;
-  return (await fetchData(url)).data;
+  return (await fetchData(url, fetchFunction)).data;
 }
 
-export async function getServicesAdmin() {
+export async function getServicesAdmin(fetchFunction = fetch) {
   const url = `${getApiURL()}/services-admin/`;
-  return (await fetchData(url)).data;
+  return (await fetchData(url, fetchFunction)).data;
 }
 
 export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
