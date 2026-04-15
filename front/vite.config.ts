@@ -20,7 +20,6 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
       target: "esnext",
-      minify: "esbuild",
     },
     server: {
       host: true,
