@@ -64,7 +64,12 @@ export async function getManagedStructures(
 ): Promise<ShortStructure[]> {
   const searchParam = searchText ? `&search=${searchText}` : "";
   const url = `${getApiURL()}/structures/?managed=1${searchParam}`;
-  return (await fetchData<ShortStructure[]>(url)).data;
+  try {
+    const result = await fetchData<ShortStructure[]>(url);
+    return result.data ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getActiveStructures({
