@@ -50,9 +50,9 @@ class ServiceSerializer(serializers.ModelSerializer):
             "beneficiaries_access_modes_external_form_link",
             "beneficiaries_access_modes_external_form_link_text",
             "forms",
-            "online_form",  # TODO: Need `credentials` reference API
+            "online_form",
             "access_conditions",
-            "credentials",  # TODO: We need a reference API for the label
+            "credentials",
             "is_orientable_with_form",
             "contact_name",
             "contact_phone",
