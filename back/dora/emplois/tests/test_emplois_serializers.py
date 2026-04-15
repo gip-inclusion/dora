@@ -45,6 +45,12 @@ def test_service_serializer_basic_fields():
         contact_phone="0123456789",
         contact_email="john.doe@example.org",
         is_contact_info_public=True,
+        coach_orientation_modes_other="Autre modalité personnalisée",
+        coach_orientation_modes_external_form_link="https://example.org/external-form",
+        coach_orientation_modes_external_form_link_text="Remplir le formulaire",
+        beneficiaries_access_modes_other="Autre accès personnalisée",
+        beneficiaries_access_modes_external_form_link="https://example.org/beneficiary-form",
+        beneficiaries_access_modes_external_form_link_text="Remplir le formulaire",
     )
 
     data = ServiceSerializer(service).data
@@ -57,6 +63,24 @@ def test_service_serializer_basic_fields():
     assert data["contact_phone"] == "0123456789"
     assert data["contact_email"] == "john.doe@example.org"
     assert data["is_contact_info_public"] is True
+    assert data["coach_orientation_modes_other"] == "Autre modalité personnalisée"
+    assert (
+        data["coach_orientation_modes_external_form_link"]
+        == "https://example.org/external-form"
+    )
+    assert (
+        data["coach_orientation_modes_external_form_link_text"]
+        == "Remplir le formulaire"
+    )
+    assert data["beneficiaries_access_modes_other"] == "Autre accès personnalisée"
+    assert (
+        data["beneficiaries_access_modes_external_form_link"]
+        == "https://example.org/beneficiary-form"
+    )
+    assert (
+        data["beneficiaries_access_modes_external_form_link_text"]
+        == "Remplir le formulaire"
+    )
 
 
 def test_service_serializer_funding_labels():

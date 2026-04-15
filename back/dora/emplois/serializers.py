@@ -43,7 +43,13 @@ class ServiceSerializer(serializers.ModelSerializer):
             "funding_labels",
             "custom_mobilization_form",
             "coach_orientation_modes",
+            "coach_orientation_modes_other",
+            "coach_orientation_modes_external_form_link",
+            "coach_orientation_modes_external_form_link_text",
             "beneficiaries_access_modes",
+            "beneficiaries_access_modes_other",
+            "beneficiaries_access_modes_external_form_link",
+            "beneficiaries_access_modes_external_form_link_text",
             "forms_info",  # TODO: Need `credentials` reference API
             "online_form",  # TODO: Need `credentials` reference API
             "access_conditions",
