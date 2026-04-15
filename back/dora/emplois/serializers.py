@@ -7,24 +7,6 @@ from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import DisabledDoraFormDIStructure
 
-COACH_ORIENTATION_MODES_ORDER = {
-    "formulaire-dora": 0,
-    "envoyer-un-mail-avec-une-fiche-de-prescription": 1,
-    "completer-le-formulaire-dadhesion": 2,
-    "envoyer-un-mail": 3,
-    "telephoner": 4,
-    "autre": 5,
-}
-
-BENEFICIARIES_ACCESS_MODES_ORDER = {
-    "se-presenter": 0,
-    "completer-le-formulaire-dadhesion": 1,
-    "envoyer-un-mail": 2,
-    "telephoner": 3,
-    "professionnel": 4,
-    "autre": 5,
-}
-
 
 class ReferenceDataSerializer(serializers.Serializer):
     kind = serializers.CharField()
@@ -37,8 +19,12 @@ class ServiceSerializer(serializers.ModelSerializer):
         many=True, read_only=True, slug_field="value"
     )
     custom_mobilization_form = serializers.SerializerMethodField()
-    mobilization_modes_professionals = serializers.SerializerMethodField()
-    mobilization_modes_individuals = serializers.SerializerMethodField()
+    coach_orientation_modes = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="value"
+    )
+    beneficiaries_access_modes = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="value"
+    )
     forms_info = serializers.SerializerMethodField()
     access_conditions = serializers.SerializerMethodField()
     credentials = serializers.SlugRelatedField(
@@ -56,8 +42,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "recurrence",
             "funding_labels",
             "custom_mobilization_form",
-            "mobilization_modes_professionals",
-            "mobilization_modes_individuals",
+            "coach_orientation_modes",
+            "beneficiaries_access_modes",
             "forms_info",  # TODO: Need `credentials` reference API
             "online_form",  # TODO: Need `credentials` reference API
             "access_conditions",
@@ -80,74 +66,6 @@ class ServiceSerializer(serializers.ModelSerializer):
                 "link": obj.coach_orientation_modes_external_form_link,
             }
         return None
-
-    def get_mobilization_modes_professionals(self, obj):
-        modes = sorted(
-            obj.coach_orientation_modes.all(),
-            key=lambda m: COACH_ORIENTATION_MODES_ORDER.get(m.value, 999),
-        )
-        result = []
-        for m in modes:
-            if m.value == "formulaire-dora":
-                label = "Orienter votre bénéficiaire via le formulaire DORA"
-            elif (
-                m.value == "envoyer-un-mail-avec-une-fiche-de-prescription"
-                and obj.contact_email
-            ):
-                label = "Envoyer un email avec une fiche de prescription"
-            elif m.value == "autre":
-                label = obj.coach_orientation_modes_other
-            else:
-                label = m.label
-
-            result.append(
-                {
-                    "label": label,
-                    "link": (
-                        obj.coach_orientation_modes_external_form_link
-                        if m.value == "completer-le-formulaire-dadhesion"
-                        and obj.coach_orientation_modes_external_form_link
-                        else None
-                    ),
-                    "linkifyLabel": m.value == "autre",
-                }
-            )
-
-        return result
-
-    def get_mobilization_modes_individuals(self, obj):
-        modes = sorted(
-            obj.beneficiaries_access_modes.all(),
-            key=lambda m: BENEFICIARIES_ACCESS_MODES_ORDER.get(m.value, 999),
-        )
-        result = []
-        for m in modes:
-            if m.value == "completer-le-formulaire-dadhesion":
-                label = (
-                    obj.beneficiaries_access_modes_external_form_link_text
-                    or "Faire une demande"
-                )
-            elif m.value == "professionnel":
-                label = "Orientation par un professionnel"
-            elif m.value == "autre":
-                label = obj.beneficiaries_access_modes_other
-            else:
-                label = m.label
-
-            result.append(
-                {
-                    "label": label,
-                    "link": (
-                        obj.beneficiaries_access_modes_external_form_link
-                        if m.value == "completer-le-formulaire-dadhesion"
-                        and obj.beneficiaries_access_modes_external_form_link
-                        else None
-                    ),
-                    "linkifyLabel": m.value == "autre",
-                }
-            )
-
-        return result
 
     def get_forms_info(self, obj):
         return [{"name": form, "url": default_storage.url(form)} for form in obj.forms]

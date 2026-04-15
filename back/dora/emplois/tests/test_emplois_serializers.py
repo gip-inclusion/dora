@@ -92,7 +92,7 @@ def test_service_serializer_custom_mobilization_form():
     }
 
 
-def test_service_serializer_mobilization_modes_professionals():
+def test_service_serializer_coach_orientation_modes():
     service = make_published_service()
     service.coach_orientation_modes.clear()
 
@@ -124,45 +124,21 @@ def test_service_serializer_mobilization_modes_professionals():
     service.contact_email = "contact@example.org"
     service.save()
 
-    data = ServiceSerializer(service).data["mobilization_modes_professionals"]
+    data = ServiceSerializer(service).data["coach_orientation_modes"]
 
-    # Tous les coach_orientation_modes possibles sont présents et ordonnés comme dans
-    # COACH_ORIENTATION_MODES_ORDER
-    assert data == [
-        {
-            "label": "Orienter votre bénéficiaire via le formulaire DORA",
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": "Envoyer un email avec une fiche de prescription",
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": mode_completer_formulaire.label,
-            "link": "https://example.org/external-form",
-            "linkifyLabel": False,
-        },
-        {
-            "label": mode_envoyer_mail.label,
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": mode_telephoner.label,
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": "Autre modalité personnalisée",
-            "link": None,
-            "linkifyLabel": True,
-        },
-    ]
+    assert sorted(data) == sorted(
+        [
+            mode_formulaire_dora.value,
+            mode_mail_avec_fiche.value,
+            mode_envoyer_mail.value,
+            mode_telephoner.value,
+            mode_autre.value,
+            mode_completer_formulaire.value,
+        ]
+    )
 
 
-def test_service_serializer_mobilization_modes_individuals():
+def test_service_serializer_beneficiaries_access_modes():
     service = make_published_service()
     service.beneficiaries_access_modes.clear()
 
@@ -192,42 +168,18 @@ def test_service_serializer_mobilization_modes_individuals():
     service.beneficiaries_access_modes_external_form_link_text = "Remplir le formulaire"
     service.save()
 
-    data = ServiceSerializer(service).data["mobilization_modes_individuals"]
+    data = ServiceSerializer(service).data["beneficiaries_access_modes"]
 
-    # Tous les beneficiaries_access_modes possibles sont présents et ordonnés comme dans
-    # BENEFICIARIES_ACCESS_MODES_ORDER
-    assert data == [
-        {
-            "label": mode_se_presenter.label,
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": "Remplir le formulaire",
-            "link": "https://example.org/beneficiary-form",
-            "linkifyLabel": False,
-        },
-        {
-            "label": mode_envoyer_mail.label,
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": mode_telephoner.label,
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": "Orientation par un professionnel",
-            "link": None,
-            "linkifyLabel": False,
-        },
-        {
-            "label": "Autre accès personnalisée",
-            "link": None,
-            "linkifyLabel": True,
-        },
-    ]
+    assert sorted(data) == sorted(
+        [
+            mode_se_presenter.value,
+            mode_completer_formulaire.value,
+            mode_envoyer_mail.value,
+            mode_telephoner.value,
+            mode_professionnel.value,
+            mode_autre.value,
+        ]
+    )
 
 
 def test_service_serializer_forms_info_uses_storage_url(monkeypatch):
