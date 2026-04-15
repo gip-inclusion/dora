@@ -34,7 +34,7 @@ class ReferenceDataSerializer(serializers.Serializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="label"
+        many=True, read_only=True, slug_field="value"
     )
     custom_mobilization_form = serializers.SerializerMethodField()
     mobilization_modes_professionals = serializers.SerializerMethodField()
@@ -54,7 +54,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "id",
             "short_desc",
             "recurrence",
-            "funding_labels",  # TODO: We need a reference API for the label
+            "funding_labels",
             "custom_mobilization_form",
             "mobilization_modes_professionals",
             "mobilization_modes_individuals",
