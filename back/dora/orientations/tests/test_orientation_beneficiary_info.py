@@ -25,7 +25,7 @@ def test_orientation_beneficiary_info_requires_auth(api_client):
     assert response.status_code == 401
 
 
-def test_orientation_beneficiary_info_returns_beneficiary_data(api_client):
+def test_orientation_beneficiary_info_returns_beneficiary_data(api_client, monkeypatch):
     user = make_user()
     structure = make_structure(siret="12345678901234")
     baker.make(Establishment, siret=structure.siret)
@@ -41,13 +41,16 @@ def test_orientation_beneficiary_info_returns_beneficiary_data(api_client):
 
     api_client.force_authenticate(user=user)
 
-    with (
-        patch("dora.orientations.serializers.decode_token", return_value=claims),
-        patch("dora.orientations.views.decode_token", return_value=claims),
-    ):
-        response = api_client.get(
-            f"{URL}?op=fake-token&service_slug={make_service().slug}"
-        )
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={make_service().slug}")
 
     assert response.status_code == 200
     assert response.data == {**BENEFICIARY_DATA, "user_structure_slug": structure.slug}
@@ -74,7 +77,7 @@ def test_orientation_beneficiary_info_invalid_token_redirects_to_homepage_with_e
 
 
 def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
-    api_client,
+    api_client, monkeypatch
 ):
     user = make_user()
     api_client.force_authenticate(user=user)
@@ -89,17 +92,16 @@ def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
         },
     }
 
-    with (
-        patch(
-            "dora.orientations.serializers.decode_token",
-            return_value=claims_without_beneficiary,
-        ),
-        patch(
-            "dora.orientations.views.decode_token",
-            return_value=claims_without_beneficiary,
-        ),
-    ):
-        response = api_client.get(f"{URL}?op=token_without_beneficiary")
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims_without_beneficiary,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims_without_beneficiary,
+    )
+
+    response = api_client.get(f"{URL}?op=token_without_beneficiary")
 
     assert response.status_code == 400
     assert len(response.data["op"]) == 1
@@ -109,7 +111,7 @@ def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
 
 
 def test_user_with_different_email_redirects_to_homepage_with_link_invalid_param(
-    api_client,
+    api_client, monkeypatch
 ):
     user = make_user()
     api_client.force_authenticate(user=user)
@@ -122,18 +124,23 @@ def test_user_with_different_email_redirects_to_homepage_with_link_invalid_param
         "beneficiary": BENEFICIARY_DATA,
     }
 
-    with (
-        patch("dora.orientations.serializers.decode_token", return_value=claims),
-        patch("dora.orientations.views.decode_token", return_value=claims),
-    ):
-        response = api_client.get(f"{URL}?op=fake-token")
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token")
 
     assert response.status_code == 200
     assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
 
 
 def test_no_structure_for_establishment_redirects_to_rattachement_with_orienter(
-    api_client,
+    api_client, monkeypatch
 ):
     user = make_user()
     service = make_service()
@@ -150,11 +157,16 @@ def test_no_structure_for_establishment_redirects_to_rattachement_with_orienter(
 
     api_client.force_authenticate(user=user)
 
-    with (
-        patch("dora.orientations.serializers.decode_token", return_value=claims),
-        patch("dora.orientations.views.decode_token", return_value=claims),
-    ):
-        response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
 
     assert response.status_code == 200
     parsed = urlparse(response.data["next_url"])
@@ -167,7 +179,7 @@ def test_no_structure_for_establishment_redirects_to_rattachement_with_orienter(
 
 
 def test_user_not_structure_member_redirects_to_rattachement_with_orienter(
-    api_client,
+    api_client, monkeypatch
 ):
     user = make_user()
     service = make_service()
@@ -184,11 +196,16 @@ def test_user_not_structure_member_redirects_to_rattachement_with_orienter(
 
     api_client.force_authenticate(user=user)
 
-    with (
-        patch("dora.orientations.serializers.decode_token", return_value=claims),
-        patch("dora.orientations.views.decode_token", return_value=claims),
-    ):
-        response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
 
     assert response.status_code == 200
     parsed = urlparse(response.data["next_url"])
