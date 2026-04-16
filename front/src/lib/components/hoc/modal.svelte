@@ -57,9 +57,7 @@
 
   function closeActions() {
     document.body.style.overflow = "inherit";
-    if (modalEl) {
-      document.querySelector(appSelector)?.removeAttribute("inert");
-    }
+    document.querySelector(appSelector)?.removeAttribute("inert");
     // Retour du focus sur le bouton d'ouverture
     if (activeElementSave) {
       activeElementSave.focus();
