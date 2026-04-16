@@ -85,7 +85,7 @@
           <ul class="list-inside list-disc">
             {#each eligibilityRequirements[0]
               .split("\n")
-              .filter(Boolean) as requirement (requirement)}
+              .filter(Boolean) as requirement, index (index)}
               <li>{requirement}</li>
             {/each}
           </ul>
