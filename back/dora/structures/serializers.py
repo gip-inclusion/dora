@@ -286,7 +286,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
             can_user_edit = serializers.SerializerMethodField()
 
-            num_services = serializers.SerializerMethodField()
+            num_services = serializers.IntegerField(read_only=True)
 
             class Meta:
                 model = ServiceModel
@@ -301,9 +301,6 @@ class StructureSerializer(serializers.ModelSerializer):
                     "slug",
                     "structure",
                 ]
-
-            def get_num_services(self, obj):
-                return obj.copies.exclude(status=ServiceStatus.ARCHIVED).count()
 
             def get_can_user_edit(self, obj):
                 return obj.can_user_edit
@@ -320,12 +317,17 @@ class StructureSerializer(serializers.ModelSerializer):
 
         qs = (
             ServiceModel.objects.filter(structure__in=target_structures)
+            .select_related("structure")
             .annotate(
                 can_user_edit=Case(
                     When(structure=structure, then=Value(can_edit_current)),
                     default=Value(can_edit_parent),
                     output_field=BooleanField(),
-                )
+                ),
+                num_services=Count(
+                    "copies",
+                    filter=~Q(copies__status=ServiceStatus.ARCHIVED),
+                ),
             )
             .prefetch_related("categories")
         )
