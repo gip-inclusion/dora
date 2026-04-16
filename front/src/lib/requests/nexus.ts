@@ -51,7 +51,7 @@ export type OrientationBeneficiaryInfo =
 export const getOrientationBeneficiaryInfo = async (
   opJwt: string,
   serviceSlug: string,
-  fetchFunction: typeof fetch
+  fetchFunction = fetch
 ) => {
   const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
   url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
