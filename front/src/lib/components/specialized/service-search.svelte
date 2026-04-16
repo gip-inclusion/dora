@@ -108,13 +108,19 @@
 
   async function searchAddress(addrQuery) {
     const url = `${banAPIUrl}?q=${encodeURIComponent(addrQuery)}&limit=10`;
-    const response = await fetch(url);
-    const jsonResponse = await response.json();
-    const results = jsonResponse.features.map((feature) => ({
-      value: feature,
-      label: getAddressLabel(feature),
-    }));
-    return results;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        return [];
+      }
+      const jsonResponse = await response.json();
+      return jsonResponse.features.map((feature) => ({
+        value: feature,
+        label: getAddressLabel(feature),
+      }));
+    } catch {
+      return [];
+    }
   }
 
   function enableRefreshButton() {
