@@ -11,7 +11,7 @@
 
   onMount(() => {
     if (!notFound) {
-      logException($page.error);
+      logException(new Error($page.error?.message ?? String($page.status)));
     }
   });
 </script>
