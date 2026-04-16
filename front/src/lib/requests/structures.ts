@@ -67,7 +67,9 @@ export async function getManagedStructures(
   try {
     const result = await fetchData<ShortStructure[]>(url);
     if (!result.ok) {
-      logException(new Error(`getManagedStructures: ${result.status} ${result.error}`));
+      logException(
+        new Error(`getManagedStructures: ${result.status} ${result.error}`)
+      );
     }
     return result.data ?? [];
   } catch (err) {
