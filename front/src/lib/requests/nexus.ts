@@ -25,10 +25,10 @@ export const getNexusMenuStatus = async () => {
       Authorization: `Token ${getToken()}`,
     },
   });
-  if (!response.ok) {
-    throw new Error("Failed to fetch Nexus menu status");
+  if (response.ok) {
+    return response.json() as Promise<NexusMenuStatus>;
   }
-  return response.json() as Promise<NexusMenuStatus>;
+  return undefined;
 };
 
 type OrientationBeneficiaryInfoData = {
