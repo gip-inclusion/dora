@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext } from "svelte";
+  import { getContext, onDestroy } from "svelte";
 
   import * as Sentry from "@sentry/sveltekit";
 
@@ -35,16 +35,25 @@
   }: Props = $props();
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
+  let currentSearchController: AbortController | undefined;
 
   async function searchAddress(query: string) {
+    currentSearchController?.abort();
+    const controller = new AbortController();
+    currentSearchController = controller;
+
     const url = `${banAPIUrl}?q=${encodeURIComponent(
       query
     )}&limit=10&citycode=${cityCode}`;
 
     try {
-      const response = await fetchWithRetry(url, undefined, {
-        maxAttempts: 3,
-      });
+      const response = await fetchWithRetry(
+        url,
+        { signal: controller.signal },
+        {
+          maxAttempts: 3,
+        }
+      );
 
       if (!response.ok) {
         return [];
@@ -59,10 +68,21 @@
         }));
       return results;
     } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return [];
+      }
       Sentry.captureException(error);
       return [];
+    } finally {
+      if (currentSearchController === controller) {
+        currentSearchController = undefined;
+      }
     }
   }
+
+  onDestroy(() => {
+    currentSearchController?.abort();
+  });
 
   const context = getContext<ValidationContext>(contextValidationKey);
 
