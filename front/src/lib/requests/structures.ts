@@ -66,8 +66,12 @@ export async function getManagedStructures(
   const url = `${getApiURL()}/structures/?managed=1${searchParam}`;
   try {
     const result = await fetchData<ShortStructure[]>(url);
+    if (!result.ok) {
+      logException(new Error(`getManagedStructures: ${result.status} ${result.error}`));
+    }
     return result.data ?? [];
-  } catch {
+  } catch (err) {
+    logException(err);
     return [];
   }
 }
