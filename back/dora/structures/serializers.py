@@ -16,6 +16,15 @@ from .models import (
 )
 
 
+def _optimize_service_qs_for_structure_detail(qs):
+    """Relations lues par StructureServicesSerializer (liste des services sur fiche structure)."""
+    return qs.select_related("structure", "model").prefetch_related(
+        "categories",
+        "location_kinds",
+        "coach_orientation_modes",
+    )
+
+
 class StructureSerializer(serializers.ModelSerializer):
     typology_display = serializers.SerializerMethodField()
     parent = serializers.SlugRelatedField(slug_field="slug", read_only=True)
@@ -222,9 +231,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
         qs = qs.filter(is_model=False)
         return StructureServicesSerializer(
-            qs.prefetch_related(
-                "categories",
-            ),
+            _optimize_service_qs_for_structure_detail(qs),
             many=True,
         ).data
 
@@ -267,9 +274,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
         qs = qs.filter(is_model=False)
         return StructureServicesSerializer(
-            qs.prefetch_related(
-                "categories",
-            ),
+            _optimize_service_qs_for_structure_detail(qs),
             many=True,
         ).data
 
