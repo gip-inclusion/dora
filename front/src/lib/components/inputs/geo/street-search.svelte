@@ -1,10 +1,16 @@
 <script lang="ts">
+  import { getContext, onDestroy } from "svelte";
+
+  import * as Sentry from "@sentry/sveltekit";
+
   import Select from "$lib/components/inputs/select/select.svelte";
+
+  import { fetchWithRetry } from "$lib/utils/fetch-retry";
+
   import {
     contextValidationKey,
     type ValidationContext,
   } from "$lib/validation/validation";
-  import { getContext } from "svelte";
 
   interface Props {
     id: string;
@@ -29,21 +35,54 @@
   }: Props = $props();
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
+  let currentSearchController: AbortController | undefined;
 
-  async function searchAddress(query) {
+  async function searchAddress(query: string) {
+    currentSearchController?.abort();
+    const controller = new AbortController();
+    currentSearchController = controller;
+
     const url = `${banAPIUrl}?q=${encodeURIComponent(
       query
     )}&limit=10&citycode=${cityCode}`;
-    const response = await fetch(url);
-    const jsonResponse = await response.json();
-    const results = jsonResponse.features
-      .filter((feature) => feature.properties.type !== "municipality")
-      .map((feature) => ({
-        value: feature,
-        label: feature.properties.name,
-      }));
-    return results;
+
+    try {
+      const response = await fetchWithRetry(
+        url,
+        { signal: controller.signal },
+        {
+          maxAttempts: 3,
+        }
+      );
+
+      if (!response.ok) {
+        return [];
+      }
+
+      const jsonResponse = await response.json();
+      const results = jsonResponse.features
+        .filter((feature) => feature.properties.type !== "municipality")
+        .map((feature) => ({
+          value: feature,
+          label: feature.properties.name,
+        }));
+      return results;
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return [];
+      }
+      Sentry.captureException(error);
+      return [];
+    } finally {
+      if (currentSearchController === controller) {
+        currentSearchController = undefined;
+      }
+    }
   }
+
+  onDestroy(() => {
+    currentSearchController?.abort();
+  });
 
   const context = getContext<ValidationContext>(contextValidationKey);
 
@@ -64,8 +103,8 @@
   {disabled}
   hideArrow
   searchFunction={searchAddress}
-  delay="200"
+  delay={200}
   localFiltering={false}
-  minCharactersToSearch="3"
+  minCharactersToSearch={3}
   {readonly}
 />
