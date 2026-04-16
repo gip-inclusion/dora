@@ -37,3 +37,5 @@ export const PROCONNECT_MORE_INFO_URL = "https://www.proconnect.gouv.fr/";
 export const ORIENTATION_JWT_QUERY_PARAM = "op";
 
 export const TOAST_DURATION_MS = 30000;
+
+export const STALE_CHUNK_ERROR_MESSAGE = "dynamically imported module";
