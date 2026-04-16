@@ -313,3 +313,4 @@ class OrientationBeneficiaryInfoOutputSerializer(serializers.Serializer):
     email = serializers.CharField(default="")
     phone = serializers.CharField(default="")
     france_travail_id = serializers.CharField(default="")
+    user_structure_slug = serializers.CharField(default="")

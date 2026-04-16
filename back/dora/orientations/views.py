@@ -450,6 +450,6 @@ def orientation_beneficiary_info(request):
     claims = input_serializer.validated_data["op"]
 
     output_serializer = OrientationBeneficiaryInfoOutputSerializer(
-        claims["beneficiary"]
+        {**claims["beneficiary"], "user_structure_slug": structure_slug}
     )
-    return Response({**output_serializer.data, "user_structure_slug": structure_slug})
+    return Response(output_serializer.data)
