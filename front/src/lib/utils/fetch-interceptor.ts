@@ -25,7 +25,13 @@ export function setupFetchInterceptor(): void {
     input: string | URL | Request,
     init?: RequestInit
   ): Promise<Response> => {
-    const response = await originalFetch(input, init);
+    let response: Response;
+    try {
+      response = await originalFetch(input, init);
+    } catch (err) {
+      Sentry.captureException(err);
+      throw err;
+    }
 
     if (response.status === 429) {
       Sentry.captureMessage(response.statusText);
