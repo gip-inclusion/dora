@@ -182,7 +182,13 @@
             spinnerText.textContent = 'Import échoué';
             spinnerActions.classList.remove('import-hidden');
 
-            if (data.error_message) {
+            if (data.messages && data.messages.length > 0) {
+              spinnerMessages.classList.remove('import-hidden');
+              spinnerMessages.innerHTML = '<ul class="messagelist">' +
+              data.messages.map(msg =>
+                `<li class="${msg.level || 'error'}">${msg.message}</li>`
+              ).join('') + '</ul>';
+            } else if (data.error_message) {
               spinnerError.classList.remove('import-hidden');
               spinnerError.innerHTML = '<div class="error-details">' + escapeHtml(data.error_message) + '</div>';
             }
