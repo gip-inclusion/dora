@@ -550,10 +550,17 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         ]
 
     def has_admin(self):
-        return bool(self.num_admins())
+        return StructureMember.objects.filter(
+            structure_id=self.id,
+            is_admin=True,
+            user__is_valid=True,
+            user__is_active=True,
+        ).exists()
 
     def num_admins(self):
-        return len(self.admins)
+        return self.membership.filter(
+            is_admin=True, user__is_valid=True, user__is_active=True
+        ).count()
 
     def is_pending_member(self, user):
         return StructurePutativeMember.objects.filter(

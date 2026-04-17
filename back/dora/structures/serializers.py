@@ -222,8 +222,8 @@ class StructureSerializer(serializers.ModelSerializer):
 
         qs = qs.filter(is_model=False)
         return StructureServicesSerializer(
-            qs.prefetch_related(
-                "categories",
+            qs.select_related("structure", "model").prefetch_related(
+                "categories", "location_kinds", "coach_orientation_modes"
             ),
             many=True,
         ).data
@@ -267,7 +267,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
         qs = qs.filter(is_model=False)
         return StructureServicesSerializer(
-            qs.prefetch_related(
+            qs.select_related("structure", "model").prefetch_related(
                 "categories",
             ),
             many=True,
@@ -286,7 +286,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
             can_user_edit = serializers.SerializerMethodField()
 
-            num_services = serializers.SerializerMethodField()
+            num_services = serializers.IntegerField()
 
             class Meta:
                 model = ServiceModel
@@ -301,9 +301,6 @@ class StructureSerializer(serializers.ModelSerializer):
                     "slug",
                     "structure",
                 ]
-
-            def get_num_services(self, obj):
-                return obj.copies.exclude(status=ServiceStatus.ARCHIVED).count()
 
             def get_can_user_edit(self, obj):
                 return obj.can_user_edit
@@ -325,8 +322,13 @@ class StructureSerializer(serializers.ModelSerializer):
                     When(structure=structure, then=Value(can_edit_current)),
                     default=Value(can_edit_parent),
                     output_field=BooleanField(),
-                )
+                ),
+                num_services=Count(
+                    "copies",
+                    filter=~Q(copies__status=ServiceStatus.ARCHIVED),
+                ),
             )
+            .select_related("structure")
             .prefetch_related("categories")
         )
 
