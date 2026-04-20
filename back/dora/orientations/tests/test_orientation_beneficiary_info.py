@@ -1,50 +1,61 @@
-from django.conf import settings
+from urllib.parse import parse_qs, urlparse
 
-from dora.core.test_utils import make_user
+from django.conf import settings
+from model_bakery import baker
+
+from dora.core.test_utils import make_service, make_structure, make_user
+from dora.sirene.models import Establishment
+from dora.structures.models import StructureMember
+
+URL = "/orientations/emplois/beneficiary-info/"
+
+BENEFICIARY_DATA = {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "0102030405",
+    "france_travail_id": "1234567890",
+}
 
 
 def test_orientation_beneficiary_info_requires_auth(api_client):
-    url = "/orientations/emplois/beneficiary-info/"
-
-    response = api_client.get(url)
+    response = api_client.get(URL)
 
     assert response.status_code == 401
 
 
 def test_orientation_beneficiary_info_returns_beneficiary_data(api_client, monkeypatch):
     user = make_user()
-    api_client.force_authenticate(user=user)
+    structure = make_structure(siret="12345678901234")
+    baker.make(Establishment, siret=structure.siret)
+    baker.make(StructureMember, structure=structure, user=user)
 
     claims = {
-        "prescriber": {"email": user.email},
-        "beneficiary": {
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@example.com",
-            "phone": "0102030405",
-            "france_travail_id": "1234567890",
+        "prescriber": {
+            "email": user.email,
+            "organization": {"siret": structure.siret},
         },
+        "beneficiary": BENEFICIARY_DATA,
     }
+
+    api_client.force_authenticate(user=user)
 
     monkeypatch.setattr(
         "dora.orientations.serializers.decode_token",
-        lambda value: claims,
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
     )
 
-    url = "/orientations/emplois/beneficiary-info/?op=fake-token"
-    response = api_client.get(url)
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={make_service().slug}")
 
     assert response.status_code == 200
-    assert response.data == {
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "john.doe@example.com",
-        "phone": "0102030405",
-        "france_travail_id": "1234567890",
-    }
+    assert response.data == {**BENEFICIARY_DATA, "user_structure_slug": structure.slug}
 
 
-def test_orientation_beneficiary_info_invalid_token_returns_error(
+def test_orientation_beneficiary_info_invalid_token_redirects_to_homepage_with_error(
     api_client, monkeypatch
 ):
     user = make_user()
@@ -58,12 +69,10 @@ def test_orientation_beneficiary_info_invalid_token_returns_error(
         _decode_token,
     )
 
-    url = "/orientations/emplois/beneficiary-info/?op=invalid-token"
-    response = api_client.get(url)
+    response = api_client.get(f"{URL}?op=invalid-token")
 
-    assert response.status_code == 400
-    assert len(response.data["op"]) == 1
-    assert response.data["op"][0]["message"] == "Token JWT invalide."
+    assert response.status_code == 200
+    assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
 
 
 def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
@@ -71,16 +80,27 @@ def test_orientation_beneficiary_info_missing_beneficiary_data_returns_error(
 ):
     user = make_user()
     api_client.force_authenticate(user=user)
+    structure = make_structure()
+    baker.make(Establishment, siret=structure.siret)
+    baker.make(StructureMember, structure=structure, user=user)
 
-    claims_without_beneficiary = {"foo": "bar"}
+    claims_without_beneficiary = {
+        "prescriber": {
+            "email": user.email,
+            "organization": {"siret": structure.siret},
+        },
+    }
 
     monkeypatch.setattr(
         "dora.orientations.serializers.decode_token",
-        lambda value: claims_without_beneficiary,
+        lambda _: claims_without_beneficiary,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims_without_beneficiary,
     )
 
-    url = "/orientations/emplois/beneficiary-info/?op=valid-token-without-beneficiary"
-    response = api_client.get(url)
+    response = api_client.get(f"{URL}?op=token_without_beneficiary")
 
     assert response.status_code == 400
     assert len(response.data["op"]) == 1
@@ -98,23 +118,99 @@ def test_user_with_different_email_redirects_to_homepage_with_link_invalid_param
     claims = {
         "prescriber": {
             "email": "different@invalid.com",
+            "organization": {"siret": "12345678901234"},
         },
-        "beneficiary": {
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@example.com",
-            "phone": "0102030405",
-            "france_travail_id": "1234567890",
-        },
+        "beneficiary": BENEFICIARY_DATA,
     }
 
     monkeypatch.setattr(
         "dora.orientations.serializers.decode_token",
-        lambda value: claims,
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
     )
 
-    url = "/orientations/emplois/beneficiary-info/?op=fake-token"
-    response = api_client.get(url)
+    response = api_client.get(f"{URL}?op=fake-token")
 
     assert response.status_code == 200
     assert response.data["next_url"] == f"{settings.FRONTEND_URL}?link_invalid=true"
+
+
+def test_no_structure_for_establishment_redirects_to_rattachement_with_orienter(
+    api_client, monkeypatch
+):
+    user = make_user()
+    service = make_service()
+    orphan_siret = "11111111111111"
+    baker.make(Establishment, siret=orphan_siret)
+
+    claims = {
+        "prescriber": {
+            "email": user.email,
+            "organization": {"siret": orphan_siret},
+        },
+        "beneficiary": BENEFICIARY_DATA,
+    }
+
+    api_client.force_authenticate(user=user)
+
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
+
+    assert response.status_code == 200
+    parsed = urlparse(response.data["next_url"])
+    query_params = parse_qs(parsed.query)
+    assert parsed.path == "/auth/rattachement"
+    assert query_params["siret"] == [orphan_siret]
+    assert query_params["op"] == ["fake-token"]
+    assert query_params["service_slug"] == [service.slug]
+    assert query_params["orienter"] == ["true"]
+
+
+def test_user_not_structure_member_redirects_to_rattachement_with_orienter(
+    api_client, monkeypatch
+):
+    user = make_user()
+    service = make_service()
+    structure = make_structure(siret="12345678901234")
+    baker.make(Establishment, siret=structure.siret)
+
+    claims = {
+        "prescriber": {
+            "email": user.email,
+            "organization": {"siret": structure.siret},
+        },
+        "beneficiary": BENEFICIARY_DATA,
+    }
+
+    api_client.force_authenticate(user=user)
+
+    monkeypatch.setattr(
+        "dora.orientations.serializers.decode_token",
+        lambda _: claims,
+    )
+    monkeypatch.setattr(
+        "dora.orientations.views.decode_token",
+        lambda _: claims,
+    )
+
+    response = api_client.get(f"{URL}?op=fake-token&service_slug={service.slug}")
+
+    assert response.status_code == 200
+    parsed = urlparse(response.data["next_url"])
+    query_params = parse_qs(parsed.query)
+    assert parsed.path == "/auth/rattachement"
+    assert query_params["siret"] == [structure.siret]
+    assert query_params["service_slug"] == [service.slug]
+    assert query_params["orienter"] == ["true"]
+    assert query_params["fast_track"] == ["true"]

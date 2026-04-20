@@ -13,7 +13,6 @@
   import type { Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
-  import { setCurrentStructure } from "$lib/utils/preferences";
   import { trackService } from "$lib/utils/stats";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
@@ -21,7 +20,6 @@
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
   import type { PageData } from "./$types";
-  import { toast } from "@zerodevx/svelte-toast";
 
   interface Props {
     data: PageData;
@@ -53,25 +51,6 @@
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
     trackService(service, $page.url, searchId, isDI);
-  });
-
-  $effect(() => {
-    const userStructureSlug = $page.url.searchParams.get("user_structure_slug");
-    if (userStructureSlug && $userInfo) {
-      const userStructure = [
-        ...$userInfo.pendingStructures,
-        ...$userInfo.structures,
-      ].find((struct) => struct.slug === userStructureSlug);
-
-      if (userStructure && setCurrentStructure(userStructureSlug)) {
-        toast.push({
-          msg: `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}.<br/><br/>Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
-          theme: {
-            "--toastWidth": "50%",
-          },
-        });
-      }
-    }
   });
 
   beforeNavigate(({ from, to }) => {
@@ -150,12 +129,3 @@
 
   <MonRecapPopup />
 {/if}
-
-<style>
-  :global(._toastItem) {
-    top: 5.1rem !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-  }
-</style>

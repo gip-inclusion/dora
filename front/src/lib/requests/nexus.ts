@@ -37,6 +37,7 @@ type OrientationBeneficiaryInfoData = {
   email: string;
   phone: string;
   franceTravailId: string;
+  userStructureSlug: string;
 };
 
 type OrientationBeneficiaryInfoRedirect = {
@@ -47,11 +48,16 @@ export type OrientationBeneficiaryInfo =
   | OrientationBeneficiaryInfoData
   | OrientationBeneficiaryInfoRedirect;
 
-export const getOrientationBeneficiaryInfo = async (opJwt: string) => {
+export const getOrientationBeneficiaryInfo = async (
+  opJwt: string,
+  serviceSlug: string,
+  fetchFunction = fetch
+) => {
   const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
   url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+  url.searchParams.set("service_slug", serviceSlug);
 
-  const response = await fetch(url, {
+  const response = await fetchFunction(url, {
     method: "GET",
     headers: {
       Accept: "application/json; version=1.0",
