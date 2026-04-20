@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-from django.db import connection
-from django.test.utils import CaptureQueriesContext
 from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -39,11 +37,10 @@ class AuthenticationTestCase(APITestCase):
         saved_search.location_kinds.set([baker.make("LocationKind")])
         saved_search.funding_labels.set([baker.make("FundingLabel")])
 
-        with CaptureQueriesContext(connection) as queries:
+        with self.assertNumQueries(15):
             response = self.client.post("/auth/user-info/", {"key": token.key})
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(queries), 15)
 
     def test_join_structure_creates_structure(self):
         baker.make("Establishment", siret=DUMMY_SIRET)
