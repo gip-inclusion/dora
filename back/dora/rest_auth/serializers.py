@@ -81,7 +81,18 @@ class UserInfoSerializer(serializers.ModelSerializer):
         if not user or not user.is_authenticated:
             qs = SavedSearch.objects.none()
         else:
-            qs = SavedSearch.objects.filter(user=user).order_by("-creation_date")
+            qs = (
+                SavedSearch.objects.filter(user=user)
+                .select_related("category")
+                .prefetch_related(
+                    "subcategories",
+                    "kinds",
+                    "fees",
+                    "location_kinds",
+                    "funding_labels",
+                )
+                .order_by("-creation_date")
+            )
         return SavedSearchSerializer(qs, many=True).data
 
 
