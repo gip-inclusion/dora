@@ -54,6 +54,7 @@ class BaseImportAdminMixin:
                 request.POST.get("should_remove_instructions") == "on"
             )
 
+            csv_file.seek(0)
             csv_content = csv_file.read().decode("utf-8")
 
             import_job = ImportJob.objects.create(
@@ -89,8 +90,11 @@ class BaseImportAdminMixin:
             return self._create_failed_job(
                 request,
                 csv_file.name,
-                "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
+                """
+                <b>Échec de l'import - Erreur d'encodage du fichier</b><br/>
+                Le fichier contient des caractères spéciaux illisibles.<br/>
+                Si possible, faites les modifications et l'export dans le Google Sheet avec le template.
+                """,
             )
         except Exception as e:
             return self._create_failed_job(
