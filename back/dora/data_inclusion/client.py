@@ -10,12 +10,16 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-def log_and_raise(resp: requests.Response, *args, **kwargs):
-    try:
-        resp.raise_for_status()
-    except requests.HTTPError as err:
-        logger.error(resp.json())
-        raise err
+def log_and_raise(disable_404_log=False):
+    def _hook(resp: requests.Response, *args, **kwargs):
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError as err:
+            if not (disable_404_log and resp.status_code == 404):
+                logger.error(resp.json())
+            raise err
+
+    return _hook
 
 
 def di_client_factory():
@@ -48,7 +52,7 @@ class DataInclusionClient:
         self.base_url = furl.furl(base_url)
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {token}"})
-        self.session.hooks["response"] = [log_and_raise]
+        self.session.hooks["response"] = [log_and_raise()]
         self.timeout_timedelta = (
             timedelta(seconds=timeout_seconds)
             if timeout_seconds is not None
@@ -102,6 +106,8 @@ class DataInclusionClient:
         if user_hash is not None:
             self.session.headers.update({"Anonymous-User-Hash": user_hash})
 
+        original_response_hooks = self.session.hooks.get("response", [])
+        self.session.hooks["response"] = [log_and_raise(disable_404_log=True)]
         try:
             response = self._get(url)
             return response.json()
@@ -109,6 +115,8 @@ class DataInclusionClient:
             return None
         except requests.ReadTimeout:
             return None
+        finally:
+            self.session.hooks["response"] = original_response_hooks
 
     @log_conn_error
     def search_services(
