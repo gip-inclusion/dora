@@ -70,7 +70,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
         if not user or not user.is_authenticated:
             qs = Bookmark.objects.none()
         else:
-            qs = Bookmark.objects.filter(user=user).order_by("-creation_date")
+            qs = (
+                Bookmark.objects.filter(user=user)
+                .select_related("service")
+                .order_by("-creation_date")
+            )
         return BookmarkListSerializer(qs, many=True).data
 
     def get_saved_searches(self, user):
