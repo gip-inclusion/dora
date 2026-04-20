@@ -1,6 +1,9 @@
 from unittest.mock import patch
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from model_bakery import baker
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
 from dora.core.models import ModerationStatus
@@ -11,6 +14,37 @@ DUMMY_SIRET = "12345678901234"
 
 
 class AuthenticationTestCase(APITestCase):
+    def test_user_info_query_count(self):
+        user = baker.make("users.User", is_valid=True)
+        token = Token.objects.create(user=user)
+
+        structure = make_structure()
+        make_structure_member(user=user, structure=structure, is_admin=True)
+        pending_structure = make_structure()
+        baker.make(
+            "StructurePutativeMember",
+            user=user,
+            structure=pending_structure,
+            invited_by_admin=False,
+        )
+
+        service = baker.make("Service", structure=structure, is_model=False)
+        baker.make("Bookmark", user=user, service=service)
+
+        category = baker.make("ServiceCategory")
+        saved_search = baker.make("SavedSearch", user=user, category=category)
+        saved_search.subcategories.set([baker.make("ServiceSubCategory")])
+        saved_search.kinds.set([baker.make("ServiceKind")])
+        saved_search.fees.set([baker.make("ServiceFee")])
+        saved_search.location_kinds.set([baker.make("LocationKind")])
+        saved_search.funding_labels.set([baker.make("FundingLabel")])
+
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.post("/auth/user-info/", {"key": token.key})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(queries), 15)
+
     def test_join_structure_creates_structure(self):
         baker.make("Establishment", siret=DUMMY_SIRET)
         user = baker.make("users.User", is_valid=True)
