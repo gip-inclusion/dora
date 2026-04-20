@@ -118,7 +118,11 @@ export function disconnect() {
   if (browser) {
     setUserInfo(null);
     removeToken();
-    localStorage.clear();
+    try {
+      localStorage.clear();
+    } catch {
+      // Même en cas d'accès refusé, on poursuit la déconnexion.
+    }
   }
 }
 
@@ -126,11 +130,16 @@ function migrateTokenFromLocalStorageToCookie(
   authTokenFromCookie: string | null
 ) {
   if (!authTokenFromCookie) {
-    const lsToken = localStorage.getItem(TOKEN_KEY);
-    if (lsToken) {
-      setToken(lsToken);
-      localStorage.removeItem(TOKEN_KEY);
-      return lsToken;
+    try {
+      const lsToken = localStorage.getItem(TOKEN_KEY);
+      if (lsToken) {
+        setToken(lsToken);
+        localStorage.removeItem(TOKEN_KEY);
+        return lsToken;
+      }
+    } catch {
+      // Certains contextes navigateur interdisent localStorage
+      // (iframe sandboxée, mode privacy strict, etc.).
     }
   }
 
