@@ -41,11 +41,15 @@ class UserInfoSerializer(serializers.ModelSerializer):
         if not user or not user.is_authenticated:
             qs = Structure.objects.none()
         else:
-            qs = Structure.objects.filter(membership__user=user).prefetch_related(
-                Prefetch(
-                    "services",
-                    queryset=Service.objects.update_advised(),
-                    to_attr="prefetched_services_to_update",
+            qs = (
+                Structure.objects.filter(membership__user=user)
+                .select_related("parent")
+                .prefetch_related(
+                    Prefetch(
+                        "services",
+                        queryset=Service.objects.update_advised(),
+                        to_attr="prefetched_services_to_update",
+                    )
                 )
             )
         return StructureListSerializer(qs, many=True, context={"user": user}).data
@@ -54,14 +58,18 @@ class UserInfoSerializer(serializers.ModelSerializer):
         if not user or not user.is_authenticated:
             qs = Structure.objects.none()
         else:
-            qs = Structure.objects.filter(
-                putative_membership__user=user,
-                putative_membership__invited_by_admin=False,
-            ).prefetch_related(
-                Prefetch(
-                    "services",
-                    queryset=Service.objects.update_advised(),
-                    to_attr="prefetched_services_to_update",
+            qs = (
+                Structure.objects.filter(
+                    putative_membership__user=user,
+                    putative_membership__invited_by_admin=False,
+                )
+                .select_related("parent")
+                .prefetch_related(
+                    Prefetch(
+                        "services",
+                        queryset=Service.objects.update_advised(),
+                        to_attr="prefetched_services_to_update",
+                    )
                 )
             )
         return StructureListSerializer(qs, many=True, context={"user": user}).data
