@@ -1,6 +1,7 @@
+from django.db.models import Prefetch
 from rest_framework import serializers
 
-from dora.services.models import Bookmark, SavedSearch
+from dora.services.models import Bookmark, SavedSearch, Service
 from dora.services.serializers import BookmarkListSerializer, SavedSearchSerializer
 from dora.sirene.models import Establishment
 from dora.structures.models import Structure
@@ -41,7 +42,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
             qs = Structure.objects.none()
         else:
             qs = Structure.objects.filter(membership__user=user).prefetch_related(
-                "services"
+                Prefetch(
+                    "services",
+                    queryset=Service.objects.update_advised(),
+                    to_attr="prefetched_services_to_update",
+                )
             )
         return StructureListSerializer(qs, many=True, context={"user": user}).data
 
@@ -52,6 +57,12 @@ class UserInfoSerializer(serializers.ModelSerializer):
             qs = Structure.objects.filter(
                 putative_membership__user=user,
                 putative_membership__invited_by_admin=False,
+            ).prefetch_related(
+                Prefetch(
+                    "services",
+                    queryset=Service.objects.update_advised(),
+                    to_attr="prefetched_services_to_update",
+                )
             )
         return StructureListSerializer(qs, many=True, context={"user": user}).data
 
