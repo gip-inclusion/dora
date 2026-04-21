@@ -74,3 +74,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 # Pas de json formatting en développement
 del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
 LOGGING["loggers"]["django"]["level"] = os.getenv("DJANGO_LOG_LEVEL", "INFO")  # noqa F405
+
+# Pour afficher les emails dans la console au lieu de les envoyer pour de vrai
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
