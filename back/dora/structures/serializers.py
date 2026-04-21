@@ -445,7 +445,9 @@ class StructureListSerializer(StructureSerializer):
         return obj.can_edit_informations(user or request.user)
 
     def get_services_to_update(self, obj):
-        services = obj.services.update_advised()
+        services = getattr(obj, "prefetched_services_to_update", None)
+        if services is None:
+            services = obj.services.update_advised()
         return [{"name": service.name, "slug": service.slug} for service in services]
 
 
