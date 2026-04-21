@@ -243,7 +243,9 @@ class StructuresImportTestCase(APITestCase):
         self.assertIsNotNone(user)
         self.assertEqual(user.get_full_name(), "foo@buzz.com")
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "[DORA] Votre invitation sur DORA")
+        self.assertEqual(
+            mail.outbox[0].subject, "[LOCAL] [DORA] Votre invitation sur DORA"
+        )
         self.assertIn(
             quote("foo@buzz.com"),
             mail.outbox[0].body,
@@ -419,7 +421,9 @@ class StructuresImportTestCase(APITestCase):
         user.refresh_from_db()
         self.assertEqual(user.get_full_name(), user.get_full_name())
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "[DORA] Votre invitation sur DORA")
+        self.assertEqual(
+            mail.outbox[0].subject, "[LOCAL] [DORA] Votre invitation sur DORA"
+        )
         self.assertIn(
             quote(user.email),
             mail.outbox[0].body,
@@ -662,7 +666,9 @@ class StructuresImportTestCase(APITestCase):
             ).exists()
         )
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, "[DORA] Votre antenne a été créée")
+        self.assertEqual(
+            mail.outbox[0].subject, "[LOCAL] [DORA] Votre antenne a été créée"
+        )
 
     def test_add_labels(self):
         structure = make_structure()

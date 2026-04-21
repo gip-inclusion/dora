@@ -27,7 +27,7 @@ def test_send_invitation_reminder(with_notification):
     assert mail.outbox[0].to == [user.email]
     assert (
         mail.outbox[0].subject
-        == f"Rappel : Acceptez l'invitation à rejoindre {structure.name} sur DORA"
+        == f"[LOCAL] Rappel : Acceptez l'invitation à rejoindre {structure.name} sur DORA"
     )
     assert structure.name in mail.outbox[0].body
     assert "/auth/invitation" in mail.outbox[0].body
@@ -47,7 +47,9 @@ def test_send_account_deletion_notification():
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].to == [user.email]
-    assert mail.outbox[0].subject == "DORA - Suppression prochaine de votre compte"
+    assert (
+        mail.outbox[0].subject == "[LOCAL] DORA - Suppression prochaine de votre compte"
+    )
     assert (
         localize(timezone.localdate() + relativedelta(days=30)) in mail.outbox[0].body
     )
@@ -59,8 +61,8 @@ def test_send_account_deletion_notification():
 @pytest.mark.parametrize(
     "deletion,subject",
     (
-        (False, "Rappel : Identifiez votre structure sur DORA"),
-        (True, "Dernier rappel avant suppression"),
+        (False, "[LOCAL] Rappel : Identifiez votre structure sur DORA"),
+        (True, "[LOCAL] Dernier rappel avant suppression"),
     ),
 )
 def test_send_user_without_structure_notification(deletion, subject):
@@ -96,7 +98,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "Vous avez des structures à modérer cette semaine",
+            "[LOCAL] Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             f"<p>À valider :</p><ul><li>{structure_awaiting_moderation.name}</li></ul>",
@@ -119,7 +121,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "Vous avez des structures à modérer cette semaine",
+            "[LOCAL] Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             f"<p>Sans utilisateur :</p><ul><li>{orphaned_structure.name}</li></ul>",
@@ -176,7 +178,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "Vous avez des structures à modérer cette semaine",
+            "[LOCAL] Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             "<p>À valider :</p><ul><li>Beta</li><li>Delta</li>"

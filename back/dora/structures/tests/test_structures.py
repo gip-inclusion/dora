@@ -1036,7 +1036,9 @@ class StructureMemberTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("Votre invitation sur DORA", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Votre invitation sur DORA", mail.outbox[0].subject
+        )
 
     def test_manager_can_resend_invite(self):
         self.client.force_authenticate(user=self.manager)
@@ -1050,7 +1052,9 @@ class StructureMemberTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("Votre invitation sur DORA", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Votre invitation sur DORA", mail.outbox[0].subject
+        )
 
     def test_admin_cant_resend_invite_to_valid_member(self):
         self.client.force_authenticate(user=self.me)
@@ -1082,7 +1086,9 @@ class StructureMemberTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("Votre invitation sur DORA", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Votre invitation sur DORA", mail.outbox[0].subject
+        )
 
     def test_admin_cant_resend_invite_to_user_to_other_struct(self):
         self.client.force_authenticate(user=self.me)
@@ -1130,7 +1136,9 @@ class StructureMemberTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("Votre invitation sur DORA", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Votre invitation sur DORA", mail.outbox[0].subject
+        )
 
     def test_admin_user_can_remove_its_admin_privilege(self):
         self.client.force_authenticate(user=self.me)
@@ -1234,7 +1242,7 @@ class StructureMemberTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(mail.outbox), 0)
-        self.assertIn("Invitation acceptée", mail.outbox[0].subject)
+        self.assertEqual("[LOCAL] [DORA] Invitation acceptée", mail.outbox[0].subject)
         self.assertIn(self.another_struct_user.email, mail.outbox[0].body)
 
     def test_admin_notified_when_new_user_request_access(self):
@@ -1251,7 +1259,9 @@ class StructureMemberTestCase(APITestCase):
             structure__siret=self.my_struct.siret, user=user
         )
         self.assertGreater(len(mail.outbox), 0)
-        self.assertIn("Demande d’accès à votre structure", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Demande d’accès à votre structure", mail.outbox[0].subject
+        )
         self.assertIn(self.my_struct.slug, mail.outbox[0].body)
 
     def test_admin_notified_when_fast_track_user_joins(self):
@@ -1278,7 +1288,10 @@ class StructureMemberTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         StructureMember.objects.get(structure__siret=self.my_struct.siret, user=user)
         self.assertGreater(len(mail.outbox), 0)
-        self.assertIn("Utilisateur rattaché à votre structure", mail.outbox[0].subject)
+        self.assertEqual(
+            "[LOCAL] [DORA] Utilisateur rattaché à votre structure",
+            mail.outbox[0].subject,
+        )
         self.assertIn(user.email, mail.outbox[0].body)
 
 

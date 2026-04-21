@@ -33,7 +33,7 @@ def test_manager_can_invite(api_client):
     assert member.is_admin is True
     assert member.invited_by_admin is True
     assert len(mail.outbox) == 1
-    assert "[DORA] Votre invitation sur DORA" in mail.outbox[0].subject
+    assert "[LOCAL] [DORA] Votre invitation sur DORA" == mail.outbox[0].subject
     assert user.get_full_name() in mail.outbox[0].body
     assert "/auth/invitation?" in mail.outbox[0].body
     assert structure.slug in mail.outbox[0].body

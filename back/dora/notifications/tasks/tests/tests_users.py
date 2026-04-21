@@ -185,12 +185,12 @@ def test_user_without_structure_task_should_trigger(user_without_structure_task)
                 case 4:
                     assert (
                         mail.outbox[cnt - 1].subject
-                        == "Dernier rappel avant suppression"
+                        == "[LOCAL] Dernier rappel avant suppression"
                     )
                 case _:
                     assert (
                         mail.outbox[cnt - 1].subject
-                        == "Rappel : Identifiez votre structure sur DORA"
+                        == "[LOCAL] Rappel : Identifiez votre structure sur DORA"
                     )
 
         with freeze_time(now + relativedelta(days=day + 1)):

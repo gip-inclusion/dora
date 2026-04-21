@@ -165,17 +165,21 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         self.assertEqual(
             mail.outbox[0].to, [self.expired_orientation_1.get_contact_email()]
         )
-        self.assertEqual(mail.outbox[0].subject, "Cette demande d’orientation a expiré")
+        self.assertEqual(
+            mail.outbox[0].subject, "[LOCAL] Cette demande d’orientation a expiré"
+        )
 
         self.assertEqual(mail.outbox[1].to, [self.beneficiary_email])
         self.assertEqual(
-            mail.outbox[1].subject, "Cette demande d’orientation a été annulée"
+            mail.outbox[1].subject, "[LOCAL] Cette demande d’orientation a été annulée"
         )
 
         self.assertEqual(
             mail.outbox[2].to, [self.expired_orientation_1.prescriber.email]
         )
-        self.assertEqual(mail.outbox[2].subject, "Votre demande d’orientation a expiré")
+        self.assertEqual(
+            mail.outbox[2].subject, "[LOCAL] Votre demande d’orientation a expiré"
+        )
 
     def test_should_send_four_emails_when_prescriber_and_referent_are_different(self):
         self.expired_orientation_1.referent_email = "different-person@email.com"
@@ -193,11 +197,13 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         self.assertEqual(
             mail.outbox[0].to, [self.expired_orientation_1.get_contact_email()]
         )
-        self.assertEqual(mail.outbox[0].subject, "Cette demande d’orientation a expiré")
+        self.assertEqual(
+            mail.outbox[0].subject, "[LOCAL] Cette demande d’orientation a expiré"
+        )
 
         self.assertEqual(mail.outbox[1].to, [self.beneficiary_email])
         self.assertEqual(
-            mail.outbox[1].subject, "Cette demande d’orientation a été annulée"
+            mail.outbox[1].subject, "[LOCAL] Cette demande d’orientation a été annulée"
         )
 
         prescriber_and_referent_emails = mail.outbox[2:4]
@@ -207,4 +213,6 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         self.assertIn(self.expired_orientation_1.referent_email, recipients)
 
         for email in prescriber_and_referent_emails:
-            self.assertEqual(email.subject, "Votre demande d’orientation a expiré")
+            self.assertEqual(
+                email.subject, "[LOCAL] Votre demande d’orientation a expiré"
+            )
