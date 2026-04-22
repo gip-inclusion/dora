@@ -90,7 +90,8 @@ def test_services_api_requires_emplois_email(api_client):
     assert response.status_code == 403
 
 
-def test_services_api_list(emplois_user, api_client, published_service):
+def test_services_api_list(emplois_user, api_client):
+    published_service = make_published_service()
     list_response = api_client.get(reverse("emplois:service-list"))
     assert list_response.status_code == 200
     assert len(list_response.data) == 1
@@ -100,7 +101,8 @@ def test_services_api_list(emplois_user, api_client, published_service):
     assert data["short_desc"] == published_service.short_desc
 
 
-def test_services_api_detail(emplois_user, api_client, published_service):
+def test_services_api_detail(emplois_user, api_client):
+    published_service = make_published_service()
     url = reverse("emplois:service-detail", kwargs={"pk": published_service.id})
     detail_response = api_client.get(url)
     assert detail_response.status_code == 200
@@ -118,9 +120,8 @@ def test_services_api_detail(emplois_user, api_client, published_service):
     ],
     ids=["post", "patch", "delete"],
 )
-def test_services_api_is_read_only(
-    emplois_user, api_client, published_service, method, use_detail, data
-):
+def test_services_api_is_read_only(emplois_user, api_client, method, use_detail, data):
+    published_service = make_published_service()
     if use_detail:
         url = reverse("emplois:service-detail", kwargs={"pk": published_service.id})
     else:
@@ -157,8 +158,8 @@ def test_services_api_detail_queries_are_bounded(
     emplois_user,
     api_client,
     django_assert_num_queries,
-    published_service,
 ):
+    published_service = make_published_service()
     with django_assert_num_queries(11):
         response = api_client.get(
             reverse("emplois:service-detail", kwargs={"pk": published_service.id})

@@ -19,14 +19,8 @@ def emplois_user(api_client, settings):
 
 
 @pytest.fixture
-def published_service():
-    return make_published_service()
-
-
-@pytest.fixture
-def orientable_service_via_dora_form(published_service):
-    service = published_service
-    service.contact_email = "contact@example.org"
+def orientable_service_via_dora_form():
+    service = make_published_service(contact_email="contact@example.org")
     service.structure.disable_orientation_form = False
     service.structure.save()
     service.save()
@@ -34,8 +28,8 @@ def orientable_service_via_dora_form(published_service):
 
 
 @pytest.fixture
-def ft_orientable_service(published_service):
-    service = published_service
+def ft_orientable_service():
+    service = make_published_service()
     service.structure.typology = TypologieStructure.FT
     service.structure.save()
 
