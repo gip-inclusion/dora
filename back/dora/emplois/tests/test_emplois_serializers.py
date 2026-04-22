@@ -84,12 +84,9 @@ def test_service_serializer_basic_fields():
 
 
 def test_service_serializer_funding_labels():
-    service = make_published_service()
-    service.funding_labels.clear()
-
     label_1 = baker.make(FundingLabel, label="Label 1", value="label-1")
     label_2 = baker.make(FundingLabel, label="Label 2", value="label-2")
-    service.funding_labels.add(label_1, label_2)
+    service = make_published_service(funding_labels=[label_1, label_2])
 
     data = ServiceSerializer(service).data
 
