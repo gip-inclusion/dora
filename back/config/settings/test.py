@@ -35,7 +35,6 @@ AUTH_COOKIE_NAME = "token_test"
 
 # Configuration nécessaire pour les tests :
 BREVO_ACTIVE = False
-EMPLOIS_API_ALLOW_UNAUTHENTICATED_LOCAL = False
 
 # Nécessaire pour la C.I. : fixe des valeurs par défaut pour les conteneurs
 # faire correspondre les valeurs définies dans la configuration de la CI

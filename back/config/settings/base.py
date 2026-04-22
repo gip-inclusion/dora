@@ -645,10 +645,6 @@ ORIENTATION_SIRENE_BLACKLIST = [
 # et pour activer le SSL sur la connexion à la base de données.
 ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 
-# API emplois : accès sans authentification en local uniquement.
-# Désactivé dans config.settings.test pour que les tests exigent l'auth.
-EMPLOIS_API_ALLOW_UNAUTHENTICATED_LOCAL = ENVIRONMENT == "local"
-
 # Nom du cookie d'authentification : différencié par environnement pour éviter
 # les collisions de cookies entre prod et staging (même domaine parent).
 AUTH_COOKIE_NAME = "token" if ENVIRONMENT == "production" else f"token_{ENVIRONMENT}"
