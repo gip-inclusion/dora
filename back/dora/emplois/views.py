@@ -36,7 +36,11 @@ PREFETCH_RELATED_SERVICE_LIST = [
     "coach_orientation_modes",
     "orientable_ft_services",
     "beneficiaries_access_modes",
-    Prefetch("orientations", queryset=_ANSWERED_ORIENTATIONS_QUERYSET),
+    Prefetch(
+        "orientations",
+        queryset=_ANSWERED_ORIENTATIONS_QUERYSET,
+        to_attr="answered_orientations",
+    ),
 ]
 
 

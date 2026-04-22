@@ -1,5 +1,3 @@
-from django.db.models import Avg, DurationField, F
-from django.db.models.expressions import ExpressionWrapper
 from rest_framework import serializers
 
 from dora.orientations.models import Orientation, OrientationStatus
@@ -69,31 +67,21 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_average_orientation_response_delay_days(self, obj):
         """Délai moyen de réponse aux demandes d'orientation, en jours."""
-        prefetched = getattr(obj, "_prefetched_objects_cache", {}).get("orientations")
-        if prefetched is not None:
-            delays = [(o.processing_date - o.creation_date).days for o in prefetched]
-            return round(sum(delays) / len(delays)) if delays else None
-        result = (
-            Orientation.objects.filter(
+        orientations = getattr(obj, "answered_orientations", None)
+        if orientations is None:
+            orientations = Orientation.objects.filter(
                 service=obj,
                 status__in=[
                     OrientationStatus.ACCEPTED,
                     OrientationStatus.REJECTED,
                 ],
                 processing_date__isnull=False,
-            )
-            .annotate(
-                delay=ExpressionWrapper(
-                    F("processing_date") - F("creation_date"),
-                    output_field=DurationField(),
-                ),
-            )
-            .aggregate(avg_delay=Avg("delay"))
-        )
-        avg_delay = result["avg_delay"]
-        if avg_delay is None:
+            ).only("creation_date", "processing_date")
+
+        delays = [(o.processing_date - o.creation_date).days for o in orientations]
+        if not delays:
             return None
-        return round(avg_delay.total_seconds() / 86400)
+        return round(sum(delays) / len(delays))
 
 
 class DisabledDoraFormDIStructureSerializer(serializers.ModelSerializer):
