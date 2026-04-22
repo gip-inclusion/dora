@@ -163,8 +163,10 @@ def test_services_api_detail_queries_are_bounded(
     api_client,
     django_assert_num_queries,
 ):
+    expected_query_count = len(PREFETCH_RELATED_SERVICE_LIST) + 1
+    # +1 pour la requete de detail du service
     published_service = make_published_service()
-    with django_assert_num_queries(11):
+    with django_assert_num_queries(expected_query_count):
         response = api_client.get(
             reverse("emplois:service-detail", kwargs={"pk": published_service.id})
         )
