@@ -11,17 +11,33 @@ from dora.services.models import (
 )
 
 
-def test_reference_data_api_requires_authentication(api_client):
-    response = api_client.get(reverse("emplois:reference-data-list"))
+@pytest.mark.parametrize(
+    "route_name",
+    [
+        "emplois:reference-data-list",
+        "emplois:service-list",
+        "emplois:disabled-dora-form-di-structure-list",
+    ],
+)
+def test_api_requires_authentication(api_client, route_name):
+    response = api_client.get(reverse(route_name))
 
     assert response.status_code == 401
 
 
-def test_reference_data_api_requires_emplois_email(api_client):
+@pytest.mark.parametrize(
+    "route_name",
+    [
+        "emplois:reference-data-list",
+        "emplois:service-list",
+        "emplois:disabled-dora-form-di-structure-list",
+    ],
+)
+def test_api_requires_emplois_email(api_client, route_name):
     user = baker.make("users.User", is_valid=True, email="other@example.com")
     api_client.force_authenticate(user=user)
 
-    response = api_client.get(reverse("emplois:reference-data-list"))
+    response = api_client.get(reverse(route_name))
 
     assert response.status_code == 403
 
@@ -73,21 +89,6 @@ def test_reference_data_api_list_queries_are_bounded(
         response = api_client.get(reverse("emplois:reference-data-list"))
 
     assert response.status_code == 200
-
-
-def test_services_api_requires_authentication(api_client):
-    response = api_client.get(reverse("emplois:service-list"))
-
-    assert response.status_code == 401
-
-
-def test_services_api_requires_emplois_email(api_client):
-    user = baker.make("users.User", is_valid=True, email="other@example.com")
-    api_client.force_authenticate(user=user)
-
-    response = api_client.get(reverse("emplois:service-list"))
-
-    assert response.status_code == 403
 
 
 def test_services_api_list(emplois_user, api_client):
@@ -166,21 +167,6 @@ def test_services_api_detail_queries_are_bounded(
         )
 
     assert response.status_code == 200
-
-
-def test_disabled_dora_form_di_structures_api_requires_authentication(api_client):
-    response = api_client.get(reverse("emplois:disabled-dora-form-di-structure-list"))
-
-    assert response.status_code == 401
-
-
-def test_disabled_dora_form_di_structures_api_requires_emplois_email(api_client):
-    user = baker.make("users.User", is_valid=True, email="other@example.com")
-    api_client.force_authenticate(user=user)
-
-    response = api_client.get(reverse("emplois:disabled-dora-form-di-structure-list"))
-
-    assert response.status_code == 403
 
 
 @pytest.mark.parametrize(
