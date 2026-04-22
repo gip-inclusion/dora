@@ -354,6 +354,13 @@ class TokenProxyAdmin(TokenAdmin):
     # DRF utilise par défaut user__username, ce qui casse avec un modèle
     # User custom qui utilise l'email comme identifiant sans champ username.
     search_fields = ("key", "user__email")
+    list_select_related = ("user",)
+    raw_id_fields = ("user",)
+
+    def get_readonly_fields(self, request, obj=None):
+        # En édition : tous les champs du formulaire sont en lecture seule.
+        # En création : l'utilisateur peut être sélectionné.
+        return self.fields if obj is not None else ()
 
 
 # Now register the new UserAdmin...
