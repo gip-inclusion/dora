@@ -44,6 +44,9 @@ def send_mail(
         email = from_email[1]
         from_email = f'"{name}" <{email}>'
 
+    if settings.ENVIRONMENT != "production":
+        subject = f"[{settings.ENVIRONMENT.upper()}] {subject}"
+
     msg = EmailMessage(
         subject,
         body,

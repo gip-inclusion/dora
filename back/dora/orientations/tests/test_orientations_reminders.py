@@ -30,7 +30,7 @@ class OrientationsNotificationsTestCase(APITestCase):
         self.call_command()
         self.assertEqual(mail.outbox[0].to, [orientation.get_contact_email()])
         self.assertEqual(
-            mail.outbox[0].subject, "Relance – Demande d’orientation en attente"
+            mail.outbox[0].subject, "[LOCAL] Relance – Demande d’orientation en attente"
         )
 
     def test_old_orientations_prescriber_notified(self):
@@ -39,7 +39,8 @@ class OrientationsNotificationsTestCase(APITestCase):
         self.call_command()
         self.assertEqual(mail.outbox[1].to, [orientation.prescriber.email])
         self.assertEqual(
-            mail.outbox[1].subject, "Relance envoyée – Demande d’orientation en attente"
+            mail.outbox[1].subject,
+            "[LOCAL] Relance envoyée – Demande d’orientation en attente",
         )
 
     def test_old_orientations_referent_cced(self):
@@ -48,7 +49,8 @@ class OrientationsNotificationsTestCase(APITestCase):
         self.call_command()
         self.assertEqual(mail.outbox[1].cc, [orientation.referent_email])
         self.assertEqual(
-            mail.outbox[1].subject, "Relance envoyée – Demande d’orientation en attente"
+            mail.outbox[1].subject,
+            "[LOCAL] Relance envoyée – Demande d’orientation en attente",
         )
 
     def test_recent_orientations_not_notified(self):

@@ -24,7 +24,7 @@ def test_send_orphan_structure_notification():
     assert mail.outbox[0].to == [structure.email]
     assert (
         mail.outbox[0].subject
-        == f"Votre structure n’a pas encore de membre actif sur DORA ({structure.name})"
+        == f"[LOCAL] Votre structure n’a pas encore de membre actif sur DORA ({structure.name})"
     )
     assert structure.name in mail.outbox[0].body
     assert f"/auth/invitation?structure={structure.slug}" in mail.outbox[0].body
@@ -51,7 +51,10 @@ def test_send_first_admin_notification_for_pending_invitation():
 
     for idx, admin_user in enumerate(admin_users):
         assert mail.outbox[idx].to == [admin_user.email]
-        assert mail.outbox[idx].subject == "Invitation non acceptée : Action requise"
+        assert (
+            mail.outbox[idx].subject
+            == "[LOCAL] Invitation non acceptée : Action requise"
+        )
         assert structure.name in mail.outbox[idx].body
         assert putative_member.email in mail.outbox[idx].body
         assert "aide.dora.inclusion.beta.gouv.fr" in mail.outbox[idx].body
@@ -77,7 +80,7 @@ def test_send_second_admin_notification_for_pending_invitation():
         assert mail.outbox[idx].to == [admin_user.email]
         assert (
             mail.outbox[idx].subject
-            == "Action requise : une de vos invitations sera bientôt désactivée"
+            == "[LOCAL] Action requise : une de vos invitations sera bientôt désactivée"
         )
         assert structure.name in mail.outbox[idx].body
         assert putative_member.email in mail.outbox[idx].body
@@ -97,7 +100,10 @@ def test_send_admin_self_invited_users_notification():
 
     for idx, admin_user in enumerate(admins_users):
         assert mail.outbox[idx].to == [admin_user.email]
-        assert mail.outbox[idx].subject == "Rappel : Demande de rattachement en attente"
+        assert (
+            mail.outbox[idx].subject
+            == "[LOCAL] Rappel : Demande de rattachement en attente"
+        )
         assert structure.name in mail.outbox[idx].body
         assert putative_member.email in mail.outbox[idx].body
         assert putative_member.first_name in mail.outbox[idx].body
@@ -132,7 +138,7 @@ def test_send_structure_activation_notification_to_old_admins():
         assert mail.outbox[idx].to == [admin_user.email]
         assert (
             mail.outbox[idx].subject
-            == f"Votre structure n’a pas encore publié de service sur DORA ({structure.name})"
+            == f"[LOCAL] Votre structure n’a pas encore publié de service sur DORA ({structure.name})"
         )
         assert structure.name in mail.outbox[idx].body
         assert (

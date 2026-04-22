@@ -343,7 +343,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
 
@@ -406,7 +406,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn("pour la thématique &quot;cat1", mail.outbox[0].body)
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
@@ -451,7 +451,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn("pour la thématique &quot;cat1", mail.outbox[0].body)
         self.assertIn(
@@ -504,7 +504,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn("pour la thématique &quot;cat1", mail.outbox[0].body)
         self.assertIn(
@@ -565,7 +565,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn("pour la thématique &quot;cat1", mail.outbox[0].body)
         self.assertIn(
@@ -618,7 +618,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject,
-            "Il y a de nouveaux services correspondant à votre alerte",
+            "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
         self.assertNotIn("<strong>service_2</strong>", mail.outbox[0].body)
