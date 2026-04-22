@@ -162,27 +162,29 @@ class StructureMemberViewset(viewsets.ModelViewSet):
             if structure.can_view_members(user):
                 return StructureMember.objects.filter(
                     structure=structure, user__is_valid=True
-                )
+                ).select_related("user")
             raise exceptions.PermissionDenied
 
         else:
             # Les superuser ont accès à tous les collaborateurs
             if user.is_staff:
-                return StructureMember.objects.all()
+                return StructureMember.objects.all().select_related("user")
 
             # Les gestionnaires ont accès à tous les collaborateurs de
             # leur département
             elif user.is_manager and user.departments:
                 return StructureMember.objects.filter(
                     structure__department__in=user.departments
-                )
+                ).select_related("user")
 
             # Les membres des structures ont accès à tous leurs collègues
             else:
                 user_structures = StructureMember.objects.filter(
                     user_id=user.id
                 ).values_list("structure_id", flat=True)
-                return StructureMember.objects.filter(structure_id__in=user_structures)
+                return StructureMember.objects.filter(
+                    structure_id__in=user_structures
+                ).select_related("user")
 
 
 class StructurePutativeMemberViewset(viewsets.ModelViewSet):
