@@ -142,9 +142,8 @@ def test_services_api_list_queries_are_bounded(
     """
     Il faut assurer qu'il n'y a qu'un seul query pour toutes les villes
     """
-    expected_query_count = len(PREFETCH_RELATED_SERVICE_LIST) + 2
+    expected_query_count = len(PREFETCH_RELATED_SERVICE_LIST) + 1
     # +1 pour la requete de listing des services
-    # +1 pour le warm cache des villes
     for i in range(5):
         city_code = f"7500{i}"
         baker.make(City, code=city_code, name="Paris")
