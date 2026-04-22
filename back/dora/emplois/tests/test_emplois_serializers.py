@@ -99,27 +99,16 @@ def test_service_serializer_funding_labels():
 def test_service_serializer_coach_orientation_modes():
     service = make_published_service()
     service.coach_orientation_modes.clear()
-
-    mode_formulaire_dora = CoachOrientationMode.objects.get(value="formulaire-dora")
-    mode_mail_avec_fiche = CoachOrientationMode.objects.get(
-        value="envoyer-un-mail-avec-une-fiche-de-prescription"
-    )
-    mode_envoyer_mail = CoachOrientationMode.objects.get(value="envoyer-un-mail")
-    mode_telephoner = CoachOrientationMode.objects.get(value="telephoner")
-    mode_autre = CoachOrientationMode.objects.get(value="autre")
-    mode_completer_formulaire = CoachOrientationMode.objects.get(
-        value="completer-le-formulaire-dadhesion"
-    )
+    expected_data = [
+        "formulaire-dora",
+        "envoyer-un-mail-avec-une-fiche-de-prescription",
+        "envoyer-un-mail",
+        "autre",
+        "completer-le-formulaire-dadhesion",
+    ]
 
     service.coach_orientation_modes.set(
-        [
-            mode_envoyer_mail,
-            mode_autre,
-            mode_formulaire_dora,
-            mode_telephoner,
-            mode_mail_avec_fiche,
-            mode_completer_formulaire,
-        ]
+        list(CoachOrientationMode.objects.filter(value__in=expected_data))
     )
     service.coach_orientation_modes_other = "Autre modalité personnalisée"
     service.coach_orientation_modes_external_form_link = (
@@ -129,41 +118,23 @@ def test_service_serializer_coach_orientation_modes():
     service.save()
 
     data = ServiceSerializer(service).data["coach_orientation_modes"]
-
-    assert sorted(data) == sorted(
-        [
-            mode_formulaire_dora.value,
-            mode_mail_avec_fiche.value,
-            mode_envoyer_mail.value,
-            mode_telephoner.value,
-            mode_autre.value,
-            mode_completer_formulaire.value,
-        ]
-    )
+    assert sorted(data) == sorted(expected_data)
 
 
 def test_service_serializer_beneficiaries_access_modes():
     service = make_published_service()
     service.beneficiaries_access_modes.clear()
-
-    mode_completer_formulaire = BeneficiaryAccessMode.objects.get(
-        value="completer-le-formulaire-dadhesion"
-    )
-    mode_professionnel = BeneficiaryAccessMode.objects.get(value="professionnel")
-    mode_autre = BeneficiaryAccessMode.objects.get(value="autre")
-    mode_envoyer_mail = BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
-    mode_telephoner = BeneficiaryAccessMode.objects.get(value="telephoner")
-    mode_se_presenter = BeneficiaryAccessMode.objects.get(value="se-presenter")
+    expected_data = [
+        "completer-le-formulaire-dadhesion",
+        "professionnel",
+        "autre",
+        "envoyer-un-mail",
+        "telephoner",
+        "se-presenter",
+    ]
 
     service.beneficiaries_access_modes.set(
-        [
-            mode_autre,
-            mode_envoyer_mail,
-            mode_professionnel,
-            mode_completer_formulaire,
-            mode_telephoner,
-            mode_se_presenter,
-        ]
+        list(BeneficiaryAccessMode.objects.filter(value__in=expected_data))
     )
     service.beneficiaries_access_modes_other = "Autre accès personnalisée"
     service.beneficiaries_access_modes_external_form_link = (
@@ -173,17 +144,7 @@ def test_service_serializer_beneficiaries_access_modes():
     service.save()
 
     data = ServiceSerializer(service).data["beneficiaries_access_modes"]
-
-    assert sorted(data) == sorted(
-        [
-            mode_se_presenter.value,
-            mode_completer_formulaire.value,
-            mode_envoyer_mail.value,
-            mode_telephoner.value,
-            mode_professionnel.value,
-            mode_autre.value,
-        ]
-    )
+    assert sorted(data) == sorted(expected_data)
 
 
 def test_service_serializer_forms():
