@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Prefetch
+from django.db.models import CharField, Prefetch, Value
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -12,7 +12,12 @@ from dora.decoupage_administratif.models import (
     City,
 )
 from dora.orientations.models import Orientation, OrientationStatus
-from dora.services.models import Service
+from dora.services.models import (
+    BeneficiaryAccessMode,
+    CoachOrientationMode,
+    FundingLabel,
+    Service,
+)
 from dora.structures.models import DisabledDoraFormDIStructure
 
 from .serializers import (
@@ -61,14 +66,6 @@ class ReferenceDataViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
-        from django.db.models import CharField, Value
-
-        from dora.services.models import (
-            BeneficiaryAccessMode,
-            CoachOrientationMode,
-            FundingLabel,
-        )
-
         funding_label_qs = FundingLabel.objects.all().annotate(
             kind=Value("funding_label", output_field=CharField())
         )
