@@ -85,11 +85,10 @@ class UsersWithoutStructureTask(Task):
             # - aucune autre invitation
             # - non membre d'une structure
             if not user.putative_membership.count() and not user.membership.count():
-                logger.warning(
+                logger.info(
                     "Suppression d'utilisateur",
                     {
                         "legal": True,
-                        "userEmail": user.email,
                         "userId": user.pk,
                         "reason": "Aucun rattachement ou invitation à une structure après relances",
                     },
@@ -146,11 +145,10 @@ class UserAccountDeletionTask(Task):
         if notification.is_complete:
             user = notification.owner_user
 
-            logger.warning(
+            logger.info(
                 "Suppression d'utilisateur",
                 {
                     "legal": True,
-                    "userEmail": user.email,
                     "userId": user.pk,
                     "reason": "Inactivité de longue durée",
                 },
