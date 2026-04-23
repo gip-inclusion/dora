@@ -111,11 +111,10 @@ class InvitedUsersTask(Task):
         if notification.is_complete:
             user = notification.owner_structureputativemember.user
 
-            logger.warning(
+            logger.info(
                 "Suppression d'utilisateur",
                 {
                     "legal": True,
-                    "userEmail": user.email,
                     "userId": str(user.pk),
                     "structureId": str(
                         notification.owner_structureputativemember.structure.pk
