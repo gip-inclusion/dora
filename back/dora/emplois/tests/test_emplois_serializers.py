@@ -20,6 +20,16 @@ from dora.services.models import (
 )
 
 
+def serialize_service(service):
+    service = (
+        Service.objects.filter(pk=service.pk)
+        .select_related("structure")
+        .prefetch_related(*PREFETCH_RELATED_SERVICE_LIST)
+        .get()
+    )
+    return ServiceSerializer(service).data
+
+
 def test_reference_data_serializer_fields():
     data = ReferenceDataSerializer(
         {
@@ -53,7 +63,7 @@ def test_service_serializer_basic_fields():
         beneficiaries_access_modes_external_form_link_text="Remplir le formulaire",
     )
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
 
     assert data["id"] == str(service.id)
     assert data["short_desc"] == "Une courte description"
@@ -88,7 +98,7 @@ def test_service_serializer_funding_labels():
     label_2 = baker.make(FundingLabel, label="Label 2", value="label-2")
     service = make_published_service(funding_labels=[label_1, label_2])
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
 
     assert sorted(data["funding_labels"]) == ["label-1", "label-2"]
 
@@ -114,7 +124,7 @@ def test_service_serializer_coach_orientation_modes():
     service.contact_email = "contact@example.org"
     service.save()
 
-    data = ServiceSerializer(service).data["coach_orientation_modes"]
+    data = serialize_service(service)["coach_orientation_modes"]
     assert sorted(data) == sorted(expected_data)
 
 
@@ -140,7 +150,7 @@ def test_service_serializer_beneficiaries_access_modes():
     service.beneficiaries_access_modes_external_form_link_text = "Remplir le formulaire"
     service.save()
 
-    data = ServiceSerializer(service).data["beneficiaries_access_modes"]
+    data = serialize_service(service)["beneficiaries_access_modes"]
     assert sorted(data) == sorted(expected_data)
 
 
@@ -149,7 +159,7 @@ def test_service_serializer_forms():
     service.forms = ["form1.pdf", "form2.pdf"]
     service.save()
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
 
     assert data["forms"] == ["form1.pdf", "form2.pdf"]
 
@@ -162,7 +172,7 @@ def test_service_serializer_credentials():
     cred_2 = baker.make(Credential, name="Justificatif de domicile")
     service.credentials.add(cred_1, cred_2)
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
 
     assert sorted(data["credentials"]) == [
         "Carte d'identité",
@@ -181,7 +191,7 @@ def test_service_serializer_is_orientable_with_form_when_orientable_and_mode(
     # Vérification de cohérence sur la logique métier sous-jacente
     assert service.is_orientable() is True
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["is_orientable_with_form"] is True
 
 
@@ -197,7 +207,7 @@ def test_service_serializer_is_not_orientable_with_form_when_not_orientable():
 
     assert service.is_orientable() is False
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["is_orientable_with_form"] is False
 
 
@@ -212,7 +222,7 @@ def test_service_serializer_is_not_orientable_with_form_without_dora_mode(
         is False
     )
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["is_orientable_with_form"] is False
 
 
@@ -233,13 +243,13 @@ def test_service_serializer_is_orientable_with_form_when_ft_whitelisted(
     assert service.is_orientable_ft_service() is True
     assert service.is_orientable() is True
 
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["is_orientable_with_form"] is True
 
 
 def test_average_orientation_response_delay_days_none_when_no_orientations():
     service = make_published_service()
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["average_orientation_response_delay_days"] is None
 
 
@@ -252,7 +262,7 @@ def test_average_orientation_response_delay_days_none_when_only_pending_orientat
         creation_date=now - timedelta(days=5),
         processing_date=None,
     )
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["average_orientation_response_delay_days"] is None
 
 
@@ -266,7 +276,7 @@ def test_average_orientation_response_delay_days_single_orientation():
         creation_date=creation,
         processing_date=processing,
     )
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["average_orientation_response_delay_days"] == 3
 
 
@@ -285,7 +295,7 @@ def test_average_orientation_response_delay_days_average_of_multiple_orientation
         creation_date=base - timedelta(days=10),
         processing_date=base - timedelta(days=10) + timedelta(days=4),
     )
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     # (2 + 4) / 2 = 3
     assert data["average_orientation_response_delay_days"] == 3
 
@@ -305,7 +315,7 @@ def test_average_orientation_response_delay_days_rounds_to_nearest_integer():
         creation_date=base - timedelta(days=5),
         processing_date=base - timedelta(days=5) + timedelta(days=2),
     )
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     # (1 + 2) / 2 = 1.5 -> round to 2
     assert data["average_orientation_response_delay_days"] == 2
 
@@ -326,7 +336,7 @@ def test_average_orientation_response_delay_days_only_counts_this_service():
         creation_date=creation,
         processing_date=creation + timedelta(days=10),
     )
-    data = ServiceSerializer(service).data
+    data = serialize_service(service)
     assert data["average_orientation_response_delay_days"] == 2
 
 

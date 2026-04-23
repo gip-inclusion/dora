@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from dora.orientations.models import Orientation
 from dora.services.models import Service
 from dora.structures.models import DisabledDoraFormDIStructure
 
@@ -67,14 +66,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_average_orientation_response_delay_days(self, obj):
         """Délai moyen de réponse aux demandes d'orientation, en jours."""
-        orientations = getattr(obj, "answered_orientations", None)
-        if orientations is None:
-            orientations = (
-                Orientation.objects.answered()
-                .filter(service=obj)
-                .only("creation_date", "processing_date")
-            )
-
+        orientations = obj.answered_orientations
         delays = [(o.processing_date - o.creation_date).days for o in orientations]
         if not delays:
             return None
