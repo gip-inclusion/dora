@@ -12,34 +12,27 @@ from dora.services.models import (
 )
 
 
-@pytest.mark.parametrize(
-    "route_name",
-    [
+@pytest.fixture(
+    name="exposed_route",
+    params=[
         "emplois:reference-data-list",
         "emplois:service-list",
         "emplois:disabled-dora-form-di-structure-list",
     ],
 )
-def test_api_requires_authentication(api_client, route_name):
-    response = api_client.get(reverse(route_name))
+def exposed_route_fixture(request):
+    return request.param
 
+
+def test_api_requires_authentication(api_client, exposed_route):
+    response = api_client.get(reverse(exposed_route))
     assert response.status_code == 401
 
 
-@pytest.mark.parametrize(
-    "route_name",
-    [
-        "emplois:reference-data-list",
-        "emplois:service-list",
-        "emplois:disabled-dora-form-di-structure-list",
-    ],
-)
-def test_api_requires_emplois_email(api_client, route_name):
+def test_api_requires_emplois_email(api_client, exposed_route):
     user = baker.make("users.User", is_valid=True, email="other@example.com")
     api_client.force_authenticate(user=user)
-
-    response = api_client.get(reverse(route_name))
-
+    response = api_client.get(reverse(exposed_route))
     assert response.status_code == 403
 
 
