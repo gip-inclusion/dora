@@ -1,0 +1,579 @@
+# serializer version: 1
+# name: test_services_api_detail_queries_are_bounded
+  dict({
+    'num_queries': 11,
+    'queries': list([
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "services_service"."moderation_status",
+                 "services_service"."moderation_date",
+                 "services_service"."id",
+                 "services_service"."slug",
+                 "services_service"."name",
+                 "services_service"."short_desc",
+                 "services_service"."full_desc",
+                 "services_service"."is_cumulative",
+                 "services_service"."fee_condition_id",
+                 "services_service"."fee_details",
+                 "services_service"."beneficiaries_access_modes_external_form_link",
+                 "services_service"."beneficiaries_access_modes_external_form_link_text",
+                 "services_service"."beneficiaries_access_modes_other",
+                 "services_service"."coach_orientation_modes_external_form_link",
+                 "services_service"."coach_orientation_modes_external_form_link_text",
+                 "services_service"."coach_orientation_modes_other",
+                 "services_service"."forms",
+                 "services_service"."online_form",
+                 "services_service"."contact_name",
+                 "services_service"."contact_phone",
+                 "services_service"."contact_email",
+                 "services_service"."is_contact_info_public",
+                 "services_service"."remote_url",
+                 "services_service"."address1",
+                 "services_service"."address2",
+                 "services_service"."postal_code",
+                 "services_service"."city_code",
+                 "services_service"."city",
+                 "services_service"."geom",
+                 "services_service"."diffusion_zone_type",
+                 "services_service"."diffusion_zone_details",
+                 "services_service"."qpv_or_zrr",
+                 "services_service"."recurrence",
+                 "services_service"."suspension_date",
+                 "services_service"."appointment_link",
+                 "services_service"."duration_weekly_hours",
+                 "services_service"."duration_weeks",
+                 "services_service"."structure_id",
+                 "services_service"."status",
+                 "services_service"."creation_date",
+                 "services_service"."modification_date",
+                 "services_service"."publication_date",
+                 "services_service"."creator_id",
+                 "services_service"."last_editor_id",
+                 "services_service"."is_model",
+                 "services_service"."model_id",
+                 "services_service"."sync_checksum",
+                 "services_service"."last_sync_checksum",
+                 "services_service"."use_inclusion_numerique_scheme",
+                 "services_service"."source_id",
+                 "services_service"."data_inclusion_id",
+                 "services_service"."data_inclusion_source",
+                 "services_service"."update_frequency",
+                 "structures_structure"."moderation_status",
+                 "structures_structure"."moderation_date",
+                 "structures_structure"."id",
+                 "structures_structure"."siret",
+                 "structures_structure"."parent_id",
+                 "structures_structure"."code_safir_ft",
+                 "structures_structure"."name",
+                 "structures_structure"."typology",
+                 "structures_structure"."slug",
+                 "structures_structure"."url",
+                 "structures_structure"."short_desc",
+                 "structures_structure"."full_desc",
+                 "structures_structure"."phone",
+                 "structures_structure"."email",
+                 "structures_structure"."address1",
+                 "structures_structure"."address2",
+                 "structures_structure"."postal_code",
+                 "structures_structure"."city_code",
+                 "structures_structure"."city",
+                 "structures_structure"."department",
+                 "structures_structure"."longitude",
+                 "structures_structure"."latitude",
+                 "structures_structure"."geocoding_score",
+                 "structures_structure"."ape",
+                 "structures_structure"."accesslibre_url",
+                 "structures_structure"."opening_hours",
+                 "structures_structure"."opening_hours_details",
+                 "structures_structure"."other_labels",
+                 "structures_structure"."creation_date",
+                 "structures_structure"."modification_date",
+                 "structures_structure"."has_been_edited",
+                 "structures_structure"."quick_start_done",
+                 "structures_structure"."creator_id",
+                 "structures_structure"."last_editor_id",
+                 "structures_structure"."source_id",
+                 "structures_structure"."data_inclusion_id",
+                 "structures_structure"."data_inclusion_source",
+                 "structures_structure"."disable_orientation_form",
+                 "structures_structure"."is_obsolete",
+                 "structures_structure"."admin_already_invited"
+          FROM "services_service"
+          INNER JOIN "structures_structure" ON ("services_service"."structure_id" = "structures_structure"."id")
+          WHERE (NOT "services_service"."is_model"
+                 AND "services_service"."status" = %s
+                 AND NOT ("structures_structure"."is_obsolete")
+                 AND NOT ("services_service"."structure_id" IN
+                            (SELECT U0."id"
+                             FROM "structures_structure" U0
+                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
+                             WHERE (U1."id" IS NULL
+                                    AND U2."id" IS NULL)))
+                 AND NOT ("services_service"."suspension_date" < %s
+                          AND "services_service"."suspension_date" IS NOT NULL)
+                 AND "services_service"."id" = %s)
+          LIMIT 21
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_publics"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_public"."id",
+                 "services_public"."name",
+                 "services_public"."structure_id",
+                 "services_public"."corresponding_di_publics"
+          FROM "services_public"
+          INNER JOIN "services_service_publics" ON ("services_public"."id" = "services_service_publics"."public_id")
+          WHERE "services_service_publics"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_access_conditions"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_accesscondition"."id",
+                 "services_accesscondition"."name",
+                 "services_accesscondition"."structure_id"
+          FROM "services_accesscondition"
+          INNER JOIN "services_service_access_conditions" ON ("services_accesscondition"."id" = "services_service_access_conditions"."accesscondition_id")
+          WHERE "services_service_access_conditions"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_requirements"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_requirement"."id",
+                 "services_requirement"."name",
+                 "services_requirement"."structure_id"
+          FROM "services_requirement"
+          INNER JOIN "services_service_requirements" ON ("services_requirement"."id" = "services_service_requirements"."requirement_id")
+          WHERE "services_service_requirements"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_credentials"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_credential"."id",
+                 "services_credential"."name",
+                 "services_credential"."structure_id"
+          FROM "services_credential"
+          INNER JOIN "services_service_credentials" ON ("services_credential"."id" = "services_service_credentials"."credential_id")
+          WHERE "services_service_credentials"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_funding_labels"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_fundinglabel"."id",
+                 "services_fundinglabel"."value",
+                 "services_fundinglabel"."label"
+          FROM "services_fundinglabel"
+          INNER JOIN "services_service_funding_labels" ON ("services_fundinglabel"."id" = "services_service_funding_labels"."fundinglabel_id")
+          WHERE "services_service_funding_labels"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_kinds"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_servicekind"."id",
+                 "services_servicekind"."value",
+                 "services_servicekind"."label"
+          FROM "services_servicekind"
+          INNER JOIN "services_service_kinds" ON ("services_servicekind"."id" = "services_service_kinds"."servicekind_id")
+          WHERE "services_service_kinds"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_coach_orientation_modes"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_coachorientationmode"."id",
+                 "services_coachorientationmode"."value",
+                 "services_coachorientationmode"."label"
+          FROM "services_coachorientationmode"
+          INNER JOIN "services_service_coach_orientation_modes" ON ("services_coachorientationmode"."id" = "services_service_coach_orientation_modes"."coachorientationmode_id")
+          WHERE "services_service_coach_orientation_modes"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "services_francetravailorientableservice"."id",
+                 "services_francetravailorientableservice"."created_at",
+                 "services_francetravailorientableservice"."structure_id",
+                 "services_francetravailorientableservice"."service_id"
+          FROM "services_francetravailorientableservice"
+          WHERE "services_francetravailorientableservice"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_beneficiaries_access_modes"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_beneficiaryaccessmode"."id",
+                 "services_beneficiaryaccessmode"."value",
+                 "services_beneficiaryaccessmode"."label"
+          FROM "services_beneficiaryaccessmode"
+          INNER JOIN "services_service_beneficiaries_access_modes" ON ("services_beneficiaryaccessmode"."id" = "services_service_beneficiaries_access_modes"."beneficiaryaccessmode_id")
+          WHERE "services_service_beneficiaries_access_modes"."service_id" IN (%s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "orientations_orientation"."id",
+                 "orientations_orientation"."creation_date",
+                 "orientations_orientation"."processing_date"
+          FROM "orientations_orientation"
+          WHERE ("orientations_orientation"."processing_date" IS NOT NULL
+                 AND "orientations_orientation"."status" IN (%s,
+                                                             %s)
+                 AND "orientations_orientation"."service_id" IN (%s))
+        ''',
+      }),
+    ]),
+  })
+# ---
+# name: test_services_api_list_queries_are_bounded
+  dict({
+    'num_queries': 11,
+    'queries': list([
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "services_service"."moderation_status",
+                 "services_service"."moderation_date",
+                 "services_service"."id",
+                 "services_service"."slug",
+                 "services_service"."name",
+                 "services_service"."short_desc",
+                 "services_service"."full_desc",
+                 "services_service"."is_cumulative",
+                 "services_service"."fee_condition_id",
+                 "services_service"."fee_details",
+                 "services_service"."beneficiaries_access_modes_external_form_link",
+                 "services_service"."beneficiaries_access_modes_external_form_link_text",
+                 "services_service"."beneficiaries_access_modes_other",
+                 "services_service"."coach_orientation_modes_external_form_link",
+                 "services_service"."coach_orientation_modes_external_form_link_text",
+                 "services_service"."coach_orientation_modes_other",
+                 "services_service"."forms",
+                 "services_service"."online_form",
+                 "services_service"."contact_name",
+                 "services_service"."contact_phone",
+                 "services_service"."contact_email",
+                 "services_service"."is_contact_info_public",
+                 "services_service"."remote_url",
+                 "services_service"."address1",
+                 "services_service"."address2",
+                 "services_service"."postal_code",
+                 "services_service"."city_code",
+                 "services_service"."city",
+                 "services_service"."geom",
+                 "services_service"."diffusion_zone_type",
+                 "services_service"."diffusion_zone_details",
+                 "services_service"."qpv_or_zrr",
+                 "services_service"."recurrence",
+                 "services_service"."suspension_date",
+                 "services_service"."appointment_link",
+                 "services_service"."duration_weekly_hours",
+                 "services_service"."duration_weeks",
+                 "services_service"."structure_id",
+                 "services_service"."status",
+                 "services_service"."creation_date",
+                 "services_service"."modification_date",
+                 "services_service"."publication_date",
+                 "services_service"."creator_id",
+                 "services_service"."last_editor_id",
+                 "services_service"."is_model",
+                 "services_service"."model_id",
+                 "services_service"."sync_checksum",
+                 "services_service"."last_sync_checksum",
+                 "services_service"."use_inclusion_numerique_scheme",
+                 "services_service"."source_id",
+                 "services_service"."data_inclusion_id",
+                 "services_service"."data_inclusion_source",
+                 "services_service"."update_frequency",
+                 "structures_structure"."moderation_status",
+                 "structures_structure"."moderation_date",
+                 "structures_structure"."id",
+                 "structures_structure"."siret",
+                 "structures_structure"."parent_id",
+                 "structures_structure"."code_safir_ft",
+                 "structures_structure"."name",
+                 "structures_structure"."typology",
+                 "structures_structure"."slug",
+                 "structures_structure"."url",
+                 "structures_structure"."short_desc",
+                 "structures_structure"."full_desc",
+                 "structures_structure"."phone",
+                 "structures_structure"."email",
+                 "structures_structure"."address1",
+                 "structures_structure"."address2",
+                 "structures_structure"."postal_code",
+                 "structures_structure"."city_code",
+                 "structures_structure"."city",
+                 "structures_structure"."department",
+                 "structures_structure"."longitude",
+                 "structures_structure"."latitude",
+                 "structures_structure"."geocoding_score",
+                 "structures_structure"."ape",
+                 "structures_structure"."accesslibre_url",
+                 "structures_structure"."opening_hours",
+                 "structures_structure"."opening_hours_details",
+                 "structures_structure"."other_labels",
+                 "structures_structure"."creation_date",
+                 "structures_structure"."modification_date",
+                 "structures_structure"."has_been_edited",
+                 "structures_structure"."quick_start_done",
+                 "structures_structure"."creator_id",
+                 "structures_structure"."last_editor_id",
+                 "structures_structure"."source_id",
+                 "structures_structure"."data_inclusion_id",
+                 "structures_structure"."data_inclusion_source",
+                 "structures_structure"."disable_orientation_form",
+                 "structures_structure"."is_obsolete",
+                 "structures_structure"."admin_already_invited"
+          FROM "services_service"
+          INNER JOIN "structures_structure" ON ("services_service"."structure_id" = "structures_structure"."id")
+          WHERE (NOT "services_service"."is_model"
+                 AND "services_service"."status" = %s
+                 AND NOT ("structures_structure"."is_obsolete")
+                 AND NOT ("services_service"."structure_id" IN
+                            (SELECT U0."id"
+                             FROM "structures_structure" U0
+                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
+                             WHERE (U1."id" IS NULL
+                                    AND U2."id" IS NULL)))
+                 AND NOT ("services_service"."suspension_date" < %s
+                          AND "services_service"."suspension_date" IS NOT NULL))
+          ORDER BY "services_service"."id" ASC
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_publics"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_public"."id",
+                 "services_public"."name",
+                 "services_public"."structure_id",
+                 "services_public"."corresponding_di_publics"
+          FROM "services_public"
+          INNER JOIN "services_service_publics" ON ("services_public"."id" = "services_service_publics"."public_id")
+          WHERE "services_service_publics"."service_id" IN (%s,
+                                                            %s,
+                                                            %s,
+                                                            %s,
+                                                            %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_access_conditions"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_accesscondition"."id",
+                 "services_accesscondition"."name",
+                 "services_accesscondition"."structure_id"
+          FROM "services_accesscondition"
+          INNER JOIN "services_service_access_conditions" ON ("services_accesscondition"."id" = "services_service_access_conditions"."accesscondition_id")
+          WHERE "services_service_access_conditions"."service_id" IN (%s,
+                                                                      %s,
+                                                                      %s,
+                                                                      %s,
+                                                                      %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_requirements"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_requirement"."id",
+                 "services_requirement"."name",
+                 "services_requirement"."structure_id"
+          FROM "services_requirement"
+          INNER JOIN "services_service_requirements" ON ("services_requirement"."id" = "services_service_requirements"."requirement_id")
+          WHERE "services_service_requirements"."service_id" IN (%s,
+                                                                 %s,
+                                                                 %s,
+                                                                 %s,
+                                                                 %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_credentials"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_credential"."id",
+                 "services_credential"."name",
+                 "services_credential"."structure_id"
+          FROM "services_credential"
+          INNER JOIN "services_service_credentials" ON ("services_credential"."id" = "services_service_credentials"."credential_id")
+          WHERE "services_service_credentials"."service_id" IN (%s,
+                                                                %s,
+                                                                %s,
+                                                                %s,
+                                                                %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_funding_labels"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_fundinglabel"."id",
+                 "services_fundinglabel"."value",
+                 "services_fundinglabel"."label"
+          FROM "services_fundinglabel"
+          INNER JOIN "services_service_funding_labels" ON ("services_fundinglabel"."id" = "services_service_funding_labels"."fundinglabel_id")
+          WHERE "services_service_funding_labels"."service_id" IN (%s,
+                                                                   %s,
+                                                                   %s,
+                                                                   %s,
+                                                                   %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_kinds"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_servicekind"."id",
+                 "services_servicekind"."value",
+                 "services_servicekind"."label"
+          FROM "services_servicekind"
+          INNER JOIN "services_service_kinds" ON ("services_servicekind"."id" = "services_service_kinds"."servicekind_id")
+          WHERE "services_service_kinds"."service_id" IN (%s,
+                                                          %s,
+                                                          %s,
+                                                          %s,
+                                                          %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_coach_orientation_modes"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_coachorientationmode"."id",
+                 "services_coachorientationmode"."value",
+                 "services_coachorientationmode"."label"
+          FROM "services_coachorientationmode"
+          INNER JOIN "services_service_coach_orientation_modes" ON ("services_coachorientationmode"."id" = "services_service_coach_orientation_modes"."coachorientationmode_id")
+          WHERE "services_service_coach_orientation_modes"."service_id" IN (%s,
+                                                                            %s,
+                                                                            %s,
+                                                                            %s,
+                                                                            %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "services_francetravailorientableservice"."id",
+                 "services_francetravailorientableservice"."created_at",
+                 "services_francetravailorientableservice"."structure_id",
+                 "services_francetravailorientableservice"."service_id"
+          FROM "services_francetravailorientableservice"
+          WHERE "services_francetravailorientableservice"."service_id" IN (%s,
+                                                                           %s,
+                                                                           %s,
+                                                                           %s,
+                                                                           %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT ("services_service_beneficiaries_access_modes"."service_id") AS "_prefetch_related_val_service_id",
+                 "services_beneficiaryaccessmode"."id",
+                 "services_beneficiaryaccessmode"."value",
+                 "services_beneficiaryaccessmode"."label"
+          FROM "services_beneficiaryaccessmode"
+          INNER JOIN "services_service_beneficiaries_access_modes" ON ("services_beneficiaryaccessmode"."id" = "services_service_beneficiaries_access_modes"."beneficiaryaccessmode_id")
+          WHERE "services_service_beneficiaries_access_modes"."service_id" IN (%s,
+                                                                               %s,
+                                                                               %s,
+                                                                               %s,
+                                                                               %s)
+        ''',
+      }),
+      dict({
+        'origin': list([
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT "orientations_orientation"."id",
+                 "orientations_orientation"."creation_date",
+                 "orientations_orientation"."processing_date"
+          FROM "orientations_orientation"
+          WHERE ("orientations_orientation"."processing_date" IS NOT NULL
+                 AND "orientations_orientation"."status" IN (%s,
+                                                             %s)
+                 AND "orientations_orientation"."service_id" IN (%s,
+                                                                 %s,
+                                                                 %s,
+                                                                 %s,
+                                                                 %s))
+        ''',
+      }),
+    ]),
+  })
+# ---
