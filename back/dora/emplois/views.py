@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
 
 from dora.core.pagination import OptionalPageNumberPagination
-from dora.orientations.models import Orientation, OrientationStatus
+from dora.orientations.models import Orientation
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -21,11 +21,6 @@ from .serializers import (
     ServiceSerializer,
 )
 
-_ANSWERED_ORIENTATIONS_QUERYSET = Orientation.objects.filter(
-    status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
-    processing_date__isnull=False,
-).only("creation_date", "processing_date")
-
 PREFETCH_RELATED_SERVICE_LIST = [
     "publics",
     "access_conditions",
@@ -38,7 +33,9 @@ PREFETCH_RELATED_SERVICE_LIST = [
     "beneficiaries_access_modes",
     Prefetch(
         "orientations",
-        queryset=_ANSWERED_ORIENTATIONS_QUERYSET,
+        queryset=Orientation.objects.answered().only(
+            "creation_date", "processing_date"
+        ),
         to_attr="answered_orientations",
     ),
 ]

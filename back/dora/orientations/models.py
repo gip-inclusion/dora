@@ -46,6 +46,14 @@ def _orientation_query_expiration_date():
     return timezone.now() + relativedelta(days=ORIENTATION_QUERY_LINK_TTL_DAY)
 
 
+class OrientationQuerySet(models.QuerySet):
+    def answered(self):
+        return self.filter(
+            status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
+            processing_date__isnull=False,
+        )
+
+
 class Orientation(models.Model):
     id = models.BigAutoField(
         auto_created=True,
@@ -211,6 +219,8 @@ class Orientation(models.Model):
     les_emplois_beneficiary_id = models.UUIDField(
         verbose_name="Identifiant bénéficiaire Les Emplois", blank=True, null=True
     )
+
+    objects = OrientationQuerySet.as_manager()
 
     class Meta:
         constraints = (
