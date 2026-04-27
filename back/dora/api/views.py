@@ -48,7 +48,7 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         structures = (
-            Structure.objects.select_related("source")
+            Structure.objects.select_related("source", "parent")
             .prefetch_related("national_labels")
             .filter(is_obsolete=False)
         )
