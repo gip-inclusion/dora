@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 import yaml
 from django.apps import apps
+from django.db import connection
 
 DATANYMIZER_CONFIG_PATH = (
     Path(__file__).resolve().parents[3] / "tools" / "datanymizer-config.yml"
@@ -38,14 +39,9 @@ PII_FIELD_FALSE_POSITIVES: set[str] = {
     "sirene_establishment.address2",
 }
 
-# Tables Django/PostGIS qu'on peut légitimement exclure mais qui ne sont
-# pas découvertes par `apps.get_models()`.
-EXTRA_KNOWN_TABLES = {
-    "django_admin_log",
-    "django_session",
-    "authtoken_token",
-    "spatial_ref_sys",
-}
+# Tables techniques autorisées dans `filter.except` même si absentes de
+# `connection.introspection.django_table_names()`.
+ALLOWED_EXTRA_EXCLUDED_TABLES = {"spatial_ref_sys"}
 
 
 @pytest.fixture(scope="module")
@@ -59,18 +55,6 @@ def _excluded_tables(config: dict) -> set[str]:
         entry.split(".", 1)[-1]
         for entry in (config.get("filter") or {}).get("except") or []
     }
-
-
-def _all_known_tables() -> set[str]:
-    tables = set()
-    for model in apps.get_models():
-        tables.add(model._meta.db_table)
-        # Les tables intermédiaires M2M auto-générées par Django ne sont
-        # pas listées dans `apps.get_models()`.
-        for m2m in model._meta.local_many_to_many:
-            if (through := m2m.remote_field.through) is not None:
-                tables.add(through._meta.db_table)
-    return tables | EXTRA_KNOWN_TABLES
 
 
 def test_datanymizer_config_covers_pii_fields(datanymizer_config):
@@ -104,11 +88,12 @@ def test_datanymizer_config_covers_pii_fields(datanymizer_config):
 
 
 def test_datanymizer_referenced_tables_exist(datanymizer_config):
-    known = _all_known_tables()
+    known = set(connection.introspection.django_table_names())
+    excluded = _excluded_tables(datanymizer_config)
 
     bad = [
         f"filter.except: {entry}"
-        for entry in sorted(_excluded_tables(datanymizer_config) - known)
+        for entry in sorted(excluded - known - ALLOWED_EXTRA_EXCLUDED_TABLES)
     ] + [
         f"tables[].name: {entry['name']}"
         for entry in datanymizer_config.get("tables") or []
