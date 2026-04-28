@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "dora.auth_links",
     "dora.nexus",
     "dora.decoupage_administratif",
+    "dora.emplois",
 ]
 
 MIDDLEWARE = [
@@ -372,6 +373,8 @@ DATA_INCLUSION_SCORE_QUALITE_MINIMUM = float(
 DATA_INCLUSION_EXCLUDE_DUPLICATES = (
     os.getenv("DATA_INCLUSION_EXCLUDE_DUPLICATES") == "true"
 )
+
+EMPLOIS_EMAIL = os.getenv("EMPLOIS_EMAIL")
 
 SKIP_DI_INTEGRATION_TESTS = True
 

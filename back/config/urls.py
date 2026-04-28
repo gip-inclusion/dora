@@ -129,10 +129,14 @@ di_api_patterns = [
     path("api/v2/", include("dora.api.urls", namespace="v2")),
 ]
 
+emplois_api_patterns = [
+    path("api/emplois/", include("dora.emplois.urls", namespace="emplois")),
+]
 
 urlpatterns = [
     *private_api_patterns,
     *di_api_patterns,
+    *emplois_api_patterns,
     # anciennes routes Inclusion-Connect (en attente de suppression)
     *oidc_patterns,
     # nouvelles routes OIDC pour ProConnect
