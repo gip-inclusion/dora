@@ -11,6 +11,10 @@ class GetDepartmentsViewTests(TestCase):
     def setUpTestData(cls):
         cls.client = APIClient()
 
+        # Nettoyage des départements créés par les data-migrations
+        # (ex: COM et TOM) pour garantir un jeu de données contrôlé.
+        Department.objects.all().delete()
+
         cls.dept_75 = Department.objects.create(
             code="75",
             name="Paris",
