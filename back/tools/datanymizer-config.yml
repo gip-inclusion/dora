@@ -25,7 +25,8 @@ tables:
         template:
           format: "!disabled"
       sub_pc:
-        uuid: ~
+        template:
+          format: "\\N"
       discovery_method_other:
         # Texte libre susceptible de contenir des informations personnelles.
         template:
