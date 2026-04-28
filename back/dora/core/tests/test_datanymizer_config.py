@@ -70,10 +70,11 @@ def test_datanymizer_config_covers_pii_fields(datanymizer_config):
         if table in excluded:
             continue
         for field in model._meta.fields:
-            qualified = f"{table}.{field.name}"
+            column = field.column
+            qualified = f"{table}.{column}"
             if (
-                PII_FIELD_PATTERN.search(field.name)
-                and field.name not in rules_by_table.get(table, set())
+                PII_FIELD_PATTERN.search(column)
+                and column not in rules_by_table.get(table, set())
                 and qualified not in PII_FIELD_FALSE_POSITIVES
             ):
                 uncovered.add(qualified)
