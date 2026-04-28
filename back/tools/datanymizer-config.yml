@@ -1,5 +1,7 @@
 tables:
   - name: users_user
+    rule_order:
+      - email
     rules:
       email:
         template:
@@ -25,8 +27,7 @@ tables:
         template:
           format: "!disabled"
       sub_pc:
-        template:
-          format: "\\N"
+        plain: '\N'
       discovery_method_other:
         # Texte libre susceptible de contenir des informations personnelles.
         template:
