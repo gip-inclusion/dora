@@ -79,10 +79,9 @@ def test_datanymizer_config_covers_pii_fields(datanymizer_config):
             ):
                 uncovered.add(qualified)
 
-    assert not uncovered, (
-        f"Champs PII non couverts dans {DATANYMIZER_CONFIG_PATH.name} :\n"
-        + "\n".join(f"  - {entry}" for entry in sorted(uncovered))
-        + "\n\nSolutions : ajouter une règle d'anonymisation, exclure la "
+    assert uncovered == set(), (
+        f"Champs PII non couverts dans {DATANYMIZER_CONFIG_PATH.name}."
+        + "Solutions : ajouter une règle d'anonymisation, exclure la "
         "table via `filter.except`, ou ajouter `<table>.<field>` à "
         "`PII_FIELD_FALSE_POSITIVES` si ce n'est pas du PII."
     )
