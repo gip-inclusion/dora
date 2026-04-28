@@ -52,6 +52,68 @@ tables:
         phone:
           format: "9^########"
 
+  - name: orientations_orientation
+    rules:
+      query_id:
+        uuid: ~
+      requirements:
+        template:
+          format: "{}"
+      situation:
+        template:
+          format: "{}"
+      situation_other:
+        template:
+          format: ""
+      beneficiary_first_name:
+        template:
+          format: ""
+      beneficiary_last_name:
+        template:
+          format: ""
+      beneficiary_phone:
+        template:
+          format: ""
+      beneficiary_email:
+        template:
+          format: ""
+      beneficiary_other_contact_method:
+        template:
+          format: ""
+      beneficiary_attachments:
+        template:
+          format: "{}"
+      beneficiary_france_travail_number:
+        template:
+          format: ""
+      referent_first_name:
+        template:
+          format: ""
+      referent_last_name:
+        template:
+          format: ""
+      referent_phone:
+        template:
+          format: ""
+      referent_email:
+        template:
+          format: ""
+      di_contact_name:
+        template:
+          format: ""
+      di_contact_email:
+        template:
+          format: ""
+      di_contact_phone:
+        template:
+          format: ""
+      orientation_reasons:
+        template:
+          format: ""
+      is_anonymized:
+        template:
+          format: "t"
+
 filter:
   except:
     # Schéma PostGIS (non applicatif).
@@ -63,12 +125,6 @@ filter:
     - public.django_admin_log
     - public.django_session
     - public.authtoken_token
-
-    # Orientations : PII lourd (bénéficiaires, référents, pièces jointes,
-    # motifs en texte libre). Anonymisées en base par `anonymize_orientations`.
-    - public.orientations_orientation
-    - public.orientations_orientation_rejection_reasons
-    - public.orientations_sentcontactemail
 
     # Événements analytics : `recipient_email`, hashes anonymes stables,
     # FKs utilisateurs et chemins d'URL. `stats_deploymentstate` n'est
