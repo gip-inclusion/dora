@@ -1,36 +1,37 @@
 tables:
   - name: users_user
+    rule_order:
+      - email
     rules:
       email:
         template:
-          # Préserve les adresses beta.gouv et inclusion.gouv
-          format:
-            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
-            %}{{_1}}{% endif %}"
-          rules:
-            - email:
-                kind: Safe
-                suffix: 5
-                uniq: true
+          # Préserve les adresses beta.gouv et inclusion.gouv ; sinon génère
+          # `test+prenom.nom.<id>@dora.inclusion.beta.gouv.fr`. Le filtre
+          # `slugify` normalise accents, espaces et apostrophes en ASCII
+          # minuscule. L'`id` garantit l'unicité (contrainte UNIQUE sur
+          # `users_user.email`).
+          format: "{% if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{ prev.email }}{% else %}test+{{ final.first_name | slugify }}.{{ final.last_name | slugify }}.{{ prev.id }}@dora.inclusion.beta.gouv.fr{% endif %}"
       first_name:
         template:
           # Préserve les adresses beta.gouv et inclusion.gouv
-          format:
-            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
-            %}{{_1}}{% endif %}"
+          format: "{% if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{ prev.first_name }}{% else %}{{ _1 }}{% endif %}"
           rules:
             - first_name: {}
       last_name:
         template:
           # Préserve les adresses beta.gouv et inclusion.gouv
-          format:
-            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
-            %}{{_1}}{% endif %}"
+          format: "{% if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{ prev.last_name }}{% else %}{{ _1 }}{% endif %}"
           rules:
             - last_name: {}
       password:
         template:
           format: "!disabled"
+      sub_pc:
+        plain: '\N'
+      discovery_method_other:
+        # Texte libre susceptible de contenir des informations personnelles.
+        template:
+          format: ""
 
   - name: services_service
     rules:
@@ -38,51 +39,117 @@ tables:
         person_name: {}
       contact_email:
         email:
-          safe: true
+          kind: Safe
       contact_phone:
         phone:
           format: "9^########"
 
-  - name: django_admin_log
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: django_session
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: authtoken_token
-    rules: {}
-    query:
-      dump_condition: "FALSE"
+  - name: structures_structure
+    rules:
+      email:
+        email:
+          kind: Safe
+      phone:
+        phone:
+          format: "9^########"
 
   - name: orientations_orientation
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: orientations_orientation_rejection_reasons
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: orientations_sentcontactemail
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: stats_orientationview
-    rules: {}
-    query:
-      dump_condition: "FALSE"
-
-  - name: stats_servicesshare
-    rules: {}
-    query:
-      dump_condition: "FALSE"
+    rules:
+      query_id:
+        uuid: ~
+      requirements:
+        template:
+          format: "{}"
+      situation:
+        template:
+          format: "{}"
+      situation_other:
+        template:
+          format: ""
+      beneficiary_first_name:
+        template:
+          format: ""
+      beneficiary_last_name:
+        template:
+          format: ""
+      beneficiary_phone:
+        template:
+          format: ""
+      beneficiary_email:
+        template:
+          format: ""
+      beneficiary_other_contact_method:
+        template:
+          format: ""
+      beneficiary_attachments:
+        template:
+          format: "{}"
+      beneficiary_france_travail_number:
+        template:
+          format: ""
+      referent_first_name:
+        template:
+          format: ""
+      referent_last_name:
+        template:
+          format: ""
+      referent_phone:
+        template:
+          format: ""
+      referent_email:
+        template:
+          format: ""
+      di_contact_name:
+        template:
+          format: ""
+      di_contact_email:
+        template:
+          format: ""
+      di_contact_phone:
+        template:
+          format: ""
+      orientation_reasons:
+        template:
+          format: ""
+      is_anonymized:
+        template:
+          format: "t"
 
 filter:
   except:
+    # Schéma PostGIS (non applicatif).
     - public.spatial_ref_sys
+
+    # Tables Django sensibles ou inutiles hors prod.
+    # `django_admin_log.object_repr` peut contenir des PII sérialisés : on
+    # n'est pas tenté de "le remettre pour debugger" en review app.
+    - public.django_admin_log
+    - public.django_session
+    - public.authtoken_token
+
+    # Événements analytics : `recipient_email`, hashes anonymes stables,
+    # FKs utilisateurs et chemins d'URL. `stats_deploymentstate` n'est
+    # volontairement pas listé (pas de PII, utile en dev).
+    - public.stats_pageview
+    - public.stats_searchview
+    - public.stats_structureview
+    - public.stats_structureinfosview
+    - public.stats_serviceview
+    - public.stats_diserviceview
+    - public.stats_orientationview
+    - public.stats_serviceshare
+    - public.stats_mobilisationevent
+    - public.stats_dimobilisationevent
+
+    # Logs applicatifs : `msg` et `payload` peuvent contenir des PII.
+    - public.logs_actionlog
+
+    # Sessions OIDC : association session <-> utilisateur.
+    - public.oidc_usersession
+
+    # Notifications : destinataires et contenu rendus pour un utilisateur.
+    - public.notifications_notification
+    - public.notifications_notificationlog
+
+    # Consentement RGPD : pseudonyme stable par utilisateur (userHash).
+    - public.users_consentrecord
