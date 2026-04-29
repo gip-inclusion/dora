@@ -14,11 +14,11 @@ asgiref==3.11.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.42.94 \
-    --hash=sha256:56d53bce75629cc7c78a32da8b62de74cee3e2a3d54a2b60ba1a65f9f1b129da \
-    --hash=sha256:56d53bce75629cc7c78a32da8b62de74cee3e2a3d54a2b60ba1a65f9f1b129da \
-    --hash=sha256:5b6056a661c19e974aaea3cb97690ddbe30d10c31e4f887df3bff06574f34510 \
-    --hash=sha256:5b6056a661c19e974aaea3cb97690ddbe30d10c31e4f887df3bff06574f34510
+boto3==1.42.95 \
+    --hash=sha256:1cb77a269596abe05e72ed44a26167e7a620df920edb7c65e7d8a7dd39b427d5 \
+    --hash=sha256:1cb77a269596abe05e72ed44a26167e7a620df920edb7c65e7d8a7dd39b427d5 \
+    --hash=sha256:f0175de8f52448e9ecade9573532c25bed390a7c30435920a0da42a10f4cafb3 \
+    --hash=sha256:f0175de8f52448e9ecade9573532c25bed390a7c30435920a0da42a10f4cafb3
     # via django-storages
 botocore==1.42.96 \
     --hash=sha256:75b3b841ffacaa944f645196655a21ca777591dd8911e732bfb6614545af0250 \
@@ -585,9 +585,9 @@ iniconfig==2.3.0 \
     --hash=sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730 \
     --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
     # via pytest
-itoutils[django,django-testing]==26.2.12.0 \
-    --hash=sha256:565d0669326dfddbab502d6beba1acbd79a3987f17e6c83ce2fd9ed6c0a00fe2 \
-    --hash=sha256:6e45f9bc809c52fed1c8fbca95f001a05583744306a89b840f5c0cfa8816ee78
+itoutils[django,django-testing]==26.4.23.0 \
+    --hash=sha256:bb6c1809854db230d1db32eabd32c72d2b5057d48bd778bc4fc368455c00fba4 \
+    --hash=sha256:efa371ed820a6c64f386cb4179769974fad98f9d6ba3cfe6f2050732f9bfd0bd
     # via
     #   -r requirements/base.in
     #   -r requirements/test.in
