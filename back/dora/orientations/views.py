@@ -260,93 +260,106 @@ class OrientationViewSet(
         return Response(status=204)
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def display_orientation_stats(request: Request, structure_slug: str) -> Response:
-    structure = get_object_or_404(
-        Structure.objects.annotate(
-            has_services=Exists(Service.objects.filter(structure=OuterRef("pk")))
-        ),
-        slug=structure_slug,
-    )
+class StructureOrientationsView(APIView):
+    """Vue partagée pour les statistiques et l'export des orientations
+    d'une structure.
+    """
 
-    if not structure.can_edit_services(request.user):
-        raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
-
-    stats = Orientation.objects.filter(
-        Q(prescriber_structure=structure) | Q(service__structure=structure)
-    ).aggregate(
-        total_sent=Count("id", filter=Q(prescriber_structure=structure)),
-        total_sent_pending=Count(
-            "id",
-            filter=Q(prescriber_structure=structure, status=OrientationStatus.PENDING),
-        ),
-        total_received=Count("id", filter=Q(service__structure=structure)),
-        total_received_pending=Count(
-            "id",
-            filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
-        ),
-    )
-
-    stats["structure_has_services"] = structure.has_services
-
-    return Response(stats)
-
-
-class OrientationExportView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request: Request, structure_slug: str) -> Response:
-        export_type = request.query_params.get("type")
+    # Renseigné via ``as_view(mode=...)`` pour distinguer les deux endpoints
+    # qui partagent cette vue.
+    mode: str | None = None
 
+    @staticmethod
+    def sent_filter(structure: Structure) -> Q:
+        return Q(prescriber_structure=structure)
+
+    @staticmethod
+    def received_filter(structure: Structure) -> Q:
+        return Q(service__structure=structure) & ~Q(
+            status__in=[
+                OrientationStatus.MODERATION_PENDING,
+                OrientationStatus.MODERATION_REJECTED,
+            ]
+        )
+
+    @classmethod
+    def sent_orientations(cls, structure: Structure):
+        return Orientation.objects.filter(cls.sent_filter(structure))
+
+    @classmethod
+    def received_orientations(cls, structure: Structure):
+        return Orientation.objects.filter(cls.received_filter(structure))
+
+    def _get_structure(self, structure_slug: str) -> Structure:
         structure = get_object_or_404(
-            Structure.objects.all(),
+            Structure.objects.annotate(
+                has_services=Exists(Service.objects.filter(structure=OuterRef("pk")))
+            ),
             slug=structure_slug,
         )
 
-        if not structure.can_edit_services(request.user):
+        if not structure.can_edit_services(self.request.user):
             raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
+        return structure
+
+    def get(self, request: Request, structure_slug: str) -> Response:
+        structure = self._get_structure(structure_slug)
+
+        if self.mode == "stats":
+            return self._stats(structure)
+        if self.mode == "export":
+            return self._export(request, structure)
+
+        raise RuntimeError(
+            f"StructureOrientationsView appelée avec un mode inconnu : {self.mode!r}."
+        )
+
+    def _stats(self, structure: Structure) -> Response:
+        sent_q = self.sent_filter(structure)
+        received_q = self.received_filter(structure)
+        pending_q = Q(status=OrientationStatus.PENDING)
+
+        stats = Orientation.objects.filter(sent_q | received_q).aggregate(
+            total_sent=Count("id", filter=sent_q),
+            total_sent_pending=Count("id", filter=sent_q & pending_q),
+            total_received=Count("id", filter=received_q),
+            total_received_pending=Count("id", filter=received_q & pending_q),
+        )
+        stats["structure_has_services"] = structure.has_services
+
+        return Response(stats)
+
+    def _export(self, request: Request, structure: Structure) -> Response:
+        export_type = request.query_params.get("type")
+
         if export_type == "sent":
-            return self._export_sent_orientations(request, structure)
-        elif export_type == "received":
-            return self._export_received_orientations(request, structure)
-        else:
-            raise serializers.ValidationError(
-                {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
+            orientations = (
+                self.sent_orientations(structure)
+                .order_by("-creation_date")
+                .select_related("service__structure", "prescriber")
+            )
+            return Response(
+                SentOrientationExportSerializer(orientations, many=True).data
             )
 
-    def _export_sent_orientations(
-        self, request: Request, structure: Structure
-    ) -> Response:
-        orientations = (
-            Orientation.objects.filter(prescriber_structure=structure)
-            .order_by("-creation_date")
-            .select_related("service__structure", "prescriber")
-        )
-
-        serializer = SentOrientationExportSerializer(orientations, many=True)
-
-        return Response(serializer.data)
-
-    def _export_received_orientations(
-        self, request: Request, structure: Structure
-    ) -> Response:
-        orientations = (
-            Orientation.objects.filter(service__structure=structure)
-            .exclude(
-                status__in=[
-                    OrientationStatus.MODERATION_PENDING,
-                    OrientationStatus.MODERATION_REJECTED,
-                ]
+        if export_type == "received":
+            orientations = (
+                self.received_orientations(structure)
+                .order_by("-creation_date")
+                .select_related(
+                    "service__structure", "prescriber_structure", "prescriber"
+                )
             )
-            .order_by("-creation_date")
-            .select_related("service__structure", "prescriber_structure", "prescriber")
+            return Response(
+                ReceivedOrientationExportSerializer(orientations, many=True).data
+            )
+
+        raise serializers.ValidationError(
+            {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
         )
-
-        serializer = ReceivedOrientationExportSerializer(orientations, many=True)
-
-        return Response(serializer.data)
 
 
 def _resolve_emplois_orientation(
