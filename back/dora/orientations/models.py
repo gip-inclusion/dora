@@ -10,6 +10,7 @@ from django.db import models
 from django.utils import timezone
 
 from dora.core.models import EnumModel, LogItem
+from dora.core.validators import validate_siret
 from dora.services.models import Service
 from dora.structures.models import Structure
 from dora.users.models import User
@@ -213,11 +214,51 @@ class Orientation(models.Model):
         verbose_name="Orientation anonymisée", default=False
     )
 
-    les_emplois_structure_id = models.UUIDField(
-        verbose_name="Identifiant structure Les Emplois", blank=True, null=True
+    is_from_les_emplois = models.BooleanField(
+        verbose_name="Orientation venant des Emplois", default=False
     )
     les_emplois_beneficiary_id = models.UUIDField(
-        verbose_name="Identifiant bénéficiaire Les Emplois", blank=True, null=True
+        verbose_name="Les Emplois - Identifiant bénéficiaire", blank=True, null=True
+    )
+    les_emplois_structure_id = models.UUIDField(
+        verbose_name="Les Emplois - Identifiant structure", blank=True, null=True
+    )
+    les_emplois_structure_name = models.CharField(
+        verbose_name="Les Emplois - Nom structure",
+        blank=True,
+        null=True,
+        max_length=140,
+    )
+    les_emplois_structure_siret = models.CharField(
+        verbose_name="Les Emplois - SIRET structure",
+        blank=True,
+        null=True,
+        max_length=14,
+        validators=[validate_siret],
+    )
+    les_emplois_prescriber_id = models.UUIDField(
+        verbose_name="Les Emplois - Identifiant prescripteur", blank=True, null=True
+    )
+    les_emplois_prescriber_email = models.EmailField(
+        verbose_name="Les Emplois - Email prescripteur", blank=True, null=True
+    )
+    les_emplois_prescriber_first_name = models.CharField(
+        verbose_name="Les Emplois - Prénom prescripteur",
+        blank=True,
+        null=True,
+        max_length=140,
+    )
+    les_emplois_prescriber_last_name = models.CharField(
+        verbose_name="Les Emplois - Nom prescripteur",
+        blank=True,
+        null=True,
+        max_length=140,
+    )
+    les_emplois_prescriber_phone = models.CharField(
+        verbose_name="Les Emplois - Téléphone prescripteur",
+        blank=True,
+        null=True,
+        max_length=10,
     )
 
     objects = OrientationQuerySet.as_manager()

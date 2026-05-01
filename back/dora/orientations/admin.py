@@ -52,6 +52,16 @@ class OrientationAdmin(admin.ModelAdmin):
         "di_contact_name",
         "di_contact_phone",
         "di_structure_name",
+        "is_from_les_emplois",
+        "les_emplois_beneficiary_id",
+        "les_emplois_structure_id",
+        "les_emplois_structure_name",
+        "les_emplois_structure_siret",
+        "les_emplois_prescriber_id",
+        "les_emplois_prescriber_email",
+        "les_emplois_prescriber_first_name",
+        "les_emplois_prescriber_last_name",
+        "les_emplois_prescriber_phone",
         "data_protection_commitment",
         "query_id",
         "query_expires_at",
@@ -106,6 +116,26 @@ class OrientationAdmin(admin.ModelAdmin):
             )
         )
         return qs
+
+    def get_fieldsets(self, request, obj=None):
+        (_, opts) = super().get_fieldsets(request, obj)[0]
+        fields = opts["fields"]
+        other, di_fields, les_emplois_fields = [], [], []
+        for name in fields:
+            if name.startswith("di_"):
+                di_fields.append(name)
+            elif name.startswith("les_emplois_"):
+                les_emplois_fields.append(name)
+            else:
+                other.append(name)
+        out = []
+        if other:
+            out.append((None, {"fields": tuple(other)}))
+        if di_fields:
+            out.append(("D·I", {"fields": tuple(di_fields)}))
+        if les_emplois_fields:
+            out.append(("Les Emplois", {"fields": tuple(les_emplois_fields)}))
+        return tuple(out)
 
 
 admin.site.register(Orientation, OrientationAdmin)

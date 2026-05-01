@@ -63,6 +63,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_contact_phone",
             "di_structure_name",
             "id",
+            "is_from_les_emplois",
             "les_emplois_beneficiary_id",
             "les_emplois_structure_id",
             "orientation_reasons",

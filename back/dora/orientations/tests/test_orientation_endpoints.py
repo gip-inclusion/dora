@@ -426,6 +426,23 @@ def test_create_with_data_protection_commitment(api_client):
     assert orientation.data_protection_commitment
 
 
+def test_create_via_dora_api_sets_is_from_les_emplois_false(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 201
+
+    orientation = structure.orientations.first()
+    assert orientation.is_from_les_emplois is False
+
+
 def test_create_without_data_protection_commitment(api_client):
     user = make_user()
     structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
