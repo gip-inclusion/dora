@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db.models import CharField, Prefetch, Value
-from rest_framework import permissions, viewsets
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
@@ -17,6 +17,7 @@ from dora.structures.models import DisabledDoraFormDIStructure
 
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
+    EmploisOrientationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
 )
@@ -42,12 +43,14 @@ PREFETCH_RELATED_SERVICE_LIST = [
 
 
 class APIPermission(permissions.BasePermission):
+    allowed_methods = permissions.SAFE_METHODS
+
     def has_permission(self, request, view):
         user = request.user
         return (
             user.is_authenticated
             and user.email == settings.EMPLOIS_EMAIL
-            and request.method in permissions.SAFE_METHODS
+            and request.method in self.allowed_methods
         )
 
     def has_object_permission(self, request, view, obj):
@@ -109,3 +112,21 @@ class DisabledDoraFormDIStructureViewSet(viewsets.ReadOnlyModelViewSet):
     renderer_classes = (JSONRenderer,)
     pagination_class = OptionalPageNumberPagination
     queryset = DisabledDoraFormDIStructure.objects.all().order_by("pk")
+
+
+class OrientationAPIPermission(APIPermission):
+    allowed_methods = ("POST",)
+
+
+class OrientationViewSet(
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet,
+):
+    permission_classes = (OrientationAPIPermission,)
+    serializer_class = EmploisOrientationSerializer
+    renderer_classes = (JSONRenderer,)
+
+    def perform_create(self, serializer):
+        # Pas de prescripteur ni d'envoi d'email : Les Emplois est une source
+        # de confiance, l'orientation reste OUVERTE en attente de traitement.
+        serializer.save(prescriber=None, prescriber_structure=None)

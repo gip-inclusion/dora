@@ -1,7 +1,11 @@
-from rest_framework import serializers
+import uuid
 
+from rest_framework import serializers
+from rest_framework.exceptions import NotFound
+
+from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
-from dora.structures.models import DisabledDoraFormDIStructure
+from dora.structures.models import DisabledDoraFormDIStructure, Structure
 
 
 class ReferenceDataSerializer(serializers.Serializer):
@@ -77,3 +81,90 @@ class DisabledDoraFormDIStructureSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisabledDoraFormDIStructure
         fields = ["source", "structure_id"]
+
+
+class EmploisOrientationSerializer(OrientationSerializer):
+    """API Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
+
+    prescriber_structure_slug = serializers.SlugRelatedField(
+        source="prescriber_structure",
+        slug_field="slug",
+        queryset=Structure.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
+    class Meta(OrientationSerializer.Meta):
+        fields = [
+            "beneficiary_attachments",
+            "beneficiary_attachments_details",
+            "beneficiary_availability",
+            "beneficiary_contact_preferences",
+            "beneficiary_email",
+            "beneficiary_france_travail_number",
+            "beneficiary_first_name",
+            "beneficiary_last_name",
+            "beneficiary_other_contact_method",
+            "beneficiary_phone",
+            "creation_date",
+            "data_protection_commitment",
+            "di_service_id",
+            "di_service_name",
+            "di_service_address_line",
+            "di_contact_email",
+            "di_contact_name",
+            "di_contact_phone",
+            "di_structure_name",
+            "les_emplois_beneficiary_id",
+            "les_emplois_structure_id",
+            "orientation_reasons",
+            "referent_email",
+            "referent_first_name",
+            "referent_last_name",
+            "referent_phone",
+            "requirements",
+            "service",
+            "situation",
+            "situation_other",
+        ]
+        extra_kwargs = {
+            "beneficiary_attachments": {"write_only": True},
+            "di_service_id": {
+                "required": True,
+                "allow_blank": False,
+                "error_messages": {
+                    "required": (
+                        "L'identifiant de service est obligatoire (format « source--id »)."
+                    ),
+                    "blank": (
+                        "L'identifiant de service est obligatoire (format « source--id »)."
+                    ),
+                },
+            },
+        }
+
+    def validate(self, attrs):
+        di_service_id = attrs["di_service_id"]
+        if "--" not in di_service_id:
+            raise serializers.ValidationError(
+                {
+                    "di_service_id": "Format d'identifiant invalide (attendu : « source--id »)."
+                }
+            )
+        if di_service_id.startswith("dora--"):
+            suffix = di_service_id.removeprefix("dora--").strip()
+            try:
+                service_pk = uuid.UUID(suffix)
+                service = Service.objects.get(pk=service_pk)
+            except (ValueError, Service.DoesNotExist):
+                raise NotFound("Service Dora introuvable pour cet identifiant.")
+            attrs["service"] = service
+            attrs["di_service_id"] = ""
+        return attrs
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.service_id:
+            data["di_service_id"] = f"dora--{instance.service_id}"
+        return data

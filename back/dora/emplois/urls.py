@@ -13,6 +13,7 @@ router.register(
     views.DisabledDoraFormDIStructureViewSet,
     basename="disabled-dora-form-di-structure",
 )
+router.register(r"orientations", views.OrientationViewSet, basename="orientation")
 
 urlpatterns = [
     path("", include(router.urls)),
