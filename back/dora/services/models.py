@@ -18,6 +18,7 @@ from django.utils.text import slugify
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
+from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -32,7 +33,6 @@ from dora.decoupage_administratif.utils import (
 from dora.structures.models import Structure
 
 from .enums import ServiceStatus
-from dora.data_inclusion.enums import TypologieStructure
 
 logger = logging.getLogger(__name__)
 

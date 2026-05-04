@@ -1,7 +1,6 @@
 import uuid
 from typing import Optional
 
-from dora.data_inclusion.enums import TypologieStructure
 from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.contrib.postgres.fields import ArrayField
@@ -35,6 +34,7 @@ from dora.core.validators import (
     validate_safir,
     validate_siret,
 )
+from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.utils import get_clean_city_name
 from dora.nexus import sync
 from dora.sirene.models import Establishment

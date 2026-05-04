@@ -14,14 +14,12 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
-from dora.data_inclusion.mappings import map_search_result
 from dora.core.constants import WGS84
+from dora.data_inclusion.mappings import map_search_result
 from dora.decoupage_administratif.models import City
 from dora.services.models import ServiceSubCategory
 
 from .models import FundingLabel
-
-
 from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 

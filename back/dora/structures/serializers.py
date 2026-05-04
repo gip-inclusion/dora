@@ -1,13 +1,12 @@
-from dora.data_inclusion.enums import TypologieStructure
 from django.db.models import BooleanField, Case, Count, Q, Value, When
 from rest_framework import exceptions, serializers
 
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceModel
 from dora.services.serializers import ServiceListSerializer
 from dora.structures.emails import send_invitation_email
 from dora.users.models import User
-
 
 from .models import (
     Structure,

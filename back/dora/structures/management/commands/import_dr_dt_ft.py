@@ -1,12 +1,12 @@
 import csv
 from pathlib import Path
 
-from dora.data_inclusion.enums import TypologieStructure
 from django.db import transaction
 
 from dora.core.commands import BaseCommand
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
+from dora.data_inclusion.enums import TypologieStructure
 from dora.sirene.models import Establishment
 from dora.structures.models import Structure, StructureNationalLabel, StructureSource
 from dora.users.models import User
