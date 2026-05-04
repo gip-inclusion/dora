@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema.v0 import Thematique as ThematiqueV0
+from dora.data_inclusion.enums import ThematiqueV0
 from data_inclusion.schema.v1 import Thematique as ThematiqueV1
 from model_bakery import baker
 
