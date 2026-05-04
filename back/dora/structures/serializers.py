@@ -8,6 +8,7 @@ from dora.services.serializers import ServiceListSerializer
 from dora.structures.emails import send_invitation_email
 from dora.users.models import User
 
+
 from .models import (
     Structure,
     StructureMember,
@@ -166,11 +167,7 @@ class StructureSerializer(serializers.ModelSerializer):
         return obj.is_admin(user)
 
     def get_typology_display(self, obj):
-        return (
-            TypologieStructure[obj.typology].label
-            if obj.typology
-            else ""
-        )
+        return TypologieStructure[obj.typology].label if obj.typology else ""
 
     def get_num_services(self, structure):
         return structure.get_num_visible_services(self.context["request"].user)
