@@ -2,7 +2,6 @@ import json
 import logging
 
 import requests
-from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.utils import timezone
@@ -14,6 +13,7 @@ from dora.core.commands import BaseCommand
 from dora.core.constants import WGS84
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.models import (
     Credential,
     LocationKind,

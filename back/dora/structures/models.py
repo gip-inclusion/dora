@@ -1,7 +1,7 @@
 import uuid
 from typing import Optional
 
-from data_inclusion.schema.v0 import TypologieStructure
+from dora.data_inclusion.enums import TypologieStructure
 from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.contrib.postgres.fields import ArrayField
@@ -373,7 +373,8 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
 
     typology = models.CharField(
         choices=zip(
-            [t.value for t in TypologieStructure], [t.label for t in TypologieStructure]
+            [t.value for t in TypologieStructure],
+            [t.label for t in TypologieStructure],
         ),
         max_length=100,
         default="",

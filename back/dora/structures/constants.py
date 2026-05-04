@@ -1,4 +1,4 @@
-from data_inclusion.schema.v0 import TypologieStructure
+from dora.data_inclusion.enums import TypologieStructure
 
 """
 Valeurs métiers communes à l'app 'dora.structure'.

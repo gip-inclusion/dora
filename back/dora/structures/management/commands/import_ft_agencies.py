@@ -2,7 +2,7 @@ import json
 from io import StringIO
 
 import requests
-from data_inclusion.schema.v0 import TypologieStructure
+from dora.data_inclusion.enums import TypologieStructure
 from django.conf import settings
 from django.utils import timezone
 

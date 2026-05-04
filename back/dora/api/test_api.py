@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema.v0 import TypologieStructure
+from dora.data_inclusion.enums import TypologieStructure
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.utils import timezone

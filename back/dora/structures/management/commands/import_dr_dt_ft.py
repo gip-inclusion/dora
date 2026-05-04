@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from data_inclusion.schema.v0 import TypologieStructure
+from dora.data_inclusion.enums import TypologieStructure
 from django.db import transaction
 
 from dora.core.commands import BaseCommand
