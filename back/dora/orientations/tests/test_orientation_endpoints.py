@@ -427,33 +427,25 @@ class OrientationStatsTestCase(APITestCase):
     def setUp(self):
         self.structure = make_structure()
         self.service = make_service(structure=self.structure)
+        self.foreign_service = make_service()
         self.user = make_user()
         baker.make(StructureMember, structure=self.structure, user=self.user)
 
-        baker.make(
-            Orientation,
-            service=self.service,
-            status=OrientationStatus.ACCEPTED,
-        )
-        baker.make(
-            Orientation,
-            service=self.service,
-            status=OrientationStatus.PENDING,
-        )
-
-        baker.make(
-            Orientation,
-            service=self.service,
-            prescriber_structure=self.structure,
-            status=OrientationStatus.REJECTED,
-        )
-        baker.make(
-            Orientation,
-            service=self.service,
-            prescriber_structure=self.structure,
-            status=OrientationStatus.PENDING,
-        )
-
+        for status in (
+            OrientationStatus.REJECTED,
+            OrientationStatus.PENDING,
+            OrientationStatus.MODERATION_PENDING,
+            OrientationStatus.MODERATION_REJECTED,
+        ):
+            # Orientations reçue
+            baker.make(Orientation, service=self.service, status=status)
+            # Orientations envoyée
+            baker.make(
+                Orientation,
+                service=self.foreign_service,
+                prescriber_structure=self.structure,
+                status=status,
+            )
         self.client.force_authenticate(user=self.user)
 
     def test_get_stats(self):
@@ -466,10 +458,10 @@ class OrientationStatsTestCase(APITestCase):
         self.assertEqual(
             response.data,
             {
-                "total_sent": 2,
+                "total_sent": 4,
                 "total_sent_pending": 1,
-                "total_received": 4,
-                "total_received_pending": 2,
+                "total_received": 2,
+                "total_received_pending": 1,
                 "structure_has_services": True,
             },
         )

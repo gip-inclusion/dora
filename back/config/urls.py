@@ -109,11 +109,11 @@ private_api_patterns = [
     path("consent-record/", dora.users.views.record_consent),
     path(
         "structures/<slug:structure_slug>/orientations/stats/",
-        dora.orientations.views.display_orientation_stats,
+        dora.orientations.views.StructureOrientationsView.as_view(mode="stats"),
     ),
     path(
         "structures/<slug:structure_slug>/orientations/export/",
-        dora.orientations.views.OrientationExportView.as_view(),
+        dora.orientations.views.StructureOrientationsView.as_view(mode="export"),
     ),
     path(
         "orientations/emplois/beneficiary-info/",
