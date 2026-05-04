@@ -174,9 +174,10 @@ def _load_credentials(apps):
 
 def _load_categories_and_subcategories(apps):
     """Crée les objets ServiceCategory et ServiceSubCategory de base."""
-    from dora.data_inclusion.enums import ThematiqueV0
     from data_inclusion.schema.v1 import Categorie
     from data_inclusion.schema.v1 import Thematique as ThematiqueV1
+
+    from dora.data_inclusion.enums import ThematiqueV0
 
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
