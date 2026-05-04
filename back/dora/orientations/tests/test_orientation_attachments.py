@@ -210,7 +210,7 @@ def test_validate_dora_service_no_requirements_passes():
 
 
 @patch("dora.orientations.serializers.dora.data_inclusion.di_client_factory")
-@patch("dora.orientations.serializers.dora.data_inclusion.map_service")
+@patch("dora.orientations.serializers.map_service")
 def test_validate_di_service_with_credentials_requires_attachments(
     mock_map_service, mock_client_factory
 ):
@@ -240,7 +240,7 @@ def test_validate_di_service_with_credentials_requires_attachments(
 
 
 @patch("dora.orientations.serializers.dora.data_inclusion.di_client_factory")
-@patch("dora.orientations.serializers.dora.data_inclusion.map_service")
+@patch("dora.orientations.serializers.map_service")
 def test_validate_di_service_with_attachments_passes(
     mock_map_service, mock_client_factory
 ):
@@ -268,7 +268,7 @@ def test_validate_di_service_with_attachments_passes(
 
 
 @patch("dora.orientations.serializers.dora.data_inclusion.di_client_factory")
-@patch("dora.orientations.serializers.dora.data_inclusion.map_service")
+@patch("dora.orientations.serializers.map_service")
 def test_validate_di_service_no_requirements_passes(
     mock_map_service, mock_client_factory
 ):

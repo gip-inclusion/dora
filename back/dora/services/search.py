@@ -14,6 +14,7 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
+from dora.data_inclusion.mappings import map_search_result
 from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import City
 from dora.services.models import ServiceSubCategory
@@ -233,7 +234,7 @@ def _map_di_results(
     supported_service_kinds = models.ServiceKind.objects.values_list("value", flat=True)
 
     mapped_di_results = [
-        data_inclusion.map_search_result(result, supported_service_kinds)
+        map_search_result(result, supported_service_kinds)
         for result in raw_di_results
     ]
 
