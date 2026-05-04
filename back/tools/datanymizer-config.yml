@@ -34,12 +34,15 @@ tables:
           format: ""
 
   - name: services_service
+    rule_order:
+      - contact_name
+      - contact_email
     rules:
       contact_name:
         person_name: {}
       contact_email:
-        email:
-          kind: Safe
+        template:
+          format: "test+{{ final.contact_name | slugify }}.{{ prev.slug }}@dora.inclusion.beta.gouv.fr"
       contact_phone:
         phone:
           format: "9^########"
@@ -47,8 +50,8 @@ tables:
   - name: structures_structure
     rules:
       email:
-        email:
-          kind: Safe
+        template:
+          format: "test+{{ prev.slug }}@dora.inclusion.beta.gouv.fr"
       phone:
         phone:
           format: "9^########"
