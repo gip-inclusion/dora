@@ -4,6 +4,7 @@ from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
 
 import dora.data_inclusion.client
+from dora.data_inclusion.mappings import map_service
 from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import Structure
@@ -157,7 +158,7 @@ class OrientationSerializer(serializers.ModelSerializer):
                 return orientation
 
             # Mapping du service DI
-            di_service = dora.data_inclusion.map_service(raw_service, False)
+            di_service = map_service(raw_service, False)
 
             # Est-ce que le service DI nécessite des documents ou justificatifs ?
             requires_attachments = (

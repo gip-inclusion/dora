@@ -1,7 +1,7 @@
-from data_inclusion.schema.v0 import TypologieStructure
 from django.db.models import BooleanField, Case, Count, Q, Value, When
 from rest_framework import exceptions, serializers
 
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceModel
 from dora.services.serializers import ServiceListSerializer

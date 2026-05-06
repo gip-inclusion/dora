@@ -1,4 +1,3 @@
-from data_inclusion.schema.v0 import TypologieStructure
 from django.db import transaction
 from django.db.models.query_utils import Q
 from django.shortcuts import get_object_or_404
@@ -11,6 +10,7 @@ from dora import onboarding
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.structures.constants import RESTRICTED_NATIONAL_LABELS
 from dora.structures.emails import send_invitation_email

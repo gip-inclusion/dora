@@ -31,6 +31,7 @@ from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
+from dora.data_inclusion.mappings import map_service
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.emails import send_service_feedback_email, send_service_sharing_email
@@ -807,9 +808,7 @@ def service_di(request, di_id: str):
     if raw_service is None:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    return Response(
-        data_inclusion.map_service(raw_service, request.user.is_authenticated)
-    )
+    return Response(map_service(raw_service, request.user.is_authenticated))
 
 
 @api_view(["POST"])
@@ -828,9 +827,7 @@ def share_di_service(
     if raw_service is None:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serialized_service = data_inclusion.map_service(
-        raw_service, request.user.is_authenticated
-    )
+    serialized_service = map_service(raw_service, request.user.is_authenticated)
     return share_service(request, serialized_service, is_di=True)
 
 

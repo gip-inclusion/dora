@@ -1,9 +1,9 @@
 import pytest
-from data_inclusion.schema.v0 import Thematique as ThematiqueV0
 from data_inclusion.schema.v1 import Thematique as ThematiqueV1
 from model_bakery import baker
 
 from dora.core.utils import get_category_from_subcategory
+from dora.data_inclusion.enums import ThematiqueV0
 from dora.services.models import ServiceCategory, ServiceSubCategory
 
 
@@ -90,7 +90,7 @@ class TestThematiquesObsolescence:
                 )
 
     def test_thematiques_v0_not_in_v1_are_obsolete(self):
-        """Les thématiques de data_inclusion.schema.v0 qui ne sont pas dans v1 doivent être obsolètes."""
+        """Les thématiques v0 qui ne sont pas dans v1 doivent être obsolètes."""
         v0_values = {thematique.value for thematique in ThematiqueV0}
         v1_values = {thematique.value for thematique in ThematiqueV1}
 

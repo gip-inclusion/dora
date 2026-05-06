@@ -2,7 +2,6 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema.v0 import TypologieStructure
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -19,6 +18,7 @@ from django.utils.text import slugify
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
+from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,

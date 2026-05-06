@@ -1,5 +1,4 @@
 import pytest
-from data_inclusion.schema.v0 import TypologieStructure
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.utils import timezone
@@ -8,6 +7,7 @@ from model_bakery import baker
 
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service, make_structure, make_user
+from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
 from dora.services.models import (
     BeneficiaryAccessMode,

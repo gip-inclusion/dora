@@ -1,8 +1,8 @@
 import pytest
-from data_inclusion.schema.v0 import TypologieStructure
 from model_bakery import baker
 
 from dora.core.test_utils import make_published_service
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.models import FranceTravailOrientableService
 
 
