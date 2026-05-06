@@ -362,9 +362,9 @@ dj-database-url==3.1.2 \
     --hash=sha256:544e015fee3efa5127a1eb1cca465f4ace578265b3671fe61d0ed7dbafb5ec8a \
     --hash=sha256:63c20e4bbaa51690dfd4c8d189521f6bf6bc9da9fcdb23d95d2ee8ee87f9ec62
     # via -r requirements/base.in
-django==6.0.4 \
-    --hash=sha256:14359c809fc16e8f81fd2b59d7d348e4d2d799da6840b10522b6edf7b8afc1da \
-    --hash=sha256:8cfa2572b3f2768b2e84983cf3c4811877a01edb64e817986ec5d60751c113ac
+django==6.0.5 \
+    --hash=sha256:9d58a7cb49244e74c8e161d5e403a46d6209f1009ba40f5a66d6aa0d0786a8f0 \
+    --hash=sha256:bc6d6872e98a2864c836e42edd644b362db311147dd5aa8d5b82ba7a032f5269
     # via
     #   -r requirements/base.in
     #   dj-database-url
@@ -585,7 +585,7 @@ iniconfig==2.3.0 \
     --hash=sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730 \
     --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
     # via pytest
-itoutils[django,django-testing]==26.2.12.0 \
+itoutils[django, django-testing]==26.2.12.0 \
     --hash=sha256:565d0669326dfddbab502d6beba1acbd79a3987f17e6c83ce2fd9ed6c0a00fe2 \
     --hash=sha256:6e45f9bc809c52fed1c8fbca95f001a05583744306a89b840f5c0cfa8816ee78
     # via
