@@ -5,7 +5,10 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
 
-from dora.core.pagination import OptionalPageNumberPagination
+from dora.core.pagination import (
+    DefaultPageNumberPagination,
+    OptionalPageNumberPagination,
+)
 from dora.orientations.models import Orientation
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -80,11 +83,14 @@ class ReferenceDataViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
+    class ServicePagination(DefaultPageNumberPagination):
+        default_page_size = 1000
+
     versioning_class = NamespaceVersioning
     permission_classes = (APIPermission,)
     serializer_class = ServiceSerializer
     renderer_classes = (JSONRenderer,)
-    pagination_class = OptionalPageNumberPagination
+    pagination_class = ServicePagination
 
     def get_queryset(self):
         return (

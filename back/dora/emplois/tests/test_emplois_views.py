@@ -90,9 +90,10 @@ def test_services_api_list(emplois_user, api_client):
     published_service = make_published_service()
     list_response = api_client.get(reverse("emplois:service-list"))
     assert list_response.status_code == 200
-    assert len(list_response.data) == 1
+    assert list_response.data["count"] == 1
+    assert len(list_response.data["results"]) == 1
 
-    data = list_response.data[0]
+    data = list_response.data["results"][0]
     assert data["id"] == str(published_service.id)
     assert data["short_desc"] == published_service.short_desc
 
@@ -147,7 +148,8 @@ def test_services_api_list_queries_are_bounded(
         response = api_client.get(reverse("emplois:service-list"))
 
     assert response.status_code == 200
-    assert len(response.data) == 5
+    assert response.data["count"] == 5
+    assert len(response.data["results"]) == 5
 
 
 def test_services_api_detail_queries_are_bounded(
@@ -178,7 +180,8 @@ def test_services_api_list_orientation_queries_are_bounded(
         response = api_client.get(reverse("emplois:service-list"))
 
     assert response.status_code == 200
-    assert len(response.data) == 5
+    assert response.data["count"] == 5
+    assert len(response.data["results"]) == 5
 
 
 @pytest.mark.parametrize(
