@@ -34,7 +34,9 @@ PREFETCH_RELATED_SERVICE_LIST = [
     Prefetch(
         "orientations",
         queryset=Orientation.objects.answered().only(
-            "creation_date", "processing_date"
+            "service_id",
+            "creation_date",
+            "processing_date",
         ),
         to_attr="answered_orientations",
     ),

@@ -3,8 +3,9 @@ from django.urls import reverse
 from itoutils.django.testing import assertSnapshotQueries
 from model_bakery import baker
 
-from dora.core.test_utils import make_published_service
+from dora.core.test_utils import make_orientation, make_published_service
 from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.orientations.models import OrientationStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -161,6 +162,23 @@ def test_services_api_detail_queries_are_bounded(
         )
 
     assert response.status_code == 200
+
+
+def test_services_api_list_orientation_queries_are_bounded(
+    emplois_user,
+    api_client,
+    snapshot,
+):
+    for _ in range(5):
+        service = make_published_service()
+        make_orientation(service=service, status=OrientationStatus.ACCEPTED)
+        make_orientation(service=service, status=OrientationStatus.REJECTED)
+
+    with assertSnapshotQueries(snapshot):
+        response = api_client.get(reverse("emplois:service-list"))
+
+    assert response.status_code == 200
+    assert len(response.data) == 5
 
 
 @pytest.mark.parametrize(
