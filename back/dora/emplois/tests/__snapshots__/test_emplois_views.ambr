@@ -266,8 +266,32 @@
 # ---
 # name: test_services_api_list_orientation_queries_are_bounded
   dict({
-    'num_queries': 11,
+    'num_queries': 12,
     'queries': list([
+      dict({
+        'origin': list([
+          'Paginator.count[<site-packages>/django/core/paginator.py]',
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_orientation_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT COUNT(*) AS "__count"
+          FROM "services_service"
+          INNER JOIN "structures_structure" ON ("services_service"."structure_id" = "structures_structure"."id")
+          WHERE (NOT "services_service"."is_model"
+                 AND "services_service"."status" = %s
+                 AND NOT ("structures_structure"."is_obsolete")
+                 AND NOT ("services_service"."structure_id" IN
+                            (SELECT U0."id"
+                             FROM "structures_structure" U0
+                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
+                             WHERE (U1."id" IS NULL
+                                    AND U2."id" IS NULL)))
+                 AND NOT ("services_service"."suspension_date" < %s
+                          AND "services_service"."suspension_date" IS NOT NULL))
+        ''',
+      }),
       dict({
         'origin': list([
           'ServiceViewSet.list[emplois/views.py]',
@@ -382,6 +406,7 @@
                  AND NOT ("services_service"."suspension_date" < %s
                           AND "services_service"."suspension_date" IS NOT NULL))
           ORDER BY "services_service"."id" ASC
+          LIMIT 5
         ''',
       }),
       dict({
@@ -581,8 +606,32 @@
 # ---
 # name: test_services_api_list_queries_are_bounded
   dict({
-    'num_queries': 11,
+    'num_queries': 12,
     'queries': list([
+      dict({
+        'origin': list([
+          'Paginator.count[<site-packages>/django/core/paginator.py]',
+          'ServiceViewSet.list[emplois/views.py]',
+          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
+        ]),
+        'sql': '''
+          SELECT COUNT(*) AS "__count"
+          FROM "services_service"
+          INNER JOIN "structures_structure" ON ("services_service"."structure_id" = "structures_structure"."id")
+          WHERE (NOT "services_service"."is_model"
+                 AND "services_service"."status" = %s
+                 AND NOT ("structures_structure"."is_obsolete")
+                 AND NOT ("services_service"."structure_id" IN
+                            (SELECT U0."id"
+                             FROM "structures_structure" U0
+                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
+                             WHERE (U1."id" IS NULL
+                                    AND U2."id" IS NULL)))
+                 AND NOT ("services_service"."suspension_date" < %s
+                          AND "services_service"."suspension_date" IS NOT NULL))
+        ''',
+      }),
       dict({
         'origin': list([
           'ServiceViewSet.list[emplois/views.py]',
@@ -697,6 +746,7 @@
                  AND NOT ("services_service"."suspension_date" < %s
                           AND "services_service"."suspension_date" IS NOT NULL))
           ORDER BY "services_service"."id" ASC
+          LIMIT 5
         ''',
       }),
       dict({

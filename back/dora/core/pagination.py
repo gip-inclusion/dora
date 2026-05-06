@@ -12,3 +12,10 @@ class OptionalPageNumberPagination(pagination.PageNumberPagination):
         if self.page_size_query_param in request.query_params:
             return super().get_page_size(request)
         return None
+
+
+class DefaultPageNumberPagination(OptionalPageNumberPagination):
+    default_page_size = 50
+
+    def get_page_size(self, request):
+        return super().get_page_size(request) or self.default_page_size
