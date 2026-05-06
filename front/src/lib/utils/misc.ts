@@ -268,3 +268,21 @@ export function debounce<T extends (...args: any[]) => any>(
 export function sleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
+
+export function transferUrlParams({
+  targetUrl,
+  sourceUrl,
+  exclude = [],
+}: {
+  targetUrl: string;
+  sourceUrl: URL;
+  exclude?: string[];
+}): string {
+  const next = new URL(targetUrl, sourceUrl);
+  for (const [key, value] of sourceUrl.searchParams) {
+    if (!exclude.includes(key)) {
+      next.searchParams.set(key, value);
+    }
+  }
+  return next.toString();
+}

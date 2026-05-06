@@ -4,6 +4,7 @@ import {
   getOrientationBeneficiaryInfo,
   type OrientationBeneficiaryInfo,
 } from "$lib/requests/nexus";
+import { transferUrlParams } from "$lib/utils/misc";
 
 export const load = async ({ parent, url, params, fetch }) => {
   const data = await parent();
@@ -33,7 +34,14 @@ export const load = async ({ parent, url, params, fetch }) => {
       beneficiaryInfo = null;
     }
     if (beneficiaryInfo && "nextUrl" in beneficiaryInfo) {
-      redirect(302, beneficiaryInfo.nextUrl);
+      redirect(
+        302,
+        transferUrlParams({
+          targetUrl: beneficiaryInfo.nextUrl,
+          sourceUrl: url,
+          exclude: [ORIENTATION_JWT_QUERY_PARAM],
+        })
+      );
     }
   }
 

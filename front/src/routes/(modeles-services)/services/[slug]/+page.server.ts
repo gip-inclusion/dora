@@ -4,6 +4,7 @@ import type { PageServerLoad } from "./$types";
 import { handleEmploisOrientation } from "$lib/requests/emplois-orientation";
 import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { TOKEN_KEY } from "$lib/utils/auth";
+import { transferUrlParams } from "$lib/utils/misc";
 
 export const load: PageServerLoad = async ({ url, params, cookies }) => {
   const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
@@ -24,7 +25,14 @@ export const load: PageServerLoad = async ({ url, params, cookies }) => {
   if (response.ok) {
     const data = await response.json();
     if (data.nextUrl) {
-      redirect(302, data.nextUrl);
+      redirect(
+        302,
+        transferUrlParams({
+          targetUrl: data.nextUrl,
+          sourceUrl: url,
+          exclude: [ORIENTATION_JWT_QUERY_PARAM],
+        })
+      );
     }
   }
 };
