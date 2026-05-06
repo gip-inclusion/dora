@@ -90,7 +90,7 @@ class TestThematiquesObsolescence:
                 )
 
     def test_thematiques_v0_not_in_v1_are_obsolete(self):
-        """Les thématiques de data_inclusion.schema.v0 qui ne sont pas dans v1 doivent être obsolètes."""
+        """Les thématiques v0 qui ne sont pas dans v1 doivent être obsolètes."""
         v0_values = {thematique.value for thematique in ThematiqueV0}
         v1_values = {thematique.value for thematique in ThematiqueV1}
 
