@@ -83,21 +83,13 @@
     structure = JSON.parse(JSON.stringify(defaultStructure));
   }
 
-  async function establishmentAlreadyCreated(siret: string) {
-    const result = await siretWasAlreadyClaimed(siret);
-    if (result.ok) {
-      return result.result as unknown as Structure;
-    }
-    return null;
-  }
-
   async function handleEstablishmentChange(
     establishment: Establishment | null
   ) {
     alreadyClaimedEstablishment = null;
     structure = JSON.parse(JSON.stringify(defaultStructure));
     if (establishment) {
-      alreadyClaimedEstablishment = await establishmentAlreadyCreated(
+      alreadyClaimedEstablishment = await siretWasAlreadyClaimed(
         establishment.siret
       );
       if (!alreadyClaimedEstablishment) {

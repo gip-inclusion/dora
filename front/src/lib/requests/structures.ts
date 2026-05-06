@@ -32,31 +32,14 @@ function structureToFront(structure: Structure): Structure {
 
 export async function siretWasAlreadyClaimed(siret: string) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-    result: undefined,
-    error: undefined,
-  };
-
-  if (res.ok) {
-    result.result = await res.json();
+  const result = await fetchData<Structure>(url);
+  if (result.ok) {
+    return result.data;
+  } else if (result.status === 404) {
+    return null;
   } else {
-    if (res.status !== 404) {
-      try {
-        result.error = await res.json();
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    throw Error(result.statusText);
   }
-  return result;
 }
 
 export async function getManagedStructures(
