@@ -134,15 +134,14 @@ def test_services_api_list_queries_are_bounded(
     api_client,
     snapshot,
 ):
-    """
-    Il faut assurer qu'il n'y a qu'un seul query pour toutes les villes
-    """
     for i in range(5):
         city_code = f"7500{i}"
         baker.make(City, code=city_code, name="Paris")
-        make_published_service(
+        service = make_published_service(
             diffusion_zone_details=city_code, diffusion_zone_type=AdminDivisionType.CITY
         )
+        make_orientation(service=service, status=OrientationStatus.ACCEPTED)
+        make_orientation(service=service, status=OrientationStatus.REJECTED)
 
     with assertSnapshotQueries(snapshot):
         response = api_client.get(reverse("emplois:service-list"))
@@ -164,24 +163,6 @@ def test_services_api_detail_queries_are_bounded(
         )
 
     assert response.status_code == 200
-
-
-def test_services_api_list_orientation_queries_are_bounded(
-    emplois_user,
-    api_client,
-    snapshot,
-):
-    for _ in range(5):
-        service = make_published_service()
-        make_orientation(service=service, status=OrientationStatus.ACCEPTED)
-        make_orientation(service=service, status=OrientationStatus.REJECTED)
-
-    with assertSnapshotQueries(snapshot):
-        response = api_client.get(reverse("emplois:service-list"))
-
-    assert response.status_code == 200
-    assert response.data["count"] == 5
-    assert len(response.data["results"]) == 5
 
 
 @pytest.mark.parametrize(
