@@ -15,6 +15,7 @@
   import CguCheckboxes from "../cgu-checkboxes.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "$lib/consts";
   import { toast } from "@zerodevx/svelte-toast";
+  import { transferUrlParams } from "$lib/utils/misc";
 
   interface Props {
     data: PageData;
@@ -84,7 +85,10 @@
       result.data = await response.json();
       await refreshUserInfo();
       const redirectUrl = opJwt
-        ? `/services/${serviceSlug}${directToOrientationPage ? "/orienter" : ""}?${ORIENTATION_JWT_QUERY_PARAM}=${encodeURIComponent(opJwt)}`
+        ? transferUrlParams({
+            targetUrl: `/services/${serviceSlug}${directToOrientationPage ? "/orienter" : ""}`,
+            sourceUrl: $page.url,
+          })
         : `/structures/${result.data.slug}`;
       await goto(redirectUrl);
       loading = false;
