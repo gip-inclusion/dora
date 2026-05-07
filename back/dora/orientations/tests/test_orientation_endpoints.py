@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from dateutil.relativedelta import relativedelta
 from django.core import mail
@@ -24,7 +26,7 @@ def test_query_refresh(api_client, orientation):
     assert response.status_code == 204
 
 
-def test_query_access(api_client, orientation):
+def test_access_refused_when_no_query_id_hash(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/"
     response = api_client.get(url, follow=True)
 
@@ -35,6 +37,26 @@ def test_query_access(api_client, orientation):
     response = api_client.get(url, follow=True)
 
     assert response.status_code == 200
+
+
+@freeze_time("2026-01-01")
+def test_access_refused_when_query_id_hash_expired(api_client, orientation):
+    orientation.query_expires_at = datetime(year=2025, month=12, day=31)
+    orientation.save()
+
+    orientation.refresh_from_db()
+
+    response = api_client.get(
+        f"/orientations/{orientation.query_id}/?h={orientation.get_query_id_hash()}"
+    )
+
+    assert response.status_code == 401
+
+
+def test_access_refused_when_query_id_hash_invalid(api_client, orientation):
+    response = api_client.get(f"/orientations/{orientation.query_id}/?h=invalid")
+
+    assert response.status_code == 401
 
 
 @freeze_time("2022-01-01")

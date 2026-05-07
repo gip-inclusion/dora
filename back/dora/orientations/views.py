@@ -1,4 +1,5 @@
 import functools
+import hmac
 import logging
 import time
 from math import ceil
@@ -71,7 +72,11 @@ class OrientationPermission(permissions.BasePermission):
         match request.method:
             case "GET" | "POST" | "PATCH":
                 if h := request.query_params.get("h"):
-                    return h == orientation.get_query_id_hash()
+                    if not hmac.compare_digest(h, orientation.get_query_id_hash()):
+                        return False
+                    if orientation.query_expired:
+                        return False
+                    return True
                 return False
             case _:
                 return False
