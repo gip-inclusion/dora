@@ -274,12 +274,14 @@ export function transferUrlParams({
   sourceUrl,
   exclude = [],
 }: {
-  targetUrl: string;
-  sourceUrl: URL;
+  targetUrl: string | URL;
+  sourceUrl: string | URL;
   exclude?: string[];
 }): string {
-  const next = new URL(targetUrl, sourceUrl);
-  for (const [key, value] of sourceUrl.searchParams) {
+  const source = new URL(sourceUrl);
+  const next = new URL(targetUrl, source);
+
+  for (const [key, value] of source.searchParams) {
     if (!exclude.includes(key)) {
       next.searchParams.set(key, value);
     }
