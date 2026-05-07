@@ -190,7 +190,7 @@ class ServiceViewSet(
         detail=True,
         methods=["post"],
         url_path="feedback",
-        permission_classes=[permissions.AllowAny],
+        permission_classes=[permissions.IsAuthenticated],
     )
     def post_dora_service_feedback(self, request, slug):
         serializer = FeedbackSerializer(data=request.data)
@@ -210,8 +210,8 @@ class ServiceViewSet(
             list(recipients),
             d["notify_support"],
             d["reasons"],
-            d["name"],
-            d["email"],
+            request.user.get_full_name(),
+            request.user.email,
             d["details"],
         )
 
@@ -832,7 +832,7 @@ def share_di_service(
 
 
 @api_view(["POST"])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def post_di_service_feedback(request, di_id: str):
     # Vérification de la validité des données
     serializer = FeedbackSerializer(data=request.data)
@@ -859,8 +859,8 @@ def post_di_service_feedback(request, di_id: str):
         [contact_email] if contact_email else [],
         d["notify_support"],
         d["reasons"],
-        d["name"],
-        d["email"],
+        request.user.get_full_name(),
+        request.user.email,
         d["details"],
     )
 
