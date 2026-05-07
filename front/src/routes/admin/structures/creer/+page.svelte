@@ -43,6 +43,7 @@
   let requesting = $state(false);
   let structure = $state(JSON.parse(JSON.stringify(defaultStructure)));
   let alreadyClaimedEstablishment: Structure | null = $state(null);
+  let errorCheckingAlreadyClaimedEstablishment = $state(false);
   let structureAdded = $state(false);
 
   function resetForm() {
@@ -89,9 +90,15 @@
     alreadyClaimedEstablishment = null;
     structure = JSON.parse(JSON.stringify(defaultStructure));
     if (establishment) {
-      alreadyClaimedEstablishment = await siretWasAlreadyClaimed(
-        establishment.siret
-      );
+      errorCheckingAlreadyClaimedEstablishment = false;
+      try {
+        alreadyClaimedEstablishment = await siretWasAlreadyClaimed(
+          establishment.siret
+        );
+      } catch (err) {
+        errorCheckingAlreadyClaimedEstablishment = true;
+        throw err;
+      }
       if (!alreadyClaimedEstablishment) {
         structure.siret = establishment.siret;
         structure.name = establishment.name;
@@ -140,6 +147,19 @@
         onEstablishmentChange={handleEstablishmentChange}
         onCityChange={handleCityChange}
       />
+
+      {#if errorCheckingAlreadyClaimedEstablishment}
+        <div class="mt-s24"></div>
+        <Notice
+          title="Erreur lors de la vérification de la structure"
+          type="error"
+        >
+          <p>
+            Une erreur est survenue lors de la vérification de la structure.
+            Veuillez réessayer plus tard.
+          </p>
+        </Notice>
+      {/if}
 
       {#if alreadyClaimedEstablishment}
         <div class="mt-s24"></div>
