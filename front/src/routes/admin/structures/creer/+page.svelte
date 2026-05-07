@@ -16,6 +16,7 @@
   import { formErrors } from "$lib/validation/validation";
   import { getToken } from "$lib/utils/auth";
   import type { Establishment, Structure } from "$lib/types";
+  import { logException } from "$lib/utils/logger";
 
   const schema = {
     email: {
@@ -43,6 +44,7 @@
   let requesting = $state(false);
   let structure = $state(JSON.parse(JSON.stringify(defaultStructure)));
   let alreadyClaimedEstablishment: Structure | null = $state(null);
+  let errorCheckingAlreadyClaimedEstablishment = $state(false);
   let structureAdded = $state(false);
 
   function resetForm() {
@@ -83,23 +85,21 @@
     structure = JSON.parse(JSON.stringify(defaultStructure));
   }
 
-  async function establishmentAlreadyCreated(siret: string) {
-    const result = await siretWasAlreadyClaimed(siret);
-    if (result.ok) {
-      return result.result as unknown as Structure;
-    }
-    return null;
-  }
-
   async function handleEstablishmentChange(
     establishment: Establishment | null
   ) {
     alreadyClaimedEstablishment = null;
     structure = JSON.parse(JSON.stringify(defaultStructure));
     if (establishment) {
-      alreadyClaimedEstablishment = await establishmentAlreadyCreated(
-        establishment.siret
-      );
+      errorCheckingAlreadyClaimedEstablishment = false;
+      try {
+        alreadyClaimedEstablishment = await siretWasAlreadyClaimed(
+          establishment.siret
+        );
+      } catch (err) {
+        errorCheckingAlreadyClaimedEstablishment = true;
+        logException(err);
+      }
       if (!alreadyClaimedEstablishment) {
         structure.siret = establishment.siret;
         structure.name = establishment.name;
@@ -148,6 +148,19 @@
         onEstablishmentChange={handleEstablishmentChange}
         onCityChange={handleCityChange}
       />
+
+      {#if errorCheckingAlreadyClaimedEstablishment}
+        <div class="mt-s24"></div>
+        <Notice
+          title="Erreur lors de la vérification de la structure"
+          type="error"
+        >
+          <p>
+            Une erreur est survenue lors de la vérification de la structure.
+            Veuillez réessayer plus tard.
+          </p>
+        </Notice>
+      {/if}
 
       {#if alreadyClaimedEstablishment}
         <div class="mt-s24"></div>

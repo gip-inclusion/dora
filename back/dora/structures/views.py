@@ -352,7 +352,7 @@ class StructurePutativeMemberViewset(viewsets.ModelViewSet):
 
 
 @api_view()
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def siret_was_claimed(request, siret):
     structure = get_object_or_404(Structure.objects.all(), siret=siret)
     serializer = StructureSerializer(structure, context={"request": request})

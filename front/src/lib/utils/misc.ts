@@ -37,12 +37,33 @@ export function htmlToMarkdown(html: string) {
   return "";
 }
 
+export type FetchDataSuccess<T> = {
+  ok: true;
+  data: T;
+  error: null;
+  status: number;
+  statusText: string;
+};
+
+export type FetchDataError = {
+  ok: false;
+  data: null;
+  error: string;
+  status: number;
+  statusText: string;
+};
+
+export type FetchDataResult<T> = FetchDataSuccess<T> | FetchDataError;
+
 export async function fetchData<T>(
   url: string,
   fetchFunction = fetch,
   customHeaders: Record<string, string> = {}
-) {
-  const headers = { Accept: defaultAcceptHeader, ...customHeaders };
+): Promise<FetchDataResult<T>> {
+  const headers: Record<string, string> = {
+    Accept: defaultAcceptHeader,
+    ...customHeaders,
+  };
   const currentToken = getToken();
 
   if (currentToken) {
@@ -53,10 +74,20 @@ export async function fetchData<T>(
     headers,
   });
 
+  if (response.ok) {
+    return {
+      ok: true,
+      data: (await response.json()) as T,
+      error: null,
+      status: response.status,
+      statusText: response.statusText,
+    };
+  }
+
   return {
-    ok: response.ok,
-    data: response.ok ? ((await response.json()) as T) : null,
-    error: response.ok ? null : response.statusText,
+    ok: false,
+    data: null,
+    error: response.statusText,
     status: response.status,
     statusText: response.statusText,
   };
