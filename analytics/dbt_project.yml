@@ -22,8 +22,11 @@ models:
     intermediate:
       +schema: intermediate
       +materialized: table
-    marts: 
+    marts:
       +schema: marts
+      +materialized: table
+    reporting:
+      +schema: reporting
       +materialized: table
 
 seeds:
