@@ -14,6 +14,12 @@ export const TOKEN_KEY =
     ? "token"
     : `token_${import.meta.env.VITE_ENVIRONMENT}`;
 
+// Cookie non-httponly indiquant que l'utilisateur est connecté (lisible par JS)
+export const AUTH_STATE_KEY =
+  import.meta.env.VITE_ENVIRONMENT === "production"
+    ? "auth_state"
+    : `auth_state_${import.meta.env.VITE_ENVIRONMENT}`;
+
 export type UserMainActivity =
   | "accompagnateur"
   | "offreur"
@@ -88,20 +94,21 @@ export function removeToken() {
   });
 }
 
-function getUserInfo(authToken) {
+export function isAuthenticated() {
+  if (!browser) return false;
+  return !!Cookies.get(AUTH_STATE_KEY);
+}
+
+function getUserInfo() {
   return fetch(`${getApiURL()}/auth/user-info/`, {
-    method: "POST",
-    headers: {
-      Accept: defaultAcceptHeader,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ key: authToken }),
+    method: "GET",
+    headers: { Accept: defaultAcceptHeader },
   });
 }
 
 export async function refreshUserInfo() {
   try {
-    const result = await getUserInfo(getToken());
+    const result = await getUserInfo();
     if (result.status === 200) {
       const info = (await result.json()) as UserInfo;
       setUserInfo(info);
@@ -149,29 +156,27 @@ function migrateTokenFromLocalStorageToCookie(
 export async function validateCredsAndFillUserInfo() {
   setUserInfo(null);
 
-  if (browser) {
-    let authToken = getToken();
+  const authenticated = browser && isAuthenticated();
+  console.debug("[auth] isAuthenticated:", authenticated);
 
-    authToken = migrateTokenFromLocalStorageToCookie(authToken);
-
-    if (authToken) {
-      // Valide le token actuel et remplit les informations
-      // utilisateur
-      try {
-        const result = await getUserInfo(authToken);
-        if (result.status === 200) {
-          const info = await result.json();
-          setUserInfo(info);
-          userPreferencesSet([...info.structures, ...info.pendingStructures]);
-        } else if (result.status === 404) {
-          // Le token est invalide, on déconnecte l'utilisateur
-          disconnect();
-        } else {
-          log("Unexpected status code", { result });
-        }
-      } catch (err) {
-        logException(err);
+  if (authenticated) {
+    try {
+      const result = await getUserInfo();
+      console.debug("[auth] user-info status:", result.status);
+      if (result.status === 200) {
+        const info = await result.json();
+        console.debug("[auth] user-info OK:", info.email);
+        setUserInfo(info);
+        userPreferencesSet([...info.structures, ...info.pendingStructures]);
+      } else if (result.status === 401 || result.status === 403) {
+        console.debug("[auth] user-info unauthorized, disconnecting");
+        disconnect();
+      } else {
+        log("Unexpected status code", { result });
       }
+    } catch (err) {
+      console.debug("[auth] user-info fetch error:", err);
+      logException(err);
     }
   }
 }

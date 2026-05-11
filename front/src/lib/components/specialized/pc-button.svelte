@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
   import { PROCONNECT_MORE_INFO_URL, URL_HELP_SITE } from "$lib/consts";
 
@@ -13,7 +13,7 @@
 
   let { nextPage, noHelpSection = false, pcHelpLink }: Props = $props();
 
-  const loginUrl = `${getApiURL()}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
+  const loginUrl = `${API_URL}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
 </script>
 
 <div class="text-center">
