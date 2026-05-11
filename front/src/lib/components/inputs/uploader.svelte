@@ -2,7 +2,6 @@
   import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
 
   import { getApiURL } from "$lib/utils/api";
-  import { getToken } from "$lib/utils/auth";
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
@@ -89,7 +88,6 @@
       const request = new XMLHttpRequest();
       request.open("POST", url);
       request.setRequestHeader("Accept", "application/json; version=1.0");
-      request.setRequestHeader("Authorization", `Token ${getToken()}`);
 
       // upload progress event
       request.upload.addEventListener("progress", (progressEvent) => {

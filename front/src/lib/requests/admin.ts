@@ -5,7 +5,6 @@ import type {
   Structure,
 } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 
 export async function getStructuresAdmin(
@@ -51,7 +50,6 @@ export async function setModerationState(entity, status: ModerationStatus) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ moderationStatus: status }),
   });

@@ -1,7 +1,6 @@
 import { toast } from "@zerodevx/svelte-toast";
 import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 
 export type NexusServiceID =
   | "dora"
@@ -22,7 +21,6 @@ export const getNexusMenuStatus = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
   });
   if (response.ok) {
@@ -61,7 +59,6 @@ export const getOrientationBeneficiaryInfo = async (
     method: "GET",
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 

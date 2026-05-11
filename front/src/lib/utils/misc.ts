@@ -1,7 +1,6 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
 import { defaultAcceptHeader } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import insane from "insane";
 import showdown from "showdown";
 
@@ -64,11 +63,6 @@ export async function fetchData<T>(
     Accept: defaultAcceptHeader,
     ...customHeaders,
   };
-  const currentToken = getToken();
-
-  if (currentToken) {
-    headers.Authorization = `Token ${currentToken}`;
-  }
 
   const response = await fetchFunction(url, {
     headers,

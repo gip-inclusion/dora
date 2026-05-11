@@ -12,7 +12,7 @@
   import { page } from "$app/stores";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { getToken } from "$lib/utils/auth";
+  import { isAuthenticated } from "$lib/utils/auth";
   import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
   import type { Service } from "$lib/types";
 
@@ -42,7 +42,7 @@
   }
 
   function handleBookmark(onBookmark: () => void) {
-    if (!getToken()) {
+    if (!isAuthenticated()) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search

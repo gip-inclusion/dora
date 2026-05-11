@@ -5,7 +5,7 @@ import {
   getServicesOptions,
 } from "$lib/requests/services";
 import type { Service } from "$lib/types";
-import { getToken } from "$lib/utils/auth";
+import { isAuthenticated } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
@@ -40,7 +40,7 @@ export const load: PageLoad = async ({ fetch, url, params, parent }) => {
         service: null,
       };
     }
-    if (!getToken()) {
+    if (!isAuthenticated()) {
       redirect(
         302,
         `/auth/connexion?next=${encodeURIComponent(url.pathname + url.search)}`

@@ -63,35 +63,9 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
 }
 
 export function getToken() {
-  if (!browser) {
-    return null;
-  }
-
-  return Cookies.get(TOKEN_KEY) ?? null;
-}
-
-export function setToken(newToken: string) {
-  if (!browser) {
-    return;
-  }
-
-  Cookies.set(TOKEN_KEY, newToken, {
-    path: "/",
-    sameSite: "Lax",
-    secure: true,
-  });
-}
-
-export function removeToken() {
-  if (!browser) {
-    return;
-  }
-
-  Cookies.remove(TOKEN_KEY, {
-    path: "/",
-    secure: true,
-    domain: window.location.hostname,
-  });
+  // The token is stored in an httponly cookie and is not readable by JS.
+  // Server-side code reads it via event.cookies; client-side code goes through the /api proxy.
+  return null;
 }
 
 export function isAuthenticated() {
@@ -121,36 +95,21 @@ export async function refreshUserInfo() {
   }
 }
 
-export function disconnect() {
+export async function disconnect() {
   if (browser) {
+    try {
+      await fetch("/auth/logout", { method: "POST" });
+    } catch {
+      // Poursuivre la déconnexion même si la requête échoue.
+    }
+    Cookies.remove(AUTH_STATE_KEY, { path: "/" });
     setUserInfo(null);
-    removeToken();
     try {
       localStorage.clear();
     } catch {
       // Même en cas d'accès refusé, on poursuit la déconnexion.
     }
   }
-}
-
-function migrateTokenFromLocalStorageToCookie(
-  authTokenFromCookie: string | null
-) {
-  if (!authTokenFromCookie) {
-    try {
-      const lsToken = localStorage.getItem(TOKEN_KEY);
-      if (lsToken) {
-        setToken(lsToken);
-        localStorage.removeItem(TOKEN_KEY);
-        return lsToken;
-      }
-    } catch {
-      // Certains contextes navigateur interdisent localStorage
-      // (iframe sandboxée, mode privacy strict, etc.).
-    }
-  }
-
-  return authTokenFromCookie;
 }
 
 export async function validateCredsAndFillUserInfo() {

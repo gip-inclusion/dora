@@ -3,7 +3,6 @@
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
-  import { getToken } from "$lib/utils/auth";
   import { addUserSchema } from "$lib/validation/schemas/dashboard";
   import ConfirmationModal from "./modal-confirmation.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
@@ -73,7 +72,6 @@
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
-        Authorization: `Token ${getToken()}`,
       },
     });
   }

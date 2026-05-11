@@ -14,7 +14,6 @@
   import * as v from "$lib/validation/schema-utils";
   import { structureSchema } from "$lib/validation/schemas/structure";
   import { formErrors } from "$lib/validation/validation";
-  import { getToken } from "$lib/utils/auth";
   import type { Establishment, Structure } from "$lib/types";
   import { logException } from "$lib/utils/logger";
 
@@ -66,8 +65,6 @@
       headers: {
         Accept: "application/json; version=1.0",
         "Content-Type": "application/json",
-
-        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         siret: validatedData.siret,

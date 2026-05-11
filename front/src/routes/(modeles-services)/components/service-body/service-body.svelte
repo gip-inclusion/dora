@@ -7,7 +7,7 @@
   import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
   import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { getToken, userInfo } from "$lib/utils/auth";
+  import { isAuthenticated, userInfo } from "$lib/utils/auth";
   import { isServiceRecentlyPublished } from "$lib/utils/service";
   import { trackMobilisation } from "$lib/utils/stats";
 
@@ -90,7 +90,7 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (getToken()) {
+    } else if (isAuthenticated()) {
       handleTrackMobilisation();
     }
   }

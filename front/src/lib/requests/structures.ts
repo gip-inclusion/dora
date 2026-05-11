@@ -1,5 +1,4 @@
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import type {
   PutativeStructureMember,
@@ -98,8 +97,6 @@ export function createStructure(structure) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -114,8 +111,6 @@ export function modifyStructure(structure) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -163,7 +158,6 @@ export async function deleteMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -188,7 +182,6 @@ export async function resendInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -213,7 +206,6 @@ export async function cancelInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -238,7 +230,6 @@ export async function acceptMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -263,7 +254,6 @@ export async function rejectMembershipRequest(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
