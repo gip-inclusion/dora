@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: views_from_funded_services
+    description: >
+      Liste les vues reçues par les services financés. Le modèle inclut uniquement les vues d'utilisateurs connectés qui ne sont ni staff, ni managers, ni membres
+      de structure, ni administrateurs de structure. Seuls les services avec un label de financement non nul sont inclus.
+
+      Chaque ligne correspond à un événement de vue d'un service financé.
+
+    columns:
+      - name: event_id
+        description: Identifiant unique de l'événement de vue.
+        tests:
+          - not_null
+          - unique
+
+      - name: event_date
+        description: Date de l'événement de vue.
+
+      - name: service_id
+        description: Identifiant unique du service consulté.
+        tests:
+          - not_null
+
+      - name: service_name
+        description: Nom du service consulté.
+          - not_null
+
+      - name: service_status
+        description: Statut du service au moment de la vue.
+
+      - name: structure_name
+        description: Nom de la structure associée au service consulté.
+
+      - name: funding_label
+        description: Label de financement associé au service.
+        tests:
+          - not_null
+
+  - name: number_of_views_by_funded_service
+    description: >
+      Compte le nombre de vues reçues par chaque service financé. Le modèle inclut uniquement les vues d'utilisateurs connectés qui ne sont ni staff, ni managers, ni
+      membres de structure, ni administrateurs de structure.
+      Seuls les services avec un label de financement non nul sont inclus.
+
+    columns:
+      - name: service_id
+        description: Identifiant unique du service.
+        tests:
+          - not_null
+          - unique
+
+      - name: service_name
+        description: Nom du service.
+
+      - name: service_status
+        description: Statut actuel du service.
+
+      - name: structure_name
+        description: Nom de la structure associée au service.
+
+      - name: funding_label
+        description: Label de financement associé au service.
+        tests:
+          - not_null
+
+      - name: number_of_views
+        description: >
+          Nombre d'événements de vue distincts enregistrés pour le service, après exclusion du staff, des managers, des membres de structure et des administrateurs de
+          structure.
+        tests:
+          - not_null
