@@ -62,14 +62,10 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
   invalidateServicesOptionsCache();
 }
 
-export function getToken() {
-  // The token is stored in an httponly cookie and is not readable by JS.
-  // Server-side code reads it via event.cookies; client-side code goes through the /api proxy.
-  return null;
-}
-
 export function isAuthenticated() {
-  if (!browser) return false;
+  if (!browser) {
+    return false;
+  }
   return !!Cookies.get(AUTH_STATE_KEY);
 }
 
@@ -116,25 +112,20 @@ export async function validateCredsAndFillUserInfo() {
   setUserInfo(null);
 
   const authenticated = browser && isAuthenticated();
-  console.debug("[auth] isAuthenticated:", authenticated);
 
   if (authenticated) {
     try {
       const result = await getUserInfo();
-      console.debug("[auth] user-info status:", result.status);
       if (result.status === 200) {
         const info = await result.json();
-        console.debug("[auth] user-info OK:", info.email);
         setUserInfo(info);
         userPreferencesSet([...info.structures, ...info.pendingStructures]);
       } else if (result.status === 401 || result.status === 403) {
-        console.debug("[auth] user-info unauthorized, disconnecting");
         disconnect();
       } else {
         log("Unexpected status code", { result });
       }
     } catch (err) {
-      console.debug("[auth] user-info fetch error:", err);
       logException(err);
     }
   }
