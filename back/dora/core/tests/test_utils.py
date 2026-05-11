@@ -4,12 +4,10 @@ from unittest.mock import Mock, patch
 
 import pytest
 from django.contrib.gis.geos import Point
-from django.http import HttpResponse
-from django.test import override_settings
 
 from dora.core import utils
 from dora.core.constants import WGS84
-from dora.core.utils import address_to_one_line, set_auth_token_cookie
+from dora.core.utils import address_to_one_line
 
 
 class UtilsTestCase(TestCase):
@@ -226,17 +224,4 @@ def test_address_to_one_line(address1, address2, postal_code, city, expected):
     assert address_to_one_line(address1, address2, postal_code, city) == expected
 
 
-@override_settings(FRONTEND_URL="https://subdomain.example.com")
-def test_set_auth_token_cookie():
-    """set_auth_token_cookie définit le cookie avec les bons attributs."""
-    response = HttpResponse()
-    token_key = "test-token-key-12345"
 
-    set_auth_token_cookie(response, token_key)
-
-    cookie = response.cookies["token_test"]
-
-    assert (
-        cookie.OutputString()
-        == f"token_test={token_key}; Domain=subdomain.example.com; Path=/; SameSite=Lax; Secure"
-    )

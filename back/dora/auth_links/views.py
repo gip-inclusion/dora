@@ -1,18 +1,20 @@
 import logging
+import uuid
 
 from django.conf import settings
+from django.core.cache import cache
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from itoutils.urls import add_url_params
 from rest_framework.authtoken.models import Token
 from sesame.utils import get_token, get_user
 
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
-from dora.core.utils import set_auth_token_cookie
 from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
@@ -72,10 +74,11 @@ def authenticate_with_link(request, sesame):
             # pour ne pas effectuer le flow de déconnexion OIDC en entier
             request.session[settings.SESAME_SESSION_NAME] = True
 
-            response = HttpResponseRedirect(FRONTEND_PC_CALLBACK_URL)
-            set_auth_token_cookie(response, token.key)
+            # Échange sécurisé via un code à usage unique
+            code = uuid.uuid4().hex
+            cache.set(f"auth_code:{code}", token.key, timeout=60)
 
-            return response
+            return HttpResponseRedirect(add_url_params(FRONTEND_PC_CALLBACK_URL, {"code": code}))
 
     logger.warning(
         "Lien direct invalide ou expiré",

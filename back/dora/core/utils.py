@@ -4,13 +4,10 @@ import logging
 import re
 from dataclasses import dataclass
 from typing import Tuple
-from urllib.parse import urlparse
 
 import requests
-from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.http import Http404
-from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.text import Truncator
 from furl import furl
@@ -150,15 +147,3 @@ def get_category_from_subcategory(subcategory: str) -> str:
     return subcategory.split("--")[0]
 
 
-def set_auth_token_cookie(response: HttpResponse, token_key: str):
-    cookie_kwargs = {
-        "path": "/",
-        "samesite": "Lax",
-        "secure": True,
-        "httponly": False,
-    }
-
-    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
-    cookie_kwargs["domain"] = parsed_frontend_url.hostname
-
-    response.set_cookie(settings.AUTH_COOKIE_NAME, token_key, **cookie_kwargs)
