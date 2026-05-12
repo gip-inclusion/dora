@@ -63,5 +63,5 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   });
 
   const next = url.searchParams.get("next") ?? "/";
-  redirect(302, CANONICAL_URL + next);
+  return redirect(302, CANONICAL_URL + next);
 };
