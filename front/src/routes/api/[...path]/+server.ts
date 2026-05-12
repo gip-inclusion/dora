@@ -19,9 +19,10 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const response = await fetch(targetUrl, {
     method: request.method,
     headers,
-    body: request.method !== "GET" && request.method !== "HEAD"
-      ? await request.arrayBuffer()
-      : undefined,
+    body:
+      request.method !== "GET" && request.method !== "HEAD"
+        ? await request.arrayBuffer()
+        : undefined,
   });
 
   const responseHeaders = new Headers(response.headers);

@@ -222,6 +222,3 @@ class UtilsTestCase(TestCase):
 )
 def test_address_to_one_line(address1, address2, postal_code, city, expected):
     assert address_to_one_line(address1, address2, postal_code, city) == expected
-
-
-

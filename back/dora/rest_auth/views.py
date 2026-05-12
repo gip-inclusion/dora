@@ -1,11 +1,9 @@
 import logging
-import uuid
 
 from django.core.cache import cache
 from django.db import transaction
 from django.http.response import Http404
 from django.utils import timezone
-from django.views.decorators.debug import sensitive_post_parameters
 from itoutils.django.nexus.token import decode_token
 from rest_framework import exceptions, permissions
 from rest_framework.authtoken.models import Token

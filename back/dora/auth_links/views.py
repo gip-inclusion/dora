@@ -78,7 +78,9 @@ def authenticate_with_link(request, sesame):
             code = uuid.uuid4().hex
             cache.set(f"auth_code:{code}", token.key, timeout=60)
 
-            return HttpResponseRedirect(add_url_params(FRONTEND_PC_CALLBACK_URL, {"code": code}))
+            return HttpResponseRedirect(
+                add_url_params(FRONTEND_PC_CALLBACK_URL, {"code": code})
+            )
 
     logger.warning(
         "Lien direct invalide ou expiré",
