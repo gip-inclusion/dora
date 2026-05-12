@@ -1,14 +1,15 @@
 from urllib.parse import parse_qs, urlparse
 
 import pytest
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
 from dora.core.test_utils import make_user
 
 
-def test_oidc_logged_in_sets_cookie_and_handles_next(client):
-    """oidc_logged_in définit le cookie d'authentification et gère le paramètre next."""
+def test_oidc_logged_in_exchanges_code_and_handles_next(client):
+    """oidc_logged_in génère un code d'échange pointant vers le bon token et gère le paramètre next."""
     user = make_user()
     token, _ = Token.objects.get_or_create(user=user)
 
@@ -21,11 +22,13 @@ def test_oidc_logged_in_sets_cookie_and_handles_next(client):
 
     assert response.status_code == 302
 
-    cookie = response.cookies["token_test"]
-    assert cookie.value == token.key
-
     parsed_url = urlparse(response.url)
     query_params = parse_qs(parsed_url.query)
+
+    assert "auth/callback" in response.url
+    code = query_params["code"][0]
+    assert cache.get(f"auth_code:{code}") == token.key
+
     assert query_params["next"][0] == next_url
 
 

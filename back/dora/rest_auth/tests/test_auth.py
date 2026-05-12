@@ -14,7 +14,9 @@ DUMMY_SIRET = "12345678901234"
 class AuthenticationTestCase(APITestCase):
     def test_user_info_query_count(self):
         user = baker.make("users.User", is_valid=True)
-        token = Token.objects.create(user=user)
+        Token.objects.create(user=user)
+
+        self.client.force_authenticate(user=user)
 
         structure = make_structure()
         make_structure_member(user=user, structure=structure, is_admin=True)
@@ -38,7 +40,7 @@ class AuthenticationTestCase(APITestCase):
         saved_search.funding_labels.set([baker.make("FundingLabel")])
 
         with self.assertNumQueries(15):
-            response = self.client.post("/auth/user-info/", {"key": token.key})
+            response = self.client.get("/auth/user-info/")
 
         self.assertEqual(response.status_code, 200)
 
