@@ -8,15 +8,14 @@
   import MailLineBusiness from "svelte-remix/MailLineBusiness.svelte";
   import PrinterLineBusiness from "svelte-remix/PrinterLineBusiness.svelte";
 
-  import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
   import { getToken } from "$lib/utils/auth";
+  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
   import type { Service } from "$lib/types";
 
-  import SharingModal from "../../components/sharing-modal.svelte";
   import ServiceActionButton from "./service-action-button.svelte";
 
   interface Props {
@@ -29,7 +28,6 @@
   const printLabel = "Imprimer";
   const shareLabel = "Partager par e-mail";
 
-  let sharingModalIsOpen = $state(false);
   let linkCopied = $state(false);
 
   function handleCopy() {
@@ -40,10 +38,6 @@
 
   function handlePrint() {
     window.print();
-  }
-
-  function handleShare() {
-    sharingModalIsOpen = true;
   }
 
   function handleBookmark(onBookmark: () => void) {
@@ -59,6 +53,7 @@
   }
 
   let isDI = $derived("source" in service);
+  let shareMailtoHref = $derived(buildServiceShareMailto(service, isDI));
 </script>
 
 <div class="gap-s16 flex">
@@ -89,7 +84,7 @@
     {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={shareLabel} onclick={handleShare}>
+    <ServiceActionButton ariaLabel={shareLabel} href={shareMailtoHref}>
       <MailLineBusiness />
     </ServiceActionButton>
     {#snippet content()}
@@ -119,7 +114,3 @@
     {/snippet}
   </Bookmarkable>
 </div>
-
-{#if browser}
-  <SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
-{/if}

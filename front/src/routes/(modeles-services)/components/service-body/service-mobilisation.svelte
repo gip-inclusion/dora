@@ -8,8 +8,7 @@
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
   import { getToken } from "$lib/utils/auth";
-
-  import SharingModal from "../sharing-modal.svelte";
+  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
 
   interface Props {
     service: Service;
@@ -36,8 +35,9 @@
     service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
   );
 
-  let sharingModalIsOpen = $state(false);
   let contactBoxOpen = $state(false);
+
+  let shareMailtoHref = $derived(buildServiceShareMailto(service, isDI));
 
   function handleShowContactClick() {
     if (!getToken() && !service.isContactInfoPublic) {
@@ -56,13 +56,7 @@
   function handleExternalFormClick(externalUrl: string) {
     onTrackMobilisation(externalUrl);
   }
-
-  function handleShareClick() {
-    sharingModalIsOpen = true;
-  }
 </script>
-
-<SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
 
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
@@ -106,8 +100,8 @@
     />
   {/if}
 
-  <Button
-    onclick={handleShareClick}
+  <LinkButton
+    to={shareMailtoHref}
     extraClass="bg-france-blue! text-white border! border-white! hover:bg-magenta-cta! hover:border-france-blue!"
     label="Partager cette fiche"
     wFull
