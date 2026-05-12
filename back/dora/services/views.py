@@ -34,7 +34,7 @@ from dora.core.utils import TRUTHY_VALUES
 from dora.data_inclusion.mappings import map_service
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
-from dora.services.emails import send_service_feedback_email, send_service_sharing_email
+from dora.services.emails import send_service_feedback_email
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     AccessCondition,
@@ -216,19 +216,6 @@ class ServiceViewSet(
         )
 
         return Response(status=201)
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path="share",
-        permission_classes=[permissions.AllowAny],
-    )
-    def share(self, request, slug):
-        service = self.get_object()
-        serialized_service = ServiceSerializer(
-            service, context={"request": request}
-        ).data
-        return share_service(request, serialized_service, is_di=False)
 
     def perform_create(self, serializer):
         pub_date = None
@@ -812,26 +799,6 @@ def service_di(request, di_id: str):
 
 
 @api_view(["POST"])
-@permission_classes([permissions.AllowAny])
-def share_di_service(
-    request,
-    di_id: str,
-):
-    di_client = data_inclusion.di_client_factory()
-
-    try:
-        raw_service = di_client.retrieve_service(id=di_id)
-    except requests.ConnectionError:
-        return Response(status=status.HTTP_502_BAD_GATEWAY)
-
-    if raw_service is None:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    serialized_service = map_service(raw_service, request.user.is_authenticated)
-    return share_service(request, serialized_service, is_di=True)
-
-
-@api_view(["POST"])
 @permission_classes([permissions.IsAuthenticated])
 def post_di_service_feedback(request, di_id: str):
     # Vérification de la validité des données
@@ -975,29 +942,3 @@ def search(request):
             "services": sorted_services,
         }
     )
-
-
-def share_service(request, service, is_di):
-    class ShareSerializer(serializers.Serializer):
-        sender_name = serializers.CharField(required=False)
-        recipient_email = serializers.EmailField()
-        recipient_kind = serializers.ChoiceField(
-            choices=["beneficiary", "professional"]
-        )
-
-    serializer = ShareSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    d = serializer.validated_data
-    if not d.get("sender_name") and not request.user.is_authenticated:
-        raise serializers.ValidationError(
-            "Le champ `sender_name` est requis pour les soumissions anonymes"
-        )
-    sender_name = (
-        request.user.get_full_name()
-        if request.user.is_authenticated
-        else d["sender_name"]
-    )
-    send_service_sharing_email(
-        service, sender_name, d["recipient_email"], d["recipient_kind"], is_di
-    )
-    return Response(status=201)
