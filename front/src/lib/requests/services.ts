@@ -59,7 +59,7 @@ export async function getServiceDI(
   fetchFunction = fetch
 ): Promise<Service> {
   const userHash = getAnalyticsId();
-  const url = new URL(`/services-di/${diId}/`, getApiURL());
+  const url = `${getApiURL()}/services-di/${diId}/`;
 
   const response = await fetchData<Service>(
     url.toString(),
@@ -86,14 +86,14 @@ export async function getPublishedServices({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/services/", getApiURL());
-
-  url.searchParams.append("published", "1");
-  url.searchParams.append("page_size", pageSize.toString());
-  url.searchParams.append("page", page.toString());
+  const params = new URLSearchParams();
+  params.append("published", "1");
+  params.append("page_size", pageSize.toString());
+  params.append("page", page.toString());
+  const url = `${getApiURL()}/services/?${params}`;
 
   return (
-    await fetchData<{ count: number; results: ShortService[] }>(url.toString())
+    await fetchData<{ count: number; results: ShortService[] }>(url)
   ).data;
 }
 

@@ -67,16 +67,14 @@ export async function getActiveStructures({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/structures/", getApiURL());
-
-  url.searchParams.append("active", "1");
-  url.searchParams.append("page_size", pageSize.toString());
-  url.searchParams.append("page", page.toString());
+  const params = new URLSearchParams();
+  params.append("active", "1");
+  params.append("page_size", pageSize.toString());
+  params.append("page", page.toString());
+  const url = `${getApiURL()}/structures/?${params}`;
 
   return (
-    await fetchData<{ count: number; results: ShortStructure[] }>(
-      url.toString()
-    )
+    await fetchData<{ count: number; results: ShortStructure[] }>(url)
   ).data;
 }
 

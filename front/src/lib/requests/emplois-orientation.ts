@@ -12,8 +12,9 @@ export function handleEmploisOrientation({
   opJwt,
   token,
 }: EmploisOrientationParams) {
-  const apiUrl = new URL(`/orientations/emplois/${serviceSlug}/`, getApiURL());
-  apiUrl.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+  const params = new URLSearchParams();
+  params.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+  const apiUrl = `${getApiURL()}/orientations/emplois/${serviceSlug}/?${params}`;
 
   return fetch(apiUrl, {
     headers: {

@@ -16,7 +16,7 @@ export type NexusMenuStatus = {
 };
 
 export const getNexusMenuStatus = async () => {
-  const url = new URL("/nexus/menu-status/", getApiURL());
+  const url = `${getApiURL()}/nexus/menu-status/`;
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -51,9 +51,10 @@ export const getOrientationBeneficiaryInfo = async (
   serviceSlug: string,
   fetchFunction = fetch
 ) => {
-  const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
-  url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
-  url.searchParams.set("service_slug", serviceSlug);
+  const params = new URLSearchParams();
+  params.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+  params.set("service_slug", serviceSlug);
+  const url = `${getApiURL()}/orientations/emplois/beneficiary-info/?${params}`;
 
   const response = await fetchFunction(url, {
     method: "GET",

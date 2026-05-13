@@ -34,9 +34,10 @@
   }: Props = $props();
 
   async function searchAdminDivision(query) {
-    const url = new URL("/admin-division-search/", getApiURL());
-    url.searchParams.set("type", searchType);
-    url.searchParams.set("q", query);
+    const params = new URLSearchParams();
+    params.set("type", searchType);
+    params.set("q", query);
+    const url = `${getApiURL()}/admin-division-search/?${params}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.map((result) => {

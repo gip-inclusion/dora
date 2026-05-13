@@ -9,7 +9,7 @@ export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
     return;
   }
 
-  const autoLoginUrl = new URL("/nexus/auto-login-in/", getApiURL());
+  const autoLoginUrl = `${getApiURL()}/nexus/auto-login-in/`;
 
   url.searchParams.delete("auto_login");
 
