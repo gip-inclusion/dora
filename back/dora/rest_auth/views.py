@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
 from django.http.response import Http404
@@ -67,7 +68,7 @@ def token_exchange(request):
         raise Http404
 
     cache.delete(cache_key)
-    return Response({"token": token_key})
+    return Response({"token": token_key, "expires_in": settings.SESSION_COOKIE_AGE})
 
 
 def _create_structure(establishment, user, reason):

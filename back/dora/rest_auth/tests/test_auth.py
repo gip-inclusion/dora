@@ -1,6 +1,7 @@
 import uuid
 from unittest.mock import patch
 
+from django.conf import settings
 from django.core.cache import cache
 from model_bakery import baker
 from rest_framework.authtoken.models import Token
@@ -270,6 +271,7 @@ class TokenExchangeTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["token"], token.key)
+        self.assertEqual(response.data["expires_in"], settings.SESSION_COOKIE_AGE)
 
     def test_token_exchange_consumes_code(self):
         """Le code ne peut être utilisé qu'une seule fois."""
