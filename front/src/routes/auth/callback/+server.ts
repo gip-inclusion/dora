@@ -2,6 +2,7 @@ import { redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { API_URL, CANONICAL_URL, INTERNAL_API_URL } from "$lib/env";
 import { TOKEN_KEY, AUTH_STATE_KEY } from "$lib/utils/auth";
+import { log, logException } from "$lib/utils/logger";
 
 // 12 heures — doit correspondre à SESSION_COOKIE_AGE côté backend
 const SESSION_COOKIE_AGE = 60 * 60 * 12;
@@ -10,7 +11,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   const code = url.searchParams.get("code");
 
   if (!code) {
-    return new Response("callback error: no code in URL", { status: 400 });
+    return new Response("Erreur d'authentification : paramètre code manquant", { status: 400 });
   }
 
   const apiBase = INTERNAL_API_URL || API_URL;
@@ -26,18 +27,18 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       body: JSON.stringify({ code }),
     });
   } catch (err) {
-    return new Response(
-      `callback error: fetch to ${tokenExchangeUrl} failed — ${err}`,
-      { status: 502 }
-    );
+    logException(err);
+    return new Response("Erreur d'authentification : service d'échange de token indisponible", {
+      status: 502,
+    });
   }
 
   if (!response.ok) {
     const body = await response.text();
-    return new Response(
-      `callback error: token-exchange returned ${response.status}\nURL: ${tokenExchangeUrl}\nBody: ${body}`,
-      { status: 502 }
-    );
+    log(`callback error: token-exchange returned ${response.status}`, { body });
+    return new Response("Erreur d'authentification : l'échange de token a échoué", {
+      status: 502,
+    });
   }
 
   const data = await response.json();
