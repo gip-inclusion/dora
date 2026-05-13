@@ -1,5 +1,7 @@
+import uuid
 from unittest.mock import patch
 
+from django.core.cache import cache
 from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -251,3 +253,54 @@ class AuthenticationTestCase(APITestCase):
                 structure__siret=request_siret, user=user
             ).exists()
         )
+
+
+class TokenExchangeTestCase(APITestCase):
+    def _make_code(self, token_key):
+        code = uuid.uuid4().hex
+        cache.set(f"auth_code:{code}", token_key, timeout=60)
+        return code
+
+    def test_token_exchange_returns_token(self):
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = self._make_code(token.key)
+
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["token"], token.key)
+
+    def test_token_exchange_consumes_code(self):
+        """Le code ne peut être utilisé qu'une seule fois."""
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = self._make_code(token.key)
+
+        self.client.post("/auth/token-exchange/", {"code": code})
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_token_exchange_invalid_code(self):
+        response = self.client.post(
+            "/auth/token-exchange/", {"code": "code-inexistant"}
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_token_exchange_missing_code(self):
+        response = self.client.post("/auth/token-exchange/", {})
+        self.assertEqual(response.status_code, 400)
+
+    def test_token_exchange_race_condition(self):
+        """Un second appel concurrent est rejeté grâce au verrou cache.add."""
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = self._make_code(token.key)
+
+        # Simuler une requête concurrente qui a déjà posé le verrou
+        cache.add(f"auth_code:{code}:claimed", "1", timeout=60)
+
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 404)

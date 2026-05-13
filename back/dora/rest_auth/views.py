@@ -59,6 +59,9 @@ def token_exchange(request):
         raise ValidationError("code requis")
 
     cache_key = f"auth_code:{code}"
+    if not cache.add(f"{cache_key}:claimed", "1", timeout=60):
+        raise Http404
+
     token_key = cache.get(cache_key)
     if not token_key:
         raise Http404
