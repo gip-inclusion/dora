@@ -8,7 +8,6 @@ import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
-import { toast } from "@zerodevx/svelte-toast";
 
 export const TOKEN_KEY =
   import.meta.env.VITE_ENVIRONMENT === "production"
