@@ -8,7 +8,10 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const { request, cookies, params } = event;
   const token = cookies.get(TOKEN_KEY);
 
-  const targetUrl = `${apiBase}/${params.path}/${event.url.search}`;
+  const normalizedPath = params.path?.endsWith("/")
+    ? params.path
+    : `${params.path}/`;
+  const targetUrl = `${apiBase}/${normalizedPath}${event.url.search}`;
 
   const headers = new Headers(request.headers);
   headers.delete("host");
