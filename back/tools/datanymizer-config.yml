@@ -57,6 +57,16 @@ tables:
           format: "9^########"
 
   - name: orientations_orientation
+    rule_order:
+      - beneficiary_first_name
+      - beneficiary_last_name
+      - beneficiary_email
+      - referent_first_name
+      - referent_last_name
+      - referent_email
+      - les_emplois_prescriber_first_name
+      - les_emplois_prescriber_last_name
+      - les_emplois_prescriber_email
     rules:
       query_id:
         uuid: ~
@@ -70,17 +80,15 @@ tables:
         template:
           format: ""
       beneficiary_first_name:
-        template:
-          format: ""
+        first_name: {}
       beneficiary_last_name:
-        template:
-          format: ""
+        last_name: {}
       beneficiary_phone:
-        template:
-          format: ""
+        phone:
+          format: "9^########"
       beneficiary_email:
         template:
-          format: ""
+          format: "test+{{ final.beneficiary_first_name | slugify }}.{{ final.beneficiary_last_name | slugify }}.{{ prev.id }}@dora.inclusion.beta.gouv.fr"
       beneficiary_other_contact_method:
         template:
           format: ""
@@ -91,45 +99,36 @@ tables:
         template:
           format: ""
       referent_first_name:
-        template:
-          format: ""
+        first_name: {}
       referent_last_name:
-        template:
-          format: ""
+        last_name: {}
       referent_phone:
-        template:
-          format: ""
+        phone:
+          format: "9^########"
       referent_email:
         template:
-          format: ""
+          format: "test+{{ final.referent_first_name | slugify }}.{{ final.referent_last_name | slugify }}.{{ prev.id }}@dora.inclusion.beta.gouv.fr"
       di_contact_name:
-        template:
-          format: ""
+        person_name: {}
       di_contact_email:
         template:
           format: ""
       di_contact_phone:
-        template:
-          format: ""
+        phone:
+          format: "9^########"
+      les_emplois_prescriber_first_name:
+        first_name: {}
+      les_emplois_prescriber_last_name:
+        last_name: {}
+      les_emplois_prescriber_phone:
+        phone:
+          format: "9^########"
       les_emplois_prescriber_email:
         template:
-          format: ""
-      les_emplois_prescriber_first_name:
-        template:
-          format: ""
-      les_emplois_prescriber_last_name:
-        template:
-          format: ""
-      les_emplois_prescriber_phone:
-        template:
-          format: ""
+          format: "test+{{ final.les_emplois_prescriber_first_name | slugify }}.{{ final.les_emplois_prescriber_last_name | slugify }}.{{ prev.id }}@dora.inclusion.beta.gouv.fr"
       orientation_reasons:
         template:
           format: ""
-      is_anonymized:
-        template:
-          format: "t"
-
 filter:
   except:
     # Schéma PostGIS (non applicatif).
