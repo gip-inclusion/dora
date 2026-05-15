@@ -8,6 +8,7 @@ import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
+import { toast } from "@zerodevx/svelte-toast";
 
 export const TOKEN_KEY =
   import.meta.env.VITE_ENVIRONMENT === "production"
@@ -91,19 +92,19 @@ export async function refreshUserInfo() {
   }
 }
 
-export async function disconnect() {
+export async function disconnect(): Promise<void> {
   if (browser) {
     try {
       await fetch("/auth/logout", { method: "POST" });
-    } catch {
-      // Poursuivre la déconnexion même si la requête échoue.
+    } catch (err) {
+      logException(err);
+      return;
     }
-    Cookies.remove(AUTH_STATE_KEY, { path: "/" });
     setUserInfo(null);
     try {
       localStorage.clear();
-    } catch {
-      // Même en cas d'accès refusé, on poursuit la déconnexion.
+    } catch (err) {
+      logException(err);
     }
   }
 }
@@ -121,7 +122,7 @@ export async function validateCredsAndFillUserInfo() {
         setUserInfo(info);
         userPreferencesSet([...info.structures, ...info.pendingStructures]);
       } else if (result.status === 401 || result.status === 403) {
-        disconnect();
+        await disconnect();
       } else {
         log("Unexpected status code", { result });
       }
