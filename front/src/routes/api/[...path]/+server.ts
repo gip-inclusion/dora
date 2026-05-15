@@ -21,9 +21,10 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
     headers,
     body:
       request.method !== "GET" && request.method !== "HEAD"
-        ? await request.arrayBuffer()
+        ? request.body
         : undefined,
-  });
+    duplex: "half",
+  } as RequestInit);
 
   const responseHeaders = new Headers(response.headers);
   responseHeaders.delete("set-cookie");
