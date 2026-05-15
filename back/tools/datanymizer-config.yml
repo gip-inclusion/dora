@@ -64,9 +64,6 @@ tables:
       - referent_first_name
       - referent_last_name
       - referent_email
-      - les_emplois_prescriber_first_name
-      - les_emplois_prescriber_last_name
-      - les_emplois_prescriber_email
     rules:
       query_id:
         uuid: ~
@@ -116,19 +113,26 @@ tables:
       di_contact_phone:
         phone:
           format: "9^########"
-      les_emplois_prescriber_first_name:
-        first_name: {}
-      les_emplois_prescriber_last_name:
-        last_name: {}
-      les_emplois_prescriber_phone:
-        phone:
-          format: "9^########"
-      les_emplois_prescriber_email:
-        template:
-          format: "test+{{ final.les_emplois_prescriber_first_name | slugify }}.{{ final.les_emplois_prescriber_last_name | slugify }}.{{ prev.id }}@dora.inclusion.beta.gouv.fr"
       orientation_reasons:
         template:
           format: ""
+
+  - name: orientations_emploisorientationdata
+    rule_order:
+      - prescriber_first_name
+      - prescriber_last_name
+      - prescriber_email
+    rules:
+      prescriber_first_name:
+        first_name: {}
+      prescriber_last_name:
+        last_name: {}
+      prescriber_phone:
+        phone:
+          format: "9^########"
+      prescriber_email:
+        template:
+          format: "test+{{ final.prescriber_first_name | slugify }}.{{ final.prescriber_last_name | slugify }}.{{ prev.orientation_id }}@dora.inclusion.beta.gouv.fr"
 filter:
   except:
     # Schéma PostGIS (non applicatif).

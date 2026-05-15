@@ -138,5 +138,4 @@ class OrientationViewSet(
         serializer.save(
             prescriber=None,
             prescriber_structure=None,
-            is_from_les_emplois=True,
         )

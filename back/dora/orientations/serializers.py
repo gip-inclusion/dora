@@ -1,11 +1,16 @@
 import requests
 from django.core.files.storage import default_storage
+from django.db import transaction
 from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
 
 import dora.data_inclusion.client
 from dora.data_inclusion.mappings import map_service
-from dora.orientations.models import Orientation, OrientationStatus
+from dora.orientations.models import (
+    EmploisOrientationData,
+    Orientation,
+    OrientationStatus,
+)
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -63,9 +68,6 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_contact_phone",
             "di_structure_name",
             "id",
-            "is_from_les_emplois",
-            "les_emplois_beneficiary_id",
-            "les_emplois_structure_id",
             "orientation_reasons",
             "op_jwt",
             "prescriber",
@@ -98,7 +100,8 @@ class OrientationSerializer(serializers.ModelSerializer):
         À la fois les services Dora et DI sont supportés.
 
         Si un JWT des Emplois (`op_jwt`) est fourni à la création, il est décodé et les informations
-        bénéficiaire ainsi que les ID (les_emplois_beneficiary_id, les_emplois_structure_id) sont préremplies.
+        bénéficiaire sont préremplies. Les identifiants Les Emplois (beneficiary_id, structure_id) sont
+        stockés dans `_emplois_data` pour création ultérieure de l'objet EmploisOrientationData.
         """
         # Préremplissage depuis le JWT des Emplois
         op_jwt = orientation.pop("op_jwt", None)
@@ -116,10 +119,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             orientation["beneficiary_france_travail_number"] = claims["beneficiary"][
                 "france_travail_id"
             ]
-            orientation["les_emplois_beneficiary_id"] = claims["beneficiary"]["uid"]
-            orientation["les_emplois_structure_id"] = claims["prescriber"][
-                "organization"
-            ]["uid"]
+            orientation["_emplois_data"] = {
+                "beneficiary_id": claims["beneficiary"]["uid"],
+                "structure_id": claims["prescriber"]["organization"]["uid"],
+            }
 
         # Validation de l'engagement de protection des données
         if not self.instance and not orientation.get("data_protection_commitment"):
@@ -175,6 +178,16 @@ class OrientationSerializer(serializers.ModelSerializer):
                 }
             )
 
+        return orientation
+
+    def create(self, validated_data):
+        emplois_data = validated_data.pop("_emplois_data", None)
+        with transaction.atomic():
+            orientation = super().create(validated_data)
+            if emplois_data:
+                EmploisOrientationData.objects.create(
+                    orientation=orientation, **emplois_data
+                )
         return orientation
 
     def get_service(self, orientation):

@@ -214,53 +214,6 @@ class Orientation(models.Model):
         verbose_name="Orientation anonymisée", default=False
     )
 
-    is_from_les_emplois = models.BooleanField(
-        verbose_name="Orientation venant des Emplois", default=False
-    )
-    les_emplois_beneficiary_id = models.UUIDField(
-        verbose_name="Les Emplois - Identifiant bénéficiaire", blank=True, null=True
-    )
-    les_emplois_structure_id = models.UUIDField(
-        verbose_name="Les Emplois - Identifiant structure", blank=True, null=True
-    )
-    les_emplois_structure_name = models.CharField(
-        verbose_name="Les Emplois - Nom structure",
-        blank=True,
-        null=True,
-        max_length=140,
-    )
-    les_emplois_structure_siret = models.CharField(
-        verbose_name="Les Emplois - SIRET structure",
-        blank=True,
-        null=True,
-        max_length=14,
-        validators=[validate_siret],
-    )
-    les_emplois_prescriber_id = models.UUIDField(
-        verbose_name="Les Emplois - Identifiant prescripteur", blank=True, null=True
-    )
-    les_emplois_prescriber_email = models.EmailField(
-        verbose_name="Les Emplois - Email prescripteur", blank=True, null=True
-    )
-    les_emplois_prescriber_first_name = models.CharField(
-        verbose_name="Les Emplois - Prénom prescripteur",
-        blank=True,
-        null=True,
-        max_length=140,
-    )
-    les_emplois_prescriber_last_name = models.CharField(
-        verbose_name="Les Emplois - Nom prescripteur",
-        blank=True,
-        null=True,
-        max_length=140,
-    )
-    les_emplois_prescriber_phone = models.CharField(
-        verbose_name="Les Emplois - Téléphone prescripteur",
-        blank=True,
-        null=True,
-        max_length=10,
-    )
-
     objects = OrientationQuerySet.as_manager()
 
     class Meta:
@@ -445,6 +398,49 @@ class Orientation(models.Model):
             user,
             f"Orientation passée de {old_status.label} à {status.label}",
         )
+
+
+class EmploisOrientationData(models.Model):
+    """Données Les Emplois associées à une orientation créée via l'API Les Emplois ou depuis un JWT Emplois."""
+
+    orientation = models.OneToOneField(
+        "Orientation",
+        primary_key=True,
+        on_delete=models.CASCADE,
+        related_name="emplois_orientation_data",
+        verbose_name="Orientation",
+    )
+    beneficiary_id = models.UUIDField(verbose_name="Identifiant bénéficiaire")
+    structure_id = models.UUIDField(verbose_name="Identifiant structure")
+    structure_name = models.CharField(
+        verbose_name="Nom structure", max_length=140, blank=True, default=""
+    )
+    structure_siret = models.CharField(
+        verbose_name="SIRET structure",
+        max_length=14,
+        blank=True,
+        default="",
+        validators=[validate_siret],
+    )
+    prescriber_id = models.UUIDField(
+        verbose_name="Identifiant prescripteur", blank=True, null=True
+    )
+    prescriber_email = models.EmailField(
+        verbose_name="Email prescripteur", blank=True, default=""
+    )
+    prescriber_first_name = models.CharField(
+        verbose_name="Prénom prescripteur", max_length=140, blank=True, default=""
+    )
+    prescriber_last_name = models.CharField(
+        verbose_name="Nom prescripteur", max_length=140, blank=True, default=""
+    )
+    prescriber_phone = models.CharField(
+        verbose_name="Téléphone prescripteur", max_length=10, blank=True, default=""
+    )
+
+    class Meta:
+        verbose_name = "Données Les Emplois"
+        verbose_name_plural = "Données Les Emplois"
 
 
 class ContactRecipient(models.TextChoices):

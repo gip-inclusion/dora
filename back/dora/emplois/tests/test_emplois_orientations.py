@@ -5,10 +5,25 @@ from django.urls import reverse
 from model_bakery import baker
 
 from dora.core.test_utils import make_service
-from dora.orientations.models import Orientation, OrientationStatus
+from dora.orientations.models import (
+    Orientation,
+    OrientationStatus,
+)
 
 ORIENTATION_URL = "emplois:orientation-list"
 DEFAULT_DI_SERVICE_ID = "soliguide--svc-1"
+
+EMPLOIS_DATA = {
+    "beneficiary_id": str(uuid.uuid4()),
+    "structure_id": str(uuid.uuid4()),
+    "structure_name": "Mission locale Paris",
+    "structure_siret": "12345678901234",
+    "prescriber_id": str(uuid.uuid4()),
+    "prescriber_email": "prescripteur@example.org",
+    "prescriber_first_name": "Alice",
+    "prescriber_last_name": "Martin",
+    "prescriber_phone": "0142030405",
+}
 
 
 def post_orientation(api_client, payload):
@@ -22,8 +37,7 @@ def post_orientation(api_client, payload):
 @pytest.fixture
 def base_payload():
     return {
-        "les_emplois_structure_id": str(uuid.uuid4()),
-        "les_emplois_beneficiary_id": str(uuid.uuid4()),
+        "emplois_data": dict(EMPLOIS_DATA),
         "beneficiary_first_name": "Boris",
         "beneficiary_last_name": "Baracus",
         "referent_first_name": "Hannibal",
@@ -58,9 +72,8 @@ def test_orientations_create_with_dora_service_resolves_fk(
     )
 
     assert response.status_code == 201, response.data
-    orientation = Orientation.objects.get()
-    assert orientation.is_from_les_emplois is True
-    assert response.data["is_from_les_emplois"] is True
+    orientation = Orientation.objects.get(service_id=service.id)
+    assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service_id == service.id
     assert orientation.di_service_id == ""
     assert response.data["di_service_id"] == f"dora--{service.id}"
@@ -76,9 +89,8 @@ def test_orientations_create_with_non_dora_service_keeps_di_id(
     )
 
     assert response.status_code == 201, response.data
-    orientation = Orientation.objects.get()
-    assert orientation.is_from_les_emplois is True
-    assert response.data["is_from_les_emplois"] is True
+    orientation = Orientation.objects.get(di_service_id="soliguide--svc-42")
+    assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service is None
     assert orientation.di_service_id == "soliguide--svc-42"
     assert response.data["di_service_id"] == "soliguide--svc-42"
@@ -112,30 +124,70 @@ def test_orientations_create_with_unresolvable_dora_service(
 
 
 @pytest.mark.parametrize(
-    "missing_field",
+    "parent_field,missing_field",
     [
-        "beneficiary_first_name",
-        "beneficiary_last_name",
-        "referent_first_name",
-        "referent_last_name",
-        "referent_email",
-        "di_service_id",
+        (None, "beneficiary_first_name"),
+        (None, "beneficiary_last_name"),
+        (None, "referent_first_name"),
+        (None, "referent_last_name"),
+        (None, "referent_email"),
+        (None, "di_service_id"),
+        ("emplois_data", "beneficiary_id"),
+        ("emplois_data", "structure_id"),
     ],
 )
 def test_orientations_create_requires_mandatory_fields(
-    emplois_user, api_client, base_payload, missing_field
+    emplois_user, api_client, base_payload, parent_field, missing_field
 ):
     payload = {**base_payload, "di_service_id": DEFAULT_DI_SERVICE_ID}
-    payload.pop(missing_field)
+    if parent_field is None:
+        payload.pop(missing_field)
+    else:
+        payload[parent_field] = {
+            k: v for k, v in payload[parent_field].items() if k != missing_field
+        }
 
     response = post_orientation(api_client, payload)
     assert response.status_code == 400
-    assert missing_field in response.data
+    if parent_field is None:
+        assert missing_field in response.data
+    else:
+        assert parent_field in response.data
+        assert missing_field in response.data[parent_field]
+
+
+@pytest.mark.parametrize(
+    "missing_emplois_field",
+    [
+        "beneficiary_id",
+        "structure_id",
+        "structure_name",
+        "structure_siret",
+        "prescriber_id",
+        "prescriber_email",
+        "prescriber_first_name",
+        "prescriber_last_name",
+        "prescriber_phone",
+    ],
+)
+def test_orientations_create_requires_all_emplois_data_fields(
+    emplois_user, api_client, base_payload, missing_emplois_field
+):
+    payload = {
+        **base_payload,
+        "di_service_id": DEFAULT_DI_SERVICE_ID,
+        "emplois_data": {
+            k: v for k, v in EMPLOIS_DATA.items() if k != missing_emplois_field
+        },
+    }
+
+    response = post_orientation(api_client, payload)
+    assert response.status_code == 400
+    assert "emplois_data" in response.data
+    assert missing_emplois_field in response.data["emplois_data"]
 
 
 def test_orientations_create_with_all_fields(emplois_user, api_client, base_payload):
-    prescriber_id = uuid.uuid4()
-
     response = post_orientation(
         api_client,
         {
@@ -152,44 +204,34 @@ def test_orientations_create_with_all_fields(emplois_user, api_client, base_payl
             "requirements": ["Permis B"],
             "referent_phone": "0506070809",
             "orientation_reasons": "Besoin d'accompagnement vers l'emploi",
-            "les_emplois_structure_name": "Mission locale Paris",
-            "les_emplois_structure_siret": "12345678901234",
-            "les_emplois_prescriber_id": str(prescriber_id),
-            "les_emplois_prescriber_email": "prescripteur@example.org",
-            "les_emplois_prescriber_first_name": "Alice",
-            "les_emplois_prescriber_last_name": "Martin",
-            "les_emplois_prescriber_phone": "0142030405",
         },
     )
 
     assert response.status_code == 201, response.data
-    orientation = Orientation.objects.get()
+    orientation = Orientation.objects.get(beneficiary_email="boris@example.org")
     assert orientation.beneficiary_email == "boris@example.org"
     assert orientation.beneficiary_phone == "0102030405"
     assert orientation.beneficiary_contact_preferences == ["EMAIL", "TELEPHONE"]
     assert orientation.situation == ["RSA"]
     assert orientation.requirements == ["Permis B"]
     assert orientation.orientation_reasons == "Besoin d'accompagnement vers l'emploi"
-    assert orientation.is_from_les_emplois is True
-    assert orientation.les_emplois_structure_name == "Mission locale Paris"
-    assert orientation.les_emplois_structure_siret == "12345678901234"
-    assert orientation.les_emplois_prescriber_id == prescriber_id
-    assert orientation.les_emplois_prescriber_email == "prescripteur@example.org"
-    assert orientation.les_emplois_prescriber_first_name == "Alice"
-    assert orientation.les_emplois_prescriber_last_name == "Martin"
-    assert orientation.les_emplois_prescriber_phone == "0142030405"
     assert orientation.prescriber is None
     assert orientation.prescriber_structure is None
     assert orientation.status == OrientationStatus.PENDING
-    assert orientation.les_emplois_structure_id == uuid.UUID(
-        base_payload["les_emplois_structure_id"]
-    )
-    assert orientation.les_emplois_beneficiary_id == uuid.UUID(
-        base_payload["les_emplois_beneficiary_id"]
-    )
+
+    data = orientation.emplois_orientation_data
+    assert data.structure_name == EMPLOIS_DATA["structure_name"]
+    assert data.structure_siret == EMPLOIS_DATA["structure_siret"]
+    assert data.prescriber_id == uuid.UUID(EMPLOIS_DATA["prescriber_id"])
+    assert data.prescriber_email == EMPLOIS_DATA["prescriber_email"]
+    assert data.prescriber_first_name == EMPLOIS_DATA["prescriber_first_name"]
+    assert data.prescriber_last_name == EMPLOIS_DATA["prescriber_last_name"]
+    assert data.prescriber_phone == EMPLOIS_DATA["prescriber_phone"]
+    assert data.structure_id == uuid.UUID(EMPLOIS_DATA["structure_id"])
+    assert data.beneficiary_id == uuid.UUID(EMPLOIS_DATA["beneficiary_id"])
 
 
-def test_orientations_create_rejects_invalid_les_emplois_structure_siret(
+def test_orientations_create_rejects_invalid_structure_siret(
     emplois_user, api_client, base_payload
 ):
     response = post_orientation(
@@ -197,9 +239,10 @@ def test_orientations_create_rejects_invalid_les_emplois_structure_siret(
         {
             **base_payload,
             "di_service_id": DEFAULT_DI_SERVICE_ID,
-            "les_emplois_structure_siret": "abc",
+            "emplois_data": {**EMPLOIS_DATA, "structure_siret": "abc"},
         },
     )
 
     assert response.status_code == 400
-    assert "les_emplois_structure_siret" in response.data
+    assert "emplois_data" in response.data
+    assert "structure_siret" in response.data["emplois_data"]

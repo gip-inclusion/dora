@@ -3,7 +3,27 @@ from django.contrib import admin, messages
 from dora.core.models import LogItem
 
 from .checks import check_orientation, format_warnings
-from .models import Orientation, SentContactEmail
+from .models import EmploisOrientationData, Orientation, SentContactEmail
+
+
+class EmploisOrientationDataInline(admin.StackedInline):
+    model = EmploisOrientationData
+    can_delete = False
+    readonly_fields = (
+        "beneficiary_id",
+        "structure_id",
+        "structure_name",
+        "structure_siret",
+        "prescriber_id",
+        "prescriber_email",
+        "prescriber_first_name",
+        "prescriber_last_name",
+        "prescriber_phone",
+    )
+    extra = 0
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 class SentContactEmailInline(admin.TabularInline):
@@ -52,16 +72,6 @@ class OrientationAdmin(admin.ModelAdmin):
         "di_contact_name",
         "di_contact_phone",
         "di_structure_name",
-        "is_from_les_emplois",
-        "les_emplois_beneficiary_id",
-        "les_emplois_structure_id",
-        "les_emplois_structure_name",
-        "les_emplois_structure_siret",
-        "les_emplois_prescriber_id",
-        "les_emplois_prescriber_email",
-        "les_emplois_prescriber_first_name",
-        "les_emplois_prescriber_last_name",
-        "les_emplois_prescriber_phone",
         "data_protection_commitment",
         "query_id",
         "query_expires_at",
@@ -79,7 +89,7 @@ class OrientationAdmin(admin.ModelAdmin):
     date_hierarchy = "creation_date"
     ordering = ("-id",)
     filter_horizontal = ("rejection_reasons",)
-    inlines = [SentContactEmailInline, LogItemInline]
+    inlines = [EmploisOrientationDataInline, SentContactEmailInline, LogItemInline]
 
     @admin.display(description="e-mail prescripteur")
     def prescriber_email(self, obj) -> str:
@@ -120,12 +130,10 @@ class OrientationAdmin(admin.ModelAdmin):
     def get_fieldsets(self, request, obj=None):
         (_, opts) = super().get_fieldsets(request, obj)[0]
         fields = opts["fields"]
-        other, di_fields, les_emplois_fields = [], [], []
+        other, di_fields = [], []
         for name in fields:
             if name.startswith("di_"):
                 di_fields.append(name)
-            elif name.startswith("les_emplois_"):
-                les_emplois_fields.append(name)
             else:
                 other.append(name)
         out = []
@@ -133,8 +141,6 @@ class OrientationAdmin(admin.ModelAdmin):
             out.append((None, {"fields": tuple(other)}))
         if di_fields:
             out.append(("D·I", {"fields": tuple(di_fields)}))
-        if les_emplois_fields:
-            out.append(("Les Emplois", {"fields": tuple(les_emplois_fields)}))
         return tuple(out)
 
 

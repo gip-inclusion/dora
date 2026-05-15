@@ -1,8 +1,11 @@
 import uuid
 
+from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound
 
+from dora.core.validators import validate_siret
+from dora.orientations.models import EmploisOrientationData
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
 from dora.structures.models import DisabledDoraFormDIStructure, Structure
@@ -83,6 +86,20 @@ class DisabledDoraFormDIStructureSerializer(serializers.ModelSerializer):
         fields = ["source", "structure_id"]
 
 
+class EmploisOrientationDataSerializer(serializers.Serializer):
+    """Sérialiseur pour les données d'orientation complémentaires des Emplois."""
+
+    beneficiary_id = serializers.UUIDField()
+    structure_id = serializers.UUIDField()
+    structure_name = serializers.CharField(max_length=140)
+    structure_siret = serializers.CharField(max_length=14, validators=[validate_siret])
+    prescriber_id = serializers.UUIDField()
+    prescriber_email = serializers.EmailField()
+    prescriber_first_name = serializers.CharField(max_length=140)
+    prescriber_last_name = serializers.CharField(max_length=140)
+    prescriber_phone = serializers.CharField(max_length=10)
+
+
 class EmploisOrientationSerializer(OrientationSerializer):
     """API Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
 
@@ -94,6 +111,8 @@ class EmploisOrientationSerializer(OrientationSerializer):
         required=False,
         allow_null=True,
     )
+
+    emplois_data = EmploisOrientationDataSerializer(write_only=True)
 
     class Meta(OrientationSerializer.Meta):
         fields = [
@@ -116,16 +135,7 @@ class EmploisOrientationSerializer(OrientationSerializer):
             "di_contact_name",
             "di_contact_phone",
             "di_structure_name",
-            "is_from_les_emplois",
-            "les_emplois_beneficiary_id",
-            "les_emplois_structure_id",
-            "les_emplois_structure_name",
-            "les_emplois_structure_siret",
-            "les_emplois_prescriber_id",
-            "les_emplois_prescriber_email",
-            "les_emplois_prescriber_first_name",
-            "les_emplois_prescriber_last_name",
-            "les_emplois_prescriber_phone",
+            "emplois_data",
             "orientation_reasons",
             "referent_email",
             "referent_first_name",
@@ -138,7 +148,6 @@ class EmploisOrientationSerializer(OrientationSerializer):
         ]
         extra_kwargs = {
             "beneficiary_attachments": {"write_only": True},
-            "is_from_les_emplois": {"read_only": True},
             "di_service_id": {
                 "required": True,
                 "allow_blank": False,
@@ -152,6 +161,15 @@ class EmploisOrientationSerializer(OrientationSerializer):
                 },
             },
         }
+
+    def create(self, validated_data):
+        emplois_data = validated_data.pop("emplois_data")
+        with transaction.atomic():
+            orientation = super().create(validated_data)
+            EmploisOrientationData.objects.create(
+                orientation=orientation, **emplois_data
+            )
+        return orientation
 
     def validate(self, attrs):
         di_service_id = attrs["di_service_id"]
