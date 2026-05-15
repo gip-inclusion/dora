@@ -73,9 +73,8 @@ export async function getActiveStructures({
   params.append("page", page.toString());
   const url = `${getApiURL()}/structures/?${params}`;
 
-  return (
-    await fetchData<{ count: number; results: ShortStructure[] }>(url)
-  ).data;
+  return (await fetchData<{ count: number; results: ShortStructure[] }>(url))
+    .data;
 }
 
 export async function getStructure(

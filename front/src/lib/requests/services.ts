@@ -92,9 +92,8 @@ export async function getPublishedServices({
   params.append("page", page.toString());
   const url = `${getApiURL()}/services/?${params}`;
 
-  return (
-    await fetchData<{ count: number; results: ShortService[] }>(url)
-  ).data;
+  return (await fetchData<{ count: number; results: ShortService[] }>(url))
+    .data;
 }
 
 export async function getModel(
