@@ -17,6 +17,7 @@
   import type { Service } from "$lib/types";
 
   import ServiceActionButton from "./service-action-button.svelte";
+  import { trackMatomoEvent } from "$lib/utils/matomo";
 
   interface Props {
     service: Service;
@@ -54,6 +55,14 @@
 
   let isDI = $derived("source" in service);
   let shareMailtoHref = $derived(buildServiceShareMailto(service, isDI));
+
+  function handleShareClick() {
+    trackMatomoEvent({
+      category: "Page Service",
+      action: "Clic Bouton Partager cette Fiche",
+      name: $page.url.pathname,
+    });
+  }
 </script>
 
 <div class="gap-s16 flex">
@@ -84,7 +93,11 @@
     {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={shareLabel} href={shareMailtoHref}>
+    <ServiceActionButton
+      ariaLabel={shareLabel}
+      href={shareMailtoHref}
+      onclick={handleShareClick}
+    >
       <MailLineBusiness />
     </ServiceActionButton>
     {#snippet content()}

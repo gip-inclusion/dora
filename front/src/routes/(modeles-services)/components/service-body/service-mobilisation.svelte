@@ -9,6 +9,7 @@
   import type { Service } from "$lib/types";
   import { getToken } from "$lib/utils/auth";
   import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
+  import { trackMatomoEvent } from "$lib/utils/matomo";
 
   interface Props {
     service: Service;
@@ -56,6 +57,14 @@
   function handleExternalFormClick(externalUrl: string) {
     onTrackMobilisation(externalUrl);
   }
+
+  function handleShareClick() {
+    trackMatomoEvent({
+      category: "Page Service",
+      action: "Clic Bouton Partager cette Fiche",
+      name: $page.url.pathname,
+    });
+  }
 </script>
 
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
@@ -101,6 +110,7 @@
   {/if}
 
   <LinkButton
+    onclick={handleShareClick}
     to={shareMailtoHref}
     extraClass="bg-france-blue! text-white border! border-white! hover:bg-magenta-cta! hover:border-france-blue!"
     label="Partager cette fiche"
