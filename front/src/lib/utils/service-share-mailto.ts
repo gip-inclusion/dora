@@ -55,12 +55,12 @@ export function buildServiceShareMailto(
     service.coachOrientationModesOther
   );
 
-  const subject = `On vous a recommandé le service ${service.name} sur DORA`;
+  const subject = `On vous a recommandé une solution solidaire`;
 
   const lines: string[] = [
     "Bonjour,",
     "",
-    "On vous a recommandé le service suivant :",
+    "On vous a recommandé le service suivant :",
     "",
     service.structureInfo.name,
     service.name,
@@ -70,18 +70,18 @@ export function buildServiceShareMailto(
   }
   lines.push(
     "",
-    "Le public concerné :",
+    "Le public concerné :",
     formatBulletList(service.publicsDisplay, "Tous publics"),
     "",
-    "Comment mobiliser ce service :",
+    "Comment mobiliser ce service :",
     "",
-    "Si vous êtes un particulier :",
+    "Si vous êtes un particulier :",
     formatBulletList(beneficiaryModes),
     "",
-    "Si vous êtes un professionnel :",
+    "Si vous êtes un professionnel :",
     formatBulletList(professionalModes),
     "",
-    `Consulter le service : ${serviceUrl}`,
+    `Consulter le service : ${serviceUrl}`,
     "",
     "À très bientôt,",
     "L’équipe DORA",
