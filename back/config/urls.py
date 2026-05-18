@@ -70,10 +70,6 @@ private_api_patterns = [
     path("stats/event/", dora.stats.views.log_event),
     path("services-di/<str:di_id>/", dora.services.views.service_di),
     path(
-        "services-di/<str:di_id>/share/",
-        dora.services.views.share_di_service,
-    ),
-    path(
         "services-di/<str:di_id>/feedback/",
         dora.services.views.post_di_service_feedback,
     ),

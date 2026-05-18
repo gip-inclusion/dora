@@ -10,6 +10,5 @@ class Tag(enum.StrEnum):
     SERVICE = "service"
     DI_SERVICE = "di_service"
     ORIENTATION = "orientation"
-    SHARE = "share"
     MOBILISATION = "mobilisation"
     DI_MOBILISATION = "di_mobilisation"

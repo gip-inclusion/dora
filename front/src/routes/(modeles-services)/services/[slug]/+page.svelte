@@ -39,6 +39,7 @@
     Boolean(
       browser &&
       service &&
+      $userInfo &&
       !isMemberOrPotentialMemberOfStructure($userInfo, service.structure)
     )
   );

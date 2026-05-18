@@ -23,7 +23,6 @@ from dora.stats.models import (
     MobilisationEvent,
     OrientationView,
     SearchView,
-    ServiceShare,
     ServiceView,
     StructureInfosView,
     StructureView,
@@ -217,46 +216,6 @@ def log_event(request):
                 di_service_name=request.data.get("di_service_name", ""),
             )
             if not is_di:
-                event.categories.set(service.categories.all())
-                event.subcategories.set(service.subcategories.all())
-
-        case Tag.SHARE:
-            recipient_email = request.data.get("recipient_email", "")
-            recipient_kind = request.data.get("recipient_kind", "")
-            is_di = not service
-            if is_di:
-                event = ServiceShare.objects.create(
-                    recipient_email=recipient_email,
-                    recipient_kind=recipient_kind,
-                    is_structure_member=False,
-                    is_structure_admin=False,
-                    is_di=True,
-                    di_structure_name=request.data.get("di_structure_name", ""),
-                    di_service_id=request.data.get("di_service_id", ""),
-                    di_service_name=request.data.get("di_service_name", ""),
-                    structure_department=request.data.get(
-                        "di_structure_department", ""
-                    ),
-                    structure_source=request.data.get("di_source", ""),
-                    search_view=search_view,
-                    search_view_id=search_view_id,
-                    **common_analytics_data,
-                )
-
-                cats_values = request.data.get("di_categories", [])
-                subcats_values = request.data.get("di_subcategories", [])
-                categories, subcategories = get_categories(cats_values, subcats_values)
-                event.categories.set(categories)
-                event.subcategories.set(subcategories)
-            else:
-                event = ServiceShare.objects.create(
-                    recipient_email=recipient_email,
-                    recipient_kind=recipient_kind,
-                    is_di=False,
-                    **common_analytics_data,
-                    **structure_data,
-                    **service_data,
-                )
                 event.categories.set(service.categories.all())
                 event.subcategories.set(service.subcategories.all())
 

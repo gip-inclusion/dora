@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { slide } from "svelte/transition";
 
   import illustration from "$lib/assets/illustrations/Validation_Orientation_Envoyee.webp";
@@ -13,7 +12,7 @@
 
   import type { Service } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
-  import { userInfo } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
 
@@ -66,8 +65,6 @@
   let formPage: 1 | 2 = $state(1);
   let selectedReasons: string[] = $state([]);
   let otherReason = $state("");
-  let name = $state("");
-  let email = $state("");
   let details = $state("");
 
   function resetState() {
@@ -76,8 +73,6 @@
     formPage = 1;
     selectedReasons = [];
     otherReason = "";
-    name = $userInfo ? `${$userInfo.firstName} ${$userInfo.lastName}` : "";
-    email = $userInfo ? $userInfo.email : "";
     details = "";
   }
 
@@ -91,8 +86,6 @@
   let formData = $derived({
     selectedReasons,
     otherReason,
-    name,
-    email,
     details,
   });
 
@@ -120,20 +113,6 @@
   };
 
   const feedbackSchemaPage2: v.Schema = {
-    name: {
-      label: "Votre nom",
-      default: "",
-      rules: [v.isString(), v.maxStrLength(140)],
-      post: [v.trim],
-      required: true,
-    },
-    email: {
-      label: "Courriel",
-      default: "",
-      rules: [v.isEmail(), v.maxStrLength(254)],
-      post: [v.lower, v.trim],
-      required: true,
-    },
     details: {
       label: "Précisez votre signalement",
       default: "",
@@ -146,13 +125,6 @@
     ...feedbackSchemaPage1,
     ...feedbackSchemaPage2,
   };
-
-  onMount(() => {
-    if ($userInfo) {
-      name = `${$userInfo.firstName} ${$userInfo.lastName}`;
-      email = $userInfo.email;
-    }
-  });
 
   function handleClose() {
     resetState();
@@ -179,13 +151,12 @@
           ...(isOtherReasonSelected(selectedReasons) ? [otherReason] : []),
         ],
         notifySupport: isNotifySupportReasonSelected(selectedReasons),
-        name,
-        email,
         details,
       }),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
+        Authorization: `Token ${getToken()}`,
       },
     });
   }
@@ -229,8 +200,6 @@
             </div>
           {:else if formPage === 2}
             <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
-              <BasicInputField id="name" bind:value={name} vertical />
-              <BasicInputField id="email" bind:value={email} vertical />
               <TextareaField
                 id="details"
                 bind:value={details}
