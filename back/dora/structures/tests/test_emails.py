@@ -30,7 +30,7 @@ def test_send_orphan_structure_notification():
     assert f"/auth/invitation?structure={structure.slug}" in mail.outbox[0].body
     assert "mtm_campaign=MailsTransactionnels" in mail.outbox[0].body
     assert "mtm_kwd=InvitationStructuresOrphelines" in mail.outbox[0].body
-    assert "aide.dora.inclusion.beta.gouv.fr" in mail.outbox[0].body
+    assert "aide.dora.inclusion.gouv.fr" in mail.outbox[0].body
     assert (
         "app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil"
         in mail.outbox[0].body
@@ -57,7 +57,7 @@ def test_send_first_admin_notification_for_pending_invitation():
         )
         assert structure.name in mail.outbox[idx].body
         assert putative_member.email in mail.outbox[idx].body
-        assert "aide.dora.inclusion.beta.gouv.fr" in mail.outbox[idx].body
+        assert "aide.dora.inclusion.gouv.fr" in mail.outbox[idx].body
         assert (
             "gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm"
             in mail.outbox[idx].body
@@ -113,7 +113,7 @@ def test_send_admin_self_invited_users_notification():
             urlencode({"next": f"/structures/{structure.slug}/collaborateurs"})
             in mail.outbox[idx].body
         )
-        assert "aide.dora.inclusion.beta.gouv.fr" in mail.outbox[idx].body
+        assert "aide.dora.inclusion.gouv.fr" in mail.outbox[idx].body
         assert (
             "gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm"
             in mail.outbox[idx].body
@@ -147,7 +147,7 @@ def test_send_structure_activation_notification_to_old_admins():
         )
         assert "mtm_campaign=MailsTransactionnels" in mail.outbox[idx].body
         assert "mtm_kwd=RelanceActivationService" in mail.outbox[idx].body
-        assert "aide.dora.inclusion.beta.gouv.fr" in mail.outbox[idx].body
+        assert "aide.dora.inclusion.gouv.fr" in mail.outbox[idx].body
         assert (
             "app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil"
             in mail.outbox[idx].body
