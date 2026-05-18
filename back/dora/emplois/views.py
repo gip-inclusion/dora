@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db.models import CharField, Prefetch, Value
-from rest_framework import mixins, permissions, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
@@ -133,6 +133,12 @@ class OrientationViewSet(
     permission_classes = (OrientationAPIPermission,)
     serializer_class = EmploisOrientationSerializer
     renderer_classes = (JSONRenderer,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.initial_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         serializer.save(

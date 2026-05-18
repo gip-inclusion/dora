@@ -67,35 +67,29 @@ def test_orientations_create_with_dora_service_resolves_fk(
     emplois_user, api_client, base_payload
 ):
     service = make_service()
-    response = post_orientation(
-        api_client, {**base_payload, "di_service_id": f"dora--{service.id}"}
-    )
+    payload = {**base_payload, "di_service_id": f"dora--{service.id}"}
+    response = post_orientation(api_client, payload)
 
     assert response.status_code == 201, response.data
+    assert response.data == payload
     orientation = Orientation.objects.get(service_id=service.id)
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service_id == service.id
     assert orientation.di_service_id == ""
-    assert response.data["di_service_id"] == f"dora--{service.id}"
-    assert response.data["service"]["is_di"] is False
-    assert response.data["service"]["slug"] == service.slug
 
 
 def test_orientations_create_with_non_dora_service_keeps_di_id(
     emplois_user, api_client, base_payload
 ):
-    response = post_orientation(
-        api_client, {**base_payload, "di_service_id": "soliguide--svc-42"}
-    )
+    payload = {**base_payload, "di_service_id": "soliguide--svc-42"}
+    response = post_orientation(api_client, payload)
 
     assert response.status_code == 201, response.data
+    assert response.data == payload
     orientation = Orientation.objects.get(di_service_id="soliguide--svc-42")
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service is None
     assert orientation.di_service_id == "soliguide--svc-42"
-    assert response.data["di_service_id"] == "soliguide--svc-42"
-    assert response.data["service"]["is_di"] is True
-    assert response.data["service"]["slug"] == "di--soliguide--svc-42"
 
 
 @pytest.mark.parametrize("di_service_id", ["no-separator", ""])
@@ -188,26 +182,25 @@ def test_orientations_create_requires_all_emplois_data_fields(
 
 
 def test_orientations_create_with_all_fields(emplois_user, api_client, base_payload):
-    response = post_orientation(
-        api_client,
-        {
-            **base_payload,
-            "di_service_id": DEFAULT_DI_SERVICE_ID,
-            "beneficiary_email": "boris@example.org",
-            "beneficiary_phone": "0102030405",
-            "beneficiary_other_contact_method": "Discord: boris#1234",
-            "beneficiary_contact_preferences": ["EMAIL", "TELEPHONE"],
-            "beneficiary_availability": "2026-05-15",
-            "beneficiary_france_travail_number": "12345678901",
-            "situation": ["RSA"],
-            "situation_other": "En logement précaire",
-            "requirements": ["Permis B"],
-            "referent_phone": "0506070809",
-            "orientation_reasons": "Besoin d'accompagnement vers l'emploi",
-        },
-    )
+    payload = {
+        **base_payload,
+        "di_service_id": DEFAULT_DI_SERVICE_ID,
+        "beneficiary_email": "boris@example.org",
+        "beneficiary_phone": "0102030405",
+        "beneficiary_other_contact_method": "Discord: boris#1234",
+        "beneficiary_contact_preferences": ["EMAIL", "TELEPHONE"],
+        "beneficiary_availability": "2026-05-15",
+        "beneficiary_france_travail_number": "12345678901",
+        "situation": ["RSA"],
+        "situation_other": "En logement précaire",
+        "requirements": ["Permis B"],
+        "referent_phone": "0506070809",
+        "orientation_reasons": "Besoin d'accompagnement vers l'emploi",
+    }
+    response = post_orientation(api_client, payload)
 
     assert response.status_code == 201, response.data
+    assert response.data == payload
     orientation = Orientation.objects.get(beneficiary_email="boris@example.org")
     assert orientation.beneficiary_email == "boris@example.org"
     assert orientation.beneficiary_phone == "0102030405"
