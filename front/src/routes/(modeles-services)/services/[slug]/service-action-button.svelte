@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  interface Props {
+  type Props = {
     ariaLabel: string;
-    onclick?: (event: MouseEvent) => void;
-    href?: string;
     children?: Snippet;
-  }
+  } & (
+    | { href: string; onclick?: (event: MouseEvent) => void }
+    | { href?: never; onclick: (event: MouseEvent) => void }
+  );
 
   let { ariaLabel, onclick, href, children }: Props = $props();
 
