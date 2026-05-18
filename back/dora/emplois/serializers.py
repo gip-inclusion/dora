@@ -8,7 +8,7 @@ from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
-from dora.structures.models import DisabledDoraFormDIStructure, Structure
+from dora.structures.models import DisabledDoraFormDIStructure
 
 
 class ReferenceDataSerializer(serializers.Serializer):
@@ -102,15 +102,6 @@ class EmploisOrientationDataSerializer(serializers.Serializer):
 
 class EmploisOrientationSerializer(OrientationSerializer):
     """API Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
-
-    prescriber_structure_slug = serializers.SlugRelatedField(
-        source="prescriber_structure",
-        slug_field="slug",
-        queryset=Structure.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
 
     emplois_data = EmploisOrientationDataSerializer(write_only=True)
 
