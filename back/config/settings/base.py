@@ -512,7 +512,7 @@ EMAIL_USE_TLS = True
 EMAIL_DOMAIN = os.getenv("EMAIL_DOMAIN")
 SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL")
 
-SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
+SUPPORT_LINK = "https://aide.dora.inclusion.gouv.fr"
 
 # Orientations :
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
