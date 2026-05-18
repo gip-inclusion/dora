@@ -54,30 +54,30 @@ models:
           - unique
           - not_null
   - name: int_mobilisation_to_orientation
-    description: 
-      Cette vue associe à chaque mobilisation la première orientation qui en suit si il y en a une. 
+    description:
+      Cette vue associe à chaque mobilisation la première orientation qui en suit si il y en a une.
       Une orientation suit une mobilisation si elle a le même user_id, est faite dans l'heure après la mobilisation,
       et concerne le même service (slug)
     columns:
       - name: mobilisation_id
         description: identifiant de la mobilisation
-        tests: 
+        tests:
           - unique
-          - not_null  
+          - not_null
       - name: user_id
         description: identifiant de l'utilisateur à l'origine de la prescription
-        tests: 
+        tests:
           - not_null
       - name: first_following_orientation_id
         description: id de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
       - name: mobilisation_date
         description: date de la mobilisation
-        tests: 
+        tests:
           - not_null
       - name: first_following_orientation_date
         description: date de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
       - name: delay
-        description: temps passé en entre la mobilisation et l'orientation. 
+        description: temps passé en entre la mobilisation et l'orientation.
   - name: int_services_models
     description: |
       Services créés à partir de modèles.
@@ -89,10 +89,10 @@ models:
     config:
       indexes:
         - columns: [mobilisation_id]
-    columns: 
+    columns:
       - name: orientation_id
         description: identifiant de l'orientation
-        tests: 
+        tests:
           - unique
           - not_null
       - name: mobilisation_id
@@ -114,7 +114,7 @@ models:
   - name: int_mobilisationevent_user
     description: |
       Événements de mobilisation des utilisateurs.
-    columns: 
+    columns:
       - name: event_id
         description: |
           Identifiant de l'événement de mobilisation
@@ -122,7 +122,7 @@ models:
           - unique
           - not_null
       - name: user_id
-        tests: 
+        tests:
           - not_null
   - name: int_orientation_user_service
     description: |
@@ -130,14 +130,14 @@ models:
     config:
       indexes:
         - columns: [user_id, orientation_creation_date, service_slug]
-    columns:  
-      - name: orientation_id 
+    columns:
+      - name: orientation_id
         description: |
           Identifiant de l'orientation
         tests:
           - unique
           - not_null
-  - name: int_users 
+  - name: int_users
     description: |
       Vue contenant les informations sur les utilisateurs.
   - name: int_users_with_iMer
@@ -205,3 +205,27 @@ models:
   - name: int_services_outside_structure_department
     description: |
       Liste des services rattaché à un département différent de la structure.
+
+  - name: int_user_departments
+    description: >
+      Modèle intermédiaire qui associe chaque utilisateur à ses départements.
+
+      Le modèle contient une ligne par couple utilisateur / département. Les utilisateurs sans
+      département renseigné ne sont pas présents dans cette table.
+
+    columns:
+      - name: user_id
+        description: Identifiant de l'utilisateur.
+        tests:
+          - not_null
+
+      - name: department
+        description: Code du département associé à l'utilisateur.
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - user_id
+            - department
