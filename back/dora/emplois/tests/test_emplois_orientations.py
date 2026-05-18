@@ -43,6 +43,7 @@ def base_payload():
         "referent_first_name": "Hannibal",
         "referent_last_name": "Smith",
         "referent_email": "hannibal@example.org",
+        "data_protection_commitment": True,
     }
 
 
@@ -90,6 +91,26 @@ def test_orientations_create_with_non_dora_service_keeps_di_id(
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service is None
     assert orientation.di_service_id == "soliguide--svc-42"
+
+
+@pytest.mark.parametrize(
+    "include_field,value",
+    [(False, None), (True, False)],
+    ids=["missing", "false"],
+)
+def test_orientations_create_requires_data_protection_commitment(
+    emplois_user, api_client, base_payload, include_field, value
+):
+    payload = {**base_payload, "di_service_id": DEFAULT_DI_SERVICE_ID}
+    payload.pop("data_protection_commitment", None)
+    if include_field:
+        payload["data_protection_commitment"] = value
+
+    response = post_orientation(api_client, payload)
+
+    assert response.status_code == 400
+    assert "data_protection_commitment" in response.data
+    assert Orientation.objects.count() == 0
 
 
 @pytest.mark.parametrize("di_service_id", ["no-separator", ""])

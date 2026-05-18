@@ -163,6 +163,15 @@ class EmploisOrientationSerializer(OrientationSerializer):
         return orientation
 
     def validate(self, attrs):
+        # Validation de l'engagement de protection des données
+        if not self.instance and not attrs.get("data_protection_commitment"):
+            raise serializers.ValidationError(
+                {
+                    "data_protection_commitment": "Vous devez accepter l’engagement de protection des données."
+                }
+            )
+
+        # Validation de l'identifiant de service DI
         di_service_id = attrs["di_service_id"]
         if "--" not in di_service_id:
             raise serializers.ValidationError(
