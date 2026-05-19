@@ -1,6 +1,6 @@
 dbt-core==1.8.8
 dbt-postgres==1.8.2
-sqlfluff==3.2.5
+sqlfluff==4.2.0
 sqlfluff-templater-dbt==3.2.5
 certifi==2025.8.3
 charset-normalizer==3.4.3
