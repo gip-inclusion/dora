@@ -32,7 +32,7 @@ def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
     csv_file.write_text(
         "\n".join(
             [
-                "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public",
+                "modele_slug,structure_siret_or_slug,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public",
                 f"{service_model.slug},{structure.siret},referent@email.com,{funding_label.value},Test Person,0123456789,,,,,,city,",
             ]
         )
@@ -57,8 +57,10 @@ def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
 class ImportServicesTestCase(TestCase):
     def setUp(self):
         self.importing_user = baker.make("users.User")
-        self.csv_headers = "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public"
-        self.structure = baker.make("Structure", siret="12345678901234")
+        self.csv_headers = "modele_slug,structure_siret_or_slug,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public"
+        self.structure = baker.make(
+            "Structure", siret="12345678901234", slug="ma-structure"
+        )
 
         self.service_model = baker.make(
             "Service",
@@ -148,10 +150,10 @@ class ImportServicesTestCase(TestCase):
             Service.objects.filter(contact_email="referent@email.com").exists()
         )
 
-    def test_missing_siret(self):
+    def test_missing_siret_or_slug(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},,referent@email.com,{self.funding_label.value},,,,,,,,,"
+            f"{self.service_model.slug},,referent@email.com,{self.funding_label.value},,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -161,12 +163,31 @@ class ImportServicesTestCase(TestCase):
         )
 
         self.assertEqual(result["created_count"], 0)
-        self.assertEqual(result["errors"][0], "[2] SIRET manquant pour la structure.")
+        self.assertEqual(
+            result["errors"][0], "[2] SIRET ou slug de la structure manquant."
+        )
 
-    def test_invalid_structure_siret(self):
+    def test_import_with_structure_slug(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},'invalid-siret',referent@email.com,{self.funding_label.value},,,,,,,,,"
+            f"{self.service_model.slug},{self.structure.slug},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+        self.assertEqual(created_service.structure, self.structure)
+
+    def test_invalid_structure_slug(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},invalid-slug,referent@email.com,{self.funding_label.value},,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -178,7 +199,40 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "[2] Structure avec le SIRET 'invalid-siret' introuvable.",
+            '[2] Structure avec le SIRET ou le slug "invalid-slug" introuvable.',
+        )
+
+    def test_missing_structure_siret_or_slug_column(self):
+        headers_without_structure = "modele_slug,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public"
+        csv_content = (
+            f"{headers_without_structure}\n"
+            f"{self.service_model.slug},referent@email.com,{self.funding_label.value},,,,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertIn("structure_siret_or_slug", result["missing_headers"])
+
+    def test_invalid_structure_siret(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},99999999999999,referent@email.com,{self.funding_label.value},,,,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            '[2] Structure avec le SIRET ou le slug "99999999999999" introuvable.',
         )
 
     def test_invalid_service_model_slug(self):
@@ -699,7 +753,7 @@ class ImportServicesTestCase(TestCase):
                 "contact_email": "referent@email.com",
                 "idx": 2,
                 "model_slug": "test-service-model",
-                "siret": "12345678901234",
+                "structure_siret_or_slug": self.structure.siret,
             },
         )
 
@@ -728,8 +782,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(
             result["errors"][0],
             f'[2] Le même service avec le modèle "{self.service_model.slug}", le référent "referent@email.com" '
-            f"et la même adresse existe déjà pour la structure "
-            f'dont le Siret est "{self.structure.siret}".',
+            f'et la même adresse existe déjà pour la structure "{self.structure.siret}".',
         )
         self.assertEqual(len(result["duplicated_services"]), 0)
 
@@ -785,7 +838,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(created_service.source, existing_source)
 
     def test_missing_headers(self):
-        missing_headers = "modele_slug,structure_siret,contact_email,diffusion_zone_type,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement"
+        missing_headers = "modele_slug,structure_siret_or_slug,contact_email,diffusion_zone_type,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement"
         csv_content = (
             f"{missing_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"

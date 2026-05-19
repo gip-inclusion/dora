@@ -6,7 +6,7 @@
       
       Traitement de la ligne 2 :
     ''',
-    "Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.",
+    "Création d'un nouveau service pour la structure '12345678901234'.",
     '✅ Service créé.',
   ])
 # ---
@@ -34,7 +34,7 @@
       
       Traitement de la ligne 2 :
     ''',
-    "Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.",
+    "Création d'un nouveau service pour la structure '12345678901234'.",
     '✅ Service créé.',
   ])
 # ---

@@ -313,7 +313,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                         title_prefix,
                         format_html_join(
                             mark_safe("<br/>"),
-                            '• [{idx}] SIRET {siret} - il existe déjà un service avec le modèle {model_slug} et le courriel "{contact_email}"',
+                            '• [{idx}] Structure "{structure_siret_or_slug}" - il existe déjà un service avec le modèle {model_slug} et le courriel "{contact_email}"',
                             duplicated_services,
                         ),
                     ),
