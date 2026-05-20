@@ -6,6 +6,7 @@
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
+  import { deleteFile } from "$lib/requests/upload";
 
   interface Props {
     id: string;
@@ -39,8 +40,12 @@
     fileKeys = newFiles;
   }
 
-  function handleRemove(fileKey: string) {
-    updateFiles(localFiles.filter((key) => key !== fileKey));
+  async function handleRemove(fileKey: string) {
+    const isFileDeleted = await deleteFile(fileKey);
+
+    if (isFileDeleted) {
+      updateFiles(localFiles.filter((key) => key !== fileKey));
+    }
   }
 
   function clearInput() {

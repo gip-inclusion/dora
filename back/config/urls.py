@@ -94,6 +94,7 @@ private_api_patterns = [
     path("structures-options/", dora.structures.views.options),
     path("upload/<slug:structure_slug>/<str:filename>/", dora.core.views.upload),
     path("safe-upload/<str:filename>/", dora.core.views.safe_upload),
+    path("delete-upload/<path:filename>/", dora.core.views.delete_upload),
     path("admin/", admin.site.urls),
     path("ping/", dora.core.views.ping),
     path("sentry-debug/", dora.core.views.trigger_error),
