@@ -203,14 +203,14 @@ class ImportServicesViewTestCase(APITestCase):
             "duplicated_services": [
                 {
                     "idx": 2,
-                    "siret": "1234",
+                    "structure_siret_or_slug": "1234",
                     "name": "Service A",
                     "model_slug": "slug_1",
                     "contact_email": "a@a.com",
                 },
                 {
                     "idx": 3,
-                    "siret": "3456",
+                    "structure_siret_or_slug": "3456",
                     "model_slug": "slug_2",
                     "name": "Service B",
                     "contact_email": "b@b.com",
@@ -231,8 +231,8 @@ class ImportServicesViewTestCase(APITestCase):
                 "level": "warning",
                 "message": mark_safe(
                     "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
-                    '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
-                    '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
+                    '• [2] Structure "1234" - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
+                    '• [3] Structure "3456" - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
                 ),
             },
         )
@@ -289,14 +289,14 @@ class ImportServicesViewTestCase(APITestCase):
             "duplicated_services": [
                 {
                     "idx": 2,
-                    "siret": "1234",
+                    "structure_siret_or_slug": "1234",
                     "name": "Service A",
                     "model_slug": "slug_1",
                     "contact_email": "a@a.com",
                 },
                 {
                     "idx": 3,
-                    "siret": "3456",
+                    "structure_siret_or_slug": "3456",
                     "name": "Service B",
                     "model_slug": "slug_2",
                     "contact_email": "b@b.com",
@@ -334,8 +334,8 @@ class ImportServicesViewTestCase(APITestCase):
                 "level": "warning",
                 "message": mark_safe(
                     "<b>Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
-                    '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
-                    '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
+                    '• [2] Structure "1234" - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
+                    '• [3] Structure "3456" - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
                 ),
             },
         )
@@ -367,14 +367,14 @@ class ImportServicesViewTestCase(APITestCase):
             "duplicated_services": [
                 {
                     "idx": 2,
-                    "siret": "1234",
+                    "structure_siret_or_slug": "1234",
                     "name": "Service A",
                     "model_slug": "slug_1",
                     "contact_email": "a@a.com",
                 },
                 {
                     "idx": 3,
-                    "siret": "3456",
+                    "structure_siret_or_slug": "3456",
                     "name": "Service B",
                     "model_slug": "slug_2",
                     "contact_email": "b@b.com",
@@ -405,8 +405,8 @@ class ImportServicesViewTestCase(APITestCase):
                 "level": "warning",
                 "message": mark_safe(
                     "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
-                    '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
-                    '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
+                    '• [2] Structure "1234" - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
+                    '• [3] Structure "3456" - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
                 ),
             },
         )

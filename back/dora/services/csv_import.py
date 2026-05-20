@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
 
 from django.db import IntegrityError, transaction
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.utils import timezone
 
 from dora.core.utils import get_geo_data, skip_csv_lines
@@ -91,9 +91,11 @@ class ImportServicesHelper:
 
                         data = self._extract_data_from_line(line)
 
-                        # Vérification que le SIRET de la structure est bien renseigné
-                        if not data.structure_siret:
-                            error_msg = f"[{idx}] SIRET manquant pour la structure."
+                        # Vérification que l'identifiant de la structure est fourni
+                        if not data.structure_siret_or_slug:
+                            error_msg = (
+                                f"[{idx}] SIRET ou slug de la structure manquant."
+                            )
                             logger.warning("❌ %s", error_msg)
                             self.errors.append(error_msg)
                             continue
@@ -101,10 +103,11 @@ class ImportServicesHelper:
                         # Vérification que la structure existe bien en BDD
                         try:
                             structure = Structure.objects.get(
-                                siret=data.structure_siret
+                                Q(siret=data.structure_siret_or_slug)
+                                | Q(slug=data.structure_siret_or_slug)
                             )
                         except Structure.DoesNotExist:
-                            error_msg = f"[{idx}] Structure avec le SIRET {data.structure_siret} introuvable."
+                            error_msg = f'[{idx}] Structure avec le SIRET ou le slug "{data.structure_siret_or_slug}" introuvable.'
                             logger.warning("❌ %s", error_msg)
                             self.errors.append(error_msg)
                             continue
@@ -122,15 +125,15 @@ class ImportServicesHelper:
                             continue
 
                         should_service_be_created = (
-                            self._check_if_service_is_duplicated(data, idx)
+                            self._check_if_service_is_duplicated(data, idx, structure)
                         )
 
                         if not should_service_be_created:
                             continue
 
                         logger.info(
-                            "Création d'un nouveau service pour la structure avec le SIRET '%s'.",
-                            data.structure_siret,
+                            "Création d'un nouveau service pour la structure '%s'.",
+                            data.structure_siret_or_slug,
                         )
                         new_service = instantiate_service_from_model(
                             model, structure, self.importing_user
@@ -236,7 +239,9 @@ class ImportServicesHelper:
     def _extract_data_from_line(self, line: Dict[str, str]) -> SimpleNamespace:
         data = SimpleNamespace(
             modele_slug=line.get("modele_slug").strip(),
-            structure_siret=line.get("structure_siret").replace(" ", "").strip(),
+            structure_siret_or_slug=line.get("structure_siret_or_slug")
+            .replace(" ", "")
+            .strip(),
             contact_name=line.get("contact_name").strip(),
             contact_email=line.get("contact_email").strip(),
             contact_phone=line.get("contact_phone").replace(" ", "").strip(),
@@ -322,9 +327,11 @@ class ImportServicesHelper:
         )
         self.source = source
 
-    def _check_if_service_is_duplicated(self, data: SimpleNamespace, idx: int) -> bool:
+    def _check_if_service_is_duplicated(
+        self, data: SimpleNamespace, idx: int, structure
+    ) -> bool:
         base_filter = {
-            "structure__siret": data.structure_siret,
+            "structure": structure,
             "model__slug": data.modele_slug,
             "contact_email": data.contact_email,
         }
@@ -343,20 +350,16 @@ class ImportServicesHelper:
         if has_location_data and Service.objects.filter(**full_filter).exists():
             error_msg = (
                 f'[{idx}] Le même service avec le modèle "{data.modele_slug}", le référent "{data.contact_email}" '
-                f"et la même adresse existe déjà pour la structure "
-                f'dont le Siret est "{data.structure_siret}".'
+                f'et la même adresse existe déjà pour la structure "{data.structure_siret_or_slug}".'
             )
-
             self.errors.append(error_msg)
-            logger.warning(
-                error_msg,
-            )
+            logger.warning(error_msg)
             return False
 
         self.duplicated_services.append(
             {
                 "idx": idx,
-                "siret": data.structure_siret,
+                "structure_siret_or_slug": data.structure_siret_or_slug,
                 "model_slug": data.modele_slug,
                 "contact_email": data.contact_email,
             }
@@ -389,7 +392,7 @@ class ImportServicesHelper:
 
     CSV_HEADERS = [
         "modele_slug",
-        "structure_siret",
+        "structure_siret_or_slug",
         "contact_email",
         "diffusion_zone_type",
         "labels_financement",
