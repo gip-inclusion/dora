@@ -100,3 +100,16 @@ class SafeFileUploadTestCase(APITestCase):
         self.assertEqual(mock_save.call_args[0][1].name, "test.pdf")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["key"], "upload_key")
+
+
+class FileDeleteTestCase(APITestCase):
+    @patch("dora.core.views.default_storage.delete")
+    def test_delete_file(self, mock_delete):
+        self.user = make_user(is_active=True)
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.delete("/delete-upload/path/to/file/test.pdf/")
+
+        assert response.status_code == 204
+        assert mock_delete.call_count == 1
+        assert mock_delete.call_args[0][0] == "path/to/file/test.pdf"

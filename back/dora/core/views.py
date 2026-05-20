@@ -59,6 +59,13 @@ def safe_upload(request: Request, filename: str) -> Response:
     return Response({"key": result}, status=201)
 
 
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_upload(request: Request, filename: str) -> Response:
+    default_storage.delete(filename)
+    return Response(status=204)
+
+
 @api_view()
 @permission_classes([permissions.AllowAny])
 def ping(request: Request) -> Response:
