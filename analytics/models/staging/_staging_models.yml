@@ -1,7 +1,7 @@
 models:
   - name: stg_accompagnateurs
     description: >
-      Vue des utilisateurs dont l'activité principale est accompagnateur ou accompagnateur-offreur et qui se sont connectés au moins une fois. 
+      Vue des utilisateurs dont l'activité principale est accompagnateur ou accompagnateur-offreur et qui se sont connectés au moins une fois.
   - name: stg_nb_orientations_per_user
     description: >
       Nombre total d'orientations et date de la dernière orientation par prescripteur.
@@ -18,6 +18,7 @@ models:
       - name: total_orientations
         description: >
           Nombre total d'orientations effectuées par le prescripteur.
+
   - name: stg_user
     config:
       indexes:
@@ -28,6 +29,15 @@ models:
         data_tests:
           - unique
           - not_null
+
+      - name: department
+        description : >
+          Première valeur présente dans la colonne `departments`.
+
+          Il est possible qu’un même utilisateur soit rattaché à plusieurs départements. Pour gérer cette complexité, on a le modèle
+          `int_user_departments`, avec une ligne par couple utilisateur x département.
+
+
   - name: stg_structure
     config:
       indexes:
@@ -74,7 +84,7 @@ models:
           - unique
           - not_null
       - name: prescriber_id
-        data_test: 
+        data_test:
           - unique
   - name: stg_mobilisationevent
     config:
