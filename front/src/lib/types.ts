@@ -110,12 +110,17 @@ export interface ShortStructure {
 
 export interface AdminShortStructure {
   adminAlreadyInvited: boolean;
+  awaitingActivation: boolean;
+  awaitingModeration: boolean;
+  awaitingUpdate: boolean;
   categories: ServiceCategory[];
   city: string;
   department: string;
   email: string;
   hasAdmin: boolean;
   isObsolete: boolean;
+  isOrphan: boolean;
+  isWaiting: boolean;
   latitude: number;
   longitude: number;
   moderationDate: string;
