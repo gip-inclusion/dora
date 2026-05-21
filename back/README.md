@@ -58,7 +58,7 @@ brew install graphviz
 ```
 Pour Linux:
 ```bash
-sudo apt install graphviz
+sudo apt install graphviz graphviz-dev
 ```
 
 Les consignes d'installation sont [ici](https://graphviz.org/download/).'
