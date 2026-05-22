@@ -195,3 +195,22 @@ class EmploisOrientationSerializer(OrientationSerializer):
         if instance.service_id:
             data["di_service_id"] = f"dora--{instance.service_id}"
         return data
+
+
+class EmploisStatsSerializer(serializers.Serializer):
+    anonymous_user_hash = serializers.RegexField(
+        r"^[0-9a-f]{32}$",
+        error_messages={
+            "invalid": "Doit contenir exactement 32 caractères hexadécimaux."
+        },
+    )
+    user_kind = serializers.RegexField(
+        r"^emplois_.+",
+        error_messages={"invalid": "Doit commencer par « emplois_ »."},
+    )
+    service_id = serializers.CharField(allow_blank=True, required=False, default="")
+    structure_id = serializers.CharField()
+    source = serializers.CharField()
+    external_link = serializers.URLField(
+        allow_blank=True, required=False, allow_null=True, default=None
+    )

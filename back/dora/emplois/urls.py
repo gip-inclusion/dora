@@ -17,6 +17,11 @@ router.register(r"orientations", views.OrientationViewSet, basename="orientation
 
 urlpatterns = [
     path("", include(router.urls)),
+    path(
+        "mobilisation-event/",
+        views.emplois_mobilisation_event,
+        name="mobilisation-event",
+    ),
 ]
 
 app_name = "emplois"
