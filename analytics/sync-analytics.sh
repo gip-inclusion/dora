@@ -28,7 +28,7 @@ load_env_file_if_exists() {
 check_required_vars() {
     echo "💎 Vérification des variables d'environnement requises..."
 
-    required_vars=("DORA_DATABASE_URL" "DATABASE_URL" "S3_BUCKET_VARIANT" "S3_ACCESS_KEY" "S3_SECRET_KEY")
+    required_vars=("DORA_DATABASE_URL" "PILOTAGE_DATABASE_URL" "DATABASE_URL" "S3_BUCKET_VARIANT" "S3_ACCESS_KEY" "S3_SECRET_KEY")
     missing_vars=()
 
     for var in "${required_vars[@]}"; do
@@ -82,10 +82,14 @@ fetch_and_export_dora_data() {
     cat models/_sources.yml | grep '      - name' | cut -d':' -f2 >tables.txt
     xargs -I {} echo -n "-t {} " <tables.txt >args.txt
 
+    # Export des données de la base de données DORA dans un fichier dump
     time pg_dump "$DORA_DATABASE_URL" --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
-    time psql "$DATABASE_URL" -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
-    time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
     
+    # Copie des données vers la base de données analytics.
+    # On purge aussi un éventuel raw_dora résiduel (cf. export pilotage plus bas)
+    time psql "$DATABASE_URL" -c "DROP SCHEMA IF EXISTS public CASCADE; DROP SCHEMA IF EXISTS raw_dora CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
+    time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+
     # Clean the files created by the script as they now serve no purpose and could contains sensitive data
     rm tables.txt args.txt
     shred -u -z /tmp/out.dump/*
@@ -134,6 +138,21 @@ VACUUM FULL public.services_service;
 VACUUM FULL public.users_user;
 VACUUM FULL public.logs_actionlog
 SQL
+
+    # Copie des données (déjà nettoyées) vers la base pilotage, dans le schéma raw_dora.
+    # Renommage temporaire du schéma public en raw_dora.
+    psql "$DATABASE_URL" -c "ALTER SCHEMA public RENAME TO raw_dora;"
+    # En cas d'échec, on remet la base analytics dans son état attendu (schéma public).
+    trap 'psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;" >/dev/null 2>&1 || true' EXIT
+
+    # On restreint l'export au schéma raw_dora. --extension=postgis force l'inclusion
+    # de l'extension PostGIS (et donc du type geometry) que --schema seul omettrait
+    time psql "$PILOTAGE_DATABASE_URL" -c "DROP SCHEMA IF EXISTS raw_dora CASCADE;"
+    time pg_dump "$DATABASE_URL" --schema=raw_dora --extension=postgis --no-owner --no-privileges --verbose \
+        | psql "$PILOTAGE_DATABASE_URL" --set ON_ERROR_STOP=1
+
+    psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;"
+    trap - EXIT
 
     echo "✔️ Fait."
     echo ""
