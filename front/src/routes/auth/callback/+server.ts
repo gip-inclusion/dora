@@ -3,6 +3,7 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { API_URL, CANONICAL_URL, INTERNAL_API_URL } from "$lib/env";
 import { TOKEN_KEY, AUTH_STATE_KEY } from "$lib/utils/auth";
 import { log, logException } from "$lib/utils/logger";
+import { getNextPage } from "../utils";
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
   const code = url.searchParams.get("code");
@@ -69,6 +70,6 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     maxAge: expiresIn,
   });
 
-  const next = url.searchParams.get("next") ?? "/";
+  const next = getNextPage(url);
   return redirect(302, CANONICAL_URL + next);
 };
