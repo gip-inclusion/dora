@@ -12,7 +12,6 @@
 
   import type { Service } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
-  import { getToken } from "$lib/utils/auth";
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
 
@@ -156,7 +155,6 @@
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
-        Authorization: `Token ${getToken()}`,
       },
     });
   }
