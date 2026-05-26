@@ -12,6 +12,7 @@ from itoutils.urls import add_url_params
 from rest_framework.authtoken.models import Token
 from sesame.utils import get_token, get_user
 
+from dora.auth_links.utils import generate_auth_code
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
 from dora.core.constants import FRONTEND_CALLBACK_URL
@@ -75,8 +76,7 @@ def authenticate_with_link(request, sesame):
             request.session[settings.SESAME_SESSION_NAME] = True
 
             # Échange sécurisé via un code à usage unique
-            code = uuid.uuid4().hex
-            cache.set(f"auth_code:{code}", token.key, timeout=60)
+            code = generate_auth_code(token.key)
 
             return HttpResponseRedirect(
                 add_url_params(FRONTEND_CALLBACK_URL, {"code": code})

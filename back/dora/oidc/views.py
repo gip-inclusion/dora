@@ -22,6 +22,7 @@ from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
+from dora.auth_links.utils import generate_auth_code
 from dora.core.constants import FRONTEND_CALLBACK_URL
 
 logger = logging.getLogger(__name__)
@@ -60,8 +61,7 @@ def oidc_logged_in(request):
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
     # Échange sécurisé via un code à usage unique (évite que le token apparaisse dans l'URL)
-    code = uuid.uuid4().hex
-    cache.set(f"auth_code:{code}", token.key, timeout=60)
+    code = generate_auth_code(token.key)
 
     redirect_uri = add_url_params(FRONTEND_CALLBACK_URL, {"code": code})
 

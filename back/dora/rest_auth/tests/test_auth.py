@@ -7,6 +7,7 @@ from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
+from dora.auth_links.utils import generate_auth_code
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_structure, make_structure_member
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
@@ -257,15 +258,10 @@ class AuthenticationTestCase(APITestCase):
 
 
 class TokenExchangeTestCase(APITestCase):
-    def _make_code(self, token_key):
-        code = uuid.uuid4().hex
-        cache.set(f"auth_code:{code}", token_key, timeout=60)
-        return code
-
     def test_token_exchange_returns_token(self):
         user = baker.make("users.User", is_valid=True)
         token, _ = Token.objects.get_or_create(user=user)
-        code = self._make_code(token.key)
+        code = generate_auth_code(token.key)
 
         response = self.client.post("/auth/token-exchange/", {"code": code})
 
@@ -277,7 +273,7 @@ class TokenExchangeTestCase(APITestCase):
         """Le code ne peut être utilisé qu'une seule fois."""
         user = baker.make("users.User", is_valid=True)
         token, _ = Token.objects.get_or_create(user=user)
-        code = self._make_code(token.key)
+        code = generate_auth_code(token.key)
 
         self.client.post("/auth/token-exchange/", {"code": code})
         response = self.client.post("/auth/token-exchange/", {"code": code})
@@ -298,7 +294,7 @@ class TokenExchangeTestCase(APITestCase):
         """Un second appel concurrent est rejeté grâce au verrou cache.add."""
         user = baker.make("users.User", is_valid=True)
         token, _ = Token.objects.get_or_create(user=user)
-        code = self._make_code(token.key)
+        code = generate_auth_code(token.key)
 
         # Simuler une requête concurrente qui a déjà posé le verrou
         cache.add(f"auth_code:{code}:claimed", "1", timeout=60)
