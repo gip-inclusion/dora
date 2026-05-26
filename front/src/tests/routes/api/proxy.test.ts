@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("$lib/env", () => ({
   API_URL: "http://backend",
-  INTERNAL_API_URL: undefined,
 }));
 
 vi.mock("$lib/utils/auth", () => ({

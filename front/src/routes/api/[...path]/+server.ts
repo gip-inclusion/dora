@@ -1,8 +1,6 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { API_URL, INTERNAL_API_URL } from "$lib/env";
+import { API_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
-
-const apiBase = INTERNAL_API_URL || API_URL;
 
 async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const { request, cookies, params } = event;
@@ -11,7 +9,7 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const normalizedPath = params.path?.endsWith("/")
     ? params.path
     : `${params.path}/`;
-  const targetUrl = `${apiBase}/${normalizedPath}${event.url.search}`;
+  const targetUrl = `${API_URL}/${normalizedPath}${event.url.search}`;
 
   const headers = new Headers(request.headers);
   headers.delete("host");
