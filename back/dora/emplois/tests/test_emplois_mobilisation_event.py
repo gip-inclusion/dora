@@ -17,7 +17,7 @@ def post_event(api_client, data):
 def base_payload():
     return {
         "anonymous_user_hash": VALID_HASH,
-        "user_kind": "emplois_accompagnateur",
+        "user_kind": "emplois_prescripteur",
         "structure_id": "dora--ma-structure",
         "source": "dora",
     }
@@ -84,7 +84,7 @@ def test_creates_structure_infos_view(emplois_user, api_client, base_payload):
     assert response.status_code == 201
     event = StructureInfosView.objects.get()
     assert event.anonymous_user_hash == VALID_HASH
-    assert event.user_kind == "emplois_accompagnateur"
+    assert event.user_kind == "emplois_prescripteur"
     assert event.structure == structure
     assert event.structure_department == "75"
     assert event.structure_city_code == "75056"
@@ -141,7 +141,7 @@ def test_creates_mobilisation_event_for_dora_service(
     assert response.status_code == 201
     event = MobilisationEvent.objects.get()
     assert event.anonymous_user_hash == VALID_HASH
-    assert event.user_kind == "emplois_accompagnateur"
+    assert event.user_kind == "emplois_prescripteur"
     assert event.service == service
     assert event.structure == service.structure
     assert event.structure_department == "69"
@@ -165,7 +165,7 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
         api_client,
         {
             "anonymous_user_hash": VALID_HASH,
-            "user_kind": "emplois_accompagnateur",
+            "user_kind": "emplois_prescripteur",
             "service_id": "soliguide--abc123",
             "structure_id": "soliguide--struct-xyz",
             "source": "soliguide",
@@ -175,7 +175,7 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
     assert response.status_code == 201
     event = DiMobilisationEvent.objects.get()
     assert event.anonymous_user_hash == VALID_HASH
-    assert event.user_kind == "emplois_accompagnateur"
+    assert event.user_kind == "emplois_prescripteur"
     assert event.service_id == "soliguide--abc123"
     assert event.structure_id == "soliguide--struct-xyz"
     assert event.source == "soliguide"
