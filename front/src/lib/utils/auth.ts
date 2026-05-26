@@ -113,20 +113,22 @@ export async function validateCredsAndFillUserInfo() {
 
   const authenticated = browser && isAuthenticated();
 
-  if (authenticated) {
-    try {
-      const result = await getUserInfo();
-      if (result.status === 200) {
-        const info = await result.json();
-        setUserInfo(info);
-        userPreferencesSet([...info.structures, ...info.pendingStructures]);
-      } else if (result.status === 401 || result.status === 403) {
-        await disconnect();
-      } else {
-        log("Unexpected status code", { result });
-      }
-    } catch (err) {
-      logException(err);
+  if (!authenticated) {
+    return;
+  }
+
+  try {
+    const result = await getUserInfo();
+    if (result.status === 200) {
+      const info = await result.json();
+      setUserInfo(info);
+      userPreferencesSet([...info.structures, ...info.pendingStructures]);
+    } else if (result.status === 401 || result.status === 403) {
+      await disconnect();
+    } else {
+      log("Unexpected status code", { result });
     }
+  } catch (err) {
+    logException(err);
   }
 }
