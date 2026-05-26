@@ -108,7 +108,7 @@ export interface ShortStructure {
   servicesToUpdate: { name: string; slug: string }[];
 }
 
-export interface AdminShortStructure {
+export interface AdminStructure {
   adminAlreadyInvited: boolean;
   awaitingActivation: boolean;
   awaitingModeration: boolean;

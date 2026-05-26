@@ -7,14 +7,14 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { modifyStructure } from "$lib/requests/structures";
-  import type { AdminShortStructure } from "$lib/types";
+  import type { AdminStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
 
   import StructureModal from "./structure-modal.svelte";
 
   interface Props {
-    filteredStructures: AdminShortStructure[];
+    filteredStructures: AdminStructure[];
     selectedStructureSlug: string | null;
     onRefresh: any;
   }
@@ -26,10 +26,10 @@
   }: Props = $props();
 
   let isStructureModalOpen = $state(false);
-  let currentStructure: AdminShortStructure | null = $state(null);
+  let currentStructure: AdminStructure | null = $state(null);
 
   async function updateStructureObsolete(
-    structure: AdminShortStructure,
+    structure: AdminStructure,
     isObsolete: boolean
   ) {
     structure.isObsolete = isObsolete;

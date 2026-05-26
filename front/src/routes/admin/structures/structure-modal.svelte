@@ -1,7 +1,7 @@
 <script lang="ts">
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
-  import type { AdminShortStructure } from "$lib/types";
+  import type { AdminStructure } from "$lib/types";
   import ModerationButtonMenu from "../moderation-button-menu.svelte";
   import StructureContacts from "../structure-contacts.svelte";
 
@@ -17,7 +17,7 @@
     onRefresh,
   }: Props = $props();
 
-  let structure: AdminShortStructure | null = $state(null);
+  let structure: AdminStructure | null = $state(null);
 
   async function handleRefresh() {
     structure = structureSlug ? await getStructureAdmin(structureSlug) : null;

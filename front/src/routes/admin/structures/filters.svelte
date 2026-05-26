@@ -6,7 +6,7 @@
   import Select from "$lib/components/inputs/select/select.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
   import type {
-    AdminShortStructure,
+    AdminStructure,
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
@@ -22,8 +22,8 @@
     filterActions?: string;
     servicesOptions: ServicesOptions;
     structuresOptions: StructuresOptions;
-    structures?: AdminShortStructure[];
-    filteredStructures: AdminShortStructure[];
+    structures?: AdminStructure[];
+    filteredStructures: AdminStructure[];
   }
 
   let {
@@ -137,7 +137,7 @@
   }
 
   function filterAndSortEntities(
-    structs: AdminShortStructure[],
+    structs: AdminStructure[],
     params: SearchParams,
     status: StatusFilter
   ) {

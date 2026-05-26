@@ -1,4 +1,4 @@
-import type { AdminShortStructure } from "$lib/types";
+import type { AdminStructure } from "$lib/types";
 import type { StatusFilter } from "./types";
 
 const STATUS_LABELS: Record<StatusFilter, string> = {
@@ -13,7 +13,7 @@ const STATUS_LABELS: Record<StatusFilter, string> = {
 };
 
 export function getStructureStatus(
-  struct: AdminShortStructure
+  struct: AdminStructure
 ): Exclude<StatusFilter, "all"> | undefined {
   // ⚠️ L'ordre des conditions est important
   if (struct.isObsolete) {

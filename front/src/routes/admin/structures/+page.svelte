@@ -13,7 +13,7 @@
   import { CANONICAL_URL } from "$lib/env";
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
-  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
+  import type { AdminStructure, GeoApiValue } from "$lib/types";
 
   import type { PageData } from "./$types";
   import DepartmentList from "./department-list.svelte";
@@ -34,8 +34,8 @@
   let searchStatus: StatusFilter = $state("all");
   let filterDefinition: string | undefined = $state();
   let filterActions: string | undefined = $state();
-  let structures: AdminShortStructure[] = $state([]);
-  let filteredStructures: AdminShortStructure[] = $state([]);
+  let structures: AdminStructure[] = $state([]);
+  let filteredStructures: AdminStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
 
