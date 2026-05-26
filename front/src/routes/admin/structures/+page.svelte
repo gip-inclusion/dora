@@ -13,21 +13,14 @@
   import { CANONICAL_URL } from "$lib/env";
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
-  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
+  import type { AdminStructure, GeoApiValue } from "$lib/types";
 
   import type { PageData } from "./$types";
   import DepartmentList from "./department-list.svelte";
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import {
-    isOrphan,
-    toActivate,
-    waiting,
-    isObsolete,
-    toUpdate,
-    toModerate,
-  } from "./structures-filters";
+  import { getStructureStatus, getStatusLabel } from "./structures-filters";
   import type { StatusFilter } from "./types";
   import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 
@@ -38,11 +31,11 @@
   let { data }: Props = $props();
 
   let selectedDepartment = $state(data.department);
-  let searchStatus: StatusFilter = $state("toutes");
+  let searchStatus: StatusFilter = $state("all");
   let filterDefinition: string | undefined = $state();
   let filterActions: string | undefined = $state();
-  let structures: AdminShortStructure[] = $state([]);
-  let filteredStructures: AdminShortStructure[] = $state([]);
+  let structures: AdminStructure[] = $state([]);
+  let filteredStructures: AdminStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
 
@@ -50,14 +43,14 @@
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
       return (
         ["ETTI", "ACI", "AI", "EI"].includes(struct.typology) &&
-        (isOrphan(struct) || waiting(struct) || toActivate(struct))
+        (struct.isOrphan || struct.isWaiting || struct.awaitingActivation)
       );
     }
 
     return structs.filter(
       (struct) =>
-        isObsolete(struct) ||
-        toModerate(struct) ||
+        struct.isObsolete ||
+        struct.awaitingModeration ||
         !isOrphanOrWaitingOrToActivateSIAE(struct)
     );
   }
@@ -88,20 +81,8 @@
     }
 
     const sheetData = filteredStructures.map((structure) => {
-      let status = "";
-      if (isObsolete(structure)) {
-        status = "obsolète";
-      } else if (isOrphan(structure)) {
-        status = "orpheline";
-      } else if (waiting(structure)) {
-        status = "en attente";
-      } else if (toModerate(structure)) {
-        status = "à modérer";
-      } else if (toActivate(structure)) {
-        status = "à activer";
-      } else if (toUpdate(structure)) {
-        status = "à actualiser";
-      }
+      const structStatus = getStructureStatus(structure);
+      const status = getStatusLabel(structStatus);
 
       // prettier-ignore
       return {
@@ -248,7 +229,7 @@
               secondary
               disabled={!filteredStructures.length}
             />
-            {#if searchStatus !== "toutes" && filterDefinition}
+            {#if searchStatus !== "all" && filterDefinition}
               <Notice type="info" title={filterDefinition}>
                 <div>
                   {#if filterActions}

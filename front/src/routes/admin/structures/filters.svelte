@@ -6,22 +6,14 @@
   import Select from "$lib/components/inputs/select/select.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
   import type {
-    AdminShortStructure,
+    AdminStructure,
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
     Typology,
   } from "$lib/types";
 
-  import {
-    adminAlreadyInvited,
-    isOrphan,
-    isObsolete,
-    toActivate,
-    toModerate,
-    toUpdate,
-    waiting,
-  } from "./structures-filters";
+  import { getStructureStatus, getStatusLabel } from "./structures-filters";
   import type { StatusFilter } from "./types";
 
   interface Props {
@@ -30,8 +22,8 @@
     filterActions?: string;
     servicesOptions: ServicesOptions;
     structuresOptions: StructuresOptions;
-    structures?: AdminShortStructure[];
-    filteredStructures: AdminShortStructure[];
+    structures?: AdminStructure[];
+    filteredStructures: AdminStructure[];
   }
 
   let {
@@ -46,61 +38,53 @@
 
   const statusFilterSettings: {
     status: StatusFilter;
-    label: string;
     definition: string;
     actions?: string;
   }[] = [
-    { status: "toutes", label: "Toutes", definition: "Toutes les structures" },
+    { status: "all", definition: "Toutes les structures" },
     {
-      status: "orphelines",
-      label: "Sans utilisateur",
+      status: "orphan",
       definition:
         "Structures référencées mais sans utilisateur actif ou invité",
       actions:
         "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
     },
     {
-      status: "en_attente",
-      label: "Administrateur invité",
+      status: "waiting",
       definition:
         "Structures où un administrateur invité n’a pas encore accepté l’invitation",
       actions:
         "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
     },
     {
-      status: "invitation_expirée",
-      label: "Invitation expirée",
+      status: "expiredInvitation",
       definition:
         "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
       actions: "Identifier un autre administrateur.",
     },
     {
-      status: "à_modérer",
-      label: "À valider",
+      status: "awaitingModeration",
       definition:
         "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
       actions:
         "Vérifier la conformité de la structure et si les administrateurs font bien partie de ses effectifs. En cas de doute, contacter l’équipe DORA.",
     },
     {
-      status: "à_activer",
-      label: "Sans service",
+      status: "awaitingActivation",
       definition:
         "Structures avec un administrateur validé sans services publiés",
       actions:
         "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à référencer leurs services sur DORA. Les SIAE sont à exclure car elles n’ont pas vocation à référencer des services supplémentaires.",
     },
     {
-      status: "à_actualiser",
-      label: "Services à actualiser",
+      status: "awaitingUpdate",
       definition:
         "Structures ayant un ou des services publiés qui nécessitent une actualisation",
       actions:
         "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à actualiser leur services.",
     },
     {
-      status: "obsolète",
-      label: "Non conforme",
+      status: "obsolete",
       definition:
         "Structures désactivées - qui n’existent plus ou qui ne respectent pas la charte DORA",
     },
@@ -153,7 +137,7 @@
   }
 
   function filterAndSortEntities(
-    structs: AdminShortStructure[],
+    structs: AdminStructure[],
     params: SearchParams,
     status: StatusFilter
   ) {
@@ -188,52 +172,10 @@
         );
       })
       .filter((struct) => {
-        if (status === "obsolète") {
-          return isObsolete(struct);
-        } else if (status === "orphelines") {
-          return (
-            !isObsolete(struct) &&
-            isOrphan(struct) &&
-            !adminAlreadyInvited(struct)
-          );
-        } else if (status === "en_attente") {
-          return !isObsolete(struct) && !isOrphan(struct) && waiting(struct);
-        } else if (status === "invitation_expirée") {
-          return (
-            !isObsolete(struct) &&
-            isOrphan(struct) &&
-            adminAlreadyInvited(struct)
-          );
-        } else if (status === "à_modérer") {
-          return (
-            !isObsolete(struct) &&
-            !isOrphan(struct) &&
-            !waiting(struct) &&
-            toModerate(struct)
-          );
-        } else if (status === "à_activer") {
-          return (
-            !isObsolete(struct) &&
-            !isOrphan(struct) &&
-            !waiting(struct) &&
-            !toModerate(struct) &&
-            toActivate(struct)
-          );
-        } else if (status === "à_actualiser") {
-          return (
-            !isObsolete(struct) &&
-            !isOrphan(struct) &&
-            !waiting(struct) &&
-            !toModerate(struct) &&
-            !toActivate(struct) &&
-            toUpdate(struct)
-          );
-        } else if (status === "toutes") {
-          // exclusion des structures obsolètes de l'affichage complet
-          return !isObsolete(struct);
+        if (status === "all") {
+          return getStructureStatus(struct) !== "obsolete";
         }
-        console.error("Statut de recherche inconnu");
-        return false;
+        return getStructureStatus(struct) === status;
       })
       .sort((structure1, structure2) => {
         // Fait un premier tri par nom
@@ -263,7 +205,7 @@
 
   function resetSearchParams() {
     searchParams = emptySearchParams;
-    searchStatus = "toutes";
+    searchStatus = "all";
   }
 
   $effect(() => {
@@ -278,7 +220,7 @@
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each statusFilterSettings as { status, label, definition, actions }}
+  {#each statusFilterSettings as { status, definition, actions }}
     <Tooltip>
       <Button
         onclick={() => {
@@ -287,7 +229,7 @@
           filterDefinition = definition;
           filterActions = actions;
         }}
-        label="{label}{status !== 'toutes'
+        label="{getStatusLabel(status)}{status !== 'all'
           ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
           : ''}"
         secondary={searchStatus !== status}

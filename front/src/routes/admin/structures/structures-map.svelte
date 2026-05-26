@@ -4,10 +4,10 @@
   import * as mlgl from "maplibre-gl";
 
   import Map from "$lib/components/display/map.svelte";
-  import type { AdminShortStructure } from "$lib/types";
+  import type { AdminStructure } from "$lib/types";
 
   interface Props {
-    filteredStructures?: AdminShortStructure[];
+    filteredStructures?: AdminStructure[];
     selectedStructureSlug: string | null;
   }
 
@@ -23,7 +23,7 @@
     );
   }
 
-  function zoomToStructures(features: AdminShortStructure[]) {
+  function zoomToStructures(features: AdminStructure[]) {
     if (!map) {
       return;
     }
@@ -33,7 +33,7 @@
         features[0].latitude,
       ];
       const bounds = features.reduce(
-        function (acc: mlgl.LngLatBounds, feature: AdminShortStructure) {
+        function (acc: mlgl.LngLatBounds, feature: AdminStructure) {
           return acc.extend([feature.longitude, feature.latitude]);
         },
         new mlgl.LngLatBounds(firstCoordinates, firstCoordinates)
@@ -143,7 +143,7 @@
     zoomToStructures(filteredStructures);
   }
 
-  function updateMapContent(structures: AdminShortStructure[]) {
+  function updateMapContent(structures: AdminStructure[]) {
     if (!map) {
       return;
     }

@@ -1,5 +1,5 @@
 import type {
-  AdminShortStructure,
+  AdminStructure,
   ModerationStatus,
   Service,
   Structure,
@@ -10,19 +10,19 @@ import { fetchData } from "$lib/utils/misc";
 
 export async function getStructuresAdmin(
   departmentCode
-): Promise<AdminShortStructure[]> {
+): Promise<AdminStructure[]> {
   let url = `${getApiURL()}/structures-admin/`;
 
   if (departmentCode) {
     url += `?department=${departmentCode}`;
   }
-  return (await fetchData<AdminShortStructure[]>(url)).data;
+  return (await fetchData<AdminStructure[]>(url)).data;
 }
 
 export async function getStructureAdmin(
   slug: string,
   fetchFunction = fetch
-): Promise<AdminShortStructure> {
+): Promise<AdminStructure> {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
   return (await fetchData<Structure>(url, fetchFunction)).data;
 }
