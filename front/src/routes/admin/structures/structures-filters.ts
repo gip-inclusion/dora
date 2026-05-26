@@ -15,6 +15,7 @@ export const STATUS_LABELS: Record<StatusFilter, string> = {
 export function getStructureStatus(
   struct: AdminShortStructure
 ): Exclude<StatusFilter, "all"> | undefined {
+  // ⚠️ L'ordre des conditions est important
   if (struct.isObsolete) {
     return "obsolete";
   }
