@@ -22,7 +22,7 @@ from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
-from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.constants import FRONTEND_CALLBACK_URL
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ def oidc_logged_in(request):
     code = uuid.uuid4().hex
     cache.set(f"auth_code:{code}", token.key, timeout=60)
 
-    redirect_uri = add_url_params(FRONTEND_PC_CALLBACK_URL, {"code": code})
+    redirect_uri = add_url_params(FRONTEND_CALLBACK_URL, {"code": code})
 
     # gestion du `next` :
     if next_url := request.GET.get("next"):

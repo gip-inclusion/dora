@@ -14,7 +14,7 @@ from sesame.utils import get_token, get_user
 
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
-from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.constants import FRONTEND_CALLBACK_URL
 from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
@@ -79,7 +79,7 @@ def authenticate_with_link(request, sesame):
             cache.set(f"auth_code:{code}", token.key, timeout=60)
 
             return HttpResponseRedirect(
-                add_url_params(FRONTEND_PC_CALLBACK_URL, {"code": code})
+                add_url_params(FRONTEND_CALLBACK_URL, {"code": code})
             )
 
     logger.warning(
