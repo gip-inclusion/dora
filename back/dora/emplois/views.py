@@ -184,7 +184,7 @@ def emplois_mobilisation_event(request):
         dora_structure_id = structure_id.removeprefix("dora--").strip()
         try:
             structure = Structure.objects.filter(pk=dora_structure_id).first()
-        except Exception:
+        except Structure.DoesNotExist:
             structure = None
         StructureInfosView.objects.create(
             **common_data,
@@ -207,7 +207,7 @@ def emplois_mobilisation_event(request):
                 .select_related("structure", "structure__source", "source")
                 .first()
             )
-        except Exception:
+        except Service.DoesNotExist:
             dora_service = None
         structure = dora_service.structure if dora_service else None
         MobilisationEvent.objects.create(
