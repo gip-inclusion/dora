@@ -1,3 +1,5 @@
+from urllib.parse import parse_qs, urlparse
+
 import sesame.utils
 from django.conf import settings
 from django.core.cache import cache
@@ -63,8 +65,6 @@ def test_authenticate_with_link_exchanges_code_for_token(client):
     assert response.status_code == 302
     assert "auth/callback" in response.url
 
-    from urllib.parse import parse_qs, urlparse
-
     code = parse_qs(urlparse(response.url).query)["code"][0]
     assert cache.get(f"auth_code:{code}") == token.key
 
@@ -85,7 +85,6 @@ def test_authenticate_with_link_creates_token_if_not_exists(client):
     assert Token.objects.filter(user=user).exists()
 
     token = Token.objects.get(user=user)
-    from urllib.parse import parse_qs, urlparse
 
     code = parse_qs(urlparse(response.url).query)["code"][0]
     assert cache.get(f"auth_code:{code}") == token.key
