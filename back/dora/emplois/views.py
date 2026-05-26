@@ -183,7 +183,12 @@ def emplois_mobilisation_event(request):
             return Response(status=status.HTTP_204_NO_CONTENT)
         dora_structure_id = structure_id.removeprefix("dora--").strip()
         try:
-            structure = Structure.objects.filter(pk=dora_structure_id).first()
+            structure = (
+                Structure.objects.filter(pk=dora_structure_id)
+                .select_related("source")
+                .only("pk", "department", "city_code", "source__value")
+                .first()
+            )
         except Structure.DoesNotExist:
             structure = None
         StructureInfosView.objects.create(
