@@ -37,6 +37,9 @@ export function getStructureStatus(
   return undefined;
 }
 
-export function getStatusLabel(status: StatusFilter): string {
-  return STATUS_LABELS[status];
+export function getStatusLabel(status?: StatusFilter): string {
+  if (!status) {
+    return "";
+  }
+  return STATUS_LABELS[status] ?? "";
 }

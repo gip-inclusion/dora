@@ -82,7 +82,7 @@
 
     const sheetData = filteredStructures.map((structure) => {
       const structStatus = getStructureStatus(structure);
-      const status = structStatus ? getStatusLabel(structStatus) : "";
+      const status = getStatusLabel(structStatus);
 
       // prettier-ignore
       return {
