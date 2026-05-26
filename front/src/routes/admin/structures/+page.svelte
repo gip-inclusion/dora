@@ -20,7 +20,7 @@
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import { getStructureStatus, STATUS_LABELS } from "./structures-filters";
+  import { getStructureStatus, getStatusLabel } from "./structures-filters";
   import type { StatusFilter } from "./types";
   import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 
@@ -82,7 +82,7 @@
 
     const sheetData = filteredStructures.map((structure) => {
       const structStatus = getStructureStatus(structure);
-      const status = structStatus ? STATUS_LABELS[structStatus] : "";
+      const status = structStatus ? getStatusLabel(structStatus) : "";
 
       // prettier-ignore
       return {

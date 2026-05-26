@@ -13,7 +13,7 @@
     Typology,
   } from "$lib/types";
 
-  import { getStructureStatus, STATUS_LABELS } from "./structures-filters";
+  import { getStructureStatus, getStatusLabel } from "./structures-filters";
   import type { StatusFilter } from "./types";
 
   interface Props {
@@ -229,7 +229,7 @@
           filterDefinition = definition;
           filterActions = actions;
         }}
-        label="{STATUS_LABELS[status]}{status !== 'all'
+        label="{getStatusLabel(status)}{status !== 'all'
           ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
           : ''}"
         secondary={searchStatus !== status}

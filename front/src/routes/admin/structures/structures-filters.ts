@@ -1,7 +1,7 @@
 import type { AdminShortStructure } from "$lib/types";
 import type { StatusFilter } from "./types";
 
-export const STATUS_LABELS: Record<StatusFilter, string> = {
+const STATUS_LABELS: Record<StatusFilter, string> = {
   all: "Toutes",
   orphan: "Sans utilisateur",
   waiting: "Administrateur invité",
@@ -35,4 +35,8 @@ export function getStructureStatus(
     return "awaitingUpdate";
   }
   return undefined;
+}
+
+export function getStatusLabel(status: StatusFilter): string {
+  return STATUS_LABELS[status];
 }
