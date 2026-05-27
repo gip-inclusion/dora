@@ -18,7 +18,7 @@ from dora.services.models import (
     Service,
 )
 from dora.stats.models import DiMobilisationEvent, MobilisationEvent, StructureInfosView
-from dora.structures.models import DisabledDoraFormDIStructure, Structure
+from dora.structures.models import DisabledDoraFormDIStructure
 
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
@@ -150,102 +150,88 @@ class OrientationViewSet(
         )
 
 
-@api_view(["POST"])
-@permission_classes([OrientationAPIPermission])
-@renderer_classes([JSONRenderer])
-def emplois_mobilisation_event(request):
-    serializer = EmploisStatsSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    d = serializer.validated_data
-
-    anonymous_user_hash = d["anonymous_user_hash"]
-    user_kind = d["user_kind"]
-    service_id = d["service_id"]
-    structure_id = d["structure_id"]
-    source = d["source"]
-    external_link = d["external_link"] or None
-
-    common_data = {
+def _build_common_stats_data(validated_data):
+    return {
         "path": "",
         "user": None,
-        "anonymous_user_hash": anonymous_user_hash,
-        "user_kind": user_kind,
+        "anonymous_user_hash": validated_data["anonymous_user_hash"],
+        "user_kind": validated_data["user_kind"],
         "is_logged": False,
         "is_staff": False,
         "is_manager": False,
         "is_an_admin": False,
     }
 
-    if not service_id:
-        # Si pas de service_id, c'est une iMER depuis une fiche structure et on veut créer un StructureInfosView
-        if source != "dora":
-            # Il n'y a pas de structure non-Dora sur Dora : on ne fait rien
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        dora_structure_id = structure_id.removeprefix("dora--").strip()
-        try:
-            structure = (
-                Structure.objects.filter(pk=dora_structure_id)
-                .select_related("source")
-                .only("pk", "department", "city_code", "source__value")
-                .first()
-            )
-        except Structure.DoesNotExist:
-            structure = None
-        StructureInfosView.objects.create(
-            **common_data,
-            structure=structure,
-            is_structure_member=False,
-            is_structure_admin=False,
-            structure_department=structure.department if structure else "",
-            structure_city_code=structure.city_code if structure else "",
-            structure_source=structure.source.value
-            if structure and structure.source
-            else "",
-        )
-        return Response(status=status.HTTP_201_CREATED)
+
+def _record_structure_infos_view(common_data, validated_data):
+    if validated_data["source"] != "dora":
+        # Il n'y a pas de structure non-Dora sur Dora : on ne fait rien
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    structure = validated_data["structure"]
+    StructureInfosView.objects.create(
+        **common_data,
+        structure=structure,
+        is_structure_member=False,
+        is_structure_admin=False,
+        structure_department=structure.department,
+        structure_city_code=structure.city_code,
+        structure_source=structure.source.value if structure.source else "",
+    )
+    return Response(status=status.HTTP_201_CREATED)
+
+
+def _record_service_mobilisation_event(common_data, validated_data):
+    source = validated_data["source"]
+    external_link = validated_data["external_link"] or None
 
     if source == "dora":
-        dora_service_id = service_id.removeprefix("dora--").strip()
-        try:
-            dora_service = (
-                Service.objects.filter(pk=dora_service_id)
-                .select_related("structure", "structure__source", "source")
-                .first()
-            )
-        except Service.DoesNotExist:
-            dora_service = None
-        structure = dora_service.structure if dora_service else None
+        dora_service = validated_data["service"]
+        structure = dora_service.structure
         MobilisationEvent.objects.create(
             **common_data,
             service=dora_service,
             structure=structure,
             is_structure_member=False,
             is_structure_admin=False,
-            structure_department=structure.department if structure else "",
-            structure_city_code=structure.city_code if structure else "",
-            structure_source=structure.source.value
-            if structure and structure.source
-            else "",
-            service_source=dora_service.source.value
-            if dora_service and dora_service.source
-            else "",
-            update_needed=dora_service.get_update_needed() if dora_service else False,
-            status=dora_service.status if dora_service else None,
+            structure_department=structure.department,
+            structure_city_code=structure.city_code,
+            structure_source=structure.source.value if structure.source else "",
+            service_source=dora_service.source.value if dora_service.source else "",
+            update_needed=dora_service.get_update_needed(),
+            status=dora_service.status,
             update_status="",
             search_view=None,
             external_link=external_link,
         )
     else:
+        # Mobilisation d'un service non-Dora
         DiMobilisationEvent.objects.create(
             **common_data,
-            service_id=service_id,
-            structure_id=structure_id,
+            service_id=validated_data["service_id"],
+            structure_id=validated_data["structure_id"],
             source=source,
-            service_name="",
-            structure_name="",
-            structure_department="",
+            service_name=validated_data["service_name"],
+            structure_name=validated_data["structure_name"],
+            structure_department=validated_data["structure_department"],
             search_view=None,
             external_link=external_link,
         )
 
     return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(["POST"])
+@permission_classes([OrientationAPIPermission])
+@renderer_classes([JSONRenderer])
+def record_mobilisation_event(request):
+    serializer = EmploisStatsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    d = serializer.validated_data
+
+    common_data = _build_common_stats_data(d)
+
+    if not d["service_id"]:
+        return _record_structure_infos_view(common_data, d)
+
+    return _record_service_mobilisation_event(common_data, d)

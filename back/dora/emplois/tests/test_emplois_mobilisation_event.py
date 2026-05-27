@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from django.urls import reverse
 from model_bakery import baker
@@ -72,7 +74,7 @@ def test_missing_required_field(emplois_user, api_client, base_payload, missing_
     assert post_event(api_client, base_payload).status_code == 400
 
 
-# ─── StructureInfosView ───────────────────────────────────────────────────────
+# ─── StructureInfosView (pas de service_id, source Dora) ──────────────────────
 
 
 def test_creates_structure_infos_view(emplois_user, api_client, base_payload):
@@ -98,23 +100,28 @@ def test_creates_structure_infos_view(emplois_user, api_client, base_payload):
     assert event.is_structure_admin is False
 
 
-def test_creates_structure_infos_view_when_structure_not_found(
-    emplois_user, api_client, base_payload
+@pytest.mark.parametrize(
+    "structure_id",
+    [f"dora--{uuid.uuid4()}", "dora--not-a-uuid"],
+    ids=["unknown_uuid", "invalid_uuid"],
+)
+def test_returns_404_when_dora_structure_not_found(
+    emplois_user, api_client, base_payload, structure_id
 ):
-    base_payload["structure_id"] = "dora--00000000-0000-0000-0000-000000000000"
+    base_payload["structure_id"] = structure_id
 
     response = post_event(api_client, base_payload)
 
-    assert response.status_code == 201
-    event = StructureInfosView.objects.get()
-    assert event.structure is None
-    assert event.structure_department == ""
-    assert event.structure_city_code == ""
+    assert response.status_code == 404
+    assert response.data["detail"]["code"] == "not_found"
+    assert str(response.data["detail"]["message"]) == (
+        "Structure Dora introuvable pour cet identifiant."
+    )
+    assert StructureInfosView.objects.count() == 0
 
 
-def test_returns_204_when_service_id_empty_and_non_dora_source(
-    emplois_user, api_client, base_payload
-):
+def test_ignores_non_dora_structure(emplois_user, api_client, base_payload):
+    # Il n'existe pas de structure non-Dora sur Dora : rien n'est enregistré.
     base_payload["source"] = "soliguide"
     base_payload["structure_id"] = "soliguide--ma-structure"
 
@@ -124,7 +131,7 @@ def test_returns_204_when_service_id_empty_and_non_dora_source(
     assert StructureInfosView.objects.count() == 0
 
 
-# ─── MobilisationEvent ────────────────────────────────────────────────────────
+# ─── MobilisationEvent (service Dora) ─────────────────────────────────────────
 
 
 def test_creates_mobilisation_event_for_dora_service(
@@ -135,6 +142,7 @@ def test_creates_mobilisation_event_for_dora_service(
     service.structure.save()
     base_payload["service_id"] = f"dora--{service.pk}"
     base_payload["structure_id"] = f"dora--{service.structure.pk}"
+    base_payload["external_link"] = "https://example.org/offre"
 
     response = post_event(api_client, base_payload)
 
@@ -146,6 +154,7 @@ def test_creates_mobilisation_event_for_dora_service(
     assert event.structure == service.structure
     assert event.structure_department == "69"
     assert event.structure_city_code == "69123"
+    assert event.external_link == "https://example.org/offre"
     assert event.path == ""
     assert event.user is None
     assert event.is_logged is False
@@ -154,10 +163,29 @@ def test_creates_mobilisation_event_for_dora_service(
     assert event.is_an_admin is False
     assert event.is_structure_member is False
     assert event.is_structure_admin is False
-    assert event.external_link is None
 
 
-# ─── DiMobilisationEvent ─────────────────────────────────────────────────────
+@pytest.mark.parametrize(
+    "service_id",
+    [f"dora--{uuid.uuid4()}", "dora--not-a-uuid"],
+    ids=["unknown_uuid", "invalid_uuid"],
+)
+def test_returns_404_when_dora_service_not_found(
+    emplois_user, api_client, base_payload, service_id
+):
+    base_payload["service_id"] = service_id
+
+    response = post_event(api_client, base_payload)
+
+    assert response.status_code == 404
+    assert response.data["detail"]["code"] == "not_found"
+    assert str(response.data["detail"]["message"]) == (
+        "Service Dora introuvable pour cet identifiant."
+    )
+    assert MobilisationEvent.objects.count() == 0
+
+
+# ─── DiMobilisationEvent (service hors Dora) ──────────────────────────────────
 
 
 def test_creates_di_mobilisation_event(emplois_user, api_client):
@@ -169,6 +197,9 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
             "service_id": "soliguide--abc123",
             "structure_id": "soliguide--struct-xyz",
             "source": "soliguide",
+            "service_name": "Accueil et orientation",
+            "structure_name": "CCAS Paris",
+            "structure_department": "75",
         },
     )
 
@@ -179,9 +210,9 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
     assert event.service_id == "soliguide--abc123"
     assert event.structure_id == "soliguide--struct-xyz"
     assert event.source == "soliguide"
-    assert event.service_name == ""
-    assert event.structure_name == ""
-    assert event.structure_department == ""
+    assert event.service_name == "Accueil et orientation"
+    assert event.structure_name == "CCAS Paris"
+    assert event.structure_department == "75"
     assert event.path == ""
     assert event.user is None
     assert event.is_logged is False
@@ -189,3 +220,27 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
     assert event.is_manager is False
     assert event.is_an_admin is False
     assert event.external_link is None
+
+
+@pytest.mark.parametrize(
+    "missing_field",
+    ["service_name", "structure_name", "structure_department"],
+)
+def test_non_dora_service_requires_metadata(emplois_user, api_client, missing_field):
+    payload = {
+        "anonymous_user_hash": VALID_HASH,
+        "user_kind": "emplois_prescripteur",
+        "service_id": "soliguide--abc123",
+        "structure_id": "soliguide--struct-xyz",
+        "source": "soliguide",
+        "service_name": "Accueil",
+        "structure_name": "CCAS",
+        "structure_department": "75",
+    }
+    del payload[missing_field]
+
+    response = post_event(api_client, payload)
+
+    assert response.status_code == 400
+    assert missing_field in response.data
+    assert DiMobilisationEvent.objects.count() == 0

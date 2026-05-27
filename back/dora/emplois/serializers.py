@@ -8,7 +8,7 @@ from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
-from dora.structures.models import DisabledDoraFormDIStructure
+from dora.structures.models import DisabledDoraFormDIStructure, Structure
 
 
 class ReferenceDataSerializer(serializers.Serializer):
@@ -197,6 +197,30 @@ class EmploisOrientationSerializer(OrientationSerializer):
         return data
 
 
+def _parse_dora_uuid(prefixed_id):
+    return uuid.UUID(prefixed_id.removeprefix("dora--").strip())
+
+
+def _get_dora_structure(structure_id):
+    try:
+        return (
+            Structure.objects.select_related("source")
+            .only("pk", "department", "city_code", "source__value")
+            .get(pk=_parse_dora_uuid(structure_id))
+        )
+    except (ValueError, Structure.DoesNotExist):
+        raise NotFound("Structure Dora introuvable pour cet identifiant.")
+
+
+def _get_dora_service(service_id):
+    try:
+        return Service.objects.select_related(
+            "structure", "structure__source", "source"
+        ).get(pk=_parse_dora_uuid(service_id))
+    except (ValueError, Service.DoesNotExist):
+        raise NotFound("Service Dora introuvable pour cet identifiant.")
+
+
 class EmploisStatsSerializer(serializers.Serializer):
     anonymous_user_hash = serializers.RegexField(
         r"^[0-9a-f]{32}$",
@@ -214,3 +238,29 @@ class EmploisStatsSerializer(serializers.Serializer):
     external_link = serializers.URLField(
         allow_blank=True, required=False, allow_null=True, default=None
     )
+    service_name = serializers.CharField(required=False, allow_blank=True, default="")
+    structure_name = serializers.CharField(required=False, allow_blank=True, default="")
+    structure_department = serializers.CharField(
+        required=False, allow_blank=True, default="", max_length=3
+    )
+
+    def validate(self, attrs):
+        service_id = attrs.get("service_id") or ""
+        source = attrs["source"]
+
+        if service_id and source == "dora":
+            attrs["service"] = _get_dora_service(service_id)
+        elif not service_id and source == "dora":
+            attrs["structure"] = _get_dora_structure(attrs["structure_id"])
+        elif service_id and source != "dora":
+            errors = {}
+            for field in ("service_name", "structure_name", "structure_department"):
+                if not attrs.get(field):
+                    errors[field] = (
+                        "Ce champ est obligatoire pour une mobilisation de service "
+                        "hors Dora."
+                    )
+            if errors:
+                raise serializers.ValidationError(errors)
+
+        return attrs
