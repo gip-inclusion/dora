@@ -79,7 +79,7 @@ fetch_and_export_dora_data() {
     fi
 
     # Generate the list of tables to be exported
-    cat models/_sources.yml | grep '      - name' | cut -d':' -f2 >tables.txt
+    cat models/_sources.yml | grep -E '^      - name' | cut -d':' -f2 >tables.txt
     xargs -I {} echo -n "-t {} " <tables.txt >args.txt
 
     # Export des données de la base de données DORA dans un fichier dump
