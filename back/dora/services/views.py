@@ -120,6 +120,7 @@ def get_visible_services(user):
             "credentials",
             "location_kinds",
         )
+        .filter(structure__is_obsolete=False)
     )
 
     # Everybody can see published services
