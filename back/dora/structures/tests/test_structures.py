@@ -68,6 +68,11 @@ class StructureTestCase(APITestCase):
         structures_ids = [s["slug"] for s in response.data]
         self.assertIn(self.other_struct.slug, structures_ids)
 
+    def test_cant_see_obsolete_struct(self):
+        obsolete_struct = make_structure(is_obsolete=True)
+        response = self.client.get(f"/structures/{obsolete_struct.slug}/")
+        self.assertEqual(response.status_code, 404)
+
     # Modification
 
     def test_can_edit_my_administered_structures(self):
