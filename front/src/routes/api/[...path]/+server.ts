@@ -13,6 +13,7 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
 
   const headers = new Headers(request.headers);
   headers.delete("host");
+  headers.delete("cookie");
   if (token) {
     headers.set("Authorization", `Token ${token}`);
   }
