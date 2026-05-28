@@ -50,14 +50,11 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   const token: string = data.token;
   const expiresIn: number = data.expiresIn;
 
-  // En HTTPS seulement — les cookies Secure sont ignorés par le navigateur sur HTTP
-  const secure = url.protocol === "https:";
-
   cookies.set(TOKEN_KEY, token, {
     path: "/",
     httpOnly: true,
     sameSite: "lax",
-    secure,
+    secure: true,
     maxAge: expiresIn,
   });
 
@@ -65,7 +62,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     path: "/",
     httpOnly: false,
     sameSite: "lax",
-    secure,
+    secure: true,
     maxAge: expiresIn,
   });
 
