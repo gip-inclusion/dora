@@ -75,5 +75,13 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
 LOGGING["loggers"]["django"]["level"] = os.getenv("DJANGO_LOG_LEVEL", "INFO")  # noqa F405
 
-# Pour afficher les emails dans la console au lieu de les envoyer pour de vrai
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Les emails sont envoyés vers Mailpit (service docker-compose) plutôt que pour
+# de vrai. Ils sont consultables sur http://localhost:8025.
+# Les valeurs sont forcées ici (et non lues depuis l'env) pour garantir qu'aucun
+# email ne parte vers un vrai serveur SMTP en développement.
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = False
