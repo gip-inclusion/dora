@@ -18,7 +18,7 @@ router.register(r"orientations", views.OrientationViewSet, basename="orientation
 urlpatterns = [
     path("", include(router.urls)),
     path(
-        "record-mobilisation-event/",
+        "mobilisation-event/",
         views.record_mobilisation_event,
         name="mobilisation-event",
     ),
