@@ -185,6 +185,14 @@ class ServiceTestCase(APITestCase):
         response = self.client.get(f"/services/{service.slug}/")
         self.assertEqual(response.status_code, 404)
 
+    def test_cant_see_service_of_obsolete_structure(self):
+        obsolete_struct = make_structure(is_obsolete=True)
+        service = make_service(
+            structure=obsolete_struct, status=ServiceStatus.PUBLISHED
+        )
+        response = self.client.get(f"/services/{service.slug}/")
+        self.assertEqual(response.status_code, 404)
+
     # Modification
 
     def test_can_edit_my_services(self):
