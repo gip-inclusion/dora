@@ -220,6 +220,9 @@ class EmploisStatsSerializer(serializers.Serializer):
         required=False, allow_blank=True, default="", max_length=3
     )
 
+    def validate_external_link(self, value):
+        return value or None
+
     def validate(self, attrs):
         service_id = attrs.get("service_id")
         source = attrs["source"]

@@ -150,46 +150,47 @@ class OrientationViewSet(
         )
 
 
-def _build_common_stats_data(validated_data):
-    return {
+@api_view(["POST"])
+@permission_classes([OrientationAPIPermission])
+@renderer_classes([JSONRenderer])
+def record_mobilisation_event(request):
+    serializer = EmploisStatsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    d = serializer.validated_data
+
+    source = d["source"]
+    common = {
         "path": "",
         "user": None,
-        "anonymous_user_hash": validated_data["anonymous_user_hash"],
-        "user_kind": validated_data["user_kind"],
+        "anonymous_user_hash": d["anonymous_user_hash"],
+        "user_kind": d["user_kind"],
         "is_logged": False,
         "is_staff": False,
         "is_manager": False,
         "is_an_admin": False,
     }
 
-
-def _record_structure_infos_view(common_data, validated_data):
-    if validated_data["source"] != "dora":
-        # Il n'y a pas de structure non-Dora sur Dora : on ne fait rien
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    structure = validated_data["structure"]
-    StructureInfosView.objects.create(
-        **common_data,
-        structure=structure,
-        is_structure_member=False,
-        is_structure_admin=False,
-        structure_department=structure.department,
-        structure_city_code=structure.city_code,
-        structure_source=structure.source.value if structure.source else "",
-    )
-    return Response(status=status.HTTP_201_CREATED)
-
-
-def _record_service_mobilisation_event(common_data, validated_data):
-    source = validated_data["source"]
-    external_link = validated_data["external_link"] or None
+    if not d["service_id"]:
+        if source != "dora":
+            # Il n'y a pas de structure non-Dora sur Dora : on ne fait rien
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        structure = d["structure"]
+        StructureInfosView.objects.create(
+            **common,
+            structure=structure,
+            is_structure_member=False,
+            is_structure_admin=False,
+            structure_department=structure.department,
+            structure_city_code=structure.city_code,
+            structure_source=structure.source.value if structure.source else "",
+        )
+        return Response(status=status.HTTP_201_CREATED)
 
     if source == "dora":
-        dora_service = validated_data["service"]
+        dora_service = d["service"]
         structure = dora_service.structure
         MobilisationEvent.objects.create(
-            **common_data,
+            **common,
             service=dora_service,
             structure=structure,
             is_structure_member=False,
@@ -200,38 +201,18 @@ def _record_service_mobilisation_event(common_data, validated_data):
             service_source=dora_service.source.value if dora_service.source else "",
             update_needed=dora_service.get_update_needed(),
             status=dora_service.status,
-            update_status="",
-            search_view=None,
-            external_link=external_link,
+            external_link=d["external_link"],
         )
     else:
-        # Mobilisation d'un service non-Dora
         DiMobilisationEvent.objects.create(
-            **common_data,
-            service_id=validated_data["service_id"],
-            structure_id=validated_data["structure_id"],
+            **common,
+            service_id=d["service_id"],
+            structure_id=d["structure_id"],
             source=source,
-            service_name=validated_data["service_name"],
-            structure_name=validated_data["structure_name"],
-            structure_department=validated_data["structure_department"],
-            search_view=None,
-            external_link=external_link,
+            service_name=d["service_name"],
+            structure_name=d["structure_name"],
+            structure_department=d["structure_department"],
+            external_link=d["external_link"],
         )
 
     return Response(status=status.HTTP_201_CREATED)
-
-
-@api_view(["POST"])
-@permission_classes([OrientationAPIPermission])
-@renderer_classes([JSONRenderer])
-def record_mobilisation_event(request):
-    serializer = EmploisStatsSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    d = serializer.validated_data
-
-    common_data = _build_common_stats_data(d)
-
-    if not d["service_id"]:
-        return _record_structure_infos_view(common_data, d)
-
-    return _record_service_mobilisation_event(common_data, d)
