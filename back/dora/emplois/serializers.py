@@ -197,30 +197,6 @@ class EmploisOrientationSerializer(OrientationSerializer):
         return data
 
 
-def _parse_dora_uuid(prefixed_id):
-    return uuid.UUID(prefixed_id.removeprefix("dora--").strip())
-
-
-def _get_dora_structure(structure_id):
-    try:
-        return (
-            Structure.objects.select_related("source")
-            .only("pk", "department", "city_code", "source__value")
-            .get(pk=_parse_dora_uuid(structure_id))
-        )
-    except (ValueError, Structure.DoesNotExist):
-        raise NotFound("Structure Dora introuvable pour cet identifiant.")
-
-
-def _get_dora_service(service_id):
-    try:
-        return Service.objects.select_related(
-            "structure", "structure__source", "source"
-        ).get(pk=_parse_dora_uuid(service_id))
-    except (ValueError, Service.DoesNotExist):
-        raise NotFound("Service Dora introuvable pour cet identifiant.")
-
-
 class EmploisStatsSerializer(serializers.Serializer):
     anonymous_user_hash = serializers.RegexField(
         r"^[0-9a-f]{32}$",
@@ -245,14 +221,30 @@ class EmploisStatsSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        service_id = attrs.get("service_id") or ""
+        service_id = attrs.get("service_id")
         source = attrs["source"]
 
-        if service_id and source == "dora":
-            attrs["service"] = _get_dora_service(service_id)
-        elif not service_id and source == "dora":
-            attrs["structure"] = _get_dora_structure(attrs["structure_id"])
-        elif service_id and source != "dora":
+        if source == "dora":
+            try:
+                if service_id:
+                    attrs["service"] = Service.objects.select_related(
+                        "structure", "structure__source", "source"
+                    ).get(pk=uuid.UUID(service_id.removeprefix("dora--").strip()))
+                else:
+                    attrs["structure"] = (
+                        Structure.objects.select_related("source")
+                        .only("pk", "department", "city_code", "source__value")
+                        .get(
+                            pk=uuid.UUID(
+                                attrs["structure_id"].removeprefix("dora--").strip()
+                            )
+                        )
+                    )
+            except (ValueError, Service.DoesNotExist, Structure.DoesNotExist):
+                if service_id:
+                    raise NotFound("Service Dora introuvable pour cet identifiant.")
+                raise NotFound("Structure Dora introuvable pour cet identifiant.")
+        elif service_id:
             errors = {}
             for field in ("service_name", "structure_name", "structure_department"):
                 if not attrs.get(field):
