@@ -1,5 +1,4 @@
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 
 export async function deleteFile(fileName: string) {
   const encodedFileName = encodeURIComponent(fileName);
@@ -10,7 +9,6 @@ export async function deleteFile(fileName: string) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
