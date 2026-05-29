@@ -32,7 +32,7 @@
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
     "@sveltejs/adapter-node": "^5.5.4",
-    "@sveltejs/kit": "^2.61.0",
+    "@sveltejs/kit": "^2.61.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.3.0",
