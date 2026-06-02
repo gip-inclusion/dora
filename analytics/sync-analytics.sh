@@ -2,6 +2,7 @@
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
+set -o pipefail
 
 # Trace execution
 [[ "${DEBUG}" ]] && set -x
@@ -145,10 +146,12 @@ SQL
     # En cas d'échec, on remet la base analytics dans son état attendu (schéma public).
     trap 'psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;" >/dev/null 2>&1 || true' EXIT
 
-    # On restreint l'export au schéma raw_dora. --extension=postgis force l'inclusion
-    # de l'extension PostGIS (et donc du type geometry) que --schema seul omettrait
-    time psql "$PILOTAGE_DATABASE_URL" -c "DROP SCHEMA IF EXISTS raw_dora CASCADE;"
-    time pg_dump "$DATABASE_URL" --schema=raw_dora --extension=postgis --no-owner --no-privileges --verbose \
+    # PostGIS existe déjà dans public sur pilotage : on réécrit les types vers public.*
+    # et on exclut spatial_ref_sys (déjà présente) plutôt que d'embarquer l'extension.
+    time psql "$PILOTAGE_DATABASE_URL" -c "DROP SCHEMA IF EXISTS raw_dora CASCADE; CREATE EXTENSION IF NOT EXISTS postgis;"
+    time pg_dump "$DATABASE_URL" --schema=raw_dora --no-owner --no-privileges --verbose \
+        --exclude-table-data=raw_dora.spatial_ref_sys \
+        | sed -E 's/\braw_dora\.(geometry|geography)\b/public.\1/g' \
         | psql "$PILOTAGE_DATABASE_URL" --set ON_ERROR_STOP=1
 
     psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;"
