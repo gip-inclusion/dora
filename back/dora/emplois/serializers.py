@@ -92,7 +92,9 @@ class EmploisOrientationDataSerializer(serializers.Serializer):
     beneficiary_id = serializers.UUIDField()
     structure_id = serializers.UUIDField()
     structure_name = serializers.CharField(max_length=140)
-    structure_siret = serializers.CharField(max_length=14, validators=[validate_siret])
+    structure_siret = serializers.CharField(
+        max_length=14, validators=[validate_siret], required=False, allow_blank=True
+    )
     prescriber_id = serializers.UUIDField()
     prescriber_email = serializers.EmailField()
     prescriber_first_name = serializers.CharField(max_length=140)
