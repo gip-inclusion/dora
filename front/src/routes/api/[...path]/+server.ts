@@ -32,6 +32,8 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
 
   const responseHeaders = new Headers(response.headers);
   responseHeaders.delete("set-cookie");
+  responseHeaders.delete("content-encoding");
+  responseHeaders.delete("content-length");
 
   return new Response(response.body, {
     status: response.status,
