@@ -2,6 +2,8 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { API_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
 
+export const trailingSlash = "ignore";
+
 async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const { request, cookies, params } = event;
   const token = cookies.get(TOKEN_KEY);
