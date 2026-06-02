@@ -1,12 +1,13 @@
 import logging
 
+from django.conf import settings
+from django.core.cache import cache
 from django.db import transaction
 from django.http.response import Http404
 from django.utils import timezone
-from django.views.decorators.debug import sensitive_post_parameters
 from itoutils.django.nexus.token import decode_token
 from rest_framework import exceptions, permissions
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -26,7 +27,7 @@ from dora.structures.serializers import StructureSerializer
 from dora.users.models import User
 
 from ..structures.emails import send_invitation_email
-from .serializers import JoinStructureSerializer, TokenSerializer, UserInfoSerializer
+from .serializers import JoinStructureSerializer, UserInfoSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -42,21 +43,32 @@ def _set_user_has_accepted_cgu(user, cgu_version):
         user.save(update_fields=["cgu_versions_accepted"])
 
 
-@sensitive_post_parameters(["key"])
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def user_info(request):
+    user = request.user
+    token = Token.objects.get(user=user)
+    update_last_login(user)
+    return Response(UserInfoSerializer(user, context={"token": token}).data, status=200)
+
+
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
-def user_info(request):
-    serializer = TokenSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    key = serializer.validated_data["key"]
-    try:
-        user, token = TokenAuthentication().authenticate_credentials(key)
-    except exceptions.AuthenticationFailed:
+def token_exchange(request):
+    code = request.data.get("code")
+    if not code:
+        raise ValidationError("code requis")
+
+    cache_key = f"auth_code:{code}"
+    if not cache.add(f"{cache_key}:claimed", "1", timeout=60):
         raise Http404
 
-    update_last_login(user)
+    token_key = cache.get(cache_key)
+    if not token_key:
+        raise Http404
 
-    return Response(UserInfoSerializer(user, context={"token": token}).data, status=200)
+    cache.delete(cache_key)
+    return Response({"token": token_key, "expires_in": settings.SESSION_COOKIE_AGE})
 
 
 def _create_structure(establishment, user, reason):

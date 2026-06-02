@@ -1,9 +1,13 @@
+import uuid
 from unittest.mock import patch
 
+from django.conf import settings
+from django.core.cache import cache
 from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
+from dora.auth_links.utils import generate_auth_code
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_structure, make_structure_member
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
@@ -14,7 +18,9 @@ DUMMY_SIRET = "12345678901234"
 class AuthenticationTestCase(APITestCase):
     def test_user_info_query_count(self):
         user = baker.make("users.User", is_valid=True)
-        token = Token.objects.create(user=user)
+        Token.objects.create(user=user)
+
+        self.client.force_authenticate(user=user)
 
         structure = make_structure()
         make_structure_member(user=user, structure=structure, is_admin=True)
@@ -38,7 +44,7 @@ class AuthenticationTestCase(APITestCase):
         saved_search.funding_labels.set([baker.make("FundingLabel")])
 
         with self.assertNumQueries(15):
-            response = self.client.post("/auth/user-info/", {"key": token.key})
+            response = self.client.get("/auth/user-info/")
 
         self.assertEqual(response.status_code, 200)
 
@@ -249,3 +255,50 @@ class AuthenticationTestCase(APITestCase):
                 structure__siret=request_siret, user=user
             ).exists()
         )
+
+
+class TokenExchangeTestCase(APITestCase):
+    def test_token_exchange_returns_token(self):
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = generate_auth_code(token.key)
+
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["token"], token.key)
+        self.assertEqual(response.data["expires_in"], settings.SESSION_COOKIE_AGE)
+
+    def test_token_exchange_consumes_code(self):
+        """Le code ne peut être utilisé qu'une seule fois."""
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = generate_auth_code(token.key)
+
+        self.client.post("/auth/token-exchange/", {"code": code})
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_token_exchange_invalid_code(self):
+        response = self.client.post(
+            "/auth/token-exchange/", {"code": "code-inexistant"}
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_token_exchange_missing_code(self):
+        response = self.client.post("/auth/token-exchange/", {})
+        self.assertEqual(response.status_code, 400)
+
+    def test_token_exchange_race_condition(self):
+        """Un second appel concurrent est rejeté grâce au verrou cache.add."""
+        user = baker.make("users.User", is_valid=True)
+        token, _ = Token.objects.get_or_create(user=user)
+        code = generate_auth_code(token.key)
+
+        # Simuler une requête concurrente qui a déjà posé le verrou
+        cache.add(f"auth_code:{code}:claimed", "1", timeout=60)
+
+        response = self.client.post("/auth/token-exchange/", {"code": code})
+
+        self.assertEqual(response.status_code, 404)

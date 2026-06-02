@@ -5,7 +5,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { getToken, validateCredsAndFillUserInfo } from "$lib/utils/auth";
+  import { validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
@@ -31,7 +31,6 @@
       headers: {
         Accept: defaultAcceptHeader,
         "Content-Type": "application/json",
-        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         structureSlug: data.structure.slug,

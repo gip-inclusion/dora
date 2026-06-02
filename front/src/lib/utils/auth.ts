@@ -14,6 +14,12 @@ export const TOKEN_KEY =
     ? "token"
     : `token_${import.meta.env.VITE_ENVIRONMENT}`;
 
+// Cookie non-httponly indiquant que l'utilisateur est connecté (lisible par JS)
+export const AUTH_STATE_KEY =
+  import.meta.env.VITE_ENVIRONMENT === "production"
+    ? "auth_state"
+    : `auth_state_${import.meta.env.VITE_ENVIRONMENT}`;
+
 export type UserMainActivity =
   | "accompagnateur"
   | "offreur"
@@ -56,52 +62,23 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
   invalidateServicesOptionsCache();
 }
 
-export function getToken() {
+export function isAuthenticated() {
   if (!browser) {
-    return null;
+    return false;
   }
-
-  return Cookies.get(TOKEN_KEY) ?? null;
+  return !!Cookies.get(AUTH_STATE_KEY);
 }
 
-export function setToken(newToken: string) {
-  if (!browser) {
-    return;
-  }
-
-  Cookies.set(TOKEN_KEY, newToken, {
-    path: "/",
-    sameSite: "Lax",
-    secure: true,
-  });
-}
-
-export function removeToken() {
-  if (!browser) {
-    return;
-  }
-
-  Cookies.remove(TOKEN_KEY, {
-    path: "/",
-    secure: true,
-    domain: window.location.hostname,
-  });
-}
-
-function getUserInfo(authToken) {
+function getUserInfo() {
   return fetch(`${getApiURL()}/auth/user-info/`, {
-    method: "POST",
-    headers: {
-      Accept: defaultAcceptHeader,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ key: authToken }),
+    method: "GET",
+    headers: { Accept: defaultAcceptHeader },
   });
 }
 
 export async function refreshUserInfo() {
   try {
-    const result = await getUserInfo(getToken());
+    const result = await getUserInfo();
     if (result.status === 200) {
       const info = (await result.json()) as UserInfo;
       setUserInfo(info);
@@ -114,64 +91,44 @@ export async function refreshUserInfo() {
   }
 }
 
-export function disconnect() {
+export async function disconnect(): Promise<void> {
   if (browser) {
+    try {
+      await fetch("/auth/logout", { method: "POST" });
+    } catch (err) {
+      logException(err);
+      return;
+    }
     setUserInfo(null);
-    removeToken();
     try {
       localStorage.clear();
-    } catch {
-      // Même en cas d'accès refusé, on poursuit la déconnexion.
+    } catch (err) {
+      logException(err);
     }
   }
-}
-
-function migrateTokenFromLocalStorageToCookie(
-  authTokenFromCookie: string | null
-) {
-  if (!authTokenFromCookie) {
-    try {
-      const lsToken = localStorage.getItem(TOKEN_KEY);
-      if (lsToken) {
-        setToken(lsToken);
-        localStorage.removeItem(TOKEN_KEY);
-        return lsToken;
-      }
-    } catch {
-      // Certains contextes navigateur interdisent localStorage
-      // (iframe sandboxée, mode privacy strict, etc.).
-    }
-  }
-
-  return authTokenFromCookie;
 }
 
 export async function validateCredsAndFillUserInfo() {
   setUserInfo(null);
 
-  if (browser) {
-    let authToken = getToken();
+  const authenticated = browser && isAuthenticated();
 
-    authToken = migrateTokenFromLocalStorageToCookie(authToken);
+  if (!authenticated) {
+    return;
+  }
 
-    if (authToken) {
-      // Valide le token actuel et remplit les informations
-      // utilisateur
-      try {
-        const result = await getUserInfo(authToken);
-        if (result.status === 200) {
-          const info = await result.json();
-          setUserInfo(info);
-          userPreferencesSet([...info.structures, ...info.pendingStructures]);
-        } else if (result.status === 404) {
-          // Le token est invalide, on déconnecte l'utilisateur
-          disconnect();
-        } else {
-          log("Unexpected status code", { result });
-        }
-      } catch (err) {
-        logException(err);
-      }
+  try {
+    const result = await getUserInfo();
+    if (result.status === 200) {
+      const info = await result.json();
+      setUserInfo(info);
+      userPreferencesSet([...info.structures, ...info.pendingStructures]);
+    } else if (result.status === 401 || result.status === 403) {
+      await disconnect();
+    } else {
+      log("Unexpected status code", { result });
     }
+  } catch (err) {
+    logException(err);
   }
 }

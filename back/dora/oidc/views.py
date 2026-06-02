@@ -1,7 +1,9 @@
 import logging
+import uuid
 from urllib.parse import urlparse
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import SuspiciousOperation
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
@@ -20,8 +22,8 @@ from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
-from dora.core.constants import FRONTEND_PC_CALLBACK_URL
-from dora.core.utils import set_auth_token_cookie
+from dora.auth_links.utils import generate_auth_code
+from dora.core.constants import FRONTEND_CALLBACK_URL
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +60,10 @@ def oidc_logged_in(request):
     # attention : l'utilisateur est toujours anonyme (à ce point il n'existe qu'un token DRF)
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
-    redirect_uri = FRONTEND_PC_CALLBACK_URL
+    # Échange sécurisé via un code à usage unique (évite que le token apparaisse dans l'URL)
+    code = generate_auth_code(token.key)
+
+    redirect_uri = add_url_params(FRONTEND_CALLBACK_URL, {"code": code})
 
     # gestion du `next` :
     if next_url := request.GET.get("next"):
@@ -73,11 +78,7 @@ def oidc_logged_in(request):
         )
         redirect_uri = add_url_params(redirect_uri, url_params)
 
-    response = HttpResponseRedirect(redirect_to=redirect_uri)
-
-    set_auth_token_cookie(response, token.key)
-
-    return response
+    return HttpResponseRedirect(redirect_to=redirect_uri)
 
 
 @api_view(["GET"])

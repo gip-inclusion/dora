@@ -1,7 +1,6 @@
 import type { SavedSearch, SavedSearchNotificationFrequency } from "$lib/types";
 import { fetchData } from "$lib/utils/misc";
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { getQueryString } from "$lib/utils/service-search";
 
 export async function saveSearch(
@@ -24,7 +23,6 @@ export async function saveSearch(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ ...savedSearch }),
   });
@@ -45,7 +43,6 @@ export async function updateSavedSearchFrequency(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ frequency }),
   });
@@ -63,7 +60,6 @@ export async function deleteSavedSearch(savedSearchId: number) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
   });
   if (!response.ok) {

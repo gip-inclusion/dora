@@ -6,7 +6,7 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { getToken, userInfo, refreshUserInfo } from "$lib/utils/auth";
+  import { userInfo, refreshUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
@@ -67,7 +67,6 @@
       headers: {
         Accept: defaultAcceptHeader,
         "Content-Type": "application/json",
-        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         siret: establishment.slug ? undefined : establishment.siret,

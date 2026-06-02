@@ -7,7 +7,7 @@
   import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
-  import { getToken } from "$lib/utils/auth";
+  import { isAuthenticated } from "$lib/utils/auth";
   import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
   import { trackMatomoEvent } from "$lib/utils/matomo";
 
@@ -41,7 +41,7 @@
   let shareMailtoHref = $derived(buildServiceShareMailto(service, isDI));
 
   function handleShowContactClick() {
-    if (!getToken() && !service.isContactInfoPublic) {
+    if (!isAuthenticated() && !service.isContactInfoPublic) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search

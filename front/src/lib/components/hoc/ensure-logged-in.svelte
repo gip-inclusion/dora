@@ -3,7 +3,7 @@
 
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { getToken, userInfo } from "$lib/utils/auth";
+  import { isAuthenticated, userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
 
   interface Props {
@@ -13,7 +13,7 @@
   let { children }: Props = $props();
 
   onMount(() => {
-    if (!getToken()) {
+    if (!isAuthenticated()) {
       const searchParams = page.url.searchParams;
       const loginHint = searchParams.get("login_hint");
       if (loginHint) {

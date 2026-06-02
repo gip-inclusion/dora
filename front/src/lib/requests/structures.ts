@@ -1,5 +1,4 @@
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import type {
   PutativeStructureMember,
@@ -68,17 +67,14 @@ export async function getActiveStructures({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/structures/", getApiURL());
+  const params = new URLSearchParams();
+  params.append("active", "1");
+  params.append("page_size", pageSize.toString());
+  params.append("page", page.toString());
+  const url = `${getApiURL()}/structures/?${params}`;
 
-  url.searchParams.append("active", "1");
-  url.searchParams.append("page_size", pageSize.toString());
-  url.searchParams.append("page", page.toString());
-
-  return (
-    await fetchData<{ count: number; results: ShortStructure[] }>(
-      url.toString()
-    )
-  ).data;
+  return (await fetchData<{ count: number; results: ShortStructure[] }>(url))
+    .data;
 }
 
 export async function getStructure(
@@ -98,8 +94,6 @@ export function createStructure(structure) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -114,8 +108,6 @@ export function modifyStructure(structure) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -163,7 +155,6 @@ export async function deleteMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -188,7 +179,6 @@ export async function resendInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -213,7 +203,6 @@ export async function cancelInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -238,7 +227,6 @@ export async function acceptMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -263,7 +251,6 @@ export async function rejectMembershipRequest(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 

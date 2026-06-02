@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
-import { getToken } from "$lib/utils/auth";
+import { isAuthenticated } from "$lib/utils/auth";
 
 import { getNextPage } from "../utils";
 import type { PageLoad } from "./$types";
@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ url, parent }) => {
 
   const nextPage = getNextPage(url);
   // Si on a déjà un token, on redirige directement sur la destination
-  if (getToken()) {
+  if (isAuthenticated()) {
     redirect(302, nextPage);
   }
   return {

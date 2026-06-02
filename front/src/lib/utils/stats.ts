@@ -1,6 +1,5 @@
 import { browser } from "$app/environment";
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
@@ -30,15 +29,10 @@ async function logAnalyticsEvent(
     userHash: getAnalyticsId(),
     ...params,
   };
-  const currentToken = getToken();
-
   const headers = new Headers({
     Accept: "application/json; version=1.0",
     "Content-Type": "application/json",
   });
-  if (currentToken) {
-    headers.append("Authorization", `Token ${currentToken}`);
-  }
 
   const res = await fetchFunction(`${getApiURL()}/stats/event/`, {
     method: "POST",

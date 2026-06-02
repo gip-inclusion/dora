@@ -1,5 +1,8 @@
+from urllib.parse import parse_qs, urlparse
+
 import sesame.utils
 from django.conf import settings
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -42,13 +45,14 @@ def test_authenticate_with_link(client):
         ),
     )
     assert response.status_code == 302, "Une redirection est attendue"
-    assert "auth/pc-callback" in response.url, (
+    assert "auth/callback" in response.url, (
         "On doit rediriger vers l'idetification du frontend"
     )
+    assert "code=" in response.url, "L'URL doit contenir un code d'échange"
 
 
-def test_authenticate_with_link_sets_cookie(client):
-    """authenticate_with_link définit le cookie d'authentification."""
+def test_authenticate_with_link_exchanges_code_for_token(client):
+    """authenticate_with_link génère un code d'échange pointant vers le bon token."""
     user = make_user(is_active=True)
     token, _ = Token.objects.get_or_create(user=user)
 
@@ -59,9 +63,10 @@ def test_authenticate_with_link_sets_cookie(client):
     )
 
     assert response.status_code == 302
+    assert "auth/callback" in response.url
 
-    cookie = response.cookies["token_test"]
-    assert cookie.value == token.key
+    code = parse_qs(urlparse(response.url).query)["code"][0]
+    assert cache.get(f"auth_code:{code}") == token.key
 
 
 def test_authenticate_with_link_creates_token_if_not_exists(client):
@@ -78,5 +83,8 @@ def test_authenticate_with_link_creates_token_if_not_exists(client):
 
     assert response.status_code == 302
     assert Token.objects.filter(user=user).exists()
+
     token = Token.objects.get(user=user)
-    assert response.cookies["token_test"].value == token.key
+
+    code = parse_qs(urlparse(response.url).query)["code"][0]
+    assert cache.get(f"auth_code:{code}") == token.key

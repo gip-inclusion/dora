@@ -104,10 +104,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
         return SavedSearchSerializer(qs, many=True).data
 
 
-class TokenSerializer(serializers.Serializer):
-    key = serializers.CharField()
-
-
 class JoinStructureSerializer(serializers.Serializer):
     siret = serializers.CharField(required=False)
     structure_slug = serializers.CharField(required=False)

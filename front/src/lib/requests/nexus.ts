@@ -1,7 +1,6 @@
 import { toast } from "@zerodevx/svelte-toast";
 import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 
 export type NexusServiceID =
   | "dora"
@@ -17,12 +16,11 @@ export type NexusMenuStatus = {
 };
 
 export const getNexusMenuStatus = async () => {
-  const url = new URL("/nexus/menu-status/", getApiURL());
+  const url = `${getApiURL()}/nexus/menu-status/`;
   const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
   });
   if (response.ok) {
@@ -53,15 +51,15 @@ export const getOrientationBeneficiaryInfo = async (
   serviceSlug: string,
   fetchFunction = fetch
 ) => {
-  const url = new URL("/orientations/emplois/beneficiary-info/", getApiURL());
-  url.searchParams.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
-  url.searchParams.set("service_slug", serviceSlug);
+  const params = new URLSearchParams();
+  params.set(ORIENTATION_JWT_QUERY_PARAM, opJwt);
+  params.set("service_slug", serviceSlug);
+  const url = `${getApiURL()}/orientations/emplois/beneficiary-info/?${params}`;
 
   const response = await fetchFunction(url, {
     method: "GET",
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 

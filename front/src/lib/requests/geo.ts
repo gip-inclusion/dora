@@ -13,7 +13,7 @@ export async function getCityLabel(
   }
 
   const cleanInseeCode = inseeCode.trim();
-  const url = new URL(`city-label/${cleanInseeCode}/`, getApiURL()).toString();
+  const url = `${getApiURL()}/city-label/${cleanInseeCode}/`;
 
   const result = await fetchData<string>(url, fetchFunction);
 

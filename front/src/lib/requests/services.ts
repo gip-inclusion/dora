@@ -1,5 +1,4 @@
 import { getApiURL } from "$lib/utils/api";
-import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 import type {
@@ -60,7 +59,7 @@ export async function getServiceDI(
   fetchFunction = fetch
 ): Promise<Service> {
   const userHash = getAnalyticsId();
-  const url = new URL(`/services-di/${diId}/`, getApiURL());
+  const url = `${getApiURL()}/services-di/${diId}/`;
 
   const response = await fetchData<Service>(
     url.toString(),
@@ -87,15 +86,14 @@ export async function getPublishedServices({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/services/", getApiURL());
+  const params = new URLSearchParams();
+  params.append("published", "1");
+  params.append("page_size", pageSize.toString());
+  params.append("page", page.toString());
+  const url = `${getApiURL()}/services/?${params}`;
 
-  url.searchParams.append("published", "1");
-  url.searchParams.append("page_size", pageSize.toString());
-  url.searchParams.append("page", page.toString());
-
-  return (
-    await fetchData<{ count: number; results: ShortService[] }>(url.toString())
-  ).data;
+  return (await fetchData<{ count: number; results: ShortService[] }>(url))
+    .data;
 }
 
 export async function getModel(
@@ -128,7 +126,6 @@ export function createOrModifyService(service: Service) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(serviceToBack(service)),
   });
@@ -140,7 +137,6 @@ export function markServiceAsSynced(service: Service | ShortService) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ markSynced: true }),
   });
@@ -166,7 +162,6 @@ export async function createOrModifyModel(model, updateAllServices = false) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(data),
   });
@@ -181,7 +176,6 @@ export async function deleteService(serviceSlug) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -214,7 +208,6 @@ export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ slug: bookmarkSlug, isDI }),
   });
@@ -231,7 +224,6 @@ export async function clearBookmark(bookmarkId: number) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
   });
   if (!response.ok) {
@@ -248,7 +240,6 @@ export async function unPublishService(serviceSlug) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ status }),
   });
@@ -268,7 +259,6 @@ export async function archiveService(serviceSlug) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ status }),
   });
@@ -288,7 +278,6 @@ export async function unarchiveService(serviceSlug) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ status }),
   });
@@ -308,7 +297,6 @@ export async function publishService(serviceSlug) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ status }),
   });
@@ -328,7 +316,6 @@ export async function convertSuggestionToDraft(serviceSlug) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ status }),
   });
@@ -373,7 +360,6 @@ export function updateServicesFromModel(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({
       services: services.map((serv) => serv.slug),
@@ -394,7 +380,6 @@ export function addIgnoredServicesToUpdate(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({
       data: modelToServiceSlugs,
@@ -408,7 +393,6 @@ export function markServicesAsUpToDate(services: { slug: string }[]) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({
       services: services.map((serv) => serv.slug),
