@@ -177,7 +177,6 @@ def test_orientations_create_requires_mandatory_fields(
         "beneficiary_id",
         "structure_id",
         "structure_name",
-        "structure_siret",
         "prescriber_id",
         "prescriber_email",
         "prescriber_first_name",
