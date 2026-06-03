@@ -11,3 +11,5 @@ talisman_report
 .envrc
 security_report.json
 .venv
+/dora_back.egg-info
+

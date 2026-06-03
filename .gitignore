@@ -9,3 +9,4 @@
 .envrc
 *.logs
 .cursor
+.claude
