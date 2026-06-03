@@ -24,6 +24,12 @@ APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
 # Voir : https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+# Environnement :
+# production | staging | review | local
+# Utilisé pour l'affichage de l'environnement sur l'admin,
+# et pour activer le SSL sur la connexion à la base de données.
+ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # Liste des applications Django :
@@ -508,7 +514,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = bool(ENVIRONMENT == "production")
 EMAIL_DOMAIN = os.getenv("EMAIL_DOMAIN")
 SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL")
 
@@ -639,11 +645,6 @@ ORIENTATION_SIRENE_BLACKLIST = [
     "314635368",
 ]
 
-# Environnement :
-# production | staging | review | local
-# Utilisé our l'affichage de l'environnement sur l'admin,
-# et pour activer le SSL sur la connexion à la base de données.
-ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 
 # Nom du cookie d'authentification : différencié par environnement pour éviter
 # les collisions de cookies entre prod et staging (même domaine parent).
