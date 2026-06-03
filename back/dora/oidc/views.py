@@ -1,9 +1,7 @@
 import logging
-import uuid
 from urllib.parse import urlparse
 
 from django.conf import settings
-from django.core.cache import cache
 from django.core.exceptions import SuspiciousOperation
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse

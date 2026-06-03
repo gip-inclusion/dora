@@ -1,4 +1,3 @@
-import uuid
 from unittest.mock import patch
 
 from django.conf import settings

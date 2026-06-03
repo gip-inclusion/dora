@@ -1,8 +1,6 @@
 import logging
-import uuid
 
 from django.conf import settings
-from django.core.cache import cache
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -12,9 +10,9 @@ from itoutils.urls import add_url_params
 from rest_framework.authtoken.models import Token
 from sesame.utils import get_token, get_user
 
-from dora.auth_links.utils import generate_auth_code
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
+from dora.auth_links.utils import generate_auth_code
 from dora.core.constants import FRONTEND_CALLBACK_URL
 from dora.users.models import User
 
