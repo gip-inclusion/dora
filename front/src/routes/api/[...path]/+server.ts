@@ -2,6 +2,8 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { API_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
 
+export const trailingSlash = "ignore";
+
 async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const { request, cookies, params } = event;
   const token = cookies.get(TOKEN_KEY);
@@ -30,6 +32,8 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
 
   const responseHeaders = new Headers(response.headers);
   responseHeaders.delete("set-cookie");
+  responseHeaders.delete("content-encoding");
+  responseHeaders.delete("content-length");
 
   return new Response(response.body, {
     status: response.status,
