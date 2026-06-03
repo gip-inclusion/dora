@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db.models import CharField, Prefetch, Value
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
@@ -17,13 +18,14 @@ from dora.services.models import (
     FundingLabel,
     Service,
 )
-from dora.stats.models import DiMobilisationEvent, MobilisationEvent, StructureInfosView
 from dora.structures.models import DisabledDoraFormDIStructure
 
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
+    DoraServiceMobilisationSerializer,
+    DoraStructureViewSerializer,
     EmploisOrientationSerializer,
-    EmploisStatsSerializer,
+    ExternalServiceMobilisationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
 )
@@ -154,65 +156,24 @@ class OrientationViewSet(
 @permission_classes([OrientationAPIPermission])
 @renderer_classes([JSONRenderer])
 def record_mobilisation_event(request):
-    serializer = EmploisStatsSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    d = serializer.validated_data
+    source = request.data.get("source")
+    if not source:
+        raise ValidationError({"source": "Ce champ est obligatoire."})
 
-    source = d["source"]
-    common = {
-        "path": "",
-        "user": None,
-        "anonymous_user_hash": d["anonymous_user_hash"],
-        "user_kind": d["user_kind"],
-        "is_logged": False,
-        "is_staff": False,
-        "is_manager": False,
-        "is_an_admin": False,
-    }
+    is_dora = source == "dora"
+    has_service = bool(request.data.get("service_id"))
 
-    if not d["service_id"]:
-        if source != "dora":
-            # Il n'y a pas de structure non-Dora sur Dora : on ne fait rien
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        structure = d["structure"]
-        StructureInfosView.objects.create(
-            **common,
-            structure=structure,
-            is_structure_member=False,
-            is_structure_admin=False,
-            structure_department=structure.department,
-            structure_city_code=structure.city_code,
-            structure_source=structure.source.value if structure.source else "",
-        )
-        return Response(status=status.HTTP_201_CREATED)
-
-    if source == "dora":
-        dora_service = d["service"]
-        structure = dora_service.structure
-        MobilisationEvent.objects.create(
-            **common,
-            service=dora_service,
-            structure=structure,
-            is_structure_member=False,
-            is_structure_admin=False,
-            structure_department=structure.department,
-            structure_city_code=structure.city_code,
-            structure_source=structure.source.value if structure.source else "",
-            service_source=dora_service.source.value if dora_service.source else "",
-            update_needed=dora_service.get_update_needed(),
-            status=dora_service.status,
-            external_link=d["external_link"],
-        )
+    if is_dora and has_service:
+        serializer_class = DoraServiceMobilisationSerializer
+    elif is_dora:
+        serializer_class = DoraStructureViewSerializer
+    elif has_service:
+        serializer_class = ExternalServiceMobilisationSerializer
     else:
-        DiMobilisationEvent.objects.create(
-            **common,
-            service_id=d["service_id"],
-            structure_id=d["structure_id"],
-            source=source,
-            service_name=d["service_name"],
-            structure_name=d["structure_name"],
-            structure_department=d["structure_department"],
-            external_link=d["external_link"],
-        )
+        # Structure hors Dora : rien à enregistrer.
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
+    serializer = serializer_class(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
     return Response(status=status.HTTP_201_CREATED)
