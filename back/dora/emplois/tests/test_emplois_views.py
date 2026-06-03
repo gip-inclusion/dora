@@ -45,16 +45,16 @@ def test_api_requires_emplois_email(api_client, exposed_route):
     ],
     ids=["post", "delete"],
 )
-def test_reference_data_api_is_read_only(emplois_user, api_client, method, data):
+def test_reference_data_api_is_read_only(emplois_api_client, method, data):
     url = reverse("emplois:reference-data-list")
-    client_method = getattr(api_client, method)
+    client_method = getattr(emplois_api_client, method)
     response = client_method(url, data=data) if data is not None else client_method(url)
 
     assert response.status_code == 403
 
 
-def test_reference_data_api_list(emplois_user, api_client):
-    response = api_client.get(reverse("emplois:reference-data-list"))
+def test_reference_data_api_list(emplois_api_client):
+    response = emplois_api_client.get(reverse("emplois:reference-data-list"))
 
     assert response.status_code == 200
     response_items = {
@@ -78,17 +78,17 @@ def test_reference_data_api_list(emplois_user, api_client):
 
 
 def test_reference_data_api_list_queries_are_bounded(
-    emplois_user, api_client, django_assert_num_queries
+    emplois_api_client, django_assert_num_queries
 ):
     with django_assert_num_queries(1):
-        response = api_client.get(reverse("emplois:reference-data-list"))
+        response = emplois_api_client.get(reverse("emplois:reference-data-list"))
 
     assert response.status_code == 200
 
 
-def test_services_api_list(emplois_user, api_client):
+def test_services_api_list(emplois_api_client):
     published_service = make_published_service()
-    list_response = api_client.get(reverse("emplois:service-list"))
+    list_response = emplois_api_client.get(reverse("emplois:service-list"))
     assert list_response.status_code == 200
     assert list_response.data["count"] == 1
     assert len(list_response.data["results"]) == 1
@@ -98,10 +98,10 @@ def test_services_api_list(emplois_user, api_client):
     assert data["short_desc"] == published_service.short_desc
 
 
-def test_services_api_detail(emplois_user, api_client):
+def test_services_api_detail(emplois_api_client):
     published_service = make_published_service()
     url = reverse("emplois:service-detail", kwargs={"pk": published_service.id})
-    detail_response = api_client.get(url)
+    detail_response = emplois_api_client.get(url)
     assert detail_response.status_code == 200
     detail_data = detail_response.data
     assert detail_data["id"] == str(published_service.id)
@@ -117,21 +117,20 @@ def test_services_api_detail(emplois_user, api_client):
     ],
     ids=["post", "patch", "delete"],
 )
-def test_services_api_is_read_only(emplois_user, api_client, method, use_detail, data):
+def test_services_api_is_read_only(emplois_api_client, method, use_detail, data):
     published_service = make_published_service()
     if use_detail:
         url = reverse("emplois:service-detail", kwargs={"pk": published_service.id})
     else:
         url = reverse("emplois:service-list")
-    client_method = getattr(api_client, method)
+    client_method = getattr(emplois_api_client, method)
     response = client_method(url, data=data) if data is not None else client_method(url)
 
     assert response.status_code == 403
 
 
 def test_services_api_list_queries_are_bounded(
-    emplois_user,
-    api_client,
+    emplois_api_client,
     snapshot,
 ):
     for i in range(5):
@@ -144,7 +143,7 @@ def test_services_api_list_queries_are_bounded(
         make_orientation(service=service, status=OrientationStatus.REJECTED)
 
     with assertSnapshotQueries(snapshot):
-        response = api_client.get(reverse("emplois:service-list"))
+        response = emplois_api_client.get(reverse("emplois:service-list"))
 
     assert response.status_code == 200
     assert response.data["count"] == 5
@@ -152,13 +151,12 @@ def test_services_api_list_queries_are_bounded(
 
 
 def test_services_api_detail_queries_are_bounded(
-    emplois_user,
-    api_client,
+    emplois_api_client,
     snapshot,
 ):
     published_service = make_published_service()
     with assertSnapshotQueries(snapshot):
-        response = api_client.get(
+        response = emplois_api_client.get(
             reverse("emplois:service-detail", kwargs={"pk": published_service.id})
         )
 
@@ -175,8 +173,7 @@ def test_services_api_detail_queries_are_bounded(
     ids=["post", "patch", "delete"],
 )
 def test_disabled_dora_form_di_structures_api_is_read_only(
-    emplois_user,
-    api_client,
+    emplois_api_client,
     method,
     use_detail,
     data,
@@ -190,7 +187,7 @@ def test_disabled_dora_form_di_structures_api_is_read_only(
     else:
         url = reverse("emplois:disabled-dora-form-di-structure-list")
 
-    client_method = getattr(api_client, method)
+    client_method = getattr(emplois_api_client, method)
     if data is not None:
         response = client_method(url, data=data)
     else:
@@ -200,15 +197,13 @@ def test_disabled_dora_form_di_structures_api_is_read_only(
 
 
 def test_disabled_dora_form_di_structures_api_list(
-    emplois_user, api_client, django_assert_num_queries
+    emplois_api_client, django_assert_num_queries
 ):
     baker.make("structures.DisabledDoraFormDIStructure", source="source-1")
     baker.make("structures.DisabledDoraFormDIStructure", source="source-2")
 
-    api_client.force_authenticate(user=emplois_user)
-
     with django_assert_num_queries(1):
-        response = api_client.get(
+        response = emplois_api_client.get(
             reverse("emplois:disabled-dora-form-di-structure-list")
         )
 
@@ -217,16 +212,14 @@ def test_disabled_dora_form_di_structures_api_list(
 
 
 def test_disabled_dora_form_di_structures_api_detail(
-    emplois_user, api_client, django_assert_num_queries
+    emplois_api_client, django_assert_num_queries
 ):
-    api_client.force_authenticate(user=emplois_user)
-
     di_structure = baker.make(
         "structures.DisabledDoraFormDIStructure", source="source-1"
     )
 
     with django_assert_num_queries(1):
-        response = api_client.get(
+        response = emplois_api_client.get(
             reverse(
                 "emplois:disabled-dora-form-di-structure-detail",
                 kwargs={"pk": di_structure.id},

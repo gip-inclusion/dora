@@ -34,10 +34,10 @@ def test_requires_emplois_email(api_client, base_payload):
 
 
 @pytest.mark.parametrize("method", ["get", "patch", "delete"])
-def test_post_only(emplois_user, api_client, method):
+def test_post_only(emplois_api_client, method):
     # La permission OrientationAPIPermission rejette les méthodes non-POST avant
     # que Django puisse retourner un 405.
-    assert getattr(api_client, method)(URL).status_code == 403
+    assert getattr(emplois_api_client, method)(URL).status_code == 403
 
 
 # ─── Validation ───────────────────────────────────────────────────────────────
@@ -49,34 +49,34 @@ def test_post_only(emplois_user, api_client, method):
     ids=["too_short", "non_hex", "31_chars", "33_chars", "empty"],
 )
 def test_invalid_anonymous_user_hash(
-    emplois_user, api_client, base_payload, invalid_hash
+    emplois_api_client, base_payload, invalid_hash
 ):
     base_payload["anonymous_user_hash"] = invalid_hash
-    assert api_client.post(URL, data=base_payload).status_code == 400
+    assert emplois_api_client.post(URL, data=base_payload).status_code == 400
 
 
-def test_invalid_user_kind(emplois_user, api_client, base_payload):
+def test_invalid_user_kind(emplois_api_client, base_payload):
     base_payload["user_kind"] = "accompagnateur"
-    assert api_client.post(URL, data=base_payload).status_code == 400
+    assert emplois_api_client.post(URL, data=base_payload).status_code == 400
 
 
 @pytest.mark.parametrize(
     "missing_field",
     ["anonymous_user_hash", "user_kind", "structure_id", "source"],
 )
-def test_missing_required_field(emplois_user, api_client, base_payload, missing_field):
+def test_missing_required_field(emplois_api_client, base_payload, missing_field):
     del base_payload[missing_field]
-    assert api_client.post(URL, data=base_payload).status_code == 400
+    assert emplois_api_client.post(URL, data=base_payload).status_code == 400
 
 
 # ─── StructureInfosView (pas de service_id, source Dora) ──────────────────────
 
 
-def test_creates_structure_infos_view(emplois_user, api_client, base_payload):
+def test_creates_structure_infos_view(emplois_api_client, base_payload):
     structure = make_structure(city_code="75056")
     base_payload["structure_id"] = f"dora--{structure.pk}"
 
-    response = api_client.post(URL, data=base_payload)
+    response = emplois_api_client.post(URL, data=base_payload)
 
     assert response.status_code == 201
     event = StructureInfosView.objects.get()
@@ -101,11 +101,11 @@ def test_creates_structure_infos_view(emplois_user, api_client, base_payload):
     ids=["unknown_uuid", "invalid_uuid"],
 )
 def test_returns_404_when_dora_structure_not_found(
-    emplois_user, api_client, base_payload, structure_id
+    emplois_api_client, base_payload, structure_id
 ):
     base_payload["structure_id"] = structure_id
 
-    response = api_client.post(URL, data=base_payload)
+    response = emplois_api_client.post(URL, data=base_payload)
 
     assert response.status_code == 404
     assert response.data["detail"]["code"] == "not_found"
@@ -115,12 +115,12 @@ def test_returns_404_when_dora_structure_not_found(
     assert StructureInfosView.objects.count() == 0
 
 
-def test_ignores_non_dora_structure(emplois_user, api_client, base_payload):
+def test_ignores_non_dora_structure(emplois_api_client, base_payload):
     # Il n'existe pas de structure non-Dora sur Dora : rien n'est enregistré.
     base_payload["source"] = "soliguide"
     base_payload["structure_id"] = "soliguide--ma-structure"
 
-    response = api_client.post(URL, data=base_payload)
+    response = emplois_api_client.post(URL, data=base_payload)
 
     assert response.status_code == 204
     assert StructureInfosView.objects.count() == 0
@@ -130,7 +130,7 @@ def test_ignores_non_dora_structure(emplois_user, api_client, base_payload):
 
 
 def test_creates_mobilisation_event_for_dora_service(
-    emplois_user, api_client, base_payload
+    emplois_api_client, base_payload
 ):
     service = make_published_service()
     service.structure.city_code = "69123"
@@ -139,7 +139,7 @@ def test_creates_mobilisation_event_for_dora_service(
     base_payload["structure_id"] = f"dora--{service.structure.pk}"
     base_payload["external_link"] = "https://example.org/offre"
 
-    response = api_client.post(URL, data=base_payload)
+    response = emplois_api_client.post(URL, data=base_payload)
 
     assert response.status_code == 201
     event = MobilisationEvent.objects.get()
@@ -166,11 +166,11 @@ def test_creates_mobilisation_event_for_dora_service(
     ids=["unknown_uuid", "invalid_uuid"],
 )
 def test_returns_404_when_dora_service_not_found(
-    emplois_user, api_client, base_payload, service_id
+    emplois_api_client, base_payload, service_id
 ):
     base_payload["service_id"] = service_id
 
-    response = api_client.post(URL, data=base_payload)
+    response = emplois_api_client.post(URL, data=base_payload)
 
     assert response.status_code == 404
     assert response.data["detail"]["code"] == "not_found"
@@ -183,8 +183,8 @@ def test_returns_404_when_dora_service_not_found(
 # ─── DiMobilisationEvent (service hors Dora) ──────────────────────────────────
 
 
-def test_creates_di_mobilisation_event(emplois_user, api_client):
-    response = api_client.post(
+def test_creates_di_mobilisation_event(emplois_api_client):
+    response = emplois_api_client.post(
         URL,
         data={
             "anonymous_user_hash": "a" * 32,
@@ -221,7 +221,7 @@ def test_creates_di_mobilisation_event(emplois_user, api_client):
     "missing_field",
     ["service_name", "structure_name", "structure_department"],
 )
-def test_non_dora_service_requires_metadata(emplois_user, api_client, missing_field):
+def test_non_dora_service_requires_metadata(emplois_api_client, missing_field):
     payload = {
         "anonymous_user_hash": "a" * 32,
         "user_kind": "emplois_prescripteur",
@@ -234,7 +234,7 @@ def test_non_dora_service_requires_metadata(emplois_user, api_client, missing_fi
     }
     del payload[missing_field]
 
-    response = api_client.post(URL, data=payload)
+    response = emplois_api_client.post(URL, data=payload)
 
     assert response.status_code == 400
     assert missing_field in response.data
