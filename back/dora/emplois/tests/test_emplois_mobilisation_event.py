@@ -48,9 +48,7 @@ def test_post_only(emplois_api_client, method):
     ["abc", "x" * 32, "a" * 31, "a" * 33, ""],
     ids=["too_short", "non_hex", "31_chars", "33_chars", "empty"],
 )
-def test_invalid_anonymous_user_hash(
-    emplois_api_client, base_payload, invalid_hash
-):
+def test_invalid_anonymous_user_hash(emplois_api_client, base_payload, invalid_hash):
     base_payload["anonymous_user_hash"] = invalid_hash
     assert emplois_api_client.post(URL, data=base_payload).status_code == 400
 
@@ -129,9 +127,7 @@ def test_ignores_non_dora_structure(emplois_api_client, base_payload):
 # ─── MobilisationEvent (service Dora) ─────────────────────────────────────────
 
 
-def test_creates_mobilisation_event_for_dora_service(
-    emplois_api_client, base_payload
-):
+def test_creates_mobilisation_event_for_dora_service(emplois_api_client, base_payload):
     service = make_published_service()
     service.structure.city_code = "69123"
     service.structure.save()
