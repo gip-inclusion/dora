@@ -8,9 +8,10 @@ from django.utils import timezone
 
 from dora.core.test_utils import make_orientation, make_service
 
-
 BUCKET_OBJECTS = "dora.core.management.commands.delete_orphaned_uploads._iter_objects"
-STORAGE_DELETE = "dora.core.management.commands.delete_orphaned_uploads.default_storage.delete"
+STORAGE_DELETE = (
+    "dora.core.management.commands.delete_orphaned_uploads.default_storage.delete"
+)
 
 
 def s3_object(key, age_hours=10):
