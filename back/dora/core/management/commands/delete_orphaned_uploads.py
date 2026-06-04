@@ -10,9 +10,9 @@ from dora.core.commands import BaseCommand
 from dora.orientations.models import Orientation
 from dora.services.models import Service
 
-ORPHAN_AGE_HOURS = 3
+ORPHAN_AGE_HOURS = 0
 
-# Matches orientation attachments (#orientations/) and service forms (structure UUID/).
+# Correspond aux préfixes des documents pour les orientations (#orientations/) ou les formulaires des services (structure UUID/).
 _MANAGED_KEY = re.compile(
     rf"^{re.escape(settings.ENVIRONMENT)}/"
     r"(#orientations/|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)"
