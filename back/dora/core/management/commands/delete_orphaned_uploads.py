@@ -22,7 +22,7 @@ def _iter_objects():
 
 
 class Command(BaseCommand):
-    help = "Supprime les fichiers uploadés orphelins (non référencés en base) de plus de 6 heures"
+    help = f"Supprime les fichiers uploadés orphelins (non référencés en base) de plus de {ORPHAN_AGE_HOURS} heures"
 
     def add_arguments(self, parser):
         parser.add_argument(
