@@ -33,7 +33,7 @@
       "size": "S"
     },
     {
-      "command": "0 4 * * * tools/delete-orphaned-documents.sh",
+      "command": "0 4 * * * tools/delete-orphaned-uploads.sh",
       "size": "S"
     }
   ]
