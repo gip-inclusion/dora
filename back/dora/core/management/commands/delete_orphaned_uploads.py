@@ -1,3 +1,4 @@
+import re
 from datetime import timedelta
 from itertools import chain
 
@@ -11,14 +12,25 @@ from dora.services.models import Service
 
 ORPHAN_AGE_HOURS = 3
 
+# Matches orientation attachments (#orientations/) and service forms (structure UUID/).
+_MANAGED_KEY = re.compile(
+    rf"^{re.escape(settings.ENVIRONMENT)}/"
+    r"(#orientations/|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)"
+)
+
 
 def _iter_objects():
     """Chercher le file path et la date de la dernière modification de tous les objets dans le bucket s3"""
     client = default_storage.connection.meta.client
     paginator = client.get_paginator("list_objects_v2")
-    for page in paginator.paginate(Bucket=settings.AWS_STORAGE_BUCKET_NAME):
+    for page in paginator.paginate(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Prefix=f"{settings.ENVIRONMENT}/",
+    ):
         for obj in page.get("Contents", ()):
-            yield obj["Key"], obj["LastModified"]
+            key = obj["Key"]
+            if _MANAGED_KEY.match(key):
+                yield key, obj["LastModified"]
 
 
 class Command(BaseCommand):
