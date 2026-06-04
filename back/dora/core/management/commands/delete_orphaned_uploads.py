@@ -10,7 +10,7 @@ from dora.core.commands import BaseCommand
 from dora.orientations.models import Orientation
 from dora.services.models import Service
 
-ORPHAN_AGE_HOURS = 0
+ORPHAN_AGE_HOURS = 3
 
 # Correspond aux préfixes des documents pour les orientations (#orientations/) ou les formulaires des services (structure UUID/).
 _MANAGED_KEY = re.compile(
