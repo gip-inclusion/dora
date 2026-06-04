@@ -6,6 +6,7 @@ import pytest
 from django.core.management import call_command
 from django.utils import timezone
 
+from dora.core.management.commands.delete_orphaned_uploads import _iter_objects
 from dora.core.test_utils import make_orientation, make_service
 
 BUCKET_OBJECTS = "dora.core.management.commands.delete_orphaned_uploads._iter_objects"
@@ -93,3 +94,22 @@ def test_deletes_only_old_orphans(mock_iter, mock_delete):
     call_cmd(wet_run=True)
 
     mock_delete.assert_called_once_with("old_orphan.pdf")
+
+
+@patch("dora.core.management.commands.delete_orphaned_uploads.default_storage")
+def test_iter_objects_skips_unmanaged_path(mock_storage):
+    now = timezone.now()
+    mock_page = {
+        "Contents": [
+            {"Key": "local/#orientations/abc/file.pdf", "LastModified": now},
+            {"Key": "local/some-other-prefix/file.pdf", "LastModified": now},
+        ]
+    }
+    mock_storage.connection.meta.client.get_paginator.return_value.paginate.return_value = [
+        mock_page
+    ]
+
+    keys = [key for key, _ in _iter_objects()]
+
+    assert "local/#orientations/abc/file.pdf" in keys
+    assert "local/some-other-prefix/file.pdf" not in keys
