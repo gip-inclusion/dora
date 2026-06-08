@@ -85,8 +85,10 @@ def test_skips_recent_file(mock_iter, mock_delete):
 @patch(BUCKET_OBJECTS)
 def test_deletes_only_old_orphans(mock_iter, mock_delete):
     make_orientation(beneficiary_attachments=["referenced.pdf"])
+    make_service(forms=["form.pdf"])
     mock_iter.return_value = [
         s3_object("referenced.pdf", age_hours=10),
+        s3_object("form.pdf", age_hours=10),
         s3_object("recent_orphan.pdf", age_hours=1),
         s3_object("old_orphan.pdf", age_hours=10),
     ]
