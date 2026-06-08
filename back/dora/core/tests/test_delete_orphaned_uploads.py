@@ -96,6 +96,32 @@ def test_deletes_only_old_orphans(mock_iter, mock_delete):
     mock_delete.assert_called_once_with("old_orphan.pdf")
 
 
+@pytest.mark.django_db
+@patch(STORAGE_DELETE)
+@patch(BUCKET_OBJECTS)
+def test_aborts_when_orientations_exist_but_have_no_attachments(mock_iter, mock_delete):
+    make_orientation(beneficiary_attachments=[])
+    make_service(forms=["form.pdf"])
+    mock_iter.return_value = [s3_object("orphan.pdf")]
+
+    call_cmd(wet_run=True)
+
+    mock_delete.assert_not_called()
+
+
+@pytest.mark.django_db
+@patch(STORAGE_DELETE)
+@patch(BUCKET_OBJECTS)
+def test_aborts_when_services_exist_but_have_no_forms(mock_iter, mock_delete):
+    make_orientation(beneficiary_attachments=["attachment.pdf"])
+    make_service(forms=[])
+    mock_iter.return_value = [s3_object("orphan.pdf")]
+
+    call_cmd(wet_run=True)
+
+    mock_delete.assert_not_called()
+
+
 @patch("dora.core.management.commands.delete_orphaned_uploads.default_storage")
 def test_iter_objects_skips_unmanaged_path(mock_storage):
     now = timezone.now()
