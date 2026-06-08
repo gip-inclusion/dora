@@ -18,15 +18,15 @@ bandit==1.9.4 \
     --hash=sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628 \
     --hash=sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e
     # via -r requirements/dev.in
-boto3==1.43.18 \
-    --hash=sha256:33138883e984eb1937d1553da699182c8ad2099138091e885b65c9accbccea16 \
-    --hash=sha256:33138883e984eb1937d1553da699182c8ad2099138091e885b65c9accbccea16 \
-    --hash=sha256:7b62ce5c0a51428d692aa4f2adc9dc2a4a4c2989bf65a0a12834eeffa99b0b84 \
-    --hash=sha256:7b62ce5c0a51428d692aa4f2adc9dc2a4a4c2989bf65a0a12834eeffa99b0b84
+boto3==1.43.20 \
+    --hash=sha256:536d023d9f72dcec04254f71b216b78c6ee644be56ac61e780a6c73c1ddea445 \
+    --hash=sha256:536d023d9f72dcec04254f71b216b78c6ee644be56ac61e780a6c73c1ddea445 \
+    --hash=sha256:ee878fa5cd739f38e68fbad535ff9bc3bf7c409290943a62f5e8bddad486aad4 \
+    --hash=sha256:ee878fa5cd739f38e68fbad535ff9bc3bf7c409290943a62f5e8bddad486aad4
     # via django-storages
-botocore==1.43.18 \
-    --hash=sha256:dc8c105351b49688c667065cd5a45fc5b9db982657cefc9e3fbfb9417a55c7df \
-    --hash=sha256:e2610fce16df9f89deab5f3c163430a814e6804034eb95bef8957c8db60b7dbc
+botocore==1.43.24 \
+    --hash=sha256:0c02f2b40e99419d496ece0ea2dcdedb5c45998c16fd1674276c7dbb30767a16 \
+    --hash=sha256:42903b4bfafd8f15a735ed940473f28e4ba21b2ea67a9b9aaa11dfa7fcb19fd5
     # via
     #   boto3
     #   s3transfer
@@ -366,9 +366,9 @@ data-inclusion-schema==1.0.8 \
     --hash=sha256:59e2fae569bfc20a062522dc4e46536120bbd6a7d950cb66f52653973645a642 \
     --hash=sha256:eb5cea65d282d55aa3ab283f83c8b525df2e1f6ab0863fda10015d98a0c038e5
     # via -r requirements/base.in
-distlib==0.4.0 \
-    --hash=sha256:9659f7d87e46584a30b5780e43ac7a2143098441670ff0a49d5f9034c54a6c16 \
-    --hash=sha256:feec40075be03a04501a973d81f633735b4b69f98b05450592310c0f401a4e0d
+distlib==0.4.1 \
+    --hash=sha256:9c2c552c68cbadc619f2d0ed3a69e27c351a3f4c9baa9ffb7df9e9cdc3d19a97 \
+    --hash=sha256:c3804d0d2d4b5fcd44036eb860cb6660485fcdf5c2aba53dc324d805837ea65b
     # via virtualenv
 dj-database-url==3.1.2 \
     --hash=sha256:544e015fee3efa5127a1eb1cca465f4ace578265b3671fe61d0ed7dbafb5ec8a \
@@ -609,9 +609,9 @@ identify==2.6.19 \
     --hash=sha256:20e6a87f786f768c092a721ad107fc9df0eb89347be9396cadf3f4abbd1fb78a \
     --hash=sha256:6be5020c38fcb07da56c53733538a3081ea5aa70d36a156f83044bfbf9173842
     # via pre-commit
-idna==3.17 \
-    --hash=sha256:466e48829084efe2548012b855df21540b96f2e20e51bd124c851536556a592c \
-    --hash=sha256:5eb0cb53bc467c12eadcf6de83163ad8527cec9416f44b9b61b19caedad2b87f
+idna==3.18 \
+    --hash=sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2 \
+    --hash=sha256:ffb385a7e039654cef1ab9ef32c6fafe283c0c0467bba1d9029738ce4a14a848
     # via
     #   anyio
     #   email-validator
@@ -1265,9 +1265,9 @@ segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
     # via django-otp
-sentry-sdk==2.61.0 \
-    --hash=sha256:1ca9b4bb777eb5be67004edab7eb894f21c6301f1d05ed64966719ad5d1764ce \
-    --hash=sha256:ec4d30273909cb1d198e03208b16ee70e2bc5d90a16fd9f1fb2fc6a72e1f03dc
+sentry-sdk==2.61.1 \
+    --hash=sha256:9c6adccb3feefa9ba032c8d295ca477575c2f11896046a2b0ad686c47c4af555 \
+    --hash=sha256:fa36eaf4b8ad708f718500d4bdcc1532637526a22beb874d88cbc0a46458b5ae
     # via -r requirements/base.in
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
@@ -1325,9 +1325,9 @@ urllib3==2.7.0 \
     #   requests
     #   sentry-sdk
     #   sib-api-v3-sdk
-virtualenv==21.4.1 \
-    --hash=sha256:2ca543c713b72840ceffd94e9bdedfbd09a661defa1f7f69e5429ad4059442e2 \
-    --hash=sha256:caf4ff72d1b4039057f41d8e8466e859513d67c0400d9c6b62c02c9d1ebc3e12
+virtualenv==21.4.2 \
+    --hash=sha256:38e6ee0a555615c0ea9da2ac7e9998fe8dc3b911dd33ad8eaad2020957653b0c \
+    --hash=sha256:854210ca524a1a4d0d744734f4acbc721c3ffe163b85bbf5d56d14d5ae2f0fae
     # via pre-commit
 whitenoise==6.12.0 \
     --hash=sha256:f723ebb76a112e98816ff80fcea0a6c9b8ecde835f8ddda25df7a30a3c2db6ad \

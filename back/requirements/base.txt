@@ -16,15 +16,15 @@ asgiref==3.11.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.18 \
-    --hash=sha256:33138883e984eb1937d1553da699182c8ad2099138091e885b65c9accbccea16 \
-    --hash=sha256:33138883e984eb1937d1553da699182c8ad2099138091e885b65c9accbccea16 \
-    --hash=sha256:7b62ce5c0a51428d692aa4f2adc9dc2a4a4c2989bf65a0a12834eeffa99b0b84 \
-    --hash=sha256:7b62ce5c0a51428d692aa4f2adc9dc2a4a4c2989bf65a0a12834eeffa99b0b84
+boto3==1.43.20 \
+    --hash=sha256:536d023d9f72dcec04254f71b216b78c6ee644be56ac61e780a6c73c1ddea445 \
+    --hash=sha256:536d023d9f72dcec04254f71b216b78c6ee644be56ac61e780a6c73c1ddea445 \
+    --hash=sha256:ee878fa5cd739f38e68fbad535ff9bc3bf7c409290943a62f5e8bddad486aad4 \
+    --hash=sha256:ee878fa5cd739f38e68fbad535ff9bc3bf7c409290943a62f5e8bddad486aad4
     # via django-storages
-botocore==1.43.18 \
-    --hash=sha256:dc8c105351b49688c667065cd5a45fc5b9db982657cefc9e3fbfb9417a55c7df \
-    --hash=sha256:e2610fce16df9f89deab5f3c163430a814e6804034eb95bef8957c8db60b7dbc
+botocore==1.43.24 \
+    --hash=sha256:0c02f2b40e99419d496ece0ea2dcdedb5c45998c16fd1674276c7dbb30767a16 \
+    --hash=sha256:42903b4bfafd8f15a735ed940473f28e4ba21b2ea67a9b9aaa11dfa7fcb19fd5
     # via
     #   boto3
     #   s3transfer
@@ -563,9 +563,9 @@ humanize==4.15.0 \
     --hash=sha256:1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10 \
     --hash=sha256:b1186eb9f5a9749cd9cb8565aee77919dd7c8d076161cf44d70e59e3301e1769
     # via -r requirements/base.in
-idna==3.17 \
-    --hash=sha256:466e48829084efe2548012b855df21540b96f2e20e51bd124c851536556a592c \
-    --hash=sha256:5eb0cb53bc467c12eadcf6de83163ad8527cec9416f44b9b61b19caedad2b87f
+idna==3.18 \
+    --hash=sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2 \
+    --hash=sha256:ffb385a7e039654cef1ab9ef32c6fafe283c0c0467bba1d9029738ce4a14a848
     # via
     #   anyio
     #   email-validator
@@ -1028,9 +1028,9 @@ segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
     # via django-otp
-sentry-sdk==2.61.0 \
-    --hash=sha256:1ca9b4bb777eb5be67004edab7eb894f21c6301f1d05ed64966719ad5d1764ce \
-    --hash=sha256:ec4d30273909cb1d198e03208b16ee70e2bc5d90a16fd9f1fb2fc6a72e1f03dc
+sentry-sdk==2.61.1 \
+    --hash=sha256:9c6adccb3feefa9ba032c8d295ca477575c2f11896046a2b0ad686c47c4af555 \
+    --hash=sha256:fa36eaf4b8ad708f718500d4bdcc1532637526a22beb874d88cbc0a46458b5ae
     # via -r requirements/base.in
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
