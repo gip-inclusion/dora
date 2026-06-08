@@ -53,18 +53,20 @@ class Command(BaseCommand):
                 Orientation.objects.values_list("beneficiary_attachments", flat=True)
             )
         )
+
+        if not orientation_paths:
+            self.logger.error(
+                "Abandon : aucun chemin extrait pour les orientations — suppression annulée par sécurité."
+            )
+            return
+
         service_form_paths = set(
             chain.from_iterable(Service.objects.values_list("forms", flat=True))
         )
 
-        if Orientation.objects.exists() and not orientation_paths:
+        if not service_form_paths:
             self.logger.error(
-                "Abandon : orientations présentes en base mais aucun chemin extrait — suppression annulée par sécurité."
-            )
-            return
-        if Service.objects.exists() and not service_form_paths:
-            self.logger.error(
-                "Abandon : services présents en base mais aucun chemin extrait — suppression annulée par sécurité."
+                "Abandon : aucun chemin extrait pour les services — suppression annulée par sécurité."
             )
             return
 

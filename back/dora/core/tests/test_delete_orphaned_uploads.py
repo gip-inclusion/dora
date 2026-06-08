@@ -38,7 +38,14 @@ def test_dry_run_does_not_delete(mock_iter, mock_delete):
 @patch(STORAGE_DELETE)
 @patch(BUCKET_OBJECTS)
 def test_wet_run_deletes_orphan(mock_iter, mock_delete):
-    mock_iter.return_value = [s3_object("orphan.pdf")]
+    make_orientation(beneficiary_attachments=["orientation.pdf"])
+    make_service(forms=["service.pdf"])
+
+    mock_iter.return_value = [
+        s3_object("orphan.pdf"),
+        s3_object("orientation.pdf"),
+        s3_object("service.pdf"),
+    ]
 
     call_cmd(wet_run=True)
 
