@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db.models import CharField, Prefetch, Value
 from rest_framework import mixins, permissions, status, viewsets
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
@@ -20,7 +22,10 @@ from dora.structures.models import DisabledDoraFormDIStructure
 
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
+    DoraServiceMobilisationSerializer,
+    DoraStructureViewSerializer,
     EmploisOrientationSerializer,
+    ExternalServiceMobilisationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
 )
@@ -145,3 +150,30 @@ class OrientationViewSet(
             prescriber=None,
             prescriber_structure=None,
         )
+
+
+@api_view(["POST"])
+@permission_classes([OrientationAPIPermission])
+@renderer_classes([JSONRenderer])
+def record_mobilisation_event(request):
+    source = request.data.get("source")
+    if not source:
+        raise ValidationError({"source": "Ce champ est obligatoire."})
+
+    is_dora = source == "dora"
+    has_service = bool(request.data.get("service_id"))
+
+    if is_dora and has_service:
+        serializer_class = DoraServiceMobilisationSerializer
+    elif is_dora:
+        serializer_class = DoraStructureViewSerializer
+    elif has_service:
+        serializer_class = ExternalServiceMobilisationSerializer
+    else:
+        # Structure hors Dora : rien à enregistrer.
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    serializer = serializer_class(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status=status.HTTP_201_CREATED)

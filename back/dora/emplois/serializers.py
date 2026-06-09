@@ -8,7 +8,12 @@ from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
-from dora.structures.models import DisabledDoraFormDIStructure
+from dora.stats.models import (
+    DiMobilisationEvent,
+    MobilisationEvent,
+    StructureInfosView,
+)
+from dora.structures.models import DisabledDoraFormDIStructure, Structure
 
 
 class ReferenceDataSerializer(serializers.Serializer):
@@ -197,3 +202,138 @@ class EmploisOrientationSerializer(OrientationSerializer):
         if instance.service_id:
             data["di_service_id"] = f"dora--{instance.service_id}"
         return data
+
+
+# Valeurs constantes communes à tous les événements de mobilisation enregistrés
+# via l'API des Emplois : il n'y a jamais d'utilisateur authentifié côté Dora.
+_EVENT_DEFAULTS = {
+    "path": "",
+    "user": None,
+    "is_logged": False,
+    "is_staff": False,
+    "is_manager": False,
+    "is_an_admin": False,
+}
+
+
+class BaseMobilisationSerializer(serializers.ModelSerializer):
+    """Champs communs à tous les événements de mobilisation des Emplois."""
+
+    anonymous_user_hash = serializers.RegexField(
+        r"^[0-9a-f]{32}$",
+        error_messages={
+            "invalid": "Doit contenir exactement 32 caractères hexadécimaux."
+        },
+    )
+    user_kind = serializers.RegexField(
+        r"^emplois_.+",
+        error_messages={"invalid": "Doit commencer par « emplois_ »."},
+    )
+
+    def validate_external_link(self, value):
+        return value or None
+
+
+class DoraServiceMobilisationSerializer(BaseMobilisationSerializer):
+    """Mobilisation d'un service Dora → MobilisationEvent."""
+
+    service_id = serializers.CharField()
+
+    class Meta:
+        model = MobilisationEvent
+        fields = ["anonymous_user_hash", "user_kind", "service_id", "external_link"]
+
+    def validate(self, attrs):
+        try:
+            pk = uuid.UUID(attrs.pop("service_id").removeprefix("dora--").strip())
+            attrs["service"] = Service.objects.select_related(
+                "structure", "structure__source", "source"
+            ).get(pk=pk)
+        except (ValueError, Service.DoesNotExist):
+            raise NotFound("Service Dora introuvable pour cet identifiant.")
+        return attrs
+
+    def create(self, validated_data):
+        service = validated_data.pop("service")
+        structure = service.structure
+        return MobilisationEvent.objects.create(
+            **_EVENT_DEFAULTS,
+            **validated_data,
+            service=service,
+            structure=structure,
+            is_structure_member=False,
+            is_structure_admin=False,
+            structure_department=structure.department,
+            structure_city_code=structure.city_code,
+            structure_source=structure.source.value if structure.source else "",
+            service_source=service.source.value if service.source else "",
+            update_needed=service.get_update_needed(),
+            status=service.status,
+        )
+
+
+class DoraStructureViewSerializer(BaseMobilisationSerializer):
+    """Consultation des informations d'une structure Dora → StructureInfosView."""
+
+    structure_id = serializers.CharField()
+
+    class Meta:
+        model = StructureInfosView
+        fields = ["anonymous_user_hash", "user_kind", "structure_id"]
+
+    def validate(self, attrs):
+        try:
+            pk = uuid.UUID(attrs.pop("structure_id").removeprefix("dora--").strip())
+            attrs["structure"] = (
+                Structure.objects.select_related("source")
+                .only("pk", "department", "city_code", "source__value")
+                .get(pk=pk)
+            )
+        except (ValueError, Structure.DoesNotExist):
+            raise NotFound("Structure Dora introuvable pour cet identifiant.")
+        return attrs
+
+    def create(self, validated_data):
+        structure = validated_data.pop("structure")
+        return StructureInfosView.objects.create(
+            **_EVENT_DEFAULTS,
+            **validated_data,
+            structure=structure,
+            is_structure_member=False,
+            is_structure_admin=False,
+            structure_department=structure.department,
+            structure_city_code=structure.city_code,
+            structure_source=structure.source.value if structure.source else "",
+        )
+
+
+class ExternalServiceMobilisationSerializer(BaseMobilisationSerializer):
+    """Mobilisation d'un service hors Dora → DiMobilisationEvent."""
+
+    structure_department = serializers.CharField(max_length=3)
+
+    class Meta:
+        model = DiMobilisationEvent
+        fields = [
+            "anonymous_user_hash",
+            "user_kind",
+            "service_id",
+            "structure_id",
+            "source",
+            "service_name",
+            "structure_name",
+            "structure_department",
+            "external_link",
+        ]
+        extra_kwargs = {
+            "service_id": {"required": True, "allow_blank": False},
+            "structure_id": {"required": True, "allow_blank": False},
+            "service_name": {"required": True, "allow_blank": False},
+            "structure_name": {"required": True, "allow_blank": False},
+        }
+
+    def create(self, validated_data):
+        return DiMobilisationEvent.objects.create(
+            **_EVENT_DEFAULTS,
+            **validated_data,
+        )

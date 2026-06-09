@@ -65,11 +65,11 @@ def test_orientations_create_requires_emplois_email(api_client, valid_payload):
 
 
 def test_orientations_create_with_dora_service_resolves_fk(
-    emplois_user, api_client, base_payload
+    emplois_api_client, base_payload
 ):
     service = make_service()
     payload = {**base_payload, "di_service_id": f"dora--{service.id}"}
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
     assert response.data == payload
@@ -80,10 +80,10 @@ def test_orientations_create_with_dora_service_resolves_fk(
 
 
 def test_orientations_create_with_non_dora_service_keeps_di_id(
-    emplois_user, api_client, base_payload
+    emplois_api_client, base_payload
 ):
     payload = {**base_payload, "di_service_id": "soliguide--svc-42"}
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
     assert response.data == payload
@@ -99,14 +99,14 @@ def test_orientations_create_with_non_dora_service_keeps_di_id(
     ids=["missing", "false"],
 )
 def test_orientations_create_requires_data_protection_commitment(
-    emplois_user, api_client, base_payload, include_field, value
+    emplois_api_client, base_payload, include_field, value
 ):
     payload = {**base_payload, "di_service_id": DEFAULT_DI_SERVICE_ID}
     payload.pop("data_protection_commitment", None)
     if include_field:
         payload["data_protection_commitment"] = value
 
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 400
     assert "data_protection_commitment" in response.data
@@ -115,10 +115,10 @@ def test_orientations_create_requires_data_protection_commitment(
 
 @pytest.mark.parametrize("di_service_id", ["no-separator", ""])
 def test_orientations_create_rejects_invalid_di_service_id(
-    emplois_user, api_client, base_payload, di_service_id
+    emplois_api_client, base_payload, di_service_id
 ):
     response = post_orientation(
-        api_client, {**base_payload, "di_service_id": di_service_id}
+        emplois_api_client, {**base_payload, "di_service_id": di_service_id}
     )
     assert response.status_code == 400
     assert "di_service_id" in response.data
@@ -126,10 +126,10 @@ def test_orientations_create_rejects_invalid_di_service_id(
 
 @pytest.mark.parametrize("di_service_id", [f"dora--{uuid.uuid4()}", "dora--not-a-uuid"])
 def test_orientations_create_with_unresolvable_dora_service(
-    emplois_user, api_client, base_payload, di_service_id
+    emplois_api_client, base_payload, di_service_id
 ):
     response = post_orientation(
-        api_client, {**base_payload, "di_service_id": di_service_id}
+        emplois_api_client, {**base_payload, "di_service_id": di_service_id}
     )
     assert response.status_code == 404
     assert response.data["detail"]["code"] == "not_found"
@@ -152,7 +152,7 @@ def test_orientations_create_with_unresolvable_dora_service(
     ],
 )
 def test_orientations_create_requires_mandatory_fields(
-    emplois_user, api_client, base_payload, parent_field, missing_field
+    emplois_api_client, base_payload, parent_field, missing_field
 ):
     payload = {**base_payload, "di_service_id": DEFAULT_DI_SERVICE_ID}
     if parent_field is None:
@@ -162,7 +162,7 @@ def test_orientations_create_requires_mandatory_fields(
             k: v for k, v in payload[parent_field].items() if k != missing_field
         }
 
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
     assert response.status_code == 400
     if parent_field is None:
         assert missing_field in response.data
@@ -185,7 +185,7 @@ def test_orientations_create_requires_mandatory_fields(
     ],
 )
 def test_orientations_create_requires_all_emplois_data_fields(
-    emplois_user, api_client, base_payload, missing_emplois_field
+    emplois_api_client, base_payload, missing_emplois_field
 ):
     payload = {
         **base_payload,
@@ -195,13 +195,13 @@ def test_orientations_create_requires_all_emplois_data_fields(
         },
     }
 
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
     assert response.status_code == 400
     assert "emplois_data" in response.data
     assert missing_emplois_field in response.data["emplois_data"]
 
 
-def test_orientations_create_with_all_fields(emplois_user, api_client, base_payload):
+def test_orientations_create_with_all_fields(emplois_api_client, base_payload):
     payload = {
         **base_payload,
         "di_service_id": DEFAULT_DI_SERVICE_ID,
@@ -217,7 +217,7 @@ def test_orientations_create_with_all_fields(emplois_user, api_client, base_payl
         "referent_phone": "0506070809",
         "orientation_reasons": "Besoin d'accompagnement vers l'emploi",
     }
-    response = post_orientation(api_client, payload)
+    response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
     assert response.data == payload
@@ -245,10 +245,10 @@ def test_orientations_create_with_all_fields(emplois_user, api_client, base_payl
 
 
 def test_orientations_create_rejects_invalid_structure_siret(
-    emplois_user, api_client, base_payload
+    emplois_api_client, base_payload
 ):
     response = post_orientation(
-        api_client,
+        emplois_api_client,
         {
             **base_payload,
             "di_service_id": DEFAULT_DI_SERVICE_ID,

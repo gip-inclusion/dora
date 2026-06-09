@@ -12,10 +12,10 @@ def _set_emplois_email(settings):
 
 
 @pytest.fixture
-def emplois_user(api_client, settings):
+def emplois_api_client(api_client, settings):
     user = baker.make("users.User", is_valid=True, email=settings.EMPLOIS_EMAIL)
     api_client.force_authenticate(user=user)
-    return user
+    return api_client
 
 
 @pytest.fixture
