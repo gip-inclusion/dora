@@ -3,6 +3,8 @@ import pathlib
 import subprocess
 import tempfile
 
+from django.contrib.gis.gdal import CoordTransform, GDALException, SpatialReference
+from django.contrib.gis.geos import Point
 from django.db.utils import DataError
 
 from dora.core.commands import BaseCommand
@@ -25,13 +27,40 @@ from ._backup import (
 
 # Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
 SIRENE_TABLE = "sirene_establishment"
+
+# Les établissements SIRENE sont désormais géolocalisés via les coordonnées
+# `coordonneeLambert*Etablissement`. Malgré leur nom, ces coordonnées ne sont en
+# Lambert 93 que pour la métropole : chaque DOM utilise sa projection officielle
+# (celle de la BAN / IGN). On les reprojette toutes en WGS84 (EPSG:4326).
+WGS84_SRID = 4326
+METROPOLE_SRID = 2154  # RGF93 / Lambert 93
+
+# Projection (EPSG) à utiliser selon le préfixe du code commune (DOM).
+SRID_BY_COMMUNE_PREFIX = {
+    "971": 5490,  # Guadeloupe               — RGAF09 / UTM 20N
+    "972": 5490,  # Martinique               — RGAF09 / UTM 20N
+    "973": 2972,  # Guyane                   — RGFG95 / UTM 22N
+    "974": 2975,  # La Réunion               — RGR92 / UTM 40S
+    "975": 4467,  # Saint-Pierre-et-Miquelon — RGSPM06 / UTM 21N
+    "976": 4471,  # Mayotte                  — RGM04 / UTM 38S
+    "977": 5490,  # Saint-Barthélemy         — RGAF09 / UTM 20N
+    "978": 5490,  # Saint-Martin             — RGAF09 / UTM 20N
+}
+
+# Transformations vers WGS84, instanciées une seule fois par projection source.
+COORD_TRANSFORMS = {
+    srid: CoordTransform(SpatialReference(srid), SpatialReference(WGS84_SRID))
+    for srid in {METROPOLE_SRID, *SRID_BY_COMMUNE_PREFIX.values()}
+}
 TMP_TABLE = "_sirene_establishment_tmp"
 BACKUP_TABLE = "_sirene_establishment_bak"
 LEGAL_UNITS_TMP_TABLE = "_sirene_legal_units_tmp"
 
-LEGAL_UNITS_FILE_URL = "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockUniteLegale_utf8.zip"
+LEGAL_UNITS_FILE_URL = (
+    "https://www.data.gouv.fr/api/1/datasets/r/825f4199-cadd-486c-ac46-a65a8ea1a047"
+)
 ESTABLISHMENTS_FILE_URL = (
-    "https://files.data.gouv.fr/geo-sirene/last/StockEtablissementActif_utf8_geo.csv.gz"
+    "https://www.data.gouv.fr/api/1/datasets/r/0651fb76-bcf3-4f6a-a38d-bc04fa708576"
 )
 
 
@@ -99,21 +128,21 @@ class Command(BaseCommand):
 
     def download_establishments(self, tmp_dir: pathlib.Path) -> pathlib.Path:
         """Télécharge et extrait le fichier des établissements. Retourne le chemin du CSV."""
-        gzipped_file = tmp_dir / "StockEtablissementActif_utf8_geo.csv.gz"
+        zipped_file = tmp_dir / "StockEtablissementActif_utf8.zip"
 
         self.logger.info("Téléchargement des établissements")
         subprocess.run(
-            ["curl", "-L", ESTABLISHMENTS_FILE_URL, "-o", gzipped_file],
+            ["curl", "-L", ESTABLISHMENTS_FILE_URL, "-o", zipped_file],
             check=True,
         )
 
         self.logger.info("Décompression du fichier établissements")
         subprocess.run(
-            ["gzip", "-dk", gzipped_file],
+            ["unzip", "-o", zipped_file, "-d", tmp_dir],
             check=True,
         )
 
-        return tmp_dir / "StockEtablissementActif_utf8_geo.csv"
+        return tmp_dir / "StockEtablissement_utf8.csv"
 
     def get_ul_name(self, row):
         if row["categorieJuridiqueUniteLegale"] == "1000":
@@ -151,10 +180,28 @@ class Command(BaseCommand):
             f"{row['libelleCedexEtablissement'] or row['libelleCommuneEtablissement']} {row['distributionSpecialeEtablissement']}"
         )
 
+    def get_coordinates(self, row):
+        """Reprojette les coordonnées de l'établissement en (longitude, latitude) WGS84,
+        en choisissant la projection source selon le territoire (métropole ou DOM).
+        Retourne (None, None) si les coordonnées sont absentes ou invalides."""
+        abscisse = row.get("coordonneeLambertAbscisseEtablissement")
+        ordonnee = row.get("coordonneeLambertOrdonneeEtablissement")
+        if not abscisse or not ordonnee:
+            return None, None
+        code_commune = row.get("codeCommuneEtablissement") or ""
+        srid = SRID_BY_COMMUNE_PREFIX.get(code_commune[:3], METROPOLE_SRID)
+        try:
+            point = Point(float(abscisse), float(ordonnee), srid=srid)
+            point.transform(COORD_TRANSFORMS[srid])
+        except (ValueError, GDALException):
+            return None, None
+        return point.x, point.y
+
     def create_establishment(self, siren, parent_name, row):
         name = self.get_name(row)[:255]
         parent_name = parent_name[:255]
         full_search_text = f"{name} {parent_name}" if name != parent_name else name
+        longitude, latitude = self.get_coordinates(row)
         return Establishment(
             siren=siren[:9],
             siret=row["siret"][:14],
@@ -169,8 +216,8 @@ class Command(BaseCommand):
             )[:5],
             ape=row["activitePrincipaleEtablissement"][:6],
             is_siege=row["etablissementSiege"] == "true",
-            longitude=row["longitude"] if row["longitude"] else None,
-            latitude=row["latitude"] if row["latitude"] else None,
+            longitude=longitude,
+            latitude=latitude,
             full_search_text=full_search_text,
         )
 
@@ -345,6 +392,10 @@ class Command(BaseCommand):
                 inserted_count = 0
 
                 for row in reader:
+                    if row["etatAdministratifEtablissement"] != "A":
+                        # On ignore les établissements fermés : contrairement à
+                        # l'ancien fichier géolocalisé, le stock complet les contient.
+                        continue
                     estab_batch.append(row)
 
                     if len(estab_batch) >= batch_size:
