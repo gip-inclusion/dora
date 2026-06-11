@@ -18,11 +18,11 @@ bandit==1.9.4 \
     --hash=sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628 \
     --hash=sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e
     # via -r requirements/dev.in
-boto3==1.43.23 \
-    --hash=sha256:5d26498702ffd021dc0d57d0eefcc7101cd995ea0ed08c057c9b631efccbaa48 \
-    --hash=sha256:5d26498702ffd021dc0d57d0eefcc7101cd995ea0ed08c057c9b631efccbaa48 \
-    --hash=sha256:8afc058924ef8a5c62467fe2e1e2e0304c22018587a044714da89f9c602ba856 \
-    --hash=sha256:8afc058924ef8a5c62467fe2e1e2e0304c22018587a044714da89f9c602ba856
+boto3==1.43.24 \
+    --hash=sha256:b18ef745274ef548a9660d733d985d4a971b16bd8a6af88165ea9d0e40913b86 \
+    --hash=sha256:b18ef745274ef548a9660d733d985d4a971b16bd8a6af88165ea9d0e40913b86 \
+    --hash=sha256:ba5afa266bf7265e0c1a454fcfd48bffe5939cb16ed223bebc669c3dc8ee0bc8 \
+    --hash=sha256:ba5afa266bf7265e0c1a454fcfd48bffe5939cb16ed223bebc669c3dc8ee0bc8
     # via django-storages
 botocore==1.43.24 \
     --hash=sha256:0c02f2b40e99419d496ece0ea2dcdedb5c45998c16fd1674276c7dbb30767a16 \
