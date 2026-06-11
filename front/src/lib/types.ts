@@ -708,7 +708,7 @@ export interface Orientation {
   creationDate: string;
   prescriberStructure?: {
     name: string;
-    slug: string;
+    url?: string;
   };
   processingDate?: string;
   status: "OUVERTE" | "VALIDÉE" | "REFUSÉE" | "EXPIRÉE";
