@@ -1,9 +1,20 @@
+import { getApiURL } from "$lib/utils/api";
+
 export const SIREN_FRANCE_TRAVAIL = "130005481";
 
 export const enum TallyFormId {
   NOTEBOOK_ORDER_FORM_ID = "mRMDWl",
   SERVICE_CREATION_FORM_ID = "mRGdpK",
 }
+
+export const enum LocationType {
+  Address,
+  City,
+  Department,
+  Region,
+}
+
+export const TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY = "lastSelectedLocation";
 
 export const TEST_WORDS = ["test", "truc", "bidule"];
 
@@ -16,6 +27,8 @@ export const SITEMAP_PAGE_SIZE = 1000;
 export const MON_RECAP_DEPARTMENTS = ["59", "69", "93"];
 
 export const SEARCH_RADIUS_KM = 50;
+
+export const SEARCH_KEYWORD_URL = `${getApiURL()}/search/keyword/`;
 
 export const METABASE_DASHBOARD_URL = (departmentCode: string) =>
   `https://metabase.dora.inclusion.gouv.fr/public/dashboard/cac884d0-fdeb-4d69-b1cc-9ae58a4cd32f?d%25C3%25A9partement_de_la_structure=${departmentCode}`;
