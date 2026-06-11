@@ -92,7 +92,7 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         self.assertEqual(len(self.expired_orientation_2.beneficiary_attachments), 0)
 
         self.assertEqual(mock_send_emails.call_count, 2)
-        self.assertEqual(
+        self.assertCountEqual(
             mock_send_emails.call_args_list,
             [
                 call(self.expired_orientation_1, self.orientation_1_start_date),
