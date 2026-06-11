@@ -415,6 +415,20 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             assert data[key] == expected_val
 
 
+def test_service_serialization_without_publics_returns_tous_publics(
+    authenticated_user, api_client
+):
+    service = make_service(status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["profils"] == ["tous-publics"]
+    assert data["publics"] == ["tous-publics"]
+    assert data["publics_precisions"] == "Tous publics"
+
+
 def test_service_serialization_formulaire_en_ligne(
     authenticated_user, api_client, settings
 ):

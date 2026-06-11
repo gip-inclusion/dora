@@ -1,4 +1,5 @@
 # from django.core.files.storage import default_storage
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
 from dora.services.models import (
@@ -296,18 +297,26 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.fee_details or None
 
     def get_profils(self, obj):
-        return [c.name for c in obj.publics.all()]
+        publics = obj.publics.all()
+        if not publics:
+            return [DiPublic.TOUS_PUBLICS.value]
+        return [p.name for p in publics]
 
     def get_publics(self, obj):
-        all_items = [
-            item
-            for public in obj.publics.all()
-            for item in public.corresponding_di_publics
-        ]
-        return list(dict.fromkeys(all_items))
+        publics = obj.publics.all()
+        if not publics:
+            return [DiPublic.TOUS_PUBLICS.value]
+        return list(
+            dict.fromkeys(
+                item for public in publics for item in public.corresponding_di_publics
+            )
+        )
 
     def get_publics_precisions(self, obj):
-        return ", ".join([p.name for p in obj.publics.all()])
+        publics = obj.publics.all()
+        if not publics:
+            return DiPublic.TOUS_PUBLICS.label
+        return ", ".join(p.name for p in publics)
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]
