@@ -26,6 +26,15 @@ def beneficiaries_has_alternate_contact_methods(orientation):
     )
 
 
+def _orientation_prescriber_context(orientation) -> dict:
+    """Données du prescripteur pour les templates, agnostiques à la source (Dora ou Les Emplois)."""
+    return {
+        "prescriber_full_name": orientation.prescriber_info.full_name,
+        "prescriber_structure_name": orientation.prescriber_info.structure_name,
+        "prescriber_structure_url": orientation.prescriber_info.structure_url,
+    }
+
+
 def _orientation_created_ctx(orientation) -> dict:
     return {
         "data": orientation,
@@ -40,6 +49,7 @@ def _orientation_created_ctx(orientation) -> dict:
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
         ],
+        **_orientation_prescriber_context(orientation),
     }
 
 
@@ -58,11 +68,11 @@ def send_orientation_created_to_structure(orientation, context=None):
         orientation.get_contact_email(),
         mjml2html(render_to_string("orientation-created-structure.mjml", context)),
         from_email=(
-            f"{orientation.prescriber.get_full_name()} via DORA",
+            f"{orientation.prescriber_info.full_name} via DORA",
             settings.DEFAULT_FROM_EMAIL,
         ),
         tags=["orientation"],
-        reply_to=[orientation.prescriber.email],
+        reply_to=[orientation.prescriber_info.email],
     )
 
 
@@ -72,7 +82,7 @@ def send_orientation_created_to_prescriber(orientation, context=None):
 
     send_mail(
         f"{'[Envoyée - Prescripteur] ' if debug else ''}Votre demande a bien été transmise !",
-        orientation.prescriber.email,
+        orientation.prescriber_info.email,
         mjml2html(render_to_string("orientation-created-prescriber.mjml", context)),
         tags=["orientation"],
         reply_to=[orientation.get_contact_email()],
@@ -85,14 +95,14 @@ def send_orientation_created_to_referent(orientation, context=None):
 
     if (
         orientation.referent_email
-        and orientation.referent_email != orientation.prescriber.email
+        and orientation.referent_email != orientation.prescriber_info.email
     ):
         send_mail(
             f"{'[Envoyée - Conseiller référent] ' if debug else ''}Notification d’une demande d’orientation",
             orientation.referent_email,
             mjml2html(render_to_string("orientation-created-referent.mjml", context)),
             tags=["orientation"],
-            reply_to=[orientation.prescriber.email],
+            reply_to=[orientation.prescriber_info.email],
         )
 
 
@@ -108,11 +118,11 @@ def send_orientation_created_to_beneficiary(orientation, context=None):
                 render_to_string("orientation-created-beneficiary.mjml", context)
             ),
             from_email=(
-                f"{orientation.prescriber.get_full_name()} via DORA",
+                f"{orientation.prescriber_info.full_name} via DORA",
                 settings.DEFAULT_FROM_EMAIL,
             ),
             tags=["orientation"],
-            reply_to=[orientation.prescriber.email],
+            reply_to=[orientation.prescriber_info.email],
         )
 
 
@@ -161,6 +171,7 @@ def send_orientation_accepted_emails(
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
         "prescriber_message": prescriber_message,
         "beneficiary_message": beneficiary_message,
+        **_orientation_prescriber_context(orientation),
     }
 
     # Structure
@@ -174,7 +185,7 @@ def send_orientation_accepted_emails(
     # Prescripteur
     send_mail(
         f"{'[Validée - Prescripteur] ' if debug else ''}Votre demande a été acceptée ! 🎉",
-        orientation.prescriber.email,
+        orientation.prescriber_info.email,
         mjml2html(render_to_string("orientation-accepted-prescriber.mjml", context)),
         from_email=(
             f"{orientation.get_structure_name()} via DORA",
@@ -186,7 +197,7 @@ def send_orientation_accepted_emails(
     # Référent
     if (
         orientation.referent_email
-        and orientation.referent_email != orientation.prescriber.email
+        and orientation.referent_email != orientation.prescriber_info.email
     ):
         send_mail(
             f"{'[Validée - Conseiller référent] ' if debug else ''}Notification de l’acceptation d’une demande d’orientation",
@@ -197,7 +208,7 @@ def send_orientation_accepted_emails(
                 settings.DEFAULT_FROM_EMAIL,
             ),
             tags=["orientation"],
-            reply_to=[orientation.prescriber.email],
+            reply_to=[orientation.prescriber_info.email],
         )
     # Bénéficiaire
     if orientation.beneficiary_email:
@@ -222,6 +233,7 @@ def send_orientation_rejected_emails(orientation, message):
         "support_email": settings.SUPPORT_EMAIL,
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
         "message": message,
+        **_orientation_prescriber_context(orientation),
     }
 
     send_mail(
@@ -240,12 +252,12 @@ def send_orientation_rejected_emails(orientation, message):
             settings.DEFAULT_FROM_EMAIL,
         ),
         tags=["orientation"],
-        reply_to=[orientation.prescriber.email],
+        reply_to=[orientation.prescriber_info.email],
     )
 
     send_mail(
         f"{'[Refusée - Prescripteur] ' if debug else ''}Votre demande d’orientation a été refusée",
-        [orientation.prescriber.email],
+        [orientation.prescriber_info.email],
         mjml2html(render_to_string("orientation-rejected-prescriber.mjml", context)),
         from_email=(
             f"{orientation.get_structure_name()} via DORA",
@@ -257,7 +269,7 @@ def send_orientation_rejected_emails(orientation, message):
 
     if (
         orientation.referent_email
-        and orientation.referent_email != orientation.prescriber.email
+        and orientation.referent_email != orientation.prescriber_info.email
     ):
         send_mail(
             f"{'[Refusée - Conseiller référent] ' if debug else ''}Votre demande d’orientation a été refusée",
@@ -283,7 +295,7 @@ def send_message_to_prescriber(orientation, message, cc):
     }
     send_mail(
         f"{'[Contact - Prescripteur] ' if debug else ''}Vous avez un nouveau message 📩",
-        orientation.prescriber.email,
+        orientation.prescriber_info.email,
         mjml2html(render_to_string("contact-prescriber.mjml", context)),
         from_email=(
             f"{orientation.get_structure_name()} via DORA",
@@ -331,6 +343,7 @@ def send_orientation_reminder_emails(orientation):
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
         ],
+        **_orientation_prescriber_context(orientation),
     }
 
     send_mail(
@@ -342,13 +355,13 @@ def send_orientation_reminder_emails(orientation):
     cc = []
     if (
         orientation.referent_email
-        and orientation.referent_email != orientation.prescriber.email
+        and orientation.referent_email != orientation.prescriber_info.email
     ):
         cc.append(orientation.referent_email)
 
     send_mail(
         f"{'[Notification - Prescripteur] ' if debug else ''}Relance envoyée – Demande d’orientation en attente",
-        orientation.prescriber.email,
+        orientation.prescriber_info.email,
         mjml2html(render_to_string("notification-prescriber.mjml", context)),
         tags=["orientation"],
         cc=cc,
@@ -366,6 +379,7 @@ def send_orientation_expiration_emails(
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
         "with_dora_info": True,
         "with_legal_info": True,
+        **_orientation_prescriber_context(orientation),
     }
 
     send_mail(
@@ -382,7 +396,7 @@ def send_orientation_expiration_emails(
         tags=["orientation"],
     )
 
-    for email in {orientation.prescriber.email, orientation.referent_email}:
+    for email in {orientation.prescriber_info.email, orientation.referent_email}:
         send_mail(
             "Votre demande d’orientation a expiré",
             email,
