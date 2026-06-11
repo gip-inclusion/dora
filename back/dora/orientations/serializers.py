@@ -204,20 +204,12 @@ class OrientationSerializer(serializers.ModelSerializer):
         }
 
     def get_prescriber_structure(self, orientation):
-        return {
-            "name": orientation.prescriber_structure.name
-            if orientation.prescriber_structure
-            else "",
-            "slug": orientation.prescriber_structure.slug
-            if orientation.prescriber_structure
-            else "",
-        }
+        info = orientation.prescriber_info
+        return {"name": info.structure_name, "url": info.structure_url}
 
     def get_prescriber(self, orientation):
-        return {
-            "name": orientation.prescriber.get_full_name(),
-            "email": orientation.prescriber.email,
-        }
+        info = orientation.prescriber_info
+        return {"name": info.full_name, "email": info.email}
 
     def get_beneficiary_attachments_details(self, orientation):
         return [
@@ -295,12 +287,12 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
         ]
 
     @staticmethod
+    def get_prescriber_name(obj: Orientation) -> str:
+        return obj.prescriber_info.full_name or "Utilisateur supprimé"
+
+    @staticmethod
     def get_prescriber_structure_name(obj: Orientation) -> str:
-        return (
-            obj.prescriber_structure.name
-            if obj.prescriber_structure
-            else "Pas de prescripteur"
-        )
+        return obj.prescriber_info.structure_name or "Pas de prescripteur"
 
     @staticmethod
     def get_detail_page_url(obj: Orientation) -> str:
