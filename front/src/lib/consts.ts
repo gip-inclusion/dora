@@ -5,6 +5,15 @@ export const enum TallyFormId {
   SERVICE_CREATION_FORM_ID = "mRGdpK",
 }
 
+export const enum LocationType {
+  Address,
+  City,
+  Department,
+  Region,
+}
+
+export const TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY = "lastSelectedLocation";
+
 export const TEST_WORDS = ["test", "truc", "bidule"];
 
 export const URL_HELP_SITE = "https://aide.dora.inclusion.gouv.fr/fr/";

@@ -56,6 +56,25 @@ export function registerMatomoExperiment(experiment: MatomoExperiment) {
     window.matomoAbTestingAsyncInit = createExperiment;
   }
 }
+export function registerRechercheTextuelleExperiment(onActivate) {
+  registerMatomoExperiment({
+    name: "rechercheTextuelle",
+    includedTargets: [
+      { attribute: "url", type: "any", inverted: "0", value: "/" },
+    ],
+    excludedTargets: [],
+    variations: [
+      {
+        name: "original",
+        activate: () => {},
+      },
+      {
+        name: "Variation1",
+        activate: onActivate,
+      },
+    ],
+  });
+}
 
 export function trackMatomoEvent({
   category,
