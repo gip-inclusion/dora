@@ -1,6 +1,8 @@
 import hashlib
 import logging
 import uuid
+from dataclasses import dataclass
+from functools import cached_property
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -53,6 +55,16 @@ class OrientationQuerySet(models.QuerySet):
             status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
             processing_date__isnull=False,
         )
+
+
+@dataclass(frozen=True)
+class PrescriberInfo:
+    """Données prescripteur exposées de façon agnostique à la source de l'orientation."""
+
+    full_name: str
+    email: str
+    structure_name: str
+    structure_url: str
 
 
 class Orientation(models.Model):
@@ -347,6 +359,32 @@ class Orientation(models.Model):
         else:
             return ""
 
+    @cached_property
+    def prescriber_info(self) -> PrescriberInfo:
+        """Données prescripteur résolues selon la source (Dora ou Les Emplois)."""
+
+        emplois_orientation_data = getattr(self, "emplois_orientation_data", None)
+
+        if self.prescriber:
+            full_name = self.prescriber.get_full_name()
+            email = self.prescriber.email
+        elif emplois_orientation_data:
+            full_name = emplois_orientation_data.prescriber_full_name
+            email = emplois_orientation_data.prescriber_email
+        else:
+            full_name = email = ""
+
+        if self.prescriber_structure:
+            structure_name = self.prescriber_structure.name
+            structure_url = self.prescriber_structure.get_frontend_url()
+        elif emplois_orientation_data:
+            structure_name = emplois_orientation_data.structure_name
+            structure_url = emplois_orientation_data.structure_url
+        else:
+            structure_name = structure_url = ""
+
+        return PrescriberInfo(full_name, email, structure_name, structure_url)
+
     def refresh_query_expiration_date(self):
         # on ne régénère le lien que si il est expiré
         if self.query_expired:
@@ -441,6 +479,17 @@ class EmploisOrientationData(models.Model):
     class Meta:
         verbose_name = "Données Les Emplois"
         verbose_name_plural = "Données Les Emplois"
+
+    @property
+    def prescriber_full_name(self):
+        return (
+            f"{self.prescriber_first_name or ''} {self.prescriber_last_name or ''}".strip()
+            or self.prescriber_email
+        )
+
+    @property
+    def structure_url(self):
+        return f"{settings.EMPLOIS_FRONTEND_URL.rstrip('/')}/insertion/structure/{self.structure_id}/card"
 
 
 class ContactRecipient(models.TextChoices):

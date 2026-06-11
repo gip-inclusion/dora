@@ -197,3 +197,27 @@ def make_di_orientation(**kwargs):
         **kwargs,
     )
     return orientation
+
+
+def make_emplois_orientation(emplois_data=None, **kwargs):
+    from uuid import uuid4
+
+    from dora.orientations.models import EmploisOrientationData
+
+    orientation = make_orientation(prescriber=None, prescriber_structure=None, **kwargs)
+    defaults = {
+        "beneficiary_id": uuid4(),
+        "structure_id": uuid4(),
+        "structure_name": "Structure des Emplois",
+        "structure_siret": "12345678901234",
+        "prescriber_id": uuid4(),
+        "prescriber_email": "jean-prescripteur.des-emplois@example.com",
+        "prescriber_first_name": "Jean-Prescripteur",
+        "prescriber_last_name": "des Emplois",
+        "prescriber_phone": "0102030405",
+    }
+    EmploisOrientationData.objects.create(
+        orientation=orientation, **{**defaults, **(emplois_data or {})}
+    )
+    orientation.refresh_from_db()
+    return orientation
