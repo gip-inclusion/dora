@@ -76,7 +76,10 @@ def subcategories_display(obj):
 
 class SearchEventAdmin(AnalyticsEventAdmin):
     list_display = [
+        "id",
         "date",
+        "search_type",
+        "keyword",
         "department",
         "city_code",
         categories_display,
@@ -87,11 +90,13 @@ class SearchEventAdmin(AnalyticsEventAdmin):
     ]
     list_filter = [
         "date",
+        "search_type",
         "categories",
         "is_staff",
         "is_logged",
         "department",
     ]
+    search_fields = ["id", "keyword"]
     filter_horizontal = [
         "categories",
         "subcategories",
@@ -113,6 +118,10 @@ class StructureEventAdmin(AnalyticsEventAdmin):
         "structure_department",
         "structure_source",
     ]
+
+
+class StructureViewAdmin(StructureEventAdmin):
+    raw_id_fields = ("structure", "user", "search_view")
 
 
 class ServiceEventAdmin(AnalyticsEventAdmin):
@@ -251,7 +260,7 @@ class StructureInfoEventAdmin(AnalyticsEventAdmin):
 
 admin.site.register(DeploymentState, DeploymentStateAdmin)
 admin.site.register(PageView, PageViewAdmin)
-admin.site.register(StructureView, StructureEventAdmin)
+admin.site.register(StructureView, StructureViewAdmin)
 admin.site.register(OrientationView, OrientationEventAdmin)
 admin.site.register(ServiceShare, ServiceShareAdmin)
 admin.site.register(ServiceView, ServiceEventAdmin)

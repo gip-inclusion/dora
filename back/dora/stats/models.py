@@ -183,7 +183,18 @@ class AbstractDiServiceEvent(AbstractAnalyticsEvent):
         abstract = True
 
 
+class SearchType(models.TextChoices):
+    THEMATIQUE = "thematique", "Thématique"
+    MOTS_CLES = "mots_cles", "Mots-clés"
+
+
 class AbstractSearchEvent(AbstractAnalyticsEvent):
+    search_type = models.CharField(
+        verbose_name="Type de recherche",
+        max_length=20,
+        choices=SearchType.choices,
+    )
+    keyword = models.CharField(verbose_name="Mots-clés saisis", blank=True)
     categories = models.ManyToManyField(ServiceCategory, blank=True, related_name="+")
     subcategories = models.ManyToManyField(
         ServiceSubCategory, blank=True, related_name="+"
@@ -230,7 +241,12 @@ class PageView(AbstractAnalyticsEvent):
 
 
 class StructureView(AbstractStructureEvent):
-    pass
+    search_view = models.ForeignKey(
+        "SearchView",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
 
 class StructureInfosView(AbstractStructureEvent):

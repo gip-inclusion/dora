@@ -3,14 +3,14 @@
 
   import AutoComplete from "./simple-autocomplete.svelte";
 
-  type Choice = { value: string | number; label: string };
+  type Choice = { value: any; label: string };
 
   interface Props {
     id: string;
     choices?: Choice[];
-    fixedItemsValues?: string[];
+    fixedItemsValues?: any[];
     sort?: boolean;
-    value?: string | number | string[] | number[];
+    value?: any | any[];
     searchText?: string;
     disabled?: boolean;
     readonly?: boolean;
@@ -23,8 +23,8 @@
     localFiltering?: boolean;
     minCharactersToSearch?: number;
     onblur?: (evt: FocusEvent) => void;
-    onChange?: ((newValue: string) => void) | ((newValues: string[]) => void);
-    initialValue?: string | number | string[] | number[];
+    onChange?: ((newValue: any) => void) | ((newValues: any[]) => void);
+    initialValue?: any | any[];
     showClear?: boolean;
     errorMessages?: string[];
     extraClass?: string;

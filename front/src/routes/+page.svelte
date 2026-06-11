@@ -11,15 +11,17 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { GOOGLE_CSE_ID } from "$lib/env";
-  import { refreshUserInfo } from "$lib/utils/auth";
-  import { userInfo } from "$lib/utils/auth";
+  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
   import { userPreferences } from "$lib/utils/preferences";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
+  import { page } from "$app/state";
   import type { PageData } from "./$types";
   import { URL_HELP_SITE } from "$lib/consts";
 
@@ -34,11 +36,29 @@
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
+
+  // Afin de faciliter certaines démonstrations, il est possible d'activer la
+  // recherche par mots-clés / texte libre via le paramètre d'URL `searchByText`.
+  const searchByTextParam = $derived.by(() => {
+    const v = page.url.searchParams.get("searchByText");
+    if (v === "1") {
+      return true;
+    }
+    if (v === "0") {
+      return false;
+    }
+    return null;
+  });
+  let searchByTextMatomo = $state(false);
+  registerRechercheTextuelleExperiment(() => {
+    searchByTextMatomo = true;
+  });
+  const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
 
-<CenteredGrid bgColor="bg-magenta-10 mb-s32">
+<CenteredGrid extraClass="mb-s32" bgColor="bg-magenta-10">
   <h1 class="mb-s16 text-france-blue m-auto text-center text-balance">
     Orientez vos bénéficiaires vers des solutions adaptées à leurs besoins
   </h1>
@@ -49,22 +69,27 @@
     </p>
   </div>
 
-  <SearchForm
-    servicesOptions={data.servicesOptions}
-    cityCode={data.cityCode}
-    cityLabel={data.cityLabel}
-    label={data.cityLabel}
-    initialSearch
-  />
-
-  {#if GOOGLE_CSE_ID}
-    <div class="mt-s32 mb-s32 flex items-center justify-center">
-      <div class="mr-s16">ou</div>
-      <LinkButton
-        label="Faire une recherche par mots-clés"
-        to={`/recherche-textuelle`}
-      />
+  {#if searchByText}
+    <div class="mb-s16">
+      <SearchFormByKeyword />
     </div>
+  {:else}
+    <SearchForm
+      servicesOptions={data.servicesOptions}
+      cityCode={data.cityCode}
+      cityLabel={data.cityLabel}
+      label={data.cityLabel}
+      initialSearch
+    />
+    {#if GOOGLE_CSE_ID}
+      <div class="mt-s32 mb-s32 flex items-center justify-center">
+        <div class="mr-s16">ou</div>
+        <LinkButton
+          label="Faire une recherche par mots-clés"
+          to={`/recherche-textuelle`}
+        />
+      </div>
+    {/if}
   {/if}
 </CenteredGrid>
 

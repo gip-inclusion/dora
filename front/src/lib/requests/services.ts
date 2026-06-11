@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import type {
   Model,
   Service,
+  ServiceSearchResult,
   ServicesOptions,
   ServiceStatus,
   ShortService,
@@ -398,4 +399,23 @@ export function markServicesAsUpToDate(services: { slug: string }[]) {
       services: services.map((serv) => serv.slug),
     }),
   });
+}
+
+// Variante A/B « recherche par mots-clés ».
+export async function getKeywordResults(
+  apiParams: URLSearchParams,
+  fetchFunction: typeof fetch
+): Promise<{
+  services: ServiceSearchResult[];
+  servicesPages: number;
+  servicesTotal: number;
+  searchCenter: [number, number] | null;
+  searchRadiusKm: number;
+}> {
+  const url = `${getApiURL()}/search/keyword/?${apiParams.toString()}`;
+  const res = await fetchFunction(url, {
+    headers: { Accept: "application/json; version=1.0" },
+  });
+  const data = await res.json();
+  return data;
 }

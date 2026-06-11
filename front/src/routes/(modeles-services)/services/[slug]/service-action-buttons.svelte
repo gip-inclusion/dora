@@ -32,7 +32,11 @@
   let linkCopied = $state(false);
 
   function handleCopy() {
-    navigator.clipboard.writeText(window.location.href);
+    // Le `searchId` sert uniquement au suivi de la recherche : on le retire de
+    // l'URL copiée pour ne pas le propager lors d'un partage.
+    const url = new URL(window.location.href);
+    url.searchParams.delete("searchId");
+    navigator.clipboard.writeText(url.toString());
     linkCopied = true;
     setTimeout(() => (linkCopied = false), 2000);
   }

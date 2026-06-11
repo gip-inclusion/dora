@@ -22,6 +22,7 @@ from dora.stats.models import (
     DiServiceView,
     MobilisationEvent,
     OrientationView,
+    SearchType,
     SearchView,
     ServiceView,
     StructureInfosView,
@@ -141,6 +142,8 @@ def log_event(request):
             )
 
         case Tag.SEARCH:
+            search_type = request.data.get("search_type", SearchType.THEMATIQUE)
+            keyword = request.data.get("keyword", "")
             city_code = request.data.get("search_city_code", "")
             department = code_insee_to_code_dept(city_code) if city_code else ""
             num_results = int(request.data.get("search_num_results", "0"))
@@ -152,6 +155,8 @@ def log_event(request):
             results_slugs_top10 = request.data.get("results_slugs_top10", [])
             event = SearchView.objects.create(
                 **common_analytics_data,
+                search_type=search_type,
+                keyword=keyword,
                 city_code=city_code,
                 department=department,
                 num_results=num_results,
@@ -174,7 +179,7 @@ def log_event(request):
 
         case Tag.STRUCTURE:
             event = StructureView.objects.create(
-                **common_analytics_data, **structure_data
+                **common_analytics_data, **structure_data, search_view=search_view
             )
 
         case Tag.STRUCTURE_INFOS:
