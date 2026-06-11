@@ -13,8 +13,8 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ data.prescriber.get_full_name }} de la structure
-    <a href="{{ data.prescriber_structure.get_frontend_url }}">{{ data.prescriber_structure.name }}
+    {{ prescriber_full_name }} de la structure
+    <a href="{{ prescriber_structure_url }}">{{ prescriber_structure_name }}
     </a>
     vous a adressé un bénéficiaire pour le service {% include "partials/service-link.html" %}.
   </p>
