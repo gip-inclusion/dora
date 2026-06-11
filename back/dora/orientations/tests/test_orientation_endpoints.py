@@ -9,6 +9,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import (
+    make_emplois_orientation,
     make_orientation,
     make_service,
     make_structure,
@@ -177,6 +178,36 @@ def test_contact_prescriber(api_client, orientation):
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
     assert len(mail.outbox) == 1
     assert mail.outbox[0].to == [orientation.prescriber.email]
+
+
+def test_contact_beneficiary_cc_prescriber_uses_dora_email(api_client, orientation):
+    url = (
+        f"/orientations/{orientation.query_id}/contact/beneficiary/"
+        f"?h={orientation.get_query_id_hash()}"
+    )
+    response = api_client.post(
+        url, data={"message": "test", "cc_prescriber": "true"}, follow=True
+    )
+
+    assert response.status_code == 204
+    assert mail.outbox[0].cc == [orientation.prescriber.email]
+
+
+def test_contact_beneficiary_cc_prescriber_uses_emplois_email(api_client):
+    orientation = make_emplois_orientation(
+        beneficiary_email="beneficiary@example.com",
+        emplois_data={"prescriber_email": "jean-prescripteur.des-emplois@example.com"},
+    )
+    url = (
+        f"/orientations/{orientation.query_id}/contact/beneficiary/"
+        f"?h={orientation.get_query_id_hash()}"
+    )
+    response = api_client.post(
+        url, data={"message": "test", "cc_prescriber": "true"}, follow=True
+    )
+
+    assert response.status_code == 204
+    assert mail.outbox[0].cc == ["jean-prescripteur.des-emplois@example.com"]
 
 
 @pytest.mark.parametrize(
@@ -663,6 +694,34 @@ class OrientationsExportTestCase(APITestCase):
                     "detail_page_url": orientation_2.get_magic_link(),
                 },
             ],
+        )
+
+    def test_get_export_of_received_orientations_from_emplois(self):
+        orientation = make_emplois_orientation(
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            emplois_data={
+                "prescriber_first_name": "Jean-Prescripteur",
+                "prescriber_last_name": "des Emplois",
+                "structure_name": "Structure des Emplois",
+            },
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(
+            response.data[0]["prescriber_name"], "Jean-Prescripteur des Emplois"
+        )
+        self.assertEqual(
+            response.data[0]["prescriber_structure_name"], "Structure des Emplois"
+        )
+        self.assertEqual(
+            response.data[0]["detail_page_url"], orientation.get_magic_link()
         )
 
     def test_raise_403_if_user_not_structure_member(self):
