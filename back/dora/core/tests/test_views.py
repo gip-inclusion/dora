@@ -80,9 +80,9 @@ class SafeFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=self.user)
 
-    @patch("dora.core.views.validate_upload")
-    @patch("dora.core.views.get_random_string", return_value="random_string")
-    @patch("dora.core.views.default_storage.save", return_value="upload_key")
+    @patch("dora.core.uploads.validate_upload")
+    @patch("dora.core.uploads.get_random_string", return_value="random_string")
+    @patch("dora.core.uploads.default_storage.save", return_value="upload_key")
     def test_safe_file_upload(self, mock_save, mock_random_string, mock_validate):
         response = self.client.post(
             self.url, {"file": self.file_mock}, format="multipart"

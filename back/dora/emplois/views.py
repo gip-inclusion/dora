@@ -1,8 +1,12 @@
+import json
+
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.db.models import CharField, Prefetch, Value
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.exceptions import ValidationError
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
@@ -11,6 +15,8 @@ from dora.core.pagination import (
     DefaultPageNumberPagination,
     OptionalPageNumberPagination,
 )
+from dora.core.throttling import UploadRateThrottle
+from dora.core.uploads import save_orientation_attachment
 from dora.orientations.models import Orientation
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -29,6 +35,8 @@ from .serializers import (
     ReferenceDataSerializer,
     ServiceSerializer,
 )
+
+MAX_ORIENTATION_ATTACHMENTS = 20  # we have a few cases with ~10 files
 
 PREFETCH_RELATED_SERVICE_LIST = [
     "publics",
@@ -137,13 +145,43 @@ class OrientationViewSet(
 ):
     permission_classes = (OrientationAPIPermission,)
     serializer_class = EmploisOrientationSerializer
+    parser_classes = (MultiPartParser, FormParser)
     renderer_classes = (JSONRenderer,)
+    throttle_classes = (UploadRateThrottle,)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        try:
+            payload = json.loads(request.data["data"])
+        except (LookupError, TypeError, ValueError):
+            raise ValidationError({"data": "Invalid or missing 'data' field."})
+
+        serializer = self.get_serializer(data=payload)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.initial_data, status=status.HTTP_201_CREATED)
+
+        attachments = request.FILES.getlist("attachments")
+        if len(attachments) > MAX_ORIENTATION_ATTACHMENTS:
+            raise ValidationError(
+                {
+                    "attachments": f"Vous ne pouvez pas joindre plus de {MAX_ORIENTATION_ATTACHMENTS} fichiers."
+                }
+            )
+
+        saved_paths = []
+        try:
+            for file_obj in attachments:
+                saved_paths.append(save_orientation_attachment(file_obj.name, file_obj))
+
+            serializer.validated_data["beneficiary_attachments"] = saved_paths
+            self.perform_create(serializer)
+        except Exception:  # we want to delete files if any error occurs
+            for path in saved_paths:
+                default_storage.delete(path)
+            raise
+
+        response_data = dict(serializer.initial_data)
+        if saved_paths:
+            response_data["beneficiary_attachments"] = saved_paths
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         serializer.save(
