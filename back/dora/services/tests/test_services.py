@@ -61,7 +61,7 @@ from ..models import (
     ServiceSubCategory,
 )
 from ..utils import SYNC_CUSTOM_M2M_FIELDS, SYNC_FIELDS, SYNC_M2M_FIELDS
-from ..views import search, service_di
+from ..views import search_services_view, service_di
 
 DUMMY_SERVICE = {"name": "Mon service"}
 
@@ -1219,7 +1219,7 @@ class DataInclusionSearchTestCase(APITestCase):
             "dora.data_inclusion.di_client_factory"
         ) as mock_di_client_factory:
             mock_di_client_factory.return_value = di_client or self.di_client
-            return search(request)
+            return search_services_view(request)
 
     def service_di(self, request, di_id):
         with mock.patch(
