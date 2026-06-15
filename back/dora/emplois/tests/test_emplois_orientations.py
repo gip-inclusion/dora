@@ -1,8 +1,12 @@
+import json
 import uuid
+from unittest.mock import patch
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from model_bakery import baker
+from rest_framework.exceptions import ValidationError
 
 from dora.core.test_utils import make_service
 from dora.orientations.models import (
@@ -26,11 +30,14 @@ EMPLOIS_DATA = {
 }
 
 
-def post_orientation(api_client, payload):
+def post_orientation(api_client, payload, attachments=None):
+    data = {"data": json.dumps(payload)}
+    if attachments:
+        data["attachments"] = list(attachments)
     return api_client.post(
         reverse(ORIENTATION_URL),
-        data=payload,
-        format="json",
+        data=data,
+        format="multipart",
     )
 
 
@@ -259,3 +266,130 @@ def test_orientations_create_rejects_invalid_structure_siret(
     assert response.status_code == 400
     assert "emplois_data" in response.data
     assert "structure_siret" in response.data["emplois_data"]
+
+
+def test_orientations_create_without_attachments_stores_empty_list(
+    emplois_api_client, valid_payload
+):
+    response = post_orientation(emplois_api_client, valid_payload)
+
+    assert response.status_code == 201, response.data
+    orientation = Orientation.objects.get(di_service_id=DEFAULT_DI_SERVICE_ID)
+    assert orientation.beneficiary_attachments == []
+
+
+def test_orientations_create_rejects_client_supplied_attachment_paths(
+    emplois_api_client, valid_payload
+):
+    payload = {**valid_payload, "beneficiary_attachments": ["malicious/path.pdf"]}
+    response = post_orientation(emplois_api_client, payload)
+
+    assert response.status_code == 400
+    assert "beneficiary_attachments" in response.data
+    assert Orientation.objects.count() == 0
+
+
+@patch("dora.emplois.views.save_orientation_attachment")
+def test_orientations_create_with_attachments_uploads_in_one_call(
+    mock_save_orientation_attachment,
+    emplois_api_client,
+    valid_payload,
+):
+    mock_save_orientation_attachment.side_effect = [
+        "orientations/justificatif.pdf",
+        "orientations/cv.pdf",
+    ]
+    attachments = [
+        SimpleUploadedFile("justificatif.pdf", b"%PDF-1.4 fake"),
+        SimpleUploadedFile("cv.pdf", b"%PDF-1.4 fake"),
+    ]
+
+    response = post_orientation(
+        emplois_api_client, valid_payload, attachments=attachments
+    )
+
+    assert response.status_code == 201, response.data
+    assert mock_save_orientation_attachment.call_count == 2
+
+    expected_paths = ["orientations/justificatif.pdf", "orientations/cv.pdf"]
+    orientation = Orientation.objects.get(di_service_id=DEFAULT_DI_SERVICE_ID)
+    assert orientation.beneficiary_attachments == expected_paths
+    assert response.data["beneficiary_attachments"] == expected_paths
+
+
+@patch(
+    "dora.emplois.views.save_orientation_attachment",
+    return_value="orientations/justificatif.pdf",
+)
+@patch("dora.emplois.views.default_storage.delete")
+def test_orientations_create_validates_before_uploading(
+    mock_delete,
+    mock_save_orientation_attachment,
+    emplois_api_client,
+    base_payload,
+):
+    # di_service_id manquant -> la validation du serializer échoue AVANT tout
+    # upload : aucun fichier n'est envoyé ni supprimé sur S3.
+    attachments = [SimpleUploadedFile("justificatif.pdf", b"%PDF-1.4 fake")]
+
+    response = post_orientation(
+        emplois_api_client, base_payload, attachments=attachments
+    )
+
+    assert response.status_code == 400
+    assert mock_save_orientation_attachment.call_count == 0
+    assert mock_delete.call_count == 0
+    assert Orientation.objects.count() == 0
+
+
+@patch("dora.emplois.views.save_orientation_attachment")
+@patch("dora.emplois.views.default_storage.delete")
+def test_orientations_create_cleans_up_uploads_when_an_upload_fails(
+    mock_delete,
+    mock_save_orientation_attachment,
+    emplois_api_client,
+    valid_payload,
+):
+    # if 2nd upload fails, the first file is deleted
+    mock_save_orientation_attachment.side_effect = [
+        "orientations/cv.pdf",
+        ValidationError("FILE_TOO_BIG"),
+    ]
+    attachments = [
+        SimpleUploadedFile("cv.pdf", b"%PDF-1.4 fake"),
+        SimpleUploadedFile("too-big.pdf", b"%PDF-1.4 fake"),
+    ]
+
+    response = post_orientation(
+        emplois_api_client, valid_payload, attachments=attachments
+    )
+
+    assert response.status_code == 400
+    assert mock_save_orientation_attachment.call_count == 2
+    mock_delete.assert_called_once_with("orientations/cv.pdf")
+    assert Orientation.objects.count() == 0
+
+
+def test_orientations_create_rejects_missing_data_part(emplois_api_client):
+    response = emplois_api_client.post(
+        reverse(ORIENTATION_URL),
+        data={
+            # no JSON
+            "attachments": [SimpleUploadedFile("justificatif.pdf", b"%PDF-1.4 fake")]
+        },
+        format="multipart",
+    )
+
+    assert response.status_code == 400
+    assert "data" in response.data
+
+
+def test_orientations_create_rejects_invalid_data_json(emplois_api_client):
+    response = emplois_api_client.post(
+        reverse(ORIENTATION_URL),
+        data={"data": "{not valid json"},
+        format="multipart",
+    )
+
+    assert response.status_code == 400
+    assert "data" in response.data

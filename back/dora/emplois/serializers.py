@@ -160,6 +160,12 @@ class EmploisOrientationSerializer(OrientationSerializer):
             },
         }
 
+    def validate_beneficiary_attachments(self, value):
+        raise serializers.ValidationError(
+            "Ce champ est renseigné à partir des fichiers joints "
+            "et ne peut pas être fourni directement."
+        )
+
     def create(self, validated_data):
         emplois_data = validated_data.pop("emplois_data")
         with transaction.atomic():
