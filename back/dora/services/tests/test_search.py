@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 from model_bakery import baker
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dora.core.test_utils import (
     make_published_service,
@@ -160,7 +160,7 @@ class TestValidateSearchCategoriesAndSubcategories:
         """Teste que les catégories invalides sont rejetées."""
         baker.make("ServiceCategory", value="cat1", label="Catégorie 1")
 
-        with pytest.raises(serializers.ValidationError) as exc_info:
+        with pytest.raises(ValidationError) as exc_info:
             _validate_search_categories_and_subcategories(
                 categories_list=["invalid_cat"], subcategories_list=None
             )
@@ -171,7 +171,7 @@ class TestValidateSearchCategoriesAndSubcategories:
         """Teste que les sous-catégories invalides sont rejetées."""
         baker.make("ServiceSubCategory", value="cat1--sub1", label="Sous-catégorie 1")
 
-        with pytest.raises(serializers.ValidationError) as exc_info:
+        with pytest.raises(ValidationError) as exc_info:
             _validate_search_categories_and_subcategories(
                 categories_list=None, subcategories_list=["invalid--sub"]
             )
@@ -187,7 +187,7 @@ class TestValidateSearchCategoriesAndSubcategories:
             is_obsolete=True,
         )
 
-        with pytest.raises(serializers.ValidationError) as exc_info:
+        with pytest.raises(ValidationError) as exc_info:
             _validate_search_categories_and_subcategories(
                 categories_list=["obsolete_cat"], subcategories_list=None
             )
@@ -203,7 +203,7 @@ class TestValidateSearchCategoriesAndSubcategories:
             is_obsolete=True,
         )
 
-        with pytest.raises(serializers.ValidationError) as exc_info:
+        with pytest.raises(ValidationError) as exc_info:
             _validate_search_categories_and_subcategories(
                 categories_list=None, subcategories_list=["cat1--obsolete_sub"]
             )

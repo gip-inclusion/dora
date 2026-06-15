@@ -1,5 +1,5 @@
-from rest_framework import mixins, permissions, serializers, viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework import mixins, permissions, viewsets
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
@@ -45,7 +45,7 @@ class ModerationMixin:
         )
 
         if not status_before_update != status_after_update:
-            raise serializers.ValidationError(
+            raise ValidationError(
                 "Mise à jour du statut de modération sans changement de statut"
             )
         msg = "Statut de modération changé par un•e membre de l'équipe"

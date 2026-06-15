@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dora.services.models import Bookmark, SavedSearch, Service
 from dora.services.serializers import BookmarkListSerializer, SavedSearchSerializer
@@ -114,7 +115,7 @@ class JoinStructureSerializer(serializers.Serializer):
         siret = data.get("siret")
         structure_slug = data.get("structure_slug")
         if siret and structure_slug:
-            raise serializers.ValidationError(
+            raise ValidationError(
                 "`siret` et `structure_slug` ne peuvent être présents simultanément"
             )
         if siret:
@@ -124,7 +125,7 @@ class JoinStructureSerializer(serializers.Serializer):
             except Establishment.DoesNotExist:
                 # The field is hidden on the frontend, so display this error globally
                 # TODO: Ideally it should be the frontend role to display the message anyway
-                raise serializers.ValidationError({"non_field_errors": "SIRET inconnu"})
+                raise ValidationError({"non_field_errors": "SIRET inconnu"})
         else:
             try:
                 structure = Structure.objects.get(slug=structure_slug)
@@ -132,7 +133,5 @@ class JoinStructureSerializer(serializers.Serializer):
             except Structure.DoesNotExist:
                 # The field is hidden on the frontend, so display this error globally
                 # TODO: Ideally it should be the frontend role to display the message anyway
-                raise serializers.ValidationError(
-                    {"non_field_errors": "structure inconnue"}
-                )
+                raise ValidationError({"non_field_errors": "structure inconnue"})
         return super().validate(data)

@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 import pytest
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dora.core.test_utils import make_published_service
 from dora.orientations.models import Orientation
@@ -72,7 +72,7 @@ def test_validate_with_invalid_op_jwt_raises_error(monkeypatch):
         "op_jwt": "invalid-token",
     }
 
-    with pytest.raises(serializers.ValidationError) as exc_info:
+    with pytest.raises(ValidationError) as exc_info:
         serializer.validate(data)
 
     assert "op_jwt" in exc_info.value.detail

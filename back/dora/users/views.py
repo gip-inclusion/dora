@@ -1,5 +1,6 @@
 from rest_framework import permissions, serializers, status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from .models import User
@@ -13,9 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if "main_activity" not in attrs and not self.instance.main_activity:
-            raise serializers.ValidationError(
-                "Le champ « Activité principale » est requis"
-            )
+            raise ValidationError("Le champ « Activité principale » est requis")
         return attrs
 
 
