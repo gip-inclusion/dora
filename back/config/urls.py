@@ -67,6 +67,11 @@ private_api_patterns = [
         "search/",
         dora.services.views.search_services_view,
     ),
+    path(
+        "search/keyword/",
+        dora.services.views.search_keyword_view,
+        name="search-keyword",
+    ),
     path("stats/event/", dora.stats.views.log_event),
     path("services-di/<str:di_id>/", dora.services.views.service_di),
     path(
