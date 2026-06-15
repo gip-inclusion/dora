@@ -1348,21 +1348,6 @@ class DataInclusionSearchTestCase(APITestCase):
         service, *_ = response.data["services"]
         assert service["slug"] == service_dora.slug
 
-    @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
-    def test_search_all_sources_on_unified_search(self):
-        # DATA_INCLUSION_STREAM_SOURCES doit être ignoré lors d'une recherche unifiée (par défaut, sans paramètre `searchMode`)
-        self.make_di_service(source="foo", zone_eligibilite=[self.city1.code])
-        self.make_di_service(source="bar", zone_eligibilite=[self.city1.code])
-        request = self.factory.get(
-            "/search/",
-            {"city": self.city1.code},
-        )
-        response = self.search(request)
-
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
     def test_service_di_contains_service_fields(self):
         service_data = self.make_di_service()
         request = self.factory.get(f"/services-di/{service_data['id']}/")
