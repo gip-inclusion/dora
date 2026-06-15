@@ -5,7 +5,6 @@
   import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
-  import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { isAuthenticated, userInfo } from "$lib/utils/auth";
   import { isServiceRecentlyPublished } from "$lib/utils/service";
@@ -61,8 +60,7 @@
   );
 
   let showServiceWillBeVisibleSoonNotice = $derived(
-    DI_DORA_UNIFIED_SEARCH_ENABLED &&
-      !service.isModel &&
+    !service.isModel &&
       service.status === "PUBLISHED" &&
       service.canWrite &&
       isServiceRecentlyPublished(service)
