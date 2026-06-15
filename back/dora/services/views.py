@@ -887,8 +887,6 @@ def search(request):
     funding = request.GET.get("funding")
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
-    # Recherche unifiée activée par défaut
-    unified_search_enabled = request.GET.get("unifiedSearchEnabled") != "false"
 
     categories_list = categories.split(",") if categories is not None else None
     subcategories_list = subcategories.split(",") if subcategories is not None else None
@@ -919,7 +917,6 @@ def search(request):
         funding_labels=funding_labels_list,
         lat=lat,
         lon=lon,
-        unified_search_enabled=unified_search_enabled,
     )
 
     # Le centre de recherche est soit les coordonnées fournies, soit le centre de la ville
