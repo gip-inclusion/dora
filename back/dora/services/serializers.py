@@ -847,11 +847,41 @@ class BookmarkSerializer(BookmarkListSerializer):
             }
 
 
+class SearchKeywordSerializer(serializers.Serializer):
+    q = serializers.CharField(required=False)
+    code_commune = serializers.CharField(required=False)
+    code_departement = serializers.CharField(required=False)
+    code_region = serializers.CharField(required=False)
+    lon = serializers.FloatField(required=False)
+    lat = serializers.FloatField(required=False)
+
+    def validate(self, attrs):
+        lat = attrs.get("lat")
+        lon = attrs.get("lon")
+        if not attrs.get("q") and not (
+            attrs.get("code_commune")
+            or attrs.get("code_departement")
+            or attrs.get("code_region")
+            or lat
+            and lon
+        ):
+            if lat or lon:
+                missing, passed = ("lon", "lat") if lon is None else ("lat", "lon")
+                raise ValidationError(
+                    f"Le champ {missing} est requis lorsque {passed} est fourni."
+                )
+            raise ValidationError(
+                f"Au moins un champ doit être fourni, parmis {', '.join(self.fields)}."
+            )
+        return attrs
+
+
 class SearchResultSerializer(ServiceListSerializer):
     distance = serializers.SerializerMethodField()
     coordinates = serializers.SerializerMethodField()
     di_publics = serializers.SerializerMethodField()
     location_kinds = serializers.SerializerMethodField()
+    search_score = serializers.FloatField(required=False)
 
     class Meta:
         model = Service
@@ -873,6 +903,7 @@ class SearchResultSerializer(ServiceListSerializer):
             "name",
             "postal_code",
             "publication_date",
+            "search_score",
             "short_desc",
             "slug",
             "status",

@@ -147,3 +147,35 @@ class DataInclusionClient:
         except requests.RequestException as err:
             logger.error(err)
             return None
+
+    @log_conn_error
+    def search(
+        self,
+        q: Optional[str] = None,
+        sources: Optional[list[str]] = None,
+        score_qualite_minimum: Optional[float] = None,
+        code_commune: Optional[str] = None,
+        code_departement: Optional[str] = None,
+        code_region: Optional[str] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+    ) -> Optional[list[dict]]:
+        url = self.base_url.copy()
+        url = url / "search"
+        if q is not None:
+            url.args["q"] = q
+        if sources is not None:
+            url.args["sources"] = sources
+        if score_qualite_minimum is not None:
+            url.args["score_qualite_minimum"] = score_qualite_minimum
+        if code_commune is not None:
+            url.args["code_commune"] = code_commune
+        if code_departement is not None:
+            url.args["code_departement"] = code_departement
+        if code_region is not None:
+            url.args["code_region"] = code_region
+        if lat is not None:
+            url.args["lat"] = lat
+        if lon is not None:
+            url.args["lon"] = lon
+        return self._get_pages(url)

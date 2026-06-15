@@ -136,3 +136,16 @@ class FakeDataInclusionClient:
             ]
         else:
             return [{"distance": 30, "service": s} for s in services]
+
+    def search(
+        self,
+        q: Optional[str] = None,
+        sources: Optional[list[str]] = None,
+        score_qualite_minimum: Optional[float] = None,
+        code_commune: Optional[str] = None,
+        code_departement: Optional[str] = None,
+        code_region: Optional[str] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+    ):
+        return self.services
