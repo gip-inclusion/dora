@@ -108,8 +108,6 @@ class DataInclusionClient:
     @log_conn_error
     def search_services(
         self,
-        sources: Optional[list[str]] = None,
-        score_qualite_minimum: Optional[float] = None,
         code_commune: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
@@ -119,12 +117,6 @@ class DataInclusionClient:
     ) -> Optional[list[dict]]:
         url = self.base_url.copy()
         url = url / "search/services"
-
-        if sources is not None:
-            url.args["sources"] = sources
-
-        if score_qualite_minimum is not None:
-            url.args["score_qualite_minimum"] = score_qualite_minimum
 
         if settings.DATA_INCLUSION_EXCLUDE_DUPLICATES:
             url.args["exclure_doublons"] = "true"
