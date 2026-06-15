@@ -56,7 +56,12 @@ from dora.services.models import (
     ServiceSubCategory,
     UpdateFrequency,
 )
-from dora.services.search import MAX_DISTANCE, search_services
+from dora.services.search import (
+    MAX_DISTANCE,
+    _get_di_thematiques,
+    search_keyword,
+    search_services,
+)
 from dora.services.utils import synchronize_service_from_model
 from dora.stats.models import DeploymentLevel, DeploymentState
 from dora.structures.models import Structure, StructureMember
@@ -66,6 +71,7 @@ from .serializers import (
     BookmarkSerializer,
     FeedbackSerializer,
     SavedSearchSerializer,
+    SearchKeywordQuerySerializer,
     ServiceListSerializer,
     ServiceModelSerializer,
     ServiceSerializer,
@@ -962,5 +968,52 @@ def search_services_view(request):
             "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
+        }
+    )
+
+
+@api_view()
+@permission_classes([permissions.AllowAny])
+def search_keyword_view(request):
+    serializer = SearchKeywordQuerySerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+
+    # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
+    query = serializer.data
+    categories = query.pop("cats")
+    subcategories = query.pop("subs")
+    query["thematiques"] = _get_di_thematiques(categories, subcategories)
+    sorted_services, metadata = search_keyword(request, query)
+
+    search_center = None
+    lon = query.get("lon")
+    if lon is not None:
+        search_center = [lon, query["lat"]]
+    elif city_code := query.get("code_commune"):
+        city_code = arrdt_to_main_insee_code(city_code)
+        try:
+            city = City.objects.get(pk=city_code)
+        except City.DoesNotExist:
+            pass
+        else:
+            search_center = [city.center.x, city.center.y]
+    if search_center is None:
+        sum_x, sum_y, total = 0, 0, 0
+        for service in sorted_services:
+            if coords := service["coordinates"]:
+                [x, y] = coords
+                sum_x += x
+                sum_y += y
+                total += 1
+        if total:
+            search_center = [sum_x / total, sum_y / total]
+
+    return Response(
+        {
+            "search_center": search_center,
+            "search_radius_km": MAX_DISTANCE,
+            "services": sorted_services,
+            "services_pages": metadata["services_pages"],
+            "services_total": metadata["services_total"],
         }
     )

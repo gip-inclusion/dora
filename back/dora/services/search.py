@@ -15,6 +15,7 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
+from dora.api.exceptions import ServiceUnavailable
 from dora.core.constants import WGS84
 from dora.data_inclusion.mappings import map_search_result
 from dora.decoupage_administratif.models import City
@@ -218,6 +219,8 @@ def _get_raw_di_results(
 def _map_di_results(
     raw_di_results: list,
     location_kinds: Optional[list[str]] = None,
+    *,
+    max_distance: Optional[float],
 ) -> list:
     """Convert DI service to Dora format.
 
@@ -230,13 +233,15 @@ def _map_di_results(
         map_search_result(result, supported_service_kinds) for result in raw_di_results
     ]
 
-    # FIXME: exclu les services uniquement en présentiel à plus de MAX_DISTANCE
-    # du lieu de recherche (ainsi que ceux qui ne retournent pas d'information de distance).
+    # FIXME: exclut les services uniquement en présentiel à plus de
+    # max_distance lors de la recherche géographique du lieu de recherche
+    # (ainsi que ceux qui ne retournent pas d'information de distance).
     # À terme il faudra passer par un rayon configurable
     mapped_di_results = [
         result
         for result in mapped_di_results
-        if (
+        if max_distance is None
+        or (
             ModeAccueil.A_DISTANCE in result["location_kinds"]
             or (
                 result.get("distance") is not None
@@ -356,17 +361,29 @@ def _process_di_results(
     request,
     raw_di_results,
     location_kinds: Optional[list[str]] = None,
+    *,
+    max_distance: Optional[float],
+    minimum_quality: Optional[float] = None,
 ) -> list:
     # Les ID de services DI sont de la forme "source--id".
     # On récupère l'ID Dora du service et la distance calculée par DI,
     # en conservant l'ordre des résultats DI (triés par distance).
     dora_results_from_di = [
-        (result["service"]["id"].split("--")[1], result["distance"])
+        (
+            result["service"]["id"].split("--")[1],
+            result["distance"],
+            result.get("score_recherche"),
+        )
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
-    dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
-    dora_ids = list(dora_distances.keys())
+    # Les données sont triées par distance lorsque l’API /search/services est
+    # utilisée, et par score de recherche pour l’API /search.
+    dora_annotations = {
+        dora_id: (distance, score_recherche)
+        for dora_id, distance, score_recherche in dora_results_from_di
+    }
+    dora_ids = list(dora_annotations.keys())
 
     dora_services_by_id = {
         str(service.id): service
@@ -395,7 +412,7 @@ def _process_di_results(
     for dora_id in dora_ids:
         service = dora_services_by_id.get(dora_id)
         if service:
-            service.distance = dora_distances[dora_id]
+            service.distance, service.search_score = dora_annotations[dora_id]
             annotated_dora_results.append(service)
 
     serialized_dora_results = SearchResultSerializer(
@@ -409,15 +426,16 @@ def _process_di_results(
         result for result in raw_di_results if result["service"]["source"] != "dora"
     ]
 
-    if settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM:
+    if minimum_quality:
         other_raw_results = [
             result
             for result in other_raw_results
-            if result["service"]["score_qualite"]
-            >= settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
+            if result["service"]["score_qualite"] >= minimum_quality
         ]
 
-    serialized_other_results = _map_di_results(other_raw_results, location_kinds)
+    serialized_other_results = _map_di_results(
+        other_raw_results, location_kinds, max_distance=max_distance
+    )
 
     serialized_results = [*serialized_dora_results, *serialized_other_results]
 
@@ -464,7 +482,13 @@ def search_services(
         lat=lat,
         lon=lon,
     )
-    results, metadata = _process_di_results(request, raw_di_results, location_kinds)
+    results, metadata = _process_di_results(
+        request,
+        raw_di_results,
+        location_kinds,
+        max_distance=MAX_DISTANCE,
+        minimum_quality=settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM,
+    )
     if len(results) == 0:
         # Pas de résultat peut signifier que DI n'est pas accessible.
         # On relance la recherche sur les services DORA locaux.
@@ -482,3 +506,27 @@ def search_services(
             lon=lon,
         )
     return _sort_services(results), metadata
+
+
+def search_keyword(request, api_params):
+    di_client = data_inclusion.di_client_factory()
+    try:
+        raw_di_results = di_client.search(**api_params, size=50)
+    except requests.RequestException:
+        raise ServiceUnavailable(
+            "L’API data.inclusion.gouv.fr nécessaire pour la recherche, "
+            "n’est pas disponible. Merci de réessayer ultérieurement."
+        )
+    results, metadata = _process_di_results(
+        request,
+        raw_di_results["items"],
+        location_kinds=None,  # Filtré par d·i.
+        max_distance=None,
+        # d·i handles the pagination. DORA shouldn’t remove results, that would
+        # make the paginator and results count incorrect.
+        minimum_quality=None,
+    )
+    results.sort(key=lambda r: r["search_score"], reverse=True)
+    metadata["services_pages"] = raw_di_results["pages"]
+    metadata["services_total"] = raw_di_results["total"]
+    return results, metadata

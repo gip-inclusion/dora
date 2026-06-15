@@ -1,5 +1,8 @@
+import math
 from typing import Optional
 from uuid import uuid4
+
+from data_inclusion.schema.v1 import Frais, ModeAccueil, Public, Thematique, TypeService
 
 
 def make_di_service_data(**kwargs) -> dict:
@@ -136,3 +139,29 @@ class FakeDataInclusionClient:
             ]
         else:
             return [{"distance": 30, "service": s} for s in services]
+
+    def search(
+        self,
+        q: Optional[str] = None,
+        sources: Optional[list[str]] = None,
+        score_qualite_minimum: Optional[float] = None,
+        code_commune: Optional[str] = None,
+        code_departement: Optional[str] = None,
+        code_region: Optional[str] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+        thematiques: Optional[list[Thematique]] = None,
+        frais: Optional[list[Frais]] = None,
+        modes_accueil: Optional[list[ModeAccueil]] = None,
+        publics: Optional[list[Public]] = None,
+        types: Optional[list[TypeService]] = None,
+        page: int = 1,
+        size: int = 50,
+    ):
+        return {
+            "items": self.services,
+            "total": len(self.services),
+            "page": page,
+            "size": size,
+            "pages": math.ceil(len(self.services) / size),
+        }
