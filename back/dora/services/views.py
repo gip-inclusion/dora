@@ -906,7 +906,7 @@ def _validate_search_categories_and_subcategories(
 
 @api_view()
 @permission_classes([permissions.AllowAny])
-def search(request):
+def search_services_view(request):
     city_code = request.GET.get("city")
     categories = request.GET.get("cats")
     subcategories = request.GET.get("subs")
