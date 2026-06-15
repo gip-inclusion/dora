@@ -78,19 +78,6 @@ class DataInclusionClient:
                 return data
 
     @log_conn_error
-    def list_services(self, source: Optional[str] = None) -> Optional[list[dict]]:
-        url = self.base_url.copy()
-        url = url / "services"
-
-        if source is not None:
-            url.args["source"] = source
-
-        try:
-            return self._get_pages(url)
-        except requests.HTTPError:
-            return None
-
-    @log_conn_error
     def retrieve_service(
         self,
         id: str,
