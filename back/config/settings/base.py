@@ -663,9 +663,6 @@ SESAME_ONE_TIME = True
 # Nom de la variable de session indiquant une connexion via sesame
 SESAME_SESSION_NAME = "sesame_magic_link"
 
-# Recherche unifiée activée par défaut
-DI_DORA_UNIFIED_SEARCH_ENABLED = os.getenv("DI_DORA_UNIFIED_SEARCH_ENABLED") != "false"
-
 # Sécurité (espace admin) :
 # L'espace d'admin est protégé par un système à 2FA
 # Et pontiellement désactivable par configuration
