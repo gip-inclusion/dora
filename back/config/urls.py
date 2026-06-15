@@ -65,7 +65,7 @@ private_api_patterns = [
     path("auth/", include("dora.rest_auth.urls")),
     path(
         "search/",
-        dora.services.views.search,
+        dora.services.views.search_services_view,
     ),
     path("stats/event/", dora.stats.views.log_event),
     path("services-di/<str:di_id>/", dora.services.views.service_di),
