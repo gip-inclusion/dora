@@ -3,7 +3,14 @@ import textwrap
 from datetime import timedelta
 
 import requests
-from data_inclusion.schema.v1 import ModeAccueil
+from data_inclusion.schema.v1 import (
+    Categorie,
+    Frais,
+    ModeAccueil,
+    Thematique,
+    TypeService,
+)
+from data_inclusion.schema.v1 import Public as DIPublic
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.storage import default_storage
@@ -847,11 +854,51 @@ class BookmarkSerializer(BookmarkListSerializer):
             }
 
 
+class SearchKeywordQuerySerializer(serializers.Serializer):
+    q = serializers.CharField(required=False)
+    code_commune = serializers.CharField(required=False)
+    code_departement = serializers.CharField(required=False)
+    code_region = serializers.CharField(required=False)
+    lon = serializers.FloatField(required=False)
+    lat = serializers.FloatField(required=False)
+    modes_accueil = serializers.MultipleChoiceField(choices=ModeAccueil, required=False)
+    publics = serializers.MultipleChoiceField(choices=DIPublic, required=False)
+    cats = serializers.MultipleChoiceField(choices=Categorie, required=False)
+    subs = serializers.MultipleChoiceField(choices=Thematique, required=False)
+    types = serializers.MultipleChoiceField(choices=TypeService, required=False)
+    frais = serializers.MultipleChoiceField(choices=Frais, required=False)
+    page = serializers.IntegerField(min_value=1, required=False, default=1)
+
+    def validate(self, attrs):
+        fields_required = {
+            "q",
+            "code_commune",
+            "code_departement",
+            "code_region",
+            "lon",
+            "lat",
+        }
+        if not set(attrs) & fields_required:
+            fields_ordered = [f for f in self.fields if f in fields_required]
+            raise ValidationError(
+                f"Au moins un champ doit être fourni, parmi {', '.join(fields_ordered)}."
+            )
+        lat = attrs.get("lat")
+        lon = attrs.get("lon")
+        if (lat is None) != (lon is None):
+            missing, passed = ("lon", "lat") if lon is None else ("lat", "lon")
+            raise ValidationError(
+                f"Le champ {missing} est requis lorsque {passed} est fourni."
+            )
+        return attrs
+
+
 class SearchResultSerializer(ServiceListSerializer):
     distance = serializers.SerializerMethodField()
     coordinates = serializers.SerializerMethodField()
     di_publics = serializers.SerializerMethodField()
     location_kinds = serializers.SerializerMethodField()
+    search_score = serializers.FloatField(required=False)
 
     class Meta:
         model = Service
@@ -873,6 +920,7 @@ class SearchResultSerializer(ServiceListSerializer):
             "name",
             "postal_code",
             "publication_date",
+            "search_score",
             "short_desc",
             "slug",
             "status",
