@@ -151,7 +151,6 @@ def _get_raw_di_results(
     fees: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-    with_dora: bool = False,
 ) -> list:
     """Search data.inclusion services.
 
@@ -193,20 +192,10 @@ def _get_raw_di_results(
     if not thematiques and subcategories:
         return []
 
-    # Si on veut toutes les sources incluant Dora, on ne spécifie pas de sources
-    # (on récupère tous les services de toutes les sources).
-    # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
-    sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
-
     types = _map_kinds_dora_to_di(kinds) if kinds else None
 
     try:
         raw_di_results = di_client.search_services(
-            sources=sources,
-            score_qualite_minimum=(
-                # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
-                None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
-            ),
             code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=types,
@@ -386,7 +375,6 @@ def _get_unified_results(
         fees=fees,
         lat=lat,
         lon=lon,
-        with_dora=True,
     )
 
     # Les ID de services DI sont de la forme "source--id".
