@@ -156,9 +156,6 @@ def _get_raw_di_results(
 
     The ``di_client`` acts as an entrypoint to the data.inclusion service repository.
 
-    The search will target the sources configured by the ``DATA_INCLUSION_STREAM_SOURCES``
-    environment variable.
-
     The other arguments match the input parameters from the classical search.
 
     This function essentially:
