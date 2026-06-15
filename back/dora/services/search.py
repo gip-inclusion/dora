@@ -268,38 +268,6 @@ def _map_di_results(
     return mapped_di_results
 
 
-def _get_di_results(
-    di_client: data_inclusion.DataInclusionClient,
-    city_code: str,
-    categories: Optional[list[str]] = None,
-    subcategories: Optional[list[str]] = None,
-    kinds: Optional[list[str]] = None,
-    fees: Optional[list[str]] = None,
-    location_kinds: Optional[list[str]] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
-) -> list:
-    """Search data.inclusion services and convert them to the Dora format.
-
-    Returns:
-        A list of search results by SearchResultSerializer.
-    """
-    raw_di_results = _get_raw_di_results(
-        di_client=di_client,
-        city_code=city_code,
-        categories=categories,
-        subcategories=subcategories,
-        kinds=kinds,
-        fees=fees,
-        lat=lat,
-        lon=lon,
-    )
-
-    mapped_di_results = _map_di_results(raw_di_results, location_kinds)
-
-    return mapped_di_results
-
-
 def _get_dora_results(
     request,
     city_code: str,
@@ -391,7 +359,7 @@ def _get_dora_results(
     }
 
 
-def _get_unified_results(
+def _get_results(
     request,
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -502,7 +470,6 @@ def search_services(
     funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-    unified_search_enabled: bool = True,
 ) -> (list[dict], dict):
     """Search services from all available repositories.
 
@@ -517,69 +484,33 @@ def search_services(
         - A list of search results by SearchResultSerializer.
         - A metadata dictionary
     """
-
-    # Par défaut, le mode de recherche est unifié (recherche DI puis filtrage Dora)
-    if settings.DI_DORA_UNIFIED_SEARCH_ENABLED and unified_search_enabled:
-        results, metadata = _get_unified_results(
-            request=request,
-            di_client=di_client,
-            categories=categories,
-            subcategories=subcategories,
-            city_code=city_code,
-            kinds=kinds,
-            fees=fees,
-            location_kinds=location_kinds,
-            lat=lat,
-            lon=lon,
-        )
-        if len(results) == 0:
-            # Pas de résultat peut signifier que DI n'est pas accessible.
-            # On relance la recherche sur les services DORA locaux.
-            results, metadata = _get_dora_results(
-                request=request,
-                categories=categories,
-                subcategories=subcategories,
-                city_code=city_code,
-                city=city,
-                kinds=kinds,
-                fees=fees,
-                location_kinds=location_kinds,
-                funding_labels=funding_labels,
-                lat=lat,
-                lon=lon,
-            )
-        return _sort_services(results), metadata
-
-    # Sinon, le mode de recherche est distribué (recherche DI + recherche Dora)
-    di_results = (
-        _get_di_results(
-            di_client=di_client,
-            categories=categories,
-            subcategories=subcategories,
-            city_code=city_code,
-            kinds=kinds,
-            fees=fees,
-            location_kinds=location_kinds,
-            lat=lat,
-            lon=lon,
-        )
-        if di_client is not None
-        else []
-    )
-
-    dora_results, metadata = _get_dora_results(
+    # Recherche DI puis filtrage Dora.
+    results, metadata = _get_results(
         request=request,
+        di_client=di_client,
         categories=categories,
         subcategories=subcategories,
         city_code=city_code,
-        city=city,
         kinds=kinds,
         fees=fees,
         location_kinds=location_kinds,
-        funding_labels=funding_labels,
         lat=lat,
         lon=lon,
     )
-
-    all_results = [*dora_results, *di_results]
-    return _sort_services(all_results), metadata
+    if len(results) == 0:
+        # Pas de résultat peut signifier que DI n'est pas accessible.
+        # On relance la recherche sur les services DORA locaux.
+        results, metadata = _get_dora_results(
+            request=request,
+            categories=categories,
+            subcategories=subcategories,
+            city_code=city_code,
+            city=city,
+            kinds=kinds,
+            fees=fees,
+            location_kinds=location_kinds,
+            funding_labels=funding_labels,
+            lat=lat,
+            lon=lon,
+        )
+    return _sort_services(results), metadata
