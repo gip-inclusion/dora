@@ -348,32 +348,14 @@ def _get_dora_results(
 
 def _get_unified_results(
     request,
-    di_client: data_inclusion.DataInclusionClient,
-    city_code: str,
-    categories: Optional[list[str]] = None,
-    subcategories: Optional[list[str]] = None,
-    kinds: Optional[list[str]] = None,
-    fees: Optional[list[str]] = None,
+    raw_di_results,
     location_kinds: Optional[list[str]] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
 ) -> list:
-    """Search data.inclusion services and convert them to the Dora format.
+    """Enrich data.inclusion services with Dora data.
 
     Returns:
         A list of search results by SearchResultSerializer.
     """
-    raw_di_results = _get_raw_di_results(
-        di_client=di_client,
-        city_code=city_code,
-        categories=categories,
-        subcategories=subcategories,
-        kinds=kinds,
-        fees=fees,
-        lat=lat,
-        lon=lon,
-    )
-
     # Les ID de services DI sont de la forme "source--id".
     # On récupère l'ID Dora du service et la distance calculée par DI,
     # en conservant l'ordre des résultats DI (triés par distance).
@@ -471,18 +453,17 @@ def search_services(
         - A metadata dictionary
     """
     # Recherche DI puis filtrage Dora.
-    results, metadata = _get_unified_results(
-        request=request,
+    raw_di_results = _get_raw_di_results(
         di_client=di_client,
+        city_code=city_code,
         categories=categories,
         subcategories=subcategories,
-        city_code=city_code,
         kinds=kinds,
         fees=fees,
-        location_kinds=location_kinds,
         lat=lat,
         lon=lon,
     )
+    results, metadata = _get_unified_results(request, raw_di_results, location_kinds)
     if len(results) == 0:
         # Pas de résultat peut signifier que DI n'est pas accessible.
         # On relance la recherche sur les services DORA locaux.
