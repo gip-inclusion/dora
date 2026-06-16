@@ -1,5 +1,6 @@
 <script lang="ts">
   import insane from "insane";
+  import { onMount } from "svelte";
 
   import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
   import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
