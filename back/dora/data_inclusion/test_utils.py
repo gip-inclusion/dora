@@ -87,9 +87,6 @@ class FakeDataInclusionClient:
     def __init__(self, services: Optional[list[dict]] = None) -> None:
         self.services = services if services is not None else []
 
-    def list_services(self, source: Optional[str] = None) -> Optional[list[dict]]:
-        raise NotImplementedError()
-
     def retrieve_service(
         self,
         id: str,
