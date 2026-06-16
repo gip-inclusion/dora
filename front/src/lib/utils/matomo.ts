@@ -34,6 +34,12 @@ type MatomoEvent = {
 };
 
 export function registerMatomoExperiment(experiment: MatomoExperiment) {
+  // Matomo n'est disponible que côté navigateur : on ne fait rien lors du
+  // rendu serveur, sans quoi l'accès à `window` provoque une erreur.
+  if (typeof window === "undefined") {
+    return;
+  }
+
   function createExperiment() {
     const Experiment = Matomo.AbTesting.Experiment;
 
