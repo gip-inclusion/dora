@@ -22,7 +22,7 @@ from rest_framework import (
     viewsets,
 )
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -435,7 +435,7 @@ class BookmarkViewSet(
             di_id=slug if is_di else "",
         )
         if not created:
-            raise serializers.ValidationError("ce bookmark existe déjà")
+            raise ValidationError("ce bookmark existe déjà")
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -531,9 +531,7 @@ class ModelViewSet(ServiceViewSet):
                 raise PermissionDenied
 
             if service.model:
-                raise serializers.ValidationError(
-                    "Impossible de copier un service synchronisé"
-                )
+                raise ValidationError("Impossible de copier un service synchronisé")
 
         structure_slug = self.request.data.get("structure")
         try:
@@ -842,7 +840,7 @@ def _validate_search_categories_and_subcategories(
     """Valide que les catégories et sous-catégories fournies existent et ne sont pas obsolètes.
 
     Raises:
-        serializers.ValidationError: Si des catégories ou sous-catégories sont invalides
+        ValidationError: Si des catégories ou sous-catégories sont invalides
     """
     invalid_categories = []
     invalid_subcategories = []
@@ -871,7 +869,7 @@ def _validate_search_categories_and_subcategories(
             error_parts.append(
                 f"Sous-catégories invalides : {', '.join(invalid_subcategories)}"
             )
-        raise serializers.ValidationError(
+        raise ValidationError(
             " ; ".join(error_parts),
             code="invalid_categories_or_subcategories",
         )

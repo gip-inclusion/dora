@@ -5,7 +5,7 @@ import pytest
 import requests
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dora.core.test_utils import make_orientation, make_published_service
 from dora.orientations.models import Orientation, OrientationStatus
@@ -149,7 +149,7 @@ def test_validate_dora_service_with_credentials_requires_attachments():
         "data_protection_commitment": True,
     }
 
-    with pytest.raises(serializers.ValidationError) as exc_info:
+    with pytest.raises(ValidationError) as exc_info:
         serializer.validate(data)
 
     assert "beneficiary_attachments" in exc_info.value.detail
@@ -170,7 +170,7 @@ def test_validate_dora_service_with_forms_requires_attachments():
             "data_protection_commitment": True,
         }
 
-        with pytest.raises(serializers.ValidationError) as exc_info:
+        with pytest.raises(ValidationError) as exc_info:
             serializer.validate(data)
 
         assert "beneficiary_attachments" in exc_info.value.detail
@@ -233,7 +233,7 @@ def test_validate_di_service_with_credentials_requires_attachments(
         "data_protection_commitment": True,
     }
 
-    with pytest.raises(serializers.ValidationError) as exc_info:
+    with pytest.raises(ValidationError) as exc_info:
         serializer.validate(data)
 
     assert "beneficiary_attachments" in exc_info.value.detail
@@ -354,7 +354,7 @@ def test_validate_existing_instance_service():
         "data_protection_commitment": True,
     }
 
-    with pytest.raises(serializers.ValidationError) as exc_info:
+    with pytest.raises(ValidationError) as exc_info:
         serializer.validate(data)
 
     assert "beneficiary_attachments" in exc_info.value.detail

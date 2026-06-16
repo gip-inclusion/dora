@@ -2,7 +2,7 @@ import uuid
 
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 
 from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData
@@ -178,7 +178,7 @@ class EmploisOrientationSerializer(OrientationSerializer):
     def validate(self, attrs):
         # Validation de l'engagement de protection des données
         if not self.instance and not attrs.get("data_protection_commitment"):
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {
                     "data_protection_commitment": "Vous devez accepter l’engagement de protection des données."
                 }
@@ -187,7 +187,7 @@ class EmploisOrientationSerializer(OrientationSerializer):
         # Validation de l'identifiant de service DI
         di_service_id = attrs["di_service_id"]
         if "--" not in di_service_id:
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {
                     "di_service_id": "Format d'identifiant invalide (attendu : « source--id »)."
                 }

@@ -4,10 +4,11 @@ from datetime import timedelta
 
 import requests
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.storage import default_storage
 from django.utils.timezone import now
 from rest_framework import exceptions, serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
@@ -56,10 +57,10 @@ class CreatablePrimaryKeyRelatedField(PrimaryKeyRelatedField):
 
         name = data.strip()
         if name == "":
-            raise ValidationError("Cette valeur est vide")
+            raise DjangoValidationError("Cette valeur est vide")
 
         if self.max_length is not None and len(name) > self.max_length:
-            raise ValidationError(
+            raise DjangoValidationError(
                 f"Cette valeur doit avoir moins de {self.max_length} caractères"
             )
 
@@ -69,7 +70,7 @@ class CreatablePrimaryKeyRelatedField(PrimaryKeyRelatedField):
             structure_slug = self.root.initial_data["structure"]
             structure = Structure.objects.get(slug=structure_slug)
         if not structure:
-            raise ValidationError("La structure ne peut pas être vide")
+            raise DjangoValidationError("La structure ne peut pas être vide")
         queryset = self.queryset
 
         # find if it already exists in the same structure
@@ -457,7 +458,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         values = data[field]
         for val in values:
             if val.structure_id is not None and val.structure_id != structure.id:
-                raise serializers.ValidationError(
+                raise ValidationError(
                     {field: "Ce choix n'est pas disponible dans cette structure"},
                     "unallowed_custom_choices_bad_struc",
                 )

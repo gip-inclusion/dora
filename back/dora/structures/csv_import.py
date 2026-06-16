@@ -6,6 +6,7 @@ from typing import Dict, List, Union
 from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
@@ -379,7 +380,7 @@ class ImportSerializer(serializers.Serializer):
             and not Structure.objects.filter(siret=siret).exists()
             and not Establishment.objects.filter(siret=siret).exists()
         ):
-            raise serializers.ValidationError(
+            raise ValidationError(
                 f"Siret inconnu: https://annuaire-entreprises.data.gouv.fr/etablissement/{siret}"
             )
         return siret
@@ -390,12 +391,12 @@ class ImportSerializer(serializers.Serializer):
             and not Structure.objects.filter(siret=parent_siret).exists()
             and not Establishment.objects.filter(siret=parent_siret).exists()
         ):
-            raise serializers.ValidationError(
+            raise ValidationError(
                 f"SIRET parent inconnu: https://annuaire-entreprises.data.gouv.fr/etablissement/{parent_siret}"
             )
 
         if Structure.objects.filter(siret=parent_siret, parent__isnull=False).exists():
-            raise serializers.ValidationError(
+            raise ValidationError(
                 f"Le SIRET {parent_siret} est une antenne, il ne peut pas être utilisé comme parent"
             )
 
@@ -406,7 +407,7 @@ class ImportSerializer(serializers.Serializer):
         parent_siret = data.get("parent_siret")
 
         if not siret and not parent_siret:
-            raise serializers.ValidationError("`siret` ou `parent_siret` sont requis")
+            raise ValidationError("`siret` ou `parent_siret` sont requis")
 
         return super().validate(data)
 
@@ -417,7 +418,7 @@ class ImportSerializer(serializers.Serializer):
                 label_obj = StructureNationalLabel.objects.get(value=label)
                 labels.append(label_obj)
             except StructureNationalLabel.DoesNotExist:
-                raise serializers.ValidationError(f"Label inconnu {label}")
+                raise ValidationError(f"Label inconnu {label}")
         return labels
 
     def validate_models(self, model_slugs: List[str]) -> List[ServiceModel]:
@@ -427,5 +428,5 @@ class ImportSerializer(serializers.Serializer):
                 model = ServiceModel.objects.get(slug=slug)
                 models.append(model)
             except ServiceModel.DoesNotExist:
-                raise serializers.ValidationError(f"Modèle inconnu {slug}")
+                raise ValidationError(f"Modèle inconnu {slug}")
         return models

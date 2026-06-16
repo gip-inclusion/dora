@@ -6,13 +6,15 @@ from math import ceil
 from urllib.parse import urlencode
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from itoutils.django.nexus.token import decode_token, generate_token
-from rest_framework import mixins, permissions, serializers, viewsets
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -122,15 +124,15 @@ class OrientationViewSet(
             sanitized_prescriber_message = sanitize_user_input_injected_in_email(
                 prescriber_message
             )
-        except ValidationError as error:
-            raise serializers.ValidationError({"message": error.messages})
+        except DjangoValidationError as error:
+            raise ValidationError({"message": error.messages})
 
         try:
             sanitized_beneficiary_message = sanitize_user_input_injected_in_email(
                 beneficiary_message
             )
-        except ValidationError as error:
-            raise serializers.ValidationError({"beneficiary_message": error.messages})
+        except DjangoValidationError as error:
+            raise ValidationError({"beneficiary_message": error.messages})
 
         if orientation.service:
             # L'objet service et les durées n'existent pas dans le cas des services DI
@@ -158,8 +160,8 @@ class OrientationViewSet(
 
         try:
             sanitized_message = sanitize_user_input_injected_in_email(message)
-        except ValidationError as error:
-            raise serializers.ValidationError({"message": error.messages})
+        except DjangoValidationError as error:
+            raise ValidationError({"message": error.messages})
 
         with transaction.atomic():
             orientation.delete_attachments()
@@ -184,7 +186,7 @@ class OrientationViewSet(
     def contact_beneficiary(self, request, query_id=None):
         orientation = self.get_object()
         if not orientation.beneficiary_email:
-            raise serializers.ValidationError("Adresse email du bénéficiaire inconnue")
+            raise ValidationError("Adresse email du bénéficiaire inconnue")
         message = self.request.data.get("message")
         cc_prescriber = self.request.data.get("cc_prescriber") in TRUTHY_VALUES
         cc_referent = self.request.data.get("cc_referent") in TRUTHY_VALUES
@@ -362,7 +364,7 @@ class StructureOrientationsView(APIView):
                 ReceivedOrientationExportSerializer(orientations, many=True).data
             )
 
-        raise serializers.ValidationError(
+        raise ValidationError(
             {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
         )
 

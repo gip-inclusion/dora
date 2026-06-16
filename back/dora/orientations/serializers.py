@@ -3,6 +3,7 @@ from django.core.files.storage import default_storage
 from django.db import transaction
 from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 import dora.data_inclusion.client
 from dora.data_inclusion.mappings import map_service
@@ -109,9 +110,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             try:
                 claims = decode_token(op_jwt)
             except ValueError:
-                raise serializers.ValidationError(
-                    {"op_jwt": "Token JWT invalide ou expiré."}
-                )
+                raise ValidationError({"op_jwt": "Token JWT invalide ou expiré."})
             orientation["beneficiary_first_name"] = claims["beneficiary"]["first_name"]
             orientation["beneficiary_last_name"] = claims["beneficiary"]["last_name"]
             orientation["beneficiary_email"] = claims["beneficiary"]["email"]
@@ -126,7 +125,7 @@ class OrientationSerializer(serializers.ModelSerializer):
 
         # Validation de l'engagement de protection des données
         if not self.instance and not orientation.get("data_protection_commitment"):
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {
                     "data_protection_commitment": "Vous devez accepter l’engagement de protection des données."
                 }
@@ -172,7 +171,7 @@ class OrientationSerializer(serializers.ModelSerializer):
 
         # Si le service nécessite des documents mais qu'aucun n'est fourni, une erreur est levée.
         if requires_attachments and not orientation.get("beneficiary_attachments"):
-            raise serializers.ValidationError(
+            raise ValidationError(
                 {
                     "beneficiary_attachments": "Pour valider l’envoi de votre demande, vous devez ajouter les documents demandés."
                 }
@@ -314,10 +313,10 @@ class OrientationBeneficiaryInfoInputSerializer(serializers.Serializer):
         try:
             claims = decode_token(value)
         except ValueError:
-            raise serializers.ValidationError("Token JWT invalide.")
+            raise ValidationError("Token JWT invalide.")
 
         if "beneficiary" not in claims:
-            raise serializers.ValidationError("Données bénéficiaire absentes du token.")
+            raise ValidationError("Données bénéficiaire absentes du token.")
 
         return claims
 
