@@ -346,16 +346,11 @@ def _get_dora_results(
     }
 
 
-def _get_unified_results(
+def _enrich_di_results_with_dora(
     request,
     raw_di_results,
     location_kinds: Optional[list[str]] = None,
 ) -> list:
-    """Enrich data.inclusion services with Dora data.
-
-    Returns:
-        A list of search results by SearchResultSerializer.
-    """
     # Les ID de services DI sont de la forme "source--id".
     # On récupère l'ID Dora du service et la distance calculée par DI,
     # en conservant l'ordre des résultats DI (triés par distance).
@@ -463,7 +458,9 @@ def search_services(
         lat=lat,
         lon=lon,
     )
-    results, metadata = _get_unified_results(request, raw_di_results, location_kinds)
+    results, metadata = _enrich_di_results_with_dora(
+        request, raw_di_results, location_kinds
+    )
     if len(results) == 0:
         # Pas de résultat peut signifier que DI n'est pas accessible.
         # On relance la recherche sur les services DORA locaux.
