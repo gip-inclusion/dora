@@ -1,5 +1,6 @@
 <script lang="ts">
   import insane from "insane";
+  import { onMount } from "svelte";
 
   import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
   import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
@@ -9,7 +10,10 @@
 
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
-  import { LocationType } from "$lib/consts";
+  import {
+    LocationType,
+    TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY,
+  } from "$lib/consts";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import { search as searchBAN } from "$lib/requests/ban";
   import type { BANFeature } from "$lib/requests/ban";
@@ -118,24 +122,11 @@
     return results;
   }
 
-  function saveLastLocation(address: AddressResult) {
-    try {
-      localStorage.setItem(
-        lastLocationStorageKey,
-        JSON.stringify({
-          kind: address.kind,
-          label: address.label,
-          searchParams: address.searchParams.toString(),
-        })
-      );
-    } catch {
-      // Le localStorage peut être inaccessible.
-    }
-  }
-
   function loadLastLocation(): AddressResult | null {
     try {
-      const stored = localStorage.getItem(lastLocationStorageKey);
+      const stored = localStorage.getItem(
+        TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY
+      );
       if (!stored) {
         return null;
       }
@@ -154,27 +145,41 @@
     if (newAddress) {
       addressFieldValue = newAddress.label;
       addressSelected = newAddress;
-      saveLastLocation(newAddress);
+      try {
+        localStorage.setItem(
+          TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY,
+          JSON.stringify({
+            kind: newAddress.kind,
+            label: newAddress.label,
+            searchParams: newAddress.searchParams.toString(),
+          })
+        );
+      } catch {
+        // Le localStorage peut être inaccessible.
+      }
     } else {
       addressFieldValue = "";
       addressSelected = null;
+      localStorage.removeItem(TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY); // On efface le dernier emplacement géographique stocké.
     }
   }
 
-  async function handleSearch() {
+  async function handleSearch(event: Event) {
+    event.preventDefault();
     isLoading = true;
     const params = new URLSearchParams();
-    if (serviceSearchQuery) {
-      params.append("q", serviceSearchQuery);
+    if (searchQuery) {
+      params.append("q", searchQuery);
     }
     if (addressSelected) {
       for (const [key, value] of addressSelected.searchParams.entries()) {
         params.append(key, value);
       }
     }
-    await goto(`/recherche-mot-cles?${params.toString()}`, {
+    await goto(`/recherche-mots-cles?${params.toString()}`, {
       noScroll: true,
     });
+
     isLoading = false;
   }
 
