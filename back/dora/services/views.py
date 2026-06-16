@@ -56,6 +56,7 @@ from dora.services.models import (
     ServiceSubCategory,
     UpdateFrequency,
 )
+from dora.services.search import MAX_DISTANCE, search_services
 from dora.services.utils import synchronize_service_from_model
 from dora.stats.models import DeploymentLevel, DeploymentState
 from dora.structures.models import Structure, StructureMember
@@ -902,8 +903,6 @@ def search(request):
 
     _validate_search_categories_and_subcategories(categories_list, subcategories_list)
 
-    from .search import search_services
-
     city_code = arrdt_to_main_insee_code(city_code)
     city = get_object_or_404(City, pk=city_code)
 
@@ -924,8 +923,6 @@ def search(request):
         lon=lon,
         unified_search_enabled=unified_search_enabled,
     )
-
-    from .search import MAX_DISTANCE
 
     # Le centre de recherche est soit les coordonnées fournies, soit le centre de la ville
     if lat and lon:
