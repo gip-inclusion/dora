@@ -14,6 +14,14 @@ if (ENVIRONMENT !== "local") {
     tracesSampleRate: 0,
     tracePropagationTargets: [],
     ignoreErrors: [STALE_CHUNK_ERROR_MESSAGE],
+    // XHR wrapping by BrowserApiErrors corrupts state on multipart image uploads,
+    // surfacing as "InvalidStateError: state must be OPENED" on request.send().
+    integrations: (defaults) =>
+      defaults.map((integration) =>
+        integration.name === "BrowserApiErrors"
+          ? Sentry.browserApiErrorsIntegration({ XMLHttpRequest: false })
+          : integration
+      ),
   });
 }
 
