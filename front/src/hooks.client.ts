@@ -14,14 +14,19 @@ if (ENVIRONMENT !== "local") {
     tracesSampleRate: 0,
     tracePropagationTargets: [],
     ignoreErrors: [STALE_CHUNK_ERROR_MESSAGE],
-    // XHR wrapping by BrowserApiErrors corrupts state on multipart image uploads,
-    // surfacing as "InvalidStateError: state must be OPENED" on request.send().
+    // XHR wrapping by BrowserApiErrors + Breadcrumbs corrupts state on multipart
+    // image uploads, surfacing as "InvalidStateError: state must be OPENED" on
+    // request.send().
     integrations: (defaults) =>
-      defaults.map((integration) =>
-        integration.name === "BrowserApiErrors"
-          ? Sentry.browserApiErrorsIntegration({ XMLHttpRequest: false })
-          : integration
-      ),
+      defaults.map((integration) => {
+        if (integration.name === "BrowserApiErrors") {
+          return Sentry.browserApiErrorsIntegration({ XMLHttpRequest: false });
+        }
+        if (integration.name === "Breadcrumbs") {
+          return Sentry.breadcrumbsIntegration({ xhr: false });
+        }
+        return integration;
+      }),
   });
 }
 
