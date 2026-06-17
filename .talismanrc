@@ -1,0 +1,4 @@
+fileignoreconfig:
+  - filename: front/package-lock.json
+    ignore_detectors:
+      - filecontent
