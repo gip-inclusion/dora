@@ -22,6 +22,7 @@
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
+  import { page } from "$app/state";
   import type { PageData } from "./$types";
   import { URL_HELP_SITE } from "$lib/consts";
 
@@ -36,10 +37,45 @@
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
-  let searchByText = $state(false);
-  registerRechercheTextuelleExperiment(() => {
-    searchByText = true;
+
+  // Afin de faciliter certaines démonstrations, il est possible d'activer la
+  // recherche par mots-clés / texte libre via le paramètre d'URL `searchByText`.
+  const searchByTextParam = $derived.by(() => {
+    const v = page.url.searchParams.get("searchByText");
+    if (v === "1") {
+      return true;
+    }
+    if (v === "0") {
+      return false;
+    }
+    return null;
   });
+  let searchByTextMatomo = $state(false);
+  registerRechercheTextuelleExperiment({
+    name: "rechercheTextuelle",
+    includedTargets: [
+      {
+        attribute: "path",
+        inverted: "0",
+        type: "equals_simple",
+        value: "/",
+      },
+    ],
+    excludedTargets: [],
+    variations: [
+      {
+        name: "original",
+        activate: () => undefined,
+      },
+      {
+        name: "Variation1",
+        activate: () => {
+          searchByTextMatomo = true;
+        },
+      },
+    ],
+  });
+  const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
