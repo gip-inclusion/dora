@@ -11,6 +11,7 @@ from dora.services.models import (
     CoachOrientationMode,
     FundingLabel,
 )
+from dora.structures.models import DisabledDoraFormDIStructure
 
 
 @pytest.fixture(
@@ -199,6 +200,7 @@ def test_disabled_dora_form_di_structures_api_is_read_only(
 def test_disabled_dora_form_di_structures_api_list(
     emplois_api_client, django_assert_num_queries
 ):
+    DisabledDoraFormDIStructure.objects.all().delete()
     baker.make("structures.DisabledDoraFormDIStructure", source="source-1")
     baker.make("structures.DisabledDoraFormDIStructure", source="source-2")
 
