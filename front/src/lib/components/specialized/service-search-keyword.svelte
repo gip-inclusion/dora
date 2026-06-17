@@ -27,7 +27,7 @@
   }
 
   const minCharactersToTriggerSearch = 4;
-  const lastLocationStorageKey = "lastSelectedSearchLocation";
+  const lastLocationStorageKey = "lastSelectedLocation";
   let addressSelected: AddressResult | null = $state(null);
   let addressFieldValue = $state("");
   let addressSelectErrorMessages: string[] = $state([]);
