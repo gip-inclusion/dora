@@ -71,7 +71,10 @@ export function buildServiceShareMailto(
   lines.push(
     "",
     "Le public concerné :",
-    formatBulletList(service.publicsDisplay, "Tous publics"),
+    formatBulletList(
+      service.publicsDisplay,
+      service.publicsDisplay === null ? "Non renseigné" : "Tous publics"
+    ),
     "",
     "Comment mobiliser ce service :",
     "",

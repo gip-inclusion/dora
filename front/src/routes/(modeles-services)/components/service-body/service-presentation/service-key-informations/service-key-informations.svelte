@@ -66,11 +66,15 @@
         <ul
           class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['·']"
         >
-          {#each service.publicsDisplay || [] as pub}
-            <li>{pub}</li>
+          {#if service.publicsDisplay === null}
+            <li>Non renseigné</li>
           {:else}
-            <li>Tous publics</li>
-          {/each}
+            {#each service.publicsDisplay as pub}
+              <li>{pub}</li>
+            {:else}
+              <li>Tous publics</li>
+            {/each}
+          {/if}
         </ul>
       </ServiceKeyInformationSection>
     </div>
