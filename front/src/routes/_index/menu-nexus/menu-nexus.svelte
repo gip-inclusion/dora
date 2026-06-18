@@ -45,7 +45,7 @@
   }
 </script>
 
-{#if nexusMenuStatus && nexusMenuStatus.mvpEnabled}
+{#if nexusMenuStatus}
   <DropdownMenu
     withBorders
     withSeparator={false}
