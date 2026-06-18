@@ -276,19 +276,16 @@ def test_nexus_menu_status_user_not_authenticated(api_client):
 
 
 @pytest.mark.parametrize(
-    "mvp_enabled,proconnect,activated_services",
+    "proconnect,activated_services",
     [
-        (False, True, ["les-emplois"]),
-        (False, False, []),
-        (True, True, ["les-emplois"]),
-        (True, False, []),
+        (True, ["les-emplois"]),
+        (False, []),
     ],
 )
 @override_settings(NEXUS_MENU_ENABLED=True)
 def test_nexus_menu_status_authenticated(
     api_client,
     user,
-    mvp_enabled,
     proconnect,
     activated_services,
 ):
@@ -298,7 +295,6 @@ def test_nexus_menu_status_authenticated(
     mock_data = {
         "proconnect": proconnect,
         "activated_services": activated_services,
-        "mvp_enabled": mvp_enabled,
     }
 
     with patch("dora.nexus.views.NexusAPIClient") as mock_client_class:
@@ -310,5 +306,4 @@ def test_nexus_menu_status_authenticated(
         assert response.status_code == status.HTTP_200_OK
         assert response.data["proconnect"] == proconnect
         assert response.data["activated_services"] == activated_services
-        assert response.data["mvp_enabled"] == mvp_enabled
         mock_client_instance.dropdown_status.assert_called_once_with(user.email)
