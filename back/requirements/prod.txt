@@ -14,11 +14,11 @@ asgiref==3.11.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.28 \
-    --hash=sha256:4fe6df2163aea02b561eca0d685e2f41a059d71f03721a3e79c3b522e79a3b56 \
-    --hash=sha256:4fe6df2163aea02b561eca0d685e2f41a059d71f03721a3e79c3b522e79a3b56 \
-    --hash=sha256:8391fdcc4d8e1d4e0bf96575a7e5610964a4d401dafa4dccb0a5bade8dd3fbb0 \
-    --hash=sha256:8391fdcc4d8e1d4e0bf96575a7e5610964a4d401dafa4dccb0a5bade8dd3fbb0
+boto3==1.43.29 \
+    --hash=sha256:354006c512cdb87ef8214a095f2ade961c8145734475cd7a7e6b39260ff5494a \
+    --hash=sha256:354006c512cdb87ef8214a095f2ade961c8145734475cd7a7e6b39260ff5494a \
+    --hash=sha256:77c27ada27cdbf619a3bbc41fa9e991caef818d3a2988cf92ea722e107d90108 \
+    --hash=sha256:77c27ada27cdbf619a3bbc41fa9e991caef818d3a2988cf92ea722e107d90108
     # via django-storages
 botocore==1.43.30 \
     --hash=sha256:19ed560cb35ae43bf010d37da429a553c07063bf7efea0f2cb53be8a78d3e3d5 \
