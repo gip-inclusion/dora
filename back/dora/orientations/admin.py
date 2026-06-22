@@ -93,9 +93,7 @@ class OrientationAdmin(admin.ModelAdmin):
 
     @admin.display(description="e-mail prescripteur")
     def prescriber_email(self, obj) -> str:
-        if p := obj.prescriber:
-            return p.email
-        return "-"
+        return obj.prescriber_info.email or "-"
 
     @admin.display(description="vérification")
     def orientation_checked(self, obj) -> bool:
@@ -122,7 +120,11 @@ class OrientationAdmin(admin.ModelAdmin):
                 "logitem_set",
             )
             .select_related(
-                "prescriber", "prescriber_structure", "service", "service__structure"
+                "prescriber",
+                "prescriber_structure",
+                "service",
+                "service__structure",
+                "emplois_orientation_data",
             )
         )
         return qs

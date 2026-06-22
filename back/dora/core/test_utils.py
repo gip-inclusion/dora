@@ -3,6 +3,7 @@ import random
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from model_bakery import baker
+from model_bakery.random_gen import gen_email
 
 from dora.services.enums import ServiceStatus
 from dora.services.models import ServiceCategory, ServiceSubCategory
@@ -195,5 +196,39 @@ def make_di_orientation(**kwargs):
         di_contact_phone=di_contact_phone,
         di_structure_name=di_structure_name,
         **kwargs,
+    )
+    return orientation
+
+
+def make_emplois_orientation(emplois_data=None, **kwargs):
+    orientation = make_orientation(prescriber=None, prescriber_structure=None, **kwargs)
+    defaults = {
+        "prescriber_email": gen_email,
+        "prescriber_first_name": "Jean",
+        "prescriber_last_name": "Prescripteur",
+        "structure_name": "Structure des Emplois",
+    }
+    baker.make(
+        "orientations.EmploisOrientationData",
+        orientation=orientation,
+        **{**defaults, **(emplois_data or {})},
+    )
+    return orientation
+
+
+def make_jwt_orientation(**kwargs):
+    orientation = make_orientation(**kwargs)
+    # Prescriber info comes from the DORA account (logged-in user); only the
+    # Emplois beneficiary_id / structure_id are kept, filled in by baker.
+    baker.make(
+        "orientations.EmploisOrientationData",
+        orientation=orientation,
+        prescriber_id=None,
+        prescriber_email="",
+        prescriber_first_name="",
+        prescriber_last_name="",
+        prescriber_phone="",
+        structure_name="",
+        structure_siret="",
     )
     return orientation
