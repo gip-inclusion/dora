@@ -415,6 +415,34 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             assert data[key] == expected_val
 
 
+def test_service_publics_export_empty_maps_to_tous_publics(
+    authenticated_user, api_client
+):
+    service = make_service(status=ServiceStatus.PUBLISHED)
+    service.publics.clear()  # no publics
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    assert response.json()["publics"] == ["tous-publics"]
+
+
+def test_service_publics_export_all_maps_to_tous_publics(
+    authenticated_user, api_client
+):
+    all_real_publics = [p.value for p in DiPublic if p.value != "tous-publics"]
+    service = make_service(status=ServiceStatus.PUBLISHED)
+    service.publics.clear()
+    service.publics.add(
+        baker.make(Public, name="tous", corresponding_di_publics=all_real_publics)
+    )  # all publics
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    assert response.json()["publics"] == ["tous-publics"]
+
+
 def test_service_serialization_formulaire_en_ligne(
     authenticated_user, api_client, settings
 ):

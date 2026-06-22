@@ -1,4 +1,5 @@
 # from django.core.files.storage import default_storage
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
 from dora.services.models import (
@@ -304,7 +305,17 @@ class ServiceSerializer(serializers.ModelSerializer):
             for public in obj.publics.all()
             for item in public.corresponding_di_publics
         ]
-        return list(dict.fromkeys(all_items))
+        unique_di_publics = list(dict.fromkeys(all_items))
+        all_publics = {
+            p.value for p in DiPublic if p.value != DiPublic.TOUS_PUBLICS.value
+        }
+        if (
+            not unique_di_publics
+            or DiPublic.TOUS_PUBLICS.value in unique_di_publics
+            or set(unique_di_publics) >= all_publics
+        ):
+            return [DiPublic.TOUS_PUBLICS.value]
+        return unique_di_publics
 
     def get_publics_precisions(self, obj):
         return ", ".join([p.name for p in obj.publics.all()])
