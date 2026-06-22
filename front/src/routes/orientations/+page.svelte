@@ -287,7 +287,8 @@
                         <ContactListItem
                           icon={HomeSmile2LineBuildings}
                           text={orientation.prescriberStructure?.name}
-                          link={`/structures/${orientation.prescriberStructure?.slug}`}
+                          link={orientation.prescriberStructure?.url ??
+                            undefined}
                         />
                       {/if}
 
