@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import uuid
+from dataclasses import dataclass
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -53,6 +54,16 @@ class OrientationQuerySet(models.QuerySet):
             status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
             processing_date__isnull=False,
         )
+
+
+@dataclass(frozen=True)
+class PrescriberInfo:
+    full_name: str = ""
+    first_name: str = ""
+    email: str = ""
+    structure_name: str = ""
+    structure_slug: str = ""
+    structure_url: str = ""
 
 
 class Orientation(models.Model):
@@ -347,6 +358,23 @@ class Orientation(models.Model):
         else:
             return ""
 
+    @property
+    def prescriber_info(self) -> PrescriberInfo:
+        user, structure = self.prescriber, self.prescriber_structure
+        if user is None and structure is None:
+            try:
+                return self.emplois_orientation_data.prescriber_info
+            except EmploisOrientationData.DoesNotExist:
+                return PrescriberInfo()
+        return PrescriberInfo(
+            full_name=user.get_full_name() if user else "",
+            first_name=user.get_short_name() if user else "",
+            email=user.email if user else "",
+            structure_name=structure.name if structure else "",
+            structure_slug=structure.slug if structure else "",
+            structure_url=structure.get_frontend_url() if structure else "",
+        )
+
     def refresh_query_expiration_date(self):
         # on ne régénère le lien que si il est expiré
         if self.query_expired:
@@ -441,6 +469,24 @@ class EmploisOrientationData(models.Model):
     class Meta:
         verbose_name = "Données Les Emplois"
         verbose_name_plural = "Données Les Emplois"
+
+    @property
+    def prescriber_full_name(self):
+        return (
+            f"{self.prescriber_first_name or ''} {self.prescriber_last_name or ''}".strip()
+            or self.prescriber_email
+        )
+
+    @property
+    def prescriber_info(self) -> PrescriberInfo:
+        return PrescriberInfo(
+            full_name=self.prescriber_full_name,
+            first_name=self.prescriber_first_name
+            or self.prescriber_last_name
+            or self.prescriber_email,
+            email=self.prescriber_email,
+            structure_name=self.structure_name,
+        )
 
 
 class ContactRecipient(models.TextChoices):

@@ -1,7 +1,7 @@
 {% extends "orientation-email-base.mjml" %}
 
 {% block preview %}
-  La demande réalisée par {{ data.prescriber.get_full_name }} à été acceptée !
+  La demande réalisée par {{ data.prescriber_info.full_name }} à été acceptée !
 {% endblock %}
 
 {% block title %}

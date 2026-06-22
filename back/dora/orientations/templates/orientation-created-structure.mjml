@@ -13,9 +13,7 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ data.prescriber.get_full_name }} de la structure
-    <a href="{{ data.prescriber_structure.get_frontend_url }}">{{ data.prescriber_structure.name }}
-    </a>
+    {{ data.prescriber_info.full_name }} de la structure {% include "partials/prescriber-structure-name.html" %}
     vous a adressé un bénéficiaire pour le service {% include "partials/service-link.html" %}.
   </p>
 {% endblock %}
