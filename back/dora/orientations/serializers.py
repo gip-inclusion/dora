@@ -104,24 +104,7 @@ class OrientationSerializer(serializers.ModelSerializer):
         bénéficiaire sont préremplies. Les identifiants Les Emplois (beneficiary_id, structure_id) sont
         stockés dans `_emplois_data` pour création ultérieure de l'objet EmploisOrientationData.
         """
-        # Préremplissage depuis le JWT des Emplois
-        op_jwt = orientation.pop("op_jwt", None)
-        if not self.instance and op_jwt:
-            try:
-                claims = decode_token(op_jwt)
-            except ValueError:
-                raise ValidationError({"op_jwt": "Token JWT invalide ou expiré."})
-            orientation["beneficiary_first_name"] = claims["beneficiary"]["first_name"]
-            orientation["beneficiary_last_name"] = claims["beneficiary"]["last_name"]
-            orientation["beneficiary_email"] = claims["beneficiary"]["email"]
-            orientation["beneficiary_phone"] = claims["beneficiary"]["phone"]
-            orientation["beneficiary_france_travail_number"] = claims["beneficiary"][
-                "france_travail_id"
-            ]
-            orientation["_emplois_data"] = {
-                "beneficiary_id": claims["beneficiary"]["uid"],
-                "structure_id": claims["prescriber"]["organization"]["uid"],
-            }
+        self._prefill_from_emplois_jwt(orientation)
 
         # Validation de l'engagement de protection des données
         if not self.instance and not orientation.get("data_protection_commitment"):
@@ -179,6 +162,28 @@ class OrientationSerializer(serializers.ModelSerializer):
 
         return orientation
 
+    def _prefill_from_emplois_jwt(self, attrs):
+        op_jwt = attrs.pop("op_jwt", None)
+        if self.instance or not op_jwt:
+            return
+        try:
+            claims = decode_token(op_jwt)
+        except ValueError:
+            raise serializers.ValidationError(
+                {"op_jwt": "Token JWT invalide ou expiré."}
+            )
+        beneficiary = claims["beneficiary"]
+        attrs["beneficiary_first_name"] = beneficiary["first_name"]
+        attrs["beneficiary_last_name"] = beneficiary["last_name"]
+        attrs["beneficiary_email"] = beneficiary["email"]
+        attrs["beneficiary_phone"] = beneficiary["phone"]
+        attrs["beneficiary_france_travail_number"] = beneficiary["france_travail_id"]
+        organization = claims["prescriber"]["organization"]
+        attrs["_emplois_data"] = {
+            "beneficiary_id": beneficiary["uid"],
+            "structure_id": organization["uid"],
+        }
+
     def create(self, validated_data):
         emplois_data = validated_data.pop("_emplois_data", None)
         with transaction.atomic():
@@ -203,20 +208,16 @@ class OrientationSerializer(serializers.ModelSerializer):
         }
 
     def get_prescriber_structure(self, orientation):
+        prescriber = orientation.prescriber_info
         return {
-            "name": orientation.prescriber_structure.name
-            if orientation.prescriber_structure
-            else "",
-            "slug": orientation.prescriber_structure.slug
-            if orientation.prescriber_structure
-            else "",
+            "name": prescriber.structure_name,
+            "slug": prescriber.structure_slug,
+            "url": prescriber.structure_url or None,
         }
 
     def get_prescriber(self, orientation):
-        return {
-            "name": orientation.prescriber.get_full_name(),
-            "email": orientation.prescriber.email,
-        }
+        prescriber = orientation.prescriber_info
+        return {"name": prescriber.full_name, "email": prescriber.email}
 
     def get_beneficiary_attachments_details(self, orientation):
         return [
@@ -249,9 +250,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_prescriber_name(obj: Orientation) -> str:
-        return (
-            obj.prescriber.get_full_name() if obj.prescriber else "Utilisateur supprimé"
-        )
+        return obj.prescriber_info.full_name or "Utilisateur supprimé"
 
     @staticmethod
     def get_structure_name(obj: Orientation) -> str:
@@ -295,11 +294,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
 
     @staticmethod
     def get_prescriber_structure_name(obj: Orientation) -> str:
-        return (
-            obj.prescriber_structure.name
-            if obj.prescriber_structure
-            else "Pas de prescripteur"
-        )
+        return obj.prescriber_info.structure_name or "Pas de prescripteur"
 
     @staticmethod
     def get_detail_page_url(obj: Orientation) -> str:
