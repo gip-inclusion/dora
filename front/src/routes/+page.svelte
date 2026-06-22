@@ -51,29 +51,8 @@
     return null;
   });
   let searchByTextMatomo = $state(false);
-  registerRechercheTextuelleExperiment({
-    name: "rechercheTextuelle",
-    includedTargets: [
-      {
-        attribute: "path",
-        inverted: "0",
-        type: "equals_simple",
-        value: "/",
-      },
-    ],
-    excludedTargets: [],
-    variations: [
-      {
-        name: "original",
-        activate: () => undefined,
-      },
-      {
-        name: "Variation1",
-        activate: () => {
-          searchByTextMatomo = true;
-        },
-      },
-    ],
+  registerRechercheTextuelleExperiment(() => {
+    searchByTextMatomo = true;
   });
   const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
