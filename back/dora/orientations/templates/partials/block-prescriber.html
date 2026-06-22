@@ -2,10 +2,10 @@
 
 <h2>Prescripteur ou prescriptrice&nbsp;:</h2>
 
-{% if data.prescriber.email !=  data.referent_email %}
+{% if data.prescriber_info.email !=  data.referent_email %}
   <ul>
-    <li>{{ data.prescriber.get_full_name }}</li>
-    <li>{{ data.prescriber.email }}</li>
+    <li>{{ data.prescriber_info.full_name }}</li>
+    <li>{{ data.prescriber_info.email }}</li>
   </ul>
 
   <h2>Conseiller ou conseillère référente&nbsp;:</h2>

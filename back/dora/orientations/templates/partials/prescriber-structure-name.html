@@ -1,0 +1,5 @@
+{% if data.prescriber_info.structure_url %}
+  <a href="{{ data.prescriber_info.structure_url }}">{{ data.prescriber_info.structure_name }}</a>
+{% else %}
+  {{ data.prescriber_info.structure_name }}
+{% endif %}

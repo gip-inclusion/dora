@@ -3,8 +3,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 from pytest_django.asserts import assertMessages
 
+from dora.core.test_utils import make_orientation
 
-def test_check_orientation(admin_client, orientation):
+
+def test_check_orientation(admin_client):
+    orientation = make_orientation()
     response = admin_client.get(
         reverse(
             "admin:orientations_orientation_change",

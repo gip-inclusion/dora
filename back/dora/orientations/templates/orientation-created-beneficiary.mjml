@@ -2,7 +2,7 @@
 {% load orientation_extras %}
 
 {% block preview %}
-  {{ data.prescriber.get_full_name }} vous a orienté vers un service solidaire
+  {{ data.prescriber_info.full_name }} vous a orienté vers un service solidaire
 {% endblock %}
 
 {% block title %}
@@ -14,19 +14,16 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ data.prescriber.get_full_name }} de la structure
-    <a
-      href="{{ data.prescriber_structure.get_frontend_url }}">{{ data.prescriber_structure.name }}
-    </a>
+    {{ data.prescriber_info.full_name }} de la structure {% include "partials/prescriber-structure-name.html" %}
     a réalisé une prescription en votre nom, pour le service {% include "partials/service-link.html" %}, ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
   <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&#8239;:</strong></p>
 
-  {% if data.prescriber.email !=  data.referent_email %}
+  {% if data.prescriber_info.email !=  data.referent_email %}
     <ul>
-      <li>{{ data.prescriber.get_full_name }}</li>
-      <li>{{ data.prescriber.email }}</li>
+      <li>{{ data.prescriber_info.full_name }}</li>
+      <li>{{ data.prescriber_info.email }}</li>
     </ul>
     <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
   {% endif %}

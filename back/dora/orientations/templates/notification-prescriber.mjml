@@ -10,7 +10,7 @@
 
 {% block content %}
   <p>
-    <strong>Bonjour {{ data.prescriber.get_short_name }},</strong>
+    <strong>Bonjour {{ data.prescriber_info.first_name }},</strong>
   </p>
 
   <p>
