@@ -195,12 +195,12 @@ class OrientationViewSet(
         cc = []
 
         if cc_prescriber:
-            cc.append(orientation.prescriber.email)
+            cc.append(orientation.prescriber_info.email)
             sent_contact_emails.append(ContactRecipient.PRESCRIBER)
         if (
             cc_referent
             and orientation.referent_email
-            and orientation.referent_email != orientation.prescriber.email
+            and orientation.referent_email != orientation.prescriber_info.email
         ):
             cc.append(orientation.referent_email)
             sent_contact_emails.append(ContactRecipient.REFERENT)
@@ -234,7 +234,7 @@ class OrientationViewSet(
         if (
             cc_referent
             and orientation.referent_email
-            and orientation.referent_email != orientation.prescriber.email
+            and orientation.referent_email != orientation.prescriber_info.email
         ):
             cc.append(orientation.referent_email)
             sent_contact_emails.append(ContactRecipient.REFERENT)
@@ -346,7 +346,12 @@ class StructureOrientationsView(APIView):
             orientations = (
                 self.sent_orientations(structure)
                 .order_by("-creation_date")
-                .select_related("service__structure", "prescriber")
+                .select_related(
+                    "service__structure",
+                    "prescriber_structure",
+                    "prescriber",
+                    "emplois_orientation_data",
+                )
             )
             return Response(
                 SentOrientationExportSerializer(orientations, many=True).data
@@ -357,7 +362,10 @@ class StructureOrientationsView(APIView):
                 self.received_orientations(structure)
                 .order_by("-creation_date")
                 .select_related(
-                    "service__structure", "prescriber_structure", "prescriber"
+                    "service__structure",
+                    "prescriber_structure",
+                    "prescriber",
+                    "emplois_orientation_data",
                 )
             )
             return Response(

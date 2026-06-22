@@ -9,6 +9,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import (
+    make_emplois_orientation,
     make_orientation,
     make_service,
     make_structure,
@@ -82,7 +83,7 @@ def test_query_validate(api_client, orientation):
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
     assert len(mail.outbox) == 4
     assert mail.outbox[0].to == [orientation.get_contact_email()]
-    assert mail.outbox[1].to == [orientation.prescriber.email]
+    assert mail.outbox[1].to == [orientation.prescriber_info.email]
     assert mail.outbox[2].to == [orientation.referent_email]
     assert mail.outbox[3].to == [orientation.beneficiary_email]
 
@@ -133,7 +134,7 @@ def test_query_reject(api_client, orientation):
     assert len(mail.outbox) == 4
     assert mail.outbox[0].to == [orientation.get_contact_email()]
     assert mail.outbox[1].to == [orientation.beneficiary_email]
-    assert mail.outbox[2].to == [orientation.prescriber.email]
+    assert mail.outbox[2].to == [orientation.prescriber_info.email]
     assert mail.outbox[3].to == [orientation.referent_email]
 
 
@@ -176,7 +177,33 @@ def test_contact_prescriber(api_client, orientation):
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
     assert len(mail.outbox) == 1
-    assert mail.outbox[0].to == [orientation.prescriber.email]
+    assert mail.outbox[0].to == [orientation.prescriber_info.email]
+
+
+def test_contact_beneficiary_cc_prescriber(api_client, orientation):
+    url = (
+        f"/orientations/{orientation.query_id}/contact/beneficiary/"
+        f"?h={orientation.get_query_id_hash()}"
+    )
+    response = api_client.post(
+        url, data={"message": "test", "cc_prescriber": "true"}, follow=True
+    )
+
+    assert response.status_code == 204
+    assert mail.outbox[0].cc == [orientation.prescriber_info.email]
+
+
+def test_contact_beneficiary_cc_referent(api_client, orientation):
+    url = (
+        f"/orientations/{orientation.query_id}/contact/beneficiary/"
+        f"?h={orientation.get_query_id_hash()}"
+    )
+    response = api_client.post(
+        url, data={"message": "test", "cc_referent": "true"}, follow=True
+    )
+
+    assert response.status_code == 204
+    assert mail.outbox[0].cc == [orientation.referent_email]
 
 
 @pytest.mark.parametrize(
@@ -367,7 +394,7 @@ def test_query_create_does_not_trigger_moderation(api_client, get_new_orientatio
 
     assert len(mail.outbox) == 4
     assert mail.outbox[0].to == [orientation.get_contact_email()]
-    assert mail.outbox[1].to == [orientation.prescriber.email]
+    assert mail.outbox[1].to == [orientation.prescriber_info.email]
     assert mail.outbox[2].to == [orientation.referent_email]
     assert mail.outbox[3].to == [orientation.beneficiary_email]
 
@@ -663,6 +690,34 @@ class OrientationsExportTestCase(APITestCase):
                     "detail_page_url": orientation_2.get_magic_link(),
                 },
             ],
+        )
+
+    def test_get_export_of_received_orientations_from_emplois(self):
+        orientation = make_emplois_orientation(
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            emplois_data={
+                "prescriber_first_name": "Jean-Prescripteur",
+                "prescriber_last_name": "des Emplois",
+                "structure_name": "Structure des Emplois",
+            },
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(
+            response.data[0]["prescriber_name"], "Jean-Prescripteur des Emplois"
+        )
+        self.assertEqual(
+            response.data[0]["prescriber_structure_name"], "Structure des Emplois"
+        )
+        self.assertEqual(
+            response.data[0]["detail_page_url"], orientation.get_magic_link()
         )
 
     def test_raise_403_if_user_not_structure_member(self):
