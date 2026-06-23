@@ -23,7 +23,7 @@ from rest_framework.test import APIRequestFactory, APITestCase
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_model, make_service, make_structure
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
-from dora.decoupage_administratif.models import AdminDivisionType, City, EPCI
+from dora.decoupage_administratif.models import EPCI, AdminDivisionType, City
 from dora.services.enums import ServiceStatus
 from dora.services.migration_utils import (
     add_categories_and_subcategories_if_subcategory,
