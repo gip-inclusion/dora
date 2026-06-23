@@ -23,7 +23,7 @@ from rest_framework.test import APIRequestFactory, APITestCase
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_model, make_service, make_structure
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
-from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.decoupage_administratif.models import AdminDivisionType, City, EPCI
 from dora.services.enums import ServiceStatus
 from dora.services.migration_utils import (
     add_categories_and_subcategories_if_subcategory,
@@ -198,36 +198,47 @@ class ServiceTestCase(APITestCase):
     def test_cache_diffusion_zones(self):
         # `ServiceViewSet.list` doit pré-charger les `City` en bloc via
         # `warm_cache` pour éviter un N+1 sur la zone de diffusion. On crée
-        # plusieurs services dont la zone est une commune, puis on vérifie
-        # qu'une seule requête sur la table `City` est émise par la vue.
+        # 5 services dont la zone est une commune et 5 dont la zone et une EPCI, puis on vérifie
+        # qu'une seule requête sur la table `City` et une requête sur la table `EPCI`
+        # est émise par la vue.
+
         for _ in range(5):
             city = baker.make("decoupage_administratif.City")
+            epci = baker.make("decoupage_administratif.EPCI")
             make_service(
                 structure=self.my_struct,
                 status=ServiceStatus.PUBLISHED,
                 diffusion_zone_type=AdminDivisionType.CITY,
                 diffusion_zone_details=city.code,
             )
+            make_service(
+                structure=self.my_struct,
+                status=ServiceStatus.PUBLISHED,
+                diffusion_zone_type=AdminDivisionType.EPCI,
+                diffusion_zone_details=epci.code,
+            )
 
         # Cache process-wide : on le vide pour repartir d'un état connu.
         City.objects._cache.clear()
+        EPCI.objects._cache.clear()
 
         with CaptureQueriesContext(connection) as ctx:
             response = self.client.get("/services/")
             self.assertEqual(response.status_code, 200)
 
-        city_queries = [
+        diffusion_zone_queries = [
             q
             for q in ctx.captured_queries
             if '"decoupage_administratif_city"' in q["sql"]
+            or '"decoupage_administratif_epci"' in q["sql"]
         ]
-        # Avec `warm_cache` : 1 SELECT IN. Sans `warm_cache` : 5 SELECT (un
-        # par service). Le seuil à 1 fait échouer le test dès qu'on retire
+        # Avec `warm_cache` : 2 SELECT IN. Sans `warm_cache` : 10 SELECT (un
+        # par service). Le seuil à 2 fait échouer le test dès qu'on retire
         # le pré-chargement.
         self.assertLessEqual(
-            len(city_queries),
-            1,
-            msg=f"N+1 détecté sur `City` : {len(city_queries)} requêtes",
+            len(diffusion_zone_queries),
+            2,
+            msg=f"N+1 détecté sur `City` et `EPCI`: {len(diffusion_zone_queries)} requêtes",
         )
 
     # Modification
