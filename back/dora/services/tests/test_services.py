@@ -12,7 +12,9 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from django.db import connection
 from django.test import override_settings
+from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 from freezegun import freeze_time
 from model_bakery import baker
@@ -21,7 +23,7 @@ from rest_framework.test import APIRequestFactory, APITestCase
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_model, make_service, make_structure
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
-from dora.decoupage_administratif.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.services.enums import ServiceStatus
 from dora.services.migration_utils import (
     add_categories_and_subcategories_if_subcategory,
@@ -192,6 +194,41 @@ class ServiceTestCase(APITestCase):
         )
         response = self.client.get(f"/services/{service.slug}/")
         self.assertEqual(response.status_code, 404)
+
+    def test_cache_diffusion_zones(self):
+        # `ServiceViewSet.list` doit pré-charger les `City` en bloc via
+        # `warm_cache` pour éviter un N+1 sur la zone de diffusion. On crée
+        # plusieurs services dont la zone est une commune, puis on vérifie
+        # qu'une seule requête sur la table `City` est émise par la vue.
+        for _ in range(5):
+            city = baker.make("decoupage_administratif.City")
+            make_service(
+                structure=self.my_struct,
+                status=ServiceStatus.PUBLISHED,
+                diffusion_zone_type=AdminDivisionType.CITY,
+                diffusion_zone_details=city.code,
+            )
+
+        # Cache process-wide : on le vide pour repartir d'un état connu.
+        City.objects._cache.clear()
+
+        with CaptureQueriesContext(connection) as ctx:
+            response = self.client.get("/services/")
+            self.assertEqual(response.status_code, 200)
+
+        city_queries = [
+            q
+            for q in ctx.captured_queries
+            if '"decoupage_administratif_city"' in q["sql"]
+        ]
+        # Avec `warm_cache` : 1 SELECT IN. Sans `warm_cache` : 5 SELECT (un
+        # par service). Le seuil à 1 fait échouer le test dès qu'on retire
+        # le pré-chargement.
+        self.assertLessEqual(
+            len(city_queries),
+            1,
+            msg=f"N+1 détecté sur `City` : {len(city_queries)} requêtes",
+        )
 
     # Modification
 
