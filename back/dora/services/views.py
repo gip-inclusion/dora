@@ -32,7 +32,7 @@ from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.data_inclusion.mappings import map_service
-from dora.decoupage_administratif.models import AdminDivisionType, City
+from dora.decoupage_administratif.models import EPCI, AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.emails import send_service_feedback_email
 from dora.services.enums import ServiceStatus
@@ -103,12 +103,29 @@ class ServicePermission(permissions.BasePermission):
         return service.can_write(user)
 
 
+def warm_diffusion_zone_caches(services):
+    # Évite le N+1 sur `City`/`EPCI` au rendu de la liste : un SELECT IN par
+    # type au lieu d'une requête par service. `Department`/`Region` utilisent
+    # déjà un cache "tout charger d'un coup" au premier appel.
+    city_codes = set()
+    epci_codes = set()
+    for s in services:
+        if not s.diffusion_zone_details:
+            continue
+        if s.diffusion_zone_type == AdminDivisionType.CITY:
+            city_codes.add(s.diffusion_zone_details)
+        elif s.diffusion_zone_type == AdminDivisionType.EPCI:
+            epci_codes.add(s.diffusion_zone_details)
+    if city_codes:
+        City.objects.warm_cache(city_codes)
+    if epci_codes:
+        EPCI.objects.warm_cache(epci_codes)
+
+
 def get_visible_services(user):
     all_services = (
         Service.objects.all()
-        .select_related(
-            "structure",
-        )
+        .select_related("structure", "model")
         .prefetch_related(
             "kinds",
             "categories",
@@ -172,6 +189,18 @@ class ServiceViewSet(
             qs = qs.filter(status=ServiceStatus.PUBLISHED)
 
         return qs.order_by("-modification_date")
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            warm_diffusion_zone_caches(page)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        services = list(queryset)
+        warm_diffusion_zone_caches(services)
+        serializer = self.get_serializer(services, many=True)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action == "list":
