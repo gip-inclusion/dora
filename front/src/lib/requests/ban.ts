@@ -30,9 +30,6 @@ export interface BANFeature {
 export async function search(term: string): Promise<BANFeature[]> {
   const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(term)}&limit=10`;
   const response = await fetch(url);
-  if (response.ok) {
-    const data = await response.json();
-    return data.features;
-  }
-  return [];
+  const data = await response.json();
+  return data.features;
 }

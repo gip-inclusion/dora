@@ -30,28 +30,28 @@
     label: string;
   }
 
-  const minCharactersToTriggerSearch = 4;
-  const lastLocationStorageKey = "lastSelectedLocation";
+  const MIN_CHARACTERS_TO_TRIGGER_SEARCH = 4;
+
   let addressSelected: AddressResult | null = $state(null);
   let addressFieldValue = $state("");
   let addressSelectErrorMessages: string[] = $state([]);
-  let serviceSearchQuery = $state("");
+  let searchQuery = $state("");
 
   let isLoading = $state(false);
-  const submitDisabled = $derived(!addressSelected && !serviceSearchQuery);
+  const submitDisabled = $derived(!addressSelected && !searchQuery);
 
   async function searchAddress(addrQuery: string) {
     const addresses: SelectOption[] = [];
     const cities: SelectOption[] = [];
     let banData: BANFeature[];
     try {
-      banData = await searchBAN(addrQuery);
       addressSelectErrorMessages = [];
+      banData = await searchBAN(addrQuery);
     } catch {
-      banData = [];
       addressSelectErrorMessages = [
         "Impossible de contacter la Base Adresse Nationale.",
       ];
+      banData = [];
     }
     for (const feature of banData) {
       if (feature.properties.type === "municipality") {
@@ -203,7 +203,8 @@
         </div>
         <div class="relative w-full">
           <label class="sr-only" for="place">
-            Lieu (tapez au moins {minCharactersToTriggerSearch} caractères pour rechercher)
+            Lieu (tapez au moins {MIN_CHARACTERS_TO_TRIGGER_SEARCH} caractères pour
+            rechercher)
           </label>
           {#snippet itemContent({ item })}
             <span>
@@ -223,7 +224,7 @@
           {/snippet}
           <Select
             id="place"
-            minCharactersToSearch={minCharactersToTriggerSearch}
+            minCharactersToSearch={MIN_CHARACTERS_TO_TRIGGER_SEARCH}
             bind:searchText={addressFieldValue}
             onChange={handleAddressChange}
             searchFunction={searchAddress}
@@ -264,10 +265,12 @@
           <SearchLineSystem />
         </div>
 
-        <label for="searchterm" class="sr-only">Mots-clés</label>
+        <label for="search-query" class="sr-only"
+          >Type de structure, thématique, public, mot-clé…</label
+        >
         <input
-          bind:value={serviceSearchQuery}
-          id="searchterm"
+          bind:value={searchQuery}
+          id="search-query"
           class="w-full px-s16 py-s16 rounded-lg"
           placeholder="Type de structure, thématique, public, mot-clé…"
         />
