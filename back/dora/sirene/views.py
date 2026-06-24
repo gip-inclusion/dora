@@ -42,7 +42,7 @@ def normalize_query(q: str) -> str:
 def search_sirene(request, citycode):
     q = normalize_query(request.query_params.get("q", ""))
     if not q:
-        return ValidationError("Le champ `q` est requis")
+        raise ValidationError("Le champ `q` est requis")
 
     # La base SIRENE contient les code insee par arrondissement
     # mais on veut faire une recherche sur la ville entière
