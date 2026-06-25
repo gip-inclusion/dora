@@ -3,6 +3,7 @@ import textwrap
 from datetime import timedelta
 
 import requests
+from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.storage import default_storage
@@ -903,11 +904,11 @@ class SearchResultSerializer(ServiceListSerializer):
         location_kind_values = [lk.value for lk in obj.location_kinds.all()]
         if (
             obj.distance is None
-            and "a-distance" in location_kind_values
-            and "en-presentiel" in location_kind_values
+            and ModeAccueil.A_DISTANCE.value in location_kind_values
+            and ModeAccueil.EN_PRESENTIEL.value in location_kind_values
         ):
             location_kind_values = [
-                v for v in location_kind_values if v != "en-presentiel"
+                v for v in location_kind_values if v != ModeAccueil.EN_PRESENTIEL.value
             ]
         return location_kind_values
 
