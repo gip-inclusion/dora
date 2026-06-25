@@ -2,7 +2,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from mjml import mjml2html
 
-from core.emails import send_mail
+from dora.core.emails import send_mail
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
@@ -14,7 +14,7 @@ def _has_distinct_referent(orientation):
     )
 
 
-def send_emplois_orientation_emails(orientation):
+def send_created(orientation):
     service_address = (
         "à distance"
         if orientation.service.location_kinds.count() == 1
@@ -53,9 +53,7 @@ def send_emplois_orientation_emails(orientation):
     )
 
 
-def send_emplois_orientation_accepted_emails(
-    orientation, prescriber_message, beneficiary_message
-):
+def send_accepted(orientation, prescriber_message, beneficiary_message):
     context = {
         "data": orientation,
         "prescriber_message": prescriber_message,
@@ -91,7 +89,7 @@ def send_emplois_orientation_accepted_emails(
     )
 
 
-def send_emplois_orientation_rejected_emails(orientation, message, other_details=""):
+def send_rejected(orientation, message, other_details=""):
     context = {
         "data": orientation,
         "message": message,
@@ -129,7 +127,7 @@ def send_emplois_orientation_rejected_emails(orientation, message, other_details
     )
 
 
-def send_emplois_orientation_expired_emails(orientation):
+def send_expired(orientation, start_date=None):
     context = {"data": orientation}
 
     send_mail(
