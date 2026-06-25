@@ -14,13 +14,16 @@ def _has_distinct_referent(orientation):
     )
 
 
-def send_created(orientation):
-    service_address = (
-        "à distance"
-        if orientation.service.location_kinds.count() == 1
-        and orientation.service.location_kind.first().value == "a-distance"
-        else orientation.get_service_address_line(),
-    )
+def send_orientation_created(orientation):
+    service = orientation.service
+    if (
+        service is not None
+        and service.location_kinds.count() == 1
+        and service.location_kinds.first().value == "a-distance"
+    ):
+        service_address = "à distance"
+    else:
+        service_address = orientation.get_service_address_line()
 
     context = {"data": orientation, "service_address": service_address}
 
@@ -53,7 +56,7 @@ def send_created(orientation):
     )
 
 
-def send_accepted(orientation, prescriber_message, beneficiary_message):
+def send_orientation_accepted(orientation, prescriber_message, beneficiary_message):
     context = {
         "data": orientation,
         "prescriber_message": prescriber_message,
@@ -89,12 +92,21 @@ def send_accepted(orientation, prescriber_message, beneficiary_message):
     )
 
 
-def send_rejected(orientation, message, other_details=""):
+def send_orientation_rejected(orientation, message, other_details=""):
     context = {
         "data": orientation,
         "message": message,
         "other_details": other_details,
     }
+
+    send_mail(
+        f"{'[Refusée - Emplois Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée",
+        orientation.beneficiary_email,
+        mjml2html(render_to_string("orientation-rejected-beneficiary.mjml", context)),
+        tags=["orientation"],
+        reply_to=[orientation.get_contact_email()],
+        from_email=("La plateforme de l'inclusion", settings.NO_REPLY_EMAIL),
+    )
 
     send_mail(
         f"{'[Refusée - Emplois Prescripteur] ' if debug else ''}Votre demande d’orientation a été refusée",
@@ -117,17 +129,8 @@ def send_rejected(orientation, message, other_details=""):
             from_email=("La plateforme de l'inclusion", settings.NO_REPLY_EMAIL),
         )
 
-    send_mail(
-        f"{'[Refusée - Emplois Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée",
-        orientation.beneficiary_email,
-        mjml2html(render_to_string("orientation-rejected-beneficiary.mjml", context)),
-        tags=["orientation"],
-        reply_to=[orientation.get_contact_email()],
-        from_email=("La plateforme de l'inclusion", settings.NO_REPLY_EMAIL),
-    )
 
-
-def send_expired(orientation, start_date=None):
+def send_orientation_expired(orientation, start_date=None):
     context = {"data": orientation}
 
     send_mail(
