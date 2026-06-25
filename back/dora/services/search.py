@@ -5,6 +5,7 @@ from functools import reduce
 from typing import Optional
 
 import requests
+from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
@@ -39,7 +40,7 @@ def _filter_and_annotate_dora_services(
     no_services = models.Service.objects.none()
     # 1) services ayant un lieu de déroulement, à moins de MAX_DISTANCE km
     services_on_site = (
-        services.filter(location_kinds__value="en-presentiel")
+        services.filter(location_kinds__value=ModeAccueil.EN_PRESENTIEL.value)
         .annotate(distance=Distance("geom", location))
         .filter(distance__lte=D(km=MAX_DISTANCE))
         if with_onsite
@@ -49,8 +50,8 @@ def _filter_and_annotate_dora_services(
     services_remote = (
         (
             services.filter(
-                Q(location_kinds__value="a-distance")
-                | ~Q(location_kinds__value="en-presentiel")
+                Q(location_kinds__value=ModeAccueil.A_DISTANCE.value)
+                | ~Q(location_kinds__value=ModeAccueil.EN_PRESENTIEL.value)
             )
             .exclude(id__in=services_on_site)
             .distinct()
@@ -68,12 +69,15 @@ def _sort_services(services):
 
     for s in services:
         if (
-            "en-presentiel" in s["location_kinds"]
+            ModeAccueil.EN_PRESENTIEL.value in s["location_kinds"]
             and s["distance"] is not None
             and s["distance"] <= MAX_DISTANCE
         ):
             on_site_services.append(s)
-        elif "a-distance" in s["location_kinds"] or s["location_kinds"] == []:
+        elif (
+            ModeAccueil.A_DISTANCE.value in s["location_kinds"]
+            or s["location_kinds"] == []
+        ):
             remote_services.append(s)
     random.seed(date.today().isoformat())
     random.shuffle(on_site_services)
@@ -244,7 +248,7 @@ def _map_di_results(
         result
         for result in mapped_di_results
         if (
-            "a-distance" in result["location_kinds"]
+            ModeAccueil.A_DISTANCE.value in result["location_kinds"]
             or (
                 result.get("distance") is not None
                 and result["distance"] <= MAX_DISTANCE
@@ -255,14 +259,21 @@ def _map_di_results(
     # FIXME: gestion du paramètre `location_kinds`
     # Idéalement, il faudrait le transmettre à l’API d·i, mais tant qu’elle ne le prend pas
     # en charge, on filtre les services à posteriori
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    with_remote = not location_kinds or ModeAccueil.A_DISTANCE.value in location_kinds
+    with_onsite = (
+        not location_kinds or ModeAccueil.EN_PRESENTIEL.value in location_kinds
+    )
     mapped_di_results = [
         result
         for result in mapped_di_results
         if (
-            (with_onsite and "en-presentiel" in result["location_kinds"])
-            or (with_remote and "a-distance" in result["location_kinds"])
+            (
+                with_onsite
+                and ModeAccueil.EN_PRESENTIEL.value in result["location_kinds"]
+            )
+            or (
+                with_remote and ModeAccueil.A_DISTANCE.value in result["location_kinds"]
+            )
         )
     ]
     return mapped_di_results
@@ -343,8 +354,10 @@ def _get_dora_results(
     if funding_labels:
         services = services.filter(funding_labels__value__in=funding_labels)
 
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    with_remote = not location_kinds or ModeAccueil.A_DISTANCE.value in location_kinds
+    with_onsite = (
+        not location_kinds or ModeAccueil.EN_PRESENTIEL.value in location_kinds
+    )
 
     categories_filter = Q()
     if categories:

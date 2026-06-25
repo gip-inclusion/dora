@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -35,8 +36,8 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.on_site = LocationKind.objects.get(value="en-presentiel")
-        self.remote = LocationKind.objects.get(value="a-distance")
+        self.on_site = LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)
+        self.remote = LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)
 
     def handle(self, *args, **options):
         self.logger.info("Vérification des notifications de recherches sauvegardées")
