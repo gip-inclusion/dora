@@ -1,6 +1,11 @@
 import textwrap
 
-from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice, Public
+from data_inclusion.schema.v1 import (
+    ModeAccueil,
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    Public,
+)
 from django.conf import settings
 from django.utils import dateparse, timezone
 
@@ -64,7 +69,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     service_data = result["service"]
     location_kinds = service_data["modes_accueil"] or []
     if location_kinds == [] and result["distance"] is not None:
-        location_kinds = ["en-presentiel"]
+        location_kinds = [ModeAccueil.EN_PRESENTIEL.value]
 
     kinds = (
         [service_data["type"]]

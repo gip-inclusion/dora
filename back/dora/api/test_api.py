@@ -1,4 +1,5 @@
 import pytest
+from data_inclusion.schema.v1 import ModeAccueil
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.utils import timezone
@@ -331,8 +332,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ),
         baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
-    service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
-    service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)
+    )
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)
+    )
     service.requirements.add(
         baker.make(Requirement, name="Bonne connaissance du français oral et écrit"),
     )
@@ -560,8 +565,12 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ),
         baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
-    service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
-    service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)
+    )
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)
+    )
     service.requirements.add(
         baker.make(Requirement, name="Bonne connaissance du français oral et écrit"),
     )
