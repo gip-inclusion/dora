@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.template.loader import render_to_string
@@ -6,6 +8,7 @@ from mjml import mjml2html
 
 from dora.core.emails import send_mail
 from dora.orientations.models import ContactPreference, Orientation
+from dora.emplois import emails as emplois_emails
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
@@ -116,25 +119,19 @@ def send_orientation_created_to_beneficiary(orientation, context=None):
         )
 
 
-def send_orientation_created_emails(orientation, cc=None):
+def _dora_send_created(orientation):
     context = _orientation_created_ctx(orientation)
 
-    # Structure porteuse
     send_orientation_created_to_structure(orientation, context)
 
-    # Prescripteur
     send_orientation_created_to_prescriber(orientation, context)
 
-    # Référent
     send_orientation_created_to_referent(orientation, context)
 
-    # Bénéficiaire
     send_orientation_created_to_beneficiary(orientation, context)
 
 
-def send_orientation_accepted_emails(
-    orientation, prescriber_message, beneficiary_message
-):
+def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
     # FIXME: le gabarit des e-mails envoyés par cette partie est construit en deux phases.
     # Tout d'abord coté frontend, avec des données de formulaires transmises au backend (!).
     # Ensuite intégré ici, sous forme de bloc de texte (prescriber_message|beneficiary_message)
@@ -216,7 +213,7 @@ def send_orientation_accepted_emails(
         )
 
 
-def send_orientation_rejected_emails(orientation, message):
+def _dora_send_rejected(orientation, message):
     context = {
         "data": orientation,
         "support_email": settings.SUPPORT_EMAIL,
@@ -341,9 +338,7 @@ def send_orientation_reminder_emails(orientation):
     )
 
 
-def send_orientation_expiration_emails(
-    orientation: Orientation, start_date: str
-) -> None:
+def _dora_send_expired(orientation: Orientation, start_date: str) -> None:
     context = {
         "data": orientation,
         "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
@@ -375,3 +370,39 @@ def send_orientation_expiration_emails(
             mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
             tags=["orientation"],
         )
+
+
+_dora_backend = SimpleNamespace(
+    send_created=_dora_send_created,
+    send_accepted=_dora_send_accepted,
+    send_rejected=_dora_send_rejected,
+    send_expired=_dora_send_expired,
+)
+
+
+def _backend(orientation):
+    return (
+        emplois_emails
+        if hasattr(orientation, "emplois_orientation_data")
+        else _dora_backend
+    )
+
+
+def send_orientation_created_emails(orientation, cc=None):
+    _backend(orientation).send_created(orientation)
+
+
+def send_orientation_accepted_emails(
+    orientation, prescriber_message, beneficiary_message
+):
+    _backend(orientation).send_accepted(
+        orientation, prescriber_message, beneficiary_message
+    )
+
+
+def send_orientation_rejected_emails(orientation, message):
+    _backend(orientation).send_rejected(orientation, message)
+
+
+def send_orientation_expiration_emails(orientation, start_date):
+    _backend(orientation).send_expired(orientation, start_date)
