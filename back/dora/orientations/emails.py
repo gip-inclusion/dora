@@ -131,7 +131,9 @@ def _dora_send_created(orientation):
     send_orientation_created_to_beneficiary(orientation, context)
 
 
-def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
+def _orientation_accepted_ctx(
+    orientation, prescriber_message="", beneficiary_message=""
+):
     # FIXME: le gabarit des e-mails envoyés par cette partie est construit en deux phases.
     # Tout d'abord coté frontend, avec des données de formulaires transmises au backend (!).
     # Ensuite intégré ici, sous forme de bloc de texte (prescriber_message|beneficiary_message)
@@ -152,7 +154,7 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
         placeholder, orientation.get_service_address_line()
     )
 
-    context = {
+    return {
         "data": orientation,
         "support_email": settings.SUPPORT_EMAIL,
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
@@ -160,7 +162,11 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
         "beneficiary_message": beneficiary_message,
     }
 
-    # Structure
+
+def send_orientation_accepted_to_structure(orientation, context=None):
+    if not context:
+        context = _orientation_accepted_ctx(orientation)
+
     send_mail(
         f"{'[Validée - Structure porteuse] ' if debug else ''}Vous venez de valider une demande 🎉",
         [orientation.get_contact_email()],
@@ -168,7 +174,11 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
         tags=["orientation"],
     )
 
-    # Prescripteur
+
+def send_orientation_accepted_to_prescriber(orientation, context=None):
+    if not context:
+        context = _orientation_accepted_ctx(orientation)
+
     send_mail(
         f"{'[Validée - Prescripteur] ' if debug else ''}Votre demande a été acceptée ! 🎉",
         orientation.prescriber_info.email,
@@ -180,7 +190,12 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
         tags=["orientation"],
         reply_to=[orientation.get_contact_email()],
     )
-    # Référent
+
+
+def send_orientation_accepted_to_referent(orientation, context=None):
+    if not context:
+        context = _orientation_accepted_ctx(orientation)
+
     if (
         orientation.referent_email
         and orientation.referent_email != orientation.prescriber_info.email
@@ -196,7 +211,12 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
             tags=["orientation"],
             reply_to=[orientation.prescriber_info.email],
         )
-    # Bénéficiaire
+
+
+def send_orientation_accepted_to_beneficiary(orientation, context=None):
+    if not context:
+        context = _orientation_accepted_ctx(orientation)
+
     if orientation.beneficiary_email:
         send_mail(
             f"{'[Validée - Bénéficiaire] ' if debug else ''}Votre demande a été acceptée ! 🎉",
@@ -213,13 +233,29 @@ def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
         )
 
 
-def _dora_send_rejected(orientation, message):
-    context = {
+def _dora_send_accepted(orientation, prescriber_message, beneficiary_message):
+    context = _orientation_accepted_ctx(
+        orientation, prescriber_message, beneficiary_message
+    )
+
+    send_orientation_accepted_to_structure(orientation, context)
+    send_orientation_accepted_to_prescriber(orientation, context)
+    send_orientation_accepted_to_referent(orientation, context)
+    send_orientation_accepted_to_beneficiary(orientation, context)
+
+
+def _orientation_rejected_ctx(orientation, message=""):
+    return {
         "data": orientation,
         "support_email": settings.SUPPORT_EMAIL,
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
         "message": message,
     }
+
+
+def send_orientation_rejected_to_structure(orientation, context=None):
+    if not context:
+        context = _orientation_rejected_ctx(orientation)
 
     send_mail(
         f"{'[Refusée - Structure porteuse] ' if debug else ''}Vous venez de refuser une demande",
@@ -228,17 +264,30 @@ def _dora_send_rejected(orientation, message):
         tags=["orientation"],
     )
 
-    send_mail(
-        f"{'[Refusée - Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée",
-        [orientation.beneficiary_email],
-        mjml2html(render_to_string("orientation-rejected-beneficiary.mjml", context)),
-        from_email=(
-            f"{orientation.get_structure_name()} via DORA",
-            settings.DEFAULT_FROM_EMAIL,
-        ),
-        tags=["orientation"],
-        reply_to=[orientation.prescriber_info.email],
-    )
+
+def send_orientation_rejected_to_beneficiary(orientation, context=None):
+    if not context:
+        context = _orientation_rejected_ctx(orientation)
+
+    if orientation.beneficiary_email:
+        send_mail(
+            f"{'[Refusée - Bénéficiaire] ' if debug else ''}Votre demande d’orientation a été refusée",
+            [orientation.beneficiary_email],
+            mjml2html(
+                render_to_string("orientation-rejected-beneficiary.mjml", context)
+            ),
+            from_email=(
+                f"{orientation.get_structure_name()} via DORA",
+                settings.DEFAULT_FROM_EMAIL,
+            ),
+            tags=["orientation"],
+            reply_to=[orientation.prescriber_info.email],
+        )
+
+
+def send_orientation_rejected_to_prescriber(orientation, context=None):
+    if not context:
+        context = _orientation_rejected_ctx(orientation)
 
     send_mail(
         f"{'[Refusée - Prescripteur] ' if debug else ''}Votre demande d’orientation a été refusée",
@@ -251,6 +300,11 @@ def _dora_send_rejected(orientation, message):
         tags=["orientation"],
         reply_to=[orientation.get_contact_email()],
     )
+
+
+def send_orientation_rejected_to_referent(orientation, context=None):
+    if not context:
+        context = _orientation_rejected_ctx(orientation)
 
     if (
         orientation.referent_email
@@ -269,6 +323,15 @@ def _dora_send_rejected(orientation, message):
             tags=["orientation"],
             reply_to=[orientation.get_contact_email()],
         )
+
+
+def _dora_send_rejected(orientation, message):
+    context = _orientation_rejected_ctx(orientation, message)
+
+    send_orientation_rejected_to_structure(orientation, context)
+    send_orientation_rejected_to_beneficiary(orientation, context)
+    send_orientation_rejected_to_prescriber(orientation, context)
+    send_orientation_rejected_to_referent(orientation, context)
 
 
 def send_message_to_prescriber(orientation, message, cc):
@@ -352,8 +415,8 @@ def send_orientation_reminder_emails(orientation):
     )
 
 
-def _dora_send_expired(orientation: Orientation, start_date: str) -> None:
-    context = {
+def _orientation_expired_ctx(orientation, start_date):
+    return {
         "data": orientation,
         "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
         "search_link": settings.FRONTEND_URL + "/recherche",
@@ -363,12 +426,20 @@ def _dora_send_expired(orientation: Orientation, start_date: str) -> None:
         "with_legal_info": True,
     }
 
+
+def send_orientation_expired_to_structure(orientation, context):
     send_mail(
         "Cette demande d’orientation a expiré",
         orientation.get_contact_email(),
         mjml2html(render_to_string("orientation-expired-service.mjml", context)),
         tags=["orientation"],
     )
+
+
+def _dora_send_expired(orientation: Orientation, start_date) -> None:
+    context = _orientation_expired_ctx(orientation, start_date)
+
+    send_orientation_expired_to_structure(orientation, context)
 
     send_mail(
         "Cette demande d’orientation a été annulée",
@@ -394,9 +465,46 @@ _dora_backend = SimpleNamespace(
 )
 
 
+def _emplois_send_created(orientation):
+    send_orientation_created_to_structure(orientation)
+    emplois_emails.send_orientation_created(orientation)
+
+
+def _emplois_send_accepted(orientation, prescriber_message, beneficiary_message):
+    send_orientation_accepted_to_structure(
+        orientation,
+        _orientation_accepted_ctx(orientation, prescriber_message, beneficiary_message),
+    )
+    emplois_emails.send_orientation_accepted(
+        orientation, prescriber_message, beneficiary_message
+    )
+
+
+def _emplois_send_rejected(orientation, message):
+    send_orientation_rejected_to_structure(
+        orientation, _orientation_rejected_ctx(orientation, message)
+    )
+    emplois_emails.send_orientation_rejected(orientation, message)
+
+
+def _emplois_send_expired(orientation, start_date):
+    send_orientation_expired_to_structure(
+        orientation, _orientation_expired_ctx(orientation, start_date)
+    )
+    emplois_emails.send_orientation_expired(orientation, start_date)
+
+
+_emplois_backend = SimpleNamespace(
+    send_created=_emplois_send_created,
+    send_accepted=_emplois_send_accepted,
+    send_rejected=_emplois_send_rejected,
+    send_expired=_emplois_send_expired,
+)
+
+
 def _backend(orientation):
     return (
-        emplois_emails
+        _emplois_backend
         if hasattr(orientation, "emplois_orientation_data")
         else _dora_backend
     )
