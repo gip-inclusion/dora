@@ -1,0 +1,17 @@
+{% extends "orientation-emplois-email-base.mjml" %}
+
+{% block preview %}
+  Votre demande d’orientation a expiré
+{% endblock %}
+
+{% block content %}
+  <p>Bonjour,</p>
+
+  <p>
+    La structure {{ data.get_structure_name }} n’a pas répondu dans le délai limite des 30 jours à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} auprès du service «&nbsp;{{ data.service.name }}&nbsp;».
+  </p>
+
+  <p>Cette demande a été automatiquement annulée.</p>
+
+  <p>À bientôt,</p>
+{% endblock %}

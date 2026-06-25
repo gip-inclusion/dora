@@ -1,0 +1,5 @@
+{% extends "orientation-emplois-email-base.mjml" %}
+
+{% block content %}
+  {{ prescriber_message|linebreaks }}
+{% endblock %}
