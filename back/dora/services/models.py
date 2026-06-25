@@ -2,6 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
+from data_inclusion.schema.v1 import ModeAccueil
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -724,7 +725,7 @@ class Service(ModerationMixin, models.Model):
         if self.location_kinds.count() == 0:
             missing.append("lieu de déroulement")
 
-        if self.location_kinds.filter(value="en-presentiel").exists():
+        if self.location_kinds.filter(value=ModeAccueil.EN_PRESENTIEL.value).exists():
             if not self.city:
                 missing.append("ville")
 
