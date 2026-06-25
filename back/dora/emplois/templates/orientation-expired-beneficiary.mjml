@@ -1,0 +1,39 @@
+{% extends "orientation-emplois-email-base.mjml" %}
+
+{% block preview %}
+  Cette demande d’orientation a été annulée
+{% endblock %}
+
+{% block content %}
+  <p>Bonjour,</p>
+
+  <p>
+    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a envoyé une demande d’orientation en votre nom, auprès du service «&nbsp;{{ data.service.name }}&nbsp;», le {{ data.creation_date|date:"j F Y" }}.
+  </p>
+
+  <p>
+    Le service n’a pas répondu à la demande dans le délai limite des 30 jours. Par conséquent, la demande a été automatiquement annulée.
+  </p>
+
+  <p>
+    Vous n’avez rien à faire&#8239;: l’accompagnateur de la structure {{ data.get_structure_name }} a également été informé.
+  </p>
+
+  <p>Des questions&#8239;? Contactez la personne qui vous accompagne&#8239;:</p>
+
+  {% if data.prescriber_info.email != data.referent_email %}
+    <p>
+      {{ data.prescriber_info.full_name }}<br />
+      {{ data.prescriber_info.email }}
+    </p>
+
+    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
+  {% endif %}
+
+  <p>
+    {{ data.get_referent_full_name }}<br />
+    {{ data.referent_email }}{% if data.referent_phone %}&nbsp;– {{ data.referent_phone }}{% endif %}
+  </p>
+
+  <p>À bientôt,</p>
+{% endblock %}
