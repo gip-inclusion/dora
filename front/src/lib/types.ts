@@ -363,9 +363,11 @@ export interface ServiceSearchResult {
   status: ServiceStatus;
   updateNeeded: boolean;
   diPublics: Array<string>;
+  categories?: ServiceCategory[];
   kinds: ServiceKind[] | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
+  diSourceDisplay?: string;
   structureInfo: {
     address1: string;
     address2: string;

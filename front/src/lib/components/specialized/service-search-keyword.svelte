@@ -7,6 +7,7 @@
   import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
 
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
 
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
@@ -31,11 +32,14 @@
   }
 
   const MIN_CHARACTERS_TO_TRIGGER_SEARCH = 4;
+  const MAX_QUERY_LENGTH = 40;
 
   let addressSelected: AddressResult | null = $state(null);
   let addressFieldValue = $state("");
   let addressSelectErrorMessages: string[] = $state([]);
-  let searchQuery = $state("");
+  // Conserve la recherche en cours à l'affichage des résultats : on initialise
+  // le champ avec le paramètre `q` présent dans l'URL.
+  let searchQuery = $state($page.url.searchParams.get("q") ?? "");
 
   let isLoading = $state(false);
   const submitDisabled = $derived(!addressSelected && !searchQuery);
@@ -265,13 +269,12 @@
           <SearchLineSystem />
         </div>
 
-        <label for="search-query" class="sr-only"
-          >Type de structure, thématique, public, mot-clé…</label
-        >
+        <label for="search-query" class="sr-only">Mots-clés de la recherche</label>
         <input
           bind:value={searchQuery}
           id="search-query"
           class="w-full px-s16 py-s16 rounded-lg"
+          maxlength={MAX_QUERY_LENGTH}
           placeholder="Type de structure, thématique, public, mot-clé…"
         />
       </div>
