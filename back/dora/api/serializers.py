@@ -381,19 +381,13 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.get_frontend_url()
 
     def get_telephone(self, obj):
-        if obj.is_contact_info_public:
-            return obj.contact_phone
-        return None
+        return obj.contact_phone
 
     def get_courriel(self, obj):
-        if obj.is_contact_info_public:
-            return obj.contact_email
-        return None
+        return obj.contact_email
 
     def get_contact_nom_prenom(self, obj):
-        if obj.is_contact_info_public:
-            return obj.contact_name
-        return None
+        return obj.contact_name
 
     def get_contact_public(self, obj):
         return obj.is_contact_info_public
