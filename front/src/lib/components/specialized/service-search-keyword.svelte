@@ -261,7 +261,7 @@
       </div>
 
       <div
-        class="border-gray-02 px-s16 py-s16 text-f14 lg:py-s16 flex border-b lg:border-r lg:border-b-0"
+        class="border-gray-02 p-s16 text-f14 flex border-b lg:border-r lg:border-b-0"
       >
         <div
           class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
@@ -269,11 +269,13 @@
           <SearchLineSystem />
         </div>
 
-        <label for="search-query" class="sr-only">Mots-clés de la recherche</label>
+        <label for="search-query" class="sr-only"
+          >Mots-clés de la recherche</label
+        >
         <input
           bind:value={searchQuery}
           id="search-query"
-          class="w-full px-s16 py-s16 rounded-lg"
+          class="w-full p-s16 rounded-lg"
           maxlength={MAX_QUERY_LENGTH}
           placeholder="Type de structure, thématique, public, mot-clé…"
         />
