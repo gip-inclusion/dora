@@ -19,7 +19,6 @@
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
-  import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
@@ -143,7 +142,7 @@
   }
 
   function handleSuccess(result: Service) {
-    if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
+    if (result.status === "PUBLISHED") {
       return goto(`/structures/${result.structure}/services/publication`);
     } else {
       return goto(`/services/${result.slug}`);
