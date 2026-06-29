@@ -405,9 +405,7 @@ def _enrich_di_results_with_dora(
     for dora_id in dora_ids:
         service = dora_services_by_id.get(dora_id)
         if service:
-            service.distance, service.search_score = dora_annotations.get(
-                dora_id, [None, None]
-            )
+            service.distance, service.search_score = dora_annotations[dora_id]
             annotated_dora_results.append(service)
 
     serialized_dora_results = SearchResultSerializer(
