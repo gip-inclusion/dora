@@ -402,7 +402,7 @@ def _get_unified_results(
     location_kinds: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-) -> list:
+):
     """Search data.inclusion services and convert them to the Dora format.
 
     Returns:
