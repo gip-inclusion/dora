@@ -330,7 +330,7 @@ class TestSearchKeyword:
                 {
                     "nonFieldErrors": [
                         {
-                            "message": "Au moins un champ doit être fourni, parmis q, code_commune, code_departement, code_region, lon, lat.",
+                            "message": "Au moins un champ doit être fourni, parmi q, code_commune, code_departement, code_region, lon, lat.",
                             "code": "invalid",
                         }
                     ]
@@ -342,7 +342,7 @@ class TestSearchKeyword:
                 {
                     "nonFieldErrors": [
                         {
-                            "message": "Au moins un champ doit être fourni, parmis q, code_commune, code_departement, code_region, lon, lat.",
+                            "message": "Au moins un champ doit être fourni, parmi q, code_commune, code_departement, code_region, lon, lat.",
                             "code": "invalid",
                         }
                     ]

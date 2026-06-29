@@ -862,7 +862,7 @@ class SearchKeywordSerializer(serializers.Serializer):
         if not set(attrs) & required_fields:
             fields_ordered = [f for f in self.fields if f not in optional_fields]
             raise ValidationError(
-                f"Au moins un champ doit être fourni, parmis {', '.join(fields_ordered)}."
+                f"Au moins un champ doit être fourni, parmi {', '.join(fields_ordered)}."
             )
         lat = attrs.get("lat")
         lon = attrs.get("lon")
