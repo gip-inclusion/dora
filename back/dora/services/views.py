@@ -979,7 +979,8 @@ def search_keyword_view(request):
     sorted_services, metadata = search_keyword(request, query, location_kinds)
 
     search_center = None
-    if lon := query.get("lon"):
+    lon = query.get("lon")
+    if lon is not None:
         search_center = [lon, query["lat"]]
     elif city_code := query.get("code_commune"):
         city_code = arrdt_to_main_insee_code(city_code)

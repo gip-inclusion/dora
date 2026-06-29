@@ -455,6 +455,24 @@ class TestSearchKeyword:
         assert [s["slug"] for s in response_json["services"]] == [service.slug]
         assert response_json["searchCenter"] == [paris.center.x, paris.center.y]
 
+    def test_search_lat_lon_0(self, api_client):
+        service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
+        result = self.api_result
+        result["service"]["id"] = f"dora--{service.pk}"
+        result["service"]["source"] = "dora"
+        result["service"]["latitude"] = 0
+        result["service"]["longitude"] = 0
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"lat": 0, "lon": 0})
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == [service.slug]
+        assert response_json["searchCenter"] == [0, 0]
+
     def test_di_unavailable(self, api_client):
         def requests_error(*args, **kwargs):
             raise requests.HTTPError()

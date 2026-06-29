@@ -862,10 +862,10 @@ class SearchKeywordSerializer(serializers.Serializer):
             attrs.get("code_commune")
             or attrs.get("code_departement")
             or attrs.get("code_region")
-            or lat
-            and lon
+            or lat is None
+            and lon is None
         ):
-            if lat or lon:
+            if lat is not None or lon is not None:
                 missing, passed = ("lon", "lat") if lon is None else ("lat", "lon")
                 raise ValidationError(
                     f"Le champ {missing} est requis lorsque {passed} est fourni."
