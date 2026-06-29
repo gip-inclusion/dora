@@ -725,7 +725,7 @@ class Service(ModerationMixin, models.Model):
         if self.location_kinds.count() == 0:
             missing.append("lieu de déroulement")
 
-        if self.location_kinds.filter(value=ModeAccueil.EN_PRESENTIEL.value).exists():
+        if self.location_kinds.filter(value=ModeAccueil.EN_PRESENTIEL).exists():
             if not self.city:
                 missing.append("ville")
 
