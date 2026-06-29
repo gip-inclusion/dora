@@ -622,7 +622,7 @@ def test_service_without_suspension_date_is_included(authenticated_user, api_cli
     assert 200 == response.status_code
 
 
-def test_service_does_not_include_contact_info_when_contact_info_is_not_public(
+def test_service_includes_contact_info_even_when_not_public(
     authenticated_user, api_client
 ):
     service = make_service(
@@ -636,6 +636,7 @@ def test_service_does_not_include_contact_info_when_contact_info_is_not_public(
 
     assert response.status_code == 200
 
-    assert response.data["courriel"] is None
-    assert response.data["telephone"] is None
-    assert response.data["contact_nom_prenom"] is None
+    assert response.data["courriel"] == "private@email.com"
+    assert response.data["telephone"] == "0123456789"
+    assert response.data["contact_nom_prenom"] == "Test Person"
+    assert response.data["contact_public"] is False
