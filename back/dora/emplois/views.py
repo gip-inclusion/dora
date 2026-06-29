@@ -11,13 +11,14 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
 
+from dora.core.models import ModerationStatus
 from dora.core.pagination import (
     DefaultPageNumberPagination,
     OptionalPageNumberPagination,
 )
 from dora.core.throttling import UploadRateThrottle
 from dora.core.uploads import save_orientation_attachment
-from dora.orientations.models import Orientation
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -25,6 +26,7 @@ from dora.services.models import (
     Service,
 )
 from dora.structures.models import DisabledDoraFormDIStructure
+from .emails import send_orientation_created
 
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
@@ -184,10 +186,11 @@ class OrientationViewSet(
         return Response(response_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        serializer.save(
+        orientation = serializer.save(
             prescriber=None,
             prescriber_structure=None,
         )
+        send_orientation_created(orientation)
 
 
 @api_view(["POST"])
