@@ -306,12 +306,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             for item in public.corresponding_di_publics
         ]
         unique_di_publics = list(dict.fromkeys(all_items))
-        all_publics = {
-            p.value for p in DiPublic if p.value != DiPublic.TOUS_PUBLICS.value
-        }
+        all_publics = {p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS}
         if (
             not unique_di_publics
-            or DiPublic.TOUS_PUBLICS.value in unique_di_publics
+            or DiPublic.TOUS_PUBLICS in unique_di_publics
             or set(unique_di_publics) >= all_publics
         ):
             return [DiPublic.TOUS_PUBLICS.value]

@@ -1568,7 +1568,7 @@ class DataInclusionSearchTestCase(APITestCase):
             (None, None, None),
             ([], [], []),
             (["valeur-inconnue"], [], []),
-            ([Public.JEUNES.value], [Public.JEUNES.value], [Public.JEUNES.label]),
+            ([Public.JEUNES], [Public.JEUNES], [Public.JEUNES.label]),
         ]
         for publics_input, publics, publics_display in cases:
             with self.subTest(publics=publics_input):
@@ -1708,8 +1708,8 @@ class DataInclusionSearchTestCase(APITestCase):
             (None, None, None),
             ([], [], []),
             (
-                [ModeAccueil.EN_PRESENTIEL.value],
-                [ModeAccueil.EN_PRESENTIEL.value],
+                [ModeAccueil.EN_PRESENTIEL],
+                [ModeAccueil.EN_PRESENTIEL],
                 [ModeAccueil.EN_PRESENTIEL.label],
             ),
         ]
@@ -1745,8 +1745,8 @@ class DataInclusionSearchTestCase(APITestCase):
             (None, None, None),
             ("", None, None),
             (
-                TypeService.ACCOMPAGNEMENT.value,
-                [TypeService.ACCOMPAGNEMENT.value],
+                TypeService.ACCOMPAGNEMENT,
+                [TypeService.ACCOMPAGNEMENT],
                 [TypeService.ACCOMPAGNEMENT.label],
             ),
         ]
@@ -2570,7 +2570,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
         service2 = make_service(
             slug="s2",
@@ -2580,7 +2580,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)]
+            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
         )
 
         service3 = make_service(
@@ -2591,7 +2591,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         response = self.client.get("/search/?city=31555")
@@ -2609,7 +2609,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         service2 = make_service(
@@ -2620,7 +2620,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.blagnac_center,
         )
         service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         service3 = make_service(
@@ -2631,7 +2631,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.toulouse_center,
         )
         service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         response = self.client.get("/search/?city=31555")
@@ -2649,7 +2649,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         service2 = make_service(
@@ -2659,7 +2659,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.montauban_center,
         )
         service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         response = self.client.get("/search/?city=31555")
@@ -2674,7 +2674,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.point_in_toulouse,
         )
         service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         service2 = make_service(
@@ -2684,7 +2684,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
             geom=self.rocamadour_center,
         )
         service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
 
         response = self.client.get("/search/?city=31555")
@@ -2701,8 +2701,8 @@ class ServiceSearchOrderingTestCase(APITestCase):
         )
         service.location_kinds.set(
             [
-                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value),
-                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value),
+                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL),
+                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE),
             ]
         )
 
@@ -2720,8 +2720,8 @@ class ServiceSearchOrderingTestCase(APITestCase):
         )
         service.location_kinds.set(
             [
-                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value),
-                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value),
+                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL),
+                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE),
             ]
         )
 
@@ -2741,37 +2741,37 @@ class ServiceSearchOrderingTestCase(APITestCase):
             slug="s1", **template, modification_date=timezone.now() - timedelta(days=1)
         )
         service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
         service2 = make_service(
             slug="s2", **template, modification_date=timezone.now() - timedelta(days=2)
         )
         service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
         service3 = make_service(
             slug="s3", **template, modification_date=timezone.now() - timedelta(days=3)
         )
         service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
         service4 = make_service(
             slug="s4", **template, modification_date=timezone.now() - timedelta(days=4)
         )
         service4.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)]
+            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
         )
         service5 = make_service(
             slug="s5", **template, modification_date=timezone.now() - timedelta(days=5)
         )
         service5.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)]
+            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
         )
         service6 = make_service(
             slug="s6", **template, modification_date=timezone.now() - timedelta(days=6)
         )
         service6.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)]
+            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
         )
 
         response = self.client.get("/search/?city=31555")
