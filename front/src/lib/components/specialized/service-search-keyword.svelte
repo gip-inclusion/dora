@@ -53,7 +53,7 @@
       banData = await searchBAN(addrQuery);
     } catch {
       addressSelectErrorMessages = [
-        "Impossible de contacter la Base Adresse Nationale.",
+        "Impossible d’effectuer une recherche d’adresse. Veuillez réessayer ultérieurement.",
       ];
       banData = [];
     }
