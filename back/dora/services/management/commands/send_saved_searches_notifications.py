@@ -36,8 +36,8 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.on_site = LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL.value)
-        self.remote = LocationKind.objects.get(value=ModeAccueil.A_DISTANCE.value)
+        self.on_site = LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)
+        self.remote = LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)
 
     def handle(self, *args, **options):
         self.logger.info("Vérification des notifications de recherches sauvegardées")

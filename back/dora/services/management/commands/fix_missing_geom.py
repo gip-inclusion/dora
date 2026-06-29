@@ -8,7 +8,7 @@ from dora.services.models import Service
 class Command(BaseCommand):
     def handle(self, *args, **options):
         services_w_missing_geo = Service.objects.filter(
-            location_kinds__value=ModeAccueil.EN_PRESENTIEL.value, geom=None
+            location_kinds__value=ModeAccueil.EN_PRESENTIEL, geom=None
         ).exclude(city_code="", address1="")
         self.stdout.write(
             self.style.NOTICE(

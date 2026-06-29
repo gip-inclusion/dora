@@ -908,7 +908,7 @@ class SearchResultSerializer(ServiceListSerializer):
             and ModeAccueil.EN_PRESENTIEL.value in location_kind_values
         ):
             location_kind_values = [
-                v for v in location_kind_values if v != ModeAccueil.EN_PRESENTIEL.value
+                v for v in location_kind_values if v != ModeAccueil.EN_PRESENTIEL
             ]
         return location_kind_values
 
