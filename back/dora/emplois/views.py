@@ -26,8 +26,8 @@ from dora.services.models import (
     Service,
 )
 from dora.structures.models import DisabledDoraFormDIStructure
-from .emails import send_orientation_created
 
+from .emails import send_orientation_created
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
     DoraServiceMobilisationSerializer,

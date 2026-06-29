@@ -7,8 +7,8 @@ from django.utils import timezone
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
-from dora.orientations.models import ContactPreference, Orientation
 from dora.emplois import emails as emplois_emails
+from dora.orientations.models import ContactPreference, Orientation
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
