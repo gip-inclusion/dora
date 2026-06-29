@@ -847,7 +847,7 @@ class BookmarkSerializer(BookmarkListSerializer):
             }
 
 
-class SearchKeywordSerializer(serializers.Serializer):
+class SearchKeywordQuerySerializer(serializers.Serializer):
     q = serializers.CharField(required=False)
     code_commune = serializers.CharField(required=False)
     code_departement = serializers.CharField(required=False)

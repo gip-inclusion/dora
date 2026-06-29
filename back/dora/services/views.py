@@ -66,7 +66,7 @@ from .serializers import (
     BookmarkSerializer,
     FeedbackSerializer,
     SavedSearchSerializer,
-    SearchKeywordSerializer,
+    SearchKeywordQuerySerializer,
     ServiceListSerializer,
     ServiceModelSerializer,
     ServiceSerializer,
@@ -970,7 +970,7 @@ def search_services_view(request):
 @api_view()
 @permission_classes([permissions.AllowAny])
 def search_keyword_view(request):
-    serializer = SearchKeywordSerializer(data=request.GET)
+    serializer = SearchKeywordQuerySerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
 
     # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
