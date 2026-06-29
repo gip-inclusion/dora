@@ -458,7 +458,7 @@ def _get_unified_results(
     for dora_id in dora_ids:
         service = dora_services_by_id.get(dora_id)
         if service:
-            service.distance = dora_distances.get(dora_id)
+            service.distance = dora_distances[dora_id]
             annotated_dora_results.append(service)
 
     serialized_dora_results = SearchResultSerializer(
