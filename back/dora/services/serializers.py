@@ -854,25 +854,24 @@ class SearchKeywordSerializer(serializers.Serializer):
     code_region = serializers.CharField(required=False)
     lon = serializers.FloatField(required=False)
     lat = serializers.FloatField(required=False)
+    locs = serializers.MultipleChoiceField(choices=ModeAccueil, required=False)
 
     def validate(self, attrs):
+        optional_fields = {"locs"}
+        required_fields = set(self.fields) - optional_fields
+        if not set(attrs) & required_fields:
+            fields_ordered = [f for f in self.fields if f not in optional_fields]
+            raise ValidationError(
+                f"Au moins un champ doit être fourni, parmis {', '.join(fields_ordered)}."
+            )
         lat = attrs.get("lat")
         lon = attrs.get("lon")
-        if not attrs.get("q") and not (
-            attrs.get("code_commune")
-            or attrs.get("code_departement")
-            or attrs.get("code_region")
-            or lat is None
-            and lon is None
-        ):
-            if lat is not None or lon is not None:
+        if lat is not None or lon is not None:
+            if lat is None or lon is None:
                 missing, passed = ("lon", "lat") if lon is None else ("lat", "lon")
                 raise ValidationError(
                     f"Le champ {missing} est requis lorsque {passed} est fourni."
                 )
-            raise ValidationError(
-                f"Au moins un champ doit être fourni, parmis {', '.join(self.fields)}."
-            )
         return attrs
 
 
