@@ -197,6 +197,13 @@
 </script>
 
 <form onsubmit={handleSearch}>
+  {#if addressSelectErrorMessages.length}
+    <ul id="address-error-messages" class="f-16 my-s8">
+      {#each addressSelectErrorMessages as message}
+        <li>{message}</li>
+      {/each}
+    </ul>
+  {/if}
   <div class="border-gray-02 w-full rounded-lg border bg-white">
     <div class="grid">
       <div
@@ -235,7 +242,9 @@
             localFiltering={false}
             hideArrow
             placeholder="Lieu ; exemple : 1 rue de l’Espoir 33000 Bordeaux"
-            errorMessages={addressSelectErrorMessages}
+            errorMessages={addressSelectErrorMessages.length
+              ? ["address-error-messages"]
+              : undefined}
             {itemContent}
           />
           <div
@@ -319,5 +328,9 @@
   }
   .grid :global(input::placeholder) {
     @apply text-gray-text;
+  }
+
+  #address-error-messages {
+    color: var(--color-service-unavailable-dark);
   }
 </style>
