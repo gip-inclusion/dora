@@ -1,5 +1,6 @@
 <script lang="ts">
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
+  import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
 
   interface Props {
     mobileDesign?: boolean;
@@ -13,6 +14,11 @@
       ? "py-s16 text-f18 font-bold text-gray-dark"
       : "text-f14 text-gray-text p-s16",
   }: Props = $props();
+
+  let showRechercheTextuelle = $state(true);
+  registerRechercheTextuelleExperiment(() => {
+    showRechercheTextuelle = false;
+  });
 </script>
 
 <div class="{mobileDesign ? 'hidden' : 'block'} py-s10 md:hidden">
@@ -31,14 +37,16 @@
       </a>
     </li>
 
-    <li
-      class="border-gray-03 leading-24 lg:border-none"
-      class:border-b={mobileDesign}
-    >
-      <a href="/recherche-textuelle" class="inline-block h-full {aClass}">
-        Recherche par mots-clés
-      </a>
-    </li>
+    {#if showRechercheTextuelle}
+      <li
+        class="border-gray-03 leading-24 lg:border-none"
+        class:border-b={mobileDesign}
+      >
+        <a href="/recherche-textuelle" class="inline-block h-full {aClass}">
+          Recherche par mots-clés
+        </a>
+      </li>
+    {/if}
     <li
       class="border-gray-03 leading-24 lg:border-none"
       class:border-b={mobileDesign}
