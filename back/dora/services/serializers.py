@@ -904,11 +904,11 @@ class SearchResultSerializer(ServiceListSerializer):
         location_kind_values = [lk.value for lk in obj.location_kinds.all()]
         if (
             obj.distance is None
-            and ModeAccueil.A_DISTANCE.value in location_kind_values
-            and ModeAccueil.EN_PRESENTIEL.value in location_kind_values
+            and ModeAccueil.A_DISTANCE in location_kind_values
+            and ModeAccueil.EN_PRESENTIEL in location_kind_values
         ):
             location_kind_values = [
-                v for v in location_kind_values if v != ModeAccueil.EN_PRESENTIEL.value
+                v for v in location_kind_values if v != ModeAccueil.EN_PRESENTIEL
             ]
         return location_kind_values
 

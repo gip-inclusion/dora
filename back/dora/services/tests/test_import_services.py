@@ -259,7 +259,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -315,7 +315,7 @@ class ImportServicesTestCase(TestCase):
     def test_location_kinds(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"{ModeAccueil.A_DISTANCE.value},{ModeAccueil.EN_PRESENTIEL.value}",,,,,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"{ModeAccueil.A_DISTANCE},{ModeAccueil.EN_PRESENTIEL}",,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -619,7 +619,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.A_DISTANCE.value},,,,,city,"
+            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.A_DISTANCE},,,,,city,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -647,7 +647,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.EN_PRESENTIEL.value},Paris,1 rue de test,,75020,city,"
+            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.EN_PRESENTIEL},Paris,1 rue de test,,75020,city,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -669,7 +669,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.EN_PRESENTIEL.value},Paris,1 rue de test,,,,"
+            f"{self.funding_label.value},Test Person,0123456789,{ModeAccueil.EN_PRESENTIEL},Paris,1 rue de test,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -689,7 +689,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -709,7 +709,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,oui"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,oui"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -736,7 +736,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -791,7 +791,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -820,7 +820,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -843,7 +843,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{missing_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE.value},,,,,,"
+            f"{self.funding_label.value},Test Person,,{ModeAccueil.A_DISTANCE},,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
