@@ -71,7 +71,7 @@ export function registerRechercheTextuelleExperiment(onActivate) {
     variations: [
       {
         name: "original",
-        activate: undefined,
+        activate: () => {},
       },
       {
         name: "Variation1",
