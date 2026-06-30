@@ -33,26 +33,6 @@ class OrientationsNotificationsTestCase(APITestCase):
             mail.outbox[0].subject, "[LOCAL] Relance – Demande d’orientation en attente"
         )
 
-    def test_old_orientations_prescriber_notified(self):
-        with freeze_time(timezone.now() - timedelta(days=11)):
-            orientation = make_orientation()
-        self.call_command()
-        self.assertEqual(mail.outbox[1].to, [orientation.prescriber.email])
-        self.assertEqual(
-            mail.outbox[1].subject,
-            "[LOCAL] Relance envoyée – Demande d’orientation en attente",
-        )
-
-    def test_old_orientations_referent_cced(self):
-        with freeze_time(timezone.now() - timedelta(days=11)):
-            orientation = make_orientation()
-        self.call_command()
-        self.assertEqual(mail.outbox[1].cc, [orientation.referent_email])
-        self.assertEqual(
-            mail.outbox[1].subject,
-            "[LOCAL] Relance envoyée – Demande d’orientation en attente",
-        )
-
     def test_recent_orientations_not_notified(self):
         with freeze_time(timezone.now() - timedelta(days=7)):
             make_orientation()
@@ -63,7 +43,7 @@ class OrientationsNotificationsTestCase(APITestCase):
         with freeze_time(timezone.now() - timedelta(days=11)):
             make_orientation()
         self.call_command()
-        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(mail.outbox), 1)
         mail.outbox = []
         self.call_command()
         self.assertEqual(len(mail.outbox), 0)
@@ -73,18 +53,11 @@ class OrientationsNotificationsTestCase(APITestCase):
             make_orientation()
         with freeze_time(timezone.now() - timedelta(days=19)):
             self.call_command()
-            self.assertEqual(len(mail.outbox), 2)
+            self.assertEqual(len(mail.outbox), 1)
             mail.outbox = []
         with freeze_time(timezone.now() - timedelta(days=15)):
             self.call_command()
             self.assertEqual(len(mail.outbox), 0)
         with freeze_time(timezone.now() - timedelta(days=8)):
             self.call_command()
-            self.assertEqual(len(mail.outbox), 2)
-
-    def test_attachments_listed_in_prescriber_message(self):
-        with freeze_time(timezone.now() - timedelta(days=11)):
-            make_orientation(beneficiary_attachments=["test/hello.pdf"])
-
-        self.call_command()
-        self.assertIn("hello.pdf", mail.outbox[1].body)
+            self.assertEqual(len(mail.outbox), 1)

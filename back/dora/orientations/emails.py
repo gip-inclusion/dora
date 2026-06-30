@@ -339,20 +339,6 @@ def send_orientation_reminder_emails(orientation):
         mjml2html(render_to_string("notification-structure.mjml", context)),
         tags=["orientation"],
     )
-    cc = []
-    if (
-        orientation.referent_email
-        and orientation.referent_email != orientation.prescriber_info.email
-    ):
-        cc.append(orientation.referent_email)
-
-    send_mail(
-        f"{'[Notification - Prescripteur] ' if debug else ''}Relance envoyée – Demande d’orientation en attente",
-        orientation.prescriber_info.email,
-        mjml2html(render_to_string("notification-prescriber.mjml", context)),
-        tags=["orientation"],
-        cc=cc,
-    )
 
 
 def send_orientation_expiration_emails(
