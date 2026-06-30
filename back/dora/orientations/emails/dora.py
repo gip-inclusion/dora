@@ -7,7 +7,6 @@ from django.utils import timezone
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
-from dora.emplois import emails as emplois_emails
 from dora.orientations.models import ContactPreference, Orientation
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
@@ -44,12 +43,6 @@ def _orientation_created_ctx(orientation) -> dict:
             for a in orientation.beneficiary_attachments
         ],
     }
-
-
-# e-mails envoyés lors de la création de l'orientation :
-# pour les liens expirés pour la structure,
-# il y a un besoin de renvoyer un e-mail du groupe séparément, d'où la séparation
-# ça permettra de tester unitairement les e-mails par ailleurs...
 
 
 def send_orientation_created_to_structure(orientation, context=None):
@@ -123,29 +116,14 @@ def _dora_send_created(orientation):
     context = _orientation_created_ctx(orientation)
 
     send_orientation_created_to_structure(orientation, context)
-
     send_orientation_created_to_prescriber(orientation, context)
-
     send_orientation_created_to_referent(orientation, context)
-
     send_orientation_created_to_beneficiary(orientation, context)
 
 
 def _orientation_accepted_ctx(
     orientation, prescriber_message="", beneficiary_message=""
 ):
-    # FIXME: le gabarit des e-mails envoyés par cette partie est construit en deux phases.
-    # Tout d'abord coté frontend, avec des données de formulaires transmises au backend (!).
-    # Ensuite intégré ici, sous forme de bloc de texte (prescriber_message|beneficiary_message)
-    # à intégrer au gabarit.
-    # Problème : certaines données ne sont présente que coté backend et doivent être intégrées
-    # dans la partie du template générée côté frontend.
-    # Bien entendu, le tout devrait être centralisé ici, mais c'est en dehors du scope et de
-    # la charge de la carte initiale.
-
-    # HACK:
-    # beneficiary_message & prescriber_message contiennent un placeholder #SERVICE_ADDRESS#,
-    # à remplacer par ... l'adresse du service (inconnue coté frontend).
     placeholder = "#SERVICE_ADDRESS#"
     prescriber_message = prescriber_message.replace(
         placeholder, orientation.get_service_address_line()
@@ -427,10 +405,6 @@ def _dora_send_reminder(orientation):
     )
 
 
-def _emplois_send_reminder(orientation):
-    send_orientation_reminder_to_structure(orientation)
-
-
 def _orientation_expired_ctx(orientation, start_date):
     return {
         "data": orientation,
@@ -473,7 +447,7 @@ def _dora_send_expired(orientation: Orientation, start_date) -> None:
         )
 
 
-_dora_backend = SimpleNamespace(
+backend = SimpleNamespace(
     send_created=_dora_send_created,
     send_accepted=_dora_send_accepted,
     send_rejected=_dora_send_rejected,
@@ -482,83 +456,3 @@ _dora_backend = SimpleNamespace(
     send_message_to_prescriber=_dora_send_message_to_prescriber,
     send_message_to_beneficiary=_dora_send_message_to_beneficiary,
 )
-
-
-def _emplois_send_created(orientation):
-    send_orientation_created_to_structure(orientation)
-    emplois_emails.send_orientation_created(orientation)
-
-
-def _emplois_send_accepted(orientation, prescriber_message, beneficiary_message):
-    send_orientation_accepted_to_structure(
-        orientation,
-        _orientation_accepted_ctx(orientation, prescriber_message, beneficiary_message),
-    )
-    emplois_emails.send_orientation_accepted(
-        orientation, prescriber_message, beneficiary_message
-    )
-
-
-def _emplois_send_rejected(orientation, message):
-    send_orientation_rejected_to_structure(
-        orientation, _orientation_rejected_ctx(orientation, message)
-    )
-    emplois_emails.send_orientation_rejected(orientation, message)
-
-
-def _emplois_send_expired(orientation, start_date):
-    send_orientation_expired_to_structure(
-        orientation, _orientation_expired_ctx(orientation, start_date)
-    )
-    emplois_emails.send_orientation_expired(orientation, start_date)
-
-
-_emplois_backend = SimpleNamespace(
-    send_created=_emplois_send_created,
-    send_accepted=_emplois_send_accepted,
-    send_rejected=_emplois_send_rejected,
-    send_expired=_emplois_send_expired,
-    send_reminder=_emplois_send_reminder,
-    send_message_to_prescriber=emplois_emails.send_message_to_prescriber,
-    send_message_to_beneficiary=emplois_emails.send_message_to_beneficiary,
-)
-
-
-def _backend(orientation):
-    return (
-        _emplois_backend
-        if hasattr(orientation, "emplois_orientation_data")
-        else _dora_backend
-    )
-
-
-def send_orientation_created_emails(orientation, cc=None):
-    _backend(orientation).send_created(orientation)
-
-
-def send_orientation_accepted_emails(
-    orientation, prescriber_message, beneficiary_message
-):
-    _backend(orientation).send_accepted(
-        orientation, prescriber_message, beneficiary_message
-    )
-
-
-def send_orientation_rejected_emails(orientation, message):
-    _backend(orientation).send_rejected(orientation, message)
-
-
-def send_orientation_expiration_emails(orientation, start_date):
-    _backend(orientation).send_expired(orientation, start_date)
-
-
-def send_message_to_prescriber(orientation, message, cc):
-    _backend(orientation).send_message_to_prescriber(orientation, message, cc)
-
-
-def send_orientation_reminder_emails(orientation):
-    _backend(orientation).send_reminder(orientation)
-
-
-def send_message_to_beneficiary(orientation, message, cc):
-    _backend(orientation).send_message_to_beneficiary(orientation, message, cc)
