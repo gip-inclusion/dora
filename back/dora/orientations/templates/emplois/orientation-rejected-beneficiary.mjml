@@ -13,7 +13,7 @@
 
   <p>Malheureusement, la structure n’a pu donner suite à cette demande d'orientation sur ce service.</p>
 
-  <p>Des questions&#8239;? Contactez la personne qui vous accompagne&#8239;:</p>
+  <p>Des questions&nbsp;? Contactez la personne qui vous accompagne&nbsp;:</p>
 
   {% if data.prescriber_info.email != data.referent_email %}
     <p>
@@ -21,7 +21,7 @@
       {{ data.prescriber_info.email }}
     </p>
 
-    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
+    <p>ou bien votre conseillèr·e référent·e&nbsp;:</p>
   {% endif %}
 
   <p>

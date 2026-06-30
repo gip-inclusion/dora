@@ -16,10 +16,10 @@
   </p>
 
   <p>
-    Vous n’avez rien à faire&#8239;: l’accompagnateur de la structure {{ data.prescriber_info.structure_name }} a également été informé.
+    Vous n’avez rien à faire&nbsp;: l’accompagnateur de la structure {{ data.prescriber_info.structure_name }} a également été informé.
   </p>
 
-  <p>Des questions&#8239;? Contactez la personne qui vous accompagne&#8239;:</p>
+  <p>Des questions&nbsp;? Contactez la personne qui vous accompagne&nbsp;:</p>
 
   {% if data.prescriber_info.email != data.referent_email %}
     <p>
@@ -27,12 +27,12 @@
       {{ data.prescriber_info.email }}
     </p>
 
-    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
+    <p>ou bien votre conseillèr·e référent·e&nbsp;:</p>
   {% endif %}
 
   <p>
     {{ data.get_referent_full_name }}<br />
-    {{ data.referent_email }}{% if data.referent_phone %}&nbsp;– {{ data.referent_phone }}{% endif %}
+    {{ data.referent_email }}{% if data.referent_phone %}&nbsp;–&nbsp;{{ data.referent_phone }}{% endif %}
   </p>
 
   <p>À bientôt,</p>
