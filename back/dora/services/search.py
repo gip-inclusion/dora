@@ -147,7 +147,7 @@ def _get_di_thematiques(
     subcategories: Optional[list[str]] = None,
 ) -> list[str]:
     thematiques = []
-    if categories is not None:
+    if categories:
         # Sélection des sous-catégories correspondant aux catégories
         subcategories_filters = reduce(
             lambda x, y: x | y,
@@ -156,7 +156,7 @@ def _get_di_thematiques(
         thematiques += ServiceSubCategory.objects.filter(
             subcategories_filters
         ).values_list("value", flat=True)
-    if subcategories is not None:
+    if subcategories:
         # Exclusion des sous-catégories --autre
         thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
     # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
