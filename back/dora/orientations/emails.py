@@ -377,8 +377,8 @@ def send_message_to_beneficiary(orientation, message, cc):
     )
 
 
-def send_orientation_reminder_emails(orientation):
-    context = {
+def _orientation_reminder_ctx(orientation):
+    return {
         "data": orientation,
         "support_email": settings.SUPPORT_EMAIL,
         "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
@@ -393,12 +393,24 @@ def send_orientation_reminder_emails(orientation):
         ],
     }
 
+
+def send_orientation_reminder_to_structure(orientation, context=None):
+    if not context:
+        context = _orientation_reminder_ctx(orientation)
+
     send_mail(
         f"{'[Notification - Structure] ' if debug else ''}Relance – Demande d’orientation en attente",
         orientation.get_contact_email(),
         mjml2html(render_to_string("notification-structure.mjml", context)),
         tags=["orientation"],
     )
+
+
+def _dora_send_reminder(orientation):
+    context = _orientation_reminder_ctx(orientation)
+
+    send_orientation_reminder_to_structure(orientation, context)
+
     cc = []
     if (
         orientation.referent_email
@@ -413,6 +425,10 @@ def send_orientation_reminder_emails(orientation):
         tags=["orientation"],
         cc=cc,
     )
+
+
+def _emplois_send_reminder(orientation):
+    send_orientation_reminder_to_structure(orientation)
 
 
 def _orientation_expired_ctx(orientation, start_date):
@@ -462,6 +478,7 @@ _dora_backend = SimpleNamespace(
     send_accepted=_dora_send_accepted,
     send_rejected=_dora_send_rejected,
     send_expired=_dora_send_expired,
+    send_reminder=_dora_send_reminder,
     send_message_to_prescriber=_dora_send_message_to_prescriber,
 )
 
@@ -500,6 +517,7 @@ _emplois_backend = SimpleNamespace(
     send_accepted=_emplois_send_accepted,
     send_rejected=_emplois_send_rejected,
     send_expired=_emplois_send_expired,
+    send_reminder=_emplois_send_reminder,
     send_message_to_prescriber=emplois_emails.send_message_to_prescriber,
 )
 
@@ -534,3 +552,7 @@ def send_orientation_expiration_emails(orientation, start_date):
 
 def send_message_to_prescriber(orientation, message, cc):
     _backend(orientation).send_message_to_prescriber(orientation, message, cc)
+
+
+def send_orientation_reminder_emails(orientation):
+    _backend(orientation).send_reminder(orientation)
