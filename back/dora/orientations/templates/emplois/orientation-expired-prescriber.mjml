@@ -1,4 +1,4 @@
-{% extends "emplois-orientation-emplois-email-base.mjml" %}
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
   Votre demande d’orientation a expiré

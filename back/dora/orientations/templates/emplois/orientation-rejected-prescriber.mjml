@@ -1,4 +1,4 @@
-{% extends "emplois-orientation-emplois-email-base.mjml" %}
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
   La demande pour {{ data.get_beneficiary_full_name }} à été refusée.
