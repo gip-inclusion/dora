@@ -14,18 +14,30 @@ def _has_distinct_referent(orientation):
     )
 
 
-def send_orientation_created(orientation):
-    service = orientation.service
-    if (
-        service is not None
-        and service.location_kinds.count() == 1
-        and service.location_kinds.first().value == "a-distance"
-    ):
-        service_address = "à distance"
-    else:
-        service_address = orientation.get_service_address_line()
+def _get_service_name(orientation):
+    if orientation.service_id:
+        return orientation.service.name
+    return orientation.di_service_name
 
-    context = {"data": orientation, "service_address": service_address}
+
+def _get_service_address(orientation):
+    if orientation.service is None:
+        return orientation.di_service_address_line
+    elif (
+        orientation.service.location_kinds.count() == 1
+        and orientation.service.location_kinds.first().value == "a-distance"
+    ):
+        return "à distance"
+    else:
+        return orientation.get_service_address_line()
+
+
+def send_orientation_created(orientation):
+    context = {
+        "data": orientation,
+        "service_address": _get_service_address(orientation),
+        "service_name": _get_service_name(orientation),
+    }
 
     send_mail(
         f"{'[Envoyée - Emplois Prescripteur] ' if debug else ''}Votre demande a bien été transmise !",
@@ -61,6 +73,7 @@ def send_orientation_accepted(orientation, prescriber_message, beneficiary_messa
         "data": orientation,
         "prescriber_message": prescriber_message,
         "beneficiary_message": beneficiary_message,
+        "service_name": _get_service_name(orientation),
     }
 
     send_mail(
@@ -97,6 +110,7 @@ def send_orientation_rejected(orientation, message, other_details=""):
         "data": orientation,
         "message": message,
         "other_details": other_details,
+        "service_name": _get_service_name(orientation),
     }
 
     send_mail(
@@ -131,7 +145,10 @@ def send_orientation_rejected(orientation, message, other_details=""):
 
 
 def send_orientation_expired(orientation, start_date=None):
-    context = {"data": orientation}
+    context = {
+        "data": orientation,
+        "service_name": _get_service_name(orientation),
+    }
 
     send_mail(
         f"{'[Expirée - Emplois Prescripteur] ' if debug else ''}Votre demande d’orientation a expiré",
@@ -166,6 +183,7 @@ def send_orientation_contact_message_from_offerer(orientation, message):
     context = {
         "data": orientation,
         "message": message,
+        "service_name": _get_service_name(orientation),
     }
 
     send_mail(
