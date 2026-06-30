@@ -5,5 +5,5 @@
     Le message concerne la demande d’orientation réalisée pour {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ data.get_service_name }}&nbsp;»&nbsp;:
   </p>
 
-  <p>{{ message|linebreaksbr }}</p>
+  <p>{{ message|linebreaks }}</p>
 {% endblock %}

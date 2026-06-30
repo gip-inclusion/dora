@@ -215,7 +215,31 @@ def send_message_to_prescriber(orientation, message, cc):
         reply_to=[orientation.get_contact_email()],
         from_email=(
             f"{structure_name} via Les Emplois",
-            orientation.get_contact_email(),
+            settings.DEFAULT_FROM_EMAIL,
+        ),
+        cc=cc,
+    )
+
+
+def send_message_to_beneficiary(orientation, message, cc):
+    structure_name = orientation.prescriber_info.structure_name
+    context = {
+        "data": orientation,
+        "message": message,
+        "structure_name": structure_name,
+    }
+
+    send_mail(
+        f"{'[Contact - Emplois Bénéficiaire] ' if debug else ''}Vous avez un nouveau message de la structure {structure_name}",
+        orientation.beneficiary_email,
+        mjml2html(
+            render_to_string("emplois-orientation-contact-beneficiary.mjml", context)
+        ),
+        tags=["orientation"],
+        reply_to=[orientation.get_contact_email()],
+        from_email=(
+            f"{structure_name} via Les Emplois",
+            settings.DEFAULT_FROM_EMAIL,
         ),
         cc=cc,
     )
