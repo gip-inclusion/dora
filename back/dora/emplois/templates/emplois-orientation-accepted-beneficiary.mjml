@@ -8,8 +8,6 @@
   {{ beneficiary_message|linebreaks }}
 {% endblock %}
 
-{% block signature %}{% endblock %}
-
 {% block footer %}
   <p>
       Les Emplois est une application portée par le GIP «&nbsp;Plateforme de l’inclusion&nbsp;». Les documents listés plus haut ont été communiqués à une structure proposant un service répondant à vos besoins.
