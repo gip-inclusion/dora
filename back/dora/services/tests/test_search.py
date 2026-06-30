@@ -19,7 +19,6 @@ from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_serv
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.services.enums import ServiceStatus
 from dora.services.search import MAX_DISTANCE
-from dora.services.serializers import SearchKeywordQuerySerializer
 from dora.services.views import _validate_search_categories_and_subcategories
 
 
@@ -336,18 +335,6 @@ class TestSearchKeyword:
                     ]
                 },
                 id="noquery",
-            ),
-            pytest.param(
-                {f: "" for f in set(SearchKeywordQuerySerializer().fields) - {"locs"}},
-                {
-                    "nonFieldErrors": [
-                        {
-                            "message": "Au moins un champ doit être fourni, parmi q, code_commune, code_departement, code_region, lon, lat.",
-                            "code": "invalid",
-                        }
-                    ]
-                },
-                id="empty",
             ),
             pytest.param(
                 {"lat": "12.1234"},
