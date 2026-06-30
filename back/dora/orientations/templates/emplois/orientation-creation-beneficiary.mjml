@@ -19,7 +19,7 @@
 
   <p>
     {{ data.prescriber_info.full_name }}<br />
-    {% if data.prescriber_info.email %}<a href="mailto:{{ data.prescriber_info.email }}">{{ data.prescriber_info.email }}</a>{% if data.prescriber_info.phone %}&nbsp;– {% endif %}{% endif %}
+    {% if data.prescriber_info.email %}{{ data.prescriber_info.email }}{% if data.prescriber_info.phone %}&nbsp;– {% endif %}{% endif %}
     {% if data.prescriber_info.phone %}{{ data.prescriber_info.phone }}{% endif %}
   </p>
 
@@ -38,7 +38,7 @@
     </p>
 
     <p>
-      Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées&nbsp;: <a href="mailto:rgpd@inclusion.gouv.fr">rgpd@inclusion.gouv.fr</a>
+      Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées&nbsp;:&nbsp;rgpd@inclusion.gouv.fr
     </p>
 
     <p>
