@@ -1,6 +1,8 @@
 from typing import Optional
 from uuid import uuid4
 
+from data_inclusion.schema.v1 import Frais, ModeAccueil, Public, Thematique, TypeService
+
 
 def make_di_service_data(**kwargs) -> dict:
     source = kwargs.pop("source", "emplois-de-linclusion")
@@ -97,8 +99,6 @@ class FakeDataInclusionClient:
 
     def search_services(
         self,
-        sources: Optional[str] = None,
-        score_qualite_minimum: Optional[float] = None,
         code_commune: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
@@ -107,14 +107,6 @@ class FakeDataInclusionClient:
         lon: Optional[float] = None,
     ) -> Optional[list[dict]]:
         services = self.services
-
-        if sources is not None:
-            services = [r for r in services if r["source"] in sources]
-
-        if score_qualite_minimum is not None:
-            services = [
-                r for r in services if r["score_qualite"] >= score_qualite_minimum
-            ]
 
         if thematiques is not None:
             services = [
@@ -146,3 +138,22 @@ class FakeDataInclusionClient:
             ]
         else:
             return [{"distance": 30, "service": s} for s in services]
+
+    def search(
+        self,
+        q: Optional[str] = None,
+        sources: Optional[list[str]] = None,
+        score_qualite_minimum: Optional[float] = None,
+        code_commune: Optional[str] = None,
+        code_departement: Optional[str] = None,
+        code_region: Optional[str] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+        thematiques: Optional[list[Thematique]] = None,
+        frais: Optional[list[Frais]] = None,
+        modes_accueil: Optional[list[ModeAccueil]] = None,
+        publics: Optional[list[Public]] = None,
+        types: Optional[list[TypeService]] = None,
+        page: Optional[int] = 1,
+    ):
+        return self.services

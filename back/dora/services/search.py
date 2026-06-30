@@ -5,6 +5,7 @@ from functools import reduce
 from typing import Optional
 
 import requests
+from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
@@ -14,6 +15,7 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
+from dora.api.exceptions import ServiceUnavailable
 from dora.core.constants import WGS84
 from dora.data_inclusion.mappings import map_search_result
 from dora.decoupage_administratif.models import City
@@ -39,7 +41,7 @@ def _filter_and_annotate_dora_services(
     no_services = models.Service.objects.none()
     # 1) services ayant un lieu de déroulement, à moins de MAX_DISTANCE km
     services_on_site = (
-        services.filter(location_kinds__value="en-presentiel")
+        services.filter(location_kinds__value=ModeAccueil.EN_PRESENTIEL)
         .annotate(distance=Distance("geom", location))
         .filter(distance__lte=D(km=MAX_DISTANCE))
         if with_onsite
@@ -49,8 +51,8 @@ def _filter_and_annotate_dora_services(
     services_remote = (
         (
             services.filter(
-                Q(location_kinds__value="a-distance")
-                | ~Q(location_kinds__value="en-presentiel")
+                Q(location_kinds__value=ModeAccueil.A_DISTANCE)
+                | ~Q(location_kinds__value=ModeAccueil.EN_PRESENTIEL)
             )
             .exclude(id__in=services_on_site)
             .distinct()
@@ -68,12 +70,12 @@ def _sort_services(services):
 
     for s in services:
         if (
-            "en-presentiel" in s["location_kinds"]
+            ModeAccueil.EN_PRESENTIEL in s["location_kinds"]
             and s["distance"] is not None
             and s["distance"] <= MAX_DISTANCE
         ):
             on_site_services.append(s)
-        elif "a-distance" in s["location_kinds"] or s["location_kinds"] == []:
+        elif ModeAccueil.A_DISTANCE in s["location_kinds"] or s["location_kinds"] == []:
             remote_services.append(s)
     random.seed(date.today().isoformat())
     random.shuffle(on_site_services)
@@ -141,6 +143,31 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     return raw_di_results
 
 
+def _get_di_thematiques(
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+) -> list[str]:
+    thematiques = []
+    if categories:
+        # Sélection des sous-catégories correspondant aux catégories
+        subcategories_filters = reduce(
+            lambda x, y: x | y,
+            [Q(value__startswith=category) for category in categories],
+        )
+        thematiques += ServiceSubCategory.objects.filter(
+            subcategories_filters
+        ).values_list("value", flat=True)
+    if subcategories:
+        # Exclusion des sous-catégories --autre
+        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
+    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
+    # va être vide et d·i renverrait *tous* les services.
+    # On renvoie donc plutôt une liste vide.
+    if not thematiques and subcategories:
+        return []
+    return thematiques
+
+
 def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -150,14 +177,10 @@ def _get_raw_di_results(
     fees: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-    with_dora: bool = False,
 ) -> list:
     """Search data.inclusion services.
 
     The ``di_client`` acts as an entrypoint to the data.inclusion service repository.
-
-    The search will target the sources configured by the ``DATA_INCLUSION_STREAM_SOURCES``
-    environment variable.
 
     The other arguments match the input parameters from the classical search.
 
@@ -172,40 +195,11 @@ def _get_raw_di_results(
     Returns:
         A list of search results by SearchResultSerializer.
     """
-    thematiques = []
-    if categories is not None:
-        # Sélection des sous-catégories correspondant aux catégories
-        subcategories_filters = reduce(
-            lambda x, y: x | y,
-            [Q(value__startswith=category) for category in categories],
-        )
-        thematiques += ServiceSubCategory.objects.filter(
-            subcategories_filters
-        ).values_list("value", flat=True)
-    if subcategories is not None:
-        # Exclusion des sous-catégories --autre
-        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
-
-    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
-    # va être vide et d·i renverrait *tous* les services.
-    # On renvoie donc plutôt une liste vide.
-    if not thematiques and subcategories:
-        return []
-
-    # Si on veut toutes les sources incluant Dora, on ne spécifie pas de sources
-    # (on récupère tous les services de toutes les sources).
-    # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
-    sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
-
+    thematiques = _get_di_thematiques(categories, subcategories)
     types = _map_kinds_dora_to_di(kinds) if kinds else None
 
     try:
         raw_di_results = di_client.search_services(
-            sources=sources,
-            score_qualite_minimum=(
-                # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
-                None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
-            ),
             code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=types,
@@ -225,6 +219,8 @@ def _get_raw_di_results(
 def _map_di_results(
     raw_di_results: list,
     location_kinds: Optional[list[str]] = None,
+    *,
+    max_distance: Optional[float],
 ) -> list:
     """Convert DI service to Dora format.
 
@@ -237,14 +233,16 @@ def _map_di_results(
         map_search_result(result, supported_service_kinds) for result in raw_di_results
     ]
 
-    # FIXME: exclu les services uniquement en présentiel à plus de MAX_DISTANCE
-    # du lieu de recherche (ainsi que ceux qui ne retournent pas d'information de distance).
+    # FIXME: exclut les services uniquement en présentiel à plus de
+    # max_distance lors de la recherche géographique du lieu de recherche
+    # (ainsi que ceux qui ne retournent pas d'information de distance).
     # À terme il faudra passer par un rayon configurable
     mapped_di_results = [
         result
         for result in mapped_di_results
-        if (
-            "a-distance" in result["location_kinds"]
+        if max_distance is None
+        or (
+            ModeAccueil.A_DISTANCE in result["location_kinds"]
             or (
                 result.get("distance") is not None
                 and result["distance"] <= MAX_DISTANCE
@@ -255,48 +253,16 @@ def _map_di_results(
     # FIXME: gestion du paramètre `location_kinds`
     # Idéalement, il faudrait le transmettre à l’API d·i, mais tant qu’elle ne le prend pas
     # en charge, on filtre les services à posteriori
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    with_remote = not location_kinds or ModeAccueil.A_DISTANCE in location_kinds
+    with_onsite = not location_kinds or ModeAccueil.EN_PRESENTIEL in location_kinds
     mapped_di_results = [
         result
         for result in mapped_di_results
         if (
-            (with_onsite and "en-presentiel" in result["location_kinds"])
-            or (with_remote and "a-distance" in result["location_kinds"])
+            (with_onsite and ModeAccueil.EN_PRESENTIEL in result["location_kinds"])
+            or (with_remote and ModeAccueil.A_DISTANCE in result["location_kinds"])
         )
     ]
-    return mapped_di_results
-
-
-def _get_di_results(
-    di_client: data_inclusion.DataInclusionClient,
-    city_code: str,
-    categories: Optional[list[str]] = None,
-    subcategories: Optional[list[str]] = None,
-    kinds: Optional[list[str]] = None,
-    fees: Optional[list[str]] = None,
-    location_kinds: Optional[list[str]] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
-) -> list:
-    """Search data.inclusion services and convert them to the Dora format.
-
-    Returns:
-        A list of search results by SearchResultSerializer.
-    """
-    raw_di_results = _get_raw_di_results(
-        di_client=di_client,
-        city_code=city_code,
-        categories=categories,
-        subcategories=subcategories,
-        kinds=kinds,
-        fees=fees,
-        lat=lat,
-        lon=lon,
-    )
-
-    mapped_di_results = _map_di_results(raw_di_results, location_kinds)
-
     return mapped_di_results
 
 
@@ -343,8 +309,8 @@ def _get_dora_results(
     if funding_labels:
         services = services.filter(funding_labels__value__in=funding_labels)
 
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    with_remote = not location_kinds or ModeAccueil.A_DISTANCE in location_kinds
+    with_onsite = not location_kinds or ModeAccueil.EN_PRESENTIEL in location_kinds
 
     categories_filter = Q()
     if categories:
@@ -391,45 +357,32 @@ def _get_dora_results(
     }
 
 
-def _get_unified_results(
+def _enrich_di_results_with_dora(
     request,
-    di_client: data_inclusion.DataInclusionClient,
-    city_code: str,
-    categories: Optional[list[str]] = None,
-    subcategories: Optional[list[str]] = None,
-    kinds: Optional[list[str]] = None,
-    fees: Optional[list[str]] = None,
+    raw_di_results,
     location_kinds: Optional[list[str]] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
+    *,
+    max_distance: Optional[float],
 ) -> list:
-    """Search data.inclusion services and convert them to the Dora format.
-
-    Returns:
-        A list of search results by SearchResultSerializer.
-    """
-    raw_di_results = _get_raw_di_results(
-        di_client=di_client,
-        city_code=city_code,
-        categories=categories,
-        subcategories=subcategories,
-        kinds=kinds,
-        fees=fees,
-        lat=lat,
-        lon=lon,
-        with_dora=True,
-    )
-
     # Les ID de services DI sont de la forme "source--id".
     # On récupère l'ID Dora du service et la distance calculée par DI,
     # en conservant l'ordre des résultats DI (triés par distance).
     dora_results_from_di = [
-        (result["service"]["id"].split("--")[1], result["distance"])
+        (
+            result["service"]["id"].split("--")[1],
+            result["distance"],
+            result.get("score_recherche"),
+        )
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
-    dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
-    dora_ids = list(dora_distances.keys())
+    # Les données sont triées par distance lorsque l’API /search/services est
+    # utilisée, et par score de recherche pour l’API /search.
+    dora_annotations = {
+        dora_id: (distance, score_recherche)
+        for dora_id, distance, score_recherche in dora_results_from_di
+    }
+    dora_ids = list(dora_annotations.keys())
 
     dora_services_by_id = {
         str(service.id): service
@@ -458,7 +411,7 @@ def _get_unified_results(
     for dora_id in dora_ids:
         service = dora_services_by_id.get(dora_id)
         if service:
-            service.distance = dora_distances.get(dora_id)
+            service.distance, service.search_score = dora_annotations[dora_id]
             annotated_dora_results.append(service)
 
     serialized_dora_results = SearchResultSerializer(
@@ -480,7 +433,9 @@ def _get_unified_results(
             >= settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
         ]
 
-    serialized_other_results = _map_di_results(other_raw_results, location_kinds)
+    serialized_other_results = _map_di_results(
+        other_raw_results, location_kinds, max_distance=max_distance
+    )
 
     serialized_results = [*serialized_dora_results, *serialized_other_results]
 
@@ -502,7 +457,6 @@ def search_services(
     funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-    unified_search_enabled: bool = True,
 ) -> (list[dict], dict):
     """Search services from all available repositories.
 
@@ -517,69 +471,53 @@ def search_services(
         - A list of search results by SearchResultSerializer.
         - A metadata dictionary
     """
-
-    # Par défaut, le mode de recherche est unifié (recherche DI puis filtrage Dora)
-    if settings.DI_DORA_UNIFIED_SEARCH_ENABLED and unified_search_enabled:
-        results, metadata = _get_unified_results(
-            request=request,
-            di_client=di_client,
-            categories=categories,
-            subcategories=subcategories,
-            city_code=city_code,
-            kinds=kinds,
-            fees=fees,
-            location_kinds=location_kinds,
-            lat=lat,
-            lon=lon,
-        )
-        if len(results) == 0:
-            # Pas de résultat peut signifier que DI n'est pas accessible.
-            # On relance la recherche sur les services DORA locaux.
-            results, metadata = _get_dora_results(
-                request=request,
-                categories=categories,
-                subcategories=subcategories,
-                city_code=city_code,
-                city=city,
-                kinds=kinds,
-                fees=fees,
-                location_kinds=location_kinds,
-                funding_labels=funding_labels,
-                lat=lat,
-                lon=lon,
-            )
-        return _sort_services(results), metadata
-
-    # Sinon, le mode de recherche est distribué (recherche DI + recherche Dora)
-    di_results = (
-        _get_di_results(
-            di_client=di_client,
-            categories=categories,
-            subcategories=subcategories,
-            city_code=city_code,
-            kinds=kinds,
-            fees=fees,
-            location_kinds=location_kinds,
-            lat=lat,
-            lon=lon,
-        )
-        if di_client is not None
-        else []
-    )
-
-    dora_results, metadata = _get_dora_results(
-        request=request,
+    # Recherche DI puis filtrage Dora.
+    raw_di_results = _get_raw_di_results(
+        di_client=di_client,
+        city_code=city_code,
         categories=categories,
         subcategories=subcategories,
-        city_code=city_code,
-        city=city,
         kinds=kinds,
         fees=fees,
-        location_kinds=location_kinds,
-        funding_labels=funding_labels,
         lat=lat,
         lon=lon,
     )
+    results, metadata = _enrich_di_results_with_dora(
+        request, raw_di_results, location_kinds, max_distance=MAX_DISTANCE
+    )
+    if len(results) == 0:
+        # Pas de résultat peut signifier que DI n'est pas accessible.
+        # On relance la recherche sur les services DORA locaux.
+        results, metadata = _get_dora_results(
+            request=request,
+            categories=categories,
+            subcategories=subcategories,
+            city_code=city_code,
+            city=city,
+            kinds=kinds,
+            fees=fees,
+            location_kinds=location_kinds,
+            funding_labels=funding_labels,
+            lat=lat,
+            lon=lon,
+        )
+    return _sort_services(results), metadata
 
-    all_results = [*dora_results, *di_results]
-    return _sort_services(all_results), metadata
+
+def search_keyword(request, api_params):
+    di_client = data_inclusion.di_client_factory()
+    try:
+        raw_di_results = di_client.search(**api_params)
+    except requests.RequestException:
+        raise ServiceUnavailable(
+            "L’API data.inclusion.gouv.fr nécessaire pour la recherche, "
+            "n’est pas disponible. Merci de réessayer ultérieurement."
+        )
+    results, metadata = _enrich_di_results_with_dora(
+        request,
+        raw_di_results,
+        location_kinds=None,  # Filtré par d·i.
+        max_distance=None,
+    )
+    results.sort(key=lambda r: r["search_score"], reverse=True)
+    return results, metadata

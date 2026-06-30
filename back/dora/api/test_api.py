@@ -1,4 +1,5 @@
 import pytest
+from data_inclusion.schema.v1 import ModeAccueil
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.utils import timezone
@@ -331,8 +332,10 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ),
         baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
-    service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
-    service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)
+    )
+    service.location_kinds.add(LocationKind.objects.get(value=ModeAccueil.A_DISTANCE))
     service.requirements.add(
         baker.make(Requirement, name="Bonne connaissance du français oral et écrit"),
     )
@@ -430,7 +433,7 @@ def test_service_publics_export_empty_maps_to_tous_publics(
 def test_service_publics_export_all_maps_to_tous_publics(
     authenticated_user, api_client
 ):
-    all_real_publics = [p.value for p in DiPublic if p.value != "tous-publics"]
+    all_real_publics = [p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS]
     service = make_service(status=ServiceStatus.PUBLISHED)
     service.publics.clear()
     service.publics.add(
@@ -560,8 +563,10 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ),
         baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
-    service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
-    service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
+    service.location_kinds.add(
+        LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)
+    )
+    service.location_kinds.add(LocationKind.objects.get(value=ModeAccueil.A_DISTANCE))
     service.requirements.add(
         baker.make(Requirement, name="Bonne connaissance du français oral et écrit"),
     )
