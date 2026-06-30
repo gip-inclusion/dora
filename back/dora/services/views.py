@@ -56,7 +56,12 @@ from dora.services.models import (
     ServiceSubCategory,
     UpdateFrequency,
 )
-from dora.services.search import MAX_DISTANCE, search_keyword, search_services
+from dora.services.search import (
+    MAX_DISTANCE,
+    _get_di_thematiques,
+    search_keyword,
+    search_services,
+)
 from dora.services.utils import synchronize_service_from_model
 from dora.stats.models import DeploymentLevel, DeploymentState
 from dora.structures.models import Structure, StructureMember
@@ -975,6 +980,9 @@ def search_keyword_view(request):
 
     # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
     query = serializer.data
+    categories = query.pop("cats")
+    subcategories = query.pop("subs")
+    query["thematiques"] = _get_di_thematiques(categories, subcategories)
     sorted_services, metadata = search_keyword(request, query)
 
     search_center = None

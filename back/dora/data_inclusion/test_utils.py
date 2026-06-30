@@ -1,6 +1,8 @@
 from typing import Optional
 from uuid import uuid4
 
+from data_inclusion.schema.v1 import Frais, ModeAccueil, Public, Thematique, TypeService
+
 
 def make_di_service_data(**kwargs) -> dict:
     source = kwargs.pop("source", "emplois-de-linclusion")
@@ -147,5 +149,11 @@ class FakeDataInclusionClient:
         code_region: Optional[str] = None,
         lat: Optional[float] = None,
         lon: Optional[float] = None,
+        thematiques: Optional[list[Thematique]] = None,
+        frais: Optional[list[Frais]] = None,
+        modes_accueil: Optional[list[ModeAccueil]] = None,
+        publics: Optional[list[Public]] = None,
+        types: Optional[list[TypeService]] = None,
+        page: Optional[int] = 1,
     ):
         return self.services

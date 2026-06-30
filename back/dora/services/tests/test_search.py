@@ -337,6 +337,18 @@ class TestSearchKeyword:
                 id="noquery",
             ),
             pytest.param(
+                {"cats": "foo"},
+                {
+                    "cats": [
+                        {
+                            "message": "«\xa0foo\xa0» n'est pas un choix valide.",
+                            "code": "invalid_choice",
+                        }
+                    ]
+                },
+                id="invalid_category",
+            ),
+            pytest.param(
                 {"lat": "12.1234"},
                 {
                     "nonFieldErrors": [

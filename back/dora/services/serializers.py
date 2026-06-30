@@ -3,7 +3,8 @@ import textwrap
 from datetime import timedelta
 
 import requests
-from data_inclusion.schema.v1 import ModeAccueil
+from data_inclusion.schema.v1 import Frais, ModeAccueil, TypeService
+from data_inclusion.schema.v1 import Public as DIPublic
 from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.storage import default_storage
@@ -854,7 +855,34 @@ class SearchKeywordQuerySerializer(serializers.Serializer):
     code_region = serializers.CharField(required=False)
     lon = serializers.FloatField(required=False)
     lat = serializers.FloatField(required=False)
-    locs = serializers.MultipleChoiceField(choices=ModeAccueil, required=False)
+    modes_accueil = serializers.MultipleChoiceField(
+        source="locs",  # Compatibilité avec la recherche de services existante.
+        choices=ModeAccueil,
+        required=False,
+    )
+    publics = serializers.MultipleChoiceField(choices=DIPublic, required=False)
+    cats = serializers.MultipleChoiceField(choices=[], required=False)
+    subs = serializers.MultipleChoiceField(choices=[], required=False)
+    types = serializers.MultipleChoiceField(
+        source="kinds",  # Compatibilité avec la recherche de services existante.
+        choices=TypeService,
+        required=False,
+    )
+    frais = serializers.MultipleChoiceField(
+        source="fees",  # Compatibilité avec la recherche de services existante.
+        choices=Frais,
+        required=False,
+    )
+    page = serializers.IntegerField(min_value=1, required=False, default=1)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["cats"].choices = ServiceCategory.objects.values_list(
+            "value", "label"
+        )
+        self.fields["subs"].choices = ServiceSubCategory.objects.values_list(
+            "value", "label"
+        )
 
     def validate(self, attrs):
         fields_required = {
@@ -878,6 +906,7 @@ class SearchKeywordQuerySerializer(serializers.Serializer):
                 raise ValidationError(
                     f"Le champ {missing} est requis lorsque {passed} est fourni."
                 )
+        # TODO: Pass categories and subcategories directly, instead of , separated.
         return attrs
 
 

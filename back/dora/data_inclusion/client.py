@@ -5,6 +5,7 @@ from typing import Optional
 
 import furl
 import requests
+from data_inclusion.schema.v1 import Frais, ModeAccueil, Public, Thematique, TypeService
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -159,6 +160,12 @@ class DataInclusionClient:
         code_region: Optional[str] = None,
         lat: Optional[float] = None,
         lon: Optional[float] = None,
+        thematiques: Optional[list[Thematique]] = None,
+        frais: Optional[list[Frais]] = None,
+        modes_accueil: Optional[list[ModeAccueil]] = None,
+        publics: Optional[list[Public]] = None,
+        types: Optional[list[TypeService]] = None,
+        page: Optional[int] = 1,
     ) -> Optional[list[dict]]:
         url = self.base_url.copy()
         url = url / "search"
@@ -178,4 +185,14 @@ class DataInclusionClient:
             url.args["lat"] = lat
         if lon is not None:
             url.args["lon"] = lon
+        if thematiques is not None:
+            url.args["thematiques"] = thematiques
+        if frais is not None:
+            url.args["frais"] = frais
+        if modes_accueil is not None:
+            url.args["modes_accueil"] = modes_accueil
+        if publics is not None:
+            url.args["publics"] = publics
+        if types is not None:
+            url.args["types"] = types
         return self._get_pages(url)
