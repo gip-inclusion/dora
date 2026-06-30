@@ -12,7 +12,7 @@
   <p>Bonjour {{ data.prescriber_info.first_name }},</p>
 
   <p>
-    Votre demande d’orientation pour le service «&nbsp;{{ data.get_service_name }}&nbsp;» ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ data.get_structure_name }} à été transmise&nbsp;!
+    Votre demande d’orientation pour le service «&nbsp;{{ data.get_service_name }}&nbsp;» ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ data.prescriber_info.structure_name }} à été transmise&nbsp;!
   </p>
 
   <p>Votre bénéficiaire, {{ data.get_beneficiary_full_name }}, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p>
@@ -26,7 +26,7 @@
   </p>
 
   <p>
-    La structure {{ data.get_structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
+    La structure {{ data.prescriber_info.structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
   </p>
 
   <p>

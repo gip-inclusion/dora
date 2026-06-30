@@ -24,7 +24,7 @@
   </p>
 
   <p>
-    La structure {{ data.get_structure_name }} ou la personne qui vous accompagne vous contacteront pour donner suite à la demande.
+    La structure {{ data.prescriber_info.structure_name }} ou la personne qui vous accompagne vous contacteront pour donner suite à la demande.
   </p>
 
   <p>À très bientôt,</p>
