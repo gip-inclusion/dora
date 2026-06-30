@@ -857,10 +857,16 @@ class SearchKeywordQuerySerializer(serializers.Serializer):
     locs = serializers.MultipleChoiceField(choices=ModeAccueil, required=False)
 
     def validate(self, attrs):
-        optional_fields = {"locs"}
-        required_fields = set(self.fields) - optional_fields
-        if not set(attrs) & required_fields:
-            fields_ordered = [f for f in self.fields if f not in optional_fields]
+        fields_required = {
+            "q",
+            "code_commune",
+            "code_departement",
+            "code_region",
+            "lon",
+            "lat",
+        }
+        if not set(attrs) & fields_required:
+            fields_ordered = [f for f in self.fields if f in fields_required]
             raise ValidationError(
                 f"Au moins un champ doit être fourni, parmi {', '.join(fields_ordered)}."
             )
