@@ -12,7 +12,7 @@
   <p>Bonjour,</p>
 
   <p>
-    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a réalisé une prescription en votre nom, pour le service «&nbsp;{{ data.service.name }}&nbsp;», ayant lieu au&#8239;: {{ service_address }}.
+    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a réalisé une prescription en votre nom, pour le service «&nbsp;{{ service_name }}&nbsp;», ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
   <p>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&nbsp;:</p>

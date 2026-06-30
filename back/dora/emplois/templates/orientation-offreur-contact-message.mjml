@@ -2,7 +2,7 @@
 
 {% block content %}
   <p>
-    Le message concerne la demande d’orientation réalisée pour {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ data.service.name }}&nbsp;»&nbsp;:
+    Le message concerne la demande d’orientation réalisée pour {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ service_name }}&nbsp;»&nbsp;:
   </p>
 
   <p>{{ message|linebreaksbr }}</p>

@@ -8,7 +8,7 @@
   <p>Bonjour,</p>
 
   <p>
-    La structure {{ data.service.structure.name }} n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} sur le service «&nbsp;{{ data.service.name }}&nbsp;».
+    La structure {{ data.service.structure.name }} n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} sur le service «&nbsp;{{ service_name }}&nbsp;».
   </p>
 
   <p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p>

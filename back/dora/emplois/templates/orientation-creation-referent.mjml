@@ -12,7 +12,7 @@
   <p>Bonjour,</p>
 
   <p>
-    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a orienté {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ data.service.name }}&nbsp;», ayant lieu au&#8239;: {{ service_address }}.
+    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a orienté {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ service_name }}&nbsp;», ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
