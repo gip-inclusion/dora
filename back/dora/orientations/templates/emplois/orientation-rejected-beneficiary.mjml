@@ -1,4 +1,4 @@
-{% extends "emplois-orientation-emplois-email-base.mjml" %}
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
   Une orientation effectuée en votre nom a été refusée.
