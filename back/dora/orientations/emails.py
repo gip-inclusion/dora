@@ -355,7 +355,7 @@ def _dora_send_message_to_prescriber(orientation, message, cc):
     )
 
 
-def send_message_to_beneficiary(orientation, message, cc):
+def _dora_send_message_to_beneficiary(orientation, message, cc):
     context = {
         "data": orientation,
         "message": message,
@@ -480,6 +480,7 @@ _dora_backend = SimpleNamespace(
     send_expired=_dora_send_expired,
     send_reminder=_dora_send_reminder,
     send_message_to_prescriber=_dora_send_message_to_prescriber,
+    send_message_to_beneficiary=_dora_send_message_to_beneficiary,
 )
 
 
@@ -519,6 +520,7 @@ _emplois_backend = SimpleNamespace(
     send_expired=_emplois_send_expired,
     send_reminder=_emplois_send_reminder,
     send_message_to_prescriber=emplois_emails.send_message_to_prescriber,
+    send_message_to_beneficiary=emplois_emails.send_message_to_beneficiary,
 )
 
 
@@ -556,3 +558,7 @@ def send_message_to_prescriber(orientation, message, cc):
 
 def send_orientation_reminder_emails(orientation):
     _backend(orientation).send_reminder(orientation)
+
+
+def send_message_to_beneficiary(orientation, message, cc):
+    _backend(orientation).send_message_to_beneficiary(orientation, message, cc)
