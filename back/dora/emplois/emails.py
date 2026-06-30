@@ -197,21 +197,25 @@ def send_orientation_expired(orientation, start_date=None):
     )
 
 
-def send_orientation_contact_message_from_offerer(orientation, message):
+def send_message_to_prescriber(orientation, message, cc):
     context = {
         "data": orientation,
         "message": message,
     }
 
+    structure_name = orientation.prescriber_info.structure_name
+
     send_mail(
-        f"{'[Contact - Emplois Bénéficiaire] ' if debug else ''}Vous avez un nouveau message",
-        orientation.beneficiary_email,
+        f"{'[Contact - Emplois Prescripteur] ' if debug else ''}Vous avez un nouveau message de la structure {structure_name}",
+        orientation.prescriber_info.email,
         mjml2html(
-            render_to_string(
-                "emplois-orientation-offreur-contact-message.mjml", context
-            )
+            render_to_string("emplois-orientation-contact-prescriber.mjml", context)
         ),
         tags=["orientation"],
         reply_to=[orientation.get_contact_email()],
-        from_email=("La plateforme de l'inclusion", settings.NO_REPLY_EMAIL),
+        from_email=(
+            f"{structure_name} via Les Emplois",
+            orientation.get_contact_email(),
+        ),
+        cc=cc,
     )

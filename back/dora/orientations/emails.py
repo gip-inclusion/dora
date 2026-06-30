@@ -334,7 +334,7 @@ def _dora_send_rejected(orientation, message):
     send_orientation_rejected_to_referent(orientation, context)
 
 
-def send_message_to_prescriber(orientation, message, cc):
+def _dora_send_message_to_prescriber(orientation, message, cc):
     context = {
         "data": orientation,
         "message": message,
@@ -462,6 +462,7 @@ _dora_backend = SimpleNamespace(
     send_accepted=_dora_send_accepted,
     send_rejected=_dora_send_rejected,
     send_expired=_dora_send_expired,
+    send_message_to_prescriber=_dora_send_message_to_prescriber,
 )
 
 
@@ -499,6 +500,7 @@ _emplois_backend = SimpleNamespace(
     send_accepted=_emplois_send_accepted,
     send_rejected=_emplois_send_rejected,
     send_expired=_emplois_send_expired,
+    send_message_to_prescriber=emplois_emails.send_message_to_prescriber,
 )
 
 
@@ -528,3 +530,7 @@ def send_orientation_rejected_emails(orientation, message):
 
 def send_orientation_expiration_emails(orientation, start_date):
     _backend(orientation).send_expired(orientation, start_date)
+
+
+def send_message_to_prescriber(orientation, message, cc):
+    _backend(orientation).send_message_to_prescriber(orientation, message, cc)
