@@ -975,8 +975,7 @@ def search_keyword_view(request):
 
     # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
     query = serializer.data
-    location_kinds = query.pop("locs", None)
-    sorted_services, metadata = search_keyword(request, query, location_kinds)
+    sorted_services, metadata = search_keyword(request, query)
 
     search_center = None
     lon = query.get("lon")

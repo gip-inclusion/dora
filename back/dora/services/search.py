@@ -504,7 +504,7 @@ def search_services(
     return _sort_services(results), metadata
 
 
-def search_keyword(request, api_params, location_kinds: Optional[list[str]] = None):
+def search_keyword(request, api_params):
     di_client = data_inclusion.di_client_factory()
     try:
         raw_di_results = di_client.search(**api_params)
@@ -514,7 +514,10 @@ def search_keyword(request, api_params, location_kinds: Optional[list[str]] = No
             "n’est pas disponible. Merci de réessayer ultérieurement."
         )
     results, metadata = _enrich_di_results_with_dora(
-        request, raw_di_results, location_kinds, max_distance=None
+        request,
+        raw_di_results,
+        location_kinds=None,  # Le filtre est appliqué par d·i, via api_params.
+        max_distance=None,
     )
     results.sort(key=lambda r: r["search_score"], reverse=True)
     return results, metadata
