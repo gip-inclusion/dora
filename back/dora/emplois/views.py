@@ -11,7 +11,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.versioning import NamespaceVersioning
 
-from dora.core.models import ModerationStatus
 from dora.core.pagination import (
     DefaultPageNumberPagination,
     OptionalPageNumberPagination,
@@ -26,8 +25,8 @@ from dora.services.models import (
     Service,
 )
 from dora.structures.models import DisabledDoraFormDIStructure
+from dora.orientations.emails import send_orientation_created_emails
 
-from .emails import send_orientation_created
 from .serializers import (
     DisabledDoraFormDIStructureSerializer,
     DoraServiceMobilisationSerializer,
@@ -190,7 +189,7 @@ class OrientationViewSet(
             prescriber=None,
             prescriber_structure=None,
         )
-        send_orientation_created(orientation)
+        send_orientation_created_emails(orientation)
 
 
 @api_view(["POST"])
