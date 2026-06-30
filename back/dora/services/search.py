@@ -516,7 +516,7 @@ def search_keyword(request, api_params):
     results, metadata = _enrich_di_results_with_dora(
         request,
         raw_di_results,
-        location_kinds=None,  # Le filtre est appliqué par d·i, via api_params.
+        location_kinds=None,  # Filtré par d·i.
         max_distance=None,
     )
     results.sort(key=lambda r: r["search_score"], reverse=True)
