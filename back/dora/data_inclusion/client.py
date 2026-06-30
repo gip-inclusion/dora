@@ -195,4 +195,6 @@ class DataInclusionClient:
             url.args["publics"] = publics
         if types is not None:
             url.args["types"] = types
-        return self._get_pages(url)
+        response = self._get(url)
+        response.raise_for_status()
+        return response.json()
