@@ -208,7 +208,10 @@ def test_orientations_create_requires_all_emplois_data_fields(
     assert missing_emplois_field in response.data["emplois_data"]
 
 
-def test_orientations_create_with_all_fields(emplois_api_client, base_payload):
+@patch("dora.emplois.views.send_orientation_created_emails")
+def test_orientations_create_with_all_fields(
+    mock_send_created, emplois_api_client, base_payload
+):
     payload = {
         **base_payload,
         "di_service_id": DEFAULT_DI_SERVICE_ID,
@@ -238,6 +241,10 @@ def test_orientations_create_with_all_fields(emplois_api_client, base_payload):
     assert orientation.prescriber is None
     assert orientation.prescriber_structure is None
     assert orientation.status == OrientationStatus.PENDING
+
+    # Smoke check: view wires through to the orientation-created email facade.
+    # Mail content is covered by orientations/tests/test_emplois_emails.py.
+    mock_send_created.assert_called_once_with(orientation)
 
     data = orientation.emplois_orientation_data
     assert data.structure_name == EMPLOIS_DATA["structure_name"]
