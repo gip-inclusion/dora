@@ -1,4 +1,4 @@
-{% extends "orientation-emplois-email-base.mjml" %}
+{% extends "emplois-orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
   La demande réalisée par {{ data.prescriber_info.full_name }} à été acceptée !

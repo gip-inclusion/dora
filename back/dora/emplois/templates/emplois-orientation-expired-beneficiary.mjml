@@ -1,4 +1,4 @@
-{% extends "orientation-emplois-email-base.mjml" %}
+{% extends "emplois-orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
   Cette demande d’orientation a été annulée

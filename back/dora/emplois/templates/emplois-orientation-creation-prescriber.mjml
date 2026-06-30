@@ -1,19 +1,21 @@
-{% extends "orientation-emplois-email-base.mjml" %}
+{% extends "emplois-orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
-  Notification d’une demande d’orientation
+  Votre demande a bien été transmise !
 {% endblock %}
 
 {% block title %}
-  Notification d’une demande d’orientation
+  Votre demande a bien été transmise&nbsp;!
 {% endblock %}
 
 {% block content %}
-  <p>Bonjour,</p>
+  <p>Bonjour {{ data.prescriber_info.first_name }},</p>
 
   <p>
-    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a orienté {{ data.get_beneficiary_full_name }} vers le service «&nbsp;{{ service_name }}&nbsp;», ayant lieu au&#8239;: {{ service_address }}.
+    Votre demande d’orientation pour le service «&nbsp;{{ service_name }}&nbsp;» ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ data.get_structure_name }} à été transmise&nbsp;!
   </p>
+
+  <p>Votre bénéficiaire, {{ data.get_beneficiary_full_name }}, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p>
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
 
@@ -24,11 +26,13 @@
   </p>
 
   <p>
-    La structure {{ data.get_structure_name }} va traiter la demande et y apportera une réponse.
+    La structure {{ data.get_structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
   </p>
 
   <p>
     Une relance automatique par mail lui sera adressée au bout de 10 et 20 jours sans acceptation ou refus de sa part.<br />
     En cas d’absence de réponse dans un délai de 30 jours, cette demande sera automatiquement annulée.
   </p>
+
+  <p>À très bientôt,</p>
 {% endblock %}
