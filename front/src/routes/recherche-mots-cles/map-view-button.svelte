@@ -20,14 +20,16 @@
     data: PageData;
     availableFundingLabels: Array<FundingLabel>;
     filters: Filters;
-    filteredServices: ServiceSearchResult[];
+    services: ServiceSearchResult[];
+    total: number;
   }
 
   let {
     data,
     availableFundingLabels,
     filters = $bindable(),
-    filteredServices,
+    services,
+    total,
   }: Props = $props();
 
   let isMapViewOpen = $state(false);
@@ -74,30 +76,27 @@
             />
           </Modal>
           <div class="my-s24 text-f21">
-            <strong
-              >{filteredServices.length}
-              {filteredServices.length > 1 ? "services" : "service"}</strong
+            <strong>
+              {total}
+              {total > 1 ? "services" : "service"}</strong
             >
           </div>
         </div>
         <div class="gap-s24 px-s32 flex flex-col">
-          {#if filteredServices.length}
+          {#if total}
             <SearchResults
               {data}
-              {filteredServices}
+              {services}
               summarized
               noPagination
               {selectedServiceSlug}
+              {total}
             />
           {/if}
         </div>
       </div>
       <div class="flex-1">
-        <ResultMap
-          {data}
-          {filteredServices}
-          onServiceClick={handleServiceClick}
-        />
+        <ResultMap {data} {services} onServiceClick={handleServiceClick} />
       </div>
     </div>
   </Modal>

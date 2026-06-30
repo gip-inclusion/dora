@@ -16,18 +16,18 @@
 
   interface Props {
     data: PageData;
-    filteredServices: ServiceSearchResult[];
+    services: ServiceSearchResult[];
     onServiceClick?: (slug: string) => void;
   }
 
-  let { data, filteredServices, onServiceClick }: Props = $props();
+  let { data, services, onServiceClick }: Props = $props();
 
   let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;
   let spiderfy: Spiderfy;
 
   let onSiteServicesWithCoords = $derived(
-    filteredServices.filter(
+    services.filter(
       (service) =>
         service.locationKinds.includes("en-presentiel") &&
         service.distance <= 50 &&

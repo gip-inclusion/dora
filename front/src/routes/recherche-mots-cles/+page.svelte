@@ -1,9 +1,6 @@
 <script lang="ts">
-  import { tick, untrack } from "svelte";
-  import { browser } from "$app/environment";
-
-  import { page } from "$app/stores";
-
+  import { goto } from "$app/navigation";
+  import { page } from "$app/state";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
@@ -22,12 +19,8 @@
   }
 
   let { data }: Props = $props();
-
-  interface SnapshotState {
-    scrollY: number;
-    filters: Filters;
-    currentPageLength: number;
-  }
+  let services = $derived(data.services);
+  let total = $derived(data.servicesTotal);
 
   // Variante mots-clés : mêmes filtres que le contrôle + le filtre
   // « Thématiques et besoins » (`categories`). Voir result-filters.svelte.
@@ -40,130 +33,40 @@
     locationKinds: "locs",
   };
 
-  let filtersInitialized = $state(false);
-
   let filters = $state(
     (
       Object.entries(FILTER_KEY_TO_QUERY_PARAM) as [keyof Filters, string][]
     ).reduce<Filters>(
       (acc, [filterKey, queryParam]) => ({
         ...acc,
-        [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
+        [filterKey]: page.url.searchParams.getAll(queryParam),
       }),
       {} as Filters
     )
   );
-
   let currentPageLength = $state(SEARCH_RESULTS_PAGE_LENGTH);
 
-  export const snapshot = {
-    capture: (): SnapshotState | null => {
-      if (!browser) {
-        return null;
-      }
-
-      return {
-        scrollY: window.scrollY,
-        filters: JSON.parse(JSON.stringify(filters)),
-        currentPageLength,
-      };
-    },
-    restore: async (state: SnapshotState | null) => {
-      if (!browser || !state) {
-        return;
-      }
-
-      filters = state.filters;
-      currentPageLength = state.currentPageLength;
-      await tick();
-      window.scrollTo(0, state.scrollY);
-    },
-  };
-
-  function resetFilters() {
-    filters = {
-      categories: [],
-      diPublics: [],
-      kinds: [],
-      fundingLabels: [],
-      feeConditions: [],
-      locationKinds: [],
-    };
-    // Réinitialise aussi la pagination quand on change les filtres
-    currentPageLength = SEARCH_RESULTS_PAGE_LENGTH;
-  }
-
-  // Réinitialise les filtres quand la recherche est actualisée.
   $effect(() => {
-    data;
-    if (untrack(() => filtersInitialized)) {
-      resetFilters();
-    } else {
-      untrack(() => {
-        filtersInitialized = true;
-      });
-    }
-  });
-
-  // Filtre les services en fonction des filtres sélectionnés.
-  // Ici on n'exclut pas les services « à distance » : l'ordre renvoyé par le back est préservé.
-  let filteredServices = $derived(
-    // TODO(A/B mots-clés) : Se débrouiller pour relancer la recherche en passant les thématiques lors de l'utilisation du filtre ? Sauf si `thematiques` reste une propriété de service..?
-    data.services.filter((service) => {
-      const categoriesMatch =
-        filters.categories.length === 0 ||
-        (service.categories &&
-          filters.categories.some((value) =>
-            service.categories!.includes(value)
-          ));
-      const diPublicsMatch =
-        filters.diPublics.length === 0 ||
-        filters.diPublics.some((value) => service.diPublics.includes(value));
-      const kindsMatch =
-        filters.kinds.length === 0 ||
-        (service.kinds &&
-          filters.kinds.some((value) => service.kinds!.includes(value)));
-      const fundingLabelsMatch =
-        filters.fundingLabels.length === 0 ||
-        filters.fundingLabels.some((value) =>
-          service.fundingLabels.includes(value)
-        );
-      const feeConditionMatch =
-        filters.feeConditions.length === 0 ||
-        (service.feeCondition &&
-          filters.feeConditions.includes(service.feeCondition));
-      const locationKindsMatch =
-        filters.locationKinds.length === 0 ||
-        filters.locationKinds.some((value) =>
-          service.locationKinds.includes(value)
-        );
-
-      return (
-        categoriesMatch &&
-        diPublicsMatch &&
-        kindsMatch &&
-        fundingLabelsMatch &&
-        feeConditionMatch &&
-        locationKindsMatch
-      );
-    })
-  );
-
-  // Met à jour les paramètres d'URL en fonction des filtres sélectionnés
-  $effect(() => {
-    (Object.keys(filters) as (keyof Filters)[]).forEach((filterKey) => {
+    const before = page.url.searchParams.toString();
+    console.log("BEFORE", before);
+    Object.entries(filters).forEach(([filterKey, value]) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
-      if (filters[filterKey].length > 0) {
-        $page.url.searchParams.set(queryParam, filters[filterKey].join(","));
-      } else {
-        $page.url.searchParams.delete(queryParam);
+      page.url.searchParams.delete(queryParam);
+      for (const param of value) {
+        page.url.searchParams.append(queryParam, param);
       }
     });
-    window.history.replaceState(
-      history.state,
-      "",
-      `?${$page.url.searchParams.toString()}`
-    );
+    console.log("AFTER", page.url.searchParams.toString());
+    if (page.url.searchParams.toString() !== before) {
+      console.log(`Should load ${page.url}`);
+      goto(page.url, {
+        noScroll: true,
+        keepFocus: true,
+        state: page.url.searchParams.toString(),
+      });
+    } else {
+      console.log("Skipping load");
+    }
   });
 </script>
 
@@ -190,7 +93,8 @@
         {data}
         availableFundingLabels={data.availableFundingLabels}
         bind:filters
-        {filteredServices}
+        {services}
+        {total}
       />
       <ResultFilters
         servicesOptions={data.servicesOptions}
@@ -206,11 +110,11 @@
       >
         <span>
           <strong
-            >{filteredServices.length}
-            {filteredServices.length > 1 ? "services" : "service"}</strong
+            >{total}
+            {total > 1 ? "services" : "service"}</strong
           >
           {#if data.keywords}
-            {filteredServices.length > 1 ? "contiennent" : "contient"}
+            {total > 1 ? "contiennent" : "contient"}
             le mot-clé « <strong>{data.keywords}</strong> » en titre, description,
             type de structure, thématique, public
           {/if}
@@ -221,9 +125,9 @@
         </span>
       </Notice>
 
-      {#if filteredServices.length}
+      {#if total}
         <div class="mt-s32">
-          <SearchResults {data} {filteredServices} bind:currentPageLength />
+          <SearchResults {data} {services} bind:currentPageLength {total} />
         </div>
       {/if}
 

@@ -13,20 +13,22 @@
 
   interface Props {
     data: PageData;
-    filteredServices: ServiceSearchResult[];
+    services: ServiceSearchResult[];
     selectedServiceSlug?: string;
     summarized?: boolean;
     noPagination?: boolean;
     currentPageLength?: number;
+    total: number;
   }
 
   let {
     data,
-    filteredServices,
+    services,
     selectedServiceSlug,
     summarized = false,
     noPagination = false,
     currentPageLength = $bindable(SEARCH_RESULTS_PAGE_LENGTH),
+    total,
   }: Props = $props();
 
   function getResultId(index: number) {
@@ -49,7 +51,7 @@
 <div class="gap-s16 flex flex-col">
   <h2 class="sr-only">Résultats de votre recherche</h2>
   <div class="gap-s16 flex flex-col">
-    {#each filteredServices as service, index}
+    {#each services as service, index}
       {#if noPagination || index < currentPageLength}
         <SearchResultCard
           id={getResultId(index)}
@@ -62,7 +64,7 @@
     {/each}
   </div>
 
-  {#if !noPagination && filteredServices.length > currentPageLength}
+  {#if !noPagination && total > currentPageLength}
     <div class="text-center">
       <Button
         label="Charger plus de résultats"

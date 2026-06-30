@@ -1015,5 +1015,6 @@ def search_keyword_view(request):
             "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
+            "services_total": metadata["services_total"],
         }
     )

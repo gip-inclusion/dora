@@ -166,7 +166,8 @@ class DataInclusionClient:
         publics: Optional[list[Public]] = None,
         types: Optional[list[TypeService]] = None,
         page: Optional[int] = 1,
-    ) -> Optional[list[dict]]:
+        size: Optional[int] = 50,
+    ) -> dict:
         url = self.base_url.copy()
         url = url / "search"
         if q is not None:
@@ -195,6 +196,7 @@ class DataInclusionClient:
             url.args["publics"] = publics
         if types is not None:
             url.args["types"] = types
+        url.args["size"] = size
         response = self._get(url)
         response.raise_for_status()
         return response.json()

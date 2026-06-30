@@ -515,9 +515,10 @@ def search_keyword(request, api_params):
         )
     results, metadata = _enrich_di_results_with_dora(
         request,
-        raw_di_results,
+        raw_di_results["items"],
         location_kinds=None,  # Filtré par d·i.
         max_distance=None,
     )
     results.sort(key=lambda r: r["search_score"], reverse=True)
+    metadata["services_total"] = raw_di_results["total"]
     return results, metadata
