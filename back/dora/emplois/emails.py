@@ -22,7 +22,8 @@ def _get_service_name(orientation):
 
 def _get_service_address(orientation):
     if (
-        orientation.service.location_kinds.count() == 1
+        orientation.service
+        and orientation.service.location_kinds.count() == 1
         and orientation.service.location_kinds.first().value == "a-distance"
     ):
         return "à distance"
