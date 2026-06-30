@@ -1,4 +1,4 @@
-# Conditions générales d’utilisation de DORA au 01/07/2026
+# Conditions générales d’utilisation de DORA au 03/11/2025
 
 Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
@@ -16,7 +16,7 @@ Elle centralise des données et permet aux accompagnateurs de l’insertion de m
 
 « L’Utilisateur » est :
 
-Tout Offreur de service (acteurs locaux associatifs, institutionnels, et nationaux).
+Tout Offreur de solutions (acteurs locaux associatifs, institutionnels, et nationaux).
 
 Tout Accompagnateur cherchant une solution, à savoir tous les acteurs de l’insertion sur le territoire qui le souhaitent (SPE, Social, et Socioprofessionnel).
 
@@ -27,8 +27,6 @@ Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emp
 « L’éditeur » est le GIP Plateforme de l’inclusion, qui met à disposition le présent service.
 
 « Les Services » sont l’ensemble des fonctionnalités proposées sur la Plateforme qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
-
-« Le comportement anormal » correspond à tout utilisation des services manifestement excessive, frauduleuse, non autorisée, ou portant atteinte à la sécurité du système d’information et de la confidentialité des données et informations. Constituent, notamment mais pas exclusivement de tels comportements des connexions répétées à des horaires inhabituels au regard des plages d’utilisation habituelles, une augmentation soudaine et non justifiée du volume de requêtes ou des tentatives répétées d’authentification échouées.
 
 ## Article 4 — Fonctionnalités
 
@@ -64,17 +62,17 @@ Ce formulaire comprend des pièces jointes nécessaires à la compréhension du 
 
 Le Gestionnaire de Territoire dispose d’un compte dédié à partir duquel il peut :
 
-- visualiser sur le territoire concerné les offreurs de solution et les accompagnateurs cherchant une solution ayant un compte Utilisateur ;
+- visualiser sur le territoire concerné les offreurs de solution et les accompagnateurs cherchant une solution ayant un compte Utilisateur;
 - accéder aux informations suivantes sur lesdits Utilisateurs : noms et prénoms, adresse e-mail et numéro de téléphone et à l’ensemble des données des structures ;
 - modifier les informations de la structure et des services. Il peut notamment inviter un administrateur ou un collaborateur ;
-- ajouter et désactiver des structures et des services ;
+- ajouter et désactiver des structures et des services
 - imprimer et extraire les données de contact.
 
 Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que les autres Utilisateurs avec compte.
 
 ## Article 5 — Orientation des bénéficiaires
 
-**5.1 Principes de l’orientation et obligations générales**
+**5.1 Principes d’orientation et obligations générales**
 
 Lorsque l’accompagnateur oriente un bénéficiaire vers un offreur de solution, il s’assure de la cohérence de l’accompagnement proposé avec le parcours et les informations du bénéficiaire.
 
@@ -91,25 +89,21 @@ Les bénéficiaires peuvent accéder aux orientations et intégrer les pièces j
 
 **5.3 Modération des premières orientations**
 
-Lorsqu’un Accompagnateur oriente un bénéficiaire pour la première fois, la structure à laquelle il est rattaché obtient le statut “en cours de modération” (si elle n’avait pas été validée au préalable), et l’orientation est alors vérifiée par l’équipe Dora. Celle-ci vérifie l’existence de l’organisme, à l’exception des structures portant les labels suivants :
+Lorsqu’un Accompagnateur oriente un bénéficiaire pour la première fois, la structure à laquelle il est rattaché obtient le statut “en cours de modération” (si elle n’avait pas été validée au préalable), et l’orientation est alors vérifiée par l’équipe Dora. Celle-ci vérifie l’existence de l’organisme, à l’exception des structures portant les labels suivants :
 
-- France Travail ;
-- Conseil Départemental ;
+- France Travail ;
+- Conseil Départemental ;
 - Cap Emploi.
 
-Lorsque l’équipe Dora refuse une organisation, et donc l’orientation qui en suit, l’ensemble des utilisateurs de la structure sont désactivés et un e-mail leur est envoyé pour leur expliquer la situation. Toute contestation est envoyée à l’éditeur dans un délai raisonnable, et il revient aux organisations de démontrer leur existence en envoyant tout document à cette adresse : [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr).
-
-**5.4 Refus d’orientation**
-
-En cas de refus d’orientation, le bénéficiaire est informé par la plateforme. L’Accompagnateur s’engage à donner les raisons de son refus via la plateforme ou par tout moyen qu’il lui appartient de démontrer. La responsabilité de l’éditeur ne saurait être engagée pour un refus d’orientation.
+Lorsque l’équipe Dora refuse une organisation, et donc l’orientation qui en suit, l’ensemble des utilisateurs de la structure sont désactivés et un e-mail leur est envoyé pour leur expliquer la situation.
 
 ## Article 6 — Suspension ou Suppression de l’espace de la structure ou d’un compte
 
-Tout Utilisateur régulièrement inscrit pourra solliciter sa désinscription en contactant [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr).
+Tout Utilisateur régulièrement inscrit pourra solliciter sa désinscription en contactant [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr) .
 
 En cas de violation des dispositions de l’article 8 des présentes conditions générales d’utilisations ou de toute discrimination, propos discriminatoire ou insultant dans le cadre de l’orientation prévue à l’article 5, l’éditeur peut suspendre un compte pour une durée proportionnée à la violation et choisie par l’éditeur. En cas de répétition des violations du présent article ou de propos ou action d’une particulière gravité, la structure encourt la suppression de son espace et des comptes associés.
 
-Lorsqu’une sanction au titre de l’article 6 est envisagée, l’éditeur informe la structure et procède au déréférencement du compte incriminé ou de l’espace de la structure. Elle précise les motifs de la décision de suspension ou de suppression prévue, et l’informe des éléments à son endroit, sauf si une disposition législative ou réglementaire l’en empêche. La structure dispose d’un délai de 10 jours pour répondre à la décision de l’éditeur, et présenter les éléments à sa disposition qu’elle estime pertinents. A l’issue de ce délai, l’éditeur communique sa décision dans un délai raisonnable. La décision comprend les motifs de la décision et précise les faits reprochés, ainsi que les délais et voies de recours.
+Lorsqu’une sanction au titre de l’article 6 est envisagée, l’éditeur informe la structure et procède au déréférencement du compte incriminé ou de l’espace de la structure. Elle précise les motifs de la décision de suspension ou de suppression prévue, et l’informe des éléments à son endroit, sauf si une disposition législative ou réglementaire l’en empêche. La structure dispose d’un délai de 10 jours pour apporter le contradictoire. A l’issue de ce délai, l’éditeur communique sa décision dans un délai raisonnable. La décision comprend les motifs de la décision et précise les faits reprochés, ainsi que les délais et voies de recours.
 
 ## Article 7 — Abonnement à la lettre d’information
 
@@ -127,9 +121,7 @@ L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un acc
 
 La Plateforme peut mettre à disposition des liens pouvant orienter l’utilisateur vers des services numériques tiers. Ces tiers sont les seuls responsables des contenus publiés sur leurs services numériques. L’Éditeur n’a aucun contrôle sur le contenu de ces services numériques, leurs contenus ne sauraient engager la responsabilité de l’Éditeur.
 
-En cas de manquement à une ou plusieurs des stipulations des présentes conditions générales d’utilisation, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l'utilisateur responsable.
-
-L'Éditeur peut également suspendre ou supprimer un accès ou un compte en cas de comportement portant atteinte à la sécurité de la plateforme, ou de tout comportement anormal au sens des présentes conditions générales d’utilisations. Des mesures conservatoires peuvent être prises sans que cela puisse engager la responsabilité de l’éditeur.
+En cas de manquement à une ou plusieurs des stipulations des présentes conditions générales d’utilisation, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l’Utilisateur responsable.
 
 ### 8.2 Responsabilités de l’Utilisateur
 
@@ -202,8 +194,6 @@ Néanmoins, il peut, soit de manière aléatoire, soit après une plainte d’un
 
 Particulièrement, le partenaire responsable conjoint s’engage à ne pas demander de données sensibles, sauf lorsqu’elles sont strictement nécessaires au bon fonctionnement de l’orientation.
 
-La responsabilité du responsable conjointe est engagée en cas de manquement au principe de minimisation.
-
 ### 9.8 Notification en cas de violation de données
 
 En cas de violation de données dans le cadre du traitement de données, le Groupement d’intérêt public « Plateforme de l’inclusion » réalise les formalités exigées par le RGPD, le cas échéant l’information de la CNIL et des personnes concernées.
@@ -228,7 +218,6 @@ Les termes des présentes CGU peuvent être amendés à tout moment, en fonction
 
 Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
 
-- [Version du 03/11/2025](/cgu/cgu-20251103)
 - [Version du 12/12/2024](/cgu/cgu-20241212)
 - [Version du 06/05/2024](/cgu/cgu-20240506)
 - [Version du 20/07/2023](/cgu/cgu-20230720)
