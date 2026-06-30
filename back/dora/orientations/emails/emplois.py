@@ -1,8 +1,21 @@
+from types import SimpleNamespace
+
 from django.conf import settings
 from django.template.loader import render_to_string
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
+
+from .dora import (
+    _orientation_accepted_ctx,
+    _orientation_expired_ctx,
+    _orientation_rejected_ctx,
+    send_orientation_accepted_to_structure,
+    send_orientation_created_to_structure,
+    send_orientation_expired_to_structure,
+    send_orientation_reminder_to_structure,
+    send_orientation_rejected_to_structure,
+)
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
@@ -21,8 +34,7 @@ def _get_service_address(orientation):
         and orientation.service.location_kinds.first().value == "a-distance"
     ):
         return "à distance"
-    else:
-        return orientation.get_service_address_line()
+    return orientation.get_service_address_line()
 
 
 def send_orientation_created(orientation):
@@ -243,3 +255,45 @@ def send_message_to_beneficiary(orientation, message, cc):
         ),
         cc=cc,
     )
+
+
+def _emplois_send_created(orientation):
+    send_orientation_created_to_structure(orientation)
+    send_orientation_created(orientation)
+
+
+def _emplois_send_accepted(orientation, prescriber_message, beneficiary_message):
+    send_orientation_accepted_to_structure(
+        orientation,
+        _orientation_accepted_ctx(orientation, prescriber_message, beneficiary_message),
+    )
+    send_orientation_accepted(orientation, prescriber_message, beneficiary_message)
+
+
+def _emplois_send_rejected(orientation, message):
+    send_orientation_rejected_to_structure(
+        orientation, _orientation_rejected_ctx(orientation, message)
+    )
+    send_orientation_rejected(orientation, message)
+
+
+def _emplois_send_expired(orientation, start_date):
+    send_orientation_expired_to_structure(
+        orientation, _orientation_expired_ctx(orientation, start_date)
+    )
+    send_orientation_expired(orientation, start_date)
+
+
+def _emplois_send_reminder(orientation):
+    send_orientation_reminder_to_structure(orientation)
+
+
+backend = SimpleNamespace(
+    send_created=_emplois_send_created,
+    send_accepted=_emplois_send_accepted,
+    send_rejected=_emplois_send_rejected,
+    send_expired=_emplois_send_expired,
+    send_reminder=_emplois_send_reminder,
+    send_message_to_prescriber=send_message_to_prescriber,
+    send_message_to_beneficiary=send_message_to_beneficiary,
+)
