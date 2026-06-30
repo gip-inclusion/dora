@@ -4,9 +4,9 @@ annotated-types==0.7.0 \
     --hash=sha256:1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53 \
     --hash=sha256:aff07c09a53a08bc8cfccb9c85b05f1aa9a2a6f23728d790723543408344ce89
     # via pydantic
-anyio==4.14.0 \
-    --hash=sha256:b47c1f9ccf73e67021df785332508f99379c68fa7d0684e8e3492cb1d4b23f89 \
-    --hash=sha256:dd9b7a2a9799ed6552fde617b2c5df02b7fdd7d88392fc48101e51bae46164d9
+anyio==4.14.1 \
+    --hash=sha256:4e5533c5b8ff0a24f5d7a176cbe6877129cd183893f66b537f8f227d10527d72 \
+    --hash=sha256:8d648a3544c1a700e3ff78615cd679e4c5c3f149904287e73687b2596963629e
     # via httpx
 asgiref==3.11.1 \
     --hash=sha256:5f184dc43b7e763efe848065441eac62229c9f7b0475f41f80e207a114eda4ce \
@@ -602,9 +602,9 @@ json-log-formatter==1.2.1 \
     --hash=sha256:1d4fd14495ad7e694aa576259ba81acaa69e6945d9d780f32ed25373d7d5ae93 \
     --hash=sha256:1e40432466c911ba2d106a302314b1c3b0019de44c762bef94e8f23138a415a7
     # via django-datadog-logger
-jwcrypto==1.5.7 \
-    --hash=sha256:70204d7cca406eda8c82352e3c41ba2d946610dafd19e54403f0a1f4f18633c6 \
-    --hash=sha256:729463fefe28b6de5cf1ebfda3e94f1a1b41d2799148ef98a01cb9678ebe2bb0
+jwcrypto==1.5.8 \
+    --hash=sha256:85aeb475f808d56bbc2f2ed1f6f73e6a317c4011a4321505f02f0aed695a3742 \
+    --hash=sha256:c3d7114b6f6e65b52f6b7da817eb8cb8423e1da31e1ef13508447c81ecbdcc34
     # via
     #   -r requirements/base.in
     #   itoutils
