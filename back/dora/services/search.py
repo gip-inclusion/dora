@@ -143,6 +143,31 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     return raw_di_results
 
 
+def _get_di_thematiques(
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+) -> list[str]:
+    thematiques = []
+    if categories is not None:
+        # Sélection des sous-catégories correspondant aux catégories
+        subcategories_filters = reduce(
+            lambda x, y: x | y,
+            [Q(value__startswith=category) for category in categories],
+        )
+        thematiques += ServiceSubCategory.objects.filter(
+            subcategories_filters
+        ).values_list("value", flat=True)
+    if subcategories is not None:
+        # Exclusion des sous-catégories --autre
+        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
+    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
+    # va être vide et d·i renverrait *tous* les services.
+    # On renvoie donc plutôt une liste vide.
+    if not thematiques and subcategories:
+        return []
+    return thematiques
+
+
 def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -170,26 +195,7 @@ def _get_raw_di_results(
     Returns:
         A list of search results by SearchResultSerializer.
     """
-    thematiques = []
-    if categories is not None:
-        # Sélection des sous-catégories correspondant aux catégories
-        subcategories_filters = reduce(
-            lambda x, y: x | y,
-            [Q(value__startswith=category) for category in categories],
-        )
-        thematiques += ServiceSubCategory.objects.filter(
-            subcategories_filters
-        ).values_list("value", flat=True)
-    if subcategories is not None:
-        # Exclusion des sous-catégories --autre
-        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
-
-    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
-    # va être vide et d·i renverrait *tous* les services.
-    # On renvoie donc plutôt une liste vide.
-    if not thematiques and subcategories:
-        return []
-
+    thematiques = _get_di_thematiques(categories, subcategories)
     types = _map_kinds_dora_to_di(kinds) if kinds else None
 
     try:
