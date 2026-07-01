@@ -1,6 +1,8 @@
 from .dora import (
     backend as _dora_backend,
-    send_orientation_created_to_structure,
+)
+from .dora import (
+    send_orientation_created_to_structure as send_orientation_created_to_structure,
 )
 from .emplois import backend as _emplois_backend
 

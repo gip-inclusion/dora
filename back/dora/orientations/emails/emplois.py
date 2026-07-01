@@ -13,8 +13,8 @@ from .dora import (
     send_orientation_accepted_to_structure,
     send_orientation_created_to_structure,
     send_orientation_expired_to_structure,
-    send_orientation_reminder_to_structure,
     send_orientation_rejected_to_structure,
+    send_orientation_reminder_to_structure,
 )
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
