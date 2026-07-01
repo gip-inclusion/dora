@@ -24,7 +24,7 @@
     <p>{{ data.get_contact_name }}</p>
   {% endif %}
   <p>
-    {% if data.get_contact_email %}{{ data.get_contact_email }}{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
+    {% if data.get_contact_email %}<a href="mailto:{{ data.get_contact_email }}">{{ data.get_contact_email }}</a>{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
     {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
   </p>
 
