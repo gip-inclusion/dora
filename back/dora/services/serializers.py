@@ -849,30 +849,18 @@ class BookmarkSerializer(BookmarkListSerializer):
 
 
 class SearchKeywordQuerySerializer(serializers.Serializer):
-    q = serializers.CharField(required=False)
+    q = serializers.CharField(required=False, max_length=255)
     code_commune = serializers.CharField(required=False)
     code_departement = serializers.CharField(required=False)
     code_region = serializers.CharField(required=False)
     lon = serializers.FloatField(required=False)
     lat = serializers.FloatField(required=False)
-    modes_accueil = serializers.MultipleChoiceField(
-        source="locs",  # Compatibilité avec la recherche de services existante.
-        choices=ModeAccueil,
-        required=False,
-    )
+    modes_accueil = serializers.MultipleChoiceField(choices=ModeAccueil, required=False)
     publics = serializers.MultipleChoiceField(choices=DIPublic, required=False)
     cats = serializers.MultipleChoiceField(choices=[], required=False)
     subs = serializers.MultipleChoiceField(choices=[], required=False)
-    types = serializers.MultipleChoiceField(
-        source="kinds",  # Compatibilité avec la recherche de services existante.
-        choices=TypeService,
-        required=False,
-    )
-    frais = serializers.MultipleChoiceField(
-        source="fees",  # Compatibilité avec la recherche de services existante.
-        choices=Frais,
-        required=False,
-    )
+    types = serializers.MultipleChoiceField(choices=TypeService, required=False)
+    frais = serializers.MultipleChoiceField(choices=Frais, required=False)
     page = serializers.IntegerField(min_value=1, required=False, default=1)
 
     def __init__(self, *args, **kwargs):
@@ -906,7 +894,6 @@ class SearchKeywordQuerySerializer(serializers.Serializer):
                 raise ValidationError(
                     f"Le champ {missing} est requis lorsque {passed} est fourni."
                 )
-        # TODO: Pass categories and subcategories directly, instead of , separated.
         return attrs
 
 
