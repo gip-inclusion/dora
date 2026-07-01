@@ -3,6 +3,7 @@ import logging
 import uuid
 from dataclasses import dataclass
 
+from boto3.docs import service
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
@@ -357,6 +358,19 @@ class Orientation(models.Model):
             return f"{settings.FRONTEND_URL}/services/di--{self.di_service_id}"
         else:
             return ""
+
+    def comes_from_les_emplois(self):
+        return hasattr(self, "emplois_orientation_data")
+
+    def get_emplois_service_detail_page(self):
+        if not self.comes_from_les_emplois():
+            return None
+
+        if self.service_id:
+            service_uid = f"dora--{self.id}"
+        else:
+            service_uid = self.di_service_id
+        return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
 
     @property
     def prescriber_info(self) -> PrescriberInfo:

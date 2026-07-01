@@ -65,13 +65,11 @@ def test_prescriber_email_sent_to_correct_address(
 ):
     send_email(orientation)
 
-    is_emplois_backend = hasattr(orientation, "emplois_orientation_data")
-
     recipients = [address for email in mail.outbox for address in email.to]
 
     # Les mails de relance des orientations créées
     # depuis les emplois ne sont envoyées qu'à l'offreur de service
-    if event == "reminder" and is_emplois_backend:
+    if event == "reminder" and orientation.comes_from_les_emplois():
         assert orientation.get_contact_email() in recipients
     else:
         assert orientation.prescriber_info.email in recipients
