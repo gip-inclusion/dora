@@ -24,7 +24,7 @@
   {% if data.prescriber_info.email != data.referent_email %}
     <p>
       {{ data.prescriber_info.full_name }}<br />
-      {{ data.prescriber_info.email }}
+      <a href="mailto:{{ data.prescriber_info.email }}">{{ data.prescriber_info.email }}</a>
     </p>
 
     <p>ou bien votre conseillèr·e référent·e&nbsp;:</p>
@@ -32,7 +32,7 @@
 
   <p>
     {{ data.get_referent_full_name }}<br />
-    {{ data.referent_email }}{% if data.referent_phone %}&nbsp;–&nbsp;{{ data.referent_phone }}{% endif %}
+    <a href="mailto:{{ data.referent_email }}">{{ data.referent_email }}</a>{% if data.referent_phone %}&nbsp;–&nbsp;{{ data.referent_phone }}{% endif %}
   </p>
 
   <p>À bientôt,</p>
