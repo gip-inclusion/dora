@@ -25,3 +25,5 @@
       Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation, notamment)&nbsp;: <a href="https://emplois.inclusion.beta.gouv.fr/legal/privacy/">https://emplois.inclusion.beta.gouv.fr/legal/privacy/</a>
     </p>
 {% endblock %}
+
+{% block signature %}{% endblock %}
