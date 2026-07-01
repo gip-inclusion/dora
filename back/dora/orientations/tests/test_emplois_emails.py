@@ -50,7 +50,9 @@ def _find(to):
     for m in mail.outbox:
         if m.to == [to]:
             return m
-    raise AssertionError(f"no mail addressed to {to}; got {[m.to for m in mail.outbox]}")
+    raise AssertionError(
+        f"no mail addressed to {to}; got {[m.to for m in mail.outbox]}"
+    )
 
 
 def _assert(to, subject, from_email, reply_to):
