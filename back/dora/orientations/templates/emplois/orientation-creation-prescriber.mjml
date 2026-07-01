@@ -1,4 +1,5 @@
 {% extends "emplois/orientation-emplois-email-base.mjml" %}
+{% load orientation_extras %}
 
 {% block preview %}
   Votre demande a bien été transmise !
@@ -19,13 +20,12 @@
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
 
+  {% if data.get_contact_name %}
+    <p>{{ data.get_contact_name }}</p>
+  {% endif %}
   <p>
-    {% if  data.get_contact_name %}
-      <p>{{ data.get_contact_name }}</p>
-    {% endif %}
-    <p>
-      {% if data.get_contact_email %}{{ data.get_contact_email }}{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
-      {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
+    {% if data.get_contact_email %}{{ data.get_contact_email }}{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
+    {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
   </p>
 
   <p>
