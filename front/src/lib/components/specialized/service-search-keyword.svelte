@@ -7,7 +7,7 @@
   import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
 
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
@@ -32,14 +32,14 @@
   }
 
   const minCharactersToTriggerSearch = 4;
-  const MAX_QUERY_LENGTH = 40;
+  const MAX_QUERY_LENGTH = 255;
 
   let addressSelected: AddressResult | null = $state(null);
   let addressFieldValue = $state("");
   let addressSelectErrorMessages: string[] = $state([]);
   // Conserve la recherche en cours à l'affichage des résultats : on initialise
   // le champ avec le paramètre `q` présent dans l'URL.
-  let searchQuery = $state($page.url.searchParams.get("q") ?? "");
+  let searchQuery = $state(page.url.searchParams.get("q") ?? "");
 
   let isLoading = $state(false);
   const submitDisabled = $derived(!addressSelected && !searchQuery);
