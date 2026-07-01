@@ -8,11 +8,7 @@ from .emplois import backend as _emplois_backend
 
 
 def _backend(orientation):
-    return (
-        _emplois_backend
-        if hasattr(orientation, "emplois_orientation_data")
-        else _dora_backend
-    )
+    return _emplois_backend if orientation.comes_from_les_emplois() else _dora_backend
 
 
 def send_orientation_created_emails(orientation, cc=None):
