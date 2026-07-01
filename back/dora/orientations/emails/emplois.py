@@ -215,7 +215,7 @@ def send_message_to_prescriber(orientation, message, cc):
         "message": message,
     }
 
-    structure_name = orientation.prescriber_info.structure_name
+    structure_name = orientation.get_structure_name()
 
     send_mail(
         f"{'[Contact - Emplois Prescripteur] ' if debug else ''}Vous avez un nouveau message de la structure {structure_name}",
@@ -234,7 +234,8 @@ def send_message_to_prescriber(orientation, message, cc):
 
 
 def send_message_to_beneficiary(orientation, message, cc):
-    structure_name = orientation.prescriber_info.structure_name
+    structure_name = orientation.get_structure_name()
+
     context = {
         "data": orientation,
         "message": message,

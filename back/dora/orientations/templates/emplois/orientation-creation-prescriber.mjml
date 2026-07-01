@@ -29,7 +29,7 @@
   </p>
 
   <p>
-    La structure {{ data.prescriber_info.structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
+    La structure {{ data.get_structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
   </p>
 
   <p>

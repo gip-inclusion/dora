@@ -8,7 +8,7 @@
   <p>Bonjour,</p>
 
   <p>
-    La structure {{ data.prescriber_info.structure_name }} n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} sur le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>.
+    La structure {{ data.get_structure_name }} n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} sur le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>.
   </p>
 
   <p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p>

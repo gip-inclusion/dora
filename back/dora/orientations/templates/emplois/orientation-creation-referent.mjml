@@ -26,7 +26,7 @@
     {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
   </p>
   <p>
-    La structure {{ data.prescriber_info.structure_name }} va traiter la demande et y apportera une réponse.
+    La structure {{ data.get_structure_name }} va traiter la demande et y apportera une réponse.
   </p>
 
   <p>

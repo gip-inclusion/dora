@@ -220,7 +220,7 @@ def test_message_to_prescriber(orientation):
     cc = ["someone@example.com"]
     send_message_to_prescriber(orientation, message="hello", cc=cc)
 
-    structure_name = orientation.prescriber_info.structure_name
+    structure_name = orientation.get_structure_name()
 
     assert len(mail.outbox) == 1
     m = _assert(
@@ -236,7 +236,7 @@ def test_message_to_beneficiary(orientation):
     cc = ["someone@example.com"]
     send_message_to_beneficiary(orientation, message="hello", cc=cc)
 
-    structure_name = orientation.prescriber_info.structure_name
+    structure_name = orientation.get_structure_name()
 
     assert len(mail.outbox) == 1
     m = _assert(
