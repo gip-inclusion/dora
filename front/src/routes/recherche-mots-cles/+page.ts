@@ -17,6 +17,7 @@ async function getKeywordResults(
   fetchFunction: typeof fetch
 ): Promise<{
   services: ServiceSearchResult[];
+  servicesPageSize: number;
   servicesTotal: number;
   searchCenter: [number, number] | null;
   searchRadiusKm: number;
@@ -35,6 +36,7 @@ async function getKeywordResults(
 
   return {
     services: [],
+    servicesPageSize: 50,
     servicesTotal: 0,
     searchCenter: null,
     searchRadiusKm: SEARCH_RADIUS_KM,
@@ -44,12 +46,10 @@ async function getKeywordResults(
 
 export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
-  console.log("LOADING", url.searchParams.toString());
   const keywords = url.searchParams.get("q");
-  const foo = url.searchParams.getAll("publics");
-  const bar = url.searchParams.getAll("cats");
   const {
     services,
+    servicesPageSize,
     servicesTotal,
     searchCenter,
     searchRadiusKm,
@@ -64,6 +64,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     availableFundingLabels: fundingLabels,
     services,
     servicesOptions: await getServicesOptions(fetch),
+    servicesPageSize,
     servicesTotal,
     // TODO(A/B mots-clés) : tracking dédié à la recherche par mots-clés si besoin.
     searchId: null as number | null,

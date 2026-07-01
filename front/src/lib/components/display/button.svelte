@@ -26,6 +26,9 @@
     ariaAttributes?: Partial<{
       "aria-expanded": boolean;
       "aria-controls": string;
+      "aria-current": string;
+      "aria-disabled": string;
+      "aria-label": string;
     }>;
     onclick?: (event: MouseEvent) => void;
   }

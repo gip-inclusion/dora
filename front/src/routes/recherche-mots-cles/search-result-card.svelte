@@ -10,7 +10,6 @@
   import { isNotFreeService } from "$lib/utils/service";
 
   interface Props {
-    id: string;
     result: ServiceSearchResult;
     searchId: number | null;
     selected?: boolean;
@@ -18,7 +17,6 @@
   }
 
   let {
-    id,
     result,
     searchId,
     selected = false,
@@ -51,7 +49,6 @@
   {#snippet children({ onBookmark, isBookmarked })}
     <div
       bind:this={element}
-      {id}
       class="rounded-2xl border shadow-sm"
       class:border-gray-02={!selected}
       class:border-magenta-cta={selected}

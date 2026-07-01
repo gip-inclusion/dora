@@ -18,19 +18,12 @@
 
   interface Props {
     data: PageData;
-    availableFundingLabels: Array<FundingLabel>;
     filters: Filters;
     services: ServiceSearchResult[];
     total: number;
   }
 
-  let {
-    data,
-    availableFundingLabels,
-    filters = $bindable(),
-    services,
-    total,
-  }: Props = $props();
+  let { data, filters = $bindable(), services, total }: Props = $props();
 
   let isMapViewOpen = $state(false);
   let isResultFiltersOpen = $state(false);
@@ -71,7 +64,6 @@
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}
-              {availableFundingLabels}
               bind:filters
             />
           </Modal>

@@ -4,15 +4,15 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import Pagination from "$lib/components/display/pagination.svelte";
+  import Spinner from "$lib/components/display/spinner.svelte";
   import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
 
   import type { PageData } from "./$types";
   import MapViewButton from "./map-view-button.svelte";
   import NoResultCard from "./no-result-card.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
-  import SearchResults, {
-    SEARCH_RESULTS_PAGE_LENGTH,
-  } from "./search-results.svelte";
+  import SearchResults from "./search-results.svelte";
 
   interface Props {
     data: PageData;
@@ -20,17 +20,21 @@
 
   let { data }: Props = $props();
   let services = $derived(data.services);
+  let pageSize = $derived(data.servicesPageSize);
   let total = $derived(data.servicesTotal);
+  let loading = $state(false);
 
   // Variante mots-clés : mêmes filtres que le contrôle + le filtre
-  // « Thématiques et besoins » (`categories`). Voir result-filters.svelte.
+  // « Thématiques et besoins » (`categories`) et page.
+  // Voir result-filters.svelte.
   const FILTER_KEY_TO_QUERY_PARAM: Record<keyof Filters, string> = {
     categories: "cats",
     diPublics: "publics",
-    kinds: "kinds",
+    kinds: "types",
     fundingLabels: "funding",
-    feeConditions: "fees",
-    locationKinds: "locs",
+    feeConditions: "frais",
+    locationKinds: "modes_accueil",
+    page: "page",
   };
 
   let filters = $state(
@@ -44,11 +48,9 @@
       {} as Filters
     )
   );
-  let currentPageLength = $state(SEARCH_RESULTS_PAGE_LENGTH);
 
   $effect(() => {
-    const before = page.url.searchParams.toString();
-    console.log("BEFORE", before);
+    const before = new URLSearchParams(page.url.searchParams);
     Object.entries(filters).forEach(([filterKey, value]) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
       page.url.searchParams.delete(queryParam);
@@ -56,16 +58,23 @@
         page.url.searchParams.append(queryParam, param);
       }
     });
-    console.log("AFTER", page.url.searchParams.toString());
-    if (page.url.searchParams.toString() !== before) {
-      console.log(`Should load ${page.url}`);
+    if (page.url.searchParams.toString() !== before.toString()) {
+      loading = true;
+      if (page.url.searchParams.get("page") !== before.get("page")) {
+        document.getElementById("results-top").scrollIntoView();
+      }
       goto(page.url, {
-        noScroll: true,
-        keepFocus: true,
         state: page.url.searchParams.toString(),
+        keepFocus: true,
+        noScroll: true,
+        invalidate: [
+          (url: URL): boolean => {
+            return url.pathname === "/api/search/keyword/";
+          },
+        ],
+      }).then(() => {
+        loading = false;
       });
-    } else {
-      console.log("Skipping load");
     }
   });
 </script>
@@ -89,51 +98,57 @@
     <div
       class="gap-s32 border-gray-02 p-s32 hidden flex-col rounded-2xl border shadow-sm lg:flex lg:basis-1/3"
     >
-      <MapViewButton
-        {data}
-        availableFundingLabels={data.availableFundingLabels}
-        bind:filters
-        {services}
-        {total}
-      />
-      <ResultFilters
-        servicesOptions={data.servicesOptions}
-        availableFundingLabels={data.availableFundingLabels}
-        bind:filters
-      />
+      <MapViewButton {data} bind:filters {services} {total} />
+      <ResultFilters servicesOptions={data.servicesOptions} bind:filters />
     </div>
-    <div class="lg:basis-2/3">
-      <Notice
-        type="info"
-        title="Comment les services sont-ils filtrés ?"
-        titleLevel="h3"
-      >
-        <span>
-          <strong
-            >{total}
-            {total > 1 ? "services" : "service"}</strong
-          >
-          {#if data.keywords}
-            {total > 1 ? "contiennent" : "contient"}
-            le mot-clé « <strong>{data.keywords}</strong> » en titre, description,
-            type de structure, thématique, public
-          {/if}
-          {#if true}
-            à proximité de l'adresse sélectionnée. Les résultats sont classés
-          {/if}
-          par ordre de pertinence.
-        </span>
-      </Notice>
+    <div id="results-top">
+      <div class="lg:basis-2/3">
+        <Notice
+          type="info"
+          title="Comment les services sont-ils filtrés ?"
+          titleLevel="h3"
+        >
+          <span>
+            <strong
+              >{total}
+              {total > 1 ? "services" : "service"}</strong
+            >
+            {#if data.keywords}
+              {total > 1 ? "contiennent" : "contient"}
+              le mot-clé « <strong>{data.keywords}</strong> » en titre, description,
+              type de structure, thématique, public
+            {/if}
+            {#if true}
+              à proximité de l'adresse sélectionnée. Les résultats sont classés
+            {/if}
+            par ordre de pertinence.
+          </span>
+        </Notice>
 
-      {#if total}
         <div class="mt-s32">
-          <SearchResults {data} {services} bind:currentPageLength {total} />
-        </div>
-      {/if}
+          {#if loading}
+            <div class="flex items-center">
+              <Spinner size="40px" />
+              <span class="mx-s16">Chargement…</span>
+            </div>
+          {:else}
+            {#if total}
+              <SearchResults {data} {services} />
+              <Pagination
+                // TODO: page should not be an array.
+                current={parseInt(filters.page[0]) || 1}
+                {pageSize}
+                {total}
+                onPageChange={(activePage) => {
+                  filters.page = [activePage];
+                }}
+              />
+            {/if}
 
-      <div class="mt-s32">
-        <NoResultCard />
+            <NoResultCard />
+          {/if}
+        </div>
       </div>
     </div>
-  </div>
-</CenteredGrid>
+  </div></CenteredGrid
+>

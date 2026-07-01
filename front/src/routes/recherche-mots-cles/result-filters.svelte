@@ -17,6 +17,7 @@
     fundingLabels: Array<FundingLabel["value"]>;
     feeConditions: Array<FeeCondition>;
     locationKinds: Array<LocationKind>;
+    page: number[];
   }
 </script>
 
@@ -28,15 +29,10 @@
 
   interface Props {
     servicesOptions: ServicesOptions;
-    availableFundingLabels: Array<FundingLabel>;
     filters: Filters;
   }
 
-  let {
-    servicesOptions,
-    availableFundingLabels,
-    filters = $bindable(),
-  }: Props = $props();
+  let { servicesOptions, filters = $bindable() }: Props = $props();
 </script>
 
 <div class="gap-s32 flex flex-col">
@@ -58,16 +54,6 @@
     choices={servicesOptions.kinds}
     bind:group={filters.kinds}
   />
-  {#key availableFundingLabels}
-    {#if availableFundingLabels.length > 0}
-      <ResultFilter
-        id="fundingLabels"
-        label="Financé par"
-        choices={availableFundingLabels}
-        bind:group={filters.fundingLabels}
-      />
-    {/if}
-  {/key}
   <ResultFilter
     id="locationKinds"
     label="Lieu d’accueil"
