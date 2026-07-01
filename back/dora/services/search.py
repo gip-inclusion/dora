@@ -504,10 +504,10 @@ def search_services(
     return _sort_services(results), metadata
 
 
-def search_keyword(request, api_params):
+def search_keyword(request, api_params, page_size):
     di_client = data_inclusion.di_client_factory()
     try:
-        raw_di_results = di_client.search(**api_params)
+        raw_di_results = di_client.search(**api_params, size=page_size)
     except requests.RequestException:
         raise ServiceUnavailable(
             "L’API data.inclusion.gouv.fr nécessaire pour la recherche, "

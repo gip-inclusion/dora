@@ -978,12 +978,13 @@ def search_keyword_view(request):
     serializer = SearchKeywordQuerySerializer(data=request.GET)
     serializer.is_valid(raise_exception=True)
 
+    page_size = 50
     # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
     query = serializer.data
     categories = query.pop("cats")
     subcategories = query.pop("subs")
     query["thematiques"] = _get_di_thematiques(categories, subcategories)
-    sorted_services, metadata = search_keyword(request, query)
+    sorted_services, metadata = search_keyword(request, query, page_size=page_size)
 
     search_center = None
     lon = query.get("lon")
@@ -1015,6 +1016,7 @@ def search_keyword_view(request):
             "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
+            "services_page_size": page_size,
             "services_total": metadata["services_total"],
         }
     )
