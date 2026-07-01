@@ -367,7 +367,7 @@ class Orientation(models.Model):
             return None
 
         if self.service_id:
-            service_uid = f"dora--{self.id}"
+            service_uid = f"dora--{self.service.id}"
         else:
             service_uid = self.di_service_id
         return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"

@@ -8,7 +8,7 @@
   <p>Bonjour,</p>
 
   <p>
-    La structure {{ data.prescriber_info.structure_name }} n’a pas répondu dans le délai limite des 30 jours à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} auprès du service «&nbsp;{{ data.get_service_name }}&nbsp;».
+    La structure {{ data.prescriber_info.structure_name }} n’a pas répondu dans le délai limite des 30 jours à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} auprès du service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>.
   </p>
 
   <p>Cette demande a été automatiquement annulée.</p>
