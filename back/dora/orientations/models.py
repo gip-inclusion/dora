@@ -3,7 +3,6 @@ import logging
 import uuid
 from dataclasses import dataclass
 
-from boto3.docs import service
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
