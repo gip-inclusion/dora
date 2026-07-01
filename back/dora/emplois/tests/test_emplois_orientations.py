@@ -242,8 +242,6 @@ def test_orientations_create_with_all_fields(
     assert orientation.prescriber_structure is None
     assert orientation.status == OrientationStatus.PENDING
 
-    # Smoke check: view wires through to the orientation-created email facade.
-    # Mail content is covered by orientations/tests/test_emplois_emails.py.
     mock_send_created.assert_called_once_with(orientation)
 
     data = orientation.emplois_orientation_data
