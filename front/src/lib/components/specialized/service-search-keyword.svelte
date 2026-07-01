@@ -285,7 +285,7 @@
           id="search-query"
           class="w-full p-s16 rounded-lg"
           maxlength={MAX_QUERY_LENGTH}
-          placeholder="Type de structure, thématique, public, mot-clé…"
+          placeholder="Mots-clés, nom de structure ou de solution, thématiques…"
         />
       </div>
 
