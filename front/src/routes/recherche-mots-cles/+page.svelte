@@ -69,6 +69,7 @@
         state: page.url.searchParams.toString(),
         keepFocus: true,
         noScroll: true,
+        // TODO: Can Svelte be smart enough to invalidate that cache on its own?
         invalidate: [
           (url: URL): boolean => {
             return url.pathname === SEARCH_KEYWORD_URL;
