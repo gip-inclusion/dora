@@ -1,7 +1,6 @@
 import { getServicesOptions } from "$lib/requests/services";
 import type { ServiceSearchResult } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
-import { SEARCH_RADIUS_KM } from "$lib/consts";
+import { SEARCH_KEYWORD_URL, SEARCH_RADIUS_KM } from "$lib/consts";
 
 import type { PageLoad } from "./$types";
 
@@ -23,7 +22,7 @@ async function getKeywordResults(
   searchRadiusKm: number;
   fundingLabels: Array<{ value: string; label: string }>;
 }> {
-  const url = `${getApiURL()}/search/keyword/?${apiParams.toString()}`;
+  const url = `${SEARCH_KEYWORD_URL}?${apiParams.toString()}`;
 
   const res = await fetchFunction(url, {
     headers: { Accept: "application/json; version=1.0" },

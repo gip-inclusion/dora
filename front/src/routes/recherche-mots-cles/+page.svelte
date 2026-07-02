@@ -7,6 +7,7 @@
   import Pagination from "$lib/components/display/pagination.svelte";
   import Spinner from "$lib/components/display/spinner.svelte";
   import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
+  import { SEARCH_KEYWORD_URL } from "$lib/consts";
 
   import type { PageData } from "./$types";
   import MapViewButton from "./map-view-button.svelte";
@@ -70,7 +71,7 @@
         noScroll: true,
         invalidate: [
           (url: URL): boolean => {
-            return url.pathname === "/api/search/keyword/";
+            return url.pathname === SEARCH_KEYWORD_URL;
           },
         ],
       }).then(() => {
