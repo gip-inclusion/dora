@@ -1,1 +1,1 @@
-export const CGU_VERSION = "20251103";
+export const CGU_VERSION = "20260701";
