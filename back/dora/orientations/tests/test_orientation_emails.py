@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import Callable
+
 import pytest
 from django.core import mail
 from django.utils import timezone
@@ -9,54 +12,90 @@ from dora.orientations.emails import (
     send_orientation_rejected_emails,
     send_orientation_reminder_emails,
 )
+from dora.orientations.models import Orientation
 
-pytestmark = pytest.mark.django_db
+
+@dataclass
+class EmailScenario:
+    send: Callable[[Orientation], None]
+    structure_email_links_to_prescriber_structure: bool
+    notifies_prescriber: bool
 
 
-EMAIL_SENDERS = [
-    pytest.param(lambda o: send_orientation_created_emails(o), True, id="created"),
+SCENARIOS = [
     pytest.param(
-        lambda o: send_orientation_accepted_emails(
-            o, "message presc.", "message bénéf."
+        EmailScenario(
+            send=send_orientation_created_emails,
+            structure_email_links_to_prescriber_structure=True,
+            notifies_prescriber=True,
         ),
-        True,
+        id="created",
+    ),
+    pytest.param(
+        EmailScenario(
+            send=lambda o: send_orientation_accepted_emails(
+                o,
+                prescriber_message="message presc.",
+                beneficiary_message="message bénéf.",
+            ),
+            structure_email_links_to_prescriber_structure=True,
+            notifies_prescriber=True,
+        ),
         id="accepted",
     ),
     pytest.param(
-        lambda o: send_orientation_rejected_emails(o, message="Refus"),
-        True,
+        EmailScenario(
+            send=lambda o: send_orientation_rejected_emails(o, message="Refus"),
+            structure_email_links_to_prescriber_structure=True,
+            notifies_prescriber=True,
+        ),
         id="rejected",
     ),
-    pytest.param(lambda o: send_orientation_reminder_emails(o), True, id="reminder"),
     pytest.param(
-        lambda o: send_orientation_expiration_emails(o, start_date=timezone.now()),
-        False,
+        EmailScenario(
+            send=send_orientation_reminder_emails,
+            structure_email_links_to_prescriber_structure=True,
+            notifies_prescriber=False,
+        ),
+        id="reminder",
+    ),
+    pytest.param(
+        EmailScenario(
+            send=lambda o: send_orientation_expiration_emails(
+                o, start_date=timezone.now()
+            ),
+            structure_email_links_to_prescriber_structure=False,
+            notifies_prescriber=True,
+        ),
         id="expired",
     ),
 ]
 
 
-@pytest.mark.parametrize("send_email, displays_structure_link", EMAIL_SENDERS)
-def test_structure_email_displays_prescriber_info(
-    orientation, send_email, displays_structure_link
-):
-    prescriber = orientation.prescriber_info
-
-    send_email(orientation)
+@pytest.mark.parametrize("scenario", SCENARIOS)
+def test_structure_email_displays_prescriber_info(orientation, scenario):
+    scenario.send(orientation)
 
     structure_email = mail.outbox[0]
+    prescriber = orientation.prescriber_info
+
     assert structure_email.to == [orientation.get_contact_email()]
     assert prescriber.full_name in structure_email.body
     assert prescriber.structure_name in structure_email.body
-    if displays_structure_link and prescriber.structure_url:
+    if (
+        scenario.structure_email_links_to_prescriber_structure
+        and prescriber.structure_url
+    ):
         assert prescriber.structure_url in structure_email.body
 
 
-@pytest.mark.parametrize("send_email, displays_structure_link", EMAIL_SENDERS)
-def test_prescriber_email_sent_to_correct_address(
-    orientation, send_email, displays_structure_link
-):
-    send_email(orientation)
+@pytest.mark.parametrize("scenario", SCENARIOS)
+def test_prescriber_is_notified_only_when_expected(orientation, scenario):
+    scenario.send(orientation)
 
-    recipients = [address for email in mail.outbox for address in email.to]
-    assert orientation.prescriber_info.email in recipients
+    recipients = {address for email in mail.outbox for address in email.to}
+
+    if scenario.notifies_prescriber:
+        assert orientation.prescriber_info.email in recipients
+    else:
+        assert orientation.prescriber_info.email not in recipients
