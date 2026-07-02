@@ -1,0 +1,42 @@
+<mjml lang="fr">
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" color="#000" font-size="15px" line-height="24px" padding="0" />
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      p {
+      margin: 0 0 16px 0;
+      }
+
+      a, a:visited {
+      color: #0000EE;
+      text-decoration-line: underline;
+      }
+    </mj-style>
+
+    <mj-preview>
+      {% block preview %}{% endblock %}
+    </mj-preview>
+  </mj-head>
+
+  <mj-body background-color="#FFFFFF" width="600px">
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          {% block content %}{% endblock %}
+        </mj-text>
+
+        {% block signature %}
+          <mj-text>
+            <p>L'équipe de la Plateforme de l'inclusion</p>
+          </mj-text>
+        {% endblock %}
+
+        <mj-text padding="0">
+          {% block footer %}{% endblock %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

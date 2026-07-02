@@ -358,6 +358,19 @@ class Orientation(models.Model):
         else:
             return ""
 
+    def comes_from_les_emplois(self):
+        return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
+
+    def get_emplois_service_detail_page(self):
+        if not self.comes_from_les_emplois():
+            return None
+
+        if self.service_id:
+            service_uid = f"dora--{self.service.id}"
+        else:
+            service_uid = self.di_service_id
+        return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
+
     @property
     def prescriber_info(self) -> PrescriberInfo:
         user, structure = self.prescriber, self.prescriber_structure

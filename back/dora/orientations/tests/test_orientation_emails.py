@@ -14,31 +14,38 @@ pytestmark = pytest.mark.django_db
 
 
 EMAIL_SENDERS = [
-    pytest.param(lambda o: send_orientation_created_emails(o), True, id="created"),
+    pytest.param(
+        lambda o: send_orientation_created_emails(o), True, "created", id="created"
+    ),
     pytest.param(
         lambda o: send_orientation_accepted_emails(
             o, "message presc.", "message bénéf."
         ),
         True,
+        "accepted",
         id="accepted",
     ),
     pytest.param(
         lambda o: send_orientation_rejected_emails(o, message="Refus"),
         True,
+        "rejected",
         id="rejected",
     ),
-    pytest.param(lambda o: send_orientation_reminder_emails(o), True, id="reminder"),
+    pytest.param(
+        lambda o: send_orientation_reminder_emails(o), True, "reminder", id="reminder"
+    ),
     pytest.param(
         lambda o: send_orientation_expiration_emails(o, start_date=timezone.now()),
         False,
+        "expired",
         id="expired",
     ),
 ]
 
 
-@pytest.mark.parametrize("send_email, displays_structure_link", EMAIL_SENDERS)
+@pytest.mark.parametrize("send_email, displays_structure_link, event", EMAIL_SENDERS)
 def test_structure_email_displays_prescriber_info(
-    orientation, send_email, displays_structure_link
+    orientation, send_email, displays_structure_link, event
 ):
     prescriber = orientation.prescriber_info
 
@@ -52,11 +59,17 @@ def test_structure_email_displays_prescriber_info(
         assert prescriber.structure_url in structure_email.body
 
 
-@pytest.mark.parametrize("send_email, displays_structure_link", EMAIL_SENDERS)
+@pytest.mark.parametrize("send_email, displays_structure_link, event", EMAIL_SENDERS)
 def test_prescriber_email_sent_to_correct_address(
-    orientation, send_email, displays_structure_link
+    orientation, send_email, displays_structure_link, event
 ):
     send_email(orientation)
 
     recipients = [address for email in mail.outbox for address in email.to]
-    assert orientation.prescriber_info.email in recipients
+
+    # Les mails de relance des orientations créées
+    # depuis les emplois ne sont envoyées qu'à l'offreur de service
+    if event == "reminder" and orientation.comes_from_les_emplois():
+        assert orientation.get_contact_email() in recipients
+    else:
+        assert orientation.prescriber_info.email in recipients

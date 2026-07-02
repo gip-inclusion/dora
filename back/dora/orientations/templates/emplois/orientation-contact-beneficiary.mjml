@@ -1,0 +1,9 @@
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
+
+{% block content %}
+  <p>
+    Le message concerne la demande d’orientation réalisée en votre nom vers le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>&nbsp; de la structure «&nbsp;{{ structure_name }}&nbsp;»&nbsp;:
+  </p>
+
+  <p>{{ message|linebreaks }}</p>
+{% endblock %}

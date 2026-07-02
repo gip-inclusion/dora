@@ -1,0 +1,29 @@
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
+
+{% block preview %}
+  La demande pour {{ data.get_beneficiary_full_name }} à été refusée.
+{% endblock %}
+
+{% block content %}
+  <p>Bonjour,</p>
+
+  <p>
+    La structure {{ data.get_structure_name }} n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} sur le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>.
+  </p>
+
+  <p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p>
+
+  <p>
+    {% for reason in data.rejection_reasons.all %}
+      {{ reason.label }}{% if not forloop.last %}<br />{% endif %}
+    {% endfor %}
+  </p>
+
+  <p>{{ other_details }}</p>
+
+  <p>La structure vous informe également de&#8239;:</p>
+
+  <p>{{ message|linebreaksbr }}</p>
+
+  <p>À très bientôt,</p>
+{% endblock %}
