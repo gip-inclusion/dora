@@ -28,7 +28,7 @@ Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emp
 
 « Les Services » sont l’ensemble des fonctionnalités proposées sur la Plateforme qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
 
-« Le comportement anormal » correspond à tout utilisation des services manifestement excessive, frauduleuse, non autorisée, ou portant atteinte à la sécurité du système d’information et de la confidentialité des données et informations. Constituent, notamment mais pas exclusivement de tels comportements des connexions répétées à des horaires inhabituels au regard des plages d’utilisation habituelles, une augmentation soudaine et non justifiée du volume de requêtes ou des tentatives répétées d’authentification échouées.
+« Le comportement anormal » correspond à toute utilisation des services manifestement excessive, frauduleuse, non autorisée, ou portant atteinte à la sécurité du système d’information et de la confidentialité des données et informations. Constituent, notamment mais pas exclusivement de tels comportements des connexions répétées à des horaires inhabituels au regard des plages d’utilisation habituelles, une augmentation soudaine et non justifiée du volume de requêtes ou des tentatives répétées d’authentification échouées.
 
 ## Article 4 — Fonctionnalités
 
