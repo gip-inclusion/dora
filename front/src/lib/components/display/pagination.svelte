@@ -3,12 +3,11 @@
 
   interface Props {
     current: number;
-    pageSize: number;
-    total: number;
+    totalPages: number;
     onPageChange: (activePage: number) => void;
   }
 
-  let { current, pageSize, total, onPageChange }: Props = $props();
+  let { current, totalPages, onPageChange }: Props = $props();
 
   function makePageRange(start: number, end: number): number[] {
     return Array.from(
@@ -18,7 +17,6 @@
     );
   }
   function pageRanges(): [number[], number[], number[]] {
-    const totalPages = Math.ceil(total / pageSize);
     if (totalPages <= 10) {
       return [makePageRange(1, totalPages), [], []];
     }
@@ -48,10 +46,10 @@
     return [start, middle, end];
   }
 
-  const [startPages, middlePages, endPages] = $derived.by(() => pageRanges());
+  const [startPages, middlePages, endPages] = $derived.by(pageRanges);
 </script>
 
-{#if current && total > pageSize}
+{#if current && totalPages > 1}
   <div class="border-gray-02 w-full rounded-lg border bg-white p-s16 mt-s16">
     <span id="pages-label">Pages :</span>
     <nav aria-labelledby="pages-label">

@@ -23,6 +23,7 @@
   let pageSize = $derived(data.servicesPageSize);
   let total = $derived(data.servicesTotal);
   let loading = $state(false);
+  let resultsTop;
 
   // Variante mots-clés : mêmes filtres que le contrôle + le filtre
   // « Thématiques et besoins » (`categories`) et page.
@@ -60,8 +61,8 @@
     });
     if (page.url.searchParams.toString() !== before.toString()) {
       loading = true;
-      if (page.url.searchParams.get("page") !== before.get("page")) {
-        document.getElementById("results-top").scrollIntoView();
+      if (page.url.searchParams.get("page") === before.get("page")) {
+        filters.page = [1];
       }
       goto(page.url, {
         state: page.url.searchParams.toString(),
@@ -101,7 +102,7 @@
       <MapViewButton {data} bind:filters {services} {total} />
       <ResultFilters servicesOptions={data.servicesOptions} bind:filters />
     </div>
-    <div id="results-top">
+    <div bind:this={resultsTop}>
       <div class="lg:basis-2/3">
         <Notice
           type="info"
@@ -137,10 +138,10 @@
               <Pagination
                 // TODO: page should not be an array.
                 current={parseInt(filters.page[0]) || 1}
-                {pageSize}
-                {total}
+                totalPages={Math.ceil(total / pageSize)}
                 onPageChange={(activePage) => {
                   filters.page = [activePage];
+                  resultsTop.scrollIntoView();
                 }}
               />
             {/if}
