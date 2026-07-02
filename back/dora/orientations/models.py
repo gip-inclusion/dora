@@ -359,7 +359,7 @@ class Orientation(models.Model):
             return ""
 
     def comes_from_les_emplois(self):
-        return hasattr(self, "emplois_orientation_data")
+        return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
     def get_emplois_service_detail_page(self):
         if not self.comes_from_les_emplois():
