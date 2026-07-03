@@ -1,9 +1,18 @@
+import re
+import uuid
+from datetime import datetime
+from datetime import timezone as dt_timezone
+
 import pytest
 from django.conf import settings
 from django.core import mail
-from model_bakery.random_gen import gen_email
+from freezegun import freeze_time
 
-from dora.core.test_utils import make_emplois_orientation
+from dora.core.test_utils import (
+    make_emplois_orientation,
+    make_service,
+    make_structure,
+)
 from dora.orientations.emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -26,11 +35,54 @@ def _disable_debug_prefix(monkeypatch):
     monkeypatch.setattr(emplois_mod, "debug", False)
 
 
+@pytest.fixture(autouse=True)
+def _freeze_time():
+    # Freeze creation_date and any timezone.now() reads so snapshots stay
+    # stable across runs.
+    with freeze_time("2025-01-15T10:00:00Z"):
+        yield
+
+
 @pytest.fixture
 def orientation(db):
+    structure = make_structure(
+        name="Structure Portante",
+        siret="12345678901234",
+        address1="1 rue du Service",
+        city="Testville",
+        postal_code="75001",
+    )
+    service = make_service(
+        id=uuid.UUID("00000000-0000-0000-0000-000000000042"),
+        structure=structure,
+        name="Le Service",
+        contact_email="contact@example.com",
+        contact_name="Contact Service",
+        contact_phone="0100000004",
+        address1="1 rue du Service",
+        city="Testville",
+        postal_code="75001",
+    )
     return make_emplois_orientation(
-        beneficiary_email=gen_email(),
-        referent_email=gen_email(),
+        service=service,
+        query_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
+        query_expires_at=datetime(2025, 2, 15, 10, 0, 0, tzinfo=dt_timezone.utc),
+        beneficiary_first_name="Ben",
+        beneficiary_last_name="Beneficiaire",
+        beneficiary_email="beneficiaire@example.com",
+        beneficiary_phone="0100000001",
+        referent_first_name="Ref",
+        referent_last_name="Referent",
+        referent_email="referent@example.com",
+        referent_phone="0100000002",
+        emplois_data={
+            "prescriber_email": "prescripteur@example.com",
+            "prescriber_first_name": "Presc",
+            "prescriber_last_name": "Ripteur",
+            "prescriber_phone": "0100000003",
+            "structure_name": "Structure Emplois",
+            "structure_siret": "98765432101234",
+        },
     )
 
 
@@ -63,11 +115,22 @@ def _assert(to, subject, from_email, reply_to):
     return m
 
 
+_UUID_RE = re.compile(
+    r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+)
+
+
+def _bodies(outbox):
+    # Redact UUIDs (service.id, orientation.query_id) so snapshots are stable
+    # while keeping every other body content assertable.
+    return {m.to[0]: _UUID_RE.sub("<UUID>", m.body) for m in outbox}
+
+
 EMPLOIS_FROM = _no_reply("La plateforme de l'inclusion")
 DEFAULT_DORA_FROM = _from("La plateforme DORA")
 
 
-def test_created(orientation):
+def test_created(orientation, snapshot):
     send_orientation_created_emails(orientation)
 
     prescriber_email = orientation.prescriber_info.email
@@ -99,9 +162,10 @@ def test_created(orientation):
         EMPLOIS_FROM,
         [prescriber_email],
     )
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_accepted(orientation):
+def test_accepted(orientation, snapshot):
     send_orientation_accepted_emails(
         orientation,
         prescriber_message="adresse: #SERVICE_ADDRESS#",
@@ -141,9 +205,10 @@ def test_accepted(orientation):
     assert service_address in p.body
     assert "#SERVICE_ADDRESS#" not in b.body
     assert service_address in b.body
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_rejected(orientation):
+def test_rejected(orientation, snapshot):
     send_orientation_rejected_emails(orientation, message="nope")
 
     prescriber_email = orientation.prescriber_info.email
@@ -167,9 +232,10 @@ def test_rejected(orientation):
             EMPLOIS_FROM,
             [structure_email],
         )
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_expired(orientation):
+def test_expired(orientation, snapshot):
     from django.utils import timezone
 
     send_orientation_expiration_emails(orientation, start_date=timezone.now())
@@ -202,9 +268,10 @@ def test_expired(orientation):
         EMPLOIS_FROM,
         [structure_email],
     )
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_reminder(orientation):
+def test_reminder(orientation, snapshot):
     send_orientation_reminder_emails(orientation)
 
     assert len(mail.outbox) == 1
@@ -214,9 +281,10 @@ def test_reminder(orientation):
         DEFAULT_DORA_FROM,
         None,
     )
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_message_to_prescriber(orientation):
+def test_message_to_prescriber(orientation, snapshot):
     cc = ["someone@example.com"]
     send_message_to_prescriber(orientation, message="hello", cc=cc)
 
@@ -230,9 +298,10 @@ def test_message_to_prescriber(orientation):
         [orientation.get_contact_email()],
     )
     assert m.cc == cc
+    assert _bodies(mail.outbox) == snapshot
 
 
-def test_message_to_beneficiary(orientation):
+def test_message_to_beneficiary(orientation, snapshot):
     cc = ["someone@example.com"]
     send_message_to_beneficiary(orientation, message="hello", cc=cc)
 
@@ -246,3 +315,4 @@ def test_message_to_beneficiary(orientation):
         [orientation.get_contact_email()],
     )
     assert m.cc == cc
+    assert _bodies(mail.outbox) == snapshot

@@ -1,0 +1,1025 @@
+d# serializer version: 1
+# name: test_accepted
+  dict({
+    'beneficiaire@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande réalisée par Presc Ripteur à été acceptée !
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>ben adresse: 1 rue du Service - 75001</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>---</p><p>
+            Les Emplois est une application portée par le GIP «&nbsp;Plateforme de l’inclusion&nbsp;». Les documents listés plus haut ont été communiqués à une structure proposant un service répondant à vos besoins.
+          </p><p>
+            Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées&nbsp;:&nbsp;<a href="mailto:rgpd@inclusion.gouv.fr">rgpd@inclusion.gouv.fr</a></p><p>
+            Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une réclamation auprès de la CNIL.
+          </p><p>
+            Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation, notamment)&nbsp;: <a href="https://emplois.inclusion.beta.gouv.fr/legal/privacy/">https://emplois.inclusion.beta.gouv.fr/legal/privacy/</a></p></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'contact@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">@media only screen and (max-width:479px) {
+                      table.mj-full-width-mobile { width: 100% !important; }
+                      td.mj-full-width-mobile { width: auto !important; }
+                  }
+                  </style><style type="text/css">h1, h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #555;
+            font-size: 15px;
+            line-height: 24px;
+            padding: 0;
+            }
+
+            h1 {
+            color: #000091;
+            font-size: 24px;
+            font-weight: bold;
+            }
+
+            h2 {
+            font-weight: bold;
+            margin-bottom: 0
+            }
+
+            ul, p {
+            margin-top: 0
+            }
+
+            a, a:visited {
+            color: #5B12EB;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#F5F5F5;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande d’orientation pour Ben Beneficiaire est validée !
+
+          </div><div lang="fr" style="background-color:#F5F5F5;"><!-- Logo --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:238px;"><img alt="" height="60" src="http://localhost:3000/emails/logo-dora-email-new.png" width="238" style="border:0;display:block;outline:none;text-decoration:none;height:60px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Contenu --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;padding-bottom:40px;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:white;border-radius:24px;vertical-align:top;padding:24px 40px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><!-- Titre --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><h1>
+        Vous venez de valider la demande d’orientation pour Ben Beneficiaire ! 🎉
+      </h1></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Illustration --><tr><td align="center" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:520px;"><img alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié." height="auto" src="http://localhost:3000/emails/illu-orientation.png" width="520" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Texte --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p><strong>Bonjour,</strong></p><p>
+          Presc Ripteur de la structure
+        Structure Emplois
+
+       vous a adressé un bénéficiaire pour le service «&#8239;<a href="http://localhost:3000/services/structure-portante-le-service">Le Service</a>&#8239;»,
+          le 15 janvier 2025.
+        </p><p>
+          Nous vous remercions d’avoir examiné attentivement cette demande et d’y avoir répondu favorablement.
+        </p><p>
+          Il se peut que le professionnel ayant réalisé la demande ou le ou la bénéficiaire souhaitent vous contacter pour
+          de plus amples informations pratiques.
+        </p><p>
+          Nous vous remercions par avance pour votre engagement.
+        </p></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- CTA --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="center" vertical-align="middle" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;width:100%;line-height:100%;"><tbody><tr><td align="center" bgcolor="#5B12EB" role="presentation" valign="middle" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#5B12EB;"><a href="http://localhost:3000/orientations?token=<UUID>&amp;h=aea79871c4b85415332173296ed685a295f48eb53def99e37dd45c5a0ef1e87a" target="_blank" style="display:inline-block;background:#5B12EB;color:white;font-family:Arial, Helvetica, sans-serif;font-size:15px;font-weight:normal;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;">
+          Visualiser le récapitulatif de la demande
+        </a></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Post-CTA --><!-- Salutations --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+                  À très bientôt,
+                  <br /><strong>L’équipe DORA</strong></div></td></tr><!-- Footer --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;\n                      padding: 16px 24px">
+
+        En cas de difficulté, n’hésitez pas à
+        <a style="color: #555" href="">contacter le
+          support</a>  de la plateforme DORA pour obtenir de l’aide.
+
+                </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos DORA --><!-- Infos légales --></div></body></html>
+    ''',
+    'prescripteur@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"></div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>adresse: 1 rue du Service - 75001</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'referent@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande pour Ben Beneficiaire a été acceptée&nbsp;!
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>adresse: 1 rue du Service - 75001</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_created
+  dict({
+    'beneficiaire@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Une orientation a été effectuée en votre nom
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          Presc Ripteur de la structure Structure Emplois a réalisé une prescription en votre nom, pour le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>, ayant lieu au&#8239;: 1 rue du Service - 75001.
+        </p><p>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&nbsp;:</p><p>
+          Presc Ripteur<br /><a href="mailto:prescripteur@example.com">prescripteur@example.com</a></p><p>
+          La structure Structure Emplois ou la personne qui vous accompagne vous contacteront pour donner suite à la demande.
+        </p><p>À très bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>---</p><p>Mention d’information</p><p>
+            Cette application est portée par le GIP «&nbsp;Plateforme de l’inclusion&nbsp;». Les documents listés plus haut ont été communiqués à une structure proposant un service répondant à vos besoins.
+          </p><p>
+            Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées&nbsp;:&nbsp;<a href="mailto:rgpd@inclusion.gouv.fr">rgpd@inclusion.gouv.fr</a></p><p>
+            Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une réclamation auprès de la CNIL.
+          </p><p>
+            Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation, notamment)&nbsp;: <a href="https://emplois.inclusion.beta.gouv.fr/legal/privacy/">https://emplois.inclusion.beta.gouv.fr/legal/privacy/</a></p></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'contact@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">@media only screen and (max-width:479px) {
+                      table.mj-full-width-mobile { width: 100% !important; }
+                      td.mj-full-width-mobile { width: auto !important; }
+                  }
+                  </style><style type="text/css">h1, h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #555;
+            font-size: 15px;
+            line-height: 24px;
+            padding: 0;
+            }
+
+            h1 {
+            color: #000091;
+            font-size: 24px;
+            font-weight: bold;
+            }
+
+            h2 {
+            font-weight: bold;
+            margin-bottom: 0
+            }
+
+            ul, p {
+            margin-top: 0
+            }
+
+            a, a:visited {
+            color: #5B12EB;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#F5F5F5;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Un bénéficiaire a été orienté vers votre service Le Service
+
+          </div><div lang="fr" style="background-color:#F5F5F5;"><!-- Logo --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:238px;"><img alt="" height="60" src="http://localhost:3000/emails/logo-dora-email-new.png" width="238" style="border:0;display:block;outline:none;text-decoration:none;height:60px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Contenu --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;padding-bottom:40px;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:white;border-radius:24px;vertical-align:top;padding:24px 40px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><!-- Titre --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><h1>
+        Vous avez reçu une demande d’orientation pour le service «&nbsp;Le Service&nbsp;»
+      </h1></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Illustration --><tr><td align="center" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:520px;"><img alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié." height="auto" src="http://localhost:3000/emails/illu-orientation.png" width="520" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Texte --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p><strong>Bonjour,</strong></p><p>
+          Presc Ripteur de la structure
+        Structure Emplois
+
+
+          vous a adressé un bénéficiaire pour le service «&#8239;<a href="http://localhost:3000/services/structure-portante-le-service">Le Service</a>&#8239;».
+        </p></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- CTA --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+          Afin de visualiser les détails de la demande et de contacter la personne orientée ou la personne prescriptrice, cliquez sur le bouton suivant&nbsp;:
+        </div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="center" vertical-align="middle" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;width:100%;line-height:100%;"><tbody><tr><td align="center" bgcolor="#5B12EB" role="presentation" valign="middle" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#5B12EB;"><a href="http://localhost:3000/orientations?token=<UUID>&amp;h=aea79871c4b85415332173296ed685a295f48eb53def99e37dd45c5a0ef1e87a" target="_blank" style="display:inline-block;background:#5B12EB;color:white;font-family:Arial, Helvetica, sans-serif;font-size:15px;font-weight:normal;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;">
+          Visualiser et traiter la demande
+        </a></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Post-CTA --><!-- Salutations --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+                  À très bientôt,
+                  <br /><strong>L’équipe DORA</strong></div></td></tr><!-- Footer --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;\n                      padding: 16px 24px">
+
+        En cas de difficulté, n’hésitez pas à
+        <a style="color: #555" href="">contacter le
+          support</a>  de la plateforme DORA pour obtenir de l’aide.
+
+                </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos DORA --><!-- Infos légales --></div></body></html>
+    ''',
+    'prescripteur@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Votre demande a bien été transmise !
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour Presc,</p><p>
+          Votre demande d’orientation pour le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a> ayant lieu au&#8239;: 1 rue du Service - 75001, porté par la structure Structure Emplois à été transmise&nbsp;!
+        </p><p>Votre bénéficiaire, Ben Beneficiaire, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p><p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p><p>Contact Service</p><p><a href="mailto:contact@example.com">contact@example.com</a>&nbsp;–&nbsp;
+          01 00 00 00 04
+        </p><p>
+          La structure Structure Portante va traiter votre demande et reviendra vers vous avec une réponse.
+        </p><p>
+          Une relance automatique par mail lui sera adressée au bout de 10 et 20 jours sans acceptation ou refus de sa part. En cas d’absence de réponse dans un délai de 30 jours, cette demande sera automatiquement annulée.
+        </p><p>À très bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'referent@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Notification d’une demande d’orientation
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          Presc Ripteur de la structure Structure Emplois a orienté Ben Beneficiaire vers le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>, ayant lieu au&#8239;: 1 rue du Service - 75001.
+        </p><p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p><p>Contact Service</p><p><a href="mailto:contact@example.com">contact@example.com</a>&nbsp;–&nbsp;
+          01 00 00 00 04
+        </p><p>
+          La structure Structure Portante va traiter la demande et y apportera une réponse.
+        </p><p>
+          Une relance automatique par mail lui sera adressée au bout de 10 et 20 jours sans acceptation ou refus de sa part. En cas d’absence de réponse dans un délai de 30 jours, cette demande sera automatiquement annulée.
+        </p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_expired
+  dict({
+    'beneficiaire@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Cette demande d’orientation a été annulée
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          Presc Ripteur de la structure Structure Emplois a envoyé une demande d’orientation en votre nom, auprès du service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>, le 15 janvier 2025.
+        </p><p>
+          Le service n’a pas répondu à la demande dans le délai limite des 30 jours. Par conséquent, la demande a été automatiquement annulée.
+        </p><p>
+          Vous n’avez rien à faire&nbsp;: l’accompagnateur de la structure Structure Emplois a également été informé.
+        </p><p>Des questions&nbsp;? Contactez la personne qui vous accompagne&nbsp;:</p><p>
+            Presc Ripteur<br /><a href="mailto:prescripteur@example.com">prescripteur@example.com</a></p><p>ou bien votre conseillèr·e référent·e&nbsp;:</p><p>
+          Ref Referent<br /><a href="mailto:referent@example.com">referent@example.com</a>&nbsp;–&nbsp;0100000002
+        </p><p>À bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'contact@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">@media only screen and (max-width:479px) {
+                      table.mj-full-width-mobile { width: 100% !important; }
+                      td.mj-full-width-mobile { width: auto !important; }
+                  }
+                  </style><style type="text/css">h1, h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #555;
+            font-size: 15px;
+            line-height: 24px;
+            padding: 0;
+            }
+
+            h1 {
+            color: #000091;
+            font-size: 24px;
+            font-weight: bold;
+            }
+
+            h2 {
+            font-weight: bold;
+            margin-bottom: 0
+            }
+
+            ul, p {
+            margin-top: 0
+            }
+
+            a, a:visited {
+            color: #5B12EB;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#F5F5F5;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Expiration de la demande d’orientation à Structure Portante
+
+          </div><div lang="fr" style="background-color:#F5F5F5;"><!-- Logo --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:238px;"><img alt="" height="60" src="http://localhost:3000/emails/logo-dora-email-new.png" width="238" style="border:0;display:block;outline:none;text-decoration:none;height:60px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Contenu --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;padding-bottom:40px;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:white;border-radius:24px;vertical-align:top;padding:24px 40px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><!-- Titre --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><h1>
+        La demande d’orientation pour Ben Beneficiaire a expirée.
+      </h1></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Illustration --><tr><td align="center" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:520px;"><img alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié." height="auto" src="http://localhost:3000/emails/illu-orientation.png" width="520" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Texte --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p><strong>Bonjour,</strong></p><p>
+          Presc Ripteur de la structure Structure Emplois vous a adressé un bénéficiaire pour le service «&#8239;Le Service&#8239;», le 15 January 2025.
+        </p><p>N’ayant pas reçu de réponses de votre part dans le délai limite des 30 jours, cette demande a été automatiquement annulée.</p><p>Nous vous remercions pour votre engagement.</p></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- CTA --><tr><td align="center" vertical-align="middle" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;width:100%;line-height:100%;"><tbody><tr><td align="center" bgcolor="#5B12EB" role="presentation" valign="middle" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#5B12EB;"><a href="http://localhost:3000/orientations?token=<UUID>&amp;h=aea79871c4b85415332173296ed685a295f48eb53def99e37dd45c5a0ef1e87a" target="_blank" style="display:inline-block;background:#5B12EB;color:white;font-family:Arial, Helvetica, sans-serif;font-size:15px;font-weight:normal;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;">
+          Visualiser le récapitulatif de la demande
+        </a></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Post-CTA --><!-- Salutations --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+                  À très bientôt,
+                  <br /><strong>L’équipe DORA</strong></div></td></tr><!-- Footer --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;\n                      padding: 16px 24px">
+
+        En cas de difficulté, n’hésitez pas à
+        <a style="color: #555" href="">contacter le
+          support</a>  de la plateforme DORA pour obtenir de l’aide.
+
+                </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos DORA --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:#000091;border-radius:24px;vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:84px;"><img alt="" height="28" src="http://localhost:3000/emails/logo-dora-mini.png" width="84" style="border:0;display:block;outline:none;text-decoration:none;height:28px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:16px;line-height:16px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: white; font-size: 13px; line-height: 20px">
+                    DORA est un service public numérique qui facilite pour les structures d'insertion le référencement et la
+                    mise à jour en temps réel de leurs services. Grâce à un moteur de recherche facile à utiliser, les
+                    professionnels de l'insertion peuvent rapidement trouver et prescrire les services correspondant aux
+                    besoins
+                    des bénéficiaires qu’ils accompagnent.
+                  </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos légales --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p style="font-size: 13px; color: #777777; line-height: 21px">
+                      Nous avons accès à vos données à caractère personnel conformément aux missions d’intérêt public du GIP
+                      de l’inclusion et des acteurs publics de l’insertion professionnelle. Conformément à l’article L. 35-4
+                      du Code des postes et communications électroniques, vous bénéficiez d’un droit d’opposition que vous
+                      pouvez utiliser à tout moment via cette adresse : support.dora@inclusion.gouv.fr.<br />
+                      Votre adresse e-mail sera, dès lors supprimée de notre base de données et vous ne serez plus contactés.
+                      Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une
+                      réclamation auprès de la CNIL.
+                    </p></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'prescripteur@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Votre demande d’orientation a expiré
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          La structure Structure Emplois n’a pas répondu dans le délai limite des 30 jours à votre demande d’orientation pour Ben Beneficiaire auprès du service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>.
+        </p><p>Cette demande a été automatiquement annulée.</p><p>À bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'referent@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Votre demande d’orientation a expiré
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          La structure Structure Emplois n’a pas répondu dans le délai limite des 30 jours à votre demande d’orientation pour Ben Beneficiaire auprès du service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>.
+        </p><p>Cette demande a été automatiquement annulée.</p><p>À bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_message_to_beneficiary
+  dict({
+    'beneficiaire@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"></div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>
+          Le message concerne la demande d’orientation réalisée en votre nom vers le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>&nbsp; de la structure «&nbsp;Structure Portante&nbsp;»&nbsp;:
+        </p><p><p>hello</p></p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_message_to_prescriber
+  dict({
+    'prescripteur@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"></div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>
+          Le message concerne la demande d’orientation réalisée pour Ben Beneficiaire vers le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>&nbsp;:
+        </p><p><p>hello</p></p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_rejected
+  dict({
+    'beneficiaire@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Une orientation effectuée en votre nom a été refusée.
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          Presc Ripteur de la structure Structure Emplois a envoyé une demande d’orientation en votre nom, auprès du service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>, le 15 janvier 2025.
+        </p><p>Malheureusement, la structure n’a pu donner suite à cette demande d'orientation sur ce service.</p><p>Des questions&nbsp;? Contactez la personne qui vous accompagne&nbsp;:</p><p>
+            Presc Ripteur<br /><a href="mailto:prescripteur@example.com">prescripteur@example.com</a></p><p>ou bien votre conseillèr·e référent·e&nbsp;:</p><p>
+          Ref Referent<br /><a href="mailto:referent@example.com">referent@example.com</a>&nbsp;– 0100000002
+        </p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'contact@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">@media only screen and (max-width:479px) {
+                      table.mj-full-width-mobile { width: 100% !important; }
+                      td.mj-full-width-mobile { width: auto !important; }
+                  }
+                  </style><style type="text/css">h1, h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #555;
+            font-size: 15px;
+            line-height: 24px;
+            padding: 0;
+            }
+
+            h1 {
+            color: #000091;
+            font-size: 24px;
+            font-weight: bold;
+            }
+
+            h2 {
+            font-weight: bold;
+            margin-bottom: 0
+            }
+
+            ul, p {
+            margin-top: 0
+            }
+
+            a, a:visited {
+            color: #5B12EB;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#F5F5F5;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande d’orientation pour Ben Beneficiaire est refusée.
+
+          </div><div lang="fr" style="background-color:#F5F5F5;"><!-- Logo --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:238px;"><img alt="" height="60" src="http://localhost:3000/emails/logo-dora-email-new.png" width="238" style="border:0;display:block;outline:none;text-decoration:none;height:60px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Contenu --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;padding-bottom:40px;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:white;border-radius:24px;vertical-align:top;padding:24px 40px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><!-- Titre --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><h1>
+        Vous venez de refuser la demande d’orientation pour Ben Beneficiaire.
+      </h1></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Illustration --><tr><td align="center" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:520px;"><img alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié." height="auto" src="http://localhost:3000/emails/illu-orientation.png" width="520" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Texte --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p><strong>Bonjour,</strong></p><p>
+          Presc Ripteur de la structure
+        Structure Emplois
+
+       vous a adressé un bénéficiaire pour le service «&#8239;<a href="http://localhost:3000/services/structure-portante-le-service">Le Service</a>&#8239;»,
+          le 15 janvier 2025 11:00.
+        </p><p>
+          Nous vous remercions d’avoir examiné attentivement cette demande et d’y avoir répondu.
+        </p><p>
+          Votre décision de ne pas donner suite à cette demande pour le moment a été transmis à ou aux accompagnateur(s)
+          de
+          Ben Beneficiaire. La ou les raisons spécifiques évoquées sont les suivantes :
+        </p><ul></ul><p></p><p>
+          Les accompagnateurs en ont été informé au travers du message suivant&nbsp;:
+        </p><p style="font-style: italic">
+          nope
+        </p><p>
+          Il se peut que le professionnel ayant réalisé la demande souhaite vous contacter pour de plus amples
+          informations.
+        </p><p>
+          Nous vous remercions par avance pour votre engagement.
+        </p></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- CTA --><tr><td align="center" vertical-align="middle" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;width:100%;line-height:100%;"><tbody><tr><td align="center" bgcolor="#5B12EB" role="presentation" valign="middle" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#5B12EB;"><a href="http://localhost:3000/orientations?token=<UUID>&amp;h=aea79871c4b85415332173296ed685a295f48eb53def99e37dd45c5a0ef1e87a" target="_blank" style="display:inline-block;background:#5B12EB;color:white;font-family:Arial, Helvetica, sans-serif;font-size:15px;font-weight:normal;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;">
+          Visualiser le récapitulatif de la demande
+        </a></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Post-CTA --><!-- Salutations --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+                  À très bientôt,
+                  <br /><strong>L’équipe DORA</strong></div></td></tr><!-- Footer --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;\n                      padding: 16px 24px">
+
+        En cas de difficulté, n’hésitez pas à
+        <a style="color: #555" href="">contacter le
+          support</a>  de la plateforme DORA pour obtenir de l’aide.
+
+                </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos DORA --><!-- Infos légales --></div></body></html>
+    ''',
+    'prescripteur@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande pour Ben Beneficiaire à été refusée.
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          La structure Structure Portante n’a pas pu donner suite à votre demande d’orientation pour Ben Beneficiaire sur le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>.
+        </p><p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p><p></p><p></p><p>La structure vous informe également de&#8239;:</p><p>nope</p><p>À très bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+    'referent@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">p {
+            margin: 0 0 16px 0;
+            }
+
+            a, a:visited {
+            color: #0000EE;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#FFFFFF;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        La demande pour Ben Beneficiaire à été refusée.
+
+          </div><div lang="fr" style="background-color:#FFFFFF;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:0;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>Bonjour,</p><p>
+          La structure Structure Portante n’a pas pu donner suite à votre demande d’orientation pour Ben Beneficiaire sur le service <a href="https://c1-review-vperron-recherche-service-via-candidats.cleverapps.io/insertion/services/dora--<UUID>">«&nbsp;Le Service&nbsp;»</a>.
+        </p><p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p><p></p><p></p><p>La structure vous informe également de&#8239;:</p><p>nope</p><p>À très bientôt,</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"><p>L'équipe de la Plateforme de l'inclusion</p></div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#000;"></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div></body></html>
+    ''',
+  })
+# ---
+# name: test_reminder
+  dict({
+    'contact@example.com': '''
+      <!doctype html><html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+      <style type="text/css">
+      #outlook a { padding: 0; }
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      p { display: block; margin: 13px 0; }
+      </style>
+      <!--[if mso]>
+      <noscript>
+      <xml>
+      <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+      </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if lte mso 11]>
+      <style type="text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+      </style>
+      <![endif]-->
+      <style type="text/css">@media only screen and (min-width:480px) { .mj-column-per-100 { width:100% !important; max-width:100%; }  }</style><style media="screen and (min-width:480px)">.moz-text-html .mj-column-per-100 { width:100% !important; max-width:100%; } </style><style type="text/css">@media only screen and (max-width:479px) {
+                      table.mj-full-width-mobile { width: 100% !important; }
+                      td.mj-full-width-mobile { width: auto !important; }
+                  }
+                  </style><style type="text/css">h1, h2, h3 {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #555;
+            font-size: 15px;
+            line-height: 24px;
+            padding: 0;
+            }
+
+            h1 {
+            color: #000091;
+            font-size: 24px;
+            font-weight: bold;
+            }
+
+            h2 {
+            font-weight: bold;
+            margin-bottom: 0
+            }
+
+            ul, p {
+            margin-top: 0
+            }
+
+            a, a:visited {
+            color: #5B12EB;
+            text-decoration-line: underline;
+            }</style></head><body style="word-spacing:normal;background-color:#F5F5F5;"><div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+
+        Demande d’orientation non traitée depuis 0 jours.
+
+          </div><div lang="fr" style="background-color:#F5F5F5;"><!-- Logo --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="vertical-align:top;padding:32px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:238px;"><img alt="" height="60" src="http://localhost:3000/emails/logo-dora-email-new.png" width="238" style="border:0;display:block;outline:none;text-decoration:none;height:60px;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Contenu --><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" width="600" style="width:600px;"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style="margin:0px auto;max-width:600px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" align="center" style="width:100%;"><tbody><tr><td style="direction:ltr;font-size:0px;padding:0;padding-bottom:40px;text-align:center;"><!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" role="presentation"><tr><td style="vertical-align:top;width:600px;"><![endif]--><div class="mj-outlook-group-fix mj-column-per-100" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><tr><td style="background-color:white;border-radius:24px;vertical-align:top;padding:24px 40px 40px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tbody><!-- Titre --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><h1>
+        Relance – Demande d’orientation en attente
+      </h1></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Illustration --><tr><td align="center" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"><tbody><tr><td style="width:520px;"><img alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié." height="auto" src="http://localhost:3000/emails/illu-orientation.png" width="520" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:15px;" /></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Texte --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><p><strong>Bonjour,</strong></p><p>
+          Nous nous permettons de vous contacter aujourd’hui afin de faire suite à une demande d’orientation que nous vous
+          avons transmise il y a 0 jours et qui n’a, semble-t-il, pas encore été traitée.
+        </p><p>
+          Cette demande concerne Ben Beneficiaire, qui vous a été adressé
+          par Presc Ripteur de la structure
+        Structure Emplois
+
+      .
+          Le service concerné : «&#8239;<a href="http://localhost:3000/services/structure-portante-le-service">Le Service</a>&#8239;».
+        </p></div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- CTA --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+          Afin de faciliter le traitement de cette demande, je vous invite à cliquer sur le lien ci-dessous pour accéder
+          directement à la plateforme où vous pourrez visualiser et traiter la demande en question :
+        </div></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="center" vertical-align="middle" style="font-size:0px;padding:0;word-break:break-word;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;width:100%;line-height:100%;"><tbody><tr><td align="center" bgcolor="#5B12EB" role="presentation" valign="middle" style="border:none;border-radius:4px;cursor:auto;mso-padding-alt:10px 25px;background:#5B12EB;"><a href="http://localhost:3000/orientations?token=<UUID>&amp;h=aea79871c4b85415332173296ed685a295f48eb53def99e37dd45c5a0ef1e87a" target="_blank" style="display:inline-block;background:#5B12EB;color:white;font-family:Arial, Helvetica, sans-serif;font-size:15px;font-weight:normal;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:4px;">
+          Visualiser et traiter la demande
+        </a></td></tr></tbody></table></td></tr><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><!-- Post-CTA --><!-- Salutations --><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;">
+                  À très bientôt,
+                  <br /><strong>L’équipe DORA</strong></div></td></tr><!-- Footer --><tr><td style="font-size:0px;padding:0;word-break:break-word;"><div style="height:24px;line-height:24px;">&#8202;</div></td></tr><tr><td align="left" style="font-size:0px;padding:0;word-break:break-word;"><div style="font-family:Arial, Helvetica, sans-serif;font-size:15px;line-height:24px;text-align:left;color:#555;"><div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;\n                      padding: 16px 24px">
+
+        En cas de difficulté, n’hésitez pas à
+        <a style="color: #555" href="">contacter le
+          support</a>  de la plateforme DORA pour obtenir de l’aide.
+
+                </div></div></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><!-- Infos DORA --><!-- Infos légales --></div></body></html>
+    ''',
+  })
+# ---
