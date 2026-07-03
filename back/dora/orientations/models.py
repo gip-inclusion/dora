@@ -358,11 +358,17 @@ class Orientation(models.Model):
         else:
             return ""
 
-    def comes_from_les_emplois(self):
+    def is_emplois(self):
         return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
+    def email_backend(self):
+        from dora.orientations.emails.dora import backend as dora_backend
+        from dora.orientations.emails.emplois import backend as emplois_backend
+
+        return emplois_backend if self.is_emplois() else dora_backend
+
     def get_emplois_service_detail_page(self):
-        if not self.comes_from_les_emplois():
+        if not self.is_emplois():
             return None
 
         if self.service_id:
