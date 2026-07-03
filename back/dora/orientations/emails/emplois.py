@@ -77,7 +77,7 @@ class EmploisBackend(OrientationEmailBackend):
 
         context = {
             "orientation": orientation,
-            "service_address": self.get_service_address_line(),
+            "service_address": orientation.get_service_address_line(),
         }
         self._send_created_to_prescriber(orientation, context)
         self._send_created_to_referent(orientation, context)
@@ -134,7 +134,7 @@ class EmploisBackend(OrientationEmailBackend):
         )
 
         placeholder = "#SERVICE_ADDRESS#"
-        service_address = self.get_service_address_line()
+        service_address = orientation.get_service_address_line()
         prescriber_message = prescriber_message.replace(placeholder, service_address)
         beneficiary_message = beneficiary_message.replace(placeholder, service_address)
 
