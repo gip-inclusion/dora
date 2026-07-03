@@ -10,26 +10,26 @@
 {% endblock %}
 
 {% block content %}
-  <p>Bonjour {{ data.prescriber_info.first_name }},</p>
+  <p>Bonjour {{ orientation.prescriber_info.first_name }},</p>
 
   <p>
-    Votre demande d’orientation pour le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a> ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ data.prescriber_info.structure_name }} à été transmise&nbsp;!
+    Votre demande d’orientation pour le service <a href="{{ orientation.get_emplois_service_detail_page }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a> ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ orientation.prescriber_info.structure_name }} à été transmise&nbsp;!
   </p>
 
-  <p>Votre bénéficiaire, {{ data.get_beneficiary_full_name }}, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p>
+  <p>Votre bénéficiaire, {{ orientation.get_beneficiary_full_name }}, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p>
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
 
-  {% if data.get_contact_name %}
-    <p>{{ data.get_contact_name }}</p>
+  {% if orientation.get_contact_name %}
+    <p>{{ orientation.get_contact_name }}</p>
   {% endif %}
   <p>
-    {% if data.get_contact_email %}<a href="mailto:{{ data.get_contact_email }}">{{ data.get_contact_email }}</a>{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
-    {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
+    {% if orientation.get_contact_email %}<a href="mailto:{{ orientation.get_contact_email }}">{{ orientation.get_contact_email }}</a>{% if orientation.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
+    {% if orientation.get_contact_phone %}{{ orientation.get_contact_phone|format_phone }}{% endif %}
   </p>
 
   <p>
-    La structure {{ data.get_structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
+    La structure {{ orientation.get_structure_name }} va traiter votre demande et reviendra vers vous avec une réponse.
   </p>
 
   <p>

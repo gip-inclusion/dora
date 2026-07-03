@@ -1,7 +1,7 @@
 {% extends "emplois/orientation-emplois-email-base.mjml" %}
 
 {% block preview %}
-  La demande réalisée par {{ data.prescriber_info.full_name }} à été acceptée !
+  La demande réalisée par {{ orientation.prescriber_info.full_name }} à été acceptée !
 {% endblock %}
 
 {% block content %}

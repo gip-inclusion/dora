@@ -13,20 +13,20 @@
   <p>Bonjour,</p>
 
   <p>
-    {{ data.prescriber_info.full_name }} de la structure {{ data.prescriber_info.structure_name }} a orienté {{ data.get_beneficiary_full_name }} vers le service <a href="{{ data.get_emplois_service_detail_page }}">«&nbsp;{{ data.get_service_name }}&nbsp;»</a>, ayant lieu au&#8239;: {{ service_address }}.
+    {{ orientation.prescriber_info.full_name }} de la structure {{ orientation.prescriber_info.structure_name }} a orienté {{ orientation.get_beneficiary_full_name }} vers le service <a href="{{ orientation.get_emplois_service_detail_page }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a>, ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
 
-  {% if data.get_contact_name %}
-    <p>{{ data.get_contact_name }}</p>
+  {% if orientation.get_contact_name %}
+    <p>{{ orientation.get_contact_name }}</p>
   {% endif %}
   <p>
-    {% if data.get_contact_email %}<a href="mailto:{{ data.get_contact_email }}">{{ data.get_contact_email }}</a>{% if data.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
-    {% if data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
+    {% if orientation.get_contact_email %}<a href="mailto:{{ orientation.get_contact_email }}">{{ orientation.get_contact_email }}</a>{% if orientation.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
+    {% if orientation.get_contact_phone %}{{ orientation.get_contact_phone|format_phone }}{% endif %}
   </p>
   <p>
-    La structure {{ data.get_structure_name }} va traiter la demande et y apportera une réponse.
+    La structure {{ orientation.get_structure_name }} va traiter la demande et y apportera une réponse.
   </p>
 
   <p>

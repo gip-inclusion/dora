@@ -76,7 +76,7 @@ class EmploisBackend(OrientationEmailBackend):
         self._dora.send_created_to_structure(orientation)
 
         context = {
-            "data": orientation,
+            "orientation": orientation,
             "service_address": self._get_service_address(orientation),
         }
         self._send_created_to_prescriber(orientation, context)
@@ -139,7 +139,7 @@ class EmploisBackend(OrientationEmailBackend):
         beneficiary_message = beneficiary_message.replace(placeholder, service_address)
 
         context = {
-            "data": orientation,
+            "orientation": orientation,
             "prescriber_message": prescriber_message,
             "beneficiary_message": beneficiary_message,
         }
@@ -199,7 +199,7 @@ class EmploisBackend(OrientationEmailBackend):
         )
 
         context = {
-            "data": orientation,
+            "orientation": orientation,
             "message": message,
             "other_details": other_details,
         }
@@ -256,7 +256,7 @@ class EmploisBackend(OrientationEmailBackend):
             orientation, self._dora._orientation_expired_ctx(orientation, start_date)
         )
 
-        context = {"data": orientation}
+        context = {"orientation": orientation}
         self._send_expired_to_prescriber(orientation, context)
         self._send_expired_to_referent(orientation, context)
         self._send_expired_to_beneficiary(orientation, context)
@@ -265,7 +265,7 @@ class EmploisBackend(OrientationEmailBackend):
 
     def send_message_to_prescriber(self, orientation, message, cc):
         structure_name = orientation.get_structure_name()
-        context = {"data": orientation, "message": message}
+        context = {"orientation": orientation, "message": message}
         self._send(
             subject=self._subject(
                 "Contact",
@@ -283,7 +283,7 @@ class EmploisBackend(OrientationEmailBackend):
     def send_message_to_beneficiary(self, orientation, message, cc):
         structure_name = orientation.get_structure_name()
         context = {
-            "data": orientation,
+            "orientation": orientation,
             "message": message,
             "structure_name": structure_name,
         }
