@@ -367,7 +367,6 @@ class Orientation(models.Model):
 
         return emplois_backend if self.is_emplois() else dora_backend
 
-
     @property
     def prescriber_info(self) -> PrescriberInfo:
         user, structure = self.prescriber, self.prescriber_structure
