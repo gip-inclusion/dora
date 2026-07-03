@@ -35,15 +35,6 @@ class OrientationEmailBackend:
             and orientation.referent_email != orientation.prescriber_info.email
         )
 
-    def _get_service_address(self, orientation):
-        if (
-            orientation.service
-            and orientation.service.location_kinds.count() == 1
-            and orientation.service.location_kinds.first().value == "a-distance"
-        ):
-            return "à distance"
-        return orientation.get_service_address_line()
-
     def _beneficiaries_has_alternate_contact_methods(self, orientation):
         beneficiaries_contact_methods = [
             method
