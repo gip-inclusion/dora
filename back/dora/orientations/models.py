@@ -367,15 +367,6 @@ class Orientation(models.Model):
 
         return emplois_backend if self.is_emplois() else dora_backend
 
-    def get_emplois_service_detail_page(self):
-        if not self.is_emplois():
-            return None
-
-        if self.service_id:
-            service_uid = f"dora--{self.service.id}"
-        else:
-            service_uid = self.di_service_id
-        return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
 
     @property
     def prescriber_info(self) -> PrescriberInfo:
@@ -506,6 +497,15 @@ class EmploisOrientationData(models.Model):
             email=self.prescriber_email,
             structure_name=self.structure_name,
         )
+
+    @property
+    def service_detail_url(self):
+        orientation = self.orientation
+        if orientation.service_id:
+            service_uid = f"dora--{orientation.service.id}"
+        else:
+            service_uid = orientation.di_service_id
+        return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
 
 
 class ContactRecipient(models.TextChoices):

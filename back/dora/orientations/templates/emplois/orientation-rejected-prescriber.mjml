@@ -8,7 +8,7 @@
   <p>Bonjour,</p>
 
   <p>
-    La structure {{ orientation.get_structure_name }} n’a pas pu donner suite à votre demande d’orientation pour {{ orientation.get_beneficiary_full_name }} sur le service <a href="{{ orientation.get_emplois_service_detail_page }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a>.
+    La structure {{ orientation.get_structure_name }} n’a pas pu donner suite à votre demande d’orientation pour {{ orientation.get_beneficiary_full_name }} sur le service <a href="{{ orientation.emplois_orientation_data.service_detail_url }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a>.
   </p>
 
   <p>La ou les raisons spécifiques évoquées sont les suivantes&#8239;:</p>

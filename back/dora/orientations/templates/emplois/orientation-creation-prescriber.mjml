@@ -13,7 +13,7 @@
   <p>Bonjour {{ orientation.prescriber_info.first_name }},</p>
 
   <p>
-    Votre demande d’orientation pour le service <a href="{{ orientation.get_emplois_service_detail_page }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a> ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ orientation.prescriber_info.structure_name }} à été transmise&nbsp;!
+    Votre demande d’orientation pour le service <a href="{{ orientation.emplois_orientation_data.service_detail_url }}">«&nbsp;{{ orientation.get_service_name }}&nbsp;»</a> ayant lieu au&#8239;: {{ service_address }}, porté par la structure {{ orientation.prescriber_info.structure_name }} à été transmise&nbsp;!
   </p>
 
   <p>Votre bénéficiaire, {{ orientation.get_beneficiary_full_name }}, recevra un récapitulatif de la demande à l’adresse e-mail renseignée.</p>
