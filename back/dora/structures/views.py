@@ -55,9 +55,11 @@ class StructureViewSet(
         only_active = self.request.query_params.get("active")
         search_string = self.request.query_params.get("search", None)
 
-        structures = Structure.objects.select_related("source", "parent").filter(
-            is_obsolete=False
-        )
+        structures = Structure.objects.select_related("source", "parent")
+
+        # Masquées en lecture, mais accessibles en écriture pour pouvoir les réactiver.
+        if self.request.method in permissions.SAFE_METHODS:
+            structures = structures.filter(is_obsolete=False)
 
         if search_string:
             structures = structures.filter(name__icontains=search_string)
