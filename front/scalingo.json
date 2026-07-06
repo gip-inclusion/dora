@@ -11,5 +11,6 @@
       "generator": "template",
       "template": "⚠️  Review app de la PR #%PR_NUMBER%."
     }
-  }
+  },
+  "stack": "scalingo-26"
 }

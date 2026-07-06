@@ -14,5 +14,6 @@
       "generator": "template",
       "template": "https://dora-front-review-pr%PR_NUMBER%.osc-fr1.scalingo.io"
     }
-  }
+  },
+  "stack": "scalingo-26"
 }
