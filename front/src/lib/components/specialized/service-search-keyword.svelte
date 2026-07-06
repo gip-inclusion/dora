@@ -115,8 +115,8 @@
         addresses.push({
           value: {
             searchParams: new URLSearchParams({
-              lat: lat.toString(),
               lon: lon.toString(),
+              lat: lat.toString(),
             }),
             kind: LocationType.Address,
             label: feature.properties.label,
