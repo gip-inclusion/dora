@@ -1,5 +1,6 @@
 import os.path
 import pathlib
+import shutil
 import subprocess
 
 from django.conf import settings
@@ -13,7 +14,19 @@ from dora.core.commands import BaseCommand
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.utils import normalize_string_for_search
 
-EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
+# Le paquet 7zip fournit uniquement 7zz sur Ubuntu 22.04 (scalingo-22),
+# et uniquement 7z/7za/7zr sur Ubuntu 24.04 et 26.04 (scalingo-24/26).
+# En production, on vise les vrais binaires et non les liens de /usr/bin,
+# qui pointent sur des chemins absolus invalides sous /app/.apt
+_7Z_CANDIDATES = (
+    ["7zr", "7zz"]
+    if settings.DEBUG
+    else ["/app/.apt/usr/lib/7zip/7zr", "/app/.apt/usr/bin/7zz"]
+)
+EXE_7Z = next(
+    (exe for exe in _7Z_CANDIDATES if shutil.which(exe)),
+    _7Z_CANDIDATES[0],
+)
 
 # Version GPKG avec coordonnées WGS84 (France métropolitaine + DOM-TOM)
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
@@ -125,7 +138,7 @@ class Command(BaseCommand):
 
         self.logger.info("Décompression du fichier AE COG")
         subprocess.run(
-            [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
+            [EXE_7Z, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
             check=True,
         )
 
