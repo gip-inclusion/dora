@@ -50,12 +50,10 @@ export const load: LayoutLoad = async ({ url }) => {
 
     // Si l'utilisateur est connecté mais n'est rattaché à aucune structure,
     // on le force à se rattacher
-    if (
-      !(
-        currentUserInfo.structures.length ||
-        currentUserInfo.pendingStructures.length
-      )
-    ) {
+    if (!(
+      currentUserInfo.structures.length ||
+      currentUserInfo.pendingStructures.length
+    )) {
       redirect(302, `/auth/rattachement${url.search}`);
     }
 

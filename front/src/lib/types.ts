@@ -1,11 +1,7 @@
 import type { Component } from "svelte";
 
 export type AdminDivisionType =
-  | "country"
-  | "region"
-  | "department"
-  | "epci"
-  | "city";
+  "country" | "region" | "department" | "epci" | "city";
 
 export type ServiceCategory =
   | "acces-aux-droits-et-citoyennete"
@@ -291,9 +287,7 @@ export type ServiceKind =
 export type FeeCondition = "gratuit" | "payant";
 
 export type SavedSearchNotificationFrequency =
-  | "NEVER"
-  | "TWO_WEEKS"
-  | "MONTHLY";
+  "NEVER" | "TWO_WEEKS" | "MONTHLY";
 
 export type CoachOrientationModes =
   | "formulaire-dora"

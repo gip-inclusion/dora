@@ -3,11 +3,7 @@ import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
 
 export type NexusServiceID =
-  | "dora"
-  | "les-emplois"
-  | "le-marche"
-  | "mon-recap"
-  | "pilotage";
+  "dora" | "les-emplois" | "le-marche" | "mon-recap" | "pilotage";
 
 export type NexusMenuStatus = {
   proconnect: boolean;
@@ -42,8 +38,7 @@ type OrientationBeneficiaryInfoRedirect = {
 };
 
 export type OrientationBeneficiaryInfo =
-  | OrientationBeneficiaryInfoData
-  | OrientationBeneficiaryInfoRedirect;
+  OrientationBeneficiaryInfoData | OrientationBeneficiaryInfoRedirect;
 
 export const getOrientationBeneficiaryInfo = async (
   opJwt: string,

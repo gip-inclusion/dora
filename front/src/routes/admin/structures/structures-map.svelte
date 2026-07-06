@@ -149,8 +149,7 @@
     }
 
     const structuresSource = map.getSource("structuresSource") as
-      | mlgl.GeoJSONSource
-      | undefined;
+      mlgl.GeoJSONSource | undefined;
 
     if (!structuresSource) {
       return;

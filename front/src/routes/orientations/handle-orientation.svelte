@@ -27,11 +27,8 @@
   let { orientation, queryHash, onRefresh }: Props = $props();
 
   let modalOpened:
-    | "accept"
-    | "deny"
-    | "contact-beneficiary"
-    | "contact-service"
-    | undefined = $state(undefined);
+    "accept" | "deny" | "contact-beneficiary" | "contact-service" | undefined =
+    $state(undefined);
 
   function closeModal() {
     modalOpened = undefined;
