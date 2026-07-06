@@ -73,7 +73,33 @@ class StructureTestCase(APITestCase):
         response = self.client.get(f"/structures/{obsolete_struct.slug}/")
         self.assertEqual(response.status_code, 404)
 
+    def test_obsolete_struct_not_in_listing(self):
+        obsolete_struct = make_structure(is_obsolete=True)
+        make_structure_member(user=self.me, structure=obsolete_struct, is_admin=True)
+        response = self.client.get("/structures/")
+        structures_ids = [s["slug"] for s in response.data]
+        self.assertNotIn(obsolete_struct.slug, structures_ids)
+
     # Modification
+
+    def test_can_reactivate_obsolete_struct(self):
+        obsolete_struct = make_structure(is_obsolete=True)
+        make_structure_member(user=self.me, structure=obsolete_struct, is_admin=True)
+        response = self.client.patch(
+            f"/structures/{obsolete_struct.slug}/", {"is_obsolete": False}
+        )
+        self.assertEqual(response.status_code, 200)
+        obsolete_struct.refresh_from_db()
+        self.assertFalse(obsolete_struct.is_obsolete)
+
+    def test_cant_reactivate_obsolete_struct_without_permission(self):
+        obsolete_struct = make_structure(is_obsolete=True)
+        response = self.client.patch(
+            f"/structures/{obsolete_struct.slug}/", {"is_obsolete": False}
+        )
+        self.assertEqual(response.status_code, 403)
+        obsolete_struct.refresh_from_db()
+        self.assertTrue(obsolete_struct.is_obsolete)
 
     def test_can_edit_my_administered_structures(self):
         response = self.client.patch(
