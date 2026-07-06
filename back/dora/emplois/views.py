@@ -17,6 +17,7 @@ from dora.core.pagination import (
 )
 from dora.core.throttling import UploadRateThrottle
 from dora.core.uploads import save_orientation_attachment
+from dora.orientations.emails import send_orientation_created_emails
 from dora.orientations.models import Orientation
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -184,10 +185,11 @@ class OrientationViewSet(
         return Response(response_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        serializer.save(
+        orientation = serializer.save(
             prescriber=None,
             prescriber_structure=None,
         )
+        send_orientation_created_emails(orientation)
 
 
 @api_view(["POST"])

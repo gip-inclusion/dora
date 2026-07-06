@@ -358,6 +358,15 @@ class Orientation(models.Model):
         else:
             return ""
 
+    def is_emplois(self):
+        return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
+
+    def email_backend(self):
+        from dora.orientations.emails.dora import backend as dora_backend
+        from dora.orientations.emails.emplois import backend as emplois_backend
+
+        return emplois_backend if self.is_emplois() else dora_backend
+
     @property
     def prescriber_info(self) -> PrescriberInfo:
         user, structure = self.prescriber, self.prescriber_structure
@@ -487,6 +496,15 @@ class EmploisOrientationData(models.Model):
             email=self.prescriber_email,
             structure_name=self.structure_name,
         )
+
+    @property
+    def service_detail_url(self):
+        orientation = self.orientation
+        if orientation.service_id:
+            service_uid = f"dora--{orientation.service.id}"
+        else:
+            service_uid = orientation.di_service_id
+        return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
 
 
 class ContactRecipient(models.TextChoices):

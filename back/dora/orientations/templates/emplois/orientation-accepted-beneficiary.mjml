@@ -1,0 +1,30 @@
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
+
+{% block preview %}
+  La demande réalisée par {{ orientation.prescriber_info.full_name }} à été acceptée !
+{% endblock %}
+
+{% block content %}
+  {{ beneficiary_message|linebreaks }}
+{% endblock %}
+
+{% block footer %}
+  <p>---</p>
+  <p>
+      Les Emplois est une application portée par le GIP «&nbsp;Plateforme de l’inclusion&nbsp;». Les documents listés plus haut ont été communiqués à une structure proposant un service répondant à vos besoins.
+    </p>
+
+    <p>
+      Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées&nbsp;:&nbsp;<a href="mailto:rgpd@inclusion.gouv.fr">rgpd@inclusion.gouv.fr</a>
+    </p>
+
+    <p>
+      Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une réclamation auprès de la CNIL.
+    </p>
+
+    <p>
+      Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation, notamment)&nbsp;: <a href="https://emplois.inclusion.beta.gouv.fr/legal/privacy/">https://emplois.inclusion.beta.gouv.fr/legal/privacy/</a>
+    </p>
+{% endblock %}
+
+{% block signature %}{% endblock %}

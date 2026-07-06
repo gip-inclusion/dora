@@ -40,6 +40,10 @@ BREVO_ACTIVE = False
 # faire correspondre les valeurs définies dans la configuration de la CI
 CORS_ALLOWED_ORIGIN_REGEXES = [os.getenv("DJANGO_CORS_ALLOWED_ORIGIN_REGEXES", "*")]
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+EMPLOIS_FRONTEND_URL = "https://emplois.example.com"
+ORIENTATION_SUPPORT_LINK = "https://help.example.com/orientation"
+SUPPORT_EMAIL = "support@example.com"
+SECRET_KEY = "test-secret-key"
 IC_TOKEN_URL = os.getenv("IC_TOKEN_URL", "https://whatever-oidc-token-url.com")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "dora")
 BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST = int(

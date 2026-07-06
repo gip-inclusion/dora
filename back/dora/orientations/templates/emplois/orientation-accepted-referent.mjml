@@ -1,0 +1,11 @@
+{% extends "emplois/orientation-emplois-email-base.mjml" %}
+
+{% block preview %}
+  La demande pour {{ orientation.get_beneficiary_full_name }} a été acceptée&nbsp;!
+{% endblock %}
+
+{% block content %}
+  {{ prescriber_message|linebreaks }}
+{% endblock %}
+
+{% block signature %}{% endblock %}
