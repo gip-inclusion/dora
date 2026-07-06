@@ -218,10 +218,10 @@
       }
       params.append("label", encodeURIComponent(addressFieldValue));
     }
-    onSearch();
     await goto(`/recherche-mots-cles?${params.toString()}`, {
       noScroll: true,
     });
+    onSearch();
 
     isLoading = false;
   }
