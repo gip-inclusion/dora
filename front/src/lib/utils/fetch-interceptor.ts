@@ -1,7 +1,26 @@
 import { browser } from "$app/environment";
 import { RATE_LIMIT_MESSAGE } from "$lib/consts";
+import { API_URL } from "$lib/env";
 import * as Sentry from "@sentry/sveltekit";
 import { toast } from "@zerodevx/svelte-toast";
+
+/**
+ * Détermine si une requête est à destination de notre propre site.
+ * Les requêtes émises par des scripts tiers (Google CSE, etc.) passent
+ * aussi par l'intercepteur, mais leurs échecs réseau (bloqueurs de pub,
+ * réseau instable…) ne doivent pas être remontés à Sentry.
+ */
+function isFirstPartyRequest(input: string | URL | Request): boolean {
+  try {
+    const rawUrl = input instanceof Request ? input.url : input.toString();
+    const url = new URL(rawUrl, window.location.href);
+    return (
+      url.origin === window.location.origin || url.href.startsWith(API_URL)
+    );
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Intercepte fetch côté client pour gérer les erreurs globalement
@@ -25,6 +44,10 @@ export function setupFetchInterceptor(): void {
     input: string | URL | Request,
     init?: RequestInit
   ): Promise<Response> => {
+    if (!isFirstPartyRequest(input)) {
+      return originalFetch(input, init);
+    }
+
     let response: Response;
     try {
       response = await originalFetch(input, init);
