@@ -500,6 +500,7 @@ export interface ShortService {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
+  isCumulative: boolean;
   model: string;
   modelChanged: boolean;
   modificationDate: string;
