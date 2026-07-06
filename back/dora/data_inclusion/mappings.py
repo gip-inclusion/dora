@@ -317,7 +317,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "has_already_been_unpublished": None,
         "is_available": True,
         "is_contact_info_public": True,
-        "is_cumulative": None,
+        "is_cumulative": True,
         "is_orientable": is_orientable(service_data),
         "is_model": False,
         "kinds": [kind.value] if kind is not None else None,

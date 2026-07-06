@@ -425,7 +425,7 @@ export interface Service {
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesExternalFormLink: string | null;
   coachOrientationModesOther: string | null;
-  publics: CustomizableFK[] | null; // TODO: should be plural
+  publics: CustomizableFK[] | null;
   publicsDisplay: string[] | null;
   contactInfoFilled: boolean;
   contactEmail: string | null;
@@ -500,6 +500,7 @@ export interface ShortService {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
+  isCumulative: boolean;
   model: string;
   modelChanged: boolean;
   modificationDate: string;
@@ -576,7 +577,7 @@ export type ServicesOptions = {
   diPublics: { value: string; label: string }[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
-  diffusionZoneType: { value: AdminDivisionType; label: string }; // TODO: should be plural
+  diffusionZoneType: { value: AdminDivisionType; label: string };
   feeConditions: { value: FeeCondition; label: string }[];
   kinds: { value: ServiceKind; label: string }[];
   locationKinds: { value: LocationKind; label: string }[];
