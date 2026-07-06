@@ -92,7 +92,7 @@ class StructureTestCase(APITestCase):
         obsolete_struct.refresh_from_db()
         self.assertFalse(obsolete_struct.is_obsolete)
 
-    def test_cant_reactivate_obsolete_struct_without_permission(self):
+    def test_cannot_reactivate_obsolete_struct_without_permission(self):
         obsolete_struct = make_structure(is_obsolete=True)
         response = self.client.patch(
             f"/structures/{obsolete_struct.slug}/", {"is_obsolete": False}
