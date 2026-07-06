@@ -6,7 +6,7 @@ Version au 30 mars 2026
 
 DORA est développé au sein du GIP Plateforme de l’inclusion. DORA est une plateforme numérique alimentée par les offreurs de solution d’insertion locales, nationales et numériques.
 
-Le responsable de l’utilisation des données est le GIP Plateforme de l’inclusion, représenté par Arnaud DENOIX, Directeur du GIP Plateforme de l’inclusion.
+Le responsable de l’utilisation des données est le GIP Plateforme de l’inclusion, représenté par Arnaud DENOIX, Directeur du GIP Plateforme de l’inclusion. Spécifiquement s’agissant de la fiche d’orientation une responsabilité conjointe entre l’organisme proposant un service et le GIP Plateforme de l’inclusion est mis en oeuvre.
 
 ## Pourquoi manipulons-nous ces données ?
 
@@ -35,14 +35,16 @@ Cette mission d’intérêt public est précisée dans l’arrêté du 19 avril 
 
 Cette mission constitue des motifs d’intérêts publics importants au sens de l’article 9 du RGPD. les missions constituant à “mettre en relation les personnes rencontrant des difficultés sociales et professionnelles avec l’offre d’insertion adaptée, fournir un accompagnement personnalisé aux personnes rencontrant des difficultés sociales et professionnelles particulières, dans le but de faciliter leur insertion sociale et professionnelle” constituant à l’évidence un tel intérêt, qui rend nécessaire le traitement de certaines données sensibles.
 
+Nous rappelons que chaque responsable de traitement doit bénéficier d’une base juridique propre lui permettant de traiter les données nécessaires.
+
 ## Pendant combien de temps conservons-nous ces données ?
 
-| **Type de données**                                                       | **Durée de conservation**                                                    |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Données relatives aux utilisateurs de la plateforme                       | 2 ans à compter du dernier contact avec l’utilisateur de la plateforme DORA. |
-| Données relatives aux personnes suivies par les agents accompagnateurs    | 6 mois après traitement de la demande, ou 2 ans en l’absence de traitement   |
-| Données relatives aux personnes à contacter pour référencer une structure | 2 ans à compter du dernier contact avec le référent.                         |
-| Données relatives à la traçabilité des utilisateurs                       | 1 an à compter du dernier contact avec l’utilisateur.                        |
+| **Type de données**                                                       | **Durée de conservation**                                                                                                         |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Données relatives aux utilisateurs de la plateforme                       | 2 ans à compter du dernier contact avec l’utilisateur de la plateforme DORA.                                                      |
+| Données relatives aux personnes suivies par les agents accompagnateurs    | 6 mois après traitement de la demande, (ou immédiatement en cas de refus ou de rejet de l’orientation en cas d’auto-orientation). |
+| Données relatives aux personnes à contacter pour référencer une structure | 2 ans à compter du dernier contact avec le référent.                                                                              |
+| Données relatives à la traçabilité des utilisateurs                       | 1 an à compter du dernier contact avec l’utilisateur.                                                                             |
 
 ## Quels droits avez-vous ?
 
@@ -67,6 +69,8 @@ Pour vous aider dans votre démarche, vous trouverez un modèle de courrier éla
 
 Nous nous engageons à vous répondre dans un délai raisonnable qui ne saurait dépasser 1 mois à compter de la réception de votre demande.
 
+Vous pouvez également exercer vos droits auprès du responsable de traitement conjoint qui vous suit, selon les modalités qu’il vous aura communiquées en application de l’article 14 RGPD.
+
 ## Qui va avoir accès à ces données ?
 
 Les accès aux données sont strictement encadrés et juridiquement justifiés. Les personnes suivantes vont avoir accès aux données :
@@ -81,6 +85,7 @@ Les accès aux données sont strictement encadrés et juridiquement justifiés. 
 
 Nous mettons en place plusieurs mesures pour sécuriser les données :
 
+- Gestion des accès logiques et des mots de passe ;
 - Stockage des données en base de données ;
 - Cloisonnement des données ;
 - Mesures de traçabilité ;
