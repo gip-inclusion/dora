@@ -11,9 +11,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     "service-status"
   ) as ServiceStatus | null;
   const updateNeeded: "true" | "false" | null = query.get("update-needed") as
-    | "true"
-    | "false"
-    | null;
+    "true" | "false" | null;
   const servicesOptions = await getServicesOptions(fetch);
 
   return {

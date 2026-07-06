@@ -220,8 +220,7 @@
     }
 
     const servicesSource = map.getSource("servicesSource") as
-      | mlgl.GeoJSONSource
-      | undefined;
+      mlgl.GeoJSONSource | undefined;
 
     if (!servicesSource) {
       return;

@@ -21,10 +21,7 @@ export const AUTH_STATE_KEY =
     : `auth_state_${import.meta.env.VITE_ENVIRONMENT}`;
 
 export type UserMainActivity =
-  | "accompagnateur"
-  | "offreur"
-  | "accompagnateur_offreur"
-  | "autre";
+  "accompagnateur" | "offreur" | "accompagnateur_offreur" | "autre";
 
 export type DiscoveryMethod =
   | "bouche-a-oreille"
