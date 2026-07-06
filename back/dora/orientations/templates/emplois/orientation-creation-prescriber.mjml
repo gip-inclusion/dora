@@ -20,10 +20,8 @@
 
   <p>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</p>
 
-  {% if orientation.get_contact_name %}
-    <p>{{ orientation.get_contact_name }}</p>
-  {% endif %}
   <p>
+    {% if orientation.get_contact_name %}{{ orientation.get_contact_name }}{% endif %}<br />
     {% if orientation.get_contact_email %}<a href="mailto:{{ orientation.get_contact_email }}">{{ orientation.get_contact_email }}</a>{% if orientation.get_contact_phone %}&nbsp;–&nbsp;{% endif %}{% endif %}
     {% if orientation.get_contact_phone %}{{ orientation.get_contact_phone|format_phone }}{% endif %}
   </p>
