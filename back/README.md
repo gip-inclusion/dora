@@ -105,12 +105,12 @@ Pour faire tourner `import_admin_express` localement, il faut installer 7zip
 
 Pour Mac :
 ```bash
-brew install p7zip
+brew install sevenzip
 ```
 
 Pour Linux :
 ```bash
-sudo apt-get install p7zip*
+sudo apt-get install 7zip
 ```
 
 ```bash
