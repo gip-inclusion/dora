@@ -58,7 +58,7 @@ class StructureViewSet(
         structures = Structure.objects.select_related("source", "parent")
 
         # Masquées en lecture, mais accessibles en écriture pour pouvoir les réactiver.
-        if self.action not in ("update", "partial_update"):
+        if self.request.method in permissions.SAFE_METHODS:
             structures = structures.filter(is_obsolete=False)
 
         if search_string:
