@@ -8,7 +8,6 @@
   import Pagination from "$lib/components/display/pagination.svelte";
   import Spinner from "$lib/components/display/spinner.svelte";
   import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
-  import { SEARCH_KEYWORD_URL } from "$lib/consts";
 
   import type { PageData } from "./$types";
   import MapViewButton from "./map-view-button.svelte";
@@ -46,9 +45,7 @@
     ).reduce<Filters>(
       (acc, [filterKey, queryParam]) => ({
         ...acc,
-        [filterKey]: page.url.searchParams.getAll(
-          decodeURIComponent(queryParam)
-        ),
+        [filterKey]: page.url.searchParams.getAll(queryParam),
       }),
       {} as Filters
     )
@@ -56,26 +53,25 @@
   const pageFromURL: string | null = page.url.searchParams.get("page");
   let currentPage: number = $state(pageFromURL ? parseInt(pageFromURL) : 1);
 
-  function setPage(newPage: number) {
-    currentPage = newPage;
-    if (currentPage === 1) {
-      page.url.searchParams.delete("page");
-    } else {
-      page.url.searchParams.set("page", currentPage.toString());
-    }
-  }
-
-  function refreshResults() {
+  function navigate(url: URL) {
     loading = true;
-    goto(page.url, {
-      state: page.url.searchParams.toString(),
+    goto(url, {
       keepFocus: true,
       noScroll: true,
-      // TODO: Can Svelte be smart enough to invalidate that cache on its own?
-      invalidate: [(url: URL): boolean => url.pathname === SEARCH_KEYWORD_URL],
     }).then(() => {
       loading = false;
     });
+  }
+
+  function gotoPage(newPage: number) {
+    currentPage = newPage;
+    const url = new URL(page.url);
+    if (newPage === 1) {
+      url.searchParams.delete("page");
+    } else {
+      url.searchParams.set("page", newPage.toString());
+    }
+    navigate(url);
   }
 
   function normalizeQueryParams(searchParams: URLSearchParams): string {
@@ -85,17 +81,21 @@
     return copy.toString();
   }
   $effect(() => {
-    const before = normalizeQueryParams(page.url.searchParams);
+    const url = new URL(page.url);
     Object.entries(filters).forEach(([filterKey, value]) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
-      page.url.searchParams.delete(queryParam);
+      url.searchParams.delete(queryParam);
       for (const param of value) {
-        page.url.searchParams.append(queryParam, encodeURIComponent(param));
+        url.searchParams.append(queryParam, param);
       }
     });
-    if (before !== normalizeQueryParams(page.url.searchParams)) {
-      setPage(1);
-      refreshResults();
+    if (
+      normalizeQueryParams(url.searchParams) !==
+      normalizeQueryParams(page.url.searchParams)
+    ) {
+      currentPage = 1;
+      url.searchParams.delete("page");
+      navigate(url);
     }
   });
 </script>
@@ -118,7 +118,7 @@
           (acc, [key, _value]) => ({ ...acc, [key]: [] }),
           {} as Filters
         );
-        setPage(1);
+        currentPage = 1;
       }}
     />
   </div>
@@ -171,9 +171,8 @@
                 current={currentPage}
                 totalPages={pages}
                 onPageChange={(activePage) => {
-                  setPage(activePage);
                   resultsTop.scrollIntoView();
-                  refreshResults();
+                  gotoPage(activePage);
                 }}
               />
             {/if}
