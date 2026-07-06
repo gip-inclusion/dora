@@ -35,9 +35,43 @@
 
   const minCharactersToTriggerSearch = 4;
 
-  let addressSelected: AddressResult | null = $state(null);
+  function loadAddressFromSearchParams(
+    params: URLSearchParams
+  ): AddressResult | null {
+    const label: string =
+      decodeURIComponent(page.url.searchParams.get("label")) || "";
+    const singleParam = {
+      code_commune: LocationType.City,
+      code_departement: LocationType.Department,
+      code_region: LocationType.Region,
+    };
+    for (const [key, kind] of Object.entries(singleParam)) {
+      if (params.get(key)) {
+        return {
+          kind,
+          label,
+          searchParams: new URLSearchParams({ key: params.get(key) || "" }),
+        };
+      }
+    }
+    if (params.get("lon") && params.get("lat")) {
+      return {
+        kind: LocationType.Address,
+        label,
+        searchParams: new URLSearchParams({
+          lon: params.get("lon"),
+          lat: params.get("lat"),
+        }),
+      };
+    }
+    return null;
+  }
+
   let addressFieldValue = $state(
     decodeURIComponent(page.url.searchParams.get("label") || "")
+  );
+  let addressSelected: AddressResult | null = $state(
+    loadAddressFromSearchParams(page.url.searchParams)
   );
   let addressSelectErrorMessages: string[] = $state([]);
   // Conserve la recherche en cours à l'affichage des résultats : on initialise
@@ -193,6 +227,18 @@
   }
 
   onMount(() => {
+    const urlAddressParams = new Set([
+      "code_commune",
+      "code_departement",
+      "code_region",
+      "lon",
+      "lat",
+    ]);
+    if (
+      urlAddressParams.intersection(new Set([page.url.searchParams.keys()]))
+    ) {
+      return;
+    }
     const lastLocation = loadLastLocation();
     if (lastLocation) {
       addressSelected = lastLocation;
