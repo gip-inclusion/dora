@@ -111,6 +111,9 @@ class EmploisOrientationSerializer(OrientationSerializer):
     """API Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
 
     emplois_data = EmploisOrientationDataSerializer(write_only=True)
+    emplois_sync_uid = serializers.UUIDField(
+        source="emplois_orientation_data.emplois_sync_uid", read_only=True
+    )
 
     class Meta(OrientationSerializer.Meta):
         fields = [
@@ -134,6 +137,7 @@ class EmploisOrientationSerializer(OrientationSerializer):
             "di_contact_phone",
             "di_structure_name",
             "emplois_data",
+            "emplois_sync_uid",
             "orientation_reasons",
             "referent_email",
             "referent_first_name",

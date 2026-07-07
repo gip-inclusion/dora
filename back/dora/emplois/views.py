@@ -179,7 +179,7 @@ class OrientationViewSet(
                 default_storage.delete(path)
             raise
 
-        response_data = dict(serializer.initial_data)
+        response_data = dict(serializer.data)
         if saved_paths:
             response_data["beneficiary_attachments"] = saved_paths
         return Response(response_data, status=status.HTTP_201_CREATED)
