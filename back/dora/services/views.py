@@ -982,6 +982,12 @@ def search_keyword_view(request):
     query = serializer.data
     categories = query.pop("cats")
     subcategories = query.pop("subs")
+    categories = [
+        # Use more specific subcategories.
+        cat
+        for cat in categories
+        if not any(sub.startswith(cat) for sub in subcategories)
+    ]
     query["thematiques"] = _get_di_thematiques(categories, subcategories)
     sorted_services, metadata = search_keyword(request, query)
 

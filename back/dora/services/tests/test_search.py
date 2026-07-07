@@ -18,6 +18,7 @@ from dora.core.test_utils import (
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.services.enums import ServiceStatus
+from dora.services.models import ServiceSubCategory
 from dora.services.search import MAX_DISTANCE
 from dora.services.views import _validate_search_categories_and_subcategories
 
@@ -549,4 +550,38 @@ class TestSearchKeyword:
         assert [s["slug"] for s in response_json["services"]] == [
             "emplois-de-linclusion--17"
         ]
-        assert response_json["searchCenter"] == None
+        assert response_json["searchCenter"] is None
+
+    def test_subcategory_has_precedence_over_category(self, api_client):
+        category_value = "choisir-un-metier"
+        subcategories = ServiceSubCategory.objects.filter(
+            value__startswith=category_value
+        )
+        assert len(subcategories) > 1
+        selected_subcategory_value = subcategories[0].value
+        client = FakeDataInclusionClient()
+        spy = mock.MagicMock(wraps=client, spec_set=client)
+        with mock.patch("dora.data_inclusion.di_client_factory", return_value=spy):
+            response = api_client.get(
+                reverse("search-keyword"),
+                {
+                    "q": "foo",  # Pass validation.
+                    "cats": [category_value],
+                    "subs": [selected_subcategory_value],
+                },
+            )
+
+        assert response.status_code == 200
+        assert spy.mock_calls == [
+            mock.call.search(
+                q="foo",
+                modes_accueil=[],
+                publics=[],
+                types=[],
+                frais=[],
+                page=1,
+                # Does not include all subcategories for category.
+                thematiques=[selected_subcategory_value],
+                size=50,
+            )
+        ]
