@@ -32,7 +32,7 @@
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
     "@sveltejs/adapter-node": "^5.5.7",
-    "@sveltejs/kit": "^2.68.0",
+    "@sveltejs/kit": "^2.69.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.2",
@@ -96,6 +96,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.62.0"
+    "@sentry/sveltekit": "^10.63.0"
   }
 }
