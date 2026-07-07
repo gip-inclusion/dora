@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     "dora.orientations",
     "dora.sirene",
     "dora.support",
-    "dora.admin_express",
     "dora.stats",
     "dora.notifications",
     "dora.logs",

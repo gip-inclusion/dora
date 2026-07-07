@@ -99,26 +99,6 @@ Pour que l’application soit utilisable, il faut _a minima_ importer les donné
 
 Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
 
-## Import des données admin_express
-
-Pour faire tourner `import_admin_express` localement, il faut installer 7zip
-
-Pour Mac :
-```bash
-brew install sevenzip
-```
-
-Pour Linux :
-```bash
-sudo apt-get install 7zip
-```
-
-```bash
-./manage.py import_admin_express
-./manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
-# Ou make populate_db
-```
-
 ## Import des données decoupage_administratif
 
 L’application s’appuie sur les données du découpage administratif (communes, départements, EPCI, régions) importées depuis l’[API geo.api.gouv.fr](https://geo.api.gouv.fr) :
@@ -137,6 +117,13 @@ Par défaut, toutes les entités sont importées. Pour limiter l’import à un 
 ```
 
 L’URL de l’API est configurable via la variable d’environnement `GEO_API_GOUV_BASE_URL` (par défaut : `https://geo.api.gouv.fr`).
+
+## Import des labels nationaux
+
+```bash
+./manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
+# Ou make populate_db
+```
 
 # Configurer le téléchargement de documents en local
 Vous devez créer un bucket dans Minio pour les téléchargements de documents.
