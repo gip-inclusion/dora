@@ -46,8 +46,9 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
       "Impossible de charger les résultats, merci de réessayer ultérieurement.";
   }
   // Le tracking des PageView accepte un titre au maximum de 255 caractères.
+  const maxLength = 100;
   const titleKeywordTruncated =
-    keywords.length > 30 ? `${keywords.slice(0, 30)}…` : keywords;
+    keywords.length > maxLength ? `${keywords.slice(0, maxLength)}…` : keywords;
   return {
     title: `Recherche par mots-clés${titleKeywordTruncated ? ` : ${titleKeywordTruncated}` : ""} | DORA`,
     noIndex: true,
