@@ -50,8 +50,8 @@
 </script>
 
 {#if current && totalPages > 1}
-  <div class="border-gray-02 w-full rounded-lg border bg-white p-s16 mt-s16">
-    <span id="pages-label">Pages :</span>
+  <div class="p-s48 flex justify-center">
+    <span id="pages-label" class="sr-only">Pages :</span>
     <nav aria-labelledby="pages-label">
       {#snippet page(i: number)}
         <li class="inline">
@@ -63,11 +63,10 @@
               "aria-current": i === current ? "page" : undefined,
               "aria-disabled": i === current ? "true" : undefined,
             }}
-            extraClass="mx-s2"
+            extraClass="m-s2"
             disabled={i === current}
             onclick={i === current ? undefined : () => onPageChange(i)}
             label={i.toString()}
-            small
           />
         </li>
       {/snippet}

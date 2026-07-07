@@ -55,9 +55,7 @@
       tabindex="-1"
     >
       <div class="p-s32 lg:pr-s64 relative">
-        <!-- En-tête : nom de la structure (cliquable uniquement pour les
-             services DORA) et, pour les services data·inclusion, la source. -->
-        <div class="text-f23 text-france-blue font-bold">
+        <div class="text-f19 text-france-blue font-bold">
           {#if isDI}
             {result.structureInfo.name}
           {:else}
@@ -70,22 +68,20 @@
           {/if}
         </div>
 
-        {#if isDI}
-          <div
-            class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text mt-s8 inline-block rounded-sm border"
-          >
-            Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
-          </div>
-        {/if}
-
-        <hr class="border-gray-01 my-s24" />
-
         <!-- Service -->
-        <h3 class="mb-s12 text-magenta-cta text-f19">
+        <h3 class="mb-s12 text-magenta-cta text-f19 my-s10">
           <a class="full-result-link hover:underline" href={servicePagePath}>
             {result.name}
           </a>
         </h3>
+
+        {#if isDI}
+          <div
+            class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text mb-s12 inline-block rounded-sm border"
+          >
+            Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
+          </div>
+        {/if}
 
         {#if !summarized}
           <p class="mb-s12 text-f16 text-gray-text relative z-10">
@@ -93,23 +89,22 @@
           </p>
         {/if}
 
-        {#if result.modificationDate}
-          <div
-            class="text-service-green-darker gap-s6 text-f16 flex items-center font-bold"
-          >
-            <LoopLeftLineSystem size="20" />
-            <RelativeDateLabel
-              date={result.modificationDate}
-              prefix="Actualisé"
-              bold
-            />
-          </div>
-        {/if}
-
         <div
           class="mt-s16 gap-s16 flex flex-col items-start md:flex-row md:items-center md:justify-between"
         >
           <div class="gap-s8 text-f16 text-gray-dark flex flex-col">
+            {#if result.modificationDate}
+              <div
+                class="text-service-green-darker gap-s6 text-f16 flex items-center font-bold"
+              >
+                <LoopLeftLineSystem size="20" />
+                <RelativeDateLabel
+                  date={result.modificationDate}
+                  prefix="Actualisé"
+                  bold
+                />
+              </div>
+            {/if}
             {#if onSite}
               <div class="gap-s8 flex items-start">
                 <span class="text-gray-text mt-s2 shrink-0">
@@ -117,8 +112,8 @@
                 </span>
                 <span>
                   Présentiel{#if result.address1}
-                    &nbsp;• {result.address1}{#if result.address2}, {result.address2}{/if}
-                    - {result.postalCode}&nbsp;{result.city}{/if}
+                    &nbsp;- {result.address1}
+                    {result.postalCode}&nbsp;{result.city}{/if}
                 </span>
               </div>
             {/if}
