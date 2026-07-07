@@ -447,6 +447,13 @@ class EmploisOrientationData(models.Model):
         related_name="emplois_orientation_data",
         verbose_name="Orientation",
     )
+    emplois_sync_uid = models.UUIDField(
+        verbose_name="Emplois sync UID",
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
     beneficiary_id = models.UUIDField(verbose_name="Identifiant bénéficiaire")
     structure_id = models.UUIDField(verbose_name="Identifiant structure")
     structure_name = models.CharField(
