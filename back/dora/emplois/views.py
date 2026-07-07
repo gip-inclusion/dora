@@ -2,6 +2,7 @@ import json
 
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.db.models import CharField, Prefetch, Value
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -185,11 +186,12 @@ class OrientationViewSet(
         return Response(response_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        orientation = serializer.save(
-            prescriber=None,
-            prescriber_structure=None,
-        )
-        send_orientation_created_emails(orientation)
+        with transaction.atomic():
+            orientation = serializer.save(
+                prescriber=None,
+                prescriber_structure=None,
+            )
+            send_orientation_created_emails(orientation)
 
 
 @api_view(["POST"])
