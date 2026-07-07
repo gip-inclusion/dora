@@ -38,8 +38,7 @@
   function loadAddressFromSearchParams(
     params: URLSearchParams
   ): AddressResult | null {
-    const label: string =
-      decodeURIComponent(page.url.searchParams.get("label")) || "";
+    const label: string = page.url.searchParams.get("label") || "";
     const singleParam = {
       code_commune: LocationType.City,
       code_departement: LocationType.Department,
@@ -67,9 +66,7 @@
     return null;
   }
 
-  let addressFieldValue = $state(
-    decodeURIComponent(page.url.searchParams.get("label") || "")
-  );
+  let addressFieldValue = $state(page.url.searchParams.get("label") || "");
   let addressSelected: AddressResult | null = $state(
     loadAddressFromSearchParams(page.url.searchParams)
   );
@@ -210,13 +207,13 @@
     isLoading = true;
     const params = new URLSearchParams();
     if (searchQuery) {
-      params.append("q", encodeURIComponent(searchQuery));
+      params.append("q", searchQuery);
     }
     if (addressSelected) {
       for (const [key, value] of addressSelected.searchParams.entries()) {
-        params.append(key, encodeURIComponent(value));
+        params.append(key, value);
       }
-      params.append("label", encodeURIComponent(addressFieldValue));
+      params.append("label", addressFieldValue);
     }
     await goto(`/recherche-mots-cles?${params.toString()}`, {
       noScroll: true,
