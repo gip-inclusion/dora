@@ -748,3 +748,23 @@ class OrientationsExportTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+
+def test_source_is_dora_for_dora_orientation(api_client):
+    orientation = make_orientation()
+    url = f"/orientations/{orientation.query_id}/?h={orientation.get_query_id_hash()}"
+
+    response = api_client.get(url)
+
+    assert response.status_code == 200
+    assert response.data["source"] == "DORA"
+
+
+def test_source_is_emplois_for_emplois_orientation(api_client):
+    orientation = make_emplois_orientation()
+    url = f"/orientations/{orientation.query_id}/?h={orientation.get_query_id_hash()}"
+
+    response = api_client.get(url)
+
+    assert response.status_code == 200
+    assert response.data["source"] == "Plateforme de l’inclusion"

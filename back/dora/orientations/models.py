@@ -361,6 +361,9 @@ class Orientation(models.Model):
     def is_emplois(self):
         return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
+    def source(self):
+        return "Plateforme de l’inclusion" if self.is_emplois() else "DORA"
+
     def email_backend(self):
         from dora.orientations.emails.dora import backend as dora_backend
         from dora.orientations.emails.emplois import backend as emplois_backend

@@ -51,6 +51,8 @@
       trackOrientation(orientation, $page.url);
     }
   });
+
+  $inspect(orientation);
 </script>
 
 {#if askForNewLink}
@@ -72,6 +74,7 @@
       <p class="text-f16">
         <span class="font-bold">Date d’envoi de la demande&nbsp;:</span>
         {formatLongDate(orientation.creationDate)}
+        · Source : {orientation.source}
       </p>
 
       <div

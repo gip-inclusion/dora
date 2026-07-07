@@ -85,6 +85,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             "service_slug",
             "situation",
             "situation_other",
+            "source",
             "status",
         ]
         extra_kwargs = {"beneficiary_attachments": {"write_only": True}}
