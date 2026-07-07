@@ -679,6 +679,7 @@ class OrientationsExportTestCase(APITestCase):
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
                     "service_name": orientation_1.get_service_name(),
                     "detail_page_url": orientation_1.get_magic_link(),
+                    "source": "DORA",
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
@@ -688,6 +689,7 @@ class OrientationsExportTestCase(APITestCase):
                     "prescriber_structure_name": "Pas de prescripteur",
                     "service_name": orientation_2.get_service_name(),
                     "detail_page_url": orientation_2.get_magic_link(),
+                    "source": "DORA",
                 },
             ],
         )
@@ -719,6 +721,7 @@ class OrientationsExportTestCase(APITestCase):
         self.assertEqual(
             response.data[0]["detail_page_url"], orientation.get_magic_link()
         )
+        self.assertEqual(response.data[0]["source"], "Plateforme de l’inclusion")
 
     def test_raise_403_if_user_not_structure_member(self):
         self.client.force_authenticate(user=make_user())

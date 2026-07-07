@@ -23,6 +23,7 @@ interface ReceivedOrientationExportData extends Pick<
 > {
   prescriberStructureName: string;
   detailPageUrl: string;
+  source: string;
 }
 
 async function fetchOrientationExportData(structureSlug: string) {
@@ -59,6 +60,7 @@ function formatReceivedOrientationExportData(
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
     "Contact émetteur": orientation.prescriberName,
+    Source: orientation.source,
     Lien: orientation.detailPageUrl,
   }));
 }

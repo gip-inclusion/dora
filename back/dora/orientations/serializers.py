@@ -291,6 +291,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "service_name",
             "prescriber_structure_name",
             "detail_page_url",
+            "source",
         ]
 
     @staticmethod
