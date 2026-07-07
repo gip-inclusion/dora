@@ -51,8 +51,6 @@
       trackOrientation(orientation, $page.url);
     }
   });
-
-  $inspect(orientation);
 </script>
 
 {#if askForNewLink}
