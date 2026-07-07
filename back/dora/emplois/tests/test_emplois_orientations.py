@@ -30,6 +30,19 @@ EMPLOIS_DATA = {
 }
 
 
+def assert_payload_echoed(response_data, payload, exclude=()):
+    """Every payload key (minus write-only/excluded) must match in response; extra keys allowed."""
+    skip = {"emplois_data", *exclude}
+    for key, value in payload.items():
+        if key in skip:
+            continue
+        assert response_data[key] == value, (
+            f"{key}: {response_data.get(key)!r} != {value!r}"
+        )
+    assert "emplois_sync_uid" in response_data
+    assert uuid.UUID(str(response_data["emplois_sync_uid"]))
+
+
 def post_orientation(api_client, payload, attachments=None):
     data = {"data": json.dumps(payload)}
     if attachments:
@@ -79,7 +92,7 @@ def test_orientations_create_with_dora_service_resolves_fk(
     response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
-    assert response.data == payload
+    assert_payload_echoed(response.data, payload)
     orientation = Orientation.objects.get(service_id=service.id)
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service_id == service.id
@@ -93,7 +106,7 @@ def test_orientations_create_with_non_dora_service_keeps_di_id(
     response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
-    assert response.data == payload
+    assert_payload_echoed(response.data, payload)
     orientation = Orientation.objects.get(di_service_id="soliguide--svc-42")
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service is None
@@ -230,7 +243,11 @@ def test_orientations_create_with_all_fields(
     response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
-    assert response.data == payload
+    # france_travail_number only returned once orientation is VALIDÉE
+    assert_payload_echoed(
+        response.data, payload, exclude=("beneficiary_france_travail_number",)
+    )
+    assert response.data["beneficiary_france_travail_number"] == ""
     orientation = Orientation.objects.get(beneficiary_email="boris@example.org")
     assert orientation.beneficiary_email == "boris@example.org"
     assert orientation.beneficiary_phone == "0102030405"
@@ -387,6 +404,43 @@ def test_orientations_create_rejects_missing_data_part(emplois_api_client):
 
     assert response.status_code == 400
     assert "data" in response.data
+
+
+@patch("dora.emplois.views.send_orientation_created_emails")
+def test_orientations_create_rolls_back_when_mail_sending_fails(
+    mock_send_created, emplois_api_client, valid_payload
+):
+    mock_send_created.side_effect = RuntimeError("smtp down")
+
+    with pytest.raises(RuntimeError):
+        post_orientation(emplois_api_client, valid_payload)
+
+    mock_send_created.assert_called_once()
+    assert Orientation.objects.count() == 0
+
+
+@patch("dora.emplois.views.default_storage.delete")
+@patch(
+    "dora.emplois.views.save_orientation_attachment",
+    return_value="orientations/cv.pdf",
+)
+@patch("dora.emplois.views.send_orientation_created_emails")
+def test_orientations_create_cleans_up_attachments_when_mail_sending_fails(
+    mock_send_created,
+    mock_save_orientation_attachment,
+    mock_delete,
+    emplois_api_client,
+    valid_payload,
+):
+    mock_send_created.side_effect = RuntimeError("smtp down")
+    attachments = [SimpleUploadedFile("cv.pdf", b"%PDF-1.4 fake")]
+
+    with pytest.raises(RuntimeError):
+        post_orientation(emplois_api_client, valid_payload, attachments=attachments)
+
+    mock_save_orientation_attachment.assert_called_once()
+    mock_delete.assert_called_once_with("orientations/cv.pdf")
+    assert Orientation.objects.count() == 0
 
 
 def test_orientations_create_rejects_invalid_data_json(emplois_api_client):
