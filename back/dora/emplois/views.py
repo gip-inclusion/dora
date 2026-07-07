@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -37,6 +38,8 @@ from .serializers import (
     ReferenceDataSerializer,
     ServiceSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 MAX_ORIENTATION_ATTACHMENTS = 20  # we have a few cases with ~10 files
 
@@ -192,6 +195,24 @@ class OrientationViewSet(
                 prescriber_structure=None,
             )
             send_orientation_created_emails(orientation)
+            emplois_data = orientation.emplois_orientation_data
+            transaction.on_commit(
+                lambda: logger.info(
+                    "emplois_orientation_created",
+                    extra={
+                        "emplois_sync_uid": str(emplois_data.emplois_sync_uid),
+                        "orientation_id": str(orientation.id),
+                        "beneficiary_id": str(emplois_data.beneficiary_id),
+                        "structure_id": str(emplois_data.structure_id),
+                        "prescriber_id": str(emplois_data.prescriber_id)
+                        if emplois_data.prescriber_id
+                        else None,
+                        "service_id": f"dora--{orientation.service_id}"
+                        if orientation.service_id
+                        else orientation.di_service_id,
+                    },
+                )
+            )
 
 
 @api_view(["POST"])
