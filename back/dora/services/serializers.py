@@ -849,7 +849,7 @@ class BookmarkSerializer(BookmarkListSerializer):
 
 
 class SearchKeywordQuerySerializer(serializers.Serializer):
-    q = serializers.CharField(required=False)
+    q = serializers.CharField(required=False, min_length=3)
     code_commune = serializers.CharField(required=False)
     code_departement = serializers.CharField(required=False)
     code_region = serializers.CharField(required=False)

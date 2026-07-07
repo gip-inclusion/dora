@@ -385,6 +385,18 @@ class TestSearchKeyword:
                 },
                 id="lat_with_q",
             ),
+            pytest.param(
+                {"q": "q"},
+                {
+                    "q": [
+                        {
+                            "message": "Assurez-vous que ce champ comporte au moins 3 caractères.",
+                            "code": "min_length",
+                        }
+                    ]
+                },
+                id="q_too_short",
+            ),
         ],
     )
     def test_invalid_payload(self, api_client, params, expected):
