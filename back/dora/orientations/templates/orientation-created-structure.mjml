@@ -4,9 +4,11 @@
   Un bénéficiaire a été orienté vers votre service {{ data.get_service_name }}
 {% endblock %}
 
-{% block title %}
+{% block title_text %}
   Vous avez reçu une demande d’orientation pour le service «&nbsp;{{ data.get_service_name }}&nbsp;»
 {% endblock %}
+
+{% block source_text %}{{ data.source }}{% endblock %}
 
 {% block content %}
   <p>
