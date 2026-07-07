@@ -10,26 +10,27 @@
 
   import type { ServiceSearchResult } from "$lib/types";
   import Button from "$lib/components/display/button.svelte";
+  import Pagination from "$lib/components/display/pagination.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
 
   import type { PageData } from "./$types";
-  import type { Filters } from "./result-filters.svelte";
-  import ResultFilters from "./result-filters.svelte";
   import ResultMap from "./result-map.svelte";
   import SearchResults from "./search-results.svelte";
 
   interface Props {
     data: PageData;
-    filters: Filters;
     services: ServiceSearchResult[];
     total: number;
+    pages: number;
+    current: number;
+    onPageChange: (page: number) => void;
   }
 
-  let { data, filters = $bindable(), services, total }: Props = $props();
+  let { data, services, total, pages, current, onPageChange }: Props = $props();
 
   let isMapViewOpen = $state(false);
-  let isResultFiltersOpen = $state(false);
   let selectedServiceSlug: string | undefined = $state();
+  let resultsColumn: HTMLDivElement | undefined = $state();
 
   function handleServiceClick(slug: string) {
     selectedServiceSlug = slug;
@@ -37,7 +38,6 @@
 
   function handleCloseModal() {
     isMapViewOpen = false;
-    isResultFiltersOpen = false;
     selectedServiceSlug = undefined;
   }
 </script>
@@ -50,42 +50,38 @@
   {#if browser}
     <Modal bind:isOpen={isMapViewOpen} hideTitle hideCloseButton noPadding>
       <div class="flex h-[90vh]">
-        <div class="pb-s16 flex w-[448px] flex-col overflow-y-auto">
+        <div
+          bind:this={resultsColumn}
+          class="pb-s16 flex w-[448px] flex-col overflow-y-auto"
+        >
           <div
             class="top-s0 gap-s8 px-s32 pt-s32 sticky z-10 flex flex-col bg-white"
           >
             <Button label="Fermer la carte" onclick={handleCloseModal} />
-            <Button
-              label="Affiner la recherche"
-              secondary
-              onclick={() => (isResultFiltersOpen = true)}
-            />
-            <Modal
-              title="Affiner la recherche"
-              width="small"
-              bind:isOpen={isResultFiltersOpen}
-            >
-              <ResultFilters
-                servicesOptions={data.servicesOptions}
-                bind:filters
-              />
-            </Modal>
-            <div class="my-s24 text-f21">
+            <div class="my-s8 text-f21">
               <strong>
                 {total}
                 {total > 1 ? "services" : "service"}</strong
               >
             </div>
           </div>
-          <div class="gap-s24 px-s32 flex flex-col">
+          <div class="gap-s24 flex flex-col">
             {#if total}
-              <SearchResults
-                {data}
-                {services}
-                summarized
-                noPagination
-                {selectedServiceSlug}
-                {total}
+              <div class="px-s32">
+                <SearchResults
+                  {data}
+                  {services}
+                  summarized
+                  {selectedServiceSlug}
+                />
+              </div>
+              <Pagination
+                {current}
+                totalPages={pages}
+                onPageChange={(activePage) => {
+                  resultsColumn?.scrollTo({ top: 0 });
+                  onPageChange(activePage);
+                }}
               />
             {/if}
           </div>

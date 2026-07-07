@@ -129,7 +129,14 @@
     <div
       class="gap-s32 border-gray-02 p-s32 hidden flex-col rounded-2xl border shadow-sm lg:flex lg:basis-1/3"
     >
-      <MapViewButton {data} bind:filters {services} {total} />
+      <MapViewButton
+        {data}
+        {services}
+        {total}
+        {pages}
+        current={currentPage}
+        onPageChange={gotoPage}
+      />
       <ResultFilters servicesOptions={data.servicesOptions} bind:filters />
     </div>
     {#if fetchError}
