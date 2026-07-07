@@ -526,7 +526,6 @@ def search_keyword(request, api_params):
         # make the paginator and results count incorrect.
         minimum_quality=None,
     )
-    results.sort(key=lambda r: r["search_score"], reverse=True)
     metadata["services_pages"] = raw_di_results["pages"]
     metadata["services_total"] = raw_di_results["total"]
     return results, metadata

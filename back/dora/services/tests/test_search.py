@@ -437,7 +437,7 @@ class TestSearchKeyword:
             result["distance"] = random.uniform(0, 10)
             result["score_recherche"] = 0.1 * i
             results.append(result)
-            expected_slugs.insert(0, service.slug)
+            expected_slugs.append(service.slug)
         with mock.patch(
             "dora.data_inclusion.di_client_factory",
             return_value=FakeDataInclusionClient(services=results),
