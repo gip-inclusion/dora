@@ -39,3 +39,7 @@ export const ORIENTATION_JWT_QUERY_PARAM = "op";
 export const TOAST_DURATION_MS = 30000;
 
 export const STALE_CHUNK_ERROR_MESSAGE = "dynamically imported module";
+
+// Marqueur retourné par le handleError client lors du rechargement automatique
+// après un déploiement, pour que la page d'erreur ne le remonte pas à Sentry
+export const STALE_CHUNK_RELOAD_MESSAGE = "stale-chunk-reload";

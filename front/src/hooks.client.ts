@@ -3,7 +3,10 @@ import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import type { HandleClientError } from "@sveltejs/kit";
 
 import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
-import { STALE_CHUNK_ERROR_MESSAGE } from "$lib/consts";
+import {
+  STALE_CHUNK_ERROR_MESSAGE,
+  STALE_CHUNK_RELOAD_MESSAGE,
+} from "$lib/consts";
 
 setupFetchInterceptor();
 
@@ -27,7 +30,7 @@ export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
       error.message.includes(STALE_CHUNK_ERROR_MESSAGE)
     ) {
       window.location.reload();
-      return {};
+      return { message: STALE_CHUNK_RELOAD_MESSAGE };
     }
 
     const message =
