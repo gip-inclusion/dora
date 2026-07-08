@@ -902,7 +902,7 @@
               unselectItem(tagItem);
             }}
           >
-            <CloseCircleFillSystem />
+            <CloseCircleFillSystem size="16" />
           </button>
         {/if}
       </div>
@@ -1051,17 +1051,14 @@
     display: flex;
     flex-direction: row;
     border-radius: var(--spacing-s4);
-    padding: var(--spacing-s2) var(--spacing-s8);
+    padding: var(--spacing-s2) var(--spacing-s2) var(--spacing-s2)
+      var(--spacing-s8);
   }
 
   .tag-delete {
     position: relative;
-    top: 2px;
     margin-left: 4px;
     cursor: pointer;
     fill: currentColor;
-    width: var(--spacing-s16);
-    height: var(--spacing-s16);
-    shrink: 0;
   }
 </style>
