@@ -4,9 +4,11 @@
   Demande d’orientation non traitée depuis {{ elapsed_days }} jours.
 {% endblock %}
 
-{% block title %}
+{% block title_text %}
   Relance – Demande d’orientation en attente
 {% endblock %}
+
+{% block source_text %}{{ data.source }}{% endblock %}
 
 {% block content %}
   <p>

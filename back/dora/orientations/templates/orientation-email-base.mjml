@@ -1,5 +1,12 @@
 {% extends "email-base.mjml" %}
 
+{% block title %}
+  {% block title_text %}{% endblock %}
+  <span style="display: block; font-size: 13px; color: #777777; font-weight: normal; margin-top: 4px;">
+    Source : {% block source_text %}{% endblock %}
+  </span>
+{% endblock %}
+
 {% block illustration %}
   <mj-image src="{% frontend_url %}/emails/illu-orientation.png"
             alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié."/>

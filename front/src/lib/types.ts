@@ -701,6 +701,7 @@ export interface Orientation {
   id?: number;
   queryId: string;
   creationDate: string;
+  source: string;
   prescriberStructure?: {
     name: string;
     url?: string;

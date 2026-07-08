@@ -96,7 +96,7 @@ class OrientationViewSet(
     lookup_field = "query_id"
 
     def get_queryset(self):
-        return Orientation.objects.all()
+        return Orientation.objects.select_related("emplois_orientation_data")
 
     def perform_create(self, serializer):
         serializer.is_valid()

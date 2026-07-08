@@ -4,9 +4,11 @@
   Expiration de la demande d’orientation à {{ data.get_structure_name }}
 {% endblock %}
 
-{% block title %}
+{% block title_text %}
   La demande d’orientation pour {{ data.get_beneficiary_full_name }} a expirée.
 {% endblock %}
+
+{% block source_text %}{{ data.source }}{% endblock %}
 
 {% block content %}
   <p>
