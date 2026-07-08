@@ -174,7 +174,7 @@ def log_event(request):
 
         case Tag.STRUCTURE:
             event = StructureView.objects.create(
-                **common_analytics_data, **structure_data
+                **common_analytics_data, **structure_data, search_view=search_view
             )
 
         case Tag.STRUCTURE_INFOS:

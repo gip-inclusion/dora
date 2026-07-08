@@ -201,6 +201,7 @@ export function trackStructure(
       url.pathname,
       {
         structure: structure.slug,
+        searchId: url.searchParams.get("searchId"),
       },
       fetchFunction
     );

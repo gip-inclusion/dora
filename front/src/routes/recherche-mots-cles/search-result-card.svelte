@@ -61,7 +61,7 @@
           {:else}
             <a
               class="hover:underline"
-              href="/structures/{result.structureInfo.slug}"
+              href="/structures/{result.structureInfo.slug}?searchId={searchId}"
             >
               {result.structureInfo.name}
             </a>

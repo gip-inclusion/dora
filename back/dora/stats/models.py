@@ -230,7 +230,9 @@ class PageView(AbstractAnalyticsEvent):
 
 
 class StructureView(AbstractStructureEvent):
-    pass
+    search_view = models.ForeignKey(
+        "SearchView", on_delete=models.SET_NULL, null=True, blank=True
+    )
 
 
 class StructureInfosView(AbstractStructureEvent):

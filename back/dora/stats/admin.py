@@ -106,6 +106,11 @@ class StructureEventAdmin(AnalyticsEventAdmin):
     ]
 
 
+class StructureViewAdmin(StructureEventAdmin):
+    # `StructureView` porte, en plus, le lien vers la recherche d'origine.
+    raw_id_fields = ("structure", "user", "search_view")
+
+
 class ServiceEventAdmin(AnalyticsEventAdmin):
     raw_id_fields = ("service", "structure", "user", "search_view")
     list_display = [
@@ -242,7 +247,7 @@ class StructureInfoEventAdmin(AnalyticsEventAdmin):
 
 admin.site.register(DeploymentState, DeploymentStateAdmin)
 admin.site.register(PageView, PageViewAdmin)
-admin.site.register(StructureView, StructureEventAdmin)
+admin.site.register(StructureView, StructureViewAdmin)
 admin.site.register(OrientationView, OrientationEventAdmin)
 admin.site.register(ServiceShare, ServiceShareAdmin)
 admin.site.register(ServiceView, ServiceEventAdmin)
