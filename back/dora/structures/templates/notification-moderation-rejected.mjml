@@ -29,7 +29,7 @@
   <mj-text>
     Cordialement,
     <br/>
-    <strong>L’équipe DORA</strong>
+    <strong>L’équipe de la Plateforme de l’inclusion</strong>
   </mj-text>
 {% endblock %}
 
