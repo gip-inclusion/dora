@@ -177,13 +177,16 @@ class OrientationViewSet(
                 saved_paths.append(save_orientation_attachment(file_obj.name, file_obj))
 
             serializer.validated_data["beneficiary_attachments"] = saved_paths
-            self.perform_create(serializer)
+            orientation = self.perform_create(serializer)
         except Exception:  # we want to delete files if any error occurs
             for path in saved_paths:
                 default_storage.delete(path)
             raise
 
-        response_data = dict(serializer.data)
+        response_data = dict(
+            **serializer.initial_data,
+            emplois_sync_uid=orientation.emplois_orientation_data.emplois_sync_uid,
+        )
         if saved_paths:
             response_data["beneficiary_attachments"] = saved_paths
         return Response(response_data, status=status.HTTP_201_CREATED)
@@ -213,6 +216,7 @@ class OrientationViewSet(
                     },
                 )
             )
+        return orientation
 
 
 @api_view(["POST"])

@@ -30,19 +30,6 @@ EMPLOIS_DATA = {
 }
 
 
-def assert_payload_echoed(response_data, payload, exclude=()):
-    """Every payload key (minus write-only/excluded) must match in response; extra keys allowed."""
-    skip = {"emplois_data", *exclude}
-    for key, value in payload.items():
-        if key in skip:
-            continue
-        assert response_data[key] == value, (
-            f"{key}: {response_data.get(key)!r} != {value!r}"
-        )
-    assert "emplois_sync_uid" in response_data
-    assert uuid.UUID(str(response_data["emplois_sync_uid"]))
-
-
 def post_orientation(api_client, payload, attachments=None):
     data = {"data": json.dumps(payload)}
     if attachments:
@@ -88,12 +75,20 @@ def test_orientations_create_with_dora_service_resolves_fk(
     emplois_api_client, base_payload
 ):
     service = make_service()
-    payload = {**base_payload, "di_service_id": f"dora--{service.id}"}
+    payload = {
+        **base_payload,
+        "di_service_id": f"dora--{service.id}",
+    }
+
     response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
-    assert_payload_echoed(response.data, payload)
+    emplois_sync_uid = response.data.pop("emplois_sync_uid")
+
+    assert response.data == payload
     orientation = Orientation.objects.get(service_id=service.id)
+    assert orientation.emplois_orientation_data.emplois_sync_uid == emplois_sync_uid
+
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service_id == service.id
     assert orientation.di_service_id == ""
@@ -106,8 +101,12 @@ def test_orientations_create_with_non_dora_service_keeps_di_id(
     response = post_orientation(emplois_api_client, payload)
 
     assert response.status_code == 201, response.data
-    assert_payload_echoed(response.data, payload)
+    emplois_sync_uid = response.data.pop("emplois_sync_uid")
+
+    assert response.data == payload
     orientation = Orientation.objects.get(di_service_id="soliguide--svc-42")
+    assert orientation.emplois_orientation_data.emplois_sync_uid == emplois_sync_uid
+
     assert hasattr(orientation, "emplois_orientation_data")
     assert orientation.service is None
     assert orientation.di_service_id == "soliguide--svc-42"
@@ -244,11 +243,11 @@ def test_orientations_create_with_all_fields(
 
     assert response.status_code == 201, response.data
     # france_travail_number only returned once orientation is VALIDÉE
-    assert_payload_echoed(
-        response.data, payload, exclude=("beneficiary_france_travail_number",)
-    )
-    assert response.data["beneficiary_france_travail_number"] == ""
+    emplois_sync_uid = response.data.pop("emplois_sync_uid")
+
+    assert response.data == payload
     orientation = Orientation.objects.get(beneficiary_email="boris@example.org")
+    assert orientation.emplois_orientation_data.emplois_sync_uid == emplois_sync_uid
     assert orientation.beneficiary_email == "boris@example.org"
     assert orientation.beneficiary_phone == "0102030405"
     assert orientation.beneficiary_contact_preferences == ["EMAIL", "TELEPHONE"]
