@@ -4,7 +4,7 @@ import type { HandleClientError } from "@sveltejs/kit";
 
 import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
 import {
-  STALE_CHUNK_ERROR_MESSAGE,
+  STALE_CHUNK_ERROR_MESSAGES,
   STALE_CHUNK_RELOAD_MESSAGE,
 } from "$lib/consts";
 
@@ -16,7 +16,7 @@ if (ENVIRONMENT !== "local") {
     environment: ENVIRONMENT,
     tracesSampleRate: 0,
     tracePropagationTargets: [],
-    ignoreErrors: [STALE_CHUNK_ERROR_MESSAGE],
+    ignoreErrors: STALE_CHUNK_ERROR_MESSAGES,
   });
 }
 
@@ -27,7 +27,9 @@ export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
     // pour que le navigateur récupère le nouvel HTML et les nouveaux chunks.
     if (
       error instanceof TypeError &&
-      error.message.includes(STALE_CHUNK_ERROR_MESSAGE)
+      STALE_CHUNK_ERROR_MESSAGES.some((message) =>
+        error.message.includes(message)
+      )
     ) {
       window.location.reload();
       return { message: STALE_CHUNK_RELOAD_MESSAGE };

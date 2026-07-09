@@ -38,7 +38,12 @@ export const ORIENTATION_JWT_QUERY_PARAM = "op";
 
 export const TOAST_DURATION_MS = 30000;
 
-export const STALE_CHUNK_ERROR_MESSAGE = "dynamically imported module";
+// Messages d'erreur de chargement de chunk obsolète, propres à chaque
+// navigateur : Chrome/Edge et Firefox pour le premier, Safari pour le second
+export const STALE_CHUNK_ERROR_MESSAGES = [
+  "dynamically imported module",
+  "Importing a module script failed",
+];
 
 // Marqueur retourné par le handleError client lors du rechargement automatique
 // après un déploiement, pour que la page d'erreur ne le remonte pas à Sentry
