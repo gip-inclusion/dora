@@ -11,6 +11,7 @@
   import Button from "$lib/components/display/button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
+  import { BAN_API_SEARCH_URL } from "$lib/consts";
   import type {
     Choice,
     FeeCondition,
@@ -104,10 +105,8 @@
       : address.properties.label;
   }
 
-  const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
-
   async function searchAddress(addrQuery) {
-    const url = `${banAPIUrl}?q=${encodeURIComponent(addrQuery)}&limit=10`;
+    const url = `${BAN_API_SEARCH_URL}?q=${encodeURIComponent(addrQuery)}&limit=10`;
     try {
       const response = await fetch(url);
       if (!response.ok) {

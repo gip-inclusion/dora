@@ -5,6 +5,7 @@
 
   import Select from "$lib/components/inputs/select/select.svelte";
 
+  import { BAN_API_SEARCH_URL } from "$lib/consts";
   import { fetchWithRetry } from "$lib/utils/fetch-retry";
 
   import {
@@ -34,7 +35,6 @@
     readonly = false,
   }: Props = $props();
 
-  const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
   let currentSearchController: AbortController | undefined;
 
   async function searchAddress(query: string) {
@@ -42,7 +42,7 @@
     const controller = new AbortController();
     currentSearchController = controller;
 
-    const url = `${banAPIUrl}?q=${encodeURIComponent(
+    const url = `${BAN_API_SEARCH_URL}?q=${encodeURIComponent(
       query
     )}&limit=10&citycode=${cityCode}`;
 
