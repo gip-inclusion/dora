@@ -6,7 +6,9 @@ from django.db import migrations, models
 
 def backfill_unique_uuids(apps, schema_editor):
     EmploisOrientationData = apps.get_model("orientations", "EmploisOrientationData")
-    rows = list(EmploisOrientationData.objects.all().only("pk"))
+    rows = list(
+        EmploisOrientationData.objects.filter(emplois_sync_uid__isnull=True).only("pk")
+    )
     for row in rows:
         row.emplois_sync_uid = uuid.uuid4()
     if rows:
