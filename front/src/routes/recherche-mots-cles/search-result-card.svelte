@@ -36,8 +36,19 @@
   let onSite = $derived(result.locationKinds.includes("en-presentiel"));
   let remote = $derived(result.locationKinds.includes("a-distance"));
 
+  // On rattache la consultation du service à la recherche originale via le
+  // `searchId`. On l'omet s'il est absent.
   let servicePagePath = $derived(
-    `/services/${isDI ? "di--" : ""}${result.slug}?searchId=${searchId}`
+    `/services/${isDI ? "di--" : ""}${result.slug}${
+      searchId ? `?searchId=${searchId}` : ""
+    }`
+  );
+
+  // De même pour la consultation de la structure depuis les résultats de recherche.
+  let structurePagePath = $derived(
+    `/structures/${result.structureInfo.slug}${
+      searchId ? `?searchId=${searchId}` : ""
+    }`
   );
 
   $effect(() => {
@@ -65,10 +76,7 @@
           {#if isDI}
             {result.structureInfo.name}
           {:else}
-            <a
-              class="hover:underline"
-              href="/structures/{result.structureInfo.slug}"
-            >
+            <a class="hover:underline" href={structurePagePath}>
               {result.structureInfo.name}
             </a>
           {/if}

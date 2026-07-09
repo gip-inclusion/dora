@@ -71,12 +71,20 @@
     } else {
       url.searchParams.set("page", newPage.toString());
     }
+    // On rajoute explicitement le `searchId` à l'URL afin de le conserver
+    // d'une page à l'autre lors de la pagination.
+    if (data.searchId) {
+      url.searchParams.set("searchId", String(data.searchId));
+    }
     navigate(url);
   }
 
   function normalizeQueryParams(searchParams: URLSearchParams): string {
     const copy = new URLSearchParams(searchParams);
     copy.delete("page");
+    // `searchId` n'est pas un filtre/critère de recherche : on l'ignore dans
+    // la comparaison afin que son ajout ne soit pas pris pour un changement de filtre.
+    copy.delete("searchId");
     copy.sort();
     return copy.toString();
   }
@@ -95,7 +103,26 @@
     ) {
       currentPage = 1;
       url.searchParams.delete("page");
+      // Un changement de filtre constitue en revanche une nouvelle recherche :
+      // un nouvel événement `search` doit être émis (i.e. avec un nouveau `searchId`).
+      url.searchParams.delete("searchId");
       navigate(url);
+    }
+  });
+
+  // Une fois l'événement `search` émis (lors d'une nouvelle recherche), on
+  // ajoute le `searchId` à l'URL afin qu'il soit conservé lors de la
+  // pagination et du retour dans l'historique (notamment depuis la page d'un
+  // service), et ce, sans re-déclencher de recherche.
+  $effect(() => {
+    if (data.searchId && !page.url.searchParams.get("searchId")) {
+      const url = new URL(page.url);
+      url.searchParams.set("searchId", String(data.searchId));
+      window.history.replaceState(
+        history.state,
+        "",
+        `${url.pathname}${url.search}`
+      );
     }
   });
 </script>

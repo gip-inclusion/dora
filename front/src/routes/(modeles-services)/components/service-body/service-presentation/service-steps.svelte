@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from "$app/stores";
+
   import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
   import Linkify from "$lib/components/display/linkify.svelte";
   import type {
@@ -45,6 +47,9 @@
   };
 
   let isDI = $derived("source" in service);
+  // Passe le `searchId` (dans l'URL) vers le détail de la structure afin de
+  // lier la consultation à la recherche originale.
+  let searchId = $derived($page.url.searchParams.get("searchId"));
 
   let coachOrientationModesValueAndDisplay = $derived(
     (service.coachOrientationModes ?? [])
@@ -129,7 +134,9 @@
         <strong
           >Vous étes un particulier&#8239;? <a
             class="text-magenta-cta underline"
-            href="/structures/{service.structureInfo.slug}"
+            href="/structures/{service.structureInfo.slug}{searchId
+              ? `?searchId=${searchId}`
+              : ''}"
             >Voir les coordonnées de la structure</a
           ></strong
         >

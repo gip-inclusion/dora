@@ -136,20 +136,28 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     redirect(302, `/recherche?${url.searchParams.toString()}`);
   }
 
-  const searchId = await trackSearch(
-    url,
-    // La priorité est donnée aux sous-catégories
-    subCategoryIds.length ? [] : categoryIds,
-    subCategoryIds,
-    cityCode,
-    cityLabel,
-    kindIds,
-    feeConditions,
-    locationKinds,
-    fundingLabels,
-    services,
-    fetch
-  );
+  // Un `searchId` déjà présent dans l'URL indique qu'on revient sur la même
+  // recherche (i.e. retour dans l'historique depuis le détail d'un service) :
+  // on réutilise ce `searchId` plutôt que d'émettre à nouveau un événement
+  // `search`, ce qui fausserait les comptes et casserait la liaison des
+  // consultations de pages à la recherche originale.
+  const existingSearchId = url.searchParams.get("searchId");
+  const searchId = existingSearchId
+    ? Number(existingSearchId)
+    : await trackSearch(
+        url,
+        // La priorité est donnée aux sous-catégories
+        subCategoryIds.length ? [] : categoryIds,
+        subCategoryIds,
+        cityCode,
+        cityLabel,
+        kindIds,
+        feeConditions,
+        locationKinds,
+        fundingLabels,
+        services,
+        fetch
+      );
 
   if (cityCode && cityLabel) {
     storeLastSearchCity(cityCode, cityLabel);

@@ -31,8 +31,12 @@
   );
   let remote = $derived(result.locationKinds.includes("a-distance"));
 
+  // On rattache la consultation du service à la recherche originale via le
+  // `searchId`. On l'omet s'il est absent.
   let servicePagePath = $derived(
-    `/services/${isDI ? "di--" : ""}${result.slug}?searchId=${searchId}`
+    `/services/${isDI ? "di--" : ""}${result.slug}${
+      searchId ? `?searchId=${searchId}` : ""
+    }`
   );
 
   $effect(() => {

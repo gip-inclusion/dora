@@ -67,7 +67,10 @@ def subcategories_display(obj):
 
 class SearchEventAdmin(AnalyticsEventAdmin):
     list_display = [
+        "id",
         "date",
+        "search_type",
+        "keyword",
         "department",
         "city_code",
         categories_display,
@@ -78,15 +81,22 @@ class SearchEventAdmin(AnalyticsEventAdmin):
     ]
     list_filter = [
         "date",
+        "search_type",
         "categories",
         "is_staff",
         "is_logged",
         "department",
     ]
+    search_fields = ["id", "keyword"]
     filter_horizontal = [
         "categories",
         "subcategories",
     ]
+
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in self.model._meta.fields] + [
+            f.name for f in self.model._meta.many_to_many
+        ]
 
 
 class StructureEventAdmin(AnalyticsEventAdmin):
@@ -104,6 +114,11 @@ class StructureEventAdmin(AnalyticsEventAdmin):
         "structure_department",
         "structure_source",
     ]
+
+
+class StructureViewAdmin(StructureEventAdmin):
+    # `StructureView` porte, en plus, le lien vers la recherche d'origine.
+    raw_id_fields = ("structure", "user", "search_view")
 
 
 class ServiceEventAdmin(AnalyticsEventAdmin):
@@ -242,7 +257,7 @@ class StructureInfoEventAdmin(AnalyticsEventAdmin):
 
 admin.site.register(DeploymentState, DeploymentStateAdmin)
 admin.site.register(PageView, PageViewAdmin)
-admin.site.register(StructureView, StructureEventAdmin)
+admin.site.register(StructureView, StructureViewAdmin)
 admin.site.register(OrientationView, OrientationEventAdmin)
 admin.site.register(ServiceShare, ServiceShareAdmin)
 admin.site.register(ServiceView, ServiceEventAdmin)

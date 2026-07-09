@@ -170,6 +170,11 @@
         $page.url.searchParams.delete(queryParam);
       }
     });
+    // On préserve dans l'URL (et donc dans l'historique de navigation) le
+    // `searchId` de la recherche courante afin de ne pas redéclencher de recherche.
+    if (data.searchId && !$page.url.searchParams.get("searchId")) {
+      $page.url.searchParams.set("searchId", String(data.searchId));
+    }
     // Utilisation de l'API History pour mettre à jour les paramètres d'URL sans recharger la page
     window.history.replaceState(
       history.state,
