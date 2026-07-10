@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
-from dora.orientations.models import Orientation
+from dora.orientations.models import EmploisOrientationData, Orientation
 
 
 class Command(BaseCommand):
@@ -24,6 +24,15 @@ class Command(BaseCommand):
             is_anonymized=False, creation_date__date__lte=anonymization_date
         )
 
+        emplois_count = EmploisOrientationData.objects.filter(
+            orientation__in=orientations_to_anonymize
+        ).update(
+            prescriber_email="",
+            prescriber_first_name="",
+            prescriber_last_name="",
+            prescriber_phone="",
+        )
+
         count = orientations_to_anonymize.update(
             beneficiary_first_name="",
             beneficiary_last_name="",
@@ -40,6 +49,7 @@ class Command(BaseCommand):
         )
 
         self.logger.info(
-            "%s orientations ont été anonymisées.",
+            "%s orientations ont été anonymisées (dont %s avec des données Les Emplois).",
             count,
+            emplois_count,
         )
