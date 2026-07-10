@@ -33,7 +33,7 @@ from .serializers import (
     DisabledDoraFormDIStructureSerializer,
     DoraServiceMobilisationSerializer,
     DoraStructureViewSerializer,
-    EmploisOrientationSerializer,
+    EmploisOrientationCreateSerializer,
     ExternalServiceMobilisationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
@@ -149,7 +149,7 @@ class OrientationViewSet(
     viewsets.GenericViewSet,
 ):
     permission_classes = (OrientationAPIPermission,)
-    serializer_class = EmploisOrientationSerializer
+    serializer_class = EmploisOrientationCreateSerializer
     parser_classes = (MultiPartParser, FormParser)
     renderer_classes = (JSONRenderer,)
     throttle_classes = (UploadRateThrottle,)

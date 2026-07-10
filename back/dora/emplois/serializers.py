@@ -107,8 +107,8 @@ class EmploisOrientationDataSerializer(serializers.Serializer):
     prescriber_phone = serializers.CharField(max_length=10)
 
 
-class EmploisOrientationSerializer(OrientationSerializer):
-    """API Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
+class EmploisOrientationCreateSerializer(OrientationSerializer):
+    """Création d'une orientation par Les Emplois : le service Dora est ciblé via `di_service_id` = `dora--` + UUID du service."""
 
     emplois_data = EmploisOrientationDataSerializer(write_only=True)
 
