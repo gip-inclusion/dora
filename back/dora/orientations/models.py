@@ -55,6 +55,14 @@ class OrientationQuerySet(models.QuerySet):
             processing_date__isnull=False,
         )
 
+    def emplois(self):
+        # Orientations émises par Les Emplois — mêmes conditions
+        # que `Orientation.is_emplois()`.
+        return self.filter(
+            prescriber__isnull=True,
+            emplois_orientation_data__isnull=False,
+        )
+
 
 @dataclass(frozen=True)
 class PrescriberInfo:
@@ -359,6 +367,7 @@ class Orientation(models.Model):
             return ""
 
     def is_emplois(self):
+        # mêmes conditions que `OrientationQuerySet.emplois()`
         return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
     def source(self):
