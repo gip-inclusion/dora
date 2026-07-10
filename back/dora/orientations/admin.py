@@ -19,6 +19,7 @@ class EmploisOrientationDataInline(admin.StackedInline):
         "prescriber_first_name",
         "prescriber_last_name",
         "prescriber_phone",
+        "emplois_sync_uid",
     )
     extra = 0
 
