@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import NotFound, ValidationError
 
 from dora.core.validators import validate_siret
-from dora.orientations.models import EmploisOrientationData
+from dora.orientations.models import EmploisOrientationData, Orientation
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
 from dora.stats.models import (
@@ -208,6 +208,19 @@ class EmploisOrientationCreateSerializer(OrientationSerializer):
         if instance.service_id:
             data["di_service_id"] = f"dora--{instance.service_id}"
         return data
+
+
+class EmploisOrientationStatusSerializer(serializers.ModelSerializer):
+    """Statut des orientations émises par Les Emplois."""
+
+    emplois_sync_uid = serializers.UUIDField(
+        source="emplois_orientation_data.emplois_sync_uid", read_only=True
+    )
+    updated_at = serializers.DateTimeField(read_only=True)
+
+    class Meta:
+        model = Orientation
+        fields = ["emplois_sync_uid", "status", "updated_at"]
 
 
 # Valeurs constantes communes à tous les événements de mobilisation enregistrés

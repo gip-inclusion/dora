@@ -1,20 +1,25 @@
 import json
 import uuid
+from datetime import timedelta
 from unittest.mock import patch
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from django.utils import timezone
 from model_bakery import baker
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import DateTimeField
 
-from dora.core.test_utils import make_service
+from dora.core.test_utils import make_orientation, make_service
 from dora.orientations.models import (
+    EmploisOrientationData,
     Orientation,
     OrientationStatus,
 )
 
 ORIENTATION_URL = "emplois:orientation-list"
+ORIENTATION_STATUS_URL = "emplois:orientation-status"
 DEFAULT_DI_SERVICE_ID = "soliguide--svc-1"
 
 EMPLOIS_DATA = {
@@ -451,3 +456,122 @@ def test_orientations_create_rejects_invalid_data_json(emplois_api_client):
 
     assert response.status_code == 400
     assert "data" in response.data
+
+
+def make_emplois_orientation(**kwargs):
+    """Crée une orientation émise par Les Emplois (avec ses `EmploisOrientationData`)."""
+    orientation = baker.make(
+        Orientation,
+        di_service_id=DEFAULT_DI_SERVICE_ID,
+        service=None,
+        **kwargs,
+    )
+    baker.make(EmploisOrientationData, orientation=orientation)
+    return orientation
+
+
+def test_orientation_status_list_requires_authentication(api_client):
+    response = api_client.get(reverse(ORIENTATION_STATUS_URL))
+    assert response.status_code == 401
+
+
+def test_orientation_status_list_requires_emplois_email(api_client):
+    user = baker.make("users.User", is_valid=True, email="other@example.com")
+    api_client.force_authenticate(user=user)
+    response = api_client.get(reverse(ORIENTATION_STATUS_URL))
+    assert response.status_code == 403
+
+
+def test_orientation_status_list_returns_only_emplois_orientations(
+    emplois_api_client,
+):
+    processing_date = timezone.now()
+    emplois_orientation = make_emplois_orientation(
+        status=OrientationStatus.ACCEPTED,
+        processing_date=processing_date,
+    )
+    # orientation Dora classique, sans données Les Emplois : exclue de la liste
+    make_orientation()
+    # orientation avec données Les Emplois mais avec un prescripteur Dora
+    # (créée depuis un JWT Emplois) : exclue de la liste
+    make_emplois_orientation(
+        prescriber=baker.make("users.User", is_valid=True),
+    )
+
+    response = emplois_api_client.get(reverse(ORIENTATION_STATUS_URL))
+
+    assert response.status_code == 200
+    results = response.data["results"]
+    assert len(results) == 1
+
+    item = results[0]
+    assert set(item.keys()) == {"emplois_sync_uid", "status", "updated_at"}
+    assert item["emplois_sync_uid"] == str(
+        emplois_orientation.emplois_orientation_data.emplois_sync_uid
+    )
+    assert item["status"] == OrientationStatus.ACCEPTED
+    assert item["updated_at"] == DateTimeField().to_representation(processing_date)
+
+
+def test_orientation_status_list_updated_at_falls_back_to_creation_date(
+    emplois_api_client,
+):
+    # orientation pas encore traitée : pas de date de traitement
+    orientation = make_emplois_orientation(status=OrientationStatus.PENDING)
+
+    response = emplois_api_client.get(reverse(ORIENTATION_STATUS_URL))
+
+    assert response.status_code == 200
+    item = response.data["results"][0]
+    assert item["updated_at"] == DateTimeField().to_representation(
+        orientation.creation_date
+    )
+
+
+def test_orientation_status_list_filters_by_updated_after(emplois_api_client):
+    cutoff = timezone.now()
+    make_emplois_orientation(
+        status=OrientationStatus.ACCEPTED,
+        processing_date=cutoff - timedelta(days=1),
+    )
+    on_cutoff = make_emplois_orientation(
+        status=OrientationStatus.REJECTED,
+        processing_date=cutoff,
+    )
+    after_cutoff = make_emplois_orientation(
+        status=OrientationStatus.ACCEPTED,
+        processing_date=cutoff + timedelta(days=1),
+    )
+
+    response = emplois_api_client.get(
+        reverse(ORIENTATION_STATUS_URL), {"updated_after": cutoff.isoformat()}
+    )
+
+    assert response.status_code == 200
+    # borne incluse : l'orientation mise à jour exactement à `updated_after`
+    # est retournée
+    assert [item["emplois_sync_uid"] for item in response.data["results"]] == [
+        str(on_cutoff.emplois_orientation_data.emplois_sync_uid),
+        str(after_cutoff.emplois_orientation_data.emplois_sync_uid),
+    ]
+
+
+def test_orientation_status_list_rejects_invalid_updated_after(emplois_api_client):
+    response = emplois_api_client.get(
+        reverse(ORIENTATION_STATUS_URL), {"updated_after": "pas-une-date"}
+    )
+
+    assert response.status_code == 400
+    assert "updated_after" in response.data
+
+
+def test_orientation_status_list_ignores_empty_updated_after(emplois_api_client):
+    make_emplois_orientation(status=OrientationStatus.PENDING)
+
+    response = emplois_api_client.get(
+        reverse(ORIENTATION_STATUS_URL), {"updated_after": ""}
+    )
+
+    # paramètre facultatif : vide, il est ignoré et la liste est complète
+    assert response.status_code == 200
+    assert len(response.data["results"]) == 1

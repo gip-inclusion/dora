@@ -5,9 +5,11 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import transaction
 from django.db.models import CharField, Prefetch, Value
-from rest_framework import mixins, permissions, status, viewsets
+from django.db.models.functions import Coalesce
+from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import DateTimeField
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -34,6 +36,7 @@ from .serializers import (
     DoraServiceMobilisationSerializer,
     DoraStructureViewSerializer,
     EmploisOrientationCreateSerializer,
+    EmploisOrientationStatusSerializer,
     ExternalServiceMobilisationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
@@ -217,6 +220,49 @@ class OrientationViewSet(
                 )
             )
         return orientation
+
+
+class OrientationStatusListView(generics.ListAPIView):
+    """Statuts des orientations émises par Les Emplois, pour leur synchronisation."""
+
+    permission_classes = (APIPermission,)
+    serializer_class = EmploisOrientationStatusSerializer
+    renderer_classes = (JSONRenderer,)
+    pagination_class = DefaultPageNumberPagination
+
+    def get_queryset(self):
+        return (
+            Orientation.objects.emplois()
+            .annotate(updated_at=Coalesce("processing_date", "creation_date"))
+            .select_related("emplois_orientation_data")
+            .only(
+                "status",
+                "processing_date",
+                "creation_date",
+                "emplois_orientation_data__emplois_sync_uid",
+            )
+            .order_by("pk")
+        )
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        # `?updated_after=<ISO 8601>` : synchronisation incrémentale des
+        # statuts. Facultatif : absent ou vide, la liste est complète.
+        # Borne incluse pour ne pas rater une mise à jour simultanée ;
+        # Les Emplois dédoublonnent via `emplois_sync_uid`.
+        updated_after = self.request.query_params.get("updated_after")
+        if updated_after:
+            try:
+                value = DateTimeField().run_validation(updated_after)
+            except ValidationError:
+                raise ValidationError(
+                    {
+                        "updated_after": "Format de date invalide (datetime ISO 8601 attendu)."
+                    }
+                )
+            queryset = queryset.filter(updated_at__gte=value)
+        return queryset
 
 
 @api_view(["POST"])
