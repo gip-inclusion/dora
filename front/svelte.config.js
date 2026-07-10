@@ -18,7 +18,7 @@ const config = {
           process.env?.VITE_API_URL,
           process.env?.VITE_ENVIRONMENT === "local" ? "ws:" : null,
           "https://*.sentry.io",
-          "https://api-adresse.data.gouv.fr/",
+          "https://data.geopf.fr/",
           "https://openmaptiles.data.gouv.fr",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
