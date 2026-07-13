@@ -1,6 +1,8 @@
 from typing import Optional
 from uuid import uuid4
 
+from data_inclusion.schema.v1 import ModeAccueil
+
 
 def make_di_service_data(**kwargs) -> dict:
     source = kwargs.pop("source", "emplois-de-linclusion")
@@ -32,7 +34,7 @@ def make_di_service_data(**kwargs) -> dict:
             "latitude": 0,
             "telephone": "+33123456789",
             "courriel": "exemple@inclusion.gouv.fr",
-            "modes_accueil": ["a-distance"],
+            "modes_accueil": [ModeAccueil.A_DISTANCE],
             "zone_eligibilite": ["75056"],
             "contact_nom_prenom": "string",
             "lien_mobilisation": "https://www.actionlogement.fr/demande-cfi",
