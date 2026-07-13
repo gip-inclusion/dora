@@ -504,7 +504,7 @@ def test_orientation_status_list_returns_only_emplois_orientations(
     results = response.data["results"]
     assert len(results) == 1
 
-    item = results[0]
+    [item] = response.data["results"]
     assert set(item.keys()) == {"emplois_sync_uid", "status", "updated_at"}
     assert item["emplois_sync_uid"] == str(
         emplois_orientation.emplois_orientation_data.emplois_sync_uid
@@ -522,7 +522,8 @@ def test_orientation_status_list_updated_at_falls_back_to_creation_date(
     response = emplois_api_client.get(reverse(ORIENTATION_STATUS_URL))
 
     assert response.status_code == 200
-    item = response.data["results"][0]
+    assert len(response.data["results"]) == 1
+    [item] = response.data["results"]
     assert item["updated_at"] == DateTimeField().to_representation(
         orientation.creation_date
     )
