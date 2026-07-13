@@ -12,6 +12,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import DateTimeField
 
 from dora.core.test_utils import make_orientation, make_service
+from dora.emplois.views import AwareDateTimeField
 from dora.orientations.models import (
     EmploisOrientationData,
     Orientation,
@@ -560,11 +561,26 @@ def test_orientation_status_list_filters_by_updated_after(emplois_api_client):
 def test_orientation_status_list_rejects_invalid_updated_after(emplois_api_client):
     invalid_value = "pas-une-date"
     with pytest.raises(ValidationError) as exc_info:
-        DateTimeField().run_validation(invalid_value)
+        AwareDateTimeField().run_validation(invalid_value)
     expected = exc_info.value.detail[0]
 
     response = emplois_api_client.get(
         reverse(ORIENTATION_STATUS_URL), {"updated_after": invalid_value}
+    )
+
+    assert response.status_code == 400
+    assert response.data["updated_after"][0]["code"] == expected.code
+    assert str(response.data["updated_after"][0]["message"]) == str(expected)
+
+
+def test_orientation_status_list_rejects_naive_updated_after(emplois_api_client):
+    naive_value = "2026-07-13T15:00:00"
+    with pytest.raises(ValidationError) as exc_info:
+        AwareDateTimeField().run_validation(naive_value)
+    expected = exc_info.value.detail[0]
+
+    response = emplois_api_client.get(
+        reverse(ORIENTATION_STATUS_URL), {"updated_after": naive_value}
     )
 
     assert response.status_code == 400

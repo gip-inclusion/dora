@@ -6,6 +6,7 @@ from django.core.files.storage import default_storage
 from django.db import transaction
 from django.db.models import CharField, Prefetch, Value
 from django.db.models.functions import Coalesce
+from django.utils import timezone
 from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.exceptions import ValidationError
@@ -222,6 +223,18 @@ class OrientationViewSet(
         return orientation
 
 
+class AwareDateTimeField(DateTimeField):
+    default_error_messages = {
+        **DateTimeField.default_error_messages,
+        "naive": "La date et l'heure doivent inclure une indication de fuseau horaire.",
+    }
+
+    def enforce_timezone(self, value):
+        if timezone.is_naive(value):
+            self.fail("naive")
+        return super().enforce_timezone(value)
+
+
 class OrientationStatusListView(generics.ListAPIView):
     """Statuts des orientations émises par Les Emplois, pour leur synchronisation."""
 
@@ -247,14 +260,16 @@ class OrientationStatusListView(generics.ListAPIView):
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
 
-        # `?updated_after=<ISO 8601>` : synchronisation incrémentale des
-        # statuts. Facultatif : absent ou vide, la liste est complète.
+        # `?updated_after=<ISO 8601 avec fuseau horaire>` : synchronisation
+        # incrémentale des statuts. Format attendu :
+        # `YYYY-MM-DDThh:mm[:ss[.uuuuuu]]Z` ou `...+HH:MM` / `...-HH:MM`
+        # (ex. `2026-07-13T13:00:00Z`).
         # Borne incluse pour ne pas rater une mise à jour simultanée ;
         # Les Emplois dédoublonnent via `emplois_sync_uid`.
         updated_after = self.request.query_params.get("updated_after")
         if updated_after:
             try:
-                value = DateTimeField().run_validation(updated_after)
+                value = AwareDateTimeField().run_validation(updated_after)
             except ValidationError as exc:
                 raise ValidationError({"updated_after": exc.detail}) from exc
             queryset = queryset.filter(updated_at__gte=value)
