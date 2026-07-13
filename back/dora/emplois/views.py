@@ -255,12 +255,8 @@ class OrientationStatusListView(generics.ListAPIView):
         if updated_after:
             try:
                 value = DateTimeField().run_validation(updated_after)
-            except ValidationError:
-                raise ValidationError(
-                    {
-                        "updated_after": "Format de date invalide (datetime ISO 8601 attendu)."
-                    }
-                )
+            except ValidationError as exc:
+                raise ValidationError({"updated_after": exc.detail}) from exc
             queryset = queryset.filter(updated_at__gte=value)
         return queryset
 

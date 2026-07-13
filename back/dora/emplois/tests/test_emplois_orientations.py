@@ -558,12 +558,18 @@ def test_orientation_status_list_filters_by_updated_after(emplois_api_client):
 
 
 def test_orientation_status_list_rejects_invalid_updated_after(emplois_api_client):
+    invalid_value = "pas-une-date"
+    with pytest.raises(ValidationError) as exc_info:
+        DateTimeField().run_validation(invalid_value)
+    expected = exc_info.value.detail[0]
+
     response = emplois_api_client.get(
-        reverse(ORIENTATION_STATUS_URL), {"updated_after": "pas-une-date"}
+        reverse(ORIENTATION_STATUS_URL), {"updated_after": invalid_value}
     )
 
     assert response.status_code == 400
-    assert "updated_after" in response.data
+    assert response.data["updated_after"][0]["code"] == expected.code
+    assert str(response.data["updated_after"][0]["message"]) == str(expected)
 
 
 def test_orientation_status_list_ignores_empty_updated_after(emplois_api_client):
