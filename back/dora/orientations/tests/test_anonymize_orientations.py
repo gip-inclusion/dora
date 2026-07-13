@@ -1,12 +1,15 @@
 from datetime import timedelta
 from io import StringIO
 
+from django.conf import settings
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 from freezegun import freeze_time
+from model_bakery import baker
 
 from dora.core.test_utils import make_orientation
+from dora.orientations.models import EmploisOrientationData
 
 
 class AnonymizeOrientationsTestCase(TestCase):
@@ -71,3 +74,51 @@ class AnonymizeOrientationsTestCase(TestCase):
 
         self.assertFalse(self.orientation.is_anonymized)
         self.assertIsNone(self.orientation.processing_date, timezone.now())
+
+
+def make_emplois_orientation_data(creation_date):
+    orientation = make_orientation(creation_date=creation_date)
+    return baker.make(
+        EmploisOrientationData,
+        orientation=orientation,
+        prescriber_email="alice.martin@example.org",
+        prescriber_first_name="Alice",
+        prescriber_last_name="Martin",
+        prescriber_phone="0601020304",
+        structure_name="Mission locale de Paris",
+    )
+
+
+def test_should_anonymize_emplois_orientation_data():
+    old_creation_date = timezone.now() - timedelta(
+        days=settings.ORIENTATION_ANONYMIZATION_PERIOD_DAYS + 1
+    )
+    emplois_data = make_emplois_orientation_data(old_creation_date)
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    emplois_data.refresh_from_db()
+    assert emplois_data.prescriber_email == ""
+    assert emplois_data.prescriber_first_name == ""
+    assert emplois_data.prescriber_last_name == ""
+    assert emplois_data.prescriber_phone == ""
+
+    orientation = emplois_data.orientation
+    orientation.refresh_from_db()
+    assert orientation.is_anonymized
+
+
+def test_should_not_anonymize_recent_emplois_orientation_data():
+    emplois_data = make_emplois_orientation_data(timezone.now())
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    emplois_data.refresh_from_db()
+    assert emplois_data.prescriber_email == "alice.martin@example.org"
+    assert emplois_data.prescriber_first_name == "Alice"
+    assert emplois_data.prescriber_last_name == "Martin"
+    assert emplois_data.prescriber_phone == "0601020304"
+
+    orientation = emplois_data.orientation
+    orientation.refresh_from_db()
+    assert not orientation.is_anonymized

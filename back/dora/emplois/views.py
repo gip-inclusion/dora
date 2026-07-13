@@ -5,9 +5,12 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import transaction
 from django.db.models import CharField, Prefetch, Value
-from rest_framework import mixins, permissions, status, viewsets
+from django.db.models.functions import Coalesce
+from django.utils import timezone
+from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import DateTimeField
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -33,7 +36,8 @@ from .serializers import (
     DisabledDoraFormDIStructureSerializer,
     DoraServiceMobilisationSerializer,
     DoraStructureViewSerializer,
-    EmploisOrientationSerializer,
+    EmploisOrientationCreateSerializer,
+    EmploisOrientationStatusSerializer,
     ExternalServiceMobilisationSerializer,
     ReferenceDataSerializer,
     ServiceSerializer,
@@ -149,7 +153,7 @@ class OrientationViewSet(
     viewsets.GenericViewSet,
 ):
     permission_classes = (OrientationAPIPermission,)
-    serializer_class = EmploisOrientationSerializer
+    serializer_class = EmploisOrientationCreateSerializer
     parser_classes = (MultiPartParser, FormParser)
     renderer_classes = (JSONRenderer,)
     throttle_classes = (UploadRateThrottle,)
@@ -217,6 +221,59 @@ class OrientationViewSet(
                 )
             )
         return orientation
+
+
+class AwareDateTimeField(DateTimeField):
+    default_error_messages = {
+        **DateTimeField.default_error_messages,
+        "naive": "La date et l'heure doivent inclure une indication de fuseau horaire.",
+    }
+
+    def enforce_timezone(self, value):
+        if timezone.is_naive(value):
+            self.fail("naive")
+        return super().enforce_timezone(value)
+
+
+class OrientationStatusListView(generics.ListAPIView):
+    """Statuts des orientations émises par Les Emplois, pour leur synchronisation."""
+
+    permission_classes = (APIPermission,)
+    serializer_class = EmploisOrientationStatusSerializer
+    renderer_classes = (JSONRenderer,)
+    pagination_class = DefaultPageNumberPagination
+
+    def get_queryset(self):
+        return (
+            Orientation.objects.emplois()
+            .annotate(updated_at=Coalesce("processing_date", "creation_date"))
+            .select_related("emplois_orientation_data")
+            .only(
+                "status",
+                "processing_date",
+                "creation_date",
+                "emplois_orientation_data__emplois_sync_uid",
+            )
+            .order_by("pk")
+        )
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        # `?updated_after=<ISO 8601 avec fuseau horaire>` : synchronisation
+        # incrémentale des statuts. Format attendu :
+        # `YYYY-MM-DDThh:mm[:ss[.uuuuuu]]Z` ou `...+HH:MM` / `...-HH:MM`
+        # (ex. `2026-07-13T13:00:00Z`).
+        # Borne incluse pour ne pas rater une mise à jour simultanée ;
+        # Les Emplois dédoublonnent via `emplois_sync_uid`.
+        updated_after = self.request.query_params.get("updated_after")
+        if updated_after:
+            try:
+                value = AwareDateTimeField().run_validation(updated_after)
+            except ValidationError as exc:
+                raise ValidationError({"updated_after": exc.detail}) from exc
+            queryset = queryset.filter(updated_at__gte=value)
+        return queryset
 
 
 @api_view(["POST"])
