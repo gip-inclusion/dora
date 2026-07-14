@@ -377,12 +377,11 @@ def _get_results(
     # Les ID de services DI sont de la forme "source--id".
     # On récupère l'ID Dora du service et la distance calculée par DI,
     # en conservant l'ordre des résultats DI (triés par distance).
-    dora_results_from_di = [
-        (result["service"]["id"].split("--")[1], result["distance"])
+    dora_distances = {
+        result["service"]["id"].split("--")[1]: result["distance"]
         for result in raw_di_results
         if result["service"]["source"] == "dora"
-    ]
-    dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
+    }
     dora_ids = list(dora_distances.keys())
 
     dora_services_by_id = {
