@@ -218,11 +218,7 @@ def _map_di_results(
     Returns:
         A list of search results by SearchResultSerializer.
     """
-    supported_service_kinds = models.ServiceKind.objects.values_list("value", flat=True)
-
-    mapped_di_results = [
-        map_search_result(result, supported_service_kinds) for result in raw_di_results
-    ]
+    mapped_di_results = [map_search_result(result) for result in raw_di_results]
 
     # FIXME: exclu les services uniquement en présentiel à plus de MAX_DISTANCE
     # du lieu de recherche (ainsi que ceux qui ne retournent pas d'information de distance).
