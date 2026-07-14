@@ -11,7 +11,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db.models import CharField, Q, URLField
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
@@ -28,7 +27,6 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.decoupage_administratif.utils import (
-    arrdt_to_main_insee_code,
     get_clean_city_name,
 )
 from dora.structures.models import Structure
@@ -909,27 +907,18 @@ class SavedSearch(models.Model):
         if self.location_kinds.exists():
             location_kinds = self.location_kinds.values_list("value", flat=True)
 
-        funding_labels = None
-        if self.funding_labels.exists():
-            funding_labels = self.funding_labels.values_list("value", flat=True)
-
         # Récupération des résultats de la recherche
         from .search import search_services
-
-        city_code = arrdt_to_main_insee_code(self.city_code)
-        city = get_object_or_404(City, pk=city_code)
 
         results, metadata = search_services(
             None,
             di_client,
             self.city_code,
-            city,
             [category.value] if category and not subcategories else None,
             subcategories,
             kinds,
             fees,
             location_kinds,
-            funding_labels,
         )
 
         # On garde les contenus qui ont été publiés depuis la dernière notification

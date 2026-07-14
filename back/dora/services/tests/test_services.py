@@ -1,3 +1,5 @@
+import json
+import random
 from datetime import timedelta
 from unittest import mock
 
@@ -50,8 +52,6 @@ from ..models import (
     AccessCondition,
     BeneficiaryAccessMode,
     CoachOrientationMode,
-    FundingLabel,
-    LocationKind,
     Service,
     ServiceCategory,
     ServiceFee,
@@ -1372,12 +1372,6 @@ class DataInclusionSearchTestCase(APITestCase):
         ]
 
     def test_data_inclusion_connection_error(self):
-        service_dora = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details=self.city1.code,
-        )
-
         class FaultyDataInclusionClient:
             def search_services(self, **kwargs):
                 raise requests.ConnectionError()
@@ -1385,17 +1379,18 @@ class DataInclusionSearchTestCase(APITestCase):
         di_client = FaultyDataInclusionClient()
         request = self.factory.get("/search/", {"city": self.city1.code})
         response = self.search(request, di_client)
-        assert response.status_code == 200
-        # ajout des "city bounds" pour la carte
-        assert len(response.data) == 4
-        assert [
-            "funding_labels",
-            "search_center",
-            "search_radius_km",
-            "services",
-        ] == sorted(list(response.data.keys()))
-        service, *_ = response.data["services"]
-        assert service["slug"] == service_dora.slug
+        response.render()
+        assert response.status_code == 503
+        assert json.loads(response.content) == {
+            "detail": {
+                "message": (
+                    "L’API data.inclusion.gouv.fr nécessaire "
+                    "pour la recherche n’est pas disponible. "
+                    "Merci de réessayer ultérieurement."
+                ),
+                "code": "service_unavailable",
+            }
+        }
 
     def test_service_di_contains_service_fields(self):
         service_data = self.make_di_service()
@@ -1878,668 +1873,9 @@ class DataInclusionSearchTestCase(APITestCase):
             )
 
 
-class ServiceSearchTestCase(APITestCase):
-    def setUp(self):
-        self.region = baker.make("decoupage_administratif.Region", code="099")
-        self.dept = baker.make(
-            "decoupage_administratif.Department", region=self.region.code, code="77"
-        )
-        self.epci11 = baker.make("decoupage_administratif.EPCI", code="200011111")
-        self.epci12 = baker.make("decoupage_administratif.EPCI", code="200022222")
-        self.city1 = baker.make(
-            "decoupage_administratif.City",
-            code="12345",
-            epci=self.epci11.code,
-            department=self.dept.code,
-            region=self.region.code,
-        )
-        self.city2 = baker.make("decoupage_administratif.City")
-
-        self.di_client = FakeDataInclusionClient()
-        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
-        self.mock_di_client_factory = self.patcher.start()
-        self.mock_di_client_factory.return_value = self.di_client
-
-        baker.make("ServiceCategory", value="cat1", label="cat1")
-        baker.make("ServiceSubCategory", value="cat1--sub1", label="cat1--sub1")
-        baker.make("ServiceSubCategory", value="cat1--sub2", label="cat1--sub2")
-        baker.make("ServiceSubCategory", value="cat1--sub3", label="cat1--sub3")
-        baker.make("ServiceSubCategory", value="cat1--autre", label="cat1--autre")
-        baker.make("ServiceCategory", value="cat2", label="cat2")
-        baker.make("ServiceSubCategory", value="cat2--sub1", label="cat2--sub1")
-        baker.make("ServiceSubCategory", value="cat2--sub2", label="cat2--sub2")
-        baker.make("ServiceSubCategory", value="cat2--autre", label="cat2--autre")
-        baker.make("ServiceCategory", value="cat3", label="cat3")
-
-    def tearDown(self):
-        self.patcher.stop()
-
-    def test_needs_city_code(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-        )
-        response = self.client.get("/search/")
-        self.assertEqual(response.status_code, 404)
-
-    def test_can_see_published_services(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_cant_see_draft_services(self):
-        make_service(
-            status=ServiceStatus.DRAFT, diffusion_zone_type=AdminDivisionType.COUNTRY
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_cant_see_suggested_services(self):
-        make_service(
-            status=ServiceStatus.SUGGESTION,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_can_see_service_with_future_suspension_date(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            suspension_date=timezone.now() + timedelta(days=1),
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_cannot_see_service_with_past_suspension_date(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            suspension_date=timezone.now() - timedelta(days=1),
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_find_services_in_city(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details=self.city1.code,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_services_in_epci(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.EPCI,
-            diffusion_zone_details=self.epci11.code,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_services_in_dept(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.DEPARTMENT,
-            diffusion_zone_details=self.dept.code,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_services_in_region(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.REGION,
-            diffusion_zone_details=self.region.code,
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_dont_find_services_in_other_city(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details=self.city1.code,
-        )
-        response = self.client.get(f"/search/?city={self.city2.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_dont_find_services_in_other_epci(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.EPCI,
-            diffusion_zone_details=self.epci11.code,
-        )
-        response = self.client.get(f"/search/?city={self.city2.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_dont_find_services_in_other_department(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.DEPARTMENT,
-            diffusion_zone_details=self.dept.code,
-        )
-        response = self.client.get(f"/search/?city={self.city2.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_dont_find_services_in_other_region(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.REGION,
-            diffusion_zone_details=self.region.code,
-        )
-        response = self.client.get(f"/search/?city={self.city2.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_filter_by_fee_free(self):
-        service1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="payant").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="payant").first(),
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&fees=gratuit")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service1.slug
-
-    def test_filter_by_fee_payant(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        service2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="payant").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&fees=payant")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service2.slug
-
-    def test_filter_without_fee(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="payant").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 3
-
-    def test_filter_kinds_one(self):
-        allowed_kinds = ServiceKind.objects.all()
-        service1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[0], allowed_kinds[1]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[2]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&kinds={allowed_kinds[0].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service1.slug
-
-    def test_filter_kinds_several(self):
-        allowed_kinds = ServiceKind.objects.all()
-        service1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[0], allowed_kinds[1]],
-        )
-        service2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[1], allowed_kinds[2]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[3]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&kinds={allowed_kinds[1].value},{allowed_kinds[2].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = [r["slug"] for r in response.data["services"]]
-        assert service1.slug in response_slugs
-        assert service2.slug in response_slugs
-
-    def test_filter_kinds_nomatch(self):
-        allowed_kinds = ServiceKind.objects.all()
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[0], allowed_kinds[1]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            kinds=[allowed_kinds[1], allowed_kinds[2]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&kinds={allowed_kinds[3].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_filter_without_funding(self):
-        allowed_funding_labels = FundingLabel.objects.all()
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[0]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 3
-
-    def test_funding_one(self):
-        allowed_funding_labels = FundingLabel.objects.all()
-        service1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[2]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[0].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service1.slug
-
-    def test_funding_several(self):
-        allowed_funding_labels = FundingLabel.objects.all()
-        service1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
-        )
-        service2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[3]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[1].value},{allowed_funding_labels[2].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = [r["slug"] for r in response.data["services"]]
-        assert service1.slug in response_slugs
-        assert service2.slug in response_slugs
-
-    def test_funding_nomatch(self):
-        allowed_funding_labels = FundingLabel.objects.all()
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[3].value}"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_find_service_with_requested_cat(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&cats=cat1")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_service_with_requested_cats(self):
-        service_1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-        service_2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat2",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&cats=cat1,cat2")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = sorted([s["slug"] for s in response.data["services"]])
-        assert response_slugs == sorted([service_1.slug, service_2.slug])
-
-    def test_find_service_with_requested_cats_exclude_one(self):
-        service_1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-        service_2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat2",
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat3",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&cats=cat1,cat2")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = sorted([s["slug"] for s in response.data["services"]])
-        assert response_slugs == sorted([service_1.slug, service_2.slug])
-
-    def test_dont_find_service_without_requested_cat(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-
-        response = self.client.get(f"/search/?city={self.city1.code}&cats=cat2")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_find_service_with_requested_subcat(self):
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub1",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&subs=cat1--sub1")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_service_with_requested_subcats(self):
-        service_1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub1",
-        )
-        service_2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub2",
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&subs=cat1--sub1,cat1--sub2"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = sorted([s["slug"] for s in response.data["services"]])
-        assert response_slugs == sorted([service_1.slug, service_2.slug])
-
-    def test_find_service_with_requested_subcats_different_cats(self):
-        service_1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub1",
-        )
-        service_2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub2",
-        )
-        service_3 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat2--sub1",
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat2--sub2",
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&subs=cat1--sub1,cat1--sub2,cat2--sub1"
-        )
-
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 3
-
-        response_slugs = sorted([s["slug"] for s in response.data["services"]])
-        assert response_slugs == sorted(
-            [service_1.slug, service_2.slug, service_3.slug]
-        )
-
-    def test_find_service_with_requested_subcats_exclude_one(self):
-        service_1 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub1",
-        )
-        service_2 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub2",
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub3",
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&subs=cat1--sub1,cat1--sub2"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-        response_slugs = sorted([s["slug"] for s in response.data["services"]])
-        assert response_slugs == sorted([service_1.slug, service_2.slug])
-
-    def test_dont_find_service_without_requested_subcat(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            subcategories="cat1--sub1",
-        )
-
-        response = self.client.get(f"/search/?city={self.city1.code}&subs=cat1--sub2")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_find_service_with_no_subcat_when_looking_for_the__other__subcat(self):
-        # On veut remonter les services sans sous-catégorie quand on interroge la
-        # sous-catégorie 'autres'
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&subs=cat1--autre")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_find_service_with_no_subcat_when_looking_for_the__other__subcat_2(
-        self,
-    ):
-        # On veut remonter les services sans sous-catégorie **de la même catégorie**
-        # quand on interroge la sous-catégorie 'autres'
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1,cat2",
-            subcategories="cat2--sub1",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&subs=cat1--autre")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service.slug
-
-    def test_dont_find_service_with_no_subcat_when_looking_for_any_subcat(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-        )
-        response = self.client.get(f"/search/?city={self.city1.code}&subs=cat1--sub1")
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 0
-
-    def test_find_cats_and_subcats_are_independant(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat1",
-            subcategories="cat1--sub1",
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            categories="cat2",
-            subcategories="cat2--sub1",
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&cats=cat1&subs=cat2--sub1"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 2
-
-
 class ServiceSearchOrderingTestCase(APITestCase):
     def setUp(self):
         self.toulouse_center = Point(1.4436700, 43.6042600, srid=WGS84)
-        # Points à moins de 100km de Toulouse
-        self.point_in_toulouse = Point(
-            1.4187594455116272, 43.601528176416416, srid=WGS84
-        )
-        self.blagnac_center = Point(1.3939900, 43.6327600, srid=WGS84)
-        self.montauban_center = Point(
-            1.3573408017582829, 44.022187843162136, srid=WGS84
-        )
-
-        # Points à plus de 100km de Toulouse
-        self.rocamadour_center = Point(
-            1.6197328621667728, 44.79914551756315, srid=WGS84
-        )
-        self.paris_center = Point(2.349014, 48.864716, srid=WGS84)
-
         region = baker.make("decoupage_administratif.Region", code="076")
         dept = baker.make(
             "decoupage_administratif.Department", region=region.code, code="31"
@@ -2551,7 +1887,6 @@ class ServiceSearchOrderingTestCase(APITestCase):
             region=region.code,
             center=self.toulouse_center,
         )
-
         self.di_client = FakeDataInclusionClient()
         self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
         self.mock_di_client_factory = self.patcher.start()
@@ -2561,248 +1896,106 @@ class ServiceSearchOrderingTestCase(APITestCase):
         self.patcher.stop()
 
     def test_on_site_first(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service1 = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details="31555",
-            geom=self.point_in_toulouse,
+        service1 = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+            zone_eligibilite="31555",
         )
-        service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
+        service2 = make_di_service_data(
+            modes_accueil=[ModeAccueil.A_DISTANCE],
+            zone_eligibilite="31555",
         )
-        service2 = make_service(
-            slug="s2",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details="31555",
-            geom=self.point_in_toulouse,
+        service3 = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+            zone_eligibilite="31555",
         )
-        service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
-        )
-
-        service3 = make_service(
-            slug="s3",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.CITY,
-            diffusion_zone_details="31555",
-            geom=self.point_in_toulouse,
-        )
-        service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
+        self.di_client.services = [service1, service2, service3]
 
         response = self.client.get("/search/?city=31555")
-        assert response.data["services"][0]["slug"] in [service1.slug, service3.slug]
-        assert response.data["services"][1]["slug"] in [service1.slug, service3.slug]
-        assert response.data["services"][2]["slug"] == service2.slug
+
+        assert response.data["services"][0]["slug"] in [service1["id"], service3["id"]]
+        assert response.data["services"][1]["slug"] in [service1["id"], service3["id"]]
+        assert response.data["services"][2]["slug"] == service2["id"]
 
     def test_on_site_nearest_first(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service1 = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.DEPARTMENT,
-            diffusion_zone_details="31",
-            geom=self.point_in_toulouse,
+        service1 = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+            zone_eligibilite="31555",
+            distance=1,
         )
-        service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
+        service2 = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+            zone_eligibilite="31555",
+            distance=2,
         )
-
-        service2 = make_service(
-            slug="s2",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.DEPARTMENT,
-            diffusion_zone_details="31",
-            geom=self.blagnac_center,
+        service3 = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+            zone_eligibilite="31555",
+            distance=1,
         )
-        service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-
-        service3 = make_service(
-            slug="s3",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.DEPARTMENT,
-            diffusion_zone_details="31",
-            geom=self.toulouse_center,
-        )
-        service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
+        self.di_client.services = [service1, service2, service3]
 
         response = self.client.get("/search/?city=31555")
 
-        assert response.data["services"][0]["slug"] in [service1.slug, service3.slug]
-        assert response.data["services"][1]["slug"] in [service1.slug, service3.slug]
-        assert response.data["services"][2]["slug"] == service2.slug
-
-    def test_distance_is_correct(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service1 = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.point_in_toulouse,
-        )
-        service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-
-        service2 = make_service(
-            slug="s2",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.montauban_center,
-        )
-        service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-
-        response = self.client.get("/search/?city=31555")
-        self.assertTrue(40 < response.data["services"][1]["distance"] < 50)
-
-    def test_distance_no_more_than_100km(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service1 = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.point_in_toulouse,
-        )
-        service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-
-        service2 = make_service(
-            slug="s2",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.rocamadour_center,
-        )
-        service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-
-        response = self.client.get("/search/?city=31555")
-        assert len(response.data) == 4
-        assert len(response.data["services"]) == 1
+        assert response.data["services"][0]["slug"] in [service1["id"], service3["id"]]
+        assert response.data["services"][1]["slug"] in [service1["id"], service3["id"]]
+        assert response.data["services"][2]["slug"] == service2["id"]
 
     def test_displayed_if_remote_and_onsite_more_than_100km(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.rocamadour_center,
+        service = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL, ModeAccueil.A_DISTANCE],
+            zone_eligibilite="31555",
+            distance=150,
         )
-        service.location_kinds.set(
-            [
-                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL),
-                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE),
-            ]
-        )
+        self.di_client.services = [service]
 
         response = self.client.get("/search/?city=31555")
         assert len(response.data) == 4
         assert len(response.data["services"]) == 1
 
     def test_displayed_only_once_if_remote_and_onsite_less_than_100km(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        service = make_service(
-            slug="s1",
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            geom=self.point_in_toulouse,
+        service = make_di_service_data(
+            modes_accueil=[ModeAccueil.EN_PRESENTIEL, ModeAccueil.A_DISTANCE],
+            zone_eligibilite="31555",
+            distance=0,
         )
-        service.location_kinds.set(
-            [
-                LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL),
-                LocationKind.objects.get(value=ModeAccueil.A_DISTANCE),
-            ]
-        )
+        self.di_client.services = [service]
 
         response = self.client.get("/search/?city=31555")
         assert len(response.data) == 4
         assert len(response.data["services"]) == 1
 
     def test_intercalate_remote(self):
-        self.assertEqual(Service.objects.all().count(), 0)
-        template = {
-            "status": ServiceStatus.PUBLISHED,
-            "diffusion_zone_type": AdminDivisionType.DEPARTMENT,
-            "diffusion_zone_details": "31",
-            "geom": self.toulouse_center,
-        }
-        service1 = make_service(
-            slug="s1", **template, modification_date=timezone.now() - timedelta(days=1)
-        )
-        service1.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-        service2 = make_service(
-            slug="s2", **template, modification_date=timezone.now() - timedelta(days=2)
-        )
-        service2.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-        service3 = make_service(
-            slug="s3", **template, modification_date=timezone.now() - timedelta(days=3)
-        )
-        service3.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-        service4 = make_service(
-            slug="s4", **template, modification_date=timezone.now() - timedelta(days=4)
-        )
-        service4.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)]
-        )
-        service5 = make_service(
-            slug="s5", **template, modification_date=timezone.now() - timedelta(days=5)
-        )
-        service5.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
-        )
-        service6 = make_service(
-            slug="s6", **template, modification_date=timezone.now() - timedelta(days=6)
-        )
-        service6.location_kinds.set(
-            [LocationKind.objects.get(value=ModeAccueil.A_DISTANCE)]
-        )
+        today = timezone.localdate()
+        on_site_services = [
+            make_di_service_data(
+                date_maj=today - timedelta(days=i),
+                modes_accueil=[ModeAccueil.EN_PRESENTIEL],
+                zone_eligibilite="31555",
+            )
+            for i in range(1, 5)
+        ]
+        remote_services = [
+            make_di_service_data(
+                date_maj=today - timedelta(days=i),
+                modes_accueil=[ModeAccueil.A_DISTANCE],
+                zone_eligibilite="31555",
+            )
+            for i in range(1, 3)
+        ]
+        all_services = on_site_services + remote_services
+        random.shuffle(all_services)
+        self.di_client.services = all_services
 
         response = self.client.get("/search/?city=31555")
-        # on s'attend à ce que les services soient classés par date de modification décroissante
-        # avec un service à distance sur 3 intercalé
-        assert response.data["services"][0]["slug"] in [
-            service1.slug,
-            service2.slug,
-            service3.slug,
-            service4.slug,
-        ]
-        assert response.data["services"][1]["slug"] in [
-            service1.slug,
-            service2.slug,
-            service3.slug,
-            service4.slug,
-        ]
-        assert response.data["services"][2]["slug"] in [service5.slug, service6.slug]
-        assert response.data["services"][3]["slug"] in [
-            service1.slug,
-            service2.slug,
-            service3.slug,
-            service4.slug,
-        ]
-        assert response.data["services"][4]["slug"] in [
-            service1.slug,
-            service2.slug,
-            service3.slug,
-            service4.slug,
-        ]
-        assert response.data["services"][5]["slug"] in [service5.slug, service6.slug]
+
+        on_site_slugs = [s["id"] for s in on_site_services]
+        remote_slugs = [s["id"] for s in remote_services]
+        assert response.data["services"][0]["slug"] in on_site_slugs
+        assert response.data["services"][1]["slug"] in on_site_slugs
+        assert response.data["services"][2]["slug"] in remote_slugs
+        assert response.data["services"][3]["slug"] in on_site_slugs
+        assert response.data["services"][4]["slug"] in on_site_slugs
+        assert response.data["services"][5]["slug"] in remote_slugs
 
 
 class ServiceSyncTestCase(APITestCase):

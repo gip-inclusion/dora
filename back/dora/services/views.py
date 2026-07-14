@@ -918,7 +918,6 @@ def search_services_view(request):
     kinds = request.GET.get("kinds")
     fees = request.GET.get("fees")
     locs = request.GET.get("locs")
-    funding = request.GET.get("funding")
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
 
@@ -927,7 +926,6 @@ def search_services_view(request):
     kinds_list = kinds.split(",") if kinds is not None else None
     fees_list = fees.split(",") if fees is not None else None
     locs_list = locs.split(",") if locs is not None else None
-    funding_labels_list = funding.split(",") if funding is not None else None
     lat = float(lat) if lat else None
     lon = float(lon) if lon else None
 
@@ -942,13 +940,11 @@ def search_services_view(request):
         request=request,
         di_client=di_client,
         city_code=city_code,
-        city=city,
         categories=categories_list,
         subcategories=subcategories_list,
         kinds=kinds_list,
         fees=fees_list,
         location_kinds=locs_list,
-        funding_labels=funding_labels_list,
         lat=lat,
         lon=lon,
     )
