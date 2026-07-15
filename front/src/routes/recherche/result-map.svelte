@@ -35,8 +35,6 @@
     ) as ServiceWithCoords[]
   );
 
-  let zoomToAddress = $derived(Boolean(data.lat && data.lon));
-
   function getPopupContent(feature): string {
     return insane(
       `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDesc}`
@@ -68,13 +66,7 @@
       return;
     }
 
-    if (zoomToAddress) {
-      // Déplacement animé vers les coordonnées de l'adresse avec zoom de niveau 15
-      map.flyTo({
-        center: [parseFloat(data.lon!), parseFloat(data.lat!)],
-        zoom: 15,
-      });
-    } else if (data.searchCenter) {
+    if (data.searchCenter) {
       map.flyTo({
         center: [data.searchCenter[0], data.searchCenter[1]],
         zoom: 10,
