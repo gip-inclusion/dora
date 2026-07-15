@@ -61,7 +61,7 @@
     popup.remove();
   }
 
-  function zoomToAddressOrCity() {
+  function zoomToSearchCenter() {
     if (!map) {
       return;
     }
@@ -84,7 +84,7 @@
       if (map) {
         map.resize();
         // Re-centre après le redimensionnement pour assurer un positionnement correct
-        zoomToAddressOrCity();
+        zoomToSearchCenter();
       }
     }, 200);
 
@@ -203,7 +203,7 @@
     map.addControl(new mlgl.NavigationControl({ showCompass: false }));
 
     // Centrage initial (sera remplacé par le centrage du timeout)
-    zoomToAddressOrCity();
+    zoomToSearchCenter();
   }
 
   function updateMapContent(services: ServiceWithCoords[]) {
