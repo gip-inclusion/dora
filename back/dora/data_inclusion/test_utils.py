@@ -132,13 +132,15 @@ class FakeDataInclusionClient:
             return [
                 # overly simple distance for tests.
                 {
-                    "distance": 0 if code_commune in s["zone_eligibilite"] else 30,
+                    "distance": s.get("distance", 0)
+                    if code_commune in s["zone_eligibilite"]
+                    else 30,
                     "service": s,
                 }
                 for s in services
             ]
         else:
-            return [{"distance": 30, "service": s} for s in services]
+            return [{"distance": s.get("distance", 30), "service": s} for s in services]
 
     def search(
         self,
