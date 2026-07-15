@@ -60,7 +60,7 @@ def shorten_and_clean_description(description: str | None) -> str:
     return shortened.replace("#", "")  # Suppression des en-têtes Markdown
 
 
-def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
+def map_search_result(result: dict) -> dict:
     # On transforme les champs nécessaires à l'affichage des resultats de recherche au format DORA
     # (c.a.d qu'on veut un objet similaire à ce que renvoie le SearchResultSerializer)
 
@@ -70,12 +70,6 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     location_kinds = service_data["modes_accueil"] or []
     if location_kinds == [] and result["distance"] is not None:
         location_kinds = [ModeAccueil.EN_PRESENTIEL]
-
-    kinds = (
-        [service_data["type"]]
-        if service_data["type"] in supported_service_kinds
-        else None
-    )
 
     return {
         #
@@ -97,7 +91,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         #
         "di_publics": service_data["publics"] or [],
         "location_kinds": location_kinds,
-        "kinds": kinds,
+        "kinds": [service_data["type"]],
         "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
