@@ -39,6 +39,15 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
     ordering = ("-id",)
     raw_id_fields = ["user"]
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class PageViewAdmin(AnalyticsEventAdmin):
     list_display = [
