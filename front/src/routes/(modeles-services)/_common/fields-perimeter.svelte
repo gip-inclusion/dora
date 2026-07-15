@@ -50,7 +50,7 @@
     choices={servicesOptions.diffusionZoneType}
     onChange={handleDiffusionZoneTypeChange}
     initialValue={service.diffusionZoneTypeDisplay}
-    description="Térritoire déterminant l’éligibilité des bénéficiaires."
+    description="Territoire déterminant l’éligibilité des bénéficiaires."
   />
 
   {#if service.diffusionZoneType !== "country"}
