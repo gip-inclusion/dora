@@ -141,21 +141,27 @@ VACUUM FULL public.logs_actionlog
 SQL
 
     # Copie des données (déjà nettoyées) vers la base pilotage, dans le schéma raw_dora.
-    # Renommage temporaire du schéma public en raw_dora.
-    psql "$DATABASE_URL" -c "ALTER SCHEMA public RENAME TO raw_dora;"
-    # En cas d'échec, on remet la base analytics dans son état attendu (schéma public).
-    trap 'psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;" >/dev/null 2>&1 || true' EXIT
+    # Les tables de public sont dupliquées dans un schéma raw_dora local, dumpé puis
+    # supprimé. OOn ne copie pas les DEFAULT (nextval sur des séquences de public,
+    # absentes de pilotage), ni spatial_ref_sys (PostGIS, déjà présente).
+    time psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
+DROP SCHEMA IF EXISTS raw_dora CASCADE;
+CREATE SCHEMA raw_dora;
+SELECT format('CREATE TABLE raw_dora.%I (LIKE public.%I INCLUDING INDEXES INCLUDING CONSTRAINTS)', tablename, tablename)
+FROM pg_tables
+WHERE schemaname = 'public' AND tablename <> 'spatial_ref_sys'
+\gexec
+SELECT format('INSERT INTO raw_dora.%I SELECT * FROM public.%I', tablename, tablename)
+FROM pg_tables
+WHERE schemaname = 'public' AND tablename <> 'spatial_ref_sys'
+\gexec
+SQL
 
-    # PostGIS existe déjà dans public sur pilotage : on réécrit les types vers public.*
-    # et on exclut spatial_ref_sys (déjà présente) plutôt que d'embarquer l'extension.
     time psql "$PILOTAGE_DATABASE_URL" -c "DROP SCHEMA IF EXISTS raw_dora CASCADE; CREATE EXTENSION IF NOT EXISTS postgis;"
     time pg_dump "$DATABASE_URL" --schema=raw_dora --no-owner --no-privileges --verbose \
-        --exclude-table-data=raw_dora.spatial_ref_sys \
-        | sed -E 's/\braw_dora\.(geometry|geography)\b/public.\1/g' \
         | psql "$PILOTAGE_DATABASE_URL" --set ON_ERROR_STOP=1
 
-    psql "$DATABASE_URL" -c "ALTER SCHEMA raw_dora RENAME TO public;"
-    trap - EXIT
+    psql "$DATABASE_URL" -c "DROP SCHEMA raw_dora CASCADE;"
 
     echo "✔️ Fait."
     echo ""
