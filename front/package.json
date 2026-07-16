@@ -27,7 +27,7 @@
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^10.0.1",
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
@@ -49,7 +49,7 @@
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.18.1",
     "dayjs": "^1.11.21",
-    "eslint": "^10.6.0",
+    "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.20.0",
     "globals": "^17.7.0",
@@ -96,6 +96,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.64.0"
+    "@sentry/sveltekit": "^10.65.0"
   }
 }
