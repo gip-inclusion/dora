@@ -1,5 +1,7 @@
 # Conditions générales d’utilisation de DORA au 01/07/2026
 
+**remplacées par [les nouvelles Conditions générales d’utilisation](/cgu).**
+
 Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
 ## Article 1 — Champ d’application
