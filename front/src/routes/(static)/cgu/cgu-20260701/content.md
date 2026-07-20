@@ -1,4 +1,6 @@
-# Conditions générales d’utilisation de DORA au 15/07/2026
+# Conditions générales d’utilisation de DORA au 01/07/2026
+
+**remplacées par [les nouvelles Conditions générales d’utilisation](/cgu).**
 
 Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
@@ -145,11 +147,9 @@ Il est rappelé que toute personne procédant à une fausse déclaration pour el
 
 ## Article 9 — Accord de responsabilité conjointe de traitement de données à caractère personnel {accord_co_responsabilite}
 
-Les présentes clauses ne s’appliquent que sous réserve d’un accord de responsabilité conjointe conclu avec signature électronique, notamment s’agissant des agences France Travail.
-
 ### 9.1 Principe de la responsabilité conjointe et obligations communes
 
-La présente clause vise à clarifier les responsabilités et rôles des responsables conjoints de traitement, conformément aux exigences de l’article 26 du RGPD. L’utilisation des Services implique la mise en œuvre d’un traitement de données à caractère personnel. Sont responsables de traitement conjoint : Le Groupement d’intérêt public « Plateforme de l’inclusion » et tout Offreur de service utilisant le service Dora et dont les salariés ou assimilés reçoivent les orientations.
+La présente clause vise à clarifier les responsabilités et rôles des responsables conjoints de traitement, conformément aux exigences de l’article 26 du RGPD. L’utilisation des Services implique la mise en œuvre d’un traitement de données à caractère personnel. Sont responsables de traitement conjoint : Le Groupement d’intérêt public « Plateforme de l’inclusion » et toute personne morale utilisant le service Dora et dont les salariés ou assimilés réalisent des orientations.
 
 Les responsables conjoints garantissent chacun l’exercice des droits des personnes concernées par le traitement de données. Notamment, chacun notifie à l’autre (via le compte référent ayant effectué l’orientation) tout exercice de droit reçu.
 
