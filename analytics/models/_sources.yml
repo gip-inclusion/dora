@@ -31,6 +31,33 @@ sources:
           description: |
             État de l'orientation (modération_en_cours, modération_rejetée, ouverte, refusée, validée).
 
+      - name: orientations_emploisorientationdata
+        description: |
+          Données Les Emplois associées à une orientation créée via l'API Les Emplois ou depuis un JWT Emplois.
+          Relation un-à-un avec orientations_orientation (orientation_id est la clé primaire).
+        columns:
+        - name: orientation_id
+          description: |
+            Identifiant de l'orientation associée, clé primaire de la table orientations_orientation.
+        - name: emplois_sync_uid
+          description: |
+            UID de synchronisation avec Les Emplois (unique).
+        - name: beneficiary_id
+          description: |
+            Identifiant du bénéficiaire côté Les Emplois.
+        - name: structure_id
+          description: |
+            Identifiant de la structure côté Les Emplois.
+        - name: structure_name
+          description: |
+            Nom de la structure côté Les Emplois.
+        - name: structure_siret
+          description: |
+            SIRET de la structure côté Les Emplois.
+        - name: prescriber_id
+          description: |
+            Identifiant du prescripteur côté Les Emplois (peut être vide).
+
       - name: orientations_rejectionreason
         description: |
           Table de correspondance id-label des motifs de refus des orientations refusées.
