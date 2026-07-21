@@ -76,13 +76,13 @@
           {@render page(p)}
         {/each}
         {#if middlePages.length}
-          <li><span>…</span></li>
+          <li class="inline"><span>…</span></li>
         {/if}
         {#each middlePages as p}
           {@render page(p)}
         {/each}
         {#if endPages.length}
-          <li><span>…</span></li>
+          <li class="inline"><span>…</span></li>
         {/if}
         {#each endPages as p}
           {@render page(p)}
