@@ -410,7 +410,6 @@ export async function getKeywordResults(
   servicesPages: number;
   servicesTotal: number;
   searchCenter: [number, number] | null;
-  searchRadiusKm: number;
 }> {
   const url = `${getApiURL()}/search/keyword/?${apiParams.toString()}`;
   const res = await fetchFunction(url, {

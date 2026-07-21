@@ -14,14 +14,12 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   let servicesPages: number = 0;
   let servicesTotal: number = 0;
   let searchCenter: [number, number] | null = null;
-  let searchRadiusKm = SEARCH_RADIUS_KM;
   try {
     const data = await getKeywordResults(url.searchParams, fetch);
     services = data.services;
     servicesPages = data.servicesPages;
     servicesTotal = data.servicesTotal;
     searchCenter = data.searchCenter;
-    searchRadiusKm = data.searchRadiusKm;
   } catch {
     fetchError =
       "Impossible de charger les résultats, merci de réessayer ultérieurement.";
@@ -38,7 +36,6 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     lat,
     lon,
     searchCenter,
-    searchRadiusKm,
     services,
     servicesOptions: await getServicesOptions(fetch),
     servicesPages,
