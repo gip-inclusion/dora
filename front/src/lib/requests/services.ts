@@ -415,6 +415,9 @@ export async function getKeywordResults(
   const res = await fetchFunction(url, {
     headers: { Accept: "application/json; version=1.0" },
   });
+  if (!res.ok) {
+    throw new Error();
+  }
   const data = await res.json();
   return data;
 }
