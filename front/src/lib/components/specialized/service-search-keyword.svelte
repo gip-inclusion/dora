@@ -302,12 +302,12 @@
         <input
           bind:value={searchQuery}
           id="search-query"
-          class="w-full p-s16 rounded-lg"
+          class="p-s16 w-full rounded-lg"
           placeholder="Mots-clés, nom de structure ou de solution, thématiques…"
         />
       </div>
 
-      <div class="flex items-center justify-around p-s12 lg:p-s16">
+      <div class="p-s12 lg:p-s16 flex items-center justify-around">
         <Button
           type="submit"
           label="Rechercher"

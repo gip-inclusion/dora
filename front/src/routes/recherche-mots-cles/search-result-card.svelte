@@ -161,7 +161,7 @@
               <MoneyEuroCircleLineFinance size="20" />
             </span>
             {#if isNotFreeService(result.feeCondition)}
-              <span class="font-bold text-orange">Payant</span>
+              <span class="text-orange font-bold">Payant</span>
             {:else}
               <span> Gratuit </span>
             {/if}
