@@ -1,6 +1,5 @@
 import { getKeywordResults, getServicesOptions } from "$lib/requests/services";
 import type { ServiceSearchResult } from "$lib/types";
-import { SEARCH_RADIUS_KM } from "$lib/consts";
 
 import type { PageLoad } from "./$types";
 
