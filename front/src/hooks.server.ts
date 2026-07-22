@@ -7,6 +7,7 @@ import * as Sentry from "@sentry/sveltekit";
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import { UNEXPECTED_ERROR_MESSAGE } from "$lib/consts";
 import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
@@ -30,7 +31,7 @@ export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
     const message =
       ENVIRONMENT === "local" && err instanceof Error
         ? err.message
-        : "Erreur inattendue";
+        : UNEXPECTED_ERROR_MESSAGE;
 
     return {
       message,
