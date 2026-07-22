@@ -14,11 +14,11 @@ asgiref==3.12.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.49 \
-    --hash=sha256:2b31ab1a0eb1cee01d0363b8ee5e68b45dff2c8f99e7b53aca11c9f7b591a794 \
-    --hash=sha256:2b31ab1a0eb1cee01d0363b8ee5e68b45dff2c8f99e7b53aca11c9f7b591a794 \
-    --hash=sha256:e58e0704805f720b94e40a56588eadd6da05d3693bde78b573116b11ae56710f \
-    --hash=sha256:e58e0704805f720b94e40a56588eadd6da05d3693bde78b573116b11ae56710f
+boto3==1.43.50 \
+    --hash=sha256:779eb5cfa8bd1d615f36051465f8182860219eef78b4ab8ca2c666bb56702325 \
+    --hash=sha256:779eb5cfa8bd1d615f36051465f8182860219eef78b4ab8ca2c666bb56702325 \
+    --hash=sha256:a6865b9cd1d15511f6aad89cef964105acecff2160a3e29ae53c10d9821416af \
+    --hash=sha256:a6865b9cd1d15511f6aad89cef964105acecff2160a3e29ae53c10d9821416af
     # via django-storages
 botocore==1.43.51 \
     --hash=sha256:7c2c538c932bddc95834e177ce6f91dcc388c6a7934b4f8d0db13caa30e3e543 \
@@ -1103,9 +1103,9 @@ segno==1.6.6 \
     --hash=sha256:28c7d081ed0cf935e0411293a465efd4d500704072cdb039778a2ab8736190c7 \
     --hash=sha256:e60933afc4b52137d323a4434c8340e0ce1e58cec71439e46680d4db188f11b3
     # via django-otp
-sentry-sdk==2.65.0 \
-    --hash=sha256:3595169677a808e4d0e1ea6ffb89443459549c7a98392ed71c77c847182ab6bf \
-    --hash=sha256:c94dc945d54bad49d4f20448b1e6b217ca2f92f46d05c3e83d41764af685c3d1
+sentry-sdk==2.66.0 \
+    --hash=sha256:096136c214c602be2b323524d30755dc5b30ec5a218a206207f33b12c05c6f11 \
+    --hash=sha256:9727d35aa83c56cd53294676fe65b96296a334c9ce107fa2142bd70f47acb265
     # via -r requirements/base.in
 sib-api-v3-sdk==7.6.0 \
     --hash=sha256:8975108c4a66ca2280532017190150f98ac826eacdda6c2f859ff104d2828266
