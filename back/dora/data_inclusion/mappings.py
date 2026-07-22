@@ -75,6 +75,7 @@ def map_search_result(result: dict) -> dict:
         #
         # SearchResultSerializer
         #
+        "search_score": result.get("score_recherche"),
         "distance": result["distance"]
         if result["distance"] is not None
         else None,  # en km

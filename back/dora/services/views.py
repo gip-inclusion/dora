@@ -56,7 +56,11 @@ from dora.services.models import (
     ServiceSubCategory,
     UpdateFrequency,
 )
-from dora.services.search import MAX_DISTANCE, search_services
+from dora.services.search import (
+    MAX_DISTANCE,
+    search_keyword,
+    search_services,
+)
 from dora.services.utils import synchronize_service_from_model
 from dora.stats.models import DeploymentLevel, DeploymentState
 from dora.structures.models import Structure, StructureMember
@@ -66,6 +70,7 @@ from .serializers import (
     BookmarkSerializer,
     FeedbackSerializer,
     SavedSearchSerializer,
+    SearchKeywordQuerySerializer,
     ServiceListSerializer,
     ServiceModelSerializer,
     ServiceSerializer,
@@ -906,7 +911,7 @@ def _validate_search_categories_and_subcategories(
 
 @api_view()
 @permission_classes([permissions.AllowAny])
-def search(request):
+def search_services_view(request):
     city_code = request.GET.get("city")
     categories = request.GET.get("cats")
     subcategories = request.GET.get("subs")
@@ -962,5 +967,71 @@ def search(request):
             "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
+        }
+    )
+
+
+@api_view()
+@permission_classes([permissions.AllowAny])
+def search_keyword_view(request):
+    serializer = SearchKeywordQuerySerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+
+    # Les params GET ne correspondant à aucun champ du serializer sont ignorés.
+    query = serializer.data
+    categories = query.pop("cats")
+    subcategories = query.pop("subs")
+    categories = [
+        # Use more specific subcategories.
+        cat
+        for cat in categories
+        if not any(sub.startswith(cat) for sub in subcategories)
+    ]
+    if categories:
+        subcategories.extend(
+            ServiceSubCategory.objects.filter(
+                Q.create(
+                    [Q(value__startswith=cat) for cat in categories],
+                    connector=Q.OR,
+                )
+            ).values_list("value", flat=True)
+        )
+    query["thematiques"] = subcategories
+
+    city = None
+    # La recherche par mots-clés d·i (/search) ne cherche pas aux alentours de
+    # la commune (contrairement à /search/services).
+    if city_code := query.pop("code_commune", None):
+        city_code = arrdt_to_main_insee_code(city_code)
+        try:
+            city = City.objects.get(pk=city_code)
+        except City.DoesNotExist:
+            query["code_commune"] = city_code
+        else:
+            query["lon"] = city.center.x
+            query["lat"] = city.center.y
+    sorted_services, metadata = search_keyword(request, query)
+
+    search_center = None
+    lon = query.get("lon")
+    if lon is not None:
+        search_center = [lon, query["lat"]]
+    if search_center is None:
+        sum_x, sum_y, total = 0, 0, 0
+        for service in sorted_services:
+            if coords := service["coordinates"]:
+                [x, y] = coords
+                sum_x += x
+                sum_y += y
+                total += 1
+        if total:
+            search_center = [sum_x / total, sum_y / total]
+
+    return Response(
+        {
+            "search_center": search_center,
+            "services": sorted_services,
+            "services_pages": metadata["services_pages"],
+            "services_total": metadata["services_total"],
         }
     )

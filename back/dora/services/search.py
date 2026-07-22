@@ -1,3 +1,4 @@
+import logging
 import random
 from _operator import itemgetter
 from datetime import date
@@ -15,6 +16,7 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
+from dora.api.exceptions import ServiceUnavailable
 from dora.core.constants import WGS84
 from dora.data_inclusion.mappings import map_search_result
 from dora.decoupage_administratif.models import City
@@ -29,6 +31,8 @@ DEPARTMENT_CODE_SOMME = "80"
 DEPARTMENT_CODE_VOSGES = "88"
 MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
 FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
+
+logger = logging.getLogger(__name__)
 
 
 def _filter_and_annotate_dora_services(
@@ -342,6 +346,29 @@ def _get_dora_results(
     }
 
 
+def _dora_services_by_id(service_ids):
+    return {
+        str(service.id): service
+        for service in models.Service.objects.filter_for_DI()
+        .select_related(
+            "structure",
+        )
+        .prefetch_related(
+            "kinds",
+            "fee_condition",
+            "location_kinds",
+            "publics",
+            "categories",
+            "subcategories",
+            "funding_labels",
+            "coach_orientation_modes",
+            "beneficiaries_access_modes",
+        )
+        .filter(id__in=service_ids)
+        .distinct()
+    }
+
+
 def _get_results(
     request,
     di_client: data_inclusion.DataInclusionClient,
@@ -380,26 +407,7 @@ def _get_results(
     }
     dora_ids = list(dora_distances.keys())
 
-    dora_services_by_id = {
-        str(service.id): service
-        for service in models.Service.objects.filter_for_DI()
-        .select_related(
-            "structure",
-        )
-        .prefetch_related(
-            "kinds",
-            "fee_condition",
-            "location_kinds",
-            "publics",
-            "categories",
-            "subcategories",
-            "funding_labels",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
-        )
-        .filter(id__in=dora_ids)
-        .distinct()
-    }
+    dora_services_by_id = _dora_services_by_id(dora_ids)
 
     # Annotation des services avec la distance calculée par DI,
     # en conservant l'ordre des résultats DI.
@@ -495,3 +503,51 @@ def search_services(
             lon=lon,
         )
     return _sort_services(results), metadata
+
+
+def _get_keyword_search_results(request, raw_di_results):
+    def dora_id(service):
+        return service["id"].removeprefix("dora--")
+
+    dora_ids = {
+        dora_id(result["service"])
+        for result in raw_di_results
+        if result["service"]["source"] == "dora"
+    }
+    dora_services_by_id = _dora_services_by_id(dora_ids)
+    results = []
+    for raw_di_result in raw_di_results:
+        if raw_di_result["service"]["source"] == "dora":
+            service = dora_services_by_id.get(dora_id(raw_di_result["service"]))
+            if service:
+                service.distance = raw_di_result["distance"]
+                service.search_score = raw_di_result["score_recherche"]
+                data = SearchResultSerializer(
+                    service, context={"request": request}
+                ).data
+                results.append(data)
+            else:
+                logger.warning(
+                    "d·i a retourné un service inconnu, id: %s",
+                    dora_id(raw_di_result["service"]),
+                )
+        else:
+            results.append(map_search_result(raw_di_result))
+    return results
+
+
+def search_keyword(request, api_params):
+    di_client = data_inclusion.di_client_factory()
+    try:
+        raw_di_results = di_client.search(**api_params, size=50)
+    except requests.RequestException:
+        raise ServiceUnavailable(
+            "L’API data.inclusion.gouv.fr nécessaire pour la recherche "
+            "n’est pas disponible. Merci de réessayer ultérieurement."
+        )
+    results = _get_keyword_search_results(request, raw_di_results["items"])
+    metadata = {
+        "services_pages": raw_di_results["pages"],
+        "services_total": raw_di_results["total"],
+    }
+    return results, metadata

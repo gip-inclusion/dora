@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { getApiURL } from "$lib/utils/api";
 import { hexoid } from "hexoid";
-import type { Service, Structure } from "$lib/types";
+import type { Service, ServiceSearchResult, Structure } from "$lib/types";
 
 const analyticsIdKey = "userHash";
 
@@ -147,6 +147,7 @@ export async function trackSearch(
       "search",
       url.pathname,
       {
+        searchType: "thematique",
         searchCityCode: cityCode,
         searchNumResults: numResults,
         categoryIds: categoryIds,
@@ -165,6 +166,61 @@ export async function trackSearch(
     return searchId;
   }
   return null;
+}
+
+// Variante A/B « recherche par mots-clés » : même événement `search` que la
+// recherche thématique mais auquel on rajoute (1) `searchType` pour les
+// distinguer et (2) `keyword` qui contiendra le texte recherché.
+// Contrairement à `trackSearch`, il n'y a pas de `fundingLabels`, et
+// `numResults` correspond au nombre total de résultats (selon le serveur)
+// et non à la seule page courante.
+export async function trackKeywordSearch(
+  url: URL,
+  keyword: string,
+  cityCode: string,
+  categoryIds: string[],
+  subCategoryIds: string[],
+  kinds: string[],
+  feeConditions: string[],
+  locationKinds: string[],
+  results: ServiceSearchResult[],
+  numResults: number,
+  fetchFunction = fetch
+) {
+  if (!browser) {
+    return null;
+  }
+  // Seulement sur la première page (max 50 résultats). Ce chiffre n’est pas
+  // comparable avec la recherche historique, qui n’est pas paginée.
+  const numDiResults = results.filter(
+    (service) => service.type === "di"
+  ).length;
+  const numDiResultsTop10 = results
+    .slice(0, 10)
+    .filter((service) => service.type === "di").length;
+  const resultsSlugsTop10 = results.slice(0, 10).map((service) => service.slug);
+
+  const event = await logAnalyticsEvent(
+    "search",
+    url.pathname,
+    {
+      searchType: "mots_cles",
+      keyword,
+      searchCityCode: cityCode,
+      searchNumResults: numResults,
+      categoryIds,
+      subCategoryIds,
+      numDiResults,
+      numDiResultsTop10,
+      resultsSlugsTop10,
+      kinds,
+      feeConditions,
+      locationKinds,
+    },
+    fetchFunction
+  );
+  const searchId = event && event.event;
+  return searchId;
 }
 
 export function trackService(service, url, searchId, isDI) {
@@ -201,6 +257,7 @@ export function trackStructure(
       url.pathname,
       {
         structure: structure.slug,
+        searchId: url.searchParams.get("searchId"),
       },
       fetchFunction
     );

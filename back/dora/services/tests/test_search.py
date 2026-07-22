@@ -1,9 +1,15 @@
+import logging
+import random
 from unittest import mock
 
 import pytest
+import requests
+from django.contrib.gis.geos import Point
+from django.urls import reverse
 from model_bakery import baker
 from rest_framework.exceptions import ValidationError
 
+from dora.core.constants import WGS84
 from dora.core.test_utils import (
     make_published_service,
     make_service,
@@ -11,8 +17,10 @@ from dora.core.test_utils import (
     make_user,
 )
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
-from dora.decoupage_administratif.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.services.enums import ServiceStatus
+from dora.services.models import ServiceSubCategory
+from dora.services.search import MAX_DISTANCE
 from dora.services.views import _validate_search_categories_and_subcategories
 
 
@@ -245,3 +253,421 @@ def test_search_endpoint_rejects_invalid_subcategories(api_client, city):
     assert len(response.data) > 0
     assert "message" in response.data[0]
     assert "Sous-catégories invalides" in str(response.data[0]["message"])
+
+
+class TestSearchKeyword:
+    @property
+    def api_result(self):
+        return {
+            "service": make_di_service_data(),
+            "distance": 0,
+            "score_recherche": 0,
+        }
+
+    @pytest.mark.parametrize(
+        "params,expected",
+        [
+            pytest.param(
+                {},
+                {
+                    "nonFieldErrors": [
+                        {
+                            "message": "Au moins un champ doit être fourni, parmi q, code_commune, code_departement, code_region, lon, lat.",
+                            "code": "invalid",
+                        }
+                    ]
+                },
+                id="noquery",
+            ),
+            pytest.param(
+                {"cats": "foo"},
+                {
+                    "cats": [
+                        {
+                            "message": "«\xa0foo\xa0» n'est pas un choix valide.",
+                            "code": "invalid_choice",
+                        }
+                    ]
+                },
+                id="invalid_category",
+            ),
+            pytest.param(
+                {"lat": "12.1234"},
+                {
+                    "nonFieldErrors": [
+                        {
+                            "message": "Le champ lon est requis lorsque lat est fourni.",
+                            "code": "invalid",
+                        }
+                    ]
+                },
+                id="lat",
+            ),
+            pytest.param(
+                {"lon": "12.1234"},
+                {
+                    "nonFieldErrors": [
+                        {
+                            "message": "Le champ lat est requis lorsque lon est fourni.",
+                            "code": "invalid",
+                        }
+                    ]
+                },
+                id="lon",
+            ),
+            pytest.param(
+                {"lat": "12.1234", "q": "foo"},
+                {
+                    "nonFieldErrors": [
+                        {
+                            "message": "Le champ lon est requis lorsque lat est fourni.",
+                            "code": "invalid",
+                        }
+                    ]
+                },
+                id="lat_with_q",
+            ),
+        ],
+    )
+    def test_invalid_payload(self, api_client, params, expected):
+        response = api_client.get(reverse("search-keyword"), params)
+        assert response.status_code == 400
+        assert response.json() == expected
+
+    @pytest.mark.parametrize(
+        "services_kwargs,expected_coords",
+        [
+            pytest.param(
+                [{"geom": Point(-0.123, 0.123, srid=WGS84)}],
+                [-0.123, 0.123],
+                id="single",
+            ),
+            pytest.param(
+                [
+                    {"geom": Point(-1, 1, srid=WGS84)},
+                    {"geom": Point(-2, 2, srid=WGS84)},
+                ],
+                [-1.5, 1.5],
+                id="search_center_average",
+            ),
+        ],
+    )
+    def test_search_api(self, api_client, expected_coords, services_kwargs):
+        results = []
+        expected_slugs = []
+        for i, service_kwargs in enumerate(services_kwargs):
+            service = make_published_service(
+                diffusion_zone_type=AdminDivisionType.COUNTRY,
+                **service_kwargs,
+            )
+            result = self.api_result
+            result["service"]["id"] = f"dora--{service.pk}"
+            result["service"]["source"] = "dora"
+            # La distance est ignorée dans le tri.
+            result["distance"] = random.uniform(0, 10)
+            result["score_recherche"] = 0.1 * i
+            results.append(result)
+            expected_slugs.append(service.slug)
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=results),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "foo"})
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == expected_slugs
+        assert response_json["searchCenter"] == expected_coords
+
+    def test_search_city(self, api_client):
+        paris = City.objects.create(
+            code="75056",
+            name="Paris",
+            department="75",
+            epci="200054781",
+            region="11",
+            postal_codes=["75001", "75002"],
+            population=2161000,
+            normalized_name="PARIS 75",
+            center=Point(2.3522, 48.8566, srid=WGS84),
+        )
+        service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
+        result = self.api_result
+        result["service"]["id"] = f"dora--{service.pk}"
+        result["service"]["source"] = "dora"
+        result["service"]["code_postal"] = paris.postal_codes[0]
+        result["service"]["code_insee"] = paris.code
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(
+                reverse("search-keyword"), {"code_commune": paris.code}
+            )
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == [service.slug]
+        assert response_json["searchCenter"] == [paris.center.x, paris.center.y]
+
+    def test_search_lat_lon_0(self, api_client):
+        service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
+        result = self.api_result
+        result["service"]["id"] = f"dora--{service.pk}"
+        result["service"]["source"] = "dora"
+        result["service"]["latitude"] = 0
+        result["service"]["longitude"] = 0
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"lat": 0, "lon": 0})
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == [service.slug]
+        assert response_json["searchCenter"] == [0, 0]
+
+    def test_di_unavailable(self, api_client):
+        def requests_error(*args, **kwargs):
+            raise requests.HTTPError()
+
+        fake_client = FakeDataInclusionClient()
+        fake_client.search = requests_error
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=fake_client,
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "foo"})
+
+        assert response.status_code == 503
+        assert response.json() == {
+            "detail": {
+                "message": (
+                    "L’API data.inclusion.gouv.fr nécessaire pour la recherche "
+                    "n’est pas disponible. Merci de réessayer ultérieurement."
+                ),
+                "code": "service_unavailable",
+            }
+        }
+
+    def test_search_api_ignores_distance(self, api_client):
+        result = self.api_result
+        result["distance"] = MAX_DISTANCE + 1
+        result["service"]["longitude"] = -42
+        result["service"]["latitude"] = 42
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "oiseau"})
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == [
+            result["service"]["id"]
+        ]
+        assert response_json["searchCenter"] == [-42, 42]
+
+    def test_search_ignores_score_qualite_minimum(self, api_client, settings):
+        settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM = 0.8
+        result = self.api_result
+        result["service"]["score_qualite"] = 0.7
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "oiseau"})
+
+        assert response.status_code == 200
+        response_json = response.json()
+        assert [s["slug"] for s in response_json["services"]] == [
+            result["service"]["id"]
+        ]
+        assert response_json["searchCenter"] is None
+
+    def test_category(self, api_client):
+        category_value = "choisir-un-metier"
+        subcategories = ServiceSubCategory.objects.filter(
+            value__startswith=category_value
+        )
+        client = FakeDataInclusionClient()
+        spy = mock.MagicMock(wraps=client, spec_set=client)
+        with mock.patch("dora.data_inclusion.di_client_factory", return_value=spy):
+            response = api_client.get(
+                reverse("search-keyword"),
+                {
+                    "q": "foo",  # Pass validation.
+                    "cats": [category_value],
+                },
+            )
+
+        assert response.status_code == 200
+        assert spy.mock_calls == [
+            mock.call.search(
+                q="foo",
+                modes_accueil=[],
+                publics=[],
+                types=[],
+                frais=[],
+                page=1,
+                # Does not include all subcategories for category.
+                thematiques=[s.value for s in subcategories],
+                size=50,
+            )
+        ]
+
+    def test_subcategory_has_precedence_over_category(self, api_client):
+        category_value = "choisir-un-metier"
+        subcategories = ServiceSubCategory.objects.filter(
+            value__startswith=category_value
+        )
+        assert len(subcategories) > 1
+        selected_subcategory_value = subcategories[0].value
+        client = FakeDataInclusionClient()
+        spy = mock.MagicMock(wraps=client, spec_set=client)
+        with mock.patch("dora.data_inclusion.di_client_factory", return_value=spy):
+            response = api_client.get(
+                reverse("search-keyword"),
+                {
+                    "q": "foo",  # Pass validation.
+                    "cats": [category_value],
+                    "subs": [selected_subcategory_value],
+                },
+            )
+
+        assert response.status_code == 200
+        assert spy.mock_calls == [
+            mock.call.search(
+                q="foo",
+                modes_accueil=[],
+                publics=[],
+                types=[],
+                frais=[],
+                page=1,
+                # Does not include all subcategories for category.
+                thematiques=[selected_subcategory_value],
+                size=50,
+            )
+        ]
+
+    def test_logs_nonexistent_dora_service(self, api_client, caplog):
+        caplog.set_level(logging.WARNING)
+        service = make_di_service_data(source="dora")
+        result = {
+            "service": service,
+            "distance": 0,
+            "score_recherche": 0,
+        }
+        service_id = service["id"].removeprefix("dora--")
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=[result]),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "oiseau"})
+
+        assert response.status_code == 200
+        # Le service non existant est exclu.
+        assert [s["slug"] for s in response.json()["services"]] == []
+        assert caplog.record_tuples == [
+            (
+                "dora.services.search",
+                logging.WARNING,
+                f"d·i a retourné un service inconnu, id: {service_id}",
+            )
+        ]
+
+    def test_preserves_di_ordering(self, api_client):
+        results = []
+        id_to_slug = {}
+        for _ in range(2):
+            service = make_published_service(
+                diffusion_zone_type=AdminDivisionType.COUNTRY,
+            )
+            result = self.api_result
+            id_ = f"dora--{service.pk}"
+            result["service"]["id"] = id_
+            result["service"]["source"] = "dora"
+            id_to_slug[id_] = service.slug
+            results.append(result)
+        results.append(self.api_result)  # service d·i.
+
+        for result in results:
+            result["distance"] = random.uniform(0, 10)
+            result["score_recherche"] = random.random()
+        random.shuffle(results)
+
+        with mock.patch(
+            "dora.data_inclusion.di_client_factory",
+            return_value=FakeDataInclusionClient(services=results),
+        ):
+            response = api_client.get(reverse("search-keyword"), {"q": "foo"})
+
+        assert response.status_code == 200
+        expected_slugs = []
+        for r in results:
+            slug = r["service"]["id"]
+            expected_slugs.append(id_to_slug.get(slug, slug))
+        assert [s["slug"] for s in response.json()["services"]] == expected_slugs
+
+    def test_city_code_is_replaced_with_lon_lat(self, api_client):
+        paris = City.objects.create(
+            code="75056",
+            name="Paris",
+            department="75",
+            epci="200054781",
+            region="11",
+            postal_codes=["75001", "75002"],
+            population=2161000,
+            normalized_name="PARIS 75",
+            center=Point(2.3522, 48.8566, srid=WGS84),
+        )
+        client = FakeDataInclusionClient()
+        spy = mock.MagicMock(wraps=client, spec_set=client)
+        with mock.patch("dora.data_inclusion.di_client_factory", return_value=spy):
+            response = api_client.get(
+                reverse("search-keyword"),
+                {
+                    "code_commune": paris.code,
+                },
+            )
+
+        assert response.status_code == 200
+        assert spy.mock_calls == [
+            mock.call.search(
+                modes_accueil=[],
+                publics=[],
+                types=[],
+                frais=[],
+                page=1,
+                thematiques=[],
+                lon=paris.center.x,
+                lat=paris.center.y,
+                size=50,
+            )
+        ]
+
+    def test_city_code_invalid(self, api_client):
+        client = FakeDataInclusionClient()
+        spy = mock.MagicMock(wraps=client, spec_set=client)
+        with mock.patch("dora.data_inclusion.di_client_factory", return_value=spy):
+            response = api_client.get(
+                reverse("search-keyword"),
+                {
+                    "code_commune": "98765",
+                },
+            )
+
+        assert response.status_code == 200
+        assert spy.mock_calls == [
+            mock.call.search(
+                modes_accueil=[],
+                publics=[],
+                types=[],
+                frais=[],
+                page=1,
+                thematiques=[],
+                code_commune="98765",
+                size=50,
+            )
+        ]
