@@ -212,6 +212,12 @@
   });
 </script>
 
+<div
+  class="tag bg-blue-information text-f12 py-s4 px-s8 text-gray-text mb-s6 ml-auto w-fit font-bold uppercase"
+>
+  Nouveau : recherchez les services d’insertion par mots-clés
+</div>
+
 <form action="/recherche-mots-cles" onsubmit={handleSearch}>
   {#if addressSelectErrorMessage}
     <!-- L’id correspond au aria-describedby du <Select …/> en cas d’erreur. -->
