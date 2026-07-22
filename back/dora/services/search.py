@@ -104,16 +104,6 @@ def _sort_services(services):
     return results
 
 
-DI_SERVICE_KINDS = {
-    "accompagnement",
-    "aide-financiere",
-    "aide-materielle",
-    "atelier",
-    "formation",
-    "information",
-}
-
-
 def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     city = City.objects.filter(code=city_code).first()
 
