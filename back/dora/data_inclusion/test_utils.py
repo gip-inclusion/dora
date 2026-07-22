@@ -120,10 +120,10 @@ class FakeDataInclusionClient:
             ]
 
         if types is not None:
-            services = [r for r in services if any(t in r["types"] for t in types)]
+            services = [r for r in services if r["type"] in types]
 
         if frais is not None:
-            services = [r for r in services if any(t in r["frais"] for t in frais)]
+            services = [r for r in services if r["frais"] in frais]
 
         if code_commune is not None:
             services = [r for r in services if code_commune in r["zone_eligibilite"]]

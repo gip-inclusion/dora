@@ -1263,9 +1263,9 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_filter_by_fee(self):
         service_data = self.make_di_service(
-            zone_eligibilite=[self.city2.code], frais=["gratuit"]
+            zone_eligibilite=[self.city2.code], frais="gratuit"
         )
-        self.make_di_service(zone_eligibilite=[self.city2.code], frais=["payant"])
+        self.make_di_service(zone_eligibilite=[self.city2.code], frais="payant")
         request = self.factory.get(
             "/search/",
             {
@@ -1281,15 +1281,15 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_filter_by_kind(self):
         service_data = self.make_di_service(
-            zone_eligibilite=[self.city2.code], types=["atelier", "accompagnement"]
+            zone_eligibilite=[self.city2.code], type="atelier"
         )
-        self.make_di_service(zone_eligibilite=[self.city2.code], types=["formation"])
+        self.make_di_service(zone_eligibilite=[self.city2.code], type="formation")
         request = self.factory.get(
             "/search/",
             {
                 "di": True,
                 "city": self.city2.code,
-                "kinds": ServiceKind.objects.filter(value=service_data["types"][0])
+                "kinds": ServiceKind.objects.filter(value=service_data["type"])
                 .first()
                 .value,
             },
