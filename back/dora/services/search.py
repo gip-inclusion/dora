@@ -114,10 +114,6 @@ DI_SERVICE_KINDS = {
 }
 
 
-def _map_kinds_dora_to_di(kinds: list[str]) -> list[str]:
-    return [kind for kind in kinds if kind in DI_SERVICE_KINDS]
-
-
 def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     city = City.objects.filter(code=city_code).first()
 
@@ -193,13 +189,11 @@ def _get_raw_di_results(
     if not thematiques and subcategories:
         return []
 
-    types = _map_kinds_dora_to_di(kinds) if kinds else None
-
     try:
         raw_di_results = di_client.search_services(
             code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
-            types=types,
+            types=kinds,
             frais=fees,
             lat=lat,
             lon=lon,
