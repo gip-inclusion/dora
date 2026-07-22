@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from mjml import mjml2html
 
+from dora.api.exceptions import ServiceUnavailable
 from dora.core.commands import BaseCommand
 from dora.core.emails import send_mail
 from dora.services.models import LocationKind
@@ -48,9 +49,17 @@ class Command(BaseCommand):
         num_emails_sent = 0
         for saved_search in saved_searches:
             # On garde les contenus qui ont été publiés depuis la dernière notification
-            new_services = saved_search.get_recent_services(
-                saved_search.last_notification_date
-            )
+            try:
+                new_services = saved_search.get_recent_services(
+                    saved_search.last_notification_date
+                )
+            except ServiceUnavailable:
+                self.logger.warning(
+                    "data·inclusion indisponible, envoi des notifications de "
+                    "recherches sauvegardées interrompu ; %s courriels envoyés",
+                    num_emails_sent,
+                )
+                return
 
             if new_services:
                 # Envoi de l'email

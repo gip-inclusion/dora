@@ -3,6 +3,7 @@ from datetime import timedelta
 from io import StringIO
 from unittest import mock
 
+import requests
 from django.contrib.gis.geos import Point
 from django.core import mail
 from django.core.management import call_command
@@ -374,6 +375,40 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             "[LOCAL] Il y a de nouveaux services correspondant à votre alerte",
         )
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
+
+    def test_di_unavailable_does_not_crash_nor_update_dates(self):
+        # ÉTANT DONNÉ un utilisateur avec une notification mensuelle envoyée à J-40
+        user = baker.make("users.User", is_valid=True)
+        last_notification_date = timezone.now() - timedelta(days=40)
+        saved_search = baker.make(
+            "SavedSearch",
+            user=user,
+            frequency=SavedSearchFrequency.MONTHLY,
+            city_label=SAVE_SEARCH_ARGS.get("city_label"),
+            city_code=SAVE_SEARCH_ARGS.get("city_code"),
+            last_notification_date=last_notification_date,
+        )
+
+        # ET data·inclusion indisponible
+        class FaultyDataInclusionClient:
+            def search_services(self, **kwargs):
+                raise requests.ConnectionError()
+
+        self.mock_di_client_factory.return_value = FaultyDataInclusionClient()
+
+        # QUAND j'envoie les notifications
+        # ALORS la commande n'échoue pas
+        self.call_command()
+
+        # ET aucun e-mail n'est envoyé
+        self.assertEqual(len(mail.outbox), 0)
+
+        # ET la date de dernière notification n'est pas mise à jour, afin de
+        # réessayer au prochain passage
+        saved_search.refresh_from_db()
+        self.assertEqual(
+            saved_search.last_notification_date, last_notification_date.date()
+        )
 
     def test_get_no_notification_location(self):
         # ÉTANT DONNÉ un utilisateur avec une notification mensuelle envoyée à J-40
