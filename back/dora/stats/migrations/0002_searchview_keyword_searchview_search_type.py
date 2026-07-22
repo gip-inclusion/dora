@@ -1,6 +1,6 @@
-from dora.stats.models import SearchType
-
 from django.db import migrations, models
+
+from dora.stats.models import SearchType
 
 
 class Migration(migrations.Migration):
