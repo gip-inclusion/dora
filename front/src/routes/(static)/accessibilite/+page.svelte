@@ -11,15 +11,34 @@
     </div>
 
     <h1>Déclaration d’accessibilité</h1>
-    <p>Établie le <span>7 décembre 2022</span>.</p>
     <p>
-      <span>Le GIP Plateforme de l’inclusion</span> s’engage à rendre son service
-      accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février
-      2005.
+      <strong>Le GIP Plateforme de l’inclusion</strong> s’engage à rendre ses
+      sites internet et applications accessibles conformément à l’article 47 de
+      la loi n<sup>o</sup> 2005-102 du 11 février 2005.
     </p>
     <p>
-      Cette déclaration d’accessibilité s’applique à <strong>DORA</strong>
-      <span> (https://dora.inclusion.gouv.fr/)</span>.
+      Son schéma pluriannuel décrit les points importants sur lesquels le GIP
+      Plateforme de l’inclusion s’appuiera pour améliorer l’accessibilité
+      numérique de l’ensemble de ses sites internet et applications. Ce schéma
+      s’accompagne de plans d’action annuels (<a
+        href="https://inclusion.gouv.fr/documents/108/GIP_plateforme_de_linclusion_-_Plan_annuel_daccessibilite_2025.pdf"
+        target="_blank">2025</a
+      >,
+      <a
+        href="https://inclusion.gouv.fr/documents/64/GIP_plateforme_de_linclusion_-_Plan_annuel_daccessibilite_2026.pdf"
+        target="_blank">2026</a
+      >) qui détaillent les opérations programmées et mises en œuvre pour
+      l'année courante, ainsi que l’état de suivi de ces actions, détaillé dans
+      le
+      <a
+        href="https://inclusion.gouv.fr/documents/65/GIP_plateforme_de_linclusion_-_Schema_pluriannuel_daccessibilite_2025-2027.pdf"
+        target="_blank">schéma pluriannuel d’accessibilité 2025-2027</a
+      >.
+    </p>
+    <p>
+      Cette déclaration d’accessibilité s’applique au site web <strong
+        >DORA</strong
+      >.
     </p>
     <h2>État de conformité</h2>
     <p>
