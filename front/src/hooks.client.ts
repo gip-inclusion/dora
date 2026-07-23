@@ -6,6 +6,7 @@ import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
 import {
   STALE_CHUNK_ERROR_MESSAGES,
   STALE_CHUNK_RELOAD_MESSAGE,
+  UNEXPECTED_ERROR_MESSAGE,
 } from "$lib/consts";
 
 setupFetchInterceptor();
@@ -38,7 +39,7 @@ export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
     const message =
       ENVIRONMENT === "local" && error instanceof Error
         ? error.message
-        : "Erreur inattendue";
+        : UNEXPECTED_ERROR_MESSAGE;
 
     return {
       message,
