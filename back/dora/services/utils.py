@@ -14,7 +14,6 @@ from dora.decoupage_administratif.models import (
     Department,
     Region,
 )
-from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
 
 SYNC_FIELDS = [
@@ -142,33 +141,6 @@ def update_sync_checksum(service):
 
     result = md5.hexdigest()
     return result
-
-
-def filter_services_by_city_code(services, city_code):
-    # Si la requete entrante contient un code insee d'arrondissement,
-    # on le convertit pour récupérer le code de la commune entière.
-    city_code = arrdt_to_main_insee_code(city_code)
-    city = get_object_or_404(City, pk=city_code)
-
-    return services.filter(
-        Q(diffusion_zone_type=AdminDivisionType.COUNTRY)
-        | (
-            Q(diffusion_zone_type=AdminDivisionType.CITY)
-            & Q(diffusion_zone_details=city.code)
-        )
-        | (
-            Q(diffusion_zone_type=AdminDivisionType.EPCI)
-            & Q(diffusion_zone_details=city.epci)
-        )
-        | (
-            Q(diffusion_zone_type=AdminDivisionType.DEPARTMENT)
-            & Q(diffusion_zone_details=city.department)
-        )
-        | (
-            Q(diffusion_zone_type=AdminDivisionType.REGION)
-            & Q(diffusion_zone_details=city.region)
-        )
-    )
 
 
 def filter_services_by_department(services, dept_code):

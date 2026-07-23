@@ -1,7 +1,9 @@
+import random
 from datetime import timedelta
 from io import StringIO
 from unittest import mock
 
+import requests
 from django.contrib.gis.geos import Point
 from django.core import mail
 from django.core.management import call_command
@@ -11,7 +13,7 @@ from rest_framework.test import APITestCase
 
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service
-from dora.data_inclusion.test_utils import FakeDataInclusionClient
+from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
 from dora.decoupage_administratif.models import (
     AdminDivisionType,
     City,
@@ -23,7 +25,7 @@ from dora.services.management.commands.send_saved_searches_notifications import 
     get_saved_search_notifications_to_send,
 )
 
-from ..models import SavedSearch, SavedSearchFrequency
+from ..models import SavedSearch, SavedSearchFrequency, ServiceSubCategory
 
 SAVE_SEARCH_ARGS = {
     "category": "choisir-un-metier",
@@ -202,6 +204,33 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
     def call_command(self):
         call_command("send_saved_searches_notifications", stdout=StringIO())
 
+    def setup_dora_service_in_di(self, **kwargs):
+        service = make_service(**kwargs)
+        di_kwargs = {}
+        subs = kwargs.get("subcategories", "").split(",")
+        cats = kwargs.get("categories", "").split(",")
+        thematiques = []
+        thematiques.extend(subs)
+        for cat in cats:
+            if not any(sub.startswith(cat) for sub in subs):
+                thematiques.extend(
+                    ServiceSubCategory.objects.filter(
+                        value__startswith=f"{cat}--"
+                    ).values_list("value", flat=True)
+                )
+        di_kwargs["thematiques"] = thematiques
+        if kinds := kwargs.get("kinds"):
+            di_kwargs["type"] = random.choice(kinds).value
+        if fee := kwargs.get("fee_condition"):
+            di_kwargs["frais"] = fee.value
+        di_service = make_di_service_data(
+            source="dora",
+            id=f"dora--{service.pk}",
+            zone_eligibilite=kwargs.get("diffusion_zone_details"),
+            **di_kwargs,
+        )
+        self.di_client.services.append(di_service)
+
     def test_get_monthly_saved_searches(self):
         # ÉTANT DONNÉ un utilisateur avec deux notifications mensuelles
         # envoyée à J-15 puis J-40
@@ -328,7 +357,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
 
         # ET un service mis à jour à J-20
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.CITY,
@@ -347,6 +376,40 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
 
+    def test_di_unavailable_does_not_crash_nor_update_dates(self):
+        # ÉTANT DONNÉ un utilisateur avec une notification mensuelle envoyée à J-40
+        user = baker.make("users.User", is_valid=True)
+        last_notification_date = timezone.now() - timedelta(days=40)
+        saved_search = baker.make(
+            "SavedSearch",
+            user=user,
+            frequency=SavedSearchFrequency.MONTHLY,
+            city_label=SAVE_SEARCH_ARGS.get("city_label"),
+            city_code=SAVE_SEARCH_ARGS.get("city_code"),
+            last_notification_date=last_notification_date,
+        )
+
+        # ET data·inclusion indisponible
+        class FaultyDataInclusionClient:
+            def search_services(self, **kwargs):
+                raise requests.ConnectionError()
+
+        self.mock_di_client_factory.return_value = FaultyDataInclusionClient()
+
+        # QUAND j'envoie les notifications
+        # ALORS la commande n'échoue pas
+        self.call_command()
+
+        # ET aucun e-mail n'est envoyé
+        self.assertEqual(len(mail.outbox), 0)
+
+        # ET la date de dernière notification n'est pas mise à jour, afin de
+        # réessayer au prochain passage
+        saved_search.refresh_from_db()
+        self.assertEqual(
+            saved_search.last_notification_date, last_notification_date.date()
+        )
+
     def test_get_no_notification_location(self):
         # ÉTANT DONNÉ un utilisateur avec une notification mensuelle envoyée à J-40
         user = baker.make("users.User", is_valid=True)
@@ -360,7 +423,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
 
         # ET un service mis à jour à J-60
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.CITY,
@@ -390,7 +453,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
 
         # ET un service mis à jour à J-20 lié à la même catégorie
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -434,7 +497,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         savedSearch.subcategories.set([sub_category, sub_category_2])
 
         # ET un service mis à jour à J-20 lié à la même catégorie et sous-catégories
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -486,7 +549,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         savedSearch.kinds.set([kind, kind_2])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories et types de service
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -546,7 +609,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         savedSearch.fees.set([fee])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories, types de service et frais à charge
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -594,7 +657,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
 
         # ET deux services mis à jour à J-20 liés à la même catégorie mais avec un seul service modifié récemment
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -602,7 +665,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             publication_date=timezone.now() - timedelta(days=20),
             diffusion_zone_details=SAVE_SEARCH_ARGS.get("city_code"),
         )
-        make_service(
+        self.setup_dora_service_in_di(
             name="service_2",
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -645,7 +708,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         savedSearch.fees.set([fee1])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories, types de service et frais à charge
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
@@ -668,7 +731,9 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         # et deux sous-catégories et deux types de services et un frais à charge
         user = baker.make("users.User", is_valid=True)
         category = baker.make("ServiceCategory", value="cat1", label="cat1")
+        baker.make("ServiceSubCategory", value="cat1--sub1", label="cat1--sub1")
         baker.make("ServiceCategory", value="cat2", label="cat2")
+        baker.make("ServiceSubCategory", value="cat2--sub1", label="cat2--sub1")
 
         baker.make(
             "SavedSearch",
@@ -681,7 +746,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         )
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories, types de service et frais à charge
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat2",
@@ -720,7 +785,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         savedSearch.subcategories.set([sub_category_1])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories, types de service et frais à charge
-        make_service(
+        self.setup_dora_service_in_di(
             name=self.service_name,
             status=ServiceStatus.PUBLISHED,
             categories="cat1",

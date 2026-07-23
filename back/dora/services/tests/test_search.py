@@ -58,8 +58,13 @@ def test_search_services_with_obsolete_structure(api_client, city):
 
     # Service publié avec structure non obsolète
     service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
+    di_service_data = make_di_service_data(
+        source="dora",
+        id=f"dora--{service.pk}",
+        zone_eligibilite=[city.code],
+    )
 
-    fake_di_client = FakeDataInclusionClient()
+    fake_di_client = FakeDataInclusionClient(services=[di_service_data])
 
     with mock.patch(
         "dora.data_inclusion.di_client_factory", return_value=fake_di_client
@@ -96,7 +101,12 @@ def test_search_services_with_orphan_structure(
     # les services rattachés à une structure orpheline
     # doivent être filtrés lors de la recherche
 
-    fake_di_client = FakeDataInclusionClient()
+    di_service_data = make_di_service_data(
+        source="dora",
+        id=f"dora--{orphan_service.pk}",
+        zone_eligibilite=[city.code],
+    )
+    fake_di_client = FakeDataInclusionClient(services=[di_service_data])
 
     with mock.patch(
         "dora.data_inclusion.di_client_factory", return_value=fake_di_client

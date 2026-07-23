@@ -8,23 +8,17 @@ from typing import Optional
 import requests
 from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
-from django.db.models import IntegerField, Q, QuerySet, Value
-from django.utils import timezone
+from django.db.models import Q
 
 import dora.services.models as models
 from dora import data_inclusion
 from dora.api.exceptions import ServiceUnavailable
-from dora.core.constants import WGS84
 from dora.data_inclusion.mappings import map_search_result
 from dora.decoupage_administratif.models import City
 from dora.services.models import ServiceSubCategory
 
 from .models import FundingLabel
 from .serializers import FundingLabelSerializer, SearchResultSerializer
-from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
 DEPARTMENT_CODE_SOMME = "80"
@@ -33,38 +27,6 @@ MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
 FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 logger = logging.getLogger(__name__)
-
-
-def _filter_and_annotate_dora_services(
-    services: QuerySet[models.Service],
-    location: Point,
-    with_remote: bool,
-    with_onsite: bool,
-) -> QuerySet[models.Service]:
-    no_services = models.Service.objects.none()
-    # 1) services ayant un lieu de déroulement, à moins de MAX_DISTANCE km
-    services_on_site = (
-        services.filter(location_kinds__value=ModeAccueil.EN_PRESENTIEL)
-        .annotate(distance=Distance("geom", location))
-        .filter(distance__lte=D(km=MAX_DISTANCE))
-        if with_onsite
-        else no_services
-    )
-    # 2) services sans lieu de déroulement
-    services_remote = (
-        (
-            services.filter(
-                Q(location_kinds__value=ModeAccueil.A_DISTANCE)
-                | ~Q(location_kinds__value=ModeAccueil.EN_PRESENTIEL)
-            )
-            .exclude(id__in=services_on_site)
-            .distinct()
-            .annotate(distance=Value(None, output_field=IntegerField()))
-        )
-        if with_remote
-        else no_services
-    )
-    return services_on_site | services_remote
 
 
 def _sort_services(services):
@@ -189,7 +151,10 @@ def _get_raw_di_results(
             lon=lon,
         )
     except requests.ConnectionError:
-        return []
+        raise ServiceUnavailable(
+            "L’API data.inclusion.gouv.fr nécessaire pour la recherche "
+            "n’est pas disponible. Merci de réessayer ultérieurement."
+        )
 
     if raw_di_results is None:
         return []
@@ -237,97 +202,6 @@ def _map_di_results(
         )
     ]
     return mapped_di_results
-
-
-def _get_dora_results(
-    request,
-    city_code: str,
-    city: City,
-    categories: Optional[list[str]] = None,
-    subcategories: Optional[list[str]] = None,
-    kinds: Optional[list[str]] = None,
-    fees: Optional[list[str]] = None,
-    location_kinds: Optional[list[str]] = None,
-    funding_labels: Optional[list[str]] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
-):
-    services = (
-        models.Service.objects.filter_for_DI()
-        .select_related(
-            "structure",
-        )
-        .prefetch_related(
-            "kinds",
-            "fee_condition",
-            "location_kinds",
-            "publics",
-            "categories",
-            "subcategories",
-            "funding_labels",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
-        )
-    )
-
-    if kinds:
-        services = services.filter(kinds__value__in=kinds)
-
-    if fees:
-        services = services.filter(fee_condition__value__in=fees)
-
-    if location_kinds:
-        services = services.filter(location_kinds__value__in=location_kinds)
-
-    if funding_labels:
-        services = services.filter(funding_labels__value__in=funding_labels)
-
-    with_remote = not location_kinds or ModeAccueil.A_DISTANCE in location_kinds
-    with_onsite = not location_kinds or ModeAccueil.EN_PRESENTIEL in location_kinds
-
-    categories_filter = Q()
-    if categories:
-        categories_filter = Q(categories__value__in=categories)
-
-    subcategories_filter = Q()
-    if subcategories:
-        for subcategory in subcategories:
-            cat, subcat = subcategory.split("--")
-            if subcat == "autre":
-                # Quand on cherche une sous-catégorie de type 'Autre', on veut
-                # aussi remonter les services sans sous-catégorie
-                all_sister_subcats = models.ServiceSubCategory.objects.filter(
-                    value__startswith=f"{cat}--"
-                )
-                subcategories_filter |= Q(subcategories__value=subcategory) | (
-                    Q(categories__value=cat) & ~Q(subcategories__in=all_sister_subcats)
-                )
-            else:
-                subcategories_filter |= Q(subcategories__value=subcategory)
-
-    services = services.filter(categories_filter | subcategories_filter).distinct()
-
-    geofiltered_services = filter_services_by_city_code(services, city_code)
-
-    # Exclude suspended services
-    services_to_display = geofiltered_services.filter(
-        Q(suspension_date=None) | Q(suspension_date__gte=timezone.now())
-    ).distinct()
-
-    results = _filter_and_annotate_dora_services(
-        services_to_display,
-        city.center if not lat or not lon else Point(lon, lat, srid=WGS84),
-        with_remote,
-        with_onsite,
-    )
-
-    funding_labels_found = FundingLabel.objects.filter(service__in=results).distinct()
-
-    return SearchResultSerializer(
-        results, many=True, context={"request": request}
-    ).data, {
-        "funding_labels": FundingLabelSerializer(funding_labels_found, many=True).data
-    }
 
 
 def _dora_services_by_id(service_ids):
@@ -434,13 +308,11 @@ def search_services(
     request,
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
-    city: City,
     categories: Optional[list[str]] = None,
     subcategories: Optional[list[str]] = None,
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
-    funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
 ) -> (list[dict], dict):
@@ -470,22 +342,6 @@ def search_services(
         lat=lat,
         lon=lon,
     )
-    if len(results) == 0:
-        # Pas de résultat peut signifier que DI n'est pas accessible.
-        # On relance la recherche sur les services DORA locaux.
-        results, metadata = _get_dora_results(
-            request=request,
-            categories=categories,
-            subcategories=subcategories,
-            city_code=city_code,
-            city=city,
-            kinds=kinds,
-            fees=fees,
-            location_kinds=location_kinds,
-            funding_labels=funding_labels,
-            lat=lat,
-            lon=lon,
-        )
     return _sort_services(results), metadata
 
 
