@@ -87,7 +87,7 @@ export function buildServiceShareMailto(
     `Consulter le service : ${serviceUrl}`,
     "",
     "À très bientôt,",
-    "L’équipe DORA",
+    "L’équipe de la Plateforme de l’inclusion",
     "",
     `En cas de difficulté, n’hésitez pas à contacter le support de la plateforme DORA (${URL_HELP_SITE}) pour obtenir de l’aide.`
   );
