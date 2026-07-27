@@ -10,12 +10,7 @@ def _isoformat(value):
     return value.isoformat() if value else None
 
 
-def _service_id(orientation: Orientation) -> str:
-    # On reconstruit l'identifiant de service tel que Les Emplois l'avait fourni :
-    # un service DORA (converti en FK à la création) redevient « dora--<uuid> »,
-    # sinon on conserve le `di_service_id` d'origine.
-    # Même logique que `OrientationViewSet.perform_create` et
-    # `EmploisOrientationCreateSerializer.to_representation`.
+def _di_service_id(orientation: Orientation) -> str:
     if orientation.service_id:
         return f"dora--{orientation.service_id}"
     return orientation.di_service_id
@@ -44,7 +39,7 @@ class Command(BaseCommand):
             "beneficiary_id": str(emplois_data.beneficiary_id),
             "prescriber_id": str(emplois_data.prescriber_id),
             "structure_id": str(emplois_data.structure_id),
-            "service_id": _service_id(orientation),
+            "service_id": _di_service_id(orientation),
             # Cycle de vie
             "status": orientation.status,
             "creation_date": _isoformat(orientation.creation_date),
