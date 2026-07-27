@@ -42,9 +42,7 @@ class Command(BaseCommand):
             # l'orientation à ses propres objets lors du réimport.
             "emplois_sync_uid": str(emplois_data.emplois_sync_uid),
             "beneficiary_id": str(emplois_data.beneficiary_id),
-            "prescriber_id": str(emplois_data.prescriber_id)
-            if emplois_data.prescriber_id
-            else None,
+            "prescriber_id": str(emplois_data.prescriber_id),
             "structure_id": str(emplois_data.structure_id),
             "service_id": _service_id(orientation),
             # Cycle de vie
