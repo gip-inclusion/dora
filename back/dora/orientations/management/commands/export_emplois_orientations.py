@@ -1,13 +1,10 @@
 import json
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
 from dora.orientations.models import Orientation
-
-
-def _isoformat(value):
-    return value.isoformat() if value else None
 
 
 def _di_service_id(orientation: Orientation) -> str:
@@ -35,21 +32,19 @@ class Command(BaseCommand):
             # Identifiants Les Emplois transmis à la création de l'orientation et
             # stockés tels quels : ils permettent à Les Emplois de rattacher
             # l'orientation à ses propres objets lors du réimport.
-            "emplois_sync_uid": str(emplois_data.emplois_sync_uid),
-            "beneficiary_id": str(emplois_data.beneficiary_id),
-            "prescriber_id": str(emplois_data.prescriber_id),
-            "structure_id": str(emplois_data.structure_id),
+            "emplois_sync_uid": emplois_data.emplois_sync_uid,
+            "beneficiary_id": emplois_data.beneficiary_id,
+            "prescriber_id": emplois_data.prescriber_id,
+            "structure_id": emplois_data.structure_id,
             "service_id": _di_service_id(orientation),
             # Cycle de vie
             "status": orientation.status,
-            "creation_date": _isoformat(orientation.creation_date),
-            "processing_date": _isoformat(orientation.processing_date),
+            "creation_date": orientation.creation_date,
+            "processing_date": orientation.processing_date,
             # Bénéficiaire
             "beneficiary_contact_preferences": orientation.beneficiary_contact_preferences,
             "beneficiary_other_contact_method": orientation.beneficiary_other_contact_method,
-            "beneficiary_availability": _isoformat(
-                orientation.beneficiary_availability
-            ),
+            "beneficiary_availability": orientation.beneficiary_availability,
             "beneficiary_attachments": orientation.beneficiary_attachments,
             # Référent
             "referent_last_name": orientation.referent_last_name,
@@ -83,7 +78,9 @@ class Command(BaseCommand):
         )
 
         with open(output_file, "w", encoding="utf-8") as json_file:
-            json.dump(data, json_file, ensure_ascii=False, indent=2)
+            json.dump(
+                data, json_file, cls=DjangoJSONEncoder, ensure_ascii=False, indent=2
+            )
 
         self.logger.info(
             "%s orientation(s) Les Emplois exportée(s) dans %s.",
