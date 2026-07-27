@@ -14,15 +14,15 @@ asgiref==3.12.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.51 \
-    --hash=sha256:a97057bb609fd38c80448db6a93db770786775dabd651401debf09816d4553d7 \
-    --hash=sha256:a97057bb609fd38c80448db6a93db770786775dabd651401debf09816d4553d7 \
-    --hash=sha256:b5a416cc703db73b69b22bef563c89c1fb14a4b10a93628d3c7abc4dd1aaf979 \
-    --hash=sha256:b5a416cc703db73b69b22bef563c89c1fb14a4b10a93628d3c7abc4dd1aaf979
+boto3==1.43.53 \
+    --hash=sha256:5383e705d8a976a14f23bb8c113c07a396931a019db98fce4cdc68650ec6e4d8 \
+    --hash=sha256:5383e705d8a976a14f23bb8c113c07a396931a019db98fce4cdc68650ec6e4d8 \
+    --hash=sha256:c80425acab314d7af09609562053f565139e1fe49108eacfcc1601ebfaee235b \
+    --hash=sha256:c80425acab314d7af09609562053f565139e1fe49108eacfcc1601ebfaee235b
     # via django-storages
-botocore==1.43.51 \
-    --hash=sha256:7c2c538c932bddc95834e177ce6f91dcc388c6a7934b4f8d0db13caa30e3e543 \
-    --hash=sha256:e0e5e88585fdb01dcb6b533ac2dd3f18d5d45092a14ccbfd330e3576a4152128
+botocore==1.43.56 \
+    --hash=sha256:6c01f85f0ff9863076f4c761e74ee3aa96c5ccc1ad09fc1efd62ef8f2d22bf57 \
+    --hash=sha256:aafc741f1b10f6fd63253eaf6ea029680c1ff436d87e1b8969d62aefa0c76976
     # via
     #   boto3
     #   s3transfer
