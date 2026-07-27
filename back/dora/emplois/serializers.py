@@ -220,7 +220,7 @@ class EmploisOrientationStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Orientation
-        fields = ["emplois_sync_uid", "status", "updated_at"]
+        fields = ["emplois_sync_uid", "status", "processing_date", "updated_at"]
 
 
 # Valeurs constantes communes à tous les événements de mobilisation enregistrés

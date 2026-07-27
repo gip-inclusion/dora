@@ -506,11 +506,17 @@ def test_orientation_status_list_returns_only_emplois_orientations(
     assert len(results) == 1
 
     [item] = response.data["results"]
-    assert set(item.keys()) == {"emplois_sync_uid", "status", "updated_at"}
+    assert set(item.keys()) == {
+        "emplois_sync_uid",
+        "status",
+        "processing_date",
+        "updated_at",
+    }
     assert item["emplois_sync_uid"] == str(
         emplois_orientation.emplois_orientation_data.emplois_sync_uid
     )
     assert item["status"] == OrientationStatus.ACCEPTED
+    assert item["processing_date"] == DateTimeField().to_representation(processing_date)
     assert item["updated_at"] == DateTimeField().to_representation(processing_date)
 
 
@@ -525,6 +531,7 @@ def test_orientation_status_list_updated_at_falls_back_to_creation_date(
     assert response.status_code == 200
     assert len(response.data["results"]) == 1
     [item] = response.data["results"]
+    assert item["processing_date"] is None
     assert item["updated_at"] == DateTimeField().to_representation(
         orientation.creation_date
     )
