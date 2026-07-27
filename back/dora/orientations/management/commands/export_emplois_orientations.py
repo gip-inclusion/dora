@@ -82,11 +82,6 @@ class Command(BaseCommand):
                 data, json_file, cls=DjangoJSONEncoder, ensure_ascii=False, indent=2
             )
 
-        self.logger.info(
-            "%s orientation(s) Les Emplois exportée(s) dans %s.",
-            len(data),
-            output_file,
-        )
         self.stdout.write(
             self.style.SUCCESS(
                 f"{len(data)} orientation(s) Les Emplois exportée(s) dans : {output_file}"
