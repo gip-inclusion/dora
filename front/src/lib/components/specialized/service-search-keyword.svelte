@@ -59,13 +59,18 @@
       }
     }
     if (params.get("lon") && params.get("lat")) {
+      const searchParams = new URLSearchParams({
+        lon: params.get("lon") || "",
+        lat: params.get("lat") || "",
+      });
+      const cityCode = params.get("code_insee");
+      if (cityCode) {
+        searchParams.set("code_insee", cityCode);
+      }
       return {
         kind: LocationType.Address,
         label,
-        searchParams: new URLSearchParams({
-          lon: params.get("lon") || "",
-          lat: params.get("lat") || "",
-        }),
+        searchParams,
       };
     }
     return null;
@@ -120,6 +125,8 @@
             searchParams: new URLSearchParams({
               lon: lon.toString(),
               lat: lat.toString(),
+              // eslint-disable-next-line camelcase
+              code_insee: feature.properties.citycode,
             }),
             kind: LocationType.Address,
             label: feature.properties.label,

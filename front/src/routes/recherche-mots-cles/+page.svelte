@@ -67,7 +67,17 @@
   async function trackSearch() {
     // Le tracking doit être comparable à la recherche historique. Cela
     // implique un suivi imparfait des actions de l’utilisateur.
-    const cityCode = page.url.searchParams.get("code_commune") ?? "";
+    // La zone géographique est stockée telle que l’utilisateur l’a
+    // sélectionnée : une adresse comme une commune remontent leur code INSEE,
+    // un département ou une région ne remontent que leur propre code.
+    const location = {
+      cityCode:
+        page.url.searchParams.get("code_commune") ??
+        page.url.searchParams.get("code_insee") ??
+        "",
+      department: page.url.searchParams.get("code_departement") ?? "",
+      region: page.url.searchParams.get("code_region") ?? "",
+    };
     const categoryIds = page.url.searchParams.getAll("cats");
     const subCategoryIds = page.url.searchParams.getAll("subs");
     const kinds = page.url.searchParams.getAll("types");
@@ -77,7 +87,7 @@
     searchId = await trackKeywordSearch(
       page.url,
       keywords,
-      cityCode,
+      location,
       categoryIds,
       subCategoryIds,
       kinds,
