@@ -200,6 +200,12 @@ class AbstractSearchEvent(AbstractAnalyticsEvent):
         ServiceSubCategory, blank=True, related_name="+"
     )
     department = models.CharField(max_length=3, blank=True, db_index=True)
+    region = models.CharField(
+        verbose_name="Code de la région de la recherche",
+        max_length=2,
+        blank=True,
+        db_index=True,
+    )
     city_code = models.CharField(
         verbose_name="Code INSEE de la recherche", max_length=5, blank=True
     )

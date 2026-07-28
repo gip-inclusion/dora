@@ -145,7 +145,13 @@ def log_event(request):
             search_type = request.data.get("search_type", SearchType.THEMATIQUE)
             keyword = request.data.get("keyword", "")
             city_code = request.data.get("search_city_code", "")
-            department = code_insee_to_code_dept(city_code) if city_code else ""
+            # La recherche par mots-clés transmet explicitement la zone
+            # géographique ; sinon (recherche thématique) on dérive le
+            # département du code INSEE.
+            department = request.data.get("search_department")
+            if department is None:
+                department = code_insee_to_code_dept(city_code) if city_code else ""
+            region = request.data.get("search_region", "")
             num_results = int(request.data.get("search_num_results", "0"))
             num_di_results = int(request.data.get("num_di_results", "0"))
             num_di_results_top10 = int(request.data.get("num_di_results_top10", "0"))
@@ -159,6 +165,7 @@ def log_event(request):
                 keyword=keyword,
                 city_code=city_code,
                 department=department,
+                region=region,
                 num_results=num_results,
                 num_di_results=num_di_results,
                 num_di_results_top10=num_di_results_top10,
