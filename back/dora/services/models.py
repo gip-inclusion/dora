@@ -58,7 +58,7 @@ class CustomizableChoice(models.Model):
     name = models.CharField(max_length=140)
     structure = models.ForeignKey(
         Structure,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_index=True,
         null=True,
         blank=True,
@@ -536,7 +536,7 @@ class Service(ModerationMixin, models.Model):
     structure = models.ForeignKey(
         Structure,
         verbose_name="Structure",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         db_index=True,
         related_name="services",
     )
@@ -943,7 +943,7 @@ class FranceTravailOrientableService(models.Model):
     )
     structure = models.ForeignKey(
         Structure,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="orientable_ft_services_agencies",
     )
     service = models.ForeignKey(

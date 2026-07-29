@@ -84,7 +84,7 @@ class StructurePutativeMember(models.Model):
         related_name="putative_membership",
     )
     structure = models.ForeignKey(
-        "Structure", on_delete=models.CASCADE, related_name="putative_membership"
+        "Structure", on_delete=models.PROTECT, related_name="putative_membership"
     )
     is_admin = models.BooleanField(default=False)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -129,7 +129,7 @@ class StructureMember(NexusModelMixin, models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="membership"
     )
     structure = models.ForeignKey(
-        "Structure", on_delete=models.CASCADE, related_name="membership"
+        "Structure", on_delete=models.PROTECT, related_name="membership"
     )
     is_admin = models.BooleanField(default=False)
 
@@ -356,7 +356,7 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         unique=True,
     )
     parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, blank=True, null=True, related_name="branches"
+        "self", on_delete=models.PROTECT, blank=True, null=True, related_name="branches"
     )
 
     code_safir_ft = models.CharField(
