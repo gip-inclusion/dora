@@ -53,3 +53,8 @@ export const STALE_CHUNK_ERROR_MESSAGES = [
 // Marqueur retourné par le handleError client lors du rechargement automatique
 // après un déploiement, pour que la page d'erreur ne le remonte pas à Sentry
 export const STALE_CHUNK_RELOAD_MESSAGE = "stale-chunk-reload";
+
+// Message générique retourné par les handleError (client et serveur) en prod, en
+// remplacement du message réel. L'erreur d'origine est déjà rapportée à Sentry par
+// handleErrorWithSentry ; ce marqueur permet à la page d'erreur de ne pas la re-logger.
+export const UNEXPECTED_ERROR_MESSAGE = "Erreur inattendue";
