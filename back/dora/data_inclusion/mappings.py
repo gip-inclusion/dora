@@ -13,6 +13,7 @@ from dora.core.utils import (
     address_to_one_line,
     code_insee_to_code_dept,
     get_category_from_subcategory,
+    strip_markdown,
 )
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
@@ -53,11 +54,11 @@ DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
 # On pourrait tout de même implémenter les mappings avec des serializers basés sur ceux existants.
 
 
-def shorten_and_clean_description(description: str | None) -> str:
+def clean_and_shorten_description(description: str | None) -> str:
     if not description:
         return ""
-    shortened = textwrap.shorten(description, width=250, placeholder="…")
-    return shortened.replace("#", "")  # Suppression des en-têtes Markdown
+
+    return textwrap.shorten(strip_markdown(description), width=250, placeholder="…")
 
 
 def map_search_result(result: dict) -> dict:
@@ -97,7 +98,7 @@ def map_search_result(result: dict) -> dict:
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
-        "short_desc": shorten_and_clean_description(service_data["description"]),
+        "short_desc": clean_and_shorten_description(service_data["description"]),
         "slug": service_data["id"],
         "status": ServiceStatus.PUBLISHED,
         "structure": service_data["structure_id"],
@@ -342,7 +343,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "remote_url": None,
         "requirements": requirements,
         "requirements_display": requirements_display,
-        "short_desc": shorten_and_clean_description(service_data["description"]),
+        "short_desc": clean_and_shorten_description(service_data["description"]),
         "slug": service_data["id"],
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,

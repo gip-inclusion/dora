@@ -15,6 +15,7 @@ mozilla-django-oidc
 furl
 humanize
 jwcrypto
+markdown-it-py
 mjml-python
 osm_opening_hours
 psycopg[binary]
