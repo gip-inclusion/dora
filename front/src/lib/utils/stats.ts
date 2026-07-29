@@ -174,10 +174,13 @@ export async function trackSearch(
 // Contrairement à `trackSearch`, il n'y a pas de `fundingLabels`, et
 // `numResults` correspond au nombre total de résultats (selon le serveur)
 // et non à la seule page courante.
+// `location` reflète la zone géographique effectivement sélectionnée par
+// l'utilisateur : un seul de ses champs est renseigné à la fois (une adresse
+// comme une commune sont remontées via `cityCode`).
 export async function trackKeywordSearch(
   url: URL,
   keyword: string,
-  cityCode: string,
+  location: { cityCode: string; department: string; region: string },
   categoryIds: string[],
   subCategoryIds: string[],
   kinds: string[],
@@ -206,7 +209,9 @@ export async function trackKeywordSearch(
     {
       searchType: "mots_cles",
       keyword,
-      searchCityCode: cityCode,
+      searchCityCode: location.cityCode,
+      searchDepartment: location.department,
+      searchRegion: location.region,
       searchNumResults: numResults,
       categoryIds,
       subCategoryIds,

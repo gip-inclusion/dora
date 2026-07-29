@@ -81,6 +81,7 @@ class SearchEventAdmin(AnalyticsEventAdmin):
         "search_type",
         "keyword",
         "department",
+        "region",
         "city_code",
         categories_display,
         subcategories_display,
@@ -95,6 +96,7 @@ class SearchEventAdmin(AnalyticsEventAdmin):
         "is_staff",
         "is_logged",
         "department",
+        "region",
     ]
     search_fields = ["id", "keyword"]
     filter_horizontal = [
