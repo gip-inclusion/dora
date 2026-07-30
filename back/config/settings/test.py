@@ -65,7 +65,7 @@ NEXUS_METABASE_DB_PORT = DATABASES["default"]["PORT"]
 NEXUS_METABASE_DB_DATABASE = DATABASES["default"]["NAME"]
 NEXUS_METABASE_DB_USER = DATABASES["default"]["USER"]
 NEXUS_METABASE_DB_PASSWORD = DATABASES["default"]["PASSWORD"]
-NEXUS_ALLOWED_REDIRECT_HOSTS = ["domain.fr", "domain.com"]
+NEXUS_ALLOWED_REDIRECT_HOSTS = frozenset({"domain.fr", "domain.com"})
 PDI_JWT_KEY = {
     "k": "aTR4ZnR1WlpYYmphbFdtaXVlVjB3alljNjhrWXpfYSE",
     "kty": "oct",

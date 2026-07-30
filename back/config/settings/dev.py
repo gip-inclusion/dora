@@ -3,6 +3,7 @@ import os
 import dj_database_url
 
 from .base import *  # noqa F403
+from .utils import env_list
 
 DEBUG = True
 
@@ -33,10 +34,12 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 # ALLOWED_HOSTS:
 # fixé par variable d'environnement, hôtes séparés par des virgules et sans espace
 # ou si absent : valeurs par défaut usuelles pour un environnement de dev.
-if allowed_hosts := os.getenv("ALLOWED_HOSTS"):
-    ALLOWED_HOSTS = allowed_hosts.split(",")
-else:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.0.1", "0.0.0.0"]
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS") or [
+    "localhost",
+    "127.0.0.1",
+    "192.168.0.1",
+    "0.0.0.0",
+]
 
 # Validation des formats de mots de passe :
 # pas nécessaire pour un environnement de dev, peut éventuellement être

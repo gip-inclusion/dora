@@ -19,7 +19,7 @@ from corsheaders.defaults import default_headers
 from django.utils.csp import CSP
 
 from . import BASE_DIR
-from .utils import env_set
+from .utils import env_list, env_set
 
 APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
@@ -154,11 +154,7 @@ CACHES = {
 # Hôtes autorisés :
 # https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/#allowed-hosts
 
-ALLOWED_HOSTS = (
-    os.getenv("DJANGO_ALLOWED_HOSTS").split(",")
-    if os.getenv("DJANGO_ALLOWED_HOSTS")
-    else None
-)
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS")
 
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -480,11 +476,7 @@ if "GEOS_LIBRARY_PATH" in os.environ:
     GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
 
 # DJANGO_ADMINS=Name1:email1,Name2:email2
-ADMINS = (
-    [u.split(":") for u in os.getenv("DJANGO_ADMINS").split(",")]
-    if os.getenv("DJANGO_ADMINS")
-    else None
-)
+ADMINS = [admin.split(":") for admin in env_list("DJANGO_ADMINS")]
 
 # CSP :
 SECURE_CSP = {
@@ -682,7 +674,7 @@ NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
 NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
-NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
+NEXUS_ALLOWED_REDIRECT_HOSTS = env_set("NEXUS_ALLOWED_REDIRECT_HOSTS")
 NEXUS_SYNC_CHUNK_SIZE = int(os.getenv("NEXUS_SYNC_CHUNK_SIZE", 5000))
 
 NEXUS_API_BASE_URL = os.getenv("NEXUS_API_BASE_URL")
