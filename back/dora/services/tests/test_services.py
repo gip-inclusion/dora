@@ -11,7 +11,6 @@ from data_inclusion.schema.v1 import (
     Public,
     TypeService,
 )
-from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -1099,6 +1098,7 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["has_already_been_unpublished"], True)
 
+    @override_settings(ORIENTATION_SIRENE_BLACKLIST=frozenset({"123456789"}))
     def test_service_no_dora_form_enforce_post(self):
         input_coach_orientation_modes = [
             "autre",
@@ -1110,7 +1110,7 @@ class ServiceTestCase(APITestCase):
             mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
         ]
         user = baker.make("users.User", is_valid=True)
-        blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
+        blacklisted_siret = "12345678912345"
         structure = make_structure(user, siret=blacklisted_siret)
         self.client.force_authenticate(user=user)
         response = self.client.post(
@@ -1134,6 +1134,7 @@ class ServiceTestCase(APITestCase):
             sorted(kept_coach_orientation_modes),
         )
 
+    @override_settings(ORIENTATION_SIRENE_BLACKLIST=frozenset({"123456789"}))
     def test_service_no_dora_form_enforce_patch(self):
         input_coach_orientation_modes = [
             "autre",
@@ -1145,7 +1146,7 @@ class ServiceTestCase(APITestCase):
             mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
         ]
         user = baker.make("users.User", is_valid=True)
-        blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
+        blacklisted_siret = "12345678912345"
         structure = make_structure(user, siret=blacklisted_siret)
         service = make_service(status=ServiceStatus.PUBLISHED, structure=structure)
         self.client.force_authenticate(user=user)
