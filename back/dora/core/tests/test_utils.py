@@ -222,3 +222,47 @@ class UtilsTestCase(TestCase):
 )
 def test_address_to_one_line(address1, address2, postal_code, city, expected):
     assert address_to_one_line(address1, address2, postal_code, city) == expected
+
+
+@pytest.mark.no_django_db
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        (None, ""),
+        ("", ""),
+        ("Un texte sans markup", "Un texte sans markup"),
+        # en-têtes
+        ("# Titre\n\nDu contenu", "Titre Du contenu"),
+        # sans espace après le #, ce n'est pas un en-tête mais du texte
+        ("#Titre collé", "#Titre collé"),
+        ("Logement #2 disponible", "Logement #2 disponible"),
+        # emphase
+        ("Un accompagnement **individualisé**", "Un accompagnement individualisé"),
+        ("Un accompagnement _individualisé_", "Un accompagnement individualisé"),
+        ("***Vraiment*** important", "Vraiment important"),
+        # on ne touche pas aux caractères isolés ou internes aux mots
+        ("Le code snake_case_ici reste", "Le code snake_case_ici reste"),
+        ("Ouvert 7j/7 * sur rendez-vous", "Ouvert 7j/7 * sur rendez-vous"),
+        # liens : on conserve le libellé
+        ("Voir [notre site](https://exemple.fr)", "Voir notre site"),
+        ("Contact <https://exemple.fr>", "Contact https://exemple.fr"),
+        # images : ignorées, texte alternatif compris
+        ("![Logo France Travail](logo.png)", ""),
+        ("Voir ![Logo](logo.png) ici", "Voir ici"),
+        # listes, citations et lignes horizontales
+        ("* premier\n* second", "premier second"),
+        ("1. premier\n2. second", "premier second"),
+        ("> Une citation", "Une citation"),
+        ("Avant\n\n---\n\nAprès", "Avant Après"),
+        # code
+        ("Utiliser `manage.py`", "Utiliser manage.py"),
+        # HTML brut et entités
+        ("Texte <br> avec du <b>HTML</b>", "Texte avec du HTML"),
+        ("Pierre &amp; Marie", "Pierre & Marie"),
+        # échappements et normalisation des espaces
+        (r"Tarif : 10\* euros", "Tarif : 10* euros"),
+        ("Deux\n\nparagraphes   espacés", "Deux paragraphes espacés"),
+    ],
+)
+def test_strip_markdown(text, expected):
+    assert utils.strip_markdown(text) == expected

@@ -11,6 +11,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.text import Truncator
 from furl import furl
+from markdown_it import MarkdownIt
 
 from dora.core.constants import WGS84
 
@@ -37,6 +38,40 @@ def normalize_phone_number(phone: str) -> str:
         phone = re.sub("^33", "0", phone)
 
     return phone[:10]
+
+
+markdown_parser = MarkdownIt("commonmark")
+
+
+def _extract_inline_text(tokens: list) -> str:
+    parts = []
+
+    for token in tokens:
+        if token.type in ("text", "code_inline"):
+            parts.append(token.content)
+        elif token.type in ("softbreak", "hardbreak"):
+            parts.append(" ")
+
+    return "".join(parts)
+
+
+def strip_markdown(text: str | None) -> str:
+    """Supprime le markup Markdown d'un texte destiné à un affichage en texte brut.
+
+    Les libellés de liens sont conservés, les images ignorées. Le texte résultant
+    est normalisé sur une seule ligne (les espaces, retours à la ligne et lignes
+    vides consécutifs sont remplacés par une simple espace).
+    """
+    if not text:
+        return ""
+
+    blocks = [
+        _extract_inline_text(token.children or [])
+        for token in markdown_parser.parse(text)
+        if token.type == "inline"
+    ]
+
+    return " ".join(" ".join(blocks).split())
 
 
 def code_insee_to_code_dept(code_insee):
