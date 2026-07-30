@@ -19,6 +19,7 @@ from corsheaders.defaults import default_headers
 from django.utils.csp import CSP
 
 from . import BASE_DIR
+from .utils import env_set
 
 APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
@@ -529,6 +530,7 @@ ORIENTATION_ANONYMIZATION_PERIOD_DAYS = int(
 ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS = int(
     os.getenv("ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS", 6)
 )
+ORIENTATION_DI_SOURCE_BLACKLIST = env_set("ORIENTATION_DI_SOURCE_BLACKLIST")
 ORIENTATION_SIRENE_BLACKLIST = [
     # CAF
     "779311224",

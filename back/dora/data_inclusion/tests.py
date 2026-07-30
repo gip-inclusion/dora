@@ -1,6 +1,7 @@
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from django.test import override_settings
 
-from .mappings import map_service
+from .mappings import is_orientable, map_service
 from .test_utils import make_di_service_data
 
 ALL_DI_ORIENTATION_MODES = [
@@ -126,6 +127,27 @@ def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_e
     assert sorted(service["coach_orientation_modes"]) == sorted(
         expected_dora_coach_orientation_modes
     )
+
+
+@override_settings(ORIENTATION_DI_SOURCE_BLACKLIST=frozenset({"backlisted-source"}))
+def test_is_not_orientable_when_source_is_blacklisted():
+    di_service_data = make_di_service_data(source="backlisted-source")
+
+    assert is_orientable(di_service_data) is False
+
+
+@override_settings(ORIENTATION_DI_SOURCE_BLACKLIST=frozenset({"backlisted-source"}))
+def test_is_orientable_when_source_is_not_blacklisted():
+    di_service_data = make_di_service_data(source="another-source")
+
+    assert is_orientable(di_service_data) is True
+
+
+@override_settings(ORIENTATION_DI_SOURCE_BLACKLIST=frozenset({"backlisted-source"}))
+def test_map_service_is_not_orientable_when_source_is_blacklisted():
+    di_service_data = make_di_service_data(source="backlisted-source")
+
+    assert map_service(di_service_data, False)["is_orientable"] is False
 
 
 def test_map_service_address_line():
