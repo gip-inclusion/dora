@@ -2,6 +2,7 @@ data-inclusion-schema
 dj-database-url
 Django
 django-cors-headers
+django-environ
 django-otp[segno]
 django-filter
 django-storages[s3]
