@@ -18,7 +18,7 @@ from botocore.config import Config
 from corsheaders.defaults import default_headers
 from django.utils.csp import CSP
 
-from . import BASE_DIR
+from . import BASE_DIR, env
 
 APPS_DIR = os.path.join(BASE_DIR, "dora")
 # Paramètres Django
@@ -528,6 +528,11 @@ ORIENTATION_ANONYMIZATION_PERIOD_DAYS = int(
 )
 ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS = int(
     os.getenv("ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS", 6)
+)
+# sources data·inclusion pour lesquelles le formulaire d'orientation Dora
+# n'est pas proposé (sources séparées par des ",")
+NON_ORIENTABLE_DI_SOURCES = frozenset(
+    env.list("NON_ORIENTABLE_DI_SOURCES", cast=str.strip, default=[])
 )
 ORIENTATION_SIRENE_BLACKLIST = [
     # CAF

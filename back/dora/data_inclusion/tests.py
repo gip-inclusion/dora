@@ -1,6 +1,6 @@
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 
-from .mappings import map_service
+from .mappings import is_orientable, map_service
 from .test_utils import make_di_service_data
 
 ALL_DI_ORIENTATION_MODES = [
@@ -126,6 +126,13 @@ def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_e
     assert sorted(service["coach_orientation_modes"]) == sorted(
         expected_dora_coach_orientation_modes
     )
+
+
+def test_is_orientable_when_source_is_blacklisted(settings):
+    settings.NON_ORIENTABLE_DI_SOURCES = frozenset({"blacklisted-source"})
+
+    assert is_orientable(make_di_service_data(source="blacklisted-source")) is False
+    assert is_orientable(make_di_service_data(source="another-source")) is True
 
 
 def test_map_service_address_line():
