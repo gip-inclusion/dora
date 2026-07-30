@@ -36,10 +36,10 @@
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
-    "@tiptap/core": "3.28.0",
-    "@tiptap/extension-link": "3.28.0",
-    "@tiptap/extension-placeholder": "3.28.0",
-    "@tiptap/starter-kit": "3.28.0",
+    "@tiptap/core": "3.29.0",
+    "@tiptap/extension-link": "3.29.0",
+    "@tiptap/extension-placeholder": "3.29.0",
+    "@tiptap/starter-kit": "3.29.0",
     "@types/iframe-resizer": "^4.0.0",
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
@@ -49,7 +49,7 @@
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.18.1",
     "dayjs": "^1.11.21",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.22.0",
     "globals": "^17.7.0",
@@ -96,6 +96,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.67.0"
+    "@sentry/sveltekit": "^10.68.0"
   }
 }
