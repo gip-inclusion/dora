@@ -111,6 +111,7 @@
   {#snippet prepend()}
     <div class="px-s8 pt-s8">
       <button
+        type="button"
         class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
         onclick={handleClickSearchCityFromLocation}
       >

@@ -260,6 +260,7 @@
       <div class="h-s24 w-s24 text-gray-text-alt">
         {#if (isMultiple ? value.length > 0 : !!value) && withClearButton}
           <button
+            type="button"
             class="h-s24 w-s24 fill-current"
             onclick={clearAll}
             {disabled}
