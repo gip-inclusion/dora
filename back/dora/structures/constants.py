@@ -10,7 +10,6 @@ autant que possible les énumérations du schéma D·I.
 # On indique ici les typologies qui ne doivent pas être modifiables par l'utilisateur.
 RESTRICTED_STRUCTURE_TYPOLOGIES = (TypologieStructure.FT,)
 
-# Typologies exclues du statut « en attente d'activation » (sans service publié).
 TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION = (
     TypologieStructure.ACI,
     TypologieStructure.AI,
