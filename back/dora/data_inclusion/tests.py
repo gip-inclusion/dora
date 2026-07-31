@@ -1,4 +1,5 @@
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from model_bakery import baker
 
 from .mappings import is_orientable, map_service
 from .test_utils import make_di_service_data
@@ -128,11 +129,46 @@ def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_e
     )
 
 
+def test_is_orientable_by_default():
+    assert is_orientable(make_di_service_data()) is True
+
+
 def test_is_orientable_when_source_is_blacklisted(settings):
     settings.NON_ORIENTABLE_DI_SOURCES = frozenset({"blacklisted-source"})
 
     assert is_orientable(make_di_service_data(source="blacklisted-source")) is False
     assert is_orientable(make_di_service_data(source="another-source")) is True
+
+
+def test_is_not_orientable_when_siren_is_blacklisted(settings):
+    di_service_data = make_di_service_data()
+    di_service_data["structure"]["siret"] = (
+        f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
+    )
+
+    assert is_orientable(di_service_data) is False
+
+
+def test_is_orientable_without_siret():
+    di_service_data = make_di_service_data()
+    di_service_data["structure"]["siret"] = None
+
+    assert is_orientable(di_service_data) is True
+
+
+def test_is_not_orientable_without_email():
+    assert is_orientable(make_di_service_data(courriel=None)) is False
+
+
+def test_is_not_orientable_when_dora_form_is_disabled_for_the_structure():
+    di_service_data = make_di_service_data()
+    baker.make(
+        "structures.DisabledDoraFormDIStructure",
+        source=di_service_data["source"],
+        structure_id=di_service_data["structure_id"],
+    )
+
+    assert is_orientable(di_service_data) is False
 
 
 def test_map_service_address_line():
