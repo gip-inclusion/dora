@@ -10,6 +10,29 @@ autant que possible les énumérations du schéma D·I.
 # On indique ici les typologies qui ne doivent pas être modifiables par l'utilisateur.
 RESTRICTED_STRUCTURE_TYPOLOGIES = (TypologieStructure.FT,)
 
+# Typologies exclues du statut « en attente d'activation » (sans service publié).
+TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION = (
+    TypologieStructure.ACI,
+    TypologieStructure.AI,
+    TypologieStructure.EI,
+    TypologieStructure.ETTI,
+    TypologieStructure.EA,
+    TypologieStructure.EATT,
+    TypologieStructure.GEIQ,
+    TypologieStructure.CHU,
+    TypologieStructure.CPH,
+    TypologieStructure.CHRS,
+    TypologieStructure.HUDA,
+    TypologieStructure.CADA,
+    TypologieStructure.SPIP,
+    TypologieStructure.PJJ,
+    TypologieStructure.CSAPA,
+    TypologieStructure.CAARUD,
+    TypologieStructure.FT,
+    TypologieStructure.CCAS,
+    TypologieStructure.OIL,
+)
+
 # On indique ici les labels nationaux faisant l'objet d'une curation
 # et de restrictions particulières (FT, CapEmploi, partenaires régionaux, SIAE).
 # Note / TODO :
