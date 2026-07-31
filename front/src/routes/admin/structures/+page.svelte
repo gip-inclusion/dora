@@ -39,30 +39,12 @@
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
 
-  function filterIgnoredStructures(structs) {
-    function isOrphanOrWaitingOrToActivateSIAE(struct) {
-      return (
-        ["ETTI", "ACI", "AI", "EI"].includes(struct.typology) &&
-        (struct.isOrphan || struct.isWaiting || struct.awaitingActivation)
-      );
-    }
-
-    return structs.filter(
-      (struct) =>
-        struct.isObsolete ||
-        struct.awaitingModeration ||
-        !isOrphanOrWaitingOrToActivateSIAE(struct)
-    );
-  }
-
   async function handleDepartmentChange(dept: GeoApiValue) {
     structures = [];
     loading = true;
     selectedDepartment = dept;
     if (selectedDepartment.code) {
-      structures = filterIgnoredStructures(
-        await getStructuresAdmin(selectedDepartment.code)
-      );
+      structures = await getStructuresAdmin(selectedDepartment.code);
     } else {
       structures = [];
     }
@@ -70,9 +52,7 @@
   }
 
   async function handleStructuresRefresh() {
-    structures = filterIgnoredStructures(
-      await getStructuresAdmin(selectedDepartment?.code)
-    );
+    structures = await getStructuresAdmin(selectedDepartment?.code);
   }
 
   function handleClick() {
