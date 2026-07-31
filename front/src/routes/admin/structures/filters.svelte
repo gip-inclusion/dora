@@ -173,7 +173,7 @@
       })
       .filter((struct) => {
         if (status === "all") {
-          return getStructureStatus(struct) !== "obsolete";
+          return true;
         }
         return getStructureStatus(struct) === status;
       })
