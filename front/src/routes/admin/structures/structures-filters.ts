@@ -9,7 +9,7 @@ const STATUS_LABELS: Record<StatusFilter, string> = {
   awaitingModeration: "À valider",
   awaitingActivation: "Sans service",
   awaitingUpdate: "Services à actualiser",
-  obsolete: "Non conforme",
+  obsolete: "Obsolète",
 };
 
 export function getStructureStatus(

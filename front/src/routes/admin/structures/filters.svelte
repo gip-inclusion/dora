@@ -43,20 +43,6 @@
   }[] = [
     { status: "all", definition: "Toutes les structures" },
     {
-      status: "orphan",
-      definition:
-        "Structures référencées mais sans utilisateur actif ou invité",
-      actions:
-        "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
-    },
-    {
-      status: "waiting",
-      definition:
-        "Structures où un administrateur invité n’a pas encore accepté l’invitation",
-      actions:
-        "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
-    },
-    {
       status: "expiredInvitation",
       definition:
         "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
@@ -172,10 +158,7 @@
         );
       })
       .filter((struct) => {
-        if (status === "all") {
-          return getStructureStatus(struct) !== "obsolete";
-        }
-        return getStructureStatus(struct) === status;
+        return status === "all" || getStructureStatus(struct) === status;
       })
       .sort((structure1, structure2) => {
         // Fait un premier tri par nom
@@ -217,7 +200,7 @@
   });
 </script>
 
-<div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
+<div class="mb-s8 font-bold">Structures DORA sur mon territoire&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
   {#each statusFilterSettings as { status, definition, actions }}
@@ -229,9 +212,7 @@
           filterDefinition = definition;
           filterActions = actions;
         }}
-        label="{getStatusLabel(status)}{status !== 'all'
-          ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
-          : ''}"
+        label={`${getStatusLabel(status)} (${filterAndSortEntities(structures, searchParams, status).length})`}
         secondary={searchStatus !== status}
       />
       {#snippet content()}

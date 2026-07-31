@@ -3,6 +3,7 @@ from rest_framework import serializers
 from dora.core.models import LogItem, ModerationStatus
 from dora.services.models import Service, ServiceModel
 from dora.services.serializers import ServiceSerializer
+from dora.structures.constants import TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.structures.serializers import StructureSerializer
 from dora.users.models import User
@@ -310,6 +311,8 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "awaiting_moderation", False)
 
     def get_awaiting_activation(self, obj):
+        if obj.typology in TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION:
+            return False
         return self.get_num_published_services(obj) == 0
 
     def get_awaiting_update(self, obj):
