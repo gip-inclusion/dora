@@ -3,6 +3,7 @@
 
   import * as mlgl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
+  import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 
   import mapStyle from "./map-style.json?raw"; // Basé sur https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json
 
@@ -18,6 +19,8 @@
   let mapDiv: HTMLElement;
 
   onMount(() => {
+    mlgl.setWorkerUrl(maplibreWorkerUrl);
+
     map = new mlgl.Map({
       container: mapDiv,
       style: JSON.parse(mapStyle),
