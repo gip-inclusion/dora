@@ -5,11 +5,10 @@ import {
   getServicesOptions,
 } from "$lib/requests/services";
 import type { Service } from "$lib/types";
-import { isAuthenticated } from "$lib/utils/auth";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ fetch, url, params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
@@ -39,12 +38,6 @@ export const load: PageLoad = async ({ fetch, url, params, parent }) => {
       return {
         service: null,
       };
-    }
-    if (!isAuthenticated()) {
-      redirect(
-        302,
-        `/auth/connexion?next=${encodeURIComponent(url.pathname + url.search)}`
-      );
     }
     error(404, "Page Not Found");
   }
