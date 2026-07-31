@@ -158,10 +158,7 @@
         );
       })
       .filter((struct) => {
-        if (status === "all") {
-          return true;
-        }
-        return getStructureStatus(struct) === status;
+        return status === "all" || getStructureStatus(struct) === status;
       })
       .sort((structure1, structure2) => {
         // Fait un premier tri par nom
