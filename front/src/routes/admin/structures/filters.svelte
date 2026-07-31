@@ -229,9 +229,7 @@
           filterDefinition = definition;
           filterActions = actions;
         }}
-        label="{getStatusLabel(status)}{status !== 'all'
-          ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
-          : ''}"
+        label={`${getStatusLabel(status)} (${filterAndSortEntities(structures, searchParams, status).length})`}
         secondary={searchStatus !== status}
       />
       {#snippet content()}
