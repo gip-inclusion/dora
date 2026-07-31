@@ -212,6 +212,7 @@
             >
               {#if cityCode}
                 <button
+                  type="button"
                   class="h-s24 w-s24 inline-block"
                   onclick={() => {
                     handleAddressChange(null);

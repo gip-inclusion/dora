@@ -795,7 +795,8 @@
       aria-describedby={formatErrors(name, errorMessages)}
     />
     {#if clearable && text?.length}
-      <button onclick={clear} class="autocomplete-clear-button">&#10006;</button
+      <button type="button" onclick={clear} class="autocomplete-clear-button"
+        >&#10006;</button
       >
     {/if}
   </div>
@@ -821,6 +822,7 @@
                   ? value.includes(listItem.value)
                   : listItem.value === value)}
               <button
+                type="button"
                 class="autocomplete-list-item px-s20 py-s6 flex w-full flex-row items-baseline text-left {i ===
                 highlightIndex
                   ? 'selected'
@@ -896,6 +898,7 @@
 
         {#if !disabled && !readonly && !isFixedItem(tagItem)}
           <button
+            type="button"
             class="tag-delete"
             onclick={(event) => {
               event.preventDefault();
