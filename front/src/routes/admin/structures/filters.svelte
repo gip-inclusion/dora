@@ -43,13 +43,6 @@
   }[] = [
     { status: "all", definition: "Toutes les structures" },
     {
-      status: "waiting",
-      definition:
-        "Structures où un administrateur invité n’a pas encore accepté l’invitation",
-      actions:
-        "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
-    },
-    {
       status: "expiredInvitation",
       definition:
         "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
