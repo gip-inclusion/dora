@@ -43,13 +43,6 @@
   }[] = [
     { status: "all", definition: "Toutes les structures" },
     {
-      status: "orphan",
-      definition:
-        "Structures référencées mais sans utilisateur actif ou invité",
-      actions:
-        "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
-    },
-    {
       status: "waiting",
       definition:
         "Structures où un administrateur invité n’a pas encore accepté l’invitation",
