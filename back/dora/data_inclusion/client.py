@@ -170,6 +170,7 @@ class DataInclusionClient:
     ) -> dict:
         url = self.base_url.copy()
         url = url / "search"
+        url.args["exclure_doublons"] = "true"
         if q is not None:
             url.args["q"] = q
         if sources is not None:
