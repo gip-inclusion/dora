@@ -14,20 +14,16 @@ function formatBulletList(
 }
 
 /**
- * Retourne la liste des modes de mobilisation en remplaçant l'entrée
- * « Autre » par le texte libre saisi par la structure le cas échéant.
+ * Retourne la liste des modes de mobilisation, complétée le cas échéant
+ * par les précisions saisies par la structure.
  */
-function buildMobilizationModes(
-  modes: ReadonlyArray<string> | null | undefined,
+export function buildMobilizationModes(
   modesDisplay: ReadonlyArray<string> | null | undefined,
-  otherText: string | null | undefined
+  precisions: string | null | undefined
 ): string[] {
-  const hasOther = modes?.includes("autre") ?? false;
-  const items = (modesDisplay ?? []).filter(
-    (label) => !hasOther || label.toLowerCase() !== "autre"
-  );
-  if (hasOther && otherText?.trim()) {
-    items.push(otherText.trim());
+  const items = [...(modesDisplay ?? [])];
+  if (precisions?.trim()) {
+    items.push(precisions.trim());
   }
   return items;
 }
@@ -44,15 +40,9 @@ export function buildServiceShareMailto(
 ): string {
   const serviceUrl = `${CANONICAL_URL}/services/${isDI ? "di--" : ""}${service.slug}`;
 
-  const beneficiaryModes = buildMobilizationModes(
-    service.beneficiariesAccessModes,
-    service.beneficiariesAccessModesDisplay,
-    service.beneficiariesAccessModesOther
-  );
-  const professionalModes = buildMobilizationModes(
-    service.coachOrientationModes,
-    service.coachOrientationModesDisplay,
-    service.coachOrientationModesOther
+  const mobilizationModes = buildMobilizationModes(
+    service.modesMobilisationDisplay,
+    service.mobilisationPrecisions
   );
 
   const subject = `On vous a recommandé une solution solidaire`;
@@ -77,12 +67,11 @@ export function buildServiceShareMailto(
     ),
     "",
     "Comment mobiliser ce service :",
+    formatBulletList(mobilizationModes),
     "",
-    "Si vous êtes un particulier :",
-    formatBulletList(beneficiaryModes),
-    "",
-    "Si vous êtes un professionnel :",
-    formatBulletList(professionalModes),
+    `Mobilisable par : ${
+      (service.mobilisableParDisplay ?? []).join(", ") || "Non renseigné"
+    }`,
     "",
     `Consulter le service : ${serviceUrl}`,
     "",

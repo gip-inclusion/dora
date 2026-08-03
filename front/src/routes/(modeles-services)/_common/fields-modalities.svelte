@@ -9,11 +9,11 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import { currentSchema } from "$lib/validation/validation";
 
-  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
-  import FieldsModalitiesCoach from "./fields-modalities-coach.svelte";
+  import FieldsModalitiesMobilisation from "./fields-modalities-mobilisation.svelte";
+  import FieldsModalitiesPersonnes from "./fields-modalities-personnes.svelte";
   import {
-    orderedBeneficiariesAccessModeValues,
-    orderedCoachOrientationModeValues,
+    orderedMobilisableParValues,
+    orderedModesMobilisationValues,
   } from "./modalities-order";
 
   interface Props {
@@ -45,38 +45,30 @@
   );
 
   $effect(() => {
-    fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
+    fieldModelProps.modesMobilisation?.value.sort((a, b) => {
       return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
+        orderedModesMobilisationValues[a] - orderedModesMobilisationValues[b]
       );
     });
   });
 
   $effect(() => {
-    fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
+    fieldModelProps.modesMobilisation?.serviceValue.sort((a, b) => {
       return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
+        orderedModesMobilisationValues[a] - orderedModesMobilisationValues[b]
       );
     });
   });
 
   $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
+    fieldModelProps.mobilisablePar?.value.sort((a, b) => {
+      return orderedMobilisableParValues[a] - orderedMobilisableParValues[b];
     });
   });
 
   $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
+    fieldModelProps.mobilisablePar?.serviceValue.sort((a, b) => {
+      return orderedMobilisableParValues[a] - orderedMobilisableParValues[b];
     });
   });
 </script>
@@ -89,41 +81,19 @@
   {/snippet}
   <Notice
     type="warning"
-    title="Modalités d’orientation"
+    title="Modalités de mobilisation"
     showIcon={false}
     titleLevel="h3"
   >
-    Afin que le service puisse être mobilisable, merci de choisir au moins une
-    méthode d’orientation – soit pour l’accompagnateur, soit pour le
-    bénéficiaire.
+    Afin que le service puisse être mobilisable, merci d’indiquer qui peut le
+    mobiliser et de choisir au moins une modalité de mobilisation.
   </Notice>
 
   <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "coachOrientationModes" in $currentSchema && "coachOrientationModesExternalFormLink" in $currentSchema && "coachOrientationModesExternalFormLinkText" in $currentSchema && "coachOrientationModesOther" in $currentSchema}
-      <FieldModel
-        {...fieldModelProps.coachOrientationModes ?? {}}
-        subFields={fieldModelProps.coachOrientationModes
-          ? {
-              "completer-le-formulaire-dadhesion": [
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLink.label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLinkText,
-                },
-              ],
-              autre: [fieldModelProps.coachOrientationModesOther],
-            }
-          : undefined}
-        type="array"
-      >
-        <FieldsModalitiesCoach
-          id="coachOrientationModes"
+    {#if $currentSchema && "mobilisablePar" in $currentSchema}
+      <FieldModel {...fieldModelProps.mobilisablePar ?? {}} type="array">
+        <FieldsModalitiesPersonnes
+          id="mobilisablePar"
           {service}
           {servicesOptions}
         />
@@ -132,34 +102,37 @@
   </div>
 
   <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema && "beneficiariesAccessModesExternalFormLink" in $currentSchema && "beneficiariesAccessModesExternalFormLinkText" in $currentSchema && "beneficiariesAccessModesOther" in $currentSchema}
+    {#if $currentSchema && "modesMobilisation" in $currentSchema && "lienMobilisation" in $currentSchema}
       <FieldModel
-        {...fieldModelProps.beneficiariesAccessModes ?? {}}
-        subFields={fieldModelProps.beneficiariesAccessModes
+        {...fieldModelProps.modesMobilisation ?? {}}
+        subFields={fieldModelProps.modesMobilisation
           ? {
-              "completer-le-formulaire-dadhesion": [
+              "utiliser-lien-mobilisation": [
                 {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLink
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLinkText,
+                  label: $currentSchema.lienMobilisation.label,
+                  ...fieldModelProps.lienMobilisation,
                 },
               ],
-              autre: [fieldModelProps.beneficiariesAccessModesOther],
             }
           : undefined}
         type="array"
       >
-        <FieldsModalitiesBeneficiary
-          id="beneficiariesAccessModes"
+        <FieldsModalitiesMobilisation
+          id="modesMobilisation"
           {service}
           {servicesOptions}
+        />
+      </FieldModel>
+    {/if}
+  </div>
+
+  <div class="lg:gap-s8 flex flex-col">
+    {#if $currentSchema && "mobilisationPrecisions" in $currentSchema}
+      <FieldModel {...fieldModelProps.mobilisationPrecisions ?? {}}>
+        <TextareaField
+          id="mobilisationPrecisions"
+          description="Précisez, si nécessaire, les modalités de mobilisation de l’offre."
+          bind:value={service.mobilisationPrecisions}
         />
       </FieldModel>
     {/if}

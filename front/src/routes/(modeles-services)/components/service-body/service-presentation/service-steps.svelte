@@ -3,12 +3,7 @@
 
   import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
   import Linkify from "$lib/components/display/linkify.svelte";
-  import type {
-    BeneficiaryAccessModes,
-    CoachOrientationModes,
-    Model,
-    Service,
-  } from "$lib/types";
+  import type { ModesMobilisation, Model, Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
 
   import ServiceList from "./components/service-list.svelte";
@@ -22,28 +17,12 @@
 
   let { service, onTrackMobilisation }: Props = $props();
 
-  const orderedCoachOrientationModeValues: Record<
-    CoachOrientationModes,
-    number
-  > = {
+  const orderedModesMobilisationValues: Record<ModesMobilisation, number> = {
     "formulaire-dora": 0,
-    "envoyer-un-mail-avec-une-fiche-de-prescription": 1,
-    "completer-le-formulaire-dadhesion": 2,
-    "envoyer-un-mail": 3,
-    telephoner: 4,
-    autre: 5,
-  };
-
-  const orderedBeneficiariesAccessModeValues: Record<
-    BeneficiaryAccessModes,
-    number
-  > = {
-    "se-presenter": 0,
-    "completer-le-formulaire-dadhesion": 1,
-    "envoyer-un-mail": 2,
+    "utiliser-lien-mobilisation": 1,
+    "envoyer-un-courriel": 2,
     telephoner: 3,
-    professionnel: 4,
-    autre: 5,
+    "se-presenter": 4,
   };
 
   let isDI = $derived("source" in service);
@@ -51,76 +30,41 @@
   // lier la consultation à la recherche originale.
   let searchId = $derived(page.url.searchParams.get("searchId"));
 
-  let coachOrientationModesValueAndDisplay = $derived(
-    (service.coachOrientationModes ?? [])
-      .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
+  let modesMobilisationValueAndDisplay = $derived(
+    (service.modesMobilisation ?? [])
+      .map((val, index) => [val, service.modesMobilisationDisplay?.[index]])
       .sort(
         (a, b) =>
-          orderedCoachOrientationModeValues[a[0]] -
-          orderedCoachOrientationModeValues[b[0]]
+          orderedModesMobilisationValues[a[0]] -
+          orderedModesMobilisationValues[b[0]]
       )
   );
 
-  let beneficiariesAccessModesValueAndDisplay = $derived(
-    (service.beneficiariesAccessModes ?? [])
-      .map((val, index) => [
-        val,
-        service.beneficiariesAccessModesDisplay[index],
-      ])
-      .sort(
-        (a, b) =>
-          orderedBeneficiariesAccessModeValues[a[0]] -
-          orderedBeneficiariesAccessModeValues[b[0]]
-      )
+  let mobilisableParDisplay = $derived(
+    (service.mobilisableParDisplay ?? []).join(", ")
   );
 </script>
 
 <ServiceSection title="Les démarches à réaliser">
-  <ServiceSubsection title="Pour les professionnels de l’accompagnement">
+  <ServiceSubsection
+    title={mobilisableParDisplay
+      ? `Mobilisable par : ${mobilisableParDisplay}`
+      : "Comment mobiliser ce service"}
+  >
     <ServiceList>
-      {#each coachOrientationModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
+      {#each modesMobilisationValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
         <li>
           {#if modeValue === "formulaire-dora"}
             Orienter votre bénéficiaire via le formulaire DORA
-          {:else if modeValue === "envoyer-un-mail-avec-une-fiche-de-prescription" && "contactEmail" in service}
-            Envoyer un email avec une fiche de prescription
-          {:else if modeValue === "autre"}
-            <Linkify
-              text={service.coachOrientationModesOther}
-              onLinkClick={onTrackMobilisation}
-            />
-          {:else}
-            {modeDisplay}
-          {/if}
-        </li>
-      {:else}
-        <li>Non renseigné</li>
-      {/each}
-    </ServiceList>
-  </ServiceSubsection>
-  <ServiceSubsection title="Pour les particuliers">
-    <ServiceList>
-      {#each beneficiariesAccessModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
-        <li>
-          {#if modeValue === "completer-le-formulaire-dadhesion"}
+          {:else if modeValue === "utiliser-lien-mobilisation"}
             <a
-              href={service.beneficiariesAccessModesExternalFormLink}
+              href={service.lienMobilisation}
               target="_blank"
               onclick={() =>
-                onTrackMobilisation(
-                  service.beneficiariesAccessModesExternalFormLink ?? undefined
-                )}
+                onTrackMobilisation(service.lienMobilisation ?? undefined)}
               class="text-magenta-cta underline"
-              >{service.beneficiariesAccessModesExternalFormLinkText ||
-                "Faire une demande"}<ExternalLinkIcon /></a
+              >Faire une demande<ExternalLinkIcon /></a
             >
-          {:else if modeValue === "professionnel"}
-            Orientation par un professionnel
-          {:else if modeValue === "autre"}
-            <Linkify
-              text={service.beneficiariesAccessModesOther}
-              onLinkClick={onTrackMobilisation}
-            />
           {:else}
             {modeDisplay}
           {/if}
@@ -129,6 +73,16 @@
         <li>Non renseigné</li>
       {/each}
     </ServiceList>
+
+    {#if service.mobilisationPrecisions}
+      <div class="mt-s16">
+        <Linkify
+          text={service.mobilisationPrecisions}
+          onLinkClick={onTrackMobilisation}
+        />
+      </div>
+    {/if}
+
     {#if !$userInfo && !isDI}
       <div class="mt-s16">
         <strong

@@ -84,10 +84,6 @@
   }
 
   function preSaveInclusionNumeriqueService(data) {
-    data.coachOrientationModes = ["autre"];
-    data.coachOrientationModesOther =
-      "Mêmes modalités que pour les bénéficiaires";
-
     data.locationKinds = ["en-presentiel"];
     data.name = "Médiation numérique";
 
@@ -173,7 +169,7 @@
     structure?.noDoraForm
       ? {
           ...servicesOptions,
-          coachOrientationModes: servicesOptions.coachOrientationModes.filter(
+          modesMobilisation: servicesOptions.modesMobilisation.filter(
             (mode) => mode.value !== "formulaire-dora"
           ),
         }
@@ -307,7 +303,7 @@
 
           <FieldsInclusionNumerique
             bind:service
-            {servicesOptions}
+            servicesOptions={modalitiesServicesOptions}
             {structure}
           />
         </div>

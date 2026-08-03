@@ -18,7 +18,8 @@
   import { isNotFreeService } from "$lib/utils/service";
   import FieldSubcategory from "$lib/components/specialized/services/field-subcategory.svelte";
 
-  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
+  import FieldsModalitiesMobilisation from "./fields-modalities-mobilisation.svelte";
+  import FieldsModalitiesPersonnes from "./fields-modalities-personnes.svelte";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -233,8 +234,10 @@
     </div>
   {/snippet}
 
-  <FieldsModalitiesBeneficiary
-    id="beneficiariesAccessModes"
+  <FieldsModalitiesPersonnes id="mobilisablePar" {service} {servicesOptions} />
+
+  <FieldsModalitiesMobilisation
+    id="modesMobilisation"
     {service}
     {servicesOptions}
   />

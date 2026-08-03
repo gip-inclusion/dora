@@ -12,10 +12,10 @@ export const load = async ({ parent, url, params, fetch }) => {
 
   // on ne doit pas pouvoir accèder à cette page
   // si le service n'est pas orientable ou si le
-  // formulaire DORA n'est pas un mode d'orientation
+  // formulaire DORA n'est pas un mode de mobilisation
   if (
     (!service.isOrientable ||
-      !service.coachOrientationModes?.includes("formulaire-dora")) &&
+      !service.modesMobilisation?.includes("formulaire-dora")) &&
     !service.isOrientableFtService
   ) {
     error(400, "Service non-orientable");

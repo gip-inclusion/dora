@@ -62,8 +62,9 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   service.structure = structure ? structure.slug : null;
 
   if (!model) {
-    service.coachOrientationModes =
-      structure && structure.noDoraForm ? [] : ["formulaire-dora"];
+    const withDoraForm = !(structure && structure.noDoraForm);
+    service.modesMobilisation = withDoraForm ? ["formulaire-dora"] : [];
+    service.mobilisablePar = withDoraForm ? ["professionnels"] : [];
   }
 
   return {

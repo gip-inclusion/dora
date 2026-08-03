@@ -29,11 +29,11 @@
 
   let isOrientableWithDoraForm = $derived(
     (service.isOrientable &&
-      service.coachOrientationModes?.includes("formulaire-dora")) ||
+      service.modesMobilisation?.includes("formulaire-dora")) ||
       service.isOrientableFtService
   );
   let hasExternalForm = $derived(
-    service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
+    service.modesMobilisation?.includes("utiliser-lien-mobilisation")
   );
 
   let contactBoxOpen = $state(false);
@@ -96,12 +96,10 @@
 
   {#if hasExternalForm}
     <LinkButton
-      onclick={() =>
-        handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
-      to={service.coachOrientationModesExternalFormLink}
+      onclick={() => handleExternalFormClick(service.lienMobilisation)}
+      to={service.lienMobilisation}
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
-      label={service.coachOrientationModesExternalFormLinkText ||
-        "Orienter votre bénéficiaire"}
+      label="Orienter votre bénéficiaire"
       icon={ExternalLinkLineSystem}
       iconOnRight
       otherTab

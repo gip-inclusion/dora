@@ -82,6 +82,18 @@
   function handleSuccess(result) {
     return goto(`/modeles/${result.slug}`);
   }
+
+  // Le formulaire DORA n'est pas proposé aux structures qui l'ont désactivé
+  const modalitiesServicesOptions = $derived(
+    structure?.noDoraForm
+      ? {
+          ...servicesOptions,
+          modesMobilisation: servicesOptions.modesMobilisation.filter(
+            (mode) => mode.value !== "formulaire-dora"
+          ),
+        }
+      : servicesOptions
+  );
 </script>
 
 <FormErrors />
@@ -152,7 +164,11 @@
 
         <FieldsPublics bind:service={model} {servicesOptions} {model} />
 
-        <FieldsModalities bind:service={model} {servicesOptions} {model} />
+        <FieldsModalities
+          bind:service={model}
+          servicesOptions={modalitiesServicesOptions}
+          {model}
+        />
 
         <FieldsDocuments bind:service={model} {servicesOptions} {model} />
 
