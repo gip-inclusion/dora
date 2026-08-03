@@ -1,6 +1,5 @@
 import type {
-  BeneficiaryAccessModes,
-  CoachOrientationModes,
+  ModesMobilisation,
   AdminDivisionType,
   FeeCondition,
   LocationKind,
@@ -134,83 +133,33 @@ export const serviceSchema: v.Schema = {
       return data.feeCondition !== "gratuit";
     },
   },
-  beneficiariesAccessModes: {
-    label: "Pour les bénéficiaires",
+  mobilisablePar: {
+    label: "Qui peut mobiliser cette offre ?",
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return !data.coachOrientationModes?.length;
-    },
+    rules: [v.isArray([v.isString()])],
+    required: true,
   },
-  beneficiariesAccessModesExternalFormLinkText: {
-    label: "L’intitulé du lien",
-    default: "Faire une demande",
-    rules: [v.isString(), v.maxStrLength(27)],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 27,
-  },
-  beneficiariesAccessModesExternalFormLink: {
-    label: "Lien",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 280,
-  },
-  beneficiariesAccessModesOther: {
-    label: "",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    maxLength: 280,
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes("autre");
-    },
-  },
-  coachOrientationModes: {
-    label: "Pour les accompagnateurs",
+  modesMobilisation: {
+    label: "Comment mobiliser cette offre ?",
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return !data.beneficiariesAccessModes.length;
-    },
+    rules: [v.isArray([v.isString()])],
+    required: true,
   },
-  coachOrientationModesExternalFormLinkText: {
-    label: "L’intitulé du lien",
-    default: "Orienter votre bénéficiaire",
-    rules: [v.isString(), v.maxStrLength(27)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 27,
-  },
-  coachOrientationModesExternalFormLink: {
-    label: "Lien",
+  lienMobilisation: {
+    label: "Lien de mobilisation",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
+    rules: [v.isURL(), v.maxStrLength(280)],
+    post: [v.trim],
+    required: (data: { modesMobilisation: ModesMobilisation[] }) => {
+      return data.modesMobilisation.includes("utiliser-lien-mobilisation");
     },
     maxLength: 280,
   },
-  coachOrientationModesOther: {
-    label: "",
+  mobilisationPrecisions: {
+    label: "Précisions sur les modalités de mobilisation",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes("autre");
-    },
-    maxLength: 280,
+    rules: [v.isString()],
+    post: [v.trim],
   },
 
   credentials: {
@@ -236,11 +185,6 @@ export const serviceSchema: v.Schema = {
     label: "Documents à compléter",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "envoyer-un-mail-avec-une-fiche-de-prescription"
-      );
-    },
   },
   onlineForm: {
     label: "Lien",
@@ -261,14 +205,8 @@ export const serviceSchema: v.Schema = {
     pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
     maxLength: 10,
-    required: (data: {
-      coachOrientationModes: CoachOrientationModes;
-      beneficiariesAccessModes: BeneficiaryAccessModes;
-    }) => {
-      return (
-        data.coachOrientationModes.includes("telephoner") ||
-        data.beneficiariesAccessModes.includes("telephoner")
-      );
+    required: (data: { modesMobilisation: ModesMobilisation[] }) => {
+      return data.modesMobilisation.includes("telephoner");
     },
   },
   contactEmail: {
@@ -277,17 +215,10 @@ export const serviceSchema: v.Schema = {
     rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
     maxLength: 254,
-    required: (data: {
-      coachOrientationModes: CoachOrientationModes;
-      beneficiariesAccessModes: BeneficiaryAccessModes;
-    }) => {
+    required: (data: { modesMobilisation: ModesMobilisation[] }) => {
       return (
-        data.coachOrientationModes.includes("formulaire-dora") ||
-        data.coachOrientationModes.includes("envoyer-un-mail") ||
-        data.coachOrientationModes.includes(
-          "envoyer-un-mail-avec-une-fiche-de-prescription"
-        ) ||
-        data.beneficiariesAccessModes.includes("envoyer-un-mail")
+        data.modesMobilisation.includes("formulaire-dora") ||
+        data.modesMobilisation.includes("envoyer-un-courriel")
       );
     },
   },
@@ -394,15 +325,10 @@ export const inclusionNumeriqueSchema: v.Schema = {
   publics: serviceSchema.publics,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: {
-    ...serviceSchema.beneficiariesAccessModes,
-    required: true,
-  },
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
+  mobilisablePar: serviceSchema.mobilisablePar,
+  modesMobilisation: serviceSchema.modesMobilisation,
+  lienMobilisation: serviceSchema.lienMobilisation,
+  mobilisationPrecisions: serviceSchema.mobilisationPrecisions,
   contactName: serviceSchema.contactName,
   contactPhone: serviceSchema.contactPhone,
   contactEmail: serviceSchema.contactEmail,
@@ -431,18 +357,10 @@ export const draftSchema: v.Schema = {
   isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
-  coachOrientationModes: serviceSchema.coachOrientationModes,
-  coachOrientationModesExternalFormLinkText:
-    serviceSchema.coachOrientationModesExternalFormLinkText,
-  coachOrientationModesExternalFormLink:
-    serviceSchema.coachOrientationModesExternalFormLink,
-  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
+  mobilisablePar: serviceSchema.mobilisablePar,
+  modesMobilisation: serviceSchema.modesMobilisation,
+  lienMobilisation: serviceSchema.lienMobilisation,
+  mobilisationPrecisions: serviceSchema.mobilisationPrecisions,
   credentials: serviceSchema.credentials,
   durationWeeklyHours: serviceSchema.durationWeeklyHours,
   durationWeeks: serviceSchema.durationWeeks,
@@ -506,18 +424,10 @@ export const modelSchema: v.Schema = {
   isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
-  coachOrientationModes: serviceSchema.coachOrientationModes,
-  coachOrientationModesExternalFormLinkText:
-    serviceSchema.coachOrientationModesExternalFormLinkText,
-  coachOrientationModesExternalFormLink:
-    serviceSchema.coachOrientationModesExternalFormLink,
-  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
+  mobilisablePar: serviceSchema.mobilisablePar,
+  modesMobilisation: serviceSchema.modesMobilisation,
+  lienMobilisation: serviceSchema.lienMobilisation,
+  mobilisationPrecisions: serviceSchema.mobilisationPrecisions,
   credentials: serviceSchema.credentials,
   durationWeeklyHours: serviceSchema.durationWeeklyHours,
   durationWeeks: serviceSchema.durationWeeks,

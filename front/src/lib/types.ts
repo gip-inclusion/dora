@@ -289,21 +289,14 @@ export type FeeCondition = "gratuit" | "payant";
 export type SavedSearchNotificationFrequency =
   "NEVER" | "TWO_WEEKS" | "MONTHLY";
 
-export type CoachOrientationModes =
-  | "formulaire-dora"
-  | "completer-le-formulaire-dadhesion"
-  | "envoyer-un-mail-avec-une-fiche-de-prescription"
-  | "envoyer-un-mail"
-  | "telephoner"
-  | "autre";
-
-export type BeneficiaryAccessModes =
-  | "professionnel"
+export type ModesMobilisation =
+  | "envoyer-un-courriel"
   | "se-presenter"
-  | "completer-le-formulaire-dadhesion"
-  | "envoyer-un-mail"
   | "telephoner"
-  | "autre";
+  | "utiliser-lien-mobilisation"
+  | "formulaire-dora";
+
+export type PersonneMobilisatrice = "usagers" | "professionnels";
 
 export type UpdateFrequency =
   | "tous-les-mois"
@@ -346,8 +339,8 @@ export interface ServiceSearchResult {
   coordinates: Coordinates | null;
   diffusionZoneType: string;
   isOrientable?: boolean;
-  coachOrientationModes?: string[];
-  beneficiariesAccessModes?: string[];
+  modesMobilisation?: string[];
+  mobilisablePar?: string[];
   fundingLabels: Array<FundingLabel>;
   modificationDate: string;
   name: string;
@@ -412,21 +405,17 @@ export interface Service {
   address1: string;
   address2: string | null;
   addressLine: string;
-  beneficiariesAccessModes: BeneficiaryAccessModes[] | null;
-  beneficiariesAccessModesDisplay: string[] | null;
-  beneficiariesAccessModesExternalFormLinkText: string;
-  beneficiariesAccessModesExternalFormLink: string | null;
-  beneficiariesAccessModesOther: string | null;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
   city: string;
   cityCode: string;
-  coachOrientationModes: CoachOrientationModes[] | null;
-  coachOrientationModesDisplay: string[] | null;
-  coachOrientationModesExternalFormLinkText: string;
-  coachOrientationModesExternalFormLink: string | null;
-  coachOrientationModesOther: string | null;
+  modesMobilisation: ModesMobilisation[] | null;
+  modesMobilisationDisplay: string[] | null;
+  mobilisablePar: PersonneMobilisatrice[] | null;
+  mobilisableParDisplay: string[] | null;
+  mobilisationPrecisions: string | null;
+  lienMobilisation: string | null;
   publics: CustomizableFK[] | null;
   publicsDisplay: string[] | null;
   contactInfoFilled: boolean;
@@ -493,7 +482,8 @@ export interface Service {
 
 export interface ShortService {
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[];
+  modesMobilisation: ModesMobilisation[];
+  mobilisablePar: PersonneMobilisatrice[];
   contactEmail: string;
   contactName: string;
   contactPhone: string;
@@ -571,9 +561,9 @@ export interface CustomChoice {
 
 export type ServicesOptions = {
   accessConditions: CustomChoice[];
-  beneficiariesAccessModes: { value: BeneficiaryAccessModes; label: string }[];
   categories: { value: ServiceCategory; label: string }[];
-  coachOrientationModes: { value: CoachOrientationModes; label: string }[];
+  modesMobilisation: { value: ModesMobilisation; label: string }[];
+  mobilisablePar: { value: PersonneMobilisatrice; label: string }[];
 
   publics: CustomChoice[];
   diPublics: { value: string; label: string }[];
@@ -591,19 +581,15 @@ export type ServicesOptions = {
 export type Model = {
   accessConditions: CustomizableFK[];
   accessConditionsDisplay: string[];
-  beneficiariesAccessModes: BeneficiaryAccessModes[];
-  beneficiariesAccessModesDisplay: string[];
-  beneficiariesAccessModesExternalFormLinkText: string;
-  beneficiariesAccessModesExternalFormLink: string;
-  beneficiariesAccessModesOther: string;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[];
-  coachOrientationModesDisplay: string[];
-  coachOrientationModesExternalFormLinkText: string;
-  coachOrientationModesExternalFormLink: string;
-  coachOrientationModesOther: string;
+  modesMobilisation: ModesMobilisation[];
+  modesMobilisationDisplay: string[];
+  mobilisablePar: PersonneMobilisatrice[];
+  mobilisableParDisplay: string[];
+  mobilisationPrecisions: string;
+  lienMobilisation: string;
   publics: CustomizableFK[];
   publicsDisplay: string[];
   creationDate: string;
