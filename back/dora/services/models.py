@@ -381,6 +381,17 @@ class Service(ModerationMixin, models.Model):
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
     publics = models.ManyToManyField(Public, verbose_name="Publics", blank=True)
+    publics_di = ArrayField(
+        models.CharField(
+            max_length=255, validators=[validate_corresponding_di_publics]
+        ),
+        default=list,
+        blank=True,
+        verbose_name="Publics (référentiel DI)",
+    )
+    publics_precisions = models.TextField(
+        blank=True, default="", verbose_name="Précisions publics"
+    )
     is_cumulative = models.BooleanField(verbose_name="Solution cumulable", default=True)
 
     fee_condition = models.ForeignKey(
