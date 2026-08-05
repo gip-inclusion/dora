@@ -15,10 +15,13 @@ from dora.core.notify import send_moderation_notification
 from dora.core.utils import code_insee_to_code_dept
 from dora.data_inclusion.mappings import DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING
 from dora.decoupage_administratif.models import AdminDivisionType, City
-from dora.services.enums import ServiceStatus
+from dora.services.enums import (
+    MOBILISABLE_PAR_ORDER,
+    MODES_MOBILISATION_ORDER,
+    ModeMobilisation,
+    ServiceStatus,
+)
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     Credential,
     LocationKind,
     Public,
@@ -372,19 +375,17 @@ class Command(BaseCommand):
                     service.city_code
                 )
 
-        service.coach_orientation_modes.add(
-            CoachOrientationMode.objects.get(value="telephoner"),
-            CoachOrientationMode.objects.get(value="envoyer-un-mail"),
-        )
-
-        service.beneficiaries_access_modes.add(
-            BeneficiaryAccessMode.objects.get(value="telephoner"),
-        )
-
+        modes_mobilisation = {
+            ModeMobilisation.TELEPHONER,
+            ModeMobilisation.ENVOYER_UN_COURRIEL,
+        }
         if not service.appointment_link:
-            service.beneficiaries_access_modes.add(
-                BeneficiaryAccessMode.objects.get(value="se-presenter"),
-            )
+            modes_mobilisation.add(ModeMobilisation.SE_PRESENTER)
+
+        service.modes_mobilisation = [
+            mode for mode in MODES_MOBILISATION_ORDER if mode in modes_mobilisation
+        ]
+        service.mobilisable_par = list(MOBILISABLE_PAR_ORDER)
 
         if label_nationaux:
             self.set_or_update_labels(service.structure, label_nationaux)
