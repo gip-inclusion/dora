@@ -10,9 +10,8 @@ from dora.core.constants import WGS84
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
+from dora.services.enums import ModeMobilisation, PersonneMobilisatrice
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     Credential,
     LocationKind,
     Public,
@@ -309,8 +308,15 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         modification_date="2023-03-11T16:54:10Z",
         geom=Point(3.76855, 23.88654, srid=WGS84),
         recurrence="Tu 09:00-12:00;We 14:00-17:00",
-        coach_orientation_modes_other="Mêmes modalités que pour les bénéficiaires",
-        beneficiaries_access_modes_other="Contacter conseiller(e) Pôle Emploi",
+        modes_mobilisation=[
+            ModeMobilisation.ENVOYER_UN_COURRIEL,
+            ModeMobilisation.FORMULAIRE_DORA,
+        ],
+        mobilisable_par=[
+            PersonneMobilisatrice.USAGERS,
+            PersonneMobilisatrice.PROFESSIONNELS,
+        ],
+        mobilisation_precisions="Contacter conseiller(e) Pôle Emploi",
         appointment_link="https://example.com",
     )
 
@@ -342,17 +348,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     service.credentials.add(
         baker.make(Credential, name="Carte d'identité, passeport ou permis de séjour"),
     )
-    service.coach_orientation_modes.add(
-        CoachOrientationMode.objects.get(value="envoyer-un-mail"),
-        CoachOrientationMode.objects.get(value="formulaire-dora"),
-        CoachOrientationMode.objects.get(
-            value="envoyer-un-mail-avec-une-fiche-de-prescription"
-        ),
-    )
-    service.beneficiaries_access_modes.add(
-        BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
-    )
-
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert 200 == response.status_code
@@ -401,20 +396,21 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "zone_diffusion_code": "29",
         "zone_diffusion_nom": "Finistère",
         "zone_diffusion_type": "departement",
-        "modes_orientation_accompagnateur": [
-            "completer-le-formulaire-dadhesion",
-            "envoyer-un-mail",
-            "envoyer-un-mail-avec-une-fiche-de-prescription",
+        # "formulaire-dora" n'existe pas dans le schéma data·inclusion : il est
+        # exposé comme un lien de mobilisation vers le formulaire DORA
+        "modes_mobilisation": [
+            "envoyer-un-courriel",
+            "utiliser-lien-mobilisation",
         ],
-        "modes_orientation_accompagnateur_autres": "Mêmes modalités que pour les bénéficiaires",
-        "modes_orientation_beneficiaire": ["envoyer-un-mail"],
-        "modes_orientation_beneficiaire_autres": "Contacter conseiller(e) Pôle Emploi",
+        "mobilisable_par": ["usagers", "professionnels"],
+        "mobilisation_precisions": "Contacter conseiller(e) Pôle Emploi",
+        "lien_mobilisation": service.get_dora_form_url(),
     }
     # Compare with order-independent list fields
-    for key in ("modes_accueil", "modes_orientation_accompagnateur"):
+    for key in ("modes_accueil", "modes_mobilisation"):
         assert sorted(data[key]) == sorted(expected[key])
     for key, expected_val in expected.items():
-        if key not in ("modes_accueil", "modes_orientation_accompagnateur"):
+        if key not in ("modes_accueil", "modes_mobilisation"):
             assert data[key] == expected_val
 
 
@@ -451,50 +447,40 @@ def test_service_serialization_formulaire_en_ligne(
 ):
     # Initialisation du service
     service = make_service(status=ServiceStatus.PUBLISHED)
-    service.coach_orientation_modes.clear()
-    service.coach_orientation_modes_external_form_link = "http://example.com/coach-form"
-    service.coach_orientation_modes.add(
-        CoachOrientationMode.objects.get(value="formulaire-dora"),
-        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion"),
-    )
-    service.beneficiaries_access_modes.clear()
-    service.beneficiaries_access_modes.add(
-        BeneficiaryAccessMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
-    service.beneficiaries_access_modes_external_form_link = (
-        "http://example.com/beneficiary-form"
-    )
+    service.modes_mobilisation = [
+        ModeMobilisation.UTILISER_LIEN_MOBILISATION,
+        ModeMobilisation.FORMULAIRE_DORA,
+    ]
+    service.lien_mobilisation = "http://example.com/mobilisation-form"
     service.online_form = "http://example.com/online-form"
     service.save()
 
-    # Formulaire en ligne = formulaire accompagnateur
+    # Formulaire en ligne = lien de mobilisation du service
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
     json = response.json()
-    assert json["formulaire_en_ligne"] == "http://example.com/coach-form"
-
-    # Formulaire en ligne = formulaire bénéficiaire
-    service.coach_orientation_modes.remove(
-        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-    assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] == "http://example.com/beneficiary-form"
+    assert json["formulaire_en_ligne"] == "http://example.com/mobilisation-form"
 
     # Formulaire en ligne = formulaire DORA
-    service.beneficiaries_access_modes.remove(
-        BeneficiaryAccessMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
+    service.modes_mobilisation = [ModeMobilisation.FORMULAIRE_DORA]
+    service.lien_mobilisation = ""
+    service.save()
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
     json = response.json()
     assert json["formulaire_en_ligne"] == service.get_dora_form_url()
 
-    # Formulaire en ligne = lien documents
-    service.coach_orientation_modes.remove(
-        CoachOrientationMode.objects.get(value="formulaire-dora")
-    )
+    # Formulaire en ligne = lien documents : un lien de mobilisation orphelin,
+    # sans son mode, n'est pas exposé et ne masque pas le formulaire en ligne
+    service.modes_mobilisation = [ModeMobilisation.TELEPHONER]
+    service.lien_mobilisation = "http://example.com/mobilisation-form"
+    service.save()
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+    assert response.status_code == 200
+    assert response.json()["lien_mobilisation"] is None
+
+    service.lien_mobilisation = ""
+    service.save()
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
     json = response.json()
@@ -507,6 +493,27 @@ def test_service_serialization_formulaire_en_ligne(
     assert response.status_code == 200
     json = response.json()
     assert json["formulaire_en_ligne"] is None
+
+
+def test_service_serialization_lien_mobilisation_mode_without_link(
+    authenticated_user, api_client
+):
+    # Le mode ne peut pas être exposé sans son lien : le schéma data·inclusion
+    # attend les deux ensemble.
+    service = make_service(status=ServiceStatus.PUBLISHED)
+    service.modes_mobilisation = [
+        ModeMobilisation.TELEPHONER,
+        ModeMobilisation.UTILISER_LIEN_MOBILISATION,
+    ]
+    service.lien_mobilisation = ""
+    service.save()
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    json = response.json()
+    assert json["modes_mobilisation"] == ["telephoner"]
+    assert json["lien_mobilisation"] is None
 
 
 def test_service_serialization_exemple_need_di_user(api_client):

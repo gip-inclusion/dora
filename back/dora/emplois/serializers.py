@@ -7,6 +7,7 @@ from rest_framework.exceptions import NotFound, ValidationError
 from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData, Orientation
 from dora.orientations.serializers import OrientationSerializer
+from dora.services.enums import ModeMobilisation
 from dora.services.models import Service
 from dora.stats.models import (
     DiMobilisationEvent,
@@ -24,12 +25,6 @@ class ReferenceDataSerializer(serializers.Serializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     funding_labels = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="value"
-    )
-    coach_orientation_modes = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="value"
-    )
-    beneficiaries_access_modes = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="value"
     )
     forms = serializers.ListField(child=serializers.CharField())
@@ -50,14 +45,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             "short_desc",
             "recurrence",
             "funding_labels",
-            "coach_orientation_modes",
-            "coach_orientation_modes_other",
-            "coach_orientation_modes_external_form_link",
-            "coach_orientation_modes_external_form_link_text",
-            "beneficiaries_access_modes",
-            "beneficiaries_access_modes_other",
-            "beneficiaries_access_modes_external_form_link",
-            "beneficiaries_access_modes_external_form_link_text",
+            "modes_mobilisation",
+            "mobilisable_par",
+            "mobilisation_precisions",
+            "lien_mobilisation",
             "forms",
             "online_form",
             "access_conditions",
@@ -71,9 +62,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
     def get_is_orientable_with_form(self, obj):
-        return obj.is_orientable() and any(
-            mode.value == "formulaire-dora"
-            for mode in obj.coach_orientation_modes.all()
+        return (
+            obj.is_orientable()
+            and ModeMobilisation.FORMULAIRE_DORA in obj.modes_mobilisation
         )
 
     def get_average_orientation_response_delay_days(self, obj):

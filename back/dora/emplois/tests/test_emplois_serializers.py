@@ -11,9 +11,8 @@ from dora.emplois.serializers import (
 )
 from dora.emplois.views import PREFETCH_RELATED_SERVICE_LIST
 from dora.orientations.models import OrientationStatus
+from dora.services.enums import ModeMobilisation, PersonneMobilisatrice
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     Credential,
     FundingLabel,
     Service,
@@ -55,12 +54,8 @@ def test_service_serializer_basic_fields():
         contact_phone="0123456789",
         contact_email="john.doe@example.org",
         is_contact_info_public=True,
-        coach_orientation_modes_other="Autre modalité personnalisée",
-        coach_orientation_modes_external_form_link="https://example.org/external-form",
-        coach_orientation_modes_external_form_link_text="Remplir le formulaire",
-        beneficiaries_access_modes_other="Autre accès personnalisée",
-        beneficiaries_access_modes_external_form_link="https://example.org/beneficiary-form",
-        beneficiaries_access_modes_external_form_link_text="Remplir le formulaire",
+        mobilisation_precisions="Autre modalité personnalisée",
+        lien_mobilisation="https://example.org/external-form",
     )
 
     data = serialize_service(service)
@@ -73,24 +68,8 @@ def test_service_serializer_basic_fields():
     assert data["contact_phone"] == "0123456789"
     assert data["contact_email"] == "john.doe@example.org"
     assert data["is_contact_info_public"] is True
-    assert data["coach_orientation_modes_other"] == "Autre modalité personnalisée"
-    assert (
-        data["coach_orientation_modes_external_form_link"]
-        == "https://example.org/external-form"
-    )
-    assert (
-        data["coach_orientation_modes_external_form_link_text"]
-        == "Remplir le formulaire"
-    )
-    assert data["beneficiaries_access_modes_other"] == "Autre accès personnalisée"
-    assert (
-        data["beneficiaries_access_modes_external_form_link"]
-        == "https://example.org/beneficiary-form"
-    )
-    assert (
-        data["beneficiaries_access_modes_external_form_link_text"]
-        == "Remplir le formulaire"
-    )
+    assert data["mobilisation_precisions"] == "Autre modalité personnalisée"
+    assert data["lien_mobilisation"] == "https://example.org/external-form"
 
 
 def test_service_serializer_funding_labels():
@@ -103,55 +82,35 @@ def test_service_serializer_funding_labels():
     assert sorted(data["funding_labels"]) == ["label-1", "label-2"]
 
 
-def test_service_serializer_coach_orientation_modes():
+def test_service_serializer_modes_mobilisation():
     service = make_published_service()
-    service.coach_orientation_modes.clear()
     expected_data = [
-        "formulaire-dora",
-        "envoyer-un-mail-avec-une-fiche-de-prescription",
-        "envoyer-un-mail",
-        "autre",
-        "completer-le-formulaire-dadhesion",
+        ModeMobilisation.ENVOYER_UN_COURRIEL,
+        ModeMobilisation.SE_PRESENTER,
+        ModeMobilisation.TELEPHONER,
+        ModeMobilisation.UTILISER_LIEN_MOBILISATION,
+        ModeMobilisation.FORMULAIRE_DORA,
     ]
 
-    service.coach_orientation_modes.set(
-        list(CoachOrientationMode.objects.filter(value__in=expected_data))
-    )
-    service.coach_orientation_modes_other = "Autre modalité personnalisée"
-    service.coach_orientation_modes_external_form_link = (
-        "https://example.org/external-form"
-    )
+    service.modes_mobilisation = expected_data
+    service.lien_mobilisation = "https://example.org/external-form"
     service.contact_email = "contact@example.org"
     service.save()
 
-    data = serialize_service(service)["coach_orientation_modes"]
-    assert sorted(data) == sorted(expected_data)
+    data = serialize_service(service)["modes_mobilisation"]
+    assert data == expected_data
 
 
-def test_service_serializer_beneficiaries_access_modes():
+def test_service_serializer_mobilisable_par():
     service = make_published_service()
-    service.beneficiaries_access_modes.clear()
-    expected_data = [
-        "completer-le-formulaire-dadhesion",
-        "professionnel",
-        "autre",
-        "envoyer-un-mail",
-        "telephoner",
-        "se-presenter",
+    service.mobilisable_par = [
+        PersonneMobilisatrice.USAGERS,
+        PersonneMobilisatrice.PROFESSIONNELS,
     ]
-
-    service.beneficiaries_access_modes.set(
-        list(BeneficiaryAccessMode.objects.filter(value__in=expected_data))
-    )
-    service.beneficiaries_access_modes_other = "Autre accès personnalisée"
-    service.beneficiaries_access_modes_external_form_link = (
-        "https://example.org/beneficiary-form"
-    )
-    service.beneficiaries_access_modes_external_form_link_text = "Remplir le formulaire"
     service.save()
 
-    data = serialize_service(service)["beneficiaries_access_modes"]
-    assert sorted(data) == sorted(expected_data)
+    data = serialize_service(service)["mobilisable_par"]
+    assert data == ["usagers", "professionnels"]
 
 
 def test_service_serializer_forms():
@@ -185,8 +144,8 @@ def test_service_serializer_is_orientable_with_form_when_orientable_and_mode(
 ):
     service = orientable_service_via_dora_form
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
+    service.modes_mobilisation = [ModeMobilisation.FORMULAIRE_DORA]
+    service.save()
 
     # Vérification de cohérence sur la logique métier sous-jacente
     assert service.is_orientable() is True
@@ -202,8 +161,8 @@ def test_service_serializer_is_not_orientable_with_form_when_not_orientable():
     service.structure.save()
     service.save()
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
+    service.modes_mobilisation = [ModeMobilisation.FORMULAIRE_DORA]
+    service.save()
 
     assert service.is_orientable() is False
 
@@ -217,10 +176,7 @@ def test_service_serializer_is_not_orientable_with_form_without_dora_mode(
     service = orientable_service_via_dora_form
 
     assert service.is_orientable() is True
-    assert (
-        service.coach_orientation_modes.filter(value="formulaire-dora").exists()
-        is False
-    )
+    assert ModeMobilisation.FORMULAIRE_DORA not in service.modes_mobilisation
 
     data = serialize_service(service)
     assert data["is_orientable_with_form"] is False
@@ -237,8 +193,8 @@ def test_service_serializer_is_orientable_with_form_when_ft_whitelisted(
     service.structure.save()
     service.save()
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
+    service.modes_mobilisation = [ModeMobilisation.FORMULAIRE_DORA]
+    service.save()
 
     assert service.is_orientable_ft_service() is True
     assert service.is_orientable() is True

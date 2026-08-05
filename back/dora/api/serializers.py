@@ -2,6 +2,7 @@
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
+from dora.services.enums import DI_MODES_MOBILISATION, ModeMobilisation
 from dora.services.models import (
     Service,
 )
@@ -205,10 +206,10 @@ class ServiceSerializer(serializers.ModelSerializer):
     zone_diffusion_type = serializers.SerializerMethodField()
     zone_diffusion_code = serializers.SerializerMethodField()
     zone_diffusion_nom = serializers.SerializerMethodField()
-    modes_orientation_accompagnateur = serializers.SerializerMethodField()
-    modes_orientation_accompagnateur_autres = serializers.SerializerMethodField()
-    modes_orientation_beneficiaire = serializers.SerializerMethodField()
-    modes_orientation_beneficiaire_autres = serializers.SerializerMethodField()
+    modes_mobilisation = serializers.SerializerMethodField()
+    mobilisable_par = serializers.SerializerMethodField()
+    mobilisation_precisions = serializers.SerializerMethodField()
+    lien_mobilisation = serializers.SerializerMethodField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
 
@@ -254,10 +255,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             "zone_diffusion_code",
             "zone_diffusion_nom",
             "zone_diffusion_type",
-            "modes_orientation_accompagnateur",
-            "modes_orientation_accompagnateur_autres",
-            "modes_orientation_beneficiaire",
-            "modes_orientation_beneficiaire_autres",
+            "modes_mobilisation",
+            "mobilisable_par",
+            "mobilisation_precisions",
+            "lien_mobilisation",
             "temps_passe_duree_hebdomadaire",
             "temps_passe_semaines",
         ]
@@ -328,19 +329,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         return [c.name for c in obj.credentials.all()]
 
     def get_formulaire_en_ligne(self, obj):
-        coach_orientation_mode_values = set(
-            m.value for m in obj.coach_orientation_modes.all()
+        return self.get_lien_mobilisation(obj) or (
+            obj.online_form if obj.online_form else None
         )
-        beneficiaries_access_mode_values = set(
-            m.value for m in obj.beneficiaries_access_modes.all()
-        )
-        if "completer-le-formulaire-dadhesion" in coach_orientation_mode_values:
-            return obj.coach_orientation_modes_external_form_link
-        elif "completer-le-formulaire-dadhesion" in beneficiaries_access_mode_values:
-            return obj.beneficiaries_access_modes_external_form_link
-        elif "formulaire-dora" in coach_orientation_mode_values:
-            return obj.get_dora_form_url()
-        return obj.online_form if obj.online_form else None
 
     def get_commune(self, obj):
         return obj.city if obj.city else None
@@ -411,26 +402,39 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_zone_diffusion_nom(self, obj):
         return obj.get_diffusion_zone_details_display()
 
-    def get_modes_orientation_accompagnateur(self, obj):
-        mapping = {
-            # "formulaire-dora" n'est pas une valeur valide pour DI,
-            # on la remplace donc par "completer-le-formulaire-dadhesion"
-            "formulaire-dora": "completer-le-formulaire-dadhesion",
-        }
-        return [
-            mapping.get(mode.value, mode.value)
-            for mode in obj.coach_orientation_modes.all()
+    def get_modes_mobilisation(self, obj):
+        # "formulaire-dora" n'est pas une valeur du schéma data·inclusion : il est
+        # exposé comme un lien de mobilisation, cf. `get_lien_mobilisation`.
+        modes = [
+            mode
+            for mode in obj.modes_mobilisation
+            if mode in DI_MODES_MOBILISATION
+            and mode != ModeMobilisation.UTILISER_LIEN_MOBILISATION
         ]
+        # Le mode et le lien vont de pair : `utiliser-lien-mobilisation` n'est
+        # exposé que si un lien l'est aussi, formulaire DORA compris.
+        if self.get_lien_mobilisation(obj):
+            modes.append(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
+        return modes or None
 
-    def get_modes_orientation_accompagnateur_autres(self, obj):
-        return obj.coach_orientation_modes_other
+    def get_mobilisable_par(self, obj):
+        return obj.mobilisable_par or None
 
-    def get_modes_orientation_beneficiaire(self, obj):
-        # Pas de mapping nécessaire
-        return [m.value for m in obj.beneficiaries_access_modes.all()]
+    def get_mobilisation_precisions(self, obj):
+        return obj.mobilisation_precisions or None
 
-    def get_modes_orientation_beneficiaire_autres(self, obj):
-        return obj.beneficiaries_access_modes_other
+    def get_lien_mobilisation(self, obj):
+        # Un lien orphelin — conservé par la migration des modes d'orientation
+        # alors que son mode ne l'était pas — n'est pas un point d'entrée du
+        # service : l'exposer masquerait le formulaire en ligne.
+        if (
+            obj.lien_mobilisation
+            and ModeMobilisation.UTILISER_LIEN_MOBILISATION in obj.modes_mobilisation
+        ):
+            return obj.lien_mobilisation
+        if ModeMobilisation.FORMULAIRE_DORA in obj.modes_mobilisation:
+            return obj.get_dora_form_url()
+        return None
 
     def get_temps_passe_duree_hebdomadaire(self, obj):
         return obj.duration_weekly_hours

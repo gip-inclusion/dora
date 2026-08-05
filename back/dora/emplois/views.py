@@ -4,7 +4,7 @@ import logging
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import transaction
-from django.db.models import CharField, Prefetch, Value
+from django.db.models import Prefetch
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from rest_framework import generics, mixins, permissions, status, viewsets
@@ -25,8 +25,6 @@ from dora.core.uploads import save_orientation_attachment
 from dora.orientations.emails import send_orientation_created_emails
 from dora.orientations.models import Orientation
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     FundingLabel,
     Service,
 )
@@ -54,9 +52,7 @@ PREFETCH_RELATED_SERVICE_LIST = [
     "credentials",
     "funding_labels",
     "kinds",
-    "coach_orientation_modes",
     "orientable_ft_services",
-    "beneficiaries_access_modes",
     Prefetch(
         "orientations",
         queryset=Orientation.objects.answered().only(
@@ -84,7 +80,7 @@ class APIPermission(permissions.BasePermission):
         return self.has_permission(request, view)
 
 
-class ReferenceDataViewSet(viewsets.ReadOnlyModelViewSet):
+class ReferenceDataViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     versioning_class = NamespaceVersioning
     permission_classes = (APIPermission,)
     serializer_class = ReferenceDataSerializer
@@ -92,19 +88,16 @@ class ReferenceDataViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
-        funding_label_qs = FundingLabel.objects.all().annotate(
-            kind=Value("funding_label", output_field=CharField())
-        )
-        beneficiary_access_mode_qs = BeneficiaryAccessMode.objects.all().annotate(
-            kind=Value("beneficiary_access_mode", output_field=CharField())
-        )
-        coach_orientation_mode_qs = CoachOrientationMode.objects.all().annotate(
-            kind=Value("coach_orientation_mode", output_field=CharField())
-        )
-
-        return funding_label_qs.union(
-            beneficiary_access_mode_qs, coach_orientation_mode_qs
-        )
+        return [
+            *(
+                {
+                    "kind": "funding_label",
+                    "value": funding_label.value,
+                    "label": funding_label.label,
+                }
+                for funding_label in FundingLabel.objects.all()
+            ),
+        ]
 
 
 class ServiceViewSet(viewsets.ReadOnlyModelViewSet):

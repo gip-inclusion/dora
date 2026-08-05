@@ -7,8 +7,6 @@ from dora.core.test_utils import make_orientation, make_published_service
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.orientations.models import OrientationStatus
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     FundingLabel,
 )
 
@@ -61,18 +59,7 @@ def test_reference_data_api_list(emplois_api_client):
         (item["kind"], item["value"], item["label"]) for item in response.data
     }
     expected_items = {
-        *{
-            ("funding_label", item.value, item.label)
-            for item in FundingLabel.objects.all()
-        },
-        *{
-            ("beneficiary_access_mode", item.value, item.label)
-            for item in BeneficiaryAccessMode.objects.all()
-        },
-        *{
-            ("coach_orientation_mode", item.value, item.label)
-            for item in CoachOrientationMode.objects.all()
-        },
+        ("funding_label", item.value, item.label) for item in FundingLabel.objects.all()
     }
     assert response_items == expected_items
 
