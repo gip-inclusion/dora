@@ -174,18 +174,6 @@ class FundingLabel(EnumModel):
         verbose_name_plural = "Labels de financement"
 
 
-class BeneficiaryAccessMode(EnumModel):
-    class Meta:
-        verbose_name = "Mode d'orientation bénéficiaire"
-        verbose_name_plural = "Modes d'orientation bénéficiaire"
-
-
-class CoachOrientationMode(EnumModel):
-    class Meta:
-        verbose_name = "Mode d'orientation accompagnateur"
-        verbose_name_plural = "Modes d'orientation accompagnateur"
-
-
 class LocationKind(EnumModel):
     class Meta:
         verbose_name = "Lieu de déroulement"
@@ -417,47 +405,6 @@ class Service(ModerationMixin, models.Model):
         verbose_name="Lien de mobilisation", max_length=280, blank=True
     )
 
-    # Champs remplacés par les quatre précédents. Ils restent en place le temps
-    # que tous leurs usages soient migrés, cf. `0008_remove_orientation_modes`.
-    beneficiaries_access_modes = models.ManyToManyField(
-        BeneficiaryAccessMode,
-        verbose_name="Comment mobiliser la solution en tant que bénéficiaire",
-        blank=True,
-    )
-
-    beneficiaries_access_modes_external_form_link = URLField(
-        verbose_name="Lien vers le formulaire externe", blank=True
-    )
-
-    beneficiaries_access_modes_external_form_link_text = CharField(
-        verbose_name="L’intitulé du lien vers le formulaire externe",
-        max_length=27,
-        blank=True,
-    )
-
-    beneficiaries_access_modes_other = CharField(
-        verbose_name="Autre", max_length=280, blank=True
-    )
-
-    coach_orientation_modes = models.ManyToManyField(
-        CoachOrientationMode,
-        verbose_name="Comment orienter un bénéficiaire en tant qu’accompagnateur",
-        blank=True,
-    )
-
-    coach_orientation_modes_external_form_link = URLField(
-        verbose_name="Lien vers le formulaire externe", blank=True
-    )
-
-    coach_orientation_modes_external_form_link_text = CharField(
-        verbose_name="L’intitulé du lien vers le formulaire externe",
-        max_length=27,
-        blank=True,
-    )
-
-    coach_orientation_modes_other = CharField(
-        verbose_name="Autre", max_length=280, blank=True
-    )
     requirements = models.ManyToManyField(
         Requirement,
         verbose_name="Quels sont les pré-requis ou compétences ?",

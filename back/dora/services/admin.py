@@ -14,9 +14,7 @@ from .csv_import import ImportServicesHelper
 from .label_services import LabelServicesHelper
 from .models import (
     AccessCondition,
-    BeneficiaryAccessMode,
     Bookmark,
-    CoachOrientationMode,
     Credential,
     FranceTravailOrientableService,
     FundingLabel,
@@ -546,8 +544,6 @@ admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryIt
 admin.site.register(ServiceStatusHistoryItem, ServiceStatusHistoryItemAdmin)
 admin.site.register(Bookmark, BookmarkAdmin)
 admin.site.register(SavedSearch, SavedSearchAdmin)
-admin.site.register(BeneficiaryAccessMode, EnumAdmin)
-admin.site.register(CoachOrientationMode, EnumAdmin)
 admin.site.register(LocationKind, EnumAdmin)
 admin.site.register(ServiceCategory, ServiceCategoryAdmin)
 admin.site.register(ServiceKind, EnumAdmin)
