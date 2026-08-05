@@ -86,7 +86,6 @@ sources:
           description: |
             Identifiant du motif de refus.
 
-      - name: services_coachorientationmode
       - name: services_fundinglabel
         description: |
           Table de correspondance id-fundinglabel des labels de financement.
@@ -129,12 +128,6 @@ sources:
       - name: services_servicecategory
         description: |
           Table de correspondance id-servicecategory.
-
-      - name: services_service_coach_orientation_modes
-        ToDo: à documenter avec le métier
-
-      - name: services_coachorientationmodes
-        ToDo: à documenter avec le métier
 
       - name: services_servicefee
       - name: services_service_funding_labels
