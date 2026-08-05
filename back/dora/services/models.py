@@ -31,7 +31,7 @@ from dora.decoupage_administratif.utils import (
 )
 from dora.structures.models import Structure
 
-from .enums import ServiceStatus
+from .enums import ModeMobilisation, PersonneMobilisatrice, ServiceStatus
 
 logger = logging.getLogger(__name__)
 
@@ -395,6 +395,30 @@ class Service(ModerationMixin, models.Model):
     ############
     # Modalities
 
+    modes_mobilisation = ArrayField(
+        CharField(max_length=30, choices=ModeMobilisation.choices),
+        verbose_name="Comment mobiliser le service",
+        blank=True,
+        default=list,
+    )
+
+    mobilisable_par = ArrayField(
+        CharField(max_length=20, choices=PersonneMobilisatrice.choices),
+        verbose_name="Qui peut mobiliser le service",
+        blank=True,
+        default=list,
+    )
+
+    mobilisation_precisions = models.TextField(
+        verbose_name="Précisions sur les modalités de mobilisation", blank=True
+    )
+
+    lien_mobilisation = URLField(
+        verbose_name="Lien de mobilisation", max_length=280, blank=True
+    )
+
+    # Champs remplacés par les quatre précédents. Ils restent en place le temps
+    # que tous leurs usages soient migrés, cf. `0008_remove_orientation_modes`.
     beneficiaries_access_modes = models.ManyToManyField(
         BeneficiaryAccessMode,
         verbose_name="Comment mobiliser la solution en tant que bénéficiaire",
