@@ -11,15 +11,14 @@ ALL_DI_ORIENTATION_MODES = [
     ModeMobilisation.UTILISER_LIEN_MOBILISATION,
 ]
 
-ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES = [
-    "envoyer-un-mail",
-    "telephoner",
-    "completer-le-formulaire-dadhesion",
-    "formulaire-dora",
+DI_MODES_WITHOUT_LINK = [
+    ModeMobilisation.ENVOYER_UN_COURRIEL,
+    ModeMobilisation.SE_PRESENTER,
+    ModeMobilisation.TELEPHONER,
 ]
 
 
-def test_map_service_coach_orientation_modes_mapping_with_form_mode_and_form():
+def test_map_service_modes_mobilisation_with_link_mode_and_link():
     di_service_data = make_di_service_data(
         mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
         modes_mobilisation=ALL_DI_ORIENTATION_MODES,
@@ -27,19 +26,17 @@ def test_map_service_coach_orientation_modes_mapping_with_form_mode_and_form():
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = list(
-        filter(
-            lambda m: m != "formulaire-dora",
-            ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES,
-        )
-    )
-
-    assert sorted(service["coach_orientation_modes"]) == sorted(
-        expected_dora_coach_orientation_modes
-    )
+    # Le lien de mobilisation du service prime sur le formulaire DORA
+    assert service["modes_mobilisation"] == [
+        "envoyer-un-courriel",
+        "se-presenter",
+        "telephoner",
+        "utiliser-lien-mobilisation",
+    ]
+    assert service["lien_mobilisation"] == "https://example.com"
 
 
-def test_map_service_coach_orientation_modes_mapping_with_form_mode_but_no_form_with_email():
+def test_map_service_modes_mobilisation_with_link_mode_but_no_link_with_email():
     di_service_data = make_di_service_data(
         mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
         modes_mobilisation=ALL_DI_ORIENTATION_MODES,
@@ -48,19 +45,17 @@ def test_map_service_coach_orientation_modes_mapping_with_form_mode_but_no_form_
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = list(
-        filter(
-            lambda m: m != "completer-le-formulaire-dadhesion",
-            ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES,
-        )
-    )
-
-    assert sorted(service["coach_orientation_modes"]) == sorted(
-        expected_dora_coach_orientation_modes
-    )
+    # Le mode utiliser-lien-mobilisation est retiré faute de lien, et le
+    # formulaire DORA prend le relais
+    assert service["modes_mobilisation"] == [
+        "envoyer-un-courriel",
+        "se-presenter",
+        "telephoner",
+        "formulaire-dora",
+    ]
 
 
-def test_map_service_coach_orientation_modes_mapping_with_form_mode_but_no_form_without_email():
+def test_map_service_modes_mobilisation_with_link_mode_but_no_link_without_email():
     di_service_data = make_di_service_data(
         mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
         modes_mobilisation=ALL_DI_ORIENTATION_MODES,
@@ -69,64 +64,89 @@ def test_map_service_coach_orientation_modes_mapping_with_form_mode_but_no_form_
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = [
-        m
-        for m in ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES
-        if m not in ["completer-le-formulaire-dadhesion", "formulaire-dora"]
+    assert service["modes_mobilisation"] == [
+        "envoyer-un-courriel",
+        "se-presenter",
+        "telephoner",
     ]
 
-    assert sorted(service["coach_orientation_modes"]) == sorted(
-        expected_dora_coach_orientation_modes
-    )
 
-
-def test_map_service_coach_orientation_modes_mapping_without_form_mode_with_email():
+def test_map_service_modes_mobilisation_without_link_mode_with_email():
     di_service_data = make_di_service_data(
         mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
-        modes_mobilisation=list(
-            filter(
-                lambda m: m != ModeMobilisation.UTILISER_LIEN_MOBILISATION,
-                ALL_DI_ORIENTATION_MODES,
-            )
-        ),
+        modes_mobilisation=DI_MODES_WITHOUT_LINK,
         courriel="contact@example.com",
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = list(
-        filter(
-            lambda m: m != "completer-le-formulaire-dadhesion",
-            ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES,
-        )
-    )
-
-    assert sorted(service["coach_orientation_modes"]) == sorted(
-        expected_dora_coach_orientation_modes
-    )
+    assert service["modes_mobilisation"] == [
+        "envoyer-un-courriel",
+        "se-presenter",
+        "telephoner",
+        "formulaire-dora",
+    ]
 
 
-def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_email():
+def test_map_service_modes_mobilisation_without_link_mode_without_email():
     di_service_data = make_di_service_data(
         mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
-        modes_mobilisation=list(
-            filter(
-                lambda m: m != ModeMobilisation.UTILISER_LIEN_MOBILISATION,
-                ALL_DI_ORIENTATION_MODES,
-            )
-        ),
+        modes_mobilisation=DI_MODES_WITHOUT_LINK,
         courriel=None,
     )
     service = map_service(di_service_data, False)
 
-    expected_dora_coach_orientation_modes = [
-        m
-        for m in ALL_EXPECTED_MAPPED_DORA_COACH_ORIENTATION_MODES
-        if m not in ["completer-le-formulaire-dadhesion", "formulaire-dora"]
+    assert service["modes_mobilisation"] == [
+        "envoyer-un-courriel",
+        "se-presenter",
+        "telephoner",
     ]
 
-    assert sorted(service["coach_orientation_modes"]) == sorted(
-        expected_dora_coach_orientation_modes
+
+def test_map_service_modes_mobilisation_adds_professionnels_with_dora_form():
+    # Un service déclaré mobilisable par les seuls usagers reste orientable par
+    # les professionnels via le formulaire DORA
+    di_service_data = make_di_service_data(
+        mobilisable_par=[PersonneMobilisatrice.USAGERS],
+        modes_mobilisation=[ModeMobilisation.TELEPHONER],
+        courriel="contact@example.com",
     )
+    service = map_service(di_service_data, False)
+
+    assert service["modes_mobilisation"] == ["telephoner", "formulaire-dora"]
+    assert service["mobilisable_par"] == ["usagers", "professionnels"]
+
+
+def test_map_service_modes_mobilisation_when_not_provided():
+    di_service_data = make_di_service_data(
+        mobilisable_par=None,
+        modes_mobilisation=None,
+        courriel="contact@example.com",
+    )
+    service = map_service(di_service_data, False)
+
+    assert service["modes_mobilisation"] == ["formulaire-dora"]
+    assert service["mobilisable_par"] == ["professionnels"]
+
+
+def test_map_service_modes_mobilisation_when_not_provided_without_email():
+    di_service_data = make_di_service_data(
+        mobilisable_par=None,
+        modes_mobilisation=None,
+        courriel=None,
+    )
+    service = map_service(di_service_data, False)
+
+    assert service["modes_mobilisation"] is None
+    assert service["mobilisable_par"] is None
+
+
+def test_map_service_mobilisation_precisions():
+    di_service_data = make_di_service_data(
+        mobilisation_precisions="Uniquement le mardi matin",
+    )
+    service = map_service(di_service_data, False)
+
+    assert service["mobilisation_precisions"] == "Uniquement le mardi matin"
 
 
 def test_is_orientable_by_default():

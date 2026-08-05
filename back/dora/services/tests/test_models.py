@@ -1,13 +1,18 @@
 from model_bakery import baker
 
 from dora.core.test_utils import make_model, make_service, make_structure
-from dora.services.enums import ServiceStatus
+from dora.services.enums import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    ServiceStatus,
+)
 from dora.services.models import (
     Service,
     ServiceCategory,
     ServiceModel,
     ServiceSubCategory,
 )
+from dora.services.utils import instantiate_service_from_model
 
 DUMMY_SERVICE = {"name": "Mon service"}
 
@@ -384,6 +389,34 @@ def test_update_service_from_model_m2m(api_client):
     assert sorted(service.subcategories.values_list("value", flat=True)) == sorted(
         model.subcategories.values_list("value", flat=True)
     )
+
+
+def test_instantiate_service_from_model_copies_mobilisation_fields():
+    # ÉTANT DONNÉ un modèle renseignant les modalités de mobilisation
+    user = baker.make("users.User", is_valid=True)
+    struct = make_structure(user)
+    model = make_model(
+        structure=struct,
+        modes_mobilisation=[
+            ModeMobilisation.TELEPHONER,
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION,
+        ],
+        mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
+        mobilisation_precisions="Uniquement le mardi",
+        lien_mobilisation="https://example.com/formulaire",
+    )
+
+    # QUAND j'en instancie un service
+    service = instantiate_service_from_model(model, struct, user)
+
+    # ALORS les quatre champs ont été recopiés
+    assert service.modes_mobilisation == [
+        ModeMobilisation.TELEPHONER,
+        ModeMobilisation.UTILISER_LIEN_MOBILISATION,
+    ]
+    assert service.mobilisable_par == [PersonneMobilisatrice.PROFESSIONNELS]
+    assert service.mobilisation_precisions == "Uniquement le mardi"
+    assert service.lien_mobilisation == "https://example.com/formulaire"
 
 
 def test_update_service_from_model_wrong_permission(api_client):

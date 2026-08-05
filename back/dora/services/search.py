@@ -219,8 +219,6 @@ def _dora_services_by_id(service_ids):
             "categories",
             "subcategories",
             "funding_labels",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
         )
         .filter(id__in=service_ids)
         .distinct()

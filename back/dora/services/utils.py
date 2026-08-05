@@ -23,12 +23,10 @@ SYNC_FIELDS = [
     "is_cumulative",
     "fee_condition",
     "fee_details",
-    "beneficiaries_access_modes_external_form_link",
-    "beneficiaries_access_modes_external_form_link_text",
-    "beneficiaries_access_modes_other",
-    "coach_orientation_modes_external_form_link",
-    "coach_orientation_modes_external_form_link_text",
-    "coach_orientation_modes_other",
+    "modes_mobilisation",
+    "mobilisable_par",
+    "mobilisation_precisions",
+    "lien_mobilisation",
     "duration_weekly_hours",
     "duration_weeks",
     "forms",
@@ -43,8 +41,6 @@ SYNC_M2M_FIELDS = [
     "kinds",
     "categories",
     "subcategories",
-    "beneficiaries_access_modes",
-    "coach_orientation_modes",
 ]
 
 # Custom Many to many fields

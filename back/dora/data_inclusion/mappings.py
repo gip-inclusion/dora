@@ -2,10 +2,10 @@ import textwrap
 
 from data_inclusion.schema.v1 import (
     ModeAccueil,
-    ModeMobilisation,
-    PersonneMobilisatrice,
     Public,
 )
+from data_inclusion.schema.v1 import ModeMobilisation as DiModeMobilisation
+from data_inclusion.schema.v1 import PersonneMobilisatrice as DiPersonneMobilisatrice
 from django.conf import settings
 from django.utils import dateparse, timezone
 
@@ -15,10 +15,14 @@ from dora.core.utils import (
     get_category_from_subcategory,
     strip_markdown,
 )
-from dora.services.enums import ServiceStatus
+from dora.services.enums import (
+    MOBILISABLE_PAR_ORDER,
+    MODES_MOBILISATION_ORDER,
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    ServiceStatus,
+)
 from dora.services.models import (
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     LocationKind,
     ServiceCategory,
     ServiceKind,
@@ -28,9 +32,6 @@ from dora.services.models import (
 )
 from dora.structures.models import DisabledDoraFormDIStructure
 
-from .constants import (
-    MODE_MOBILISATION_DI_TO_DORA,
-)
 from .diffusion_zone_info import get_diffusion_zone_info
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
@@ -180,61 +181,38 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         code_insee_to_code_dept(structure_insee_code) if structure_insee_code else ""
     )
 
-    beneficiaries_access_modes = None
-    beneficiaries_access_modes_external_form_link = None
-    beneficiaries_access_modes_other = None
-    if (
-        service_data["modes_mobilisation"] is not None
-        and service_data["mobilisable_par"] is not None
-        and PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]
-    ):
-        beneficiaries_access_modes = BeneficiaryAccessMode.objects.filter(
-            value__in=[
-                MODE_MOBILISATION_DI_TO_DORA[mode]
-                for mode in service_data["modes_mobilisation"]
-            ]
-        )
-        # Autres champs
-        beneficiaries_access_modes_external_form_link = service_data[
-            "lien_mobilisation"
-        ]
-        beneficiaries_access_modes_other = service_data["mobilisation_precisions"]
+    mobilisable_par = service_data["mobilisable_par"]
+    modes_mobilisation = service_data["modes_mobilisation"]
 
-    coach_orientation_modes = None
-    coach_orientation_modes_external_form_link = None
-    coach_orientation_modes_other = None
+    modes = set(modes_mobilisation or [])
+
+    # Le mode utiliser-lien-mobilisation n'a pas de sens sans lien
+    if not service_data["lien_mobilisation"]:
+        modes.discard(DiModeMobilisation.UTILISER_LIEN_MOBILISATION)
+
+    # À défaut de lien de mobilisation propre, un service joignable par courriel
+    # reste mobilisable par les professionnels via le formulaire DORA.
     if (
-        service_data["modes_mobilisation"] is not None
-        and service_data["mobilisable_par"] is not None
-        and PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]
+        DiModeMobilisation.UTILISER_LIEN_MOBILISATION not in modes
+        and service_data["courriel"]
     ):
-        modes_mobilisation = service_data["modes_mobilisation"].copy()
-        # Suppression du mode utiliser-lien-mobilisation si lien_mobilisation n'est pas spécifié
-        if (
-            ModeMobilisation.UTILISER_LIEN_MOBILISATION in modes_mobilisation
-            and not service_data["lien_mobilisation"]
-        ):
-            modes_mobilisation.remove(ModeMobilisation.UTILISER_LIEN_MOBILISATION)
-        # Conversion des modes de mobilisation en modes d'orientation accompagnateur
-        coach_orientation_mode_values = [
-            MODE_MOBILISATION_DI_TO_DORA[mode] for mode in modes_mobilisation
+        modes.add(ModeMobilisation.FORMULAIRE_DORA)
+        mobilisable_par = [
+            *(mobilisable_par or []),
+            DiPersonneMobilisatrice.PROFESSIONNELS,
         ]
-        # Ajout du mode formulaire-dora si pas de mode utiliser-lien-mobilisation et si courriel existe
-        if (
-            ModeMobilisation.UTILISER_LIEN_MOBILISATION not in modes_mobilisation
-            and service_data["courriel"]
-        ):
-            coach_orientation_mode_values.append("formulaire-dora")
-        coach_orientation_modes = CoachOrientationMode.objects.filter(
-            value__in=coach_orientation_mode_values
-        )
-        # Autres champs
-        coach_orientation_modes_external_form_link = service_data["lien_mobilisation"]
-        coach_orientation_modes_other = service_data["mobilisation_precisions"]
-    elif service_data["courriel"]:
-        coach_orientation_modes = CoachOrientationMode.objects.filter(
-            value="formulaire-dora"
-        )
+
+    if modes_mobilisation is not None or modes:
+        modes_mobilisation = [
+            mode for mode in MODES_MOBILISATION_ORDER if mode in modes
+        ]
+
+    if mobilisable_par is not None:
+        mobilisable_par = [
+            personne
+            for personne in MOBILISABLE_PAR_ORDER
+            if personne in set(mobilisable_par)
+        ]
 
     publics = None
     if service_data["publics"] is not None:
@@ -260,31 +238,25 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             service_data["code_postal"],
             service_data["commune"],
         ),
-        "beneficiaries_access_modes": [m.value for m in beneficiaries_access_modes]
-        if beneficiaries_access_modes is not None
-        else None,
-        "beneficiaries_access_modes_display": [
-            m.label for m in beneficiaries_access_modes
-        ]
-        if beneficiaries_access_modes is not None
-        else None,
-        "beneficiaries_access_modes_external_form_link": beneficiaries_access_modes_external_form_link,
-        "beneficiaries_access_modes_external_form_link_text": "",
-        "beneficiaries_access_modes_other": beneficiaries_access_modes_other,
         "can_write": False,
         "categories": [c.value for c in categories],
         "categories_display": [c.label for c in categories],
         "city": service_data["commune"],
         "city_code": service_data["code_insee"],
-        "coach_orientation_modes": [m.value for m in coach_orientation_modes]
-        if coach_orientation_modes is not None
+        "lien_mobilisation": service_data["lien_mobilisation"],
+        "mobilisable_par": mobilisable_par,
+        "mobilisable_par_display": [
+            PersonneMobilisatrice(personne).label for personne in mobilisable_par
+        ]
+        if mobilisable_par is not None
         else None,
-        "coach_orientation_modes_display": [m.label for m in coach_orientation_modes]
-        if coach_orientation_modes is not None
+        "mobilisation_precisions": service_data["mobilisation_precisions"],
+        "modes_mobilisation": modes_mobilisation,
+        "modes_mobilisation_display": [
+            ModeMobilisation(mode).label for mode in modes_mobilisation
+        ]
+        if modes_mobilisation is not None
         else None,
-        "coach_orientation_modes_external_form_link": coach_orientation_modes_external_form_link,
-        "coach_orientation_modes_external_form_link_text": "",
-        "coach_orientation_modes_other": coach_orientation_modes_other,
         "publics": [p.value for p in publics] if publics is not None else None,
         "publics_display": [p.label for p in publics] if publics is not None else None,
         "contact_email": service_data["courriel"],

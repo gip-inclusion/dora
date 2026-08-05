@@ -22,14 +22,18 @@ from rest_framework.relations import PrimaryKeyRelatedField
 import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
-from dora.services.enums import ServiceStatus
+from dora.services.enums import (
+    MOBILISABLE_PAR_ORDER,
+    MODES_MOBILISATION_ORDER,
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    ServiceStatus,
+)
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
     AccessCondition,
-    BeneficiaryAccessMode,
     Bookmark,
-    CoachOrientationMode,
     Credential,
     FundingLabel,
     LocationKind,
@@ -230,27 +234,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     )
     diffusion_zone_type_display = serializers.SerializerMethodField()
     diffusion_zone_details_display = serializers.SerializerMethodField()
-    beneficiaries_access_modes = serializers.SlugRelatedField(
-        slug_field="value",
-        queryset=BeneficiaryAccessMode.objects.all(),
-        many=True,
-        required=False,
-    )
-    beneficiaries_access_modes_display = serializers.SlugRelatedField(
-        source="beneficiaries_access_modes",
-        slug_field="label",
-        many=True,
-        read_only=True,
-    )
-    coach_orientation_modes = serializers.SlugRelatedField(
-        slug_field="value",
-        queryset=CoachOrientationMode.objects.all(),
-        many=True,
-        required=False,
-    )
-    coach_orientation_modes_display = serializers.SlugRelatedField(
-        source="coach_orientation_modes", slug_field="label", many=True, read_only=True
-    )
+    modes_mobilisation_display = serializers.SerializerMethodField()
+    mobilisable_par_display = serializers.SerializerMethodField()
     department = serializers.SerializerMethodField()
     can_write = serializers.SerializerMethodField()
     has_already_been_unpublished = serializers.SerializerMethodField()
@@ -286,21 +271,17 @@ class ServiceSerializer(serializers.ModelSerializer):
             "address1",
             "address2",
             "address_line",
-            "beneficiaries_access_modes",
-            "beneficiaries_access_modes_display",
-            "beneficiaries_access_modes_external_form_link",
-            "beneficiaries_access_modes_external_form_link_text",
-            "beneficiaries_access_modes_other",
             "can_write",
             "categories",
             "categories_display",
             "city",
             "city_code",
-            "coach_orientation_modes",
-            "coach_orientation_modes_display",
-            "coach_orientation_modes_external_form_link",
-            "coach_orientation_modes_external_form_link_text",
-            "coach_orientation_modes_other",
+            "lien_mobilisation",
+            "mobilisable_par",
+            "mobilisable_par_display",
+            "mobilisation_precisions",
+            "modes_mobilisation",
+            "modes_mobilisation_display",
             "publics",
             "publics_display",
             "contact_info_filled",
@@ -421,16 +402,54 @@ class ServiceSerializer(serializers.ModelSerializer):
         user = self.context.get("request").user
         return obj.can_write(user)
 
+    def get_modes_mobilisation_display(self, obj):
+        return [ModeMobilisation(mode).label for mode in obj.modes_mobilisation]
+
+    def get_mobilisable_par_display(self, obj):
+        return [
+            PersonneMobilisatrice(personne).label for personne in obj.mobilisable_par
+        ]
+
+    def validate_modes_mobilisation(self, value):
+        # Ordre canonique : sans cette normalisation, une permutation des valeurs
+        # modifierait le checksum de synchronisation des modèles.
+        values = set(value)
+        return [mode for mode in MODES_MOBILISATION_ORDER if mode in values]
+
+    def validate_mobilisable_par(self, value):
+        values = set(value)
+        return [personne for personne in MOBILISABLE_PAR_ORDER if personne in values]
+
     def validate(self, data):
         user = self.context.get("request").user
         structure = data.get("structure") or self.instance.structure
 
-        if structure.no_dora_form() and "coach_orientation_modes" in data:
-            data["coach_orientation_modes"] = [
+        if structure.no_dora_form() and "modes_mobilisation" in data:
+            data["modes_mobilisation"] = [
                 mode
-                for mode in data["coach_orientation_modes"]
-                if mode.value != "formulaire-dora"
+                for mode in data["modes_mobilisation"]
+                if mode != ModeMobilisation.FORMULAIRE_DORA
             ]
+
+        modes_mobilisation = data.get(
+            "modes_mobilisation",
+            self.instance.modes_mobilisation if self.instance else [],
+        )
+        lien_mobilisation = data.get(
+            "lien_mobilisation",
+            self.instance.lien_mobilisation if self.instance else "",
+        )
+        if (
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION in modes_mobilisation
+            and not lien_mobilisation
+        ):
+            raise ValidationError(
+                {
+                    "lien_mobilisation": "Ce champ est obligatoire lorsque le mode "
+                    "« utiliser-lien-mobilisation » est sélectionné"
+                },
+                "missing_lien_mobilisation",
+            )
 
         user_structures = StructureMember.objects.filter(user_id=user.id).values_list(
             "structure_id", flat=True
@@ -536,19 +555,15 @@ class ServiceModelSerializer(ServiceSerializer):
         fields = [
             "access_conditions",
             "access_conditions_display",
-            "beneficiaries_access_modes",
-            "beneficiaries_access_modes_display",
-            "beneficiaries_access_modes_external_form_link",
-            "beneficiaries_access_modes_external_form_link_text",
-            "beneficiaries_access_modes_other",
             "can_write",
             "categories",
             "categories_display",
-            "coach_orientation_modes",
-            "coach_orientation_modes_display",
-            "coach_orientation_modes_external_form_link",
-            "coach_orientation_modes_external_form_link_text",
-            "coach_orientation_modes_other",
+            "lien_mobilisation",
+            "mobilisable_par",
+            "mobilisable_par_display",
+            "mobilisation_precisions",
+            "modes_mobilisation",
+            "modes_mobilisation_display",
             "publics",
             "publics_display",
             "creation_date",
@@ -642,7 +657,8 @@ class ServiceListSerializer(ServiceSerializer):
         fields = [
             "categories_display",
             "city",
-            "coach_orientation_modes",
+            "mobilisable_par",
+            "modes_mobilisation",
             "contact_email",
             "contact_name",
             "contact_phone",
@@ -905,9 +921,9 @@ class SearchResultSerializer(ServiceListSerializer):
         fields = [
             "address1",
             "address2",
-            "beneficiaries_access_modes",
             "city",
-            "coach_orientation_modes",
+            "mobilisable_par",
+            "modes_mobilisation",
             "coordinates",
             "diffusion_zone_type",
             "di_publics",

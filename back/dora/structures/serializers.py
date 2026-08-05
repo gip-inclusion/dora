@@ -187,7 +187,8 @@ class StructureSerializer(serializers.ModelSerializer):
                     "categories_display",
                     "city",
                     "city_code",
-                    "coach_orientation_modes",
+                    "mobilisable_par",
+                    "modes_mobilisation",
                     "contact_email",
                     "contact_name",
                     "contact_phone",
@@ -223,7 +224,7 @@ class StructureSerializer(serializers.ModelSerializer):
         qs = qs.filter(is_model=False)
         return StructureServicesSerializer(
             qs.select_related("structure", "model").prefetch_related(
-                "categories", "location_kinds", "coach_orientation_modes"
+                "categories", "location_kinds"
             ),
             many=True,
         ).data

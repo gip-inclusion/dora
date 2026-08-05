@@ -1,13 +1,22 @@
-"""Tests des transformations appliquées par la migration 0006."""
+"""Tests des transformations appliquées par les migrations 0006 et 0007."""
 
 import importlib
 
 import pytest
+from model_bakery import baker
+
+from dora.core.test_utils import make_model
+from dora.services.models import AccessCondition, ServiceFee, ServiceKind
+from dora.services.utils import update_sync_checksum
 
 migration = importlib.import_module(
     "dora.services.migrations.0006_migrate_mobilisation_data"
 )
 compute_mobilisation_fields = migration.compute_mobilisation_fields
+
+checksums_migration = importlib.import_module(
+    "dora.services.migrations.0007_recompute_sync_checksums"
+)
 
 
 def compute(**kwargs):
@@ -191,6 +200,30 @@ class TestMobilisationPrecisions:
     def test_whitespace_only_is_ignored(self):
         result = compute(coach_other="   ", beneficiary_other="Sur rendez-vous")
         assert result["mobilisation_precisions"] == "Sur rendez-vous"
+
+
+@pytest.mark.parametrize("with_fee_condition", [True, False])
+def test_migration_checksum_matches_application(with_fee_condition):
+    """Sentinelle du calcul figé dans la migration 0007.
+
+    Si ce test échoue, c'est que `SYNC_FIELDS` ou le calcul du checksum ont
+    changé depuis : il faut alors une nouvelle migration de recalcul, sans quoi
+    tous les modèles de service basculeront en « modèle modifié ». La migration
+    0007, elle, doit rester figée.
+    """
+    model = make_model(
+        fee_condition=baker.make(ServiceFee) if with_fee_condition else None,
+        modes_mobilisation=["telephoner", "formulaire-dora"],
+        mobilisable_par=["usagers"],
+        mobilisation_precisions="Uniquement le mardi",
+        lien_mobilisation="https://example.com/formulaire",
+    )
+    model.kinds.add(baker.make(ServiceKind))
+    model.access_conditions.add(baker.make(AccessCondition))
+
+    assert checksums_migration.compute_sync_checksum(model) == update_sync_checksum(
+        model
+    )
 
 
 @pytest.mark.no_django_db

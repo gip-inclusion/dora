@@ -35,12 +35,14 @@ from dora.data_inclusion.mappings import map_service
 from dora.decoupage_administratif.models import EPCI, AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.emails import send_service_feedback_email
-from dora.services.enums import ServiceStatus
+from dora.services.enums import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    ServiceStatus,
+)
 from dora.services.models import (
     AccessCondition,
-    BeneficiaryAccessMode,
     Bookmark,
-    CoachOrientationMode,
     Credential,
     LocationKind,
     Public,
@@ -137,8 +139,6 @@ def get_visible_services(user):
             "subcategories",
             "access_conditions",
             "publics",
-            "beneficiaries_access_modes",
-            "coach_orientation_modes",
             "requirements",
             "credentials",
             "location_kinds",
@@ -533,8 +533,6 @@ class ModelViewSet(ServiceViewSet):
                 "subcategories",
                 "access_conditions",
                 "publics",
-                "beneficiaries_access_modes",
-                "coach_orientation_modes",
                 "requirements",
                 "credentials",
                 "location_kinds",
@@ -679,16 +677,6 @@ def options(request):
             model = ServiceKind
             fields = ["value", "label"]
 
-    class BeneficiaryAccessModeSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = BeneficiaryAccessMode
-            fields = ["value", "label"]
-
-    class CoachOrientationModeSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = CoachOrientationMode
-            fields = ["value", "label"]
-
     class LocationKindSerializer(serializers.ModelSerializer):
         class Meta:
             model = LocationKind
@@ -721,11 +709,13 @@ def options(request):
         return choices.filter(filters)
 
     user = request.user
-    cache_key = "options:anon"
+    # Le préfixe est versionné : il doit changer à chaque modification du format
+    # de la réponse, sinon les anciennes entrées restent servies pendant une heure.
+    cache_key = "options:v2:anon"
 
     # If options depend on user permissions, include user ID
     if user.is_authenticated:
-        cache_key = f"options:user:{user.pk}"
+        cache_key = f"options:v2:user:{user.pk}"
 
     # Try to serve from cache
     cached_data = cache.get(cache_key)
@@ -745,12 +735,13 @@ def options(request):
         "fee_conditions": ServiceFeeSerializer(
             ServiceFee.objects.all(), many=True
         ).data,
-        "beneficiaries_access_modes": BeneficiaryAccessModeSerializer(
-            BeneficiaryAccessMode.objects.all(), many=True
-        ).data,
-        "coach_orientation_modes": CoachOrientationModeSerializer(
-            CoachOrientationMode.objects.all(), many=True
-        ).data,
+        "modes_mobilisation": [
+            {"value": mode.value, "label": mode.label} for mode in ModeMobilisation
+        ],
+        "mobilisable_par": [
+            {"value": personne.value, "label": personne.label}
+            for personne in PersonneMobilisatrice
+        ],
         "location_kinds": LocationKindSerializer(
             LocationKind.objects.all(), many=True
         ).data,

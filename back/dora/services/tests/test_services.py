@@ -48,10 +48,9 @@ from dora.services.models import UpdateFrequency
 from dora.services.serializers import ServiceSerializer
 from dora.structures.models import Structure
 
+from ..enums import ModeMobilisation as DoraModeMobilisation
 from ..models import (
     AccessCondition,
-    BeneficiaryAccessMode,
-    CoachOrientationMode,
     Service,
     ServiceCategory,
     ServiceFee,
@@ -123,10 +122,10 @@ class ServiceTestCase(APITestCase):
             "AccessCondition", structure=self.struct_31
         )
 
-        cache.delete("options:anon")
-        cache.delete(f"options:user:{self.me.pk}")
-        cache.delete(f"options:user:{self.superuser.pk}")
-        cache.delete(f"options:user:{self.manager.pk}")
+        cache.delete("options:v2:anon")
+        cache.delete(f"options:v2:user:{self.me.pk}")
+        cache.delete(f"options:v2:user:{self.superuser.pk}")
+        cache.delete(f"options:v2:user:{self.manager.pk}")
 
         self.struct_44 = make_structure(department="44")
         self.service_44 = make_service(
@@ -536,7 +535,7 @@ class ServiceTestCase(APITestCase):
     # CustomizableChoices
     def test_anonymous_user_see_global_choices(self):
         self.client.force_authenticate(user=None)
-        cache.delete("options:anon")
+        cache.delete("options:v2:anon")
         response = self.client.get(
             "/services-options/",
         )
@@ -582,6 +581,30 @@ class ServiceTestCase(APITestCase):
         self.assertIn(self.struct_condition2.id, conds)
         self.assertIn(self.other_struct_condition1.id, conds)
         self.assertIn(self.other_struct_condition2.id, conds)
+
+    def test_options_expose_mobilisation_choices(self):
+        response = self.client.get("/services-options/")
+
+        self.assertEqual(
+            [option["value"] for option in response.data["modes_mobilisation"]],
+            [
+                "envoyer-un-courriel",
+                "se-presenter",
+                "telephoner",
+                "utiliser-lien-mobilisation",
+                "formulaire-dora",
+            ],
+        )
+        self.assertEqual(
+            [option["value"] for option in response.data["mobilisable_par"]],
+            ["usagers", "professionnels"],
+        )
+        # Chaque option porte un libellé
+        for option in response.data["modes_mobilisation"]:
+            self.assertTrue(option["label"])
+
+        self.assertNotIn("beneficiaries_access_modes", response.data)
+        self.assertNotIn("coach_orientation_modes", response.data)
 
     def test_manager_see_all_choices_inside_its_department(self):
         self.client.force_authenticate(user=self.manager)
@@ -1100,15 +1123,12 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.data["has_already_been_unpublished"], True)
 
     def test_service_no_dora_form_enforce_post(self):
-        input_coach_orientation_modes = [
-            "autre",
-            "envoyer-un-mail",
+        input_modes_mobilisation = [
+            "envoyer-un-courriel",
             "telephoner",
             "formulaire-dora",
         ]
-        kept_coach_orientation_modes = [
-            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
-        ]
+        kept_modes_mobilisation = ["envoyer-un-courriel", "telephoner"]
         user = baker.make("users.User", is_valid=True)
         blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
         structure = make_structure(user, siret=blacklisted_siret)
@@ -1118,32 +1138,21 @@ class ServiceTestCase(APITestCase):
             {
                 "name": "dummy",
                 "structure": structure.slug,
-                "coachOrientationModes": input_coach_orientation_modes,
+                "modesMobilisation": input_modes_mobilisation,
             },
         )
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(
-            sorted(response.data["coach_orientation_modes"]),
-            sorted(kept_coach_orientation_modes),
-        )
+        self.assertEqual(response.data["modes_mobilisation"], kept_modes_mobilisation)
         service = Service.objects.get(slug=response.data["slug"])
-        self.assertEqual(
-            sorted(
-                list(service.coach_orientation_modes.values_list("value", flat=True))
-            ),
-            sorted(kept_coach_orientation_modes),
-        )
+        self.assertEqual(service.modes_mobilisation, kept_modes_mobilisation)
 
     def test_service_no_dora_form_enforce_patch(self):
-        input_coach_orientation_modes = [
-            "autre",
-            "envoyer-un-mail",
+        input_modes_mobilisation = [
+            "envoyer-un-courriel",
             "telephoner",
             "formulaire-dora",
         ]
-        kept_coach_orientation_modes = [
-            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
-        ]
+        kept_modes_mobilisation = ["envoyer-un-courriel", "telephoner"]
         user = baker.make("users.User", is_valid=True)
         blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
         structure = make_structure(user, siret=blacklisted_siret)
@@ -1151,19 +1160,58 @@ class ServiceTestCase(APITestCase):
         self.client.force_authenticate(user=user)
         response = self.client.patch(
             f"/services/{service.slug}/",
-            {"coachOrientationModes": input_coach_orientation_modes},
+            {"modesMobilisation": input_modes_mobilisation},
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["modes_mobilisation"], kept_modes_mobilisation)
+        service.refresh_from_db()
+        self.assertEqual(service.modes_mobilisation, kept_modes_mobilisation)
+
+    def test_service_modes_mobilisation_are_normalized(self):
+        # L'ordre canonique protège le checksum de synchronisation des modèles
+        user = baker.make("users.User", is_valid=True)
+        structure = make_structure(user)
+        service = make_service(status=ServiceStatus.PUBLISHED, structure=structure)
+        self.client.force_authenticate(user=user)
+
+        response = self.client.patch(
+            f"/services/{service.slug}/",
+            {
+                "modesMobilisation": ["telephoner", "formulaire-dora", "se-presenter"],
+                "mobilisablePar": ["professionnels", "usagers"],
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            sorted(response.data["coach_orientation_modes"]),
-            sorted(kept_coach_orientation_modes),
+            response.data["modes_mobilisation"],
+            ["se-presenter", "telephoner", "formulaire-dora"],
         )
         self.assertEqual(
-            sorted(
-                list(service.coach_orientation_modes.values_list("value", flat=True))
-            ),
-            sorted(kept_coach_orientation_modes),
+            response.data["mobilisable_par"], ["usagers", "professionnels"]
         )
+
+    def test_service_lien_mobilisation_is_required_by_its_mode(self):
+        user = baker.make("users.User", is_valid=True)
+        structure = make_structure(user)
+        service = make_service(status=ServiceStatus.PUBLISHED, structure=structure)
+        self.client.force_authenticate(user=user)
+
+        response = self.client.patch(
+            f"/services/{service.slug}/",
+            {"modesMobilisation": ["utiliser-lien-mobilisation"]},
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("lien_mobilisation", response.data)
+
+        response = self.client.patch(
+            f"/services/{service.slug}/",
+            {
+                "modesMobilisation": ["utiliser-lien-mobilisation"],
+                "lienMobilisation": "https://example.com/formulaire",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
 
     def test_mark_services_as_up_to_date(self):
         user = baker.make("users.User", is_valid=True)
@@ -1455,80 +1503,18 @@ class DataInclusionSearchTestCase(APITestCase):
                     response.data["subcategories_display"], subcategories_display
                 )
 
-    def test_service_di_beneficiaries_access_modes(self):
-        courriel_mode_instance = BeneficiaryAccessMode.objects.get(
-            value="envoyer-un-mail"
-        )
-
+    def test_service_di_modes_mobilisation(self):
+        # Les services data·inclusion joignables par courriel sont orientables
+        # via le formulaire DORA, en plus de leurs propres modes.
         cases = [
-            ([PersonneMobilisatrice.PROFESSIONNELS], [], None, None),
-            ([PersonneMobilisatrice.USAGERS], [], [], []),
-            (
-                [PersonneMobilisatrice.USAGERS],
-                [ModeMobilisation.ENVOYER_UN_COURRIEL],
-                [courriel_mode_instance.value],
-                [courriel_mode_instance.label],
-            ),
-        ]
-        for (
-            mobilisable_par,
-            modes_mobilisation,
-            beneficiaries_access_modes,
-            beneficiaries_access_modes_display,
-        ) in cases:
-            with self.subTest(
-                mobilisable_par=mobilisable_par, modes_mobilisation=modes_mobilisation
-            ):
-                service_data = self.make_di_service(
-                    mobilisable_par=mobilisable_par,
-                    modes_mobilisation=modes_mobilisation,
-                )
-                request = self.factory.get(f"/services-di/{service_data['id']}/")
-                response = self.service_di(request, di_id=service_data["id"])
-                self.assertEqual(response.status_code, 200)
-                self.assertEqual(
-                    response.data["beneficiaries_access_modes"],
-                    beneficiaries_access_modes,
-                )
-                self.assertEqual(
-                    response.data["beneficiaries_access_modes_display"],
-                    beneficiaries_access_modes_display,
-                )
-
-    def test_service_di_beneficiaries_access_modes_other(self):
-        service_data = self.make_di_service(
-            mobilisable_par=[PersonneMobilisatrice.USAGERS],
-            mobilisation_precisions="Nous consulter",
-        )
-        request = self.factory.get(f"/services-di/{service_data['id']}/")
-        response = self.service_di(request, di_id=service_data["id"])
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data["beneficiaries_access_modes_other"], "Nous consulter"
-        )
-
-    def test_service_di_coach_orientation_modes(self):
-        courriel_mode_instance = CoachOrientationMode.objects.get(
-            value="envoyer-un-mail"
-        )
-        dora_form_mode_instance = CoachOrientationMode.objects.get(
-            value="formulaire-dora"
-        )
-
-        cases = [
-            (None, [dora_form_mode_instance.value], [dora_form_mode_instance.label]),
-            ([], [dora_form_mode_instance.value], [dora_form_mode_instance.label]),
+            (None, ["formulaire-dora"]),
+            ([], ["formulaire-dora"]),
             (
                 [ModeMobilisation.ENVOYER_UN_COURRIEL],
-                [courriel_mode_instance.value, dora_form_mode_instance.value],
-                [courriel_mode_instance.label, dora_form_mode_instance.label],
+                ["envoyer-un-courriel", "formulaire-dora"],
             ),
         ]
-        for (
-            modes_mobilisation,
-            coach_orientation_modes,
-            coach_orientation_modes_display,
-        ) in cases:
+        for modes_mobilisation, expected_modes in cases:
             with self.subTest(modes_mobilisation=modes_mobilisation):
                 service_data = self.make_di_service(
                     mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
@@ -1537,26 +1523,37 @@ class DataInclusionSearchTestCase(APITestCase):
                 request = self.factory.get(f"/services-di/{service_data['id']}/")
                 response = self.service_di(request, di_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.data["modes_mobilisation"], expected_modes)
                 self.assertEqual(
-                    sorted(response.data["coach_orientation_modes"]),
-                    sorted(coach_orientation_modes),
-                )
-                self.assertEqual(
-                    sorted(response.data["coach_orientation_modes_display"]),
-                    sorted(coach_orientation_modes_display),
+                    response.data["modes_mobilisation_display"],
+                    [DoraModeMobilisation(mode).label for mode in expected_modes],
                 )
 
-    def test_service_di_coach_orientation_modes_other(self):
+    def test_service_di_mobilisable_par(self):
         service_data = self.make_di_service(
-            mobilisable_par=[PersonneMobilisatrice.PROFESSIONNELS],
+            mobilisable_par=[PersonneMobilisatrice.USAGERS],
+            modes_mobilisation=[ModeMobilisation.TELEPHONER],
+        )
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_id=service_data["id"])
+        self.assertEqual(response.status_code, 200)
+        # `professionnels` est ajouté avec le formulaire DORA
+        self.assertEqual(
+            response.data["mobilisable_par"], ["usagers", "professionnels"]
+        )
+        self.assertEqual(
+            response.data["mobilisable_par_display"], ["Usagers", "Professionnels"]
+        )
+
+    def test_service_di_mobilisation_precisions(self):
+        service_data = self.make_di_service(
+            mobilisable_par=[PersonneMobilisatrice.USAGERS],
             mobilisation_precisions="Nous consulter",
         )
         request = self.factory.get(f"/services-di/{service_data['id']}/")
         response = self.service_di(request, di_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data["coach_orientation_modes_other"], "Nous consulter"
-        )
+        self.assertEqual(response.data["mobilisation_precisions"], "Nous consulter")
 
     def test_service_di_publics(self):
         cases = [
@@ -2037,14 +2034,17 @@ class ServiceSyncTestCase(APITestCase):
             elif field in (
                 "online_form",
                 "remote_url",
-                "beneficiaries_access_modes_external_form_link",
-                "coach_orientation_modes_external_form_link",
+                "lien_mobilisation",
             ):
                 new_val = "https://example.com"
             elif field in ("duration_weekly_hours", "duration_weeks"):
                 new_val = 4
             elif field == "forms":
                 new_val = ["https://example.com"]
+            elif field == "modes_mobilisation":
+                new_val = ["telephoner"]
+            elif field == "mobilisable_par":
+                new_val = ["usagers"]
             elif field == "contact_email":
                 new_val = "test@example.com"
             elif field == "diffusion_zone_type":
