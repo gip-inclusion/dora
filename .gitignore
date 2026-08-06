@@ -10,3 +10,4 @@
 *.logs
 .cursor
 .claude
+mise.toml
