@@ -35,9 +35,11 @@
   let hasLabelSection = $derived(isNotCumulative || hasFundingLabels);
 
   let eligibilityRequirements = $derived([
-    ...(service.accessConditionsDisplay || []),
-    ...(service.requirementsDisplay || []),
-    ...(service.qpvOrZrr ? ["Uniquement QPV ou ZFRR"] : []),
+    ...new Set([
+      ...(service.accessConditionsDisplay || []),
+      ...(service.requirementsDisplay || []),
+      ...(service.qpvOrZrr ? ["Uniquement QPV ou ZFRR"] : []),
+    ]),
   ]);
 
   let addressForMapLink = $derived(
