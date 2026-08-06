@@ -97,5 +97,8 @@
   },
   "dependencies": {
     "@sentry/sveltekit": "^10.69.0"
+  },
+  "allowScripts": {
+    "@sentry/cli@2.58.5": true
   }
 }
