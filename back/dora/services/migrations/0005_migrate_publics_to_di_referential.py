@@ -1,21 +1,16 @@
-"""Migration adds `publics_di` (ArrayField) and `publics_precisions` (TextField) to Service and
-backfills them from the existing `Service.publics` M2M.
+"""Ajoute `publics_di` (ArrayField) et `publics_precisions` (TextField) à Service et les remplit
+à partir de la relation M2M historique `Service.publics`.
 
-Services with an empty publics M2M fall back to an LLM suggestion loaded from an
-optional JSON artifact under migrations/data/ (empty when absent), else `tous-publics`.
+La logique de remplissage vit dans `dora.services.utils.compute_publics_di` (partagée avec le
+signal de double écriture et la commande de réconciliation). Les services sans public résolu
+basculent sur `tous-publics`.
 """
 
-from pathlib import Path
-
-from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.postgres.fields import ArrayField
 from django.db import migrations, models
 
 from dora.services.models import validate_corresponding_di_publics
-
-DATA_DIR = Path(__file__).resolve().parent / "data"
-TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
-VALID_DI_PUBLICS = {p.value for p in DiPublic}
+from dora.services.utils import compute_publics_di
 
 
 def backfill_publics(apps, schema_editor):
@@ -24,29 +19,7 @@ def backfill_publics(apps, schema_editor):
     updated = []
     qs = Service.objects.prefetch_related("publics").only("pk").iterator(chunk_size=500)
     for service in qs:
-        slugs = set()
-        precisions = []
-
-        for public in service.publics.all():
-            slugs.update(
-                s
-                for s in (public.corresponding_di_publics or [])
-                if s in VALID_DI_PUBLICS
-            )
-            # Structure-specific custom names are preserved as free text.
-            if public.structure_id is not None:
-                precisions.append(public.name)
-
-        # If service has no publics, put tous-publics
-        if not slugs:
-            slugs.add(TOUS_PUBLICS)
-
-        # Exclusivity: tous-publics may not coexist with a specific public.
-        if len(slugs) > 1:
-            slugs.discard(TOUS_PUBLICS)
-
-        service.publics_di = sorted(slugs)
-        service.publics_precisions = ", ".join(dict.fromkeys(precisions))
+        service.publics_di, service.publics_precisions = compute_publics_di(service)
         updated.append(service)
 
         if len(updated) >= 500:
