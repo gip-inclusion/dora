@@ -379,7 +379,9 @@ def _get_keyword_search_results(request, raw_di_results):
 def search_keyword(request, api_params):
     di_client = data_inclusion.di_client_factory()
     try:
-        raw_di_results = di_client.search(**api_params, size=50)
+        raw_di_results = di_client.search(
+            **api_params, size=settings.KEYWORD_SEARCH_PAGE_SIZE
+        )
     except requests.RequestException:
         raise ServiceUnavailable(
             "L’API data.inclusion.gouv.fr nécessaire pour la recherche "

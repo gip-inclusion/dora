@@ -704,3 +704,9 @@ try:
     GEO_API_GOUV_TIMEOUT_SECONDS = int(os.getenv("GEO_API_GOUV_TIMEOUT_SECONDS"), 10)
 except (TypeError, ValueError):
     GEO_API_GOUV_TIMEOUT_SECONDS = None
+
+
+# Recherche par mots-clés
+# ---------------------------------------
+KEYWORD_SEARCH_PAGE_SIZE = int(os.getenv("KEYWORD_SEARCH_PAGE_SIZE", 50))
+KEYWORD_SEARCH_MAX_PAGES = int(os.getenv("KEYWORD_SEARCH_MAX_PAGES", 3))

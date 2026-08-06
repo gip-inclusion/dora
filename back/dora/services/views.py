@@ -1023,11 +1023,18 @@ def search_keyword_view(request):
         if total:
             search_center = [sum_x / total, sum_y / total]
 
+    # Limitation du nombre de pages et de résultats pour ne pas submerger les utilisateurs
+    service_pages = min(metadata["services_pages"], settings.KEYWORD_SEARCH_MAX_PAGES)
+    service_total = min(
+        metadata["services_total"],
+        settings.KEYWORD_SEARCH_MAX_PAGES * settings.KEYWORD_SEARCH_PAGE_SIZE,
+    )
+
     return Response(
         {
             "search_center": search_center,
             "services": sorted_services,
-            "services_pages": metadata["services_pages"],
-            "services_total": metadata["services_total"],
+            "services_pages": service_pages,
+            "services_total": service_total,
         }
     )
