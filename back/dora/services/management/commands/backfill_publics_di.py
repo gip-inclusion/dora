@@ -1,3 +1,5 @@
+from itoutils.django.commands import AtomicHandleMixin, dry_runnable
+
 from dora.core.commands import BaseCommand
 from dora.services.models import Service
 from dora.services.utils import compute_publics_di
@@ -5,17 +7,18 @@ from dora.services.utils import compute_publics_di
 BATCH = 500
 
 
-class Command(BaseCommand):
+class Command(AtomicHandleMixin, BaseCommand):
+    ATOMIC_HANDLE = True
+
     def add_arguments(self, parser):
         parser.add_argument(
-            "--dry-run",
+            "--wet-run",
             action="store_true",
             help="Réconciliation des services dont les publics ont divergé de leurs valeurs pour les colonnes publics_di et publics_precisions.",
         )
 
+    @dry_runnable
     def handle(self, *args, **options):
-        dry_run = options["dry_run"]
-
         total = Service._base_manager.count()
         self.stdout.write(
             self.style.NOTICE(f"{total} services et modèles de service à vérifier")
@@ -43,26 +46,25 @@ class Command(BaseCommand):
                 f"{service.publics_precisions!r} -> {publics_precisions!r}"
             )
 
-            if not dry_run:
-                service.publics_di = publics_di
-                service.publics_precisions = publics_precisions
-                updated.append(service)
-                if len(updated) >= BATCH:
-                    Service._base_manager.bulk_update(
-                        updated, ["publics_di", "publics_precisions"]
-                    )
-                    updated = []
+            service.publics_di = publics_di
+            service.publics_precisions = publics_precisions
+            updated.append(service)
+            if len(updated) >= BATCH:
+                Service._base_manager.bulk_update(
+                    updated, ["publics_di", "publics_precisions"]
+                )
+                updated = []
 
-        if not dry_run and updated:
+        if updated:
             Service._base_manager.bulk_update(
                 updated, ["publics_di", "publics_precisions"]
             )
 
-        if dry_run:
+        if options["wet_run"]:
+            self.stdout.write(self.style.SUCCESS(f"{mismatches} services corrigés"))
+        else:
             self.stdout.write(
                 self.style.WARNING(f"{mismatches} services à corriger (dry-run)")
                 if mismatches
                 else self.style.SUCCESS("Aucun écart : colonnes synchronisées")
             )
-        else:
-            self.stdout.write(self.style.SUCCESS(f"{mismatches} services corrigés"))

@@ -32,7 +32,7 @@ def _service_with_drift():
 def test_dry_run_reports_drift_without_writing():
     service = _service_with_drift()
 
-    out = _run("--dry-run")
+    out = _run()
 
     assert "à corriger" in out
     assert str(service.pk) in out
@@ -45,7 +45,7 @@ def test_dry_run_reports_drift_without_writing():
 def test_run_fixes_drift():
     service = _service_with_drift()
 
-    out = _run()
+    out = _run("--wet-run")
 
     assert "corrigés" in out
     service.refresh_from_db()
@@ -59,7 +59,7 @@ def test_clean_state_reports_no_drift():
         baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
     )
 
-    out = _run("--dry-run")
+    out = _run()
 
     assert "Aucun écart" in out
     service.refresh_from_db()
@@ -69,8 +69,8 @@ def test_clean_state_reports_no_drift():
 def test_run_is_idempotent():
     _service_with_drift()
 
-    _run()
-    out = _run("--dry-run")
+    _run("--wet-run")
+    out = _run()
 
     assert "Aucun écart" in out
 
@@ -87,7 +87,7 @@ def test_fixes_service_model_with_drift():
         publics_di=["stale-value"], publics_precisions="stale"
     )
 
-    out = _run()
+    out = _run("--wet-run")
 
     assert "corrigés" in out
     service_model_with_drift.refresh_from_db()
