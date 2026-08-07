@@ -9,12 +9,12 @@ BATCH = 500
 
 class Command(AtomicHandleMixin, BaseCommand):
     ATOMIC_HANDLE = True
+    help = "Réconciliation des services dont les publics ont divergé de leurs valeurs pour les colonnes publics_di et publics_precisions."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--wet-run",
             action="store_true",
-            help="Réconciliation des services dont les publics ont divergé de leurs valeurs pour les colonnes publics_di et publics_precisions.",
         )
 
     @dry_runnable
