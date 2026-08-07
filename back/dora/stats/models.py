@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1 import TypeService
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -9,7 +10,6 @@ from dora.services.models import (
     Service,
     ServiceCategory,
     ServiceFee,
-    ServiceKind,
     ServiceSubCategory,
 )
 from dora.structures.models import Structure
@@ -215,10 +215,17 @@ class AbstractSearchEvent(AbstractAnalyticsEvent):
 
     results_slugs_top10 = ArrayField(models.CharField(blank=True), default=list)
 
-    kinds = models.ManyToManyField(
-        ServiceKind,
-        verbose_name="Type de service",
+    kinds = ArrayField(
+        models.CharField(
+            max_length=255,
+            choices=zip(
+                [t.value for t in TypeService],
+                [t.label for t in TypeService],
+            ),
+        ),
+        verbose_name="Types de service",
         blank=True,
+        default=list,
     )
 
     fee_conditions = models.ManyToManyField(

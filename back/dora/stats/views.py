@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1 import TypeService
 from django.db.models import Q
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
@@ -14,7 +15,6 @@ from dora.services.models import (
     Service,
     ServiceCategory,
     ServiceFee,
-    ServiceKind,
     ServiceSubCategory,
 )
 from dora.stats.models import (
@@ -155,7 +155,10 @@ def log_event(request):
             num_results = int(request.data.get("search_num_results", "0"))
             num_di_results = int(request.data.get("num_di_results", "0"))
             num_di_results_top10 = int(request.data.get("num_di_results_top10", "0"))
-            kinds = request.data.get("kinds", [])
+            # Les valeurs proviennent du front : on ne conserve que celles du référentiel
+            kinds = [
+                kind for kind in request.data.get("kinds") or [] if kind in TypeService
+            ]
             fee_conditions = request.data.get("fee_conditions")
             location_kinds = request.data.get("location_kinds")
             results_slugs_top10 = request.data.get("results_slugs_top10", [])
@@ -170,13 +173,13 @@ def log_event(request):
                 num_di_results=num_di_results,
                 num_di_results_top10=num_di_results_top10,
                 results_slugs_top10=results_slugs_top10,
+                kinds=kinds,
             )
             cats_values = request.data.get("category_ids", [])
             subcats_values = request.data.get("sub_category_ids", [])
             categories, subcategories = get_categories(cats_values, subcats_values)
             event.categories.set(categories)
             event.subcategories.set(subcategories)
-            event.kinds.set(ServiceKind.objects.filter(value__in=kinds))
             event.fee_conditions.set(
                 ServiceFee.objects.filter(value__in=fee_conditions)
             )
