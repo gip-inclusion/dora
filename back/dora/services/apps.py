@@ -6,5 +6,9 @@ class ServicesConfig(AppConfig):
     verbose_name = "Services"
 
     def ready(self):
-        # Connecte les gestionnaires de signaux de double écriture des publics (import pour effet de bord).
-        from . import signals_publics  # noqa: F401
+        super().ready()
+
+        from . import (
+            signals_kind,  # noqa: F401
+            signals_publics,  # noqa: F401
+        )
