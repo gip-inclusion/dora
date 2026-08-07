@@ -73,7 +73,7 @@ def compute_publics_di(service):
         slugs.discard(TOUS_PUBLICS)
     if not slugs:
         slugs = {TOUS_PUBLICS}
-    return sorted(slugs), ", ".join(dict.fromkeys(precisions))
+    return sorted(slugs), ", ".join(sorted(set(precisions)))
 
 
 def _duplicate_customizable_choices(field, choices, structure):

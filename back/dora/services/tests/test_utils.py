@@ -86,6 +86,16 @@ def test_publics_precisions_are_unique():
     assert precisions == "Jeunes du quartier, Seniors isolés"
 
 
+def test_publics_precisions_are_sorted():
+    service = make_service()
+    service.publics.add(
+        _public("Seniors isolés", [FAMILLES], structure=make_structure()),
+        _public("Jeunes du quartier", [ACTIFS], structure=make_structure()),
+    )
+    _, precisions = compute_publics_di(service)
+    assert precisions == "Jeunes du quartier, Seniors isolés"
+
+
 def test_publics_di_is_sorted():
     service = make_service()
     service.publics.add(
