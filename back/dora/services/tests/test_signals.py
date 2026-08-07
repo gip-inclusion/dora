@@ -55,7 +55,7 @@ def test_signal_public_save_applies_to_all_associated_services():
     public.corresponding_di_publics = [ETUDIANTS]
     public.save()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([ETUDIANTS], "")
+    assert (service.publics_di, service.publics_precisions) == ([ETUDIANTS], "familles")
 
 
 def test_signal_survives_later_full_save():
@@ -67,7 +67,7 @@ def test_signal_survives_later_full_save():
     )
     service.save()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([FAMILLES], "")
+    assert (service.publics_di, service.publics_precisions) == ([FAMILLES], "familles")
 
 
 def test_update_service_model():

@@ -62,16 +62,15 @@ VALID_DI_PUBLICS = {p.value for p in DiPublic}
 
 
 def compute_publics_di(service):
-    slugs, precisions = set(), []
+    slugs, names = set(), []
     for public in service.publics.all():
         slugs.update(
             s for s in (public.corresponding_di_publics or []) if s in VALID_DI_PUBLICS
         )
-        if public.structure_id is not None:
-            precisions.append(public.name)
+        names.append(public.name)
     # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
     slugs.discard(TOUS_PUBLICS)
-    return sorted(slugs), ", ".join(sorted(set(precisions)))
+    return sorted(slugs), ", ".join(sorted(set(names)))
 
 
 def _duplicate_customizable_choices(field, choices, structure):

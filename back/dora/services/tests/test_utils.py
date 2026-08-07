@@ -25,7 +25,7 @@ def test_empty_m2m_returns_empty():
 def test_single_public():
     service = make_service()
     service.publics.add(_public("familles", [FAMILLES]))
-    assert compute_publics_di(service) == ([FAMILLES], "")
+    assert compute_publics_di(service) == ([FAMILLES], "familles")
 
 
 def test_publics_di_contains_only_unique_values():
@@ -44,14 +44,14 @@ def test_exclusivity_drops_tous_publics_if_another_public_present():
         _public("tous", [TOUS_PUBLICS]),
         _public("familles", [FAMILLES]),
     )
-    assert compute_publics_di(service) == ([FAMILLES], "")
+    assert compute_publics_di(service) == ([FAMILLES], "familles, tous")
 
 
 def test_tous_publics_is_never_stored():
     # tous-publics est toujours retiré : un service « tous publics » stocke [].
     service = make_service()
     service.publics.add(_public("tous", [TOUS_PUBLICS]))
-    assert compute_publics_di(service) == ([], "")
+    assert compute_publics_di(service) == ([], "tous")
 
 
 def test_invalid_slug_filtered_out():
@@ -61,10 +61,11 @@ def test_invalid_slug_filtered_out():
     Public.objects.filter(pk=public.pk).update(
         corresponding_di_publics=["not-a-real-public", FAMILLES]
     )
-    assert compute_publics_di(service) == ([FAMILLES], "")
+    assert compute_publics_di(service) == ([FAMILLES], "familles")
 
 
-def test_publics_precisions_are_structure_specific():
+def test_publics_precisions_contains_all_public_names():
+    # precisions = tous les noms de publics (globaux + personnalisés), triés, dédupliqués.
     service = make_service()
     structure = make_structure()
     service.publics.add(
@@ -72,7 +73,7 @@ def test_publics_precisions_are_structure_specific():
         _public("familles", [ETUDIANTS]),
     )
     _, precisions = compute_publics_di(service)
-    assert precisions == "Nom personnalisé"
+    assert precisions == "Nom personnalisé, familles"
 
 
 def test_publics_precisions_are_unique():

@@ -50,7 +50,7 @@ def test_run_fixes_drift():
     assert "corrigés" in out
     service.refresh_from_db()
     assert service.publics_di == [FAMILLES]
-    assert service.publics_precisions == ""
+    assert service.publics_precisions == "familles"
 
 
 def test_clean_state_reports_no_drift():
@@ -92,4 +92,4 @@ def test_fixes_service_model_with_drift():
     assert "corrigés" in out
     service_model_with_drift.refresh_from_db()
     assert service_model_with_drift.publics_di == [FAMILLES]
-    assert service_model_with_drift.publics_precisions == ""
+    assert service_model_with_drift.publics_precisions == "familles"
