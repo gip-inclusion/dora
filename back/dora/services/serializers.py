@@ -165,6 +165,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     kinds_display = serializers.SlugRelatedField(
         source="kinds", slug_field="label", many=True, read_only=True
     )
+    # dérivé de `kinds` : exposé en lecture le temps que le formulaire bascule dessus
+    kind = serializers.CharField(read_only=True)
+    kind_display = serializers.SerializerMethodField()
     categories = serializers.SlugRelatedField(
         slug_field="value",
         queryset=ServiceCategory.objects.all(),
@@ -332,6 +335,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "is_cumulative",
             "is_model",
             "is_orientable",
+            "kind",
+            "kind_display",
             "kinds",
             "kinds_display",
             "location_kinds",
@@ -381,6 +386,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         # (obj.categories est caché via un prefetch_related)
         cats = obj.categories.all()
         return cats[0].label if cats else ""
+
+    def get_kind_display(self, obj):
+        return TypeService(obj.kind).label if obj.kind else ""
 
     def get_is_available(self, obj):
         return True
@@ -567,6 +575,8 @@ class ServiceModelSerializer(ServiceSerializer):
             "full_desc",
             "is_cumulative",
             "is_model",
+            "kind",
+            "kind_display",
             "kinds",
             "kinds_display",
             "modification_date",
@@ -914,6 +924,7 @@ class SearchResultSerializer(ServiceListSerializer):
             "distance",
             "fee_condition",
             "funding_labels",
+            "kind",
             "kinds",
             "location_kinds",
             "modification_date",
