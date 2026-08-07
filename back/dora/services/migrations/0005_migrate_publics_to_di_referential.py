@@ -2,8 +2,8 @@
 à partir de la relation M2M historique `Service.publics`.
 
 La logique de remplissage vit dans `dora.services.utils.compute_publics_di` (partagée avec le
-signal de double écriture et la commande de réconciliation). Les services sans public résolu
-basculent sur `tous-publics`.
+signal de double écriture et la commande de réconciliation). `tous-publics` n'est jamais stocké :
+un tableau vide signifie « tous publics » et sera réinterprété pour l'affichage.
 """
 
 from django.contrib.postgres.fields import ArrayField

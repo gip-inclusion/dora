@@ -69,10 +69,8 @@ def compute_publics_di(service):
         )
         if public.structure_id is not None:
             precisions.append(public.name)
-    if len(slugs) > 1:
-        slugs.discard(TOUS_PUBLICS)
-    if not slugs:
-        slugs = {TOUS_PUBLICS}
+    # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
+    slugs.discard(TOUS_PUBLICS)
     return sorted(slugs), ", ".join(sorted(set(precisions)))
 
 

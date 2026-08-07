@@ -3,7 +3,7 @@ from model_bakery import baker
 
 from dora.core.test_utils import make_service, make_structure
 from dora.services.models import Public, Service
-from dora.services.utils import TOUS_PUBLICS, compute_publics_di
+from dora.services.utils import compute_publics_di
 
 FAMILLES = DiPublic.FAMILLES.value
 ETUDIANTS = DiPublic.ETUDIANTS.value
@@ -36,14 +36,15 @@ def test_signal_set_rewrites_columns():
     assert service.publics_di == [ETUDIANTS]
 
 
-def test_signal_clear_returns_tous_publics():
+def test_signal_clear_returns_empty():
+    # Après clear : plus de public -> [] (« tous publics », réinterprété côté lecteurs).
     service = make_service()
     service.publics.add(
         baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
     )
     service.publics.clear()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([TOUS_PUBLICS], "")
+    assert (service.publics_di, service.publics_precisions) == ([], "")
 
 
 def test_signal_public_save_applies_to_all_associated_services():

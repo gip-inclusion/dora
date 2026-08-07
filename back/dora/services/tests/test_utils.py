@@ -16,9 +16,10 @@ def _public(name, slugs, structure=None):
     )
 
 
-def test_empty_m2m_returns_tous_publics():
+def test_empty_m2m_returns_empty():
+    # [] signifie « tous publics »
     service = make_service()
-    assert compute_publics_di(service) == ([TOUS_PUBLICS], "")
+    assert compute_publics_di(service) == ([], "")
 
 
 def test_single_public():
@@ -46,10 +47,11 @@ def test_exclusivity_drops_tous_publics_if_another_public_present():
     assert compute_publics_di(service) == ([FAMILLES], "")
 
 
-def test_tous_publics_only_applied_if_it_is_the_only_value():
+def test_tous_publics_is_never_stored():
+    # tous-publics est toujours retiré : un service « tous publics » stocke [].
     service = make_service()
     service.publics.add(_public("tous", [TOUS_PUBLICS]))
-    assert compute_publics_di(service) == ([TOUS_PUBLICS], "")
+    assert compute_publics_di(service) == ([], "")
 
 
 def test_invalid_slug_filtered_out():
