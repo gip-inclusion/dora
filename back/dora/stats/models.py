@@ -218,10 +218,7 @@ class AbstractSearchEvent(AbstractAnalyticsEvent):
     kinds = ArrayField(
         models.CharField(
             max_length=255,
-            choices=zip(
-                [t.value for t in TypeService],
-                [t.label for t in TypeService],
-            ),
+            choices=[(t.value, t.label) for t in TypeService],
         ),
         verbose_name="Types de service",
         blank=True,
