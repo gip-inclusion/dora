@@ -16,13 +16,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         dry_run = options["dry_run"]
 
-        total = Service.objects.count()
-        self.stdout.write(self.style.NOTICE(f"{total} services à vérifier"))
+        total = Service._base_manager.count()
+        self.stdout.write(
+            self.style.NOTICE(f"{total} services et modèles de service à vérifier")
+        )
 
         mismatches = 0
         updated = []
         qs = (
-            Service.objects.prefetch_related("publics")
+            Service._base_manager.prefetch_related("publics")
             .only("pk", "publics_di", "publics_precisions")
             .iterator(chunk_size=BATCH)
         )
@@ -46,13 +48,15 @@ class Command(BaseCommand):
                 service.publics_precisions = publics_precisions
                 updated.append(service)
                 if len(updated) >= BATCH:
-                    Service.objects.bulk_update(
+                    Service._base_manager.bulk_update(
                         updated, ["publics_di", "publics_precisions"]
                     )
                     updated = []
 
         if not dry_run and updated:
-            Service.objects.bulk_update(updated, ["publics_di", "publics_precisions"])
+            Service._base_manager.bulk_update(
+                updated, ["publics_di", "publics_precisions"]
+            )
 
         if dry_run:
             self.stdout.write(

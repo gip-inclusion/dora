@@ -11,7 +11,7 @@ from dora.services.utils import compute_publics_di
 
 def _sync(service):
     publics_di, publics_precisions = compute_publics_di(service)
-    Service.objects.filter(pk=service.pk).update(
+    Service._base_manager.filter(pk=service.pk).update(
         publics_di=publics_di, publics_precisions=publics_precisions
     )
     # Garde l'instance en mémoire cohérente : un save() complet ultérieur de ce même objet
@@ -30,7 +30,7 @@ def on_service_publics_changed(sender, instance, action, reverse, pk_set, **kwar
     else:
         # instance est un Public ; recalcule chaque service concerné (tous les liés lors d'un clear)
         services = (
-            Service.objects.filter(pk__in=pk_set)
+            Service._base_manager.filter(pk__in=pk_set)
             if pk_set
             else instance.service_set.all()
         )

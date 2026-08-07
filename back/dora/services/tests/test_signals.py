@@ -1,8 +1,8 @@
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from model_bakery import baker
 
-from dora.core.test_utils import make_service
-from dora.services.models import Public
+from dora.core.test_utils import make_service, make_structure
+from dora.services.models import Public, Service
 from dora.services.utils import TOUS_PUBLICS, compute_publics_di
 
 FAMILLES = DiPublic.FAMILLES.value
@@ -67,3 +67,17 @@ def test_signal_survives_later_full_save():
     service.save()
     service.refresh_from_db()
     assert (service.publics_di, service.publics_precisions) == ([FAMILLES], "")
+
+
+def test_update_service_model():
+    service_model = baker.make(Service, is_model=True, structure=make_structure())
+    service_model.publics.add(
+        baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
+    )
+    service_model.refresh_from_db()
+
+    assert (
+        service_model.publics_di,
+        service_model.publics_precisions,
+    ) == compute_publics_di(service_model)
+    assert service_model.publics_di == [FAMILLES]
