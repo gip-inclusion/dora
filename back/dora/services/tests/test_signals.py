@@ -70,6 +70,28 @@ def test_signal_survives_later_full_save():
     assert (service.publics_di, service.publics_precisions) == ([FAMILLES], "familles")
 
 
+def test_signal_reverse_clear_resyncs_services():
+    # public.service_set.clear() doit resynchroniser les services (pas de valeur périmée).
+    service = make_service()
+    public = baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
+    service.publics.add(public)
+
+    public.service_set.clear()
+    service.refresh_from_db()
+    assert (service.publics_di, service.publics_precisions) == ([], "")
+
+
+def test_signal_public_delete_resyncs_services():
+    # public.delete() (cascade M2M sans m2m_changed) doit resynchroniser les services liés.
+    service = make_service()
+    public = baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
+    service.publics.add(public)
+
+    public.delete()
+    service.refresh_from_db()
+    assert (service.publics_di, service.publics_precisions) == ([], "")
+
+
 def test_update_service_model():
     service_model = baker.make(Service, is_model=True, structure=make_structure())
     service_model.publics.add(
