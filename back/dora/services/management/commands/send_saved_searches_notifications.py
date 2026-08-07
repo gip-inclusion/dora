@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from data_inclusion.schema.v1 import ModeAccueil, TypeService
+from data_inclusion.schema.v1 import ModeAccueil
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -10,6 +10,7 @@ from dora.api.exceptions import ServiceUnavailable
 from dora.core.commands import BaseCommand
 from dora.core.emails import send_mail
 from dora.services.models import LocationKind
+from dora.services.utils import get_kinds_labels
 
 from ...models import SavedSearch, SavedSearchFrequency
 
@@ -103,7 +104,7 @@ class Command(BaseCommand):
             text += f", pour le(s) besoin(s) : {', '.join(labels)}"
 
         if saved_search.kinds:
-            labels = [TypeService(kind).label for kind in saved_search.kinds]
+            labels = get_kinds_labels(saved_search.kinds)
             text += f", pour le(s) type(s) de service : {', '.join(labels)}"
 
         if saved_search.fees.exists():

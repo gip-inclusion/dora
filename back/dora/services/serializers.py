@@ -23,6 +23,7 @@ import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
+from dora.services.utils import get_kinds_labels
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
@@ -770,7 +771,7 @@ class SavedSearchSerializer(serializers.ModelSerializer):
         ]
 
     def get_kinds_display(self, obj):
-        return [TypeService(kind).label for kind in obj.kinds]
+        return get_kinds_labels(obj.kinds)
 
     def get_new_services_count(self, obj):
         return len(

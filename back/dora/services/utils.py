@@ -1,5 +1,6 @@
 import hashlib
 
+from data_inclusion.schema.v1 import TypeService
 from django.contrib.gis.geos import Point
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -199,3 +200,7 @@ def filter_services_by_region(services, region_code):
             & Q(diffusion_zone_details=region.code)
         )
     )
+
+
+def get_kinds_labels(kinds):
+    return [TypeService(kind).label for kind in kinds]
