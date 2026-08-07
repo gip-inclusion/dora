@@ -350,10 +350,21 @@ class Service(ModerationMixin, models.Model):
     ##########
     # Typology
 
+    # `kinds` est en cours de remplacement par `kind` : elle reste la source de vérité
+    # (c'est encore elle que le formulaire écrit), `kind` en est dérivé par double écriture.
     kinds = models.ManyToManyField(
         ServiceKind,
-        verbose_name="Type de service",
+        verbose_name="Types de service (déprécié)",
         blank=True,
+    )
+
+    kind = models.CharField(
+        verbose_name="Type de service",
+        max_length=255,
+        choices=[(t.value, t.label) for t in TypeService],
+        blank=True,
+        default="",
+        db_index=True,
     )
 
     categories = models.ManyToManyField(

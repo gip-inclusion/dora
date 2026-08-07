@@ -4,6 +4,7 @@ from typing import Optional
 from urllib.parse import unquote
 
 import requests
+from data_inclusion.schema.v1 import TypeService
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
@@ -49,7 +50,6 @@ from dora.services.models import (
     Service,
     ServiceCategory,
     ServiceFee,
-    ServiceKind,
     ServiceModel,
     ServiceModificationHistoryItem,
     ServiceStatusHistoryItem,
@@ -674,11 +674,6 @@ def options(request):
             model = ServiceSubCategory
             fields = ["value", "label"]
 
-    class ServiceKindSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = ServiceKind
-            fields = ["value", "label"]
-
     class BeneficiaryAccessModeSerializer(serializers.ModelSerializer):
         class Meta:
             model = BeneficiaryAccessMode
@@ -739,9 +734,11 @@ def options(request):
         "subcategories": ServiceSubCategorySerializer(
             ServiceSubCategory.objects.all(), many=True
         ).data,
-        "kinds": ServiceKindSerializer(
-            ServiceKind.objects.all().order_by("label"), many=True
-        ).data,
+        # servis depuis le référentiel DI plutôt que depuis `ServiceKind`, voué à disparaître
+        "kinds": [
+            {"value": t.value, "label": t.label}
+            for t in sorted(TypeService, key=lambda t: t.label)
+        ],
         "fee_conditions": ServiceFeeSerializer(
             ServiceFee.objects.all(), many=True
         ).data,
