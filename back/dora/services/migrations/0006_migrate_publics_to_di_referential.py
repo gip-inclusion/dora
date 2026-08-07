@@ -32,7 +32,7 @@ def backfill_publics(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0004_protect_structure_fks"),
+        ("services", "0005_savedsearch_kinds_array"),
     ]
 
     operations = [
