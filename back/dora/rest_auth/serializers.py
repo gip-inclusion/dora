@@ -95,7 +95,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
                 .select_related("category")
                 .prefetch_related(
                     "subcategories",
-                    "kinds",
                     "fees",
                     "location_kinds",
                     "funding_labels",

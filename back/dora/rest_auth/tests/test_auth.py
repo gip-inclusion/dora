@@ -35,14 +35,15 @@ class AuthenticationTestCase(APITestCase):
         baker.make("Bookmark", user=user, service=service)
 
         category = baker.make("ServiceCategory")
-        saved_search = baker.make("SavedSearch", user=user, category=category)
+        saved_search = baker.make(
+            "SavedSearch", user=user, category=category, kinds=["formation"]
+        )
         saved_search.subcategories.set([baker.make("ServiceSubCategory")])
-        saved_search.kinds.set([baker.make("ServiceKind")])
         saved_search.fees.set([baker.make("ServiceFee")])
         saved_search.location_kinds.set([baker.make("LocationKind")])
         saved_search.funding_labels.set([baker.make("FundingLabel")])
 
-        with self.assertNumQueries(15):
+        with self.assertNumQueries(14):
             response = self.client.get("/auth/user-info/")
 
         self.assertEqual(response.status_code, 200)

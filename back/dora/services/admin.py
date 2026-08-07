@@ -496,7 +496,6 @@ class SavedSearchAdmin(admin.ModelAdmin):
     raw_id_fields = ["user"]
     filter_horizontal = [
         "subcategories",
-        "kinds",
         "fees",
     ]
     readonly_fields = ["creation_date"]

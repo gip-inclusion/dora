@@ -25,7 +25,12 @@ from dora.services.management.commands.send_saved_searches_notifications import 
     get_saved_search_notifications_to_send,
 )
 
-from ..models import SavedSearch, SavedSearchFrequency, ServiceSubCategory
+from ..models import (
+    SavedSearch,
+    SavedSearchFrequency,
+    ServiceKind,
+    ServiceSubCategory,
+)
 
 SAVE_SEARCH_ARGS = {
     "category": "choisir-un-metier",
@@ -80,9 +85,23 @@ class ServiceSavedSearchTestCase(APITestCase):
             sorted(SAVE_SEARCH_ARGS.get("subcategories")),
         )
         self.assertEqual(
+            sorted(saved_search.kinds), sorted(SAVE_SEARCH_ARGS.get("kinds"))
+        )
+        self.assertEqual(
             sorted(list(saved_search.funding_labels.values_list("value", flat=True))),
             sorted(SAVE_SEARCH_ARGS.get("funding_labels")),
         )
+
+    def test_create_search_with_unknown_kind(self):
+        user = baker.make("users.User", is_valid=True)
+        self.client.force_authenticate(user=user)
+
+        args = SAVE_SEARCH_ARGS.copy()
+        args["kinds"] = ["type-inexistant"]
+        response = self.client.post("/saved-searches/", args)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(SavedSearch.objects.all().count(), 0)
 
     def test_delete_search(self):
         user = baker.make("users.User", is_valid=True)
@@ -533,8 +552,8 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         sub_category_2 = baker.make(
             "ServiceSubCategory", value="cat1--sub2", label="cat1--sub2"
         )
-        kind = baker.make("ServiceKind", value="kind1", label="kind1")
-        kind_2 = baker.make("ServiceKind", value="kind2", label="kind2")
+        kind = ServiceKind.objects.get(value="formation")
+        kind_2 = ServiceKind.objects.get(value="information")
 
         savedSearch = baker.make(
             "SavedSearch",
@@ -544,9 +563,9 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             city_label=SAVE_SEARCH_ARGS.get("city_label"),
             city_code=SAVE_SEARCH_ARGS.get("city_code"),
             last_notification_date=timezone.now() - timedelta(days=40),
+            kinds=[kind.value, kind_2.value],
         )
         savedSearch.subcategories.set([sub_category, sub_category_2])
-        savedSearch.kinds.set([kind, kind_2])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories et types de service
         self.setup_dora_service_in_di(
@@ -574,7 +593,8 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             "pour le(s) besoin(s) : cat1--sub1, cat1--sub2", mail.outbox[0].body
         )
         self.assertIn(
-            "pour le(s) type(s) de service : kind1, kind2", mail.outbox[0].body
+            "pour le(s) type(s) de service : Formation, Information",
+            mail.outbox[0].body,
         )
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
 
@@ -591,8 +611,8 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         sub_category_2 = baker.make(
             "ServiceSubCategory", value="cat1--sub2", label="cat1--sub2"
         )
-        kind = baker.make("ServiceKind", value="kind1", label="kind1")
-        kind_2 = baker.make("ServiceKind", value="kind2", label="kind2")
+        kind = ServiceKind.objects.get(value="formation")
+        kind_2 = ServiceKind.objects.get(value="information")
         fee = baker.make("ServiceFee", value="fee", label="fee")
 
         savedSearch = baker.make(
@@ -603,9 +623,9 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             city_label=SAVE_SEARCH_ARGS.get("city_label"),
             city_code=SAVE_SEARCH_ARGS.get("city_code"),
             last_notification_date=timezone.now() - timedelta(days=40),
+            kinds=[kind.value, kind_2.value],
         )
         savedSearch.subcategories.set([sub_category, sub_category_2])
-        savedSearch.kinds.set([kind, kind_2])
         savedSearch.fees.set([fee])
 
         # ET un service mis à jour à J-20 lié à la même catégorie, sous-catégories, types de service et frais à charge
@@ -635,7 +655,8 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             "pour le(s) besoin(s) : cat1--sub1, cat1--sub2", mail.outbox[0].body
         )
         self.assertIn(
-            "pour le(s) type(s) de service : kind1, kind2", mail.outbox[0].body
+            "pour le(s) type(s) de service : Formation, Information",
+            mail.outbox[0].body,
         )
         self.assertIn("avec comme frais à charge : fee", mail.outbox[0].body)
         self.assertIn(f"<strong>{self.service_name}</strong>", mail.outbox[0].body)
