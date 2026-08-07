@@ -1,6 +1,5 @@
 <script lang="ts">
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
-  import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
 
   interface Props {
     mobileDesign?: boolean;
@@ -16,9 +15,6 @@
   }: Props = $props();
 
   let showRechercheTextuelle = $state(true);
-  registerRechercheTextuelleExperiment(() => {
-    showRechercheTextuelle = false;
-  });
 </script>
 
 <div class="{mobileDesign ? 'hidden' : 'block'} py-s10 md:hidden">
