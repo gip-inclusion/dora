@@ -56,6 +56,24 @@ SYNC_CUSTOM_M2M_FIELDS = [
     "credentials",
 ]
 
+SERVICE_KIND_PRIORITY = [
+    TypeService.AIDE_FINANCIERE,
+    TypeService.AIDE_MATERIELLE,
+    TypeService.FORMATION,
+    TypeService.ATELIER,
+    TypeService.ACCOMPAGNEMENT,
+    TypeService.INFORMATION,
+]
+
+
+def compute_service_kind(service):
+    """Type unique d'un service, dérivé de sa M2M historique `kinds`.
+
+    Renvoie une chaîne vide si le service n'a aucun type, ou aucun type du référentiel DI.
+    """
+    values = {kind.value for kind in service.kinds.all()}
+    return next((k.value for k in SERVICE_KIND_PRIORITY if k.value in values), "")
+
 
 def _duplicate_customizable_choices(field, choices, structure):
     for choice in choices:
