@@ -60,6 +60,15 @@ SYNC_CUSTOM_M2M_FIELDS = [
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
 VALID_DI_PUBLICS = {p.value for p in DiPublic}
 
+SERVICE_KIND_PRIORITY = [
+    TypeService.AIDE_FINANCIERE,
+    TypeService.AIDE_MATERIELLE,
+    TypeService.FORMATION,
+    TypeService.ATELIER,
+    TypeService.ACCOMPAGNEMENT,
+    TypeService.INFORMATION,
+]
+
 
 def compute_publics_di(service):
     slugs, names = set(), []
@@ -71,6 +80,15 @@ def compute_publics_di(service):
     # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
     slugs.discard(TOUS_PUBLICS)
     return sorted(slugs), "; ".join(sorted(set(names)))
+
+
+def compute_service_kind(service):
+    """Type unique d'un service, dérivé de sa M2M historique `kinds`.
+
+    Renvoie `None` si le service n'a aucun type, ou aucun type du référentiel DI.
+    """
+    values = {kind.value for kind in service.kinds.all()}
+    return next((k.value for k in SERVICE_KIND_PRIORITY if k.value in values), None)
 
 
 def _duplicate_customizable_choices(field, choices, structure):
