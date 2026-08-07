@@ -102,6 +102,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     ]
     list_filter = [
         "status",
+        "kind",
         "creation_date",
         "moderation_status",
         "source",
@@ -124,6 +125,8 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "status",
         "data_inclusion_id",
         "data_inclusion_source",
+        # dérivé de `kinds` par double écriture, ne pas saisir à la main
+        "kind",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
@@ -431,7 +434,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
     inlines = [ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True
-    readonly_fields = ("creation_date", "modification_date", "status")
+    readonly_fields = ("creation_date", "modification_date", "status", "kind")
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
 

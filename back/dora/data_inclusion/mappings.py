@@ -93,6 +93,7 @@ def map_search_result(result: dict) -> dict:
         #
         "di_publics": service_data["publics"] or [],
         "location_kinds": location_kinds,
+        "kind": service_data["type"],
         "kinds": [service_data["type"]],
         "fee_condition": service_data["frais"],
         "funding_labels": [],
@@ -322,6 +323,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "is_cumulative": True,
         "is_orientable": is_orientable(service_data),
         "is_model": False,
+        "kind": kind.value if kind is not None else None,
+        "kind_display": kind.label if kind is not None else None,
         "kinds": [kind.value] if kind is not None else None,
         "kinds_display": [kind.label] if kind is not None else None,
         "lien_source": service_data["lien_source"],
