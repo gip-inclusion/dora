@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema.v1 import ModeAccueil
+from data_inclusion.schema.v1 import ModeAccueil, TypeService
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -856,8 +856,14 @@ class SavedSearch(models.Model):
         verbose_name="Besoins",
         blank=True,
     )
-    kinds = models.ManyToManyField(
-        ServiceKind, verbose_name="Type de service", blank=True
+    kinds = ArrayField(
+        models.CharField(
+            max_length=255,
+            choices=[(t.value, t.label) for t in TypeService],
+        ),
+        verbose_name="Types de service",
+        blank=True,
+        default=list,
     )
     fees = models.ManyToManyField(ServiceFee, verbose_name="Frais à charge", blank=True)
     location_kinds = models.ManyToManyField(
@@ -895,9 +901,7 @@ class SavedSearch(models.Model):
         if self.subcategories.exists():
             subcategories = self.subcategories.values_list("value", flat=True)
 
-        kinds = None
-        if self.kinds.exists():
-            kinds = self.kinds.values_list("value", flat=True)
+        kinds = self.kinds or None
 
         fees = None
         if self.fees.exists():

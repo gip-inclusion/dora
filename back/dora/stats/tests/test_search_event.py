@@ -91,3 +91,21 @@ def test_thematic_search_derives_department(
     assert event.city_code == city_code
     assert event.department == expected_department
     assert event.region == ""
+
+
+def test_search_stores_kinds(api_client, base_payload):
+    event = post_search_view(
+        api_client,
+        {**base_payload, "kinds": ["formation", "information"]},
+    )
+
+    assert event.kinds == ["formation", "information"]
+
+
+def test_search_ignores_unknown_kinds(api_client, base_payload):
+    event = post_search_view(
+        api_client,
+        {**base_payload, "kinds": ["formation", "type-inexistant"]},
+    )
+
+    assert event.kinds == ["formation"]

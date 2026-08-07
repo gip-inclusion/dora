@@ -10,6 +10,7 @@ from dora.api.exceptions import ServiceUnavailable
 from dora.core.commands import BaseCommand
 from dora.core.emails import send_mail
 from dora.services.models import LocationKind
+from dora.services.utils import get_kinds_labels
 
 from ...models import SavedSearch, SavedSearchFrequency
 
@@ -102,8 +103,8 @@ class Command(BaseCommand):
             labels = saved_search.subcategories.values_list("label", flat=True)
             text += f", pour le(s) besoin(s) : {', '.join(labels)}"
 
-        if saved_search.kinds.exists():
-            labels = saved_search.kinds.values_list("label", flat=True)
+        if saved_search.kinds:
+            labels = get_kinds_labels(saved_search.kinds)
             text += f", pour le(s) type(s) de service : {', '.join(labels)}"
 
         if saved_search.fees.exists():

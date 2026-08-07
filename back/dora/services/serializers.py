@@ -23,6 +23,7 @@ import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
+from dora.services.utils import get_kinds_labels
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
@@ -710,15 +711,11 @@ class SavedSearchSerializer(serializers.ModelSerializer):
         source="subcategories", slug_field="label", many=True, read_only=True
     )
 
-    kinds = serializers.SlugRelatedField(
-        slug_field="value",
-        queryset=ServiceKind.objects.all(),
-        many=True,
+    kinds = serializers.ListField(
+        child=serializers.ChoiceField(choices=TypeService),
         required=False,
     )
-    kinds_display = serializers.SlugRelatedField(
-        source="kinds", slug_field="label", many=True, read_only=True
-    )
+    kinds_display = serializers.SerializerMethodField()
 
     fees = serializers.SlugRelatedField(
         slug_field="value",
@@ -772,6 +769,9 @@ class SavedSearchSerializer(serializers.ModelSerializer):
             "funding_labels_display",
             "new_services_count",
         ]
+
+    def get_kinds_display(self, obj):
+        return get_kinds_labels(obj.kinds)
 
     def get_new_services_count(self, obj):
         return len(
