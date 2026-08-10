@@ -17,7 +17,13 @@ def backfill_publics(apps, schema_editor):
     Service = apps.get_model("services", "Service")
 
     updated = []
-    qs = Service.objects.prefetch_related("publics").only("pk").iterator(chunk_size=500)
+    qs = (
+        Service.objects.filter(publics__isnull=False)
+        .distinct()
+        .prefetch_related("publics")
+        .only("pk")
+        .iterator(chunk_size=500)
+    )
     for service in qs:
         service.publics_di, service.publics_precisions = compute_publics_di(service)
         updated.append(service)
