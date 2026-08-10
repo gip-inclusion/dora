@@ -70,7 +70,7 @@ def compute_publics_di(service):
         names.append(public.name)
     # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
     slugs.discard(TOUS_PUBLICS)
-    return sorted(slugs), ", ".join(sorted(set(names)))
+    return sorted(slugs), sorted(set(names))
 
 
 def _duplicate_customizable_choices(field, choices, structure):

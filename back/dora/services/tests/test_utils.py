@@ -19,13 +19,13 @@ def _public(name, slugs, structure=None):
 def test_empty_m2m_returns_empty():
     # [] signifie « tous publics »
     service = make_service()
-    assert compute_publics_di(service) == ([], "")
+    assert compute_publics_di(service) == ([], [])
 
 
 def test_single_public():
     service = make_service()
     service.publics.add(_public("familles", [FAMILLES]))
-    assert compute_publics_di(service) == ([FAMILLES], "familles")
+    assert compute_publics_di(service) == ([FAMILLES], ["familles"])
 
 
 def test_publics_di_contains_only_unique_values():
@@ -44,14 +44,14 @@ def test_exclusivity_drops_tous_publics_if_another_public_present():
         _public("tous", [TOUS_PUBLICS]),
         _public("familles", [FAMILLES]),
     )
-    assert compute_publics_di(service) == ([FAMILLES], "familles, tous")
+    assert compute_publics_di(service) == ([FAMILLES], ["familles", "tous"])
 
 
 def test_tous_publics_is_never_stored():
     # tous-publics est toujours retiré : un service « tous publics » stocke [].
     service = make_service()
     service.publics.add(_public("tous", [TOUS_PUBLICS]))
-    assert compute_publics_di(service) == ([], "tous")
+    assert compute_publics_di(service) == ([], ["tous"])
 
 
 def test_invalid_slug_filtered_out():
@@ -61,7 +61,7 @@ def test_invalid_slug_filtered_out():
     Public.objects.filter(pk=public.pk).update(
         corresponding_di_publics=["not-a-real-public", FAMILLES]
     )
-    assert compute_publics_di(service) == ([FAMILLES], "familles")
+    assert compute_publics_di(service) == ([FAMILLES], ["familles"])
 
 
 def test_publics_precisions_contains_all_public_names():
@@ -73,7 +73,7 @@ def test_publics_precisions_contains_all_public_names():
         _public("familles", [ETUDIANTS]),
     )
     _, precisions = compute_publics_di(service)
-    assert precisions == "Nom personnalisé, familles"
+    assert precisions == ["Nom personnalisé", "familles"]
 
 
 def test_publics_precisions_are_unique():
@@ -86,7 +86,7 @@ def test_publics_precisions_are_unique():
         _public("Jeunes du quartier", [ACTIFS], structure=structure_b),
     )
     _, precisions = compute_publics_di(service)
-    assert precisions == "Jeunes du quartier, Seniors isolés"
+    assert precisions == ["Jeunes du quartier", "Seniors isolés"]
 
 
 def test_publics_precisions_are_sorted():
@@ -96,7 +96,7 @@ def test_publics_precisions_are_sorted():
         _public("Jeunes du quartier", [ACTIFS], structure=make_structure()),
     )
     _, precisions = compute_publics_di(service)
-    assert precisions == "Jeunes du quartier, Seniors isolés"
+    assert precisions == ["Jeunes du quartier", "Seniors isolés"]
 
 
 def test_publics_di_is_sorted():
