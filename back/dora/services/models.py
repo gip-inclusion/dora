@@ -367,7 +367,6 @@ class Service(ModerationMixin, models.Model):
         null=True,
         blank=True,
         default=None,
-        db_index=True,
     )
 
     categories = models.ManyToManyField(

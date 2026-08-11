@@ -52,7 +52,6 @@ class Migration(migrations.Migration):
                     ("formation", "Formation"),
                     ("information", "Information"),
                 ],
-                db_index=True,
                 default=None,
                 max_length=255,
                 null=True,
