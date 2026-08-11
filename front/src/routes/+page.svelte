@@ -15,6 +15,7 @@
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
   import { userPreferences } from "$lib/utils/preferences";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
@@ -49,6 +50,9 @@
     return null;
   });
   let searchByTextMatomo = $state(false);
+  registerRechercheTextuelleExperiment(() => {
+    searchByTextMatomo = true;
+  });
   const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
 
