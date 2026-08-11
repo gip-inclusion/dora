@@ -43,12 +43,23 @@ def _sync_all(service_pks):
     if not service_pks:
         return
 
-    services = list(
-        Service._base_manager.filter(pk__in=service_pks).prefetch_related("kinds")
+    updated = []
+    services = (
+        Service._base_manager.filter(pk__in=service_pks)
+        .only("pk")
+        .prefetch_related("kinds")
+        .iterator(chunk_size=BATCH)
     )
     for service in services:
         service.kind = compute_service_kind(service)
-    Service._base_manager.bulk_update(services, ["kind"], batch_size=BATCH)
+        updated.append(service)
+
+        if len(updated) >= BATCH:
+            Service._base_manager.bulk_update(updated, ["kind"])
+            updated = []
+
+    if updated:
+        Service._base_manager.bulk_update(updated, ["kind"])
 
 
 def _linked_service_pks(kind):
