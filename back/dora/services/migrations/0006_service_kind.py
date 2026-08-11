@@ -1,36 +1,12 @@
-"""Ajoute `Service.kind` et le remplit à partir de la M2M historique `Service.kinds`.
+"""Ajoute `Service.kind`, dérivé de la M2M historique `Service.kinds`.
 
-Un service peut porter plusieurs types ; la règle de réduction vit dans
-`dora.services.utils.compute_service_kind` (partagée avec le signal de double écriture et la
-commande de réconciliation). Les services sans type gardent un `kind` à `NULL`.
+La colonne est créée vide : le remplissage de l'existant est confié à la commande
+`backfill_service_kind` (à lancer avec `--wet-run` juste après le déploiement), qui porte
+aussi la règle de réduction `dora.services.utils.compute_service_kind`. Les services sans
+type gardent un `kind` à `NULL`.
 """
 
 from django.db import migrations, models
-
-from dora.services.utils import compute_service_kind
-
-BATCH = 500
-
-
-def backfill_kind(apps, schema_editor):
-    Service = apps.get_model("services", "Service")
-
-    updated = []
-    qs = (
-        Service._base_manager.prefetch_related("kinds")
-        .only("pk")
-        .iterator(chunk_size=BATCH)
-    )
-    for service in qs:
-        service.kind = compute_service_kind(service)
-        updated.append(service)
-
-        if len(updated) >= BATCH:
-            Service._base_manager.bulk_update(updated, ["kind"])
-            updated = []
-
-    if updated:
-        Service._base_manager.bulk_update(updated, ["kind"])
 
 
 class Migration(migrations.Migration):
@@ -67,5 +43,4 @@ class Migration(migrations.Migration):
                 verbose_name="Types de service (déprécié)",
             ),
         ),
-        migrations.RunPython(backfill_kind, migrations.RunPython.noop),
     ]
