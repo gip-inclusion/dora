@@ -389,11 +389,8 @@ class Service(ModerationMixin, models.Model):
         blank=True,
         verbose_name="Publics (référentiel DI)",
     )
-    publics_precisions = ArrayField(
-        models.CharField(max_length=255),
-        default=list,
-        blank=True,
-        verbose_name="Précisions publics",
+    publics_precisions = models.TextField(
+        blank=True, default="", verbose_name="Précisions publics"
     )
     is_cumulative = models.BooleanField(verbose_name="Solution cumulable", default=True)
 
