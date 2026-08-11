@@ -7,4 +7,4 @@ class ServicesConfig(AppConfig):
 
     def ready(self):
         # Connecte les gestionnaires de signaux de double écriture des publics (import pour effet de bord).
-        from . import signals  # noqa: F401
+        from . import signals_publics  # noqa: F401
