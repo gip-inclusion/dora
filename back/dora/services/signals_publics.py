@@ -76,15 +76,19 @@ def on_service_publics_changed(sender, instance, action, reverse, pk_set, **kwar
 @receiver(post_save, sender=Public)
 def on_public_saved(sender, instance, **kwargs):
     # les modifications de corresponding_di_publics / name changent les valeurs dérivées de chaque service lié.
-    _sync_pks(instance.service_set.values_list("pk", flat=True))
+    linked_service_pks = Service._base_manager.filter(publics=instance).values_list(
+        "pk", flat=True
+    )
+    _sync_pks(linked_service_pks)
 
 
 @receiver(pre_delete, sender=Public)
 def on_public_pre_delete(sender, instance, **kwargs):
     # Capturer les services liés avant que la suppression en cascade ne retire les liens M2M.
-    instance._linked_service_pks = list(
-        instance.service_set.values_list("pk", flat=True)
+    linked_service_pks = list(
+        Service._base_manager.filter(publics=instance).values_list("pk", flat=True)
     )
+    instance._linked_service_pks = linked_service_pks
 
 
 @receiver(post_delete, sender=Public)
