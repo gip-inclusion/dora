@@ -1,4 +1,4 @@
-"""Double écriture `Service.kinds` → `Service.kind` (`dora.services.signals`)."""
+"""Double écriture `Service.kinds` → `Service.kind` (`dora.services.signals_kind`)."""
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext

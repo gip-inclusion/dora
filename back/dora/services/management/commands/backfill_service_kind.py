@@ -10,7 +10,7 @@ BATCH = 500
 class Command(AtomicHandleMixin, BaseCommand):
     """Réconcilie `Service.kind` avec la M2M historique `Service.kinds`.
 
-    La double écriture (`dora.services.signals`) suffit en régime nominal ; cette commande
+    La double écriture (`dora.services.signals_kind`) suffit en régime nominal ; cette commande
     rattrape les divergences éventuelles (écriture SQL directe, restauration de base) et permet
     de rejouer le calcul après un changement de l'ordre de priorité.
     """
