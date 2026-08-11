@@ -33,7 +33,8 @@ class Command(AtomicHandleMixin, BaseCommand):
         mismatches = 0
         updated = []
         qs = (
-            Service._base_manager.prefetch_related("kinds")
+            Service._base_manager.exclude(kinds__isnull=True, kind__isnull=True)
+            .prefetch_related("kinds")
             .only("pk", "kind")
             .iterator(chunk_size=BATCH)
         )
