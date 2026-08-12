@@ -11,7 +11,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0005_savedsearch_kinds_array"),
+        ("services", "0006_service_publics_di_service_publics_precisions"),
     ]
 
     operations = [
