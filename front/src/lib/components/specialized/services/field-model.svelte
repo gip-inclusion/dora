@@ -139,7 +139,10 @@
           {:else if type === "boolean"}
             <p class="mb-s0 text-f14">{value === true ? "Oui" : "Non"}</p>
           {:else if type === "text"}
-            <p class="mb-s0 text-f14 text-gray-text">{value}</p>
+            <p class="mb-s0 text-f14 text-gray-text">
+              {options?.find((option) => option.value === value)?.label ??
+                value}
+            </p>
           {/if}
         </div>
       {/if}
