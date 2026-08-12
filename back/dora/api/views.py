@@ -83,7 +83,6 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             .select_related("structure", "fee_condition", "source")
             .prefetch_related(
                 "subcategories",
-                "kinds",
                 "location_kinds",
                 "coach_orientation_modes",
                 "beneficiaries_access_modes",

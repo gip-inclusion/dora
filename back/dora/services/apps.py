@@ -8,7 +8,4 @@ class ServicesConfig(AppConfig):
     def ready(self):
         super().ready()
 
-        from . import (
-            signals_kind,  # noqa: F401
-            signals_publics,  # noqa: F401
-        )
+        from . import signals_publics  # noqa: F401

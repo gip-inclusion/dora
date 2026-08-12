@@ -98,7 +98,6 @@ def map_search_result(result: dict) -> dict:
         ],
         "location_kinds": location_kinds,
         "kind": service_data["type"],
-        "kinds": [service_data["type"]],
         "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
@@ -333,8 +332,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "is_model": False,
         "kind": kind.value if kind is not None else None,
         "kind_display": kind.label if kind is not None else None,
-        "kinds": [kind.value] if kind is not None else None,
-        "kinds_display": [kind.label] if kind is not None else None,
         "lien_source": service_data["lien_source"],
         "location_kinds": [lk.value for lk in location_kinds]
         if location_kinds is not None

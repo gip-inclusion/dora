@@ -23,7 +23,10 @@ import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
-from dora.services.utils import get_kinds_labels
+from dora.services.utils import (
+    get_kinds_labels,
+    reduce_service_kinds,
+)
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
@@ -40,7 +43,6 @@ from .models import (
     Service,
     ServiceCategory,
     ServiceFee,
-    ServiceKind,
     ServiceModel,
     ServiceSubCategory,
     UpdateFrequency,
@@ -156,18 +158,22 @@ class ServiceSerializer(serializers.ModelSerializer):
         queryset=Structure.objects.all(), slug_field="slug"
     )
     structure_info = StructureSerializer(source="structure", read_only=True)
-    kinds = serializers.SlugRelatedField(
-        slug_field="value",
-        queryset=ServiceKind.objects.all(),
-        many=True,
+    kind = serializers.ChoiceField(
+        choices=TypeService,
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+    kind_display = serializers.SerializerMethodField()
+    # Tolérance transitoire : front et back se déployant séparément, une version du front
+    # envoyant encore `kinds` doit continuer à fonctionner — DRF ignorerait silencieusement
+    # la clé et le service perdrait son type. Réduit vers `kind` ; la lecture est assurée
+    # par `to_representation`, elle aussi dérivée de `kind`. À retirer avec `Service.kinds`.
+    kinds = serializers.ListField(
+        child=serializers.ChoiceField(choices=TypeService),
+        write_only=True,
         required=False,
     )
-    kinds_display = serializers.SlugRelatedField(
-        source="kinds", slug_field="label", many=True, read_only=True
-    )
-    # dérivé de `kinds` : exposé en lecture le temps que le formulaire bascule dessus
-    kind = serializers.CharField(read_only=True, allow_null=True)
-    kind_display = serializers.SerializerMethodField()
     categories = serializers.SlugRelatedField(
         slug_field="value",
         queryset=ServiceCategory.objects.all(),
@@ -339,7 +345,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "kind",
             "kind_display",
             "kinds",
-            "kinds_display",
             "location_kinds",
             "location_kinds_display",
             "model",
@@ -391,6 +396,17 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_kind_display(self, obj):
         return TypeService(obj.kind).label if obj.kind else None
 
+    def to_representation(self, instance):
+        # Pendant de la tolérance en écriture sur `kinds` : une version du front pas encore
+        # à jour lit encore `kinds`/`kinds_display`, et leur absence la casse (résultats de
+        # recherche vidés dès qu'un filtre de type est coché, `.filter()` sur `undefined`).
+        # Dérivés de `kind`, jamais lus depuis la M2M. À retirer avec `Service.kinds`.
+        data = super().to_representation(instance)
+        kinds = [instance.kind] if instance.kind else []
+        data["kinds"] = kinds
+        data["kinds_display"] = get_kinds_labels(kinds)
+        return data
+
     def get_is_available(self, obj):
         return True
 
@@ -434,6 +450,22 @@ class ServiceSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = self.context.get("request").user
         structure = data.get("structure") or self.instance.structure
+
+        # `kinds` n'est plus stockée : soit elle complète un `kind` absent (front pas encore
+        # à jour), soit elle est ignorée. Le retrait de la clé est nécessaire, sans quoi DRF
+        # tenterait d'écrire la M2M avec des chaînes.
+        kinds = data.pop("kinds", None)
+        if kinds is not None and "kind" not in data:
+            data["kind"] = reduce_service_kinds(kinds)
+
+        # Un service sans type saisi est un service sans type : le formulaire envoie une
+        # chaîne vide, la base attend un NULL.
+        # `ChoiceField` restitue le membre d'énumération, pas la chaîne : on le réduit ici,
+        # sinon l'instance en mémoire et celle relue en base ne donneraient pas la même
+        # empreinte de synchronisation (`update_sync_checksum` hache des `repr()`), et toutes
+        # les copies d'un modèle passeraient en « modèle modifié » à sa première édition.
+        if "kind" in data:
+            data["kind"] = str(data["kind"]) if data["kind"] else None
 
         if structure.no_dora_form() and "coach_orientation_modes" in data:
             data["coach_orientation_modes"] = [
@@ -580,7 +612,6 @@ class ServiceModelSerializer(ServiceSerializer):
             "kind",
             "kind_display",
             "kinds",
-            "kinds_display",
             "modification_date",
             "name",
             "num_services",
@@ -927,7 +958,6 @@ class SearchResultSerializer(ServiceListSerializer):
             "fee_condition",
             "funding_labels",
             "kind",
-            "kinds",
             "location_kinds",
             "modification_date",
             "name",

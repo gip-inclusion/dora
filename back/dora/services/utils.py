@@ -34,15 +34,21 @@ SYNC_FIELDS = [
     "duration_weekly_hours",
     "duration_weeks",
     "forms",
+    "kind",
     "online_form",
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
 ]
 
+# Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
+# l'instance liée, dont le `repr()` dépend du `__str__` — inexistant sur les modèles
+# historiques d'une migration, et qui changerait l'empreinte de tous les modèles au moindre
+# renommage d'un libellé.
+SYNC_FK_FIELDS = {"fee_condition"}
+
 # Many to many fields
 SYNC_M2M_FIELDS = [
-    "kinds",
     "categories",
     "subcategories",
     "beneficiaries_access_modes",
@@ -81,12 +87,14 @@ def compute_publics_di(service):
     return sorted(slugs)
 
 
-def compute_service_kind(service):
-    """Type unique d'un service, dérivé de sa M2M historique `kinds`.
+def reduce_service_kinds(values):
+    """Réduit une liste de types de service au type unique retenu.
 
-    Renvoie `None` si le service n'a aucun type, ou aucun type du référentiel DI.
+    Sert à alimenter `Service.kind` depuis les sources encore multi-valuées : imports
+    data·inclusion et mednum, et requêtes envoyées par un front pas encore à jour.
+    Renvoie `None` si la liste est vide ou ne contient aucun type du référentiel DI.
     """
-    values = {kind.value for kind in service.kinds.all()}
+    values = set(values)
     return next((k.value for k in SERVICE_KIND_PRIORITY if k.value in values), None)
 
 
@@ -160,18 +168,13 @@ def synchronize_service_from_model(service, model):
 def update_sync_checksum(service):
     md5 = hashlib.md5(usedforsecurity=False)
     for field in SYNC_FIELDS:
-        md5.update(repr(getattr(service, field)).encode())
+        attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
+        md5.update(repr(getattr(service, attr)).encode())
     for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
-        md5.update(
-            repr(
-                list(
-                    getattr(service, m2m_field)
-                    .all()
-                    .values_list("pk", flat=True)
-                    .order_by("pk")
-                )
-            ).encode()
-        )
+        # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
+        # `.values_list()` reclone le queryset et repart en base à chaque champ.
+        pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
+        md5.update(repr(pks).encode())
 
     result = md5.hexdigest()
     return result

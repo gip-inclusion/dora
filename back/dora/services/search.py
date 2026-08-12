@@ -212,7 +212,6 @@ def _dora_services_by_id(service_ids):
             "structure",
         )
         .prefetch_related(
-            "kinds",
             "fee_condition",
             "location_kinds",
             "publics",

@@ -53,7 +53,6 @@ PREFETCH_RELATED_SERVICE_LIST = [
     "requirements",
     "credentials",
     "funding_labels",
-    "kinds",
     "coach_orientation_modes",
     "orientable_ft_services",
     "beneficiaries_access_modes",
