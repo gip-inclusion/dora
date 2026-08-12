@@ -184,3 +184,17 @@ def test_map_service_address_line():
         service["address_line"]
         == "6 Boulevard St Denis Plateforme de l'inclusion - 75010 Paris"
     )
+
+
+def test_map_service_kind():
+    service = map_service(make_di_service_data(type="formation"), False)
+
+    assert service["kind"] == "formation"
+    assert service["kind_display"] == "Formation"
+
+
+def test_map_service_kind_inconnu():
+    service = map_service(make_di_service_data(type="plus-utilise"), False)
+
+    assert service["kind"] is None
+    assert service["kind_display"] is None
