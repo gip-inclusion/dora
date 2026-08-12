@@ -1,6 +1,7 @@
 import hashlib
 
 from data_inclusion.schema.v1 import TypeService
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -55,6 +56,21 @@ SYNC_CUSTOM_M2M_FIELDS = [
     "requirements",
     "credentials",
 ]
+
+TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
+VALID_DI_PUBLICS = {p.value for p in DiPublic}
+
+
+def compute_publics_di(service):
+    slugs, names = set(), []
+    for public in service.publics.all():
+        slugs.update(
+            s for s in (public.corresponding_di_publics or []) if s in VALID_DI_PUBLICS
+        )
+        names.append(public.name)
+    # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
+    slugs.discard(TOUS_PUBLICS)
+    return sorted(slugs), "; ".join(sorted(set(names)))
 
 
 def _duplicate_customizable_choices(field, choices, structure):
