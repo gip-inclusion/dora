@@ -71,15 +71,14 @@ SERVICE_KIND_PRIORITY = [
 
 
 def compute_publics_di(service):
-    slugs, names = set(), []
+    slugs = set()
     for public in service.publics.all():
         slugs.update(
             s for s in (public.corresponding_di_publics or []) if s in VALID_DI_PUBLICS
         )
-        names.append(public.name)
     # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
     slugs.discard(TOUS_PUBLICS)
-    return sorted(slugs), "; ".join(sorted(set(names)))
+    return sorted(slugs)
 
 
 def compute_service_kind(service):

@@ -23,9 +23,7 @@ def _service_with_drift():
         baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
     )
     # Contourne le signal de double écriture pour introduire un écart.
-    Service.objects.filter(pk=service.pk).update(
-        publics_di=["stale-value"], publics_precisions="stale"
-    )
+    Service.objects.filter(pk=service.pk).update(publics_di=["stale-value"])
     return service
 
 
@@ -39,7 +37,6 @@ def test_dry_run_reports_drift_without_writing():
 
     service.refresh_from_db()
     assert service.publics_di == ["stale-value"]
-    assert service.publics_precisions == "stale"
 
 
 def test_run_fixes_drift():
@@ -50,7 +47,6 @@ def test_run_fixes_drift():
     assert "corrigés" in out
     service.refresh_from_db()
     assert service.publics_di == [FAMILLES]
-    assert service.publics_precisions == "familles"
 
 
 def test_clean_state_reports_no_drift():
@@ -84,7 +80,7 @@ def test_fixes_service_model_with_drift():
         baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
     )
     ServiceModel.objects.filter(pk=service_model_with_drift.pk).update(
-        publics_di=["stale-value"], publics_precisions="stale"
+        publics_di=["stale-value"]
     )
 
     out = _run("--wet-run")
@@ -92,4 +88,3 @@ def test_fixes_service_model_with_drift():
     assert "corrigés" in out
     service_model_with_drift.refresh_from_db()
     assert service_model_with_drift.publics_di == [FAMILLES]
-    assert service_model_with_drift.publics_precisions == "familles"

@@ -9,7 +9,7 @@ BATCH = 500
 
 class Command(AtomicHandleMixin, BaseCommand):
     ATOMIC_HANDLE = True
-    help = "Réconciliation des services dont les publics ont divergé de leurs valeurs pour les colonnes publics_di et publics_precisions."
+    help = "Réconciliation des services dont les publics ont divergé de leurs valeurs pour les colonnes publics_di"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -28,37 +28,27 @@ class Command(AtomicHandleMixin, BaseCommand):
         updated = []
         qs = (
             Service._base_manager.prefetch_related("publics")
-            .only("pk", "publics_di", "publics_precisions")
+            .only("pk", "publics_di")
             .iterator(chunk_size=BATCH)
         )
         for service in qs:
-            publics_di, publics_precisions = compute_publics_di(service)
-            if (
-                service.publics_di == publics_di
-                and service.publics_precisions == publics_precisions
-            ):
+            publics_di = compute_publics_di(service)
+            if service.publics_di == publics_di:
                 continue
 
             mismatches += 1
             self.stdout.write(
-                f"{service.pk}: "
-                f"{service.publics_di!r} -> {publics_di!r} | "
-                f"{service.publics_precisions!r} -> {publics_precisions!r}"
+                f"{service.pk}: {service.publics_di!r} -> {publics_di!r} | "
             )
 
             service.publics_di = publics_di
-            service.publics_precisions = publics_precisions
             updated.append(service)
             if len(updated) >= BATCH:
-                Service._base_manager.bulk_update(
-                    updated, ["publics_di", "publics_precisions"]
-                )
+                Service._base_manager.bulk_update(updated, ["publics_di"])
                 updated = []
 
         if updated:
-            Service._base_manager.bulk_update(
-                updated, ["publics_di", "publics_precisions"]
-            )
+            Service._base_manager.bulk_update(updated, ["publics_di"])
 
         if options["wet_run"]:
             self.stdout.write(self.style.SUCCESS(f"{mismatches} services corrigés"))

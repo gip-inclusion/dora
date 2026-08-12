@@ -15,9 +15,7 @@ def test_signal_add_writes_columns():
         baker.make(Public, name="familles", corresponding_di_publics=[FAMILLES])
     )
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == compute_publics_di(
-        service
-    )
+    assert service.publics_di == compute_publics_di(service)
     assert service.publics_di == [FAMILLES]
 
 
@@ -30,9 +28,7 @@ def test_signal_set_rewrites_columns():
         [baker.make(Public, name="etudiants", corresponding_di_publics=[ETUDIANTS])]
     )
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == compute_publics_di(
-        service
-    )
+    assert service.publics_di == compute_publics_di(service)
     assert service.publics_di == [ETUDIANTS]
 
 
@@ -44,7 +40,7 @@ def test_signal_clear_returns_empty():
     )
     service.publics.clear()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([], "")
+    assert service.publics_di == []
 
 
 def test_signal_public_save_applies_to_all_associated_services():
@@ -55,7 +51,7 @@ def test_signal_public_save_applies_to_all_associated_services():
     public.corresponding_di_publics = [ETUDIANTS]
     public.save()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([ETUDIANTS], "familles")
+    assert service.publics_di == [ETUDIANTS]
 
 
 def test_signal_survives_later_full_save():
@@ -67,7 +63,7 @@ def test_signal_survives_later_full_save():
     )
     service.save()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([FAMILLES], "familles")
+    assert service.publics_di == [FAMILLES]
 
 
 def test_signal_reverse_clear_resyncs_services():
@@ -78,7 +74,7 @@ def test_signal_reverse_clear_resyncs_services():
 
     public.service_set.clear()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([], "")
+    assert service.publics_di == []
 
 
 def test_signal_public_delete_resyncs_services():
@@ -89,7 +85,7 @@ def test_signal_public_delete_resyncs_services():
 
     public.delete()
     service.refresh_from_db()
-    assert (service.publics_di, service.publics_precisions) == ([], "")
+    assert service.publics_di == []
 
 
 def test_update_service_model():
@@ -99,8 +95,5 @@ def test_update_service_model():
     )
     service_model.refresh_from_db()
 
-    assert (
-        service_model.publics_di,
-        service_model.publics_precisions,
-    ) == compute_publics_di(service_model)
+    assert service_model.publics_di == compute_publics_di(service_model)
     assert service_model.publics_di == [FAMILLES]
