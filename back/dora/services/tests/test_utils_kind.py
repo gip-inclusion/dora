@@ -6,6 +6,7 @@ from model_bakery import baker
 from dora.core.test_utils import make_service
 from dora.services.models import Public, ServiceKind
 from dora.services.utils import (
+    PRECISIONS_MAX_LENGTH,
     SERVICE_KIND_PRIORITY,
     TOUS_PUBLICS,
     compute_publics_di,
@@ -79,6 +80,15 @@ def test_publics_di_is_sorted():
     )
     publics_di = compute_publics_di(service)
     assert publics_di == sorted(publics_di)
+
+
+def test_publics_precisions_empty_if_exceeds_limit():
+    service = make_service()
+    for i in range(PRECISIONS_MAX_LENGTH + 1):
+        service.publics.add(_public(str(i), [FAMILLES], structure=make_structure()))
+
+    _, precisions = compute_publics_di(service)
+    assert precisions == ""
 
 
 def set_kinds(service, *values):
