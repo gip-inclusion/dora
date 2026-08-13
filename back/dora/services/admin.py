@@ -26,7 +26,6 @@ from .models import (
     SavedSearch,
     Service,
     ServiceCategory,
-    ServiceKind,
     ServiceModel,
     ServiceModificationHistoryItem,
     ServiceSource,
@@ -550,7 +549,6 @@ admin.site.register(BeneficiaryAccessMode, EnumAdmin)
 admin.site.register(CoachOrientationMode, EnumAdmin)
 admin.site.register(LocationKind, EnumAdmin)
 admin.site.register(ServiceCategory, ServiceCategoryAdmin)
-admin.site.register(ServiceKind, EnumAdmin)
 admin.site.register(ServiceSubCategory, ServiceSubCategoryAdmin)
 admin.site.register(ServiceSource, EnumAdmin)
 admin.site.register(FundingLabel, EnumAdmin)

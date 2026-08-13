@@ -25,7 +25,6 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
-    reduce_service_kinds,
 )
 from dora.structures.models import Structure, StructureMember
 
@@ -165,15 +164,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         allow_blank=True,
     )
     kind_display = serializers.SerializerMethodField()
-    # Tolérance transitoire : front et back se déployant séparément, une version du front
-    # envoyant encore `kinds` doit continuer à fonctionner — DRF ignorerait silencieusement
-    # la clé et le service perdrait son type. Réduit vers `kind` ; la lecture est assurée
-    # par `to_representation`, elle aussi dérivée de `kind`. À retirer avec `Service.kinds`.
-    kinds = serializers.ListField(
-        child=serializers.ChoiceField(choices=TypeService),
-        write_only=True,
-        required=False,
-    )
     categories = serializers.SlugRelatedField(
         slug_field="value",
         queryset=ServiceCategory.objects.all(),
@@ -344,7 +334,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "is_orientable",
             "kind",
             "kind_display",
-            "kinds",
             "location_kinds",
             "location_kinds_display",
             "model",
@@ -396,17 +385,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_kind_display(self, obj):
         return TypeService(obj.kind).label if obj.kind else None
 
-    def to_representation(self, instance):
-        # Pendant de la tolérance en écriture sur `kinds` : une version du front pas encore
-        # à jour lit encore `kinds`/`kinds_display`, et leur absence la casse (résultats de
-        # recherche vidés dès qu'un filtre de type est coché, `.filter()` sur `undefined`).
-        # Dérivés de `kind`, jamais lus depuis la M2M. À retirer avec `Service.kinds`.
-        data = super().to_representation(instance)
-        kinds = [instance.kind] if instance.kind else []
-        data["kinds"] = kinds
-        data["kinds_display"] = get_kinds_labels(kinds)
-        return data
-
     def get_is_available(self, obj):
         return True
 
@@ -450,13 +428,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = self.context.get("request").user
         structure = data.get("structure") or self.instance.structure
-
-        # `kinds` n'est plus stockée : soit elle complète un `kind` absent (front pas encore
-        # à jour), soit elle est ignorée. Le retrait de la clé est nécessaire, sans quoi DRF
-        # tenterait d'écrire la M2M avec des chaînes.
-        kinds = data.pop("kinds", None)
-        if kinds is not None and "kind" not in data:
-            data["kind"] = reduce_service_kinds(kinds)
 
         # Un service sans type saisi est un service sans type : le formulaire envoie une
         # chaîne vide, la base attend un NULL.
@@ -611,7 +582,6 @@ class ServiceModelSerializer(ServiceSerializer):
             "is_model",
             "kind",
             "kind_display",
-            "kinds",
             "modification_date",
             "name",
             "num_services",
