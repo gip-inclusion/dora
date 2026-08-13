@@ -312,6 +312,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         coach_orientation_modes_other="Mêmes modalités que pour les bénéficiaires",
         beneficiaries_access_modes_other="Contacter conseiller(e) Pôle Emploi",
         appointment_link="https://example.com",
+        publics_precisions="précision fournie par l'utilisateur",
     )
 
     service.subcategories.add(
@@ -387,7 +388,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
         "publics": ["etudiants", "familles", "femmes"],
-        "publics_precisions": "etudiants; familles; femmes",
+        "publics_precisions": "précision fournie par l'utilisateur",
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
         "source": None,
         "structure_id": str(structure.id),
