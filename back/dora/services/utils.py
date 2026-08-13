@@ -90,6 +90,15 @@ def compute_service_kind(service):
     return next((k.value for k in SERVICE_KIND_PRIORITY if k.value in values), None)
 
 
+def display_di_publics(publics_di):
+    """Représentation d'affichage de `publics_di` : [] (aucun public) ou la totalité du
+    référentiel se présentent comme « tous-publics ». La colonne reste fidèle à la
+    sélection (on ne collapse jamais en base)."""
+    if not publics_di or set(publics_di) >= (VALID_DI_PUBLICS - {TOUS_PUBLICS}):
+        return [TOUS_PUBLICS]
+    return publics_di
+
+
 def _duplicate_customizable_choices(field, choices, structure):
     for choice in choices:
         if choice.structure:

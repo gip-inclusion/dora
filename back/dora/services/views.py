@@ -136,7 +136,6 @@ def get_visible_services(user):
             "categories",
             "subcategories",
             "access_conditions",
-            "publics",
             "beneficiaries_access_modes",
             "coach_orientation_modes",
             "requirements",

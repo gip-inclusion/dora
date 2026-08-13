@@ -1,10 +1,10 @@
 # from django.core.files.storage import default_storage
-from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
 from dora.services.models import (
     Service,
 )
+from dora.services.utils import display_di_publics
 from dora.structures.models import Structure
 
 ############
@@ -178,7 +178,6 @@ class ServiceSerializer(serializers.ModelSerializer):
     prise_rdv = serializers.SerializerMethodField()
     frais = serializers.SerializerMethodField()
     frais_autres = serializers.SerializerMethodField()
-    profils = serializers.SerializerMethodField()
     publics = serializers.SerializerMethodField()
     publics_precisions = serializers.SerializerMethodField()
     pre_requis = serializers.SerializerMethodField()
@@ -242,7 +241,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "presentation_detail",
             "presentation_resume",
             "prise_rdv",
-            "profils",
             "publics",
             "publics_precisions",
             "recurrence",
@@ -296,27 +294,11 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_frais_autres(self, obj):
         return obj.fee_details or None
 
-    def get_profils(self, obj):
-        return [c.name for c in obj.publics.all()]
-
     def get_publics(self, obj):
-        all_items = [
-            item
-            for public in obj.publics.all()
-            for item in public.corresponding_di_publics
-        ]
-        unique_di_publics = list(dict.fromkeys(all_items))
-        all_publics = {p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS}
-        if (
-            not unique_di_publics
-            or DiPublic.TOUS_PUBLICS in unique_di_publics
-            or set(unique_di_publics) >= all_publics
-        ):
-            return [DiPublic.TOUS_PUBLICS.value]
-        return unique_di_publics
+        return display_di_publics(obj.publics_di)
 
     def get_publics_precisions(self, obj):
-        return ", ".join([p.name for p in obj.publics.all()])
+        return obj.publics_precisions
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]

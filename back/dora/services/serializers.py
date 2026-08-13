@@ -23,7 +23,7 @@ import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
-from dora.services.utils import get_kinds_labels
+from dora.services.utils import display_di_publics, get_kinds_labels
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
@@ -414,7 +414,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return [item.name for item in obj.access_conditions.all()]
 
     def get_publics_display(self, obj):
-        return [item.name for item in obj.publics.all()]
+        return [DIPublic(public).label for public in obj.publics_di]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
@@ -950,10 +950,7 @@ class SearchResultSerializer(ServiceListSerializer):
             return (obj.geom.x, obj.geom.y)
 
     def get_di_publics(self, obj):
-        di_publics = set()
-        for public in obj.publics.all():
-            di_publics.update(public.corresponding_di_publics)
-        return list(di_publics)
+        return display_di_publics(obj.publics_di)
 
     def get_location_kinds(self, obj):
         """
