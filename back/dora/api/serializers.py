@@ -4,7 +4,7 @@ from rest_framework import serializers
 from dora.services.models import (
     Service,
 )
-from dora.services.utils import PUBLICS_PRECISIONS_SEPARATOR, display_di_publics
+from dora.services.utils import display_di_publics
 from dora.structures.models import Structure
 
 ############
@@ -298,9 +298,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return display_di_publics(obj.publics_di)
 
     def get_publics_precisions(self, obj):
-        return f"{PUBLICS_PRECISIONS_SEPARATOR} ".join(
-            obj.publics_precisions.split(PUBLICS_PRECISIONS_SEPARATOR)
-        )
+        return obj.publics_precisions
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]
