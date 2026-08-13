@@ -116,11 +116,17 @@
     }
   });
 
+  // Un service sans restriction de public (liste vide) est ouvert à tous :
+  // il correspond à n'importe quel filtre de public sélectionné.
+  const servesAllPublics = (service: { diPublics: string[] }) =>
+    service.diPublics.length === 0;
+
   // Filtre les services en fonctions des filtres sélectionnés
   let filteredServices = $derived(
     data.services.filter((service) => {
       const diPublicsMatch =
         filters.diPublics.length === 0 ||
+        servesAllPublics(service) ||
         filters.diPublics.some((value) => service.diPublics.includes(value));
       const kindsMatch =
         filters.kinds.length === 0 ||

@@ -91,7 +91,11 @@ def map_search_result(result: dict) -> dict:
         #
         # ServiceSerializer
         #
-        "di_publics": service_data["publics"] or [],
+        # DI -> Dora : `tous-publics` (absence de restriction) devient une liste vide,
+        # que les lecteurs Dora réinterprètent comme « tous publics ».
+        "di_publics": [
+            p for p in (service_data["publics"] or []) if p != Public.TOUS_PUBLICS.value
+        ],
         "location_kinds": location_kinds,
         "kind": service_data["type"],
         "kinds": [service_data["type"]],
@@ -239,9 +243,12 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
 
     publics = None
     if service_data["publics"] is not None:
+        # `tous-publics` (absence de restriction) n'est pas conservé côté Dora :
+        # une liste vide sera affichée « Tous publics ».
         publics = [
             Public(p)
             for p in (set(service_data["publics"]) & {p.value for p in Public})
+            if p != Public.TOUS_PUBLICS.value
         ]
 
     diffusion_zone_info = get_diffusion_zone_info(service_data["zone_eligibilite"])
