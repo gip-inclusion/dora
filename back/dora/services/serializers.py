@@ -23,7 +23,7 @@ import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
-from dora.services.utils import display_di_publics, get_kinds_labels
+from dora.services.utils import get_kinds_labels
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
@@ -950,7 +950,10 @@ class SearchResultSerializer(ServiceListSerializer):
             return (obj.geom.x, obj.geom.y)
 
     def get_di_publics(self, obj):
-        return display_di_publics(obj.publics_di)
+        # Côté application/front, publics = restrictions ; une liste vide signifie
+        # « aucune restriction » (tous publics). On n'inflate pas en `tous-publics`
+        # (ça reste réservé à l'interface DI, cf. api/serializers.py).
+        return obj.publics_di
 
     def get_location_kinds(self, obj):
         """

@@ -1,10 +1,10 @@
 # from django.core.files.storage import default_storage
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
 from dora.services.models import (
     Service,
 )
-from dora.services.utils import display_di_publics
 from dora.structures.models import Structure
 
 ############
@@ -295,7 +295,13 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.fee_details or None
 
     def get_publics(self, obj):
-        return display_di_publics(obj.publics_di)
+        # Export data·inclusion uniquement : une liste vide (aucune restriction) ou la
+        # totalité du référentiel se traduisent en « tous-publics ». Seul endroit où Dora
+        # réintroduit `tous-publics` ; partout ailleurs l'absence de restriction reste [].
+        specific_publics = {p.value for p in DiPublic} - {DiPublic.TOUS_PUBLICS.value}
+        if not obj.publics_di or set(obj.publics_di) >= specific_publics:
+            return [DiPublic.TOUS_PUBLICS.value]
+        return obj.publics_di
 
     def get_publics_precisions(self, obj):
         return obj.publics_precisions

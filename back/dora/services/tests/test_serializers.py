@@ -24,26 +24,24 @@ def test_service_bookmark_serialization(service_with_source):
     assert data["service"]["source"] == service_with_source.source.label
 
 
-def test_search_di_publics_empty_maps_to_tous():
-    # Aucun public -> publics_di == [] -> réinterprété « tous-publics » à l'affichage.
+def test_search_di_publics_empty_returns_empty():
+    # Aucun public -> publics_di == [] : « aucune restriction ». La lecture applicative
+    # n'inflate plus en `tous-publics` (réservé à l'interface DI) ; le front affiche
+    # « Tous publics » sur la liste vide.
     service = make_service()
     service.refresh_from_db()
-    assert SearchResultSerializer().get_di_publics(service) == [TOUS_PUBLICS]
+    assert SearchResultSerializer().get_di_publics(service) == []
 
 
-def test_search_di_publics_all_referential_maps_to_tous():
-    # Tout le référentiel sélectionné se présente comme « tous-publics » (collapse à l'affichage,
-    # la colonne reste fidèle).
+def test_search_di_publics_all_referential_returned_as_is():
+    # Le collapse « tout le référentiel -> tous-publics » n'a plus lieu en lecture
+    # applicative : la colonne est renvoyée fidèlement.
+    expected = sorted(p.value for p in DiPublic if p.value != TOUS_PUBLICS)
     service = make_service()
-    for public in DiPublic:
-        if public.value != TOUS_PUBLICS:
-            service.publics.add(
-                baker.make(
-                    Public, name=public.value, corresponding_di_publics=[public.value]
-                )
-            )
+    service.publics_di = expected
+    service.save()
     service.refresh_from_db()
-    assert SearchResultSerializer().get_di_publics(service) == [TOUS_PUBLICS]
+    assert SearchResultSerializer().get_di_publics(service) == expected
 
 
 def test_search_di_publics_returns_specific_publics():
