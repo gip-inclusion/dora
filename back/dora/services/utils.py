@@ -88,12 +88,7 @@ def compute_publics_di(service):
 
 
 def reduce_service_kinds(values):
-    """Réduit une liste de types de service au type unique retenu.
-
-    Sert à alimenter `Service.kind` depuis les sources encore multi-valuées : imports
-    data·inclusion et mednum, et requêtes envoyées par un front pas encore à jour.
-    Renvoie `None` si la liste est vide ou ne contient aucun type du référentiel DI.
-    """
+    """Réduit une liste de types de service au type unique retenu."""
     values = set(values)
     return next((k.value for k in SERVICE_KIND_PRIORITY if k.value in values), None)
 
