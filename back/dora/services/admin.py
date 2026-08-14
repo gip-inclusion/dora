@@ -113,10 +113,10 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "publics",
         "requirements",
         "credentials",
     ]
+    exclude = ("publics",)
     inlines = [ServiceStatusHistoryItemInline, ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True
@@ -425,10 +425,10 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "publics",
         "requirements",
         "credentials",
     ]
+    exclude = ("publics",)
     inlines = [ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True

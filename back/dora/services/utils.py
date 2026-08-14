@@ -36,6 +36,8 @@ SYNC_FIELDS = [
     "forms",
     "kind",
     "online_form",
+    "publics_di",
+    "publics_precisions",
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
@@ -58,7 +60,6 @@ SYNC_M2M_FIELDS = [
 # Custom Many to many fields
 SYNC_CUSTOM_M2M_FIELDS = [
     "access_conditions",
-    "publics",
     "requirements",
     "credentials",
 ]

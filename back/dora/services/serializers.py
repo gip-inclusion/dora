@@ -37,7 +37,6 @@ from .models import (
     Credential,
     FundingLabel,
     LocationKind,
-    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -208,10 +207,11 @@ class ServiceSerializer(serializers.ModelSerializer):
         required=False,
     )
     access_conditions_display = serializers.SerializerMethodField()
-    publics = CreatablePrimaryKeyRelatedField(
-        many=True,
-        queryset=Public.objects.all(),
-        max_length=140,
+    publics = serializers.ListField(
+        child=serializers.ChoiceField(
+            choices=[p.value for p in DIPublic if not DIPublic.TOUS_PUBLICS.value]
+        ),
+        source="publics_di",
         required=False,
     )
     publics_display = serializers.SerializerMethodField()
@@ -487,11 +487,6 @@ class ServiceSerializer(serializers.ModelSerializer):
                 "access_conditions", data, user, user_structures, structure
             )
 
-        if "publics" in data:
-            self._validate_custom_choice(
-                "publics", data, user, user_structures, structure
-            )
-
         if "requirements" in data:
             self._validate_custom_choice(
                 "requirements", data, user, user_structures, structure
@@ -540,13 +535,6 @@ class ServiceModelSerializer(ServiceSerializer):
     access_conditions = ModelCreatablePrimaryKeyRelatedField(
         many=True,
         queryset=AccessCondition.objects.all(),
-        max_length=140,
-        required=False,
-    )
-
-    publics = ModelCreatablePrimaryKeyRelatedField(
-        many=True,
-        queryset=Public.objects.all(),
         max_length=140,
         required=False,
     )

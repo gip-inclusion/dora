@@ -1,9 +1,8 @@
 import pytest
 from data_inclusion.schema.v1.publics import Public as DiPublic
-from model_bakery import baker
 
 from dora.core.test_utils import make_published_service, make_service
-from dora.services.models import Bookmark, Public, ServiceSource
+from dora.services.models import Bookmark, ServiceSource
 from dora.services.serializers import BookmarkSerializer, SearchResultSerializer
 
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
@@ -45,17 +44,10 @@ def test_search_di_publics_all_referential_returned_as_is():
 
 
 def test_search_di_publics_returns_specific_publics():
+    # Bascule d'écriture : les publics sont portés directement par la colonne `publics_di`.
     service = make_service()
-    service.publics.add(
-        baker.make(
-            Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES.value]
-        ),
-        baker.make(
-            Public,
-            name="etudiants",
-            corresponding_di_publics=[DiPublic.ETUDIANTS.value],
-        ),
-    )
+    service.publics_di = sorted([DiPublic.FAMILLES.value, DiPublic.ETUDIANTS.value])
+    service.save()
     service.refresh_from_db()
     assert SearchResultSerializer().get_di_publics(service) == sorted(
         [DiPublic.FAMILLES.value, DiPublic.ETUDIANTS.value]

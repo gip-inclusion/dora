@@ -291,6 +291,37 @@ class ServiceTestCase(APITestCase):
         response = self.client.get(f"/services/{self.colleague_draft_service.slug}/")
         self.assertEqual(response.data["name"], "xxx")
 
+    def test_write_publics_persists_di_columns(self):
+        response = self.client.patch(
+            f"/services/{self.my_service.slug}/",
+            {
+                "publics": [Public.JEUNES.value],
+                "publics_precisions": "jeunes de 16 à 25 ans",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.my_service.refresh_from_db()
+        self.assertEqual(self.my_service.publics_di, [Public.JEUNES.value])
+        self.assertEqual(self.my_service.publics_precisions, "jeunes de 16 à 25 ans")
+        self.assertEqual(self.my_service.publics.count(), 0)
+
+    def test_write_publics_rejects_unknown_slug(self):
+        response = self.client.patch(
+            f"/services/{self.my_service.slug}/",
+            {"publics": ["valeur-inconnue"]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_read_publics_returns_di_slugs(self):
+        self.my_service.publics_di = [Public.JEUNES.value]
+        self.my_service.publics_precisions = "précision"
+        self.my_service.save()
+        response = self.client.get(f"/services/{self.my_service.slug}/")
+        self.assertEqual(response.data["publics"], [Public.JEUNES.value])
+        self.assertEqual(response.data["publics_precisions"], "précision")
+
     def test_cant_edit_others_services(self):
         response = self.client.patch(
             f"/services/{self.other_service.slug}/", {"name": "xxx"}
@@ -2044,7 +2075,14 @@ class ServiceSyncTestCase(APITestCase):
 
         for field in SYNC_FIELDS:
             initial_checksum = model.sync_checksum
-            if isinstance(getattr(model, field), bool):
+            patch_field = field
+            if field == "publics_di":
+                # écrit via le champ d'API `publics` (source=publics_di)
+                patch_field = "publics"
+                new_val = [Public.JEUNES.value]
+            elif field == "publics_precisions":
+                new_val = "précision"
+            elif isinstance(getattr(model, field), bool):
                 new_val = not getattr(model, field)
             elif field in (
                 "online_form",
@@ -2072,7 +2110,9 @@ class ServiceSyncTestCase(APITestCase):
             else:
                 new_val = "xxx"
 
-            response = self.client.patch(f"/models/{model.slug}/", {field: new_val})
+            response = self.client.patch(
+                f"/models/{model.slug}/", {patch_field: new_val}
+            )
             self.assertEqual(response.status_code, 200, response.data)
 
             model.refresh_from_db()
