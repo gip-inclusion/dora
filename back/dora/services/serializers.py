@@ -209,7 +209,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     access_conditions_display = serializers.SerializerMethodField()
     publics = serializers.ListField(
         child=serializers.ChoiceField(
-            choices=[p.value for p in DIPublic if not DIPublic.TOUS_PUBLICS.value]
+            choices=[
+                p.value for p in DIPublic if p.value != DIPublic.TOUS_PUBLICS.value
+            ]
         ),
         source="publics_di",
         required=False,

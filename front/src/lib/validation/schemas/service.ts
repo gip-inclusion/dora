@@ -106,9 +106,14 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   publics: {
-    label: "Profils",
+    label: "Choix du public",
     default: [],
-    rules: [v.isArray([v.isCustomizablePK()])],
+    rules: [v.isArray([v.isString()])],
+  },
+  publicsPrecisions: {
+    label: "publics precisions",
+    default: "",
+    rules: [v.isString()],
   },
   requirements: {
     label: "Prérequis ou compétences",
