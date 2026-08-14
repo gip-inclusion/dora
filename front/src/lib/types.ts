@@ -429,6 +429,7 @@ export interface Service {
   coachOrientationModesOther: string | null;
   publics: CustomizableFK[] | null;
   publicsDisplay: string[] | null;
+  publicsPrecisions: string;
   contactInfoFilled: boolean;
   contactEmail: string | null;
   contactName: string | null;
@@ -606,6 +607,7 @@ export type Model = {
   coachOrientationModesOther: string;
   publics: CustomizableFK[];
   publicsDisplay: string[];
+  publicsPrecisions: string;
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];

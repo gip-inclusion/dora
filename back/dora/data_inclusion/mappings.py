@@ -295,6 +295,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_other": coach_orientation_modes_other,
         "publics": [p.value for p in publics] if publics is not None else None,
         "publics_display": [p.label for p in publics] if publics is not None else None,
+        "publics_precisions": service_data["publics_precisions"],
         "contact_email": service_data["courriel"],
         "contact_name": service_data["contact_nom_prenom"],
         "contact_phone": service_data["telephone"],
