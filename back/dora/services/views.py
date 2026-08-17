@@ -754,11 +754,6 @@ def options(request):
             for p in DiPublic
             if p.value != DiPublic.TOUS_PUBLICS
         ],
-        "di_publics": [
-            {"value": p.value, "label": p.label}
-            for p in DiPublic
-            if p.value != DiPublic.TOUS_PUBLICS
-        ],
         "requirements": RequirementSerializer(
             filter_custom_choices(
                 Requirement.objects.select_related("structure").all()

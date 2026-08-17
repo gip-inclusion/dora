@@ -3,11 +3,12 @@
     FeeCondition,
     FundingLabel,
     LocationKind,
+    Public,
     ServiceKind,
   } from "$lib/types";
 
   export interface Filters {
-    diPublics: Array<string>;
+    diPublics: Array<Public>;
     kinds: Array<ServiceKind>;
     fundingLabels: Array<FundingLabel["value"]>;
     feeConditions: Array<FeeCondition>;
@@ -37,7 +38,7 @@
   <ResultFilter
     id="diPublics"
     label="Publics"
-    choices={servicesOptions.diPublics}
+    choices={servicesOptions.publics}
     bind:group={filters.diPublics}
   />
   <ResultFilter
