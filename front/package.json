@@ -36,15 +36,15 @@
     "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
-    "@tiptap/core": "3.29.2",
-    "@tiptap/extension-link": "3.29.2",
-    "@tiptap/extension-placeholder": "3.29.2",
-    "@tiptap/starter-kit": "3.29.2",
+    "@tiptap/core": "3.30.0",
+    "@tiptap/extension-link": "3.30.0",
+    "@tiptap/extension-placeholder": "3.30.0",
+    "@tiptap/starter-kit": "3.30.0",
     "@types/iframe-resizer": "^4.0.0",
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.66.0",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.18.1",
@@ -52,13 +52,13 @@
     "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.22.0",
-    "globals": "^17.9.0",
+    "globals": "^17.10.0",
     "hexoid": "^2.0.0",
     "husky": "^9.1.7",
     "insane": "^2.6.2",
     "js-cookie": "^3.0.8",
     "lint-staged": "^17.3.0",
-    "maplibre-gl": "^6.2.0",
+    "maplibre-gl": "^6.3.0",
     "opening_hours": "^3.14.0",
     "prettier": "^3.9.6",
     "prettier-plugin-svelte": "^4.1.1",
@@ -96,7 +96,7 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.69.0"
+    "@sentry/sveltekit": "^10.70.0"
   },
   "allowScripts": {
     "@sentry/cli@2.58.5": true
