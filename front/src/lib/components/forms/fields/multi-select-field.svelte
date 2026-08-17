@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="T extends string | number = string">
   import type { Choice } from "$lib/types";
   import {
     currentFormData,
@@ -10,13 +10,13 @@
 
   interface Props {
     id: string;
-    value?: string[] | number[];
+    value?: T[];
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
-    initialValue?: string[] | number[];
+    initialValue?: T[];
     // Spécifique du select
-    choices: Choice[];
+    choices: Choice<T>[];
     sort?: boolean;
     onChange?: (newValues: string[]) => void;
     placeholderMulti?: string;

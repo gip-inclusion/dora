@@ -1,6 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import AddableMultiSelectField from "$lib/components/forms/fields/addable-multiselect-field.svelte";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
@@ -59,15 +60,13 @@
 
   {#if servicesOptions.publics.length}
     <FieldModel {...fieldModelProps.publics ?? {}} type="array">
-      <AddableMultiSelectField
+      <MultiSelectField
         id="publics"
-        bind:values={service.publics}
-        structureSlug={service.structure}
+        bind:value={service.publics}
         choices={servicesOptions.publics}
         sort
         description="Tous publics par défaut. Un ou plusieurs publics possibles. Vous pouvez apporter des précisions sur les publics concernés."
         placeholder="Tous publics"
-        canAdd={false}
       />
     </FieldModel>
     <FieldModel>
