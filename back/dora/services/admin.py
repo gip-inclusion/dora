@@ -21,7 +21,6 @@ from .models import (
     FranceTravailOrientableService,
     FundingLabel,
     LocationKind,
-    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -84,7 +83,30 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
         return False
 
 
+def publics_di_field():
+    return forms.MultipleChoiceField(
+        choices=(
+            (p.value, p.label)
+            for p in DiPublic
+            if p.value != DiPublic.TOUS_PUBLICS.value
+        ),
+        widget=forms.SelectMultiple(attrs={"size": "10"}),
+        label="Publics Data Inclusion correspondants",
+        required=False,
+    )
+
+
+class ServiceAdminForm(forms.ModelForm):
+    publics_di = publics_di_field()
+
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+
 class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
+    form = ServiceAdminForm
+
     def __init__(self, *args, **kwargs):
         self.import_service_helper = ImportServicesHelper()
         return super().__init__(*args, **kwargs)
@@ -403,7 +425,17 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         return ImportServicesHelper.CSV_HEADERS
 
 
+class ServiceModelAdminForm(forms.ModelForm):
+    publics_di = publics_di_field()
+
+    class Meta:
+        model = ServiceModel
+        fields = "__all__"
+
+
 class ServiceModelAdmin(admin.ModelAdmin):
+    form = ServiceModelAdminForm
+
     search_fields = (
         "name",
         "structure__name",
@@ -447,30 +479,6 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
     )
     list_per_page = 1000
     raw_id_fields = ["structure"]
-
-
-class PublicForm(forms.ModelForm):
-    corresponding_di_publics = forms.MultipleChoiceField(
-        choices=((p.value, p.label) for p in DiPublic),
-        widget=forms.SelectMultiple(attrs={"size": "10"}),
-        label="Publics Data Inclusion correspondants",
-    )
-
-    class Meta:
-        model = Public
-        fields = "__all__"
-
-
-class PublicAdmin(CustomizableChoiceAdmin):
-    form = PublicForm
-    list_display = ("name", "get_corresponding_di_publics", "structure")
-
-    def get_corresponding_di_publics(self, obj):
-        return ", ".join(DiPublic(p).label for p in obj.corresponding_di_publics)
-
-    get_corresponding_di_publics.short_description = (
-        "Publics Data Inclusion correspondants"
-    )
 
 
 class ServiceModelInline(admin.TabularInline):
@@ -539,7 +547,6 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(Public, PublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)
