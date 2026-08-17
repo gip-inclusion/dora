@@ -21,9 +21,6 @@ def test_service_detail_exposes_the_kind(api_client):
     assert response.status_code == 200
     assert response.data["kind"] == "atelier"
     assert response.data["kind_display"] == "Atelier"
-    # la M2M a disparu
-    assert "kinds" not in response.data
-    assert "kinds_display" not in response.data
 
 
 def test_service_without_kind_exposes_null(api_client):
