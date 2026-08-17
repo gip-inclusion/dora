@@ -132,7 +132,6 @@ def get_visible_services(user):
         Service.objects.all()
         .select_related("structure", "model")
         .prefetch_related(
-            "kinds",
             "categories",
             "subcategories",
             "access_conditions",
@@ -527,7 +526,6 @@ class ModelViewSet(ServiceViewSet):
                 "structure",
             )
             .prefetch_related(
-                "kinds",
                 "categories",
                 "subcategories",
                 "access_conditions",

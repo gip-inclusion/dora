@@ -56,11 +56,17 @@ from ..models import (
     ServiceCategory,
     ServiceFee,
     ServiceKind,
+    ServiceModel,
     ServiceModificationHistoryItem,
     ServiceStatusHistoryItem,
     ServiceSubCategory,
 )
-from ..utils import SYNC_CUSTOM_M2M_FIELDS, SYNC_FIELDS, SYNC_M2M_FIELDS
+from ..utils import (
+    SYNC_CUSTOM_M2M_FIELDS,
+    SYNC_FIELDS,
+    SYNC_M2M_FIELDS,
+    update_sync_checksum,
+)
 from ..views import search_services_view, service_di
 
 DUMMY_SERVICE = {"name": "Mon service"}
@@ -1397,7 +1403,13 @@ class DataInclusionSearchTestCase(APITestCase):
         request = self.factory.get(f"/services-di/{service_data['id']}/")
         response = self.service_di(request, di_id=service_data["id"])
 
-        for field in set(ServiceSerializer.Meta.fields):
+        # les champs en écriture seule — la tolérance transitoire `kinds` — ne sont pas restitués
+        readable_fields = {
+            name
+            for name, field in ServiceSerializer().fields.items()
+            if not field.write_only
+        }
+        for field in readable_fields:
             with self.subTest(field=field):
                 assert field in response.data
 
@@ -1735,24 +1747,24 @@ class DataInclusionSearchTestCase(APITestCase):
                     response.data["requirements_display"], requirements_display
                 )
 
-    def test_service_di_kinds(self):
+    def test_service_di_kind(self):
         cases = [
             (None, None, None),
             ("", None, None),
             (
                 TypeService.ACCOMPAGNEMENT,
-                [TypeService.ACCOMPAGNEMENT],
-                [TypeService.ACCOMPAGNEMENT.label],
+                TypeService.ACCOMPAGNEMENT,
+                TypeService.ACCOMPAGNEMENT.label,
             ),
         ]
-        for type, kinds, kinds_display in cases:
+        for type, kind, kind_display in cases:
             with self.subTest(type=type):
                 service_data = self.make_di_service(type=type)
                 request = self.factory.get(f"/services-di/{service_data['id']}/")
                 response = self.service_di(request, di_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.data["kinds"], kinds)
-                self.assertEqual(response.data["kinds_display"], kinds_display)
+                self.assertEqual(response.data["kind"], kind)
+                self.assertEqual(response.data["kind_display"], kind_display)
 
     def test_service_di_desc(self):
         cases = [
@@ -2053,6 +2065,8 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = "2022-10-10"
             elif field == "fee_condition":
                 new_val = "payant"
+            elif field == "kind":
+                new_val = TypeService.FORMATION.value
             elif field == "geom":
                 continue
             else:
@@ -2076,6 +2090,45 @@ class ServiceSyncTestCase(APITestCase):
 
         model.refresh_from_db()
         self.assertEqual(model.sync_checksum, initial_checksum)
+
+    def test_rewriting_the_same_kind_doesnt_update_checksum(self):
+        # `update_sync_checksum` hache des `repr()` : le type doit être stocké sous forme
+        # de chaîne nue, sinon le membre d'énumération renvoyé par le `ChoiceField` donne
+        # une empreinte différente de celle calculée en relisant la base, et toutes les
+        # copies du modèle passent en « modèle modifié ».
+        user = baker.make("users.User", is_valid=True)
+        struct = make_structure(user)
+        model = make_model(structure=struct, kind=TypeService.FORMATION.value)
+        self.client.force_authenticate(user=user)
+
+        initial_checksum = model.sync_checksum
+        response = self.client.patch(
+            f"/models/{model.slug}/",
+            {"address1": "xxx", "kind": TypeService.FORMATION.value},
+        )
+        self.assertEqual(response.status_code, 200)
+
+        model.refresh_from_db()
+        self.assertEqual(model.sync_checksum, initial_checksum)
+        self.assertEqual(model.sync_checksum, update_sync_checksum(model))
+
+    def test_renaming_a_fee_condition_doesnt_update_checksum(self):
+        # L'empreinte hache l'identifiant des clés étrangères, pas l'instance liée : son
+        # `repr()` dépendrait du `__str__`, absent des modèles historiques manipulés par une
+        # migration — et un simple renommage de libellé ferait basculer tous les modèles en
+        # « modèle modifié ».
+        struct = make_structure(baker.make("users.User", is_valid=True))
+        fee_condition = ServiceFee.objects.get(value="payant")
+        model = make_model(structure=struct, fee_condition=fee_condition)
+
+        initial_checksum = model.sync_checksum
+        fee_condition.label = "Payant (nouveau libellé)"
+        fee_condition.save()
+
+        self.assertEqual(
+            update_sync_checksum(ServiceModel.objects.get(pk=model.pk)),
+            initial_checksum,
+        )
 
     def test_m2m_field_change_updates_checksum(self):
         user = baker.make("users.User", is_valid=True)

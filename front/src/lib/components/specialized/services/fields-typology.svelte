@@ -1,7 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
+  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldCategory from "./field-category.svelte";
@@ -127,12 +127,19 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps.kinds ?? {}} type="array">
-    <CheckboxesField
-      id="kinds"
-      bind:value={service.kinds}
+  <!-- `options` est passé explicitement : `servicesOptions` expose les types sous la clé
+       `kinds`, que `getModelInputProps` ne sait pas rapprocher du champ `kind` — sans quoi
+       l'encart « Modèle » afficherait la valeur brute au lieu du libellé. -->
+  <FieldModel
+    {...fieldModelProps.kind ?? {}}
+    type="text"
+    options={servicesOptions.kinds}
+  >
+    <RadioButtonsField
+      id="kind"
+      bind:value={service.kind}
       choices={servicesOptions.kinds}
-      description="Sélectionnez au moins une typologie de service. Plusieurs choix possibles."
+      description="Sélectionnez la typologie qui correspond le mieux au service."
     />
   </FieldModel>
 

@@ -350,8 +350,8 @@ class Service(ModerationMixin, models.Model):
     ##########
     # Typology
 
-    # `kinds` est en cours de remplacement par `kind` : elle reste la source de vérité
-    # (c'est encore elle que le formulaire écrit), `kind` en est dérivé par double écriture.
+    # Remplacée par `kind`, qui est désormais le seul champ lu et écrit. La M2M est gelée
+    # en l'état : conservée le temps de vérifier la bascule, elle sera supprimée ensuite.
     kinds = models.ManyToManyField(
         ServiceKind,
         verbose_name="Types de service (déprécié)",

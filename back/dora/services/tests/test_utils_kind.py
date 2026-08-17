@@ -4,12 +4,12 @@ from data_inclusion.schema.v1.publics import Public as DiPublic
 from model_bakery import baker
 
 from dora.core.test_utils import make_service
-from dora.services.models import Public, ServiceKind
+from dora.services.models import Public
 from dora.services.utils import (
     SERVICE_KIND_PRIORITY,
     TOUS_PUBLICS,
     compute_publics_di,
-    compute_service_kind,
+    reduce_service_kinds,
 )
 
 FAMILLES = DiPublic.FAMILLES.value
@@ -81,20 +81,18 @@ def test_publics_di_is_sorted():
     assert publics_di == sorted(publics_di)
 
 
-def set_kinds(service, *values):
-    service.kinds.set(ServiceKind.objects.filter(value__in=values))
-    return service
+@pytest.mark.no_django_db
+def test_no_kind_reduces_to_none():
+    assert reduce_service_kinds([]) is None
 
 
-def test_service_without_kinds_has_no_kind():
-    assert compute_service_kind(make_service()) is None
-
-
+@pytest.mark.no_django_db
 @pytest.mark.parametrize("kind", [t.value for t in TypeService])
 def test_single_kind_is_kept(kind):
-    assert compute_service_kind(set_kinds(make_service(), kind)) == kind
+    assert reduce_service_kinds([kind]) == kind
 
 
+@pytest.mark.no_django_db
 @pytest.mark.parametrize(
     "kinds,expected",
     [
@@ -107,16 +105,14 @@ def test_single_kind_is_kept(kind):
     ],
 )
 def test_highest_priority_kind_wins(kinds, expected):
-    assert compute_service_kind(set_kinds(make_service(), *kinds)) == expected
+    assert reduce_service_kinds(kinds) == expected
 
 
+@pytest.mark.no_django_db
 def test_priority_covers_the_whole_referential():
     assert {k.value for k in SERVICE_KIND_PRIORITY} == {t.value for t in TypeService}
 
 
+@pytest.mark.no_django_db
 def test_kind_outside_the_referential_is_ignored():
-    kind = ServiceKind.objects.create(value="obsolete", label="Obsolète")
-    service = make_service()
-    service.kinds.set([kind])
-
-    assert compute_service_kind(service) is None
+    assert reduce_service_kinds(["obsolete"]) is None

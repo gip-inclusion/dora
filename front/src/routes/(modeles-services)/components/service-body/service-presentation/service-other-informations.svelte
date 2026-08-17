@@ -27,10 +27,10 @@
   );
 
   let hasCategories = $derived(Object.keys(categories).length > 0);
-  let hasKinds = $derived(service.kinds && service.kinds.length > 0);
+  let hasKind = $derived(!!service.kind);
   let hasSource = $derived(!service.isModel && !!service.source);
 
-  let hasOtherInformations = $derived(hasCategories || hasKinds || hasSource);
+  let hasOtherInformations = $derived(hasCategories || hasKind || hasSource);
 </script>
 
 {#if hasOtherInformations}
@@ -59,9 +59,9 @@
         </ServiceList>
       </ServiceSubsection>
     {/if}
-    {#if hasKinds}
+    {#if hasKind}
       <ServiceSubsection title="Type de service">
-        {service.kindsDisplay.join(", ")}
+        {service.kindDisplay}
       </ServiceSubsection>
     {/if}
     {#if hasSource}

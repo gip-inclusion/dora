@@ -1,6 +1,5 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
@@ -10,7 +9,6 @@
   import type {
     Choice,
     Service,
-    ServiceKind,
     ServicesOptions,
     ShortStructure,
     Structure,
@@ -100,17 +98,7 @@
     .filter(doesPublicExistInServiceOptions)
     .map(addServicesOptionsPublicsValues);
 
-  function existInServicesOptionsKinds(kindsOption) {
-    return servicesOptions.kinds
-      .map((genericKindsOption: Choice): string => genericKindsOption.value)
-      .includes(kindsOption.value);
-  }
-
-  const kindsOptions = [
-    {
-      value: "autonomie",
-      label: "Seul : j’ai accès à du matériel et une connexion",
-    },
+  const kindOptions: Choice[] = [
     {
       value: "accompagnement",
       label:
@@ -121,12 +109,7 @@
       label:
         "Dans un atelier : j’apprends collectivement à utiliser le numérique",
     },
-    {
-      value: "delegation",
-      label:
-        "À ma place : une personne habilitée fait les démarches à ma place",
-    },
-  ].filter(existInServicesOptionsKinds);
+  ];
 
   function preSetContact() {
     if (structure.phone && !service.contactPhone) {
@@ -153,16 +136,17 @@
     );
   }
 
-  function filterKinds() {
-    service.kinds = service.kinds.filter((kind: ServiceKind) =>
-      kindsOptions.map((option) => option.value).includes(kind)
-    );
+  function filterKind() {
+    const values = kindOptions.map((option): string => option.value);
+    if (service.kind && !values.includes(service.kind)) {
+      service.kind = null;
+    }
   }
 
   filterPublics();
   preSetContact();
   preSetDiffusionZone();
-  filterKinds();
+  filterKind();
 </script>
 
 <FieldSet title="Service de l’inclusion numérique">
@@ -201,14 +185,12 @@
     />
   {/if}
 
-  {#if kindsOptions.length}
-    <CheckboxesField
-      id="kinds"
-      bind:value={service.kinds}
-      choices={kindsOptions}
-      description="Sélectionnez au moins une typologie de service. Plusieurs choix possibles."
-    />
-  {/if}
+  <RadioButtonsField
+    id="kind"
+    bind:value={service.kind}
+    choices={kindOptions}
+    description="Sélectionnez la typologie qui correspond le mieux au service."
+  />
 
   <RadioButtonsField
     id="feeCondition"

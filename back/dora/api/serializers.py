@@ -279,7 +279,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.full_desc or None
 
     def get_types(self, obj):
-        return [k.value for k in obj.kinds.all()]
+        return [obj.kind] if obj.kind else []
 
     def get_thematiques(self, obj):
         scats = [scat.value for scat in obj.subcategories.all()]

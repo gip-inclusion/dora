@@ -130,8 +130,7 @@
         filters.diPublics.some((value) => service.diPublics.includes(value));
       const kindsMatch =
         filters.kinds.length === 0 ||
-        (service.kinds &&
-          filters.kinds.some((value) => service.kinds!.includes(value)));
+        (!!service.kind && filters.kinds.includes(service.kind));
       const fundingLabelsMatch =
         filters.fundingLabels.length === 0 ||
         filters.fundingLabels.some((value) =>

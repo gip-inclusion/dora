@@ -18,7 +18,6 @@ from dora.services.models import (
     Public,
     Requirement,
     ServiceFee,
-    ServiceKind,
     ServiceStatus,
     ServiceSubCategory,
 )
@@ -320,10 +319,8 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             value="choisir-un-metier--confirmer-son-choix-de-metier"
         )
     )
-    service.kinds.add(
-        ServiceKind.objects.get(value="formation"),
-        ServiceKind.objects.get(value="information"),
-    )
+    service.kind = "formation"
+    service.save()
     service.publics.add(
         baker.make(
             Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
@@ -394,10 +391,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "structure_id": str(structure.id),
         "telephone": "0278911262",
         "thematiques": ["choisir-un-metier--confirmer-son-choix-de-metier"],
-        "types": [
-            "formation",
-            "information",
-        ],
+        "types": ["formation"],
         "zone_diffusion_code": "29",
         "zone_diffusion_nom": "Finistère",
         "zone_diffusion_type": "departement",
@@ -550,10 +544,8 @@ def test_service_serialization_exemple_need_di_user(api_client):
             value="choisir-un-metier--confirmer-son-choix-de-metier"
         )
     )
-    service.kinds.add(
-        ServiceKind.objects.get(value="formation"),
-        ServiceKind.objects.get(value="information"),
-    )
+    service.kind = "formation"
+    service.save()
     service.publics.add(
         baker.make(
             Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]

@@ -358,7 +358,7 @@ export interface ServiceSearchResult {
   updateNeeded: boolean;
   diPublics: Array<string>;
   categories?: ServiceCategory[];
-  kinds: ServiceKind[] | null;
+  kind: ServiceKind | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
   diSourceDisplay?: string;
@@ -437,8 +437,8 @@ export interface ServiceModelBase {
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
   isCumulative: boolean;
-  kinds: ServiceKind[];
-  kindsDisplay: string[];
+  kind: ServiceKind | null;
+  kindDisplay: string | null;
   modificationDate: string | null;
   name: string;
   onlineForm: string;
