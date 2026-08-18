@@ -90,7 +90,7 @@ def publics_di_field():
             if p.value != DiPublic.TOUS_PUBLICS.value
         ),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
-        label="Publics Data Inclusion correspondants",
+        label="Publics",
         required=False,
     )
 

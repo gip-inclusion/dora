@@ -111,7 +111,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isString()])],
   },
   publicsPrecisions: {
-    label: "publics precisions",
+    label: "Précisions concernant les publics",
     default: "",
     rules: [v.isString()],
   },
