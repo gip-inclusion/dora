@@ -69,7 +69,7 @@
         placeholder="Tous publics"
       />
     </FieldModel>
-    <FieldModel>
+    <FieldModel {...fieldModelProps.publicsPrecisions}>
       <TextareaField
         id="publicsPrecisions"
         bind:value={service.publicsPrecisions}
