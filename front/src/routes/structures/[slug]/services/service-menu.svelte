@@ -71,16 +71,14 @@
       iconOnRight
       {extraClass}
     />
-    {#if !service.useInclusionNumeriqueScheme}
-      <LinkButton
-        label="Créer un modèle"
-        to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
-        small
-        icon={FileCopy2LineDocument}
-        iconOnRight
-        noBackground
-        {extraClass}
-      />
-    {/if}
+    <LinkButton
+      label="Créer un modèle"
+      to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
+      small
+      icon={FileCopy2LineDocument}
+      iconOnRight
+      noBackground
+      {extraClass}
+    />
   {/if}
 </div>

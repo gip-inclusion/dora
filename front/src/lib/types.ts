@@ -67,7 +67,6 @@ export interface StructureService {
   slug: string;
   status: ServiceStatus;
   structure: string;
-  useInclusionNumeriqueScheme: boolean;
   updateNeeded: boolean;
 }
 
@@ -490,7 +489,6 @@ export interface Service extends ServiceModelBase {
   remoteUrl: string | null;
   source?: string;
   status: ServiceStatus;
-  useInclusionNumeriqueScheme: boolean;
   updateFrequency: UpdateFrequency | null;
   updateFrequencyDisplay: string | null;
   updateNeeded: boolean;
@@ -525,7 +523,6 @@ export interface ShortService {
   structure: string;
   structureInfo: ServiceStructure;
   locationKinds: LocationKind[];
-  useInclusionNumeriqueScheme: boolean;
   updateNeeded: boolean;
 }
 

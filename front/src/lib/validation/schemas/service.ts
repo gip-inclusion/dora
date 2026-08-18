@@ -373,11 +373,6 @@ export const serviceSchema: v.Schema = {
     rules: [v.isDate()],
     post: [v.nullEmpty],
   },
-  useInclusionNumeriqueScheme: {
-    label: "",
-    default: false,
-    rules: [v.isBool()],
-  },
   updateFrequency: {
     label: "Périodicité de mise à jour",
     default: "tous-les-6-mois",
@@ -432,7 +427,6 @@ export const draftSchema: v.Schema = {
   qpvOrZrr: serviceSchema.qpvOrZrr,
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
-  useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
   updateFrequency: serviceSchema.updateFrequency,
 };
 
