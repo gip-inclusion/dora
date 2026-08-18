@@ -5,6 +5,7 @@ from data_inclusion.schema.v1 import (
     ModeMobilisation,
     PersonneMobilisatrice,
     Public,
+    TypeService,
 )
 from django.conf import settings
 from django.utils import dateparse, timezone
@@ -21,7 +22,6 @@ from dora.services.models import (
     CoachOrientationMode,
     LocationKind,
     ServiceCategory,
-    ServiceKind,
     ServiceSubCategory,
     UpdateFrequency,
     get_update_needed,
@@ -158,7 +158,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             value__in=service_data["modes_accueil"]
         )
 
-    kind = ServiceKind.objects.filter(value=service_data["type"]).first()
+    # un type absent du référentiel (valeur historique) est traité comme un type manquant
+    kind = next((t for t in TypeService if t == service_data["type"]), None)
 
     department = None
     if service_data["code_insee"] is not None:

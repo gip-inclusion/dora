@@ -1,4 +1,3 @@
-import random
 from datetime import timedelta
 from io import StringIO
 from unittest import mock
@@ -28,7 +27,6 @@ from dora.services.management.commands.send_saved_searches_notifications import 
 from ..models import (
     SavedSearch,
     SavedSearchFrequency,
-    ServiceKind,
     ServiceSubCategory,
 )
 
@@ -238,8 +236,8 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
                     ).values_list("value", flat=True)
                 )
         di_kwargs["thematiques"] = thematiques
-        if kinds := kwargs.get("kinds"):
-            di_kwargs["type"] = random.choice(kinds).value
+        if kind := kwargs.get("kind"):
+            di_kwargs["type"] = kind
         if fee := kwargs.get("fee_condition"):
             di_kwargs["frais"] = fee.value
         di_service = make_di_service_data(
@@ -552,8 +550,6 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         sub_category_2 = baker.make(
             "ServiceSubCategory", value="cat1--sub2", label="cat1--sub2"
         )
-        kind = ServiceKind.objects.get(value="formation")
-        kind_2 = ServiceKind.objects.get(value="information")
 
         savedSearch = baker.make(
             "SavedSearch",
@@ -563,7 +559,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             city_label=SAVE_SEARCH_ARGS.get("city_label"),
             city_code=SAVE_SEARCH_ARGS.get("city_code"),
             last_notification_date=timezone.now() - timedelta(days=40),
-            kinds=[kind.value, kind_2.value],
+            kinds=["formation", "information"],
         )
         savedSearch.subcategories.set([sub_category, sub_category_2])
 
@@ -573,7 +569,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
             subcategories="cat1--sub1,cat1--sub2",
-            kinds=[kind, kind_2],
+            kind="formation",
             diffusion_zone_type=AdminDivisionType.CITY,
             publication_date=timezone.now() - timedelta(days=20),
             diffusion_zone_details=SAVE_SEARCH_ARGS.get("city_code"),
@@ -611,8 +607,6 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         sub_category_2 = baker.make(
             "ServiceSubCategory", value="cat1--sub2", label="cat1--sub2"
         )
-        kind = ServiceKind.objects.get(value="formation")
-        kind_2 = ServiceKind.objects.get(value="information")
         fee = baker.make("ServiceFee", value="fee", label="fee")
 
         savedSearch = baker.make(
@@ -623,7 +617,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             city_label=SAVE_SEARCH_ARGS.get("city_label"),
             city_code=SAVE_SEARCH_ARGS.get("city_code"),
             last_notification_date=timezone.now() - timedelta(days=40),
-            kinds=[kind.value, kind_2.value],
+            kinds=["formation", "information"],
         )
         savedSearch.subcategories.set([sub_category, sub_category_2])
         savedSearch.fees.set([fee])
@@ -634,7 +628,7 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
             status=ServiceStatus.PUBLISHED,
             categories="cat1",
             subcategories="cat1--sub1,cat1--sub2",
-            kinds=[kind, kind_2],
+            kind="formation",
             fee_condition=fee,
             diffusion_zone_type=AdminDivisionType.CITY,
             publication_date=timezone.now() - timedelta(days=20),

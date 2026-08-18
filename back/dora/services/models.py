@@ -162,12 +162,6 @@ class ServiceSubCategory(EnumModel):
         verbose_name = "Sous-catégorie"
 
 
-class ServiceKind(EnumModel):
-    class Meta:
-        verbose_name = "Type de service"
-        verbose_name_plural = "Types de service"
-
-
 class FundingLabel(EnumModel):
     class Meta:
         verbose_name = "Label de financement"
@@ -349,14 +343,6 @@ class Service(ModerationMixin, models.Model):
 
     ##########
     # Typology
-
-    # Remplacée par `kind`, qui est désormais le seul champ lu et écrit. La M2M est gelée
-    # en l'état : conservée le temps de vérifier la bascule, elle sera supprimée ensuite.
-    kinds = models.ManyToManyField(
-        ServiceKind,
-        verbose_name="Types de service (déprécié)",
-        blank=True,
-    )
 
     # `null` (et non chaîne vide) pour les services sans type : l'absence de type est une
     # information à part entière, à ne pas confondre avec une valeur non renseignée.

@@ -731,7 +731,8 @@ def options(request):
         "subcategories": ServiceSubCategorySerializer(
             ServiceSubCategory.objects.all(), many=True
         ).data,
-        # servis depuis le référentiel DI plutôt que depuis `ServiceKind`, voué à disparaître
+        # servis depuis le référentiel DI ; la liste alimente aussi les filtres de recherche,
+        # qui restent multi-valués
         "kinds": [
             {"value": t.value, "label": t.label}
             for t in sorted(TypeService, key=lambda t: t.label)
