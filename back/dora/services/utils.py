@@ -77,17 +77,6 @@ SERVICE_KIND_PRIORITY = [
 ]
 
 
-def compute_publics_di(service):
-    slugs = set()
-    for public in service.publics.all():
-        slugs.update(
-            s for s in (public.corresponding_di_publics or []) if s in VALID_DI_PUBLICS
-        )
-    # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
-    slugs.discard(TOUS_PUBLICS)
-    return sorted(slugs)
-
-
 def reduce_service_kinds(values):
     """Réduit une liste de types de service au type unique retenu."""
     values = set(values)
