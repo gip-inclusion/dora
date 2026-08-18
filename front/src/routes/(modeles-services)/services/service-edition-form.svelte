@@ -1,17 +1,14 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Fieldset from "$lib/components/display/fieldset.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
-  import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsInclusionNumerique from "../_common/fields-inclusion-numerique.svelte";
   import FieldsModalities from "../_common/fields-modalities.svelte";
   import FieldsPerimeter from "../_common/fields-perimeter.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
@@ -27,14 +24,8 @@
     ShortStructure,
   } from "$lib/types";
   import { log } from "$lib/utils/logger";
-  import {
-    draftSchema,
-    serviceSchema,
-    inclusionNumeriqueSchema,
-  } from "$lib/validation/schemas/service";
+  import { draftSchema, serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
-  import type { Schema } from "$lib/validation/schema-utils";
-  import { shortenString } from "$lib/utils/misc";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
   import { goto } from "$app/navigation";
 
@@ -60,11 +51,6 @@
 
   let requesting = $state(false);
   let requestKind = $state<RequestKind | undefined>(undefined);
-  let currentSchema: Schema = $derived(
-    service.useInclusionNumeriqueScheme
-      ? inclusionNumeriqueSchema
-      : serviceSchema
-  );
   let isModalOpen = $state(false);
   let formControls = $state<FormControls>({
     submit: undefined,
@@ -83,28 +69,8 @@
     service = { ...service, ...validatedData };
   }
 
-  function preSaveInclusionNumeriqueService(data) {
-    data.coachOrientationModes = ["autre"];
-    data.coachOrientationModesOther =
-      "Mêmes modalités que pour les bénéficiaires";
-
-    data.locationKinds = ["en-presentiel"];
-    data.name = "Médiation numérique";
-
-    const proposedServices = servicesOptions.subcategories
-      .filter((subcategory) => data.subcategories.includes(subcategory.value))
-      .map((subcategory) => subcategory.label.toLowerCase())
-      .join(", ");
-    data.shortDesc = shortenString(
-      `${structure.name} propose des services : ${proposedServices}`,
-      280
-    );
-  }
   function handleSubmit(validatedData, kind: RequestKind) {
     requestKind = kind;
-    if (service.useInclusionNumeriqueScheme) {
-      preSaveInclusionNumeriqueService(validatedData);
-    }
     if (requestKind === "publish") {
       return createOrModifyService({
         ...validatedData,
@@ -150,7 +116,7 @@
   }
 
   function handleValidate(data, kind?: string) {
-    const schema = kind === "draft" ? draftSchema : currentSchema;
+    const schema = kind === "draft" ? draftSchema : serviceSchema;
     return validate(data, schema, {
       servicesOptions,
       checkRequired: kind !== "draft",
@@ -186,7 +152,7 @@
 <Form
   bind:data={service}
   bind:formControls
-  schema={currentSchema}
+  schema={serviceSchema}
   {servicesOptions}
   onChange={handleChange}
   onSubmit={handleSubmit}
@@ -272,46 +238,32 @@
         </div>
       {/if}
 
-      {#if !service.useInclusionNumeriqueScheme}
-        <div class={service.model ? "" : "lg:w-2/3"}>
-          <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
+      <div class={service.model ? "" : "lg:w-2/3"}>
+        <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
 
-          <FieldsPresentation bind:service {servicesOptions} {model} />
+        <FieldsPresentation bind:service {servicesOptions} {model} />
 
-          <FieldsDuration bind:service {servicesOptions} {model} />
+        <FieldsDuration bind:service {servicesOptions} {model} />
 
-          <FieldsPublics bind:service {servicesOptions} {model} />
+        <FieldsPublics bind:service {servicesOptions} {model} />
 
-          <FieldsModalities
-            bind:service
-            servicesOptions={modalitiesServicesOptions}
-            {model}
-          />
+        <FieldsModalities
+          bind:service
+          servicesOptions={modalitiesServicesOptions}
+          {model}
+        />
 
-          <FieldsDocuments bind:service {servicesOptions} {model} />
+        <FieldsDocuments bind:service {servicesOptions} {model} />
 
-          <FieldsPeriodicity bind:service {servicesOptions} {model} />
-        </div>
-        <div class="lg:w-2/3">
-          <FieldsPerimeter bind:service {servicesOptions} />
+        <FieldsPeriodicity bind:service {servicesOptions} {model} />
+      </div>
+      <div class="lg:w-2/3">
+        <FieldsPerimeter bind:service {servicesOptions} />
 
-          <FieldsPlace bind:service {structure} {servicesOptions} />
+        <FieldsPlace bind:service {structure} {servicesOptions} />
 
-          <FieldsContact bind:service />
-        </div>
-      {:else}
-        <div class={service.model ? "" : "lg:w-2/3"}>
-          <Fieldset noTopPadding>
-            <FieldCategory bind:service {servicesOptions} {model} />
-          </Fieldset>
-
-          <FieldsInclusionNumerique
-            bind:service
-            {servicesOptions}
-            {structure}
-          />
-        </div>
-      {/if}
+        <FieldsContact bind:service />
+      </div>
     </CenteredGrid>
 
     <StickyFormSubmissionRow>

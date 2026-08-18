@@ -386,37 +386,6 @@ export const serviceSchema: v.Schema = {
   },
 };
 
-export const inclusionNumeriqueSchema: v.Schema = {
-  structure: serviceSchema.structure,
-  categories: serviceSchema.categories,
-  subcategories: serviceSchema.subcategories,
-  kind: serviceSchema.kind,
-  publics: serviceSchema.publics,
-  feeCondition: serviceSchema.feeCondition,
-  feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: {
-    ...serviceSchema.beneficiariesAccessModes,
-    required: true,
-  },
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
-  contactName: serviceSchema.contactName,
-  contactPhone: serviceSchema.contactPhone,
-  contactEmail: serviceSchema.contactEmail,
-  isContactInfoPublic: serviceSchema.isContactInfoPublic,
-  city: serviceSchema.city,
-  address1: serviceSchema.address1,
-  address2: serviceSchema.address2,
-  postalCode: serviceSchema.postalCode,
-  diffusionZoneType: serviceSchema.diffusionZoneType,
-  diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
-  useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
-  updateFrequency: serviceSchema.updateFrequency,
-};
-
 export const draftSchema: v.Schema = {
   structure: serviceSchema.structure,
   categories: serviceSchema.categories,
