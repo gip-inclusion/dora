@@ -49,10 +49,7 @@
     <FieldCategory
       bind:service
       {servicesOptions}
-      {model}
-      description={!service.useInclusionNumeriqueScheme
-        ? "Sélectionnez jusqu’à 3 thématiques auxquelles le service correspond."
-        : ""}
+      description="Sélectionnez jusqu’à 3 thématiques auxquelles le service correspond."
     />
   </FieldModel>
   {#snippet help()}
@@ -86,17 +83,6 @@
             </abbr>&nbsp;:&nbsp;votre offre de service sur Dora
           </a>
         </li>
-        <li class="mb-s10">
-          <a
-            href={`${URL_HELP_SITE}article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/`}
-            class="text-magenta-cta hover:underline"
-            target="_blank"
-            title="Ouverture dans une nouvelle fenêtre"
-            rel="noopener"
-          >
-            Référencer un service d’inclusion numérique sur Dora
-          </a>
-        </li>
         <li>
           <a
             href={`${URL_HELP_SITE}article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/`}
@@ -121,9 +107,7 @@
     <FieldSubcategory
       bind:service
       {servicesOptions}
-      description={!service.useInclusionNumeriqueScheme
-        ? "Sélectionnez au moins un besoin, pour chaque thématique choisie."
-        : "Sélectionnez au moins un besoin."}
+      description="Sélectionnez au moins un besoin, pour chaque thématique choisie."
     />
   </FieldModel>
 
