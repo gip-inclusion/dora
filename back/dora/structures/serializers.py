@@ -211,7 +211,6 @@ class StructureSerializer(serializers.ModelSerializer):
                     "slug",
                     "status",
                     "structure",
-                    "use_inclusion_numerique_scheme",
                     "update_needed",
                 ]
 
@@ -256,7 +255,6 @@ class StructureSerializer(serializers.ModelSerializer):
                     "slug",
                     "status",
                     "structure",
-                    "use_inclusion_numerique_scheme",
                     "update_needed",
                 ]
 

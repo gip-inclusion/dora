@@ -361,7 +361,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "update_frequency",
             "update_frequency_display",
             "update_needed",
-            "use_inclusion_numerique_scheme",
             "is_orientable_ft_service",
         ]
         read_only_fields = [
@@ -674,7 +673,6 @@ class ServiceListSerializer(ServiceSerializer):
             "status",
             "structure",
             "structure_info",
-            "use_inclusion_numerique_scheme",
         ]
         read_only_fields = [
             "city",

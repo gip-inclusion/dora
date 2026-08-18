@@ -105,7 +105,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "creation_date",
         "moderation_status",
         "source",
-        "use_inclusion_numerique_scheme",
         "structure__department",
     ]
     filter_horizontal = [
