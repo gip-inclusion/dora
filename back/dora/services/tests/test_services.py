@@ -31,7 +31,6 @@ from dora.services.enums import ServiceStatus
 from dora.services.migration_utils import (
     add_categories_and_subcategories_if_subcategory,
     create_category,
-    create_service_kind,
     create_subcategory,
     delete_category,
     delete_subcategory,
@@ -55,7 +54,6 @@ from ..models import (
     Service,
     ServiceCategory,
     ServiceFee,
-    ServiceKind,
     ServiceModel,
     ServiceModificationHistoryItem,
     ServiceStatusHistoryItem,
@@ -1326,9 +1324,7 @@ class DataInclusionSearchTestCase(APITestCase):
             {
                 "di": True,
                 "city": self.city2.code,
-                "kinds": ServiceKind.objects.filter(value=service_data["type"])
-                .first()
-                .value,
+                "kinds": service_data["type"],
             },
         )
         response = self.search(request)
@@ -1434,13 +1430,7 @@ class DataInclusionSearchTestCase(APITestCase):
         request = self.factory.get(f"/services-di/{service_data['id']}/")
         response = self.service_di(request, di_id=service_data["id"])
 
-        # les champs en écriture seule — la tolérance transitoire `kinds` — ne sont pas restitués
-        readable_fields = {
-            name
-            for name, field in ServiceSerializer().fields.items()
-            if not field.write_only
-        }
-        for field in readable_fields:
+        for field in ServiceSerializer().fields:
             with self.subTest(field=field):
                 assert field in response.data
 
@@ -2624,21 +2614,6 @@ class ServiceMigrationUtilsTestCase(APITestCase):
         self.assertEqual(category.count(), 1)
         self.assertEqual(category.first().value, value)
         self.assertEqual(category.first().label, label)
-
-    def test_create_service_kind(self):
-        # ÉTANT DONNÉ un type de service non existant
-        value = "new-value"
-        label = "Nouvelle valeur"
-        self.assertEqual(ServiceKind.objects.filter(value=value).count(), 0)
-
-        # QUAND je créé ce type de service
-        create_service_kind(ServiceKind, value, label)
-
-        # ALORS il existe
-        subcategory = ServiceKind.objects.filter(value=value)
-        self.assertEqual(subcategory.count(), 1)
-        self.assertEqual(subcategory.first().value, value)
-        self.assertEqual(subcategory.first().label, label)
 
     def test_create_subcategory(self):
         # ÉTANT DONNÉ un besoin non existant
