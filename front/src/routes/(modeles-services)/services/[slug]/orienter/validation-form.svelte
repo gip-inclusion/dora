@@ -52,9 +52,7 @@
         <CheckboxesField
           id="situation"
           choices={publicsChoices}
-          description={!servesAllPublics
-            ? "Merci de cocher au moins un profil ou situation"
-            : ""}
+          description="Merci de cocher au moins un profil ou situation"
           bind:value={$orientation.situation}
           vertical
         />
