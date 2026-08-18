@@ -53,7 +53,7 @@ def recompute_sync_checksums(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0008_recompute_sync_checksums"),
+        ("services", "0009_remove_service_kinds"),
     ]
 
     operations = [
