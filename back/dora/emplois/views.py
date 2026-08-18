@@ -48,7 +48,6 @@ logger = logging.getLogger(__name__)
 MAX_ORIENTATION_ATTACHMENTS = 20  # we have a few cases with ~10 files
 
 PREFETCH_RELATED_SERVICE_LIST = [
-    "publics",
     "access_conditions",
     "requirements",
     "credentials",
