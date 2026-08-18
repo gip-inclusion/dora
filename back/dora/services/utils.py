@@ -139,7 +139,12 @@ def update_sync_checksum(service):
     md5 = hashlib.md5(usedforsecurity=False)
     for field in SYNC_FIELDS:
         attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
-        md5.update(repr(getattr(service, attr)).encode())
+        value = getattr(service, attr)
+        # Les champs liste (ex: `publics_di`) n'ont pas d'ordre significatif :
+        # on trie pour que deux listes équivalentes donnent le même checksum.
+        if isinstance(value, list):
+            value = sorted(value)
+        md5.update(repr(value).encode())
     for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
         # `.values_list()` reclone le queryset et repart en base à chaque champ.

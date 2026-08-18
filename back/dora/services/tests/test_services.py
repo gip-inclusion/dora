@@ -2193,6 +2193,21 @@ class ServiceSyncTestCase(APITestCase):
             model.refresh_from_db()
             self.assertNotEqual(model.sync_checksum, initial_checksum)
 
+    def test_list_field_checksum_is_order_independent(self):
+        # `publics_di` est une liste sans ordre significatif : deux compositions
+        # équivalentes mais ordonnées différemment doivent produire la même empreinte,
+        # sinon un simple réordonnancement basculerait le modèle en « modèle modifié ».
+        struct = make_structure(baker.make("users.User", is_valid=True))
+        model = make_model(structure=struct)
+
+        model.publics_di = [Public.FAMILLES.value, Public.JEUNES.value]
+        checksum_one_order = update_sync_checksum(model)
+
+        model.publics_di = [Public.JEUNES.value, Public.FAMILLES.value]
+        checksum_other_order = update_sync_checksum(model)
+
+        self.assertEqual(checksum_one_order, checksum_other_order)
+
 
 class ServiceArchiveTestCase(APITestCase):
     def setUp(self):
