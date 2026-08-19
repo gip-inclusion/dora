@@ -31,7 +31,7 @@ def test_service_bookmark_serialization(service_with_source):
 
 
 def test_search_di_publics_empty_returns_empty():
-    # Aucun public -> publics_di == [] : « aucune restriction ». La lecture applicative
+    # Aucun public -> publics == [] : « aucune restriction ». La lecture applicative
     # n'inflate plus en `tous-publics` (réservé à l'interface DI) ; le front affiche
     # « Tous publics » sur la liste vide.
     service = make_service()
@@ -44,16 +44,16 @@ def test_search_di_publics_all_referential_returned_as_is():
     # applicative : la colonne est renvoyée fidèlement.
     expected = sorted(p.value for p in DiPublic if p.value != TOUS_PUBLICS)
     service = make_service()
-    service.publics_di = expected
+    service.publics = expected
     service.save()
     service.refresh_from_db()
     assert SearchResultSerializer().get_di_publics(service) == expected
 
 
 def test_search_di_publics_returns_specific_publics():
-    # Bascule d'écriture : les publics sont portés directement par la colonne `publics_di`.
+    # Les publics sont portés directement par la colonne `publics`.
     service = make_service()
-    service.publics_di = sorted([DiPublic.FAMILLES.value, DiPublic.ETUDIANTS.value])
+    service.publics = sorted([DiPublic.FAMILLES.value, DiPublic.ETUDIANTS.value])
     service.save()
     service.refresh_from_db()
     assert SearchResultSerializer().get_di_publics(service) == sorted(
@@ -62,7 +62,7 @@ def test_search_di_publics_returns_specific_publics():
 
 
 def validate_publics(publics):
-    # `ServiceSerializer.validate` normalise `publics_di` : on passe par la validation
+    # `ServiceSerializer.validate` normalise `publics` : on passe par la validation
     # complète du sérialiseur pour vérifier ce que l'écriture persistera réellement.
     user = baker.make("users.User", is_valid=True)
     service = make_service(structure=make_structure(user))
@@ -78,7 +78,7 @@ def validate_publics(publics):
         context={"request": request},
     )
     assert serializer.is_valid(), serializer.errors
-    return serializer.validated_data["publics_di"]
+    return serializer.validated_data["publics"]
 
 
 def test_validate_publics_deduplicates():

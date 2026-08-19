@@ -311,7 +311,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         beneficiaries_access_modes_other="Contacter conseiller(e) Pôle Emploi",
         appointment_link="https://example.com",
         kind="formation",
-        publics_di=[
+        publics=[
             DiPublic.ETUDIANTS.value,
             DiPublic.FAMILLES.value,
             DiPublic.FEMMES.value,
@@ -409,8 +409,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
 def test_service_publics_export_empty_maps_to_tous_publics(
     authenticated_user, api_client
 ):
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.publics.clear()  # no publics
+    service = make_service(status=ServiceStatus.PUBLISHED, publics=[])
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -422,7 +421,7 @@ def test_service_publics_export_all_maps_to_tous_publics(
     authenticated_user, api_client
 ):
     all_real_publics = [p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS]
-    service = make_service(status=ServiceStatus.PUBLISHED, publics_di=all_real_publics)
+    service = make_service(status=ServiceStatus.PUBLISHED, publics=all_real_publics)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -528,7 +527,7 @@ def test_service_serialization_exemple_need_di_user(api_client):
         geom=Point(3.76855, 23.88654, srid=WGS84),
         recurrence="Tu 09:00-12:00;We 14:00-17:00",
         kind="formation",
-        publics_di=[
+        publics=[
             DiPublic.ETUDIANTS.value,
             DiPublic.FAMILLES.value,
             DiPublic.FEMMES.value,

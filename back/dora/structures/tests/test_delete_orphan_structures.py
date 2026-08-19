@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 import pytest
-from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.core.management import call_command
 from model_bakery import baker
 

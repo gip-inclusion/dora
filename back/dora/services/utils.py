@@ -36,7 +36,7 @@ SYNC_FIELDS = [
     "forms",
     "kind",
     "online_form",
-    "publics_di",
+    "publics",
     "publics_precisions",
     "qpv_or_zrr",
     "recurrence",
@@ -67,7 +67,7 @@ SYNC_CUSTOM_M2M_FIELDS = [
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
 VALID_DI_PUBLICS = {p.value for p in DiPublic}
 
-# Ordre de référence des publics DI : `publics_di` est normalisé à l'écriture selon cet
+# Ordre de référence des publics DI : `publics` est normalisé à l'écriture selon cet
 # ordre (cf. `ServiceSerializer.validate`) afin que la composition, et non l'ordre de
 # saisie, détermine l'empreinte de synchronisation, l'historique de modification et le
 # diff « modèle modifié » côté front. On suit l'ordre du référentiel plutôt que l'ordre
@@ -75,7 +75,7 @@ VALID_DI_PUBLICS = {p.value for p in DiPublic}
 DI_PUBLICS_ORDER = {p.value: index for index, p in enumerate(DiPublic)}
 
 
-def normalize_publics_di(publics):
+def normalize_publics(publics):
     return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
 
 
