@@ -587,8 +587,6 @@ class Service(ModerationMixin, models.Model):
     sync_checksum = models.CharField(max_length=32, blank=True)
     last_sync_checksum = models.CharField(max_length=32, blank=True)
 
-    use_inclusion_numerique_scheme = models.BooleanField(default=False)
-
     source = models.ForeignKey(
         ServiceSource, null=True, blank=True, on_delete=models.PROTECT
     )
