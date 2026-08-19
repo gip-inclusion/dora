@@ -1842,7 +1842,6 @@ class DataInclusionSearchTestCase(APITestCase):
         self.assertEqual(response.data["online_form"], None)
         self.assertEqual(response.data["remote_url"], None)
         self.assertEqual(response.data["status"], "PUBLISHED")
-        self.assertEqual(response.data["use_inclusion_numerique_scheme"], False)
 
     @override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=0.7)
     def test_service_quality_score(self):
