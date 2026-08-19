@@ -200,7 +200,11 @@ export function arraysCompare(a, b) {
     return false;
   }
 
-  return a.every((val, i) => val === b[i]);
+  // La comparaison ne tient pas compte de l'ordre des éléments
+  const sortedA = [...a].sort();
+  const sortedB = [...b].sort();
+
+  return sortedA.every((val, i) => val === sortedB[i]);
 }
 
 export function formatPhoneNumber(phoneNumber: string): string {

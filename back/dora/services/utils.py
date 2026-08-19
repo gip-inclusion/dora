@@ -67,6 +67,17 @@ SYNC_CUSTOM_M2M_FIELDS = [
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
 VALID_DI_PUBLICS = {p.value for p in DiPublic}
 
+# Ordre de référence des publics DI : `publics_di` est normalisé à l'écriture selon cet
+# ordre (cf. `ServiceSerializer.validate`) afin que la composition, et non l'ordre de
+# saisie, détermine l'empreinte de synchronisation, l'historique de modification et le
+# diff « modèle modifié » côté front. On suit l'ordre du référentiel plutôt que l'ordre
+# alphabétique pour rester aligné sur l'affichage des libellés (`get_publics_display`).
+DI_PUBLICS_ORDER = {p.value: index for index, p in enumerate(DiPublic)}
+
+
+def normalize_publics_di(publics):
+    return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
+
 
 def _duplicate_customizable_choices(field, choices, structure):
     for choice in choices:
@@ -140,10 +151,6 @@ def update_sync_checksum(service):
     for field in SYNC_FIELDS:
         attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
         value = getattr(service, attr)
-        # Les champs liste (ex: `publics_di`) n'ont pas d'ordre significatif :
-        # on trie pour que deux listes équivalentes donnent le même checksum.
-        if isinstance(value, list):
-            value = sorted(value)
         md5.update(repr(value).encode())
     for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un

@@ -63,6 +63,7 @@ from ..utils import (
     SYNC_CUSTOM_M2M_FIELDS,
     SYNC_FIELDS,
     SYNC_M2M_FIELDS,
+    normalize_publics_di,
     update_sync_checksum,
 )
 from ..views import search_services_view, service_di
@@ -2193,20 +2194,30 @@ class ServiceSyncTestCase(APITestCase):
             model.refresh_from_db()
             self.assertNotEqual(model.sync_checksum, initial_checksum)
 
-    def test_list_field_checksum_is_order_independent(self):
-        # `publics_di` est une liste sans ordre significatif : deux compositions
-        # équivalentes mais ordonnées différemment doivent produire la même empreinte,
-        # sinon un simple réordonnancement basculerait le modèle en « modèle modifié ».
-        struct = make_structure(baker.make("users.User", is_valid=True))
+    def test_publics_are_normalized_on_write(self):
+        # `publics_di` est un ensemble, pas une séquence : l'écriture le dédoublonne et le
+        # range dans l'ordre du référentiel, sinon un simple réordonnancement de la saisie
+        # basculerait le modèle en « modèle modifié ».
+        user = baker.make("users.User", is_valid=True)
+        struct = make_structure(user)
         model = make_model(structure=struct)
+        self.client.force_authenticate(user=user)
 
-        model.publics_di = [Public.FAMILLES.value, Public.JEUNES.value]
-        checksum_one_order = update_sync_checksum(model)
+        normalized = normalize_publics_di([Public.FAMILLES.value, Public.JEUNES.value])
+        response = self.client.patch(f"/models/{model.slug}/", {"publics": normalized})
+        self.assertEqual(response.status_code, 200)
+        model.refresh_from_db()
+        self.assertEqual(model.publics_di, normalized)
+        initial_checksum = model.sync_checksum
 
-        model.publics_di = [Public.JEUNES.value, Public.FAMILLES.value]
-        checksum_other_order = update_sync_checksum(model)
-
-        self.assertEqual(checksum_one_order, checksum_other_order)
+        response = self.client.patch(
+            f"/models/{model.slug}/",
+            {"publics": [*reversed(normalized), normalized[0]]},
+        )
+        self.assertEqual(response.status_code, 200)
+        model.refresh_from_db()
+        self.assertEqual(model.publics_di, normalized)
+        self.assertEqual(model.sync_checksum, initial_checksum)
 
 
 class ServiceArchiveTestCase(APITestCase):

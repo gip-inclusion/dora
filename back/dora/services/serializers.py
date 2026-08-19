@@ -25,6 +25,7 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
+    normalize_publics_di,
 )
 from dora.structures.models import Structure, StructureMember
 
@@ -469,6 +470,13 @@ class ServiceSerializer(serializers.ModelSerializer):
             self._validate_custom_choice(
                 "credentials", data, user, user_structures, structure
             )
+
+        # Les publics forment un ensemble, pas une séquence : on les normalise (dédoublonnés,
+        # rangés dans l'ordre du référentiel) pour qu'un simple changement d'ordre de saisie
+        # ne fasse pas diverger l'empreinte de synchronisation, l'historique de modification
+        # et le diff « modèle modifié » côté front.
+        if "publics_di" in data:
+            data["publics_di"] = normalize_publics_di(data["publics_di"])
 
         return data
 
