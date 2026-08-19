@@ -35,7 +35,6 @@
 
   const propsWithSpecificFields = [
     "accessConditions",
-    "publics",
     "requirements",
     "credentials",
   ];
@@ -55,10 +54,10 @@
       );
 
       if (isModel) {
-        // sur un modèle l'API retourne les champs les champs spécifiques sous forme de string,
+        // sur un modèle l'API retourne les champs spécifiques sous forme de string,
         // on leur attribue l'id numérique
         service[propName].forEach((value, i) => {
-          // si le type est une string, c'est un champs spécifique
+          // si le type est une string, c'est un champ spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
               (opt) => opt.label === value
@@ -68,15 +67,15 @@
         });
       } else if (service.model && model) {
         model[propName].forEach((value, i) => {
-          // si le type est une string, c'est un champs spécifique
+          // si le type est une string, c'est un champ spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
               (opt) => opt.label === value
             );
 
-            // si ce champs spécifique existe dans les options de service
-            // -> on modifie le modèle avec l'id du champs spécifique
-            // sinon (le champs spécifique n'existe pas dans les options de service)
+            // si ce champ spécifique existe dans les options de service
+            // -> on modifie le modèle avec l'id du champ spécifique
+            // sinon (le champ spécifique n'existe pas dans les options de service)
             // -> on l'ajoute dans les options de service
 
             if (option) {
