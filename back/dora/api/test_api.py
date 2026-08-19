@@ -15,7 +15,6 @@ from dora.services.models import (
     CoachOrientationMode,
     Credential,
     LocationKind,
-    Public,
     Requirement,
     ServiceFee,
     ServiceStatus,
