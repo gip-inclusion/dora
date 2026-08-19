@@ -20,8 +20,8 @@ export const load = async ({ parent }) => {
 
   // Pour gérer le retour arrière du navigateur permettant d'ignorer la validation,
   // on valide à nouveau le formulaire ici
-  const { publicsRequired } = computePublicsChoices(service);
-  orientationStep1Schema.situation.required = publicsRequired;
+  const { servesAllPublics } = computePublicsChoices(service);
+  orientationStep1Schema.situation.required = !servesAllPublics;
 
   const { requirementRequired } = computeRequirementsChoices(service);
   orientationStep1Schema.requirements.required = requirementRequired;

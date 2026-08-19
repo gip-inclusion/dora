@@ -44,7 +44,6 @@ from dora.services.models import (
     CoachOrientationMode,
     Credential,
     LocationKind,
-    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -529,7 +528,6 @@ class ModelViewSet(ServiceViewSet):
                 "categories",
                 "subcategories",
                 "access_conditions",
-                "publics",
                 "beneficiaries_access_modes",
                 "coach_orientation_modes",
                 "requirements",
@@ -649,10 +647,6 @@ def options(request):
         class Meta(CustomChoiceSerializer.Meta):
             model = AccessCondition
 
-    class PublicSerializer(CustomChoiceSerializer):
-        class Meta(CustomChoiceSerializer.Meta):
-            model = Public
-
     class RequirementSerializer(CustomChoiceSerializer):
         class Meta(CustomChoiceSerializer.Meta):
             model = Requirement
@@ -756,12 +750,7 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
-        "publics": PublicSerializer(
-            filter_custom_choices(Public.objects.select_related("structure").all()),
-            many=True,
-            context={"request": request},
-        ).data,
-        "di_publics": [
+        "publics": [
             {"value": p.value, "label": p.label}
             for p in DiPublic
             if p.value != DiPublic.TOUS_PUBLICS

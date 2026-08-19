@@ -117,17 +117,16 @@ export function acceptOrientation(
 
 export function computePublicsChoices(service: Service): {
   publicsChoices: Choice[];
-  publicsRequired: boolean;
+  servesAllPublics: boolean;
 } {
-  const excludedPublicsLabels = ["Autre", "Tous publics"];
-  const publicsChoices = (service.publicsDisplay || [])
-    .map((value) => ({ value: value, label: value }))
-    .filter((elt) => !excludedPublicsLabels.includes(elt.value));
+  const publicsChoices = (service.publicsDisplay || []).map((value) => ({
+    value: value,
+    label: value,
+  }));
 
   return {
     publicsChoices,
-    publicsRequired:
-      publicsChoices.filter((elt) => elt.value !== "Autre").length > 0,
+    servesAllPublics: publicsChoices.length === 0,
   };
 }
 

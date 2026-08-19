@@ -1,10 +1,12 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import AddableMultiSelectField from "$lib/components/forms/fields/addable-multiselect-field.svelte";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import { currentSchema } from "$lib/validation/validation";
   import { URL_HELP_SITE } from "$lib/consts";
 
@@ -58,15 +60,21 @@
 
   {#if servicesOptions.publics.length}
     <FieldModel {...fieldModelProps.publics ?? {}} type="array">
-      <AddableMultiSelectField
+      <MultiSelectField
         id="publics"
-        bind:values={service.publics}
-        structureSlug={service.structure}
+        bind:value={service.publics}
         choices={servicesOptions.publics}
         sort
-        description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
+        description="Tous publics par défaut. Un ou plusieurs publics possibles. Vous pouvez apporter des précisions sur les publics concernés."
         placeholder="Tous publics"
-        canAdd={false}
+      />
+    </FieldModel>
+    <FieldModel {...fieldModelProps.publicsPrecisions}>
+      <TextareaField
+        id="publicsPrecisions"
+        bind:value={service.publicsPrecisions}
+        placeholder="Ajoutez ici des précisions sur les publics concernés..."
+        hideLabel
       />
     </FieldModel>
   {/if}

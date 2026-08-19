@@ -214,7 +214,6 @@ def _dora_services_by_id(service_ids):
         .prefetch_related(
             "fee_condition",
             "location_kinds",
-            "publics",
             "categories",
             "subcategories",
             "funding_labels",

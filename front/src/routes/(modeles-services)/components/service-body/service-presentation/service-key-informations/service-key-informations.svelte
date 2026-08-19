@@ -77,10 +77,12 @@
               <li>Tous publics</li>
             {/each}
           {/if}
-          {#if service.publicsPrecisions}
-            <div class="mt-s16">{service.publicsPrecisions}</div>
-          {/if}
         </ul>
+        {#if service.publicsPrecisions}
+          <div class="mt-s16 whitespace-pre-line">
+            {service.publicsPrecisions}
+          </div>
+        {/if}
       </ServiceKeyInformationSection>
     </div>
     <div class="pb-s32">

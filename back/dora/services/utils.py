@@ -36,6 +36,8 @@ SYNC_FIELDS = [
     "forms",
     "kind",
     "online_form",
+    "publics_di",
+    "publics_precisions",
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
@@ -58,7 +60,6 @@ SYNC_M2M_FIELDS = [
 # Custom Many to many fields
 SYNC_CUSTOM_M2M_FIELDS = [
     "access_conditions",
-    "publics",
     "requirements",
     "credentials",
 ]
@@ -66,16 +67,16 @@ SYNC_CUSTOM_M2M_FIELDS = [
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
 VALID_DI_PUBLICS = {p.value for p in DiPublic}
 
+# Ordre de référence des publics DI : `publics_di` est normalisé à l'écriture selon cet
+# ordre (cf. `ServiceSerializer.validate`) afin que la composition, et non l'ordre de
+# saisie, détermine l'empreinte de synchronisation, l'historique de modification et le
+# diff « modèle modifié » côté front. On suit l'ordre du référentiel plutôt que l'ordre
+# alphabétique pour rester aligné sur l'affichage des libellés (`get_publics_display`).
+DI_PUBLICS_ORDER = {p.value: index for index, p in enumerate(DiPublic)}
 
-def compute_publics_di(service):
-    slugs = set()
-    for public in service.publics.all():
-        slugs.update(
-            s for s in (public.corresponding_di_publics or []) if s in VALID_DI_PUBLICS
-        )
-    # tous-publics n'est jamais stocké : un tableau vide signifie « tous publics ».
-    slugs.discard(TOUS_PUBLICS)
-    return sorted(slugs)
+
+def normalize_publics_di(publics):
+    return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
 
 
 def _duplicate_customizable_choices(field, choices, structure):
@@ -149,7 +150,8 @@ def update_sync_checksum(service):
     md5 = hashlib.md5(usedforsecurity=False)
     for field in SYNC_FIELDS:
         attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
-        md5.update(repr(getattr(service, attr)).encode())
+        value = getattr(service, attr)
+        md5.update(repr(value).encode())
     for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
         # `.values_list()` reclone le queryset et repart en base à chaque champ.

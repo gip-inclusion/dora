@@ -15,7 +15,6 @@ from dora.services.models import (
     CoachOrientationMode,
     Credential,
     LocationKind,
-    Public,
     Requirement,
     ServiceFee,
     ServiceStatus,
@@ -311,24 +310,19 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         coach_orientation_modes_other="Mêmes modalités que pour les bénéficiaires",
         beneficiaries_access_modes_other="Contacter conseiller(e) Pôle Emploi",
         appointment_link="https://example.com",
-        publics_precisions="précision fournie par l'utilisateur",
+        kind="formation",
+        publics_di=[
+            DiPublic.ETUDIANTS.value,
+            DiPublic.FAMILLES.value,
+            DiPublic.FEMMES.value,
+        ],
+        publics_precisions="Précision des publics",
     )
 
     service.subcategories.add(
         ServiceSubCategory.objects.get(
             value="choisir-un-metier--confirmer-son-choix-de-metier"
         )
-    )
-    service.kind = "formation"
-    service.save()
-    service.publics.add(
-        baker.make(
-            Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
-        ),
-        baker.make(
-            Public, name="etudiants", corresponding_di_publics=[DiPublic.ETUDIANTS]
-        ),
-        baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(
         LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)
@@ -385,7 +379,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
         "publics": ["etudiants", "familles", "femmes"],
-        "publics_precisions": "précision fournie par l'utilisateur",
+        "publics_precisions": "Précision des publics",
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
         "source": None,
         "structure_id": str(structure.id),
@@ -428,11 +422,7 @@ def test_service_publics_export_all_maps_to_tous_publics(
     authenticated_user, api_client
 ):
     all_real_publics = [p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS]
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.publics.clear()
-    service.publics.add(
-        baker.make(Public, name="tous", corresponding_di_publics=all_real_publics)
-    )  # all publics
+    service = make_service(status=ServiceStatus.PUBLISHED, publics_di=all_real_publics)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -537,23 +527,19 @@ def test_service_serialization_exemple_need_di_user(api_client):
         modification_date="2023-03-11T16:54:10Z",
         geom=Point(3.76855, 23.88654, srid=WGS84),
         recurrence="Tu 09:00-12:00;We 14:00-17:00",
+        kind="formation",
+        publics_di=[
+            DiPublic.ETUDIANTS.value,
+            DiPublic.FAMILLES.value,
+            DiPublic.FEMMES.value,
+        ],
+        publics_precisions="Précision des publics",
     )
 
     service.subcategories.add(
         ServiceSubCategory.objects.get(
             value="choisir-un-metier--confirmer-son-choix-de-metier"
         )
-    )
-    service.kind = "formation"
-    service.save()
-    service.publics.add(
-        baker.make(
-            Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
-        ),
-        baker.make(
-            Public, name="etudiants", corresponding_di_publics=[DiPublic.ETUDIANTS]
-        ),
-        baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(
         LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)

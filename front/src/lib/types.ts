@@ -312,6 +312,21 @@ export type UpdateFrequency =
   | "tous-les-16-mois"
   | "jamais";
 
+export type Public =
+  | "actifs"
+  | "beneficiaires-des-minimas-sociaux"
+  | "demandeurs-emploi"
+  | "etudiants"
+  | "familles"
+  | "femmes"
+  | "jeunes"
+  | "personnes-en-situation-de-handicap"
+  | "personnes-en-situation-durgence"
+  | "personnes-en-situation-juridique-specifique"
+  | "personnes-exilees"
+  | "residents-qpv-frr"
+  | "seniors";
+
 export interface FundingLabel {
   value: string;
   label: string;
@@ -355,7 +370,7 @@ export interface ServiceSearchResult {
   structure: string;
   status: ServiceStatus;
   updateNeeded: boolean;
-  diPublics: Array<string>;
+  diPublics: Array<Public>;
   categories?: ServiceCategory[];
   kind: ServiceKind | null;
   feeCondition: FeeCondition | null;
@@ -441,7 +456,7 @@ export interface ServiceModelBase {
   modificationDate: string | null;
   name: string;
   onlineForm: string;
-  publics: CustomizableFK[];
+  publics: Array<Public>;
   publicsDisplay: string[];
   publicsPrecisions: string;
   qpvOrZrr: boolean;
@@ -583,8 +598,7 @@ export type ServicesOptions = {
   categories: { value: ServiceCategory; label: string }[];
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
 
-  publics: CustomChoice[];
-  diPublics: { value: string; label: string }[];
+  publics: { value: Public; label: string }[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
   diffusionZoneType: { value: AdminDivisionType; label: string };

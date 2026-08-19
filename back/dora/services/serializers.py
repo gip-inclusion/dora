@@ -25,6 +25,7 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
+    normalize_publics_di,
 )
 from dora.structures.models import Structure, StructureMember
 
@@ -36,7 +37,6 @@ from .models import (
     Credential,
     FundingLabel,
     LocationKind,
-    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -198,10 +198,13 @@ class ServiceSerializer(serializers.ModelSerializer):
         required=False,
     )
     access_conditions_display = serializers.SerializerMethodField()
-    publics = CreatablePrimaryKeyRelatedField(
-        many=True,
-        queryset=Public.objects.all(),
-        max_length=140,
+    publics = serializers.ListField(
+        child=serializers.ChoiceField(
+            choices=[
+                p.value for p in DIPublic if p.value != DIPublic.TOUS_PUBLICS.value
+            ]
+        ),
+        source="publics_di",
         required=False,
     )
     publics_display = serializers.SerializerMethodField()
@@ -457,11 +460,6 @@ class ServiceSerializer(serializers.ModelSerializer):
                 "access_conditions", data, user, user_structures, structure
             )
 
-        if "publics" in data:
-            self._validate_custom_choice(
-                "publics", data, user, user_structures, structure
-            )
-
         if "requirements" in data:
             self._validate_custom_choice(
                 "requirements", data, user, user_structures, structure
@@ -471,6 +469,13 @@ class ServiceSerializer(serializers.ModelSerializer):
             self._validate_custom_choice(
                 "credentials", data, user, user_structures, structure
             )
+
+        # Les publics forment un ensemble, pas une séquence : on les normalise (dédoublonnés,
+        # rangés dans l'ordre du référentiel) pour qu'un simple changement d'ordre de saisie
+        # ne fasse pas diverger l'empreinte de synchronisation, l'historique de modification
+        # et le diff « modèle modifié » côté front.
+        if "publics_di" in data:
+            data["publics_di"] = normalize_publics_di(data["publics_di"])
 
         return data
 
@@ -510,13 +515,6 @@ class ServiceModelSerializer(ServiceSerializer):
     access_conditions = ModelCreatablePrimaryKeyRelatedField(
         many=True,
         queryset=AccessCondition.objects.all(),
-        max_length=140,
-        required=False,
-    )
-
-    publics = ModelCreatablePrimaryKeyRelatedField(
-        many=True,
-        queryset=Public.objects.all(),
         max_length=140,
         required=False,
     )

@@ -59,7 +59,7 @@
   <ResultFilter
     id="diPublics"
     label="Publics"
-    choices={servicesOptions.diPublics}
+    choices={servicesOptions.publics}
     bind:group={filters.diPublics}
   />
   <ResultFilter

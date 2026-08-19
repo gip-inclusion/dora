@@ -1,7 +1,7 @@
 # serializer version: 1
 # name: test_services_api_detail_queries_are_bounded
   dict({
-    'num_queries': 10,
+    'num_queries': 9,
     'queries': list([
       dict({
         'origin': list([
@@ -127,21 +127,6 @@
           'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
         ]),
         'sql': '''
-          SELECT ("services_service_publics"."service_id") AS "_prefetch_related_val_service_id",
-                 "services_public"."id",
-                 "services_public"."name",
-                 "services_public"."structure_id",
-                 "services_public"."corresponding_di_publics"
-          FROM "services_public"
-          INNER JOIN "services_service_publics" ON ("services_public"."id" = "services_service_publics"."public_id")
-          WHERE "services_service_publics"."service_id" IN (%s)
-        ''',
-      }),
-      dict({
-        'origin': list([
-          'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
-        ]),
-        'sql': '''
           SELECT ("services_service_access_conditions"."service_id") AS "_prefetch_related_val_service_id",
                  "services_accesscondition"."id",
                  "services_accesscondition"."name",
@@ -255,7 +240,7 @@
 # ---
 # name: test_services_api_list_queries_are_bounded
   dict({
-    'num_queries': 11,
+    'num_queries': 10,
     'queries': list([
       dict({
         'origin': list([
@@ -399,26 +384,6 @@
                           AND "services_service"."suspension_date" IS NOT NULL))
           ORDER BY "services_service"."id" ASC
           LIMIT 5
-        ''',
-      }),
-      dict({
-        'origin': list([
-          'ServiceViewSet.list[emplois/views.py]',
-          'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
-        ]),
-        'sql': '''
-          SELECT ("services_service_publics"."service_id") AS "_prefetch_related_val_service_id",
-                 "services_public"."id",
-                 "services_public"."name",
-                 "services_public"."structure_id",
-                 "services_public"."corresponding_di_publics"
-          FROM "services_public"
-          INNER JOIN "services_service_publics" ON ("services_public"."id" = "services_service_publics"."public_id")
-          WHERE "services_service_publics"."service_id" IN (%s,
-                                                            %s,
-                                                            %s,
-                                                            %s,
-                                                            %s)
         ''',
       }),
       dict({

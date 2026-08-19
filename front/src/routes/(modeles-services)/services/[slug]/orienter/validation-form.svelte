@@ -19,9 +19,8 @@
   let { service }: Props = $props();
 
   // Publics concernés par ce service
-  const { publicsChoices, publicsRequired } = computePublicsChoices(service);
-  orientationStep1Schema.situation.required = publicsRequired;
-  const serviceAcceptsAllPublic = publicsChoices.length === 0;
+  const { publicsChoices, servesAllPublics } = computePublicsChoices(service);
+  orientationStep1Schema.situation.required = !servesAllPublics;
 
   // Critères et conditions d’accès
   const { requirementChoices, requirementRequired } =
@@ -47,15 +46,13 @@
 
   <Fieldset title="Publics concernés par ce service" noTopPadding>
     <div class="lg:gap-s8 flex flex-col">
-      {#if serviceAcceptsAllPublic}
+      {#if servesAllPublics}
         <p class="mb-s0 italic">Ce service concerne tous les publics</p>
       {:else}
         <CheckboxesField
           id="situation"
           choices={publicsChoices}
-          description={!serviceAcceptsAllPublic
-            ? "Merci de cocher au moins un profil ou situation"
-            : ""}
+          description="Merci de cocher au moins un profil ou situation"
           bind:value={$orientation.situation}
           vertical
         />

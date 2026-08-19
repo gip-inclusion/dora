@@ -106,9 +106,14 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   publics: {
-    label: "Profils",
+    label: "Choix du public",
     default: [],
-    rules: [v.isArray([v.isCustomizablePK()])],
+    rules: [v.isArray([v.isString()])],
+  },
+  publicsPrecisions: {
+    label: "Précisions concernant les publics",
+    default: "",
+    rules: [v.isString()],
   },
   requirements: {
     label: "Prérequis ou compétences",
@@ -391,6 +396,7 @@ export const draftSchema: v.Schema = {
   fullDesc: serviceSchema.fullDesc,
   accessConditions: serviceSchema.accessConditions,
   publics: serviceSchema.publics,
+  publicsPrecisions: serviceSchema.publicsPrecisions,
   requirements: serviceSchema.requirements,
   isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
@@ -430,31 +436,6 @@ export const draftSchema: v.Schema = {
   updateFrequency: serviceSchema.updateFrequency,
 };
 
-export const contribSchema: v.Schema = {
-  siret: serviceSchema.siret,
-  categories: serviceSchema.categories,
-  subcategories: serviceSchema.subcategories,
-  kind: serviceSchema.kind,
-  name: serviceSchema.name,
-  shortDesc: serviceSchema.shortDesc,
-  fullDesc: serviceSchema.fullDesc,
-  accessConditions: serviceSchema.accessConditions,
-  publics: serviceSchema.publics,
-  requirements: serviceSchema.requirements,
-  isCumulative: serviceSchema.isCumulative,
-  feeCondition: serviceSchema.feeCondition,
-  feeDetails: serviceSchema.feeDetails,
-  contactName: serviceSchema.contactName,
-  contactPhone: { ...serviceSchema.contactPhone, required: false },
-  contactEmail: { ...serviceSchema.contactEmail, required: false },
-  locationKinds: { ...serviceSchema.locationKinds, required: false },
-  remoteUrl: serviceSchema.remoteUrl,
-  city: serviceSchema.city,
-  address1: serviceSchema.address1,
-  address2: serviceSchema.address2,
-  postalCode: serviceSchema.postalCode,
-};
-
 export const modelSchema: v.Schema = {
   structure: serviceSchema.structure,
   categories: serviceSchema.categories,
@@ -465,6 +446,7 @@ export const modelSchema: v.Schema = {
   fullDesc: serviceSchema.fullDesc,
   accessConditions: serviceSchema.accessConditions,
   publics: serviceSchema.publics,
+  publicsPrecisions: serviceSchema.publicsPrecisions,
   requirements: serviceSchema.requirements,
   isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
