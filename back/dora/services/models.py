@@ -337,8 +337,8 @@ class Service(ModerationMixin, models.Model):
     # Presentation
     name = models.CharField(verbose_name="Nom de l’offre", max_length=140)
     short_desc = models.TextField(verbose_name="Résumé", max_length=280, blank=True)
-    full_desc = models.TextField(
-        verbose_name="Descriptif complet de l’offre", blank=True
+    description = models.TextField(
+        verbose_name="Description", max_length=10000, blank=True
     )
 
     ##########
