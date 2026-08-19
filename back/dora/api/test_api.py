@@ -423,11 +423,7 @@ def test_service_publics_export_all_maps_to_tous_publics(
     authenticated_user, api_client
 ):
     all_real_publics = [p.value for p in DiPublic if p != DiPublic.TOUS_PUBLICS]
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.publics.clear()
-    service.publics.add(
-        baker.make(Public, name="tous", corresponding_di_publics=all_real_publics)
-    )  # all publics
+    service = make_service(status=ServiceStatus.PUBLISHED, publics_di=all_real_publics)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
