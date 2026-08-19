@@ -22,16 +22,18 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
     error(404, "Page Not Found");
   }
 
-  const structure = await getStructure(service.structure, fetch);
-
-  const model = service.model ? await getModel(service.model, fetch) : null;
+  const [structure, servicesOptions, model] = await Promise.all([
+    getStructure(service.structure, fetch),
+    getServicesOptions(fetch),
+    service.model ? getModel(service.model, fetch) : null,
+  ]);
 
   return {
-    title: `Éditer | ${service.name} | ${structure.name} | DORA`,
+    title: `Éditer | ${service.name}${structure ? ` | ${structure.name}` : ""} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions(fetch),
-    structures: [structure],
+    servicesOptions,
+    structures: structure ? [structure] : [],
     structure,
     model,
   };
