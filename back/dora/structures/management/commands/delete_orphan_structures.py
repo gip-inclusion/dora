@@ -17,7 +17,7 @@ def get_orphan_structures():
     # - les structures mères sont exclues, leur suppression entrainerait en
     #   cascade celle de leurs antennes, qui peuvent, elles, être actives ;
     # - les structures possédant des choix personnalisés (`accesscondition`,
-    #   `public`, `requirement`, `credential`) sont exclues, ces derniers pouvant
+    #   `requirement`, `credential`) sont exclues, ces derniers pouvant
     #   être utilisés par les services d'autres structures.
     return Structure.objects.filter(
         creation_date__lt=CREATED_BEFORE,
@@ -27,7 +27,6 @@ def get_orphan_structures():
         branches=None,
         admin_already_invited=False,
         accesscondition=None,
-        public=None,
         requirement=None,
         credential=None,
     )

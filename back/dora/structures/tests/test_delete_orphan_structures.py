@@ -79,14 +79,6 @@ def test_dry_run_deletes_nothing():
             id="custom-access-condition",
         ),
         pytest.param(
-            lambda structure: baker.make(
-                "services.Public",
-                structure=structure,
-                corresponding_di_publics=[DiPublic.FAMILLES],
-            ),
-            id="custom-public",
-        ),
-        pytest.param(
             lambda structure: baker.make("services.Requirement", structure=structure),
             id="custom-requirement",
         ),
