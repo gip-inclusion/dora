@@ -2,6 +2,7 @@ import csv
 import json
 import logging
 import re
+import textwrap
 from dataclasses import dataclass
 from typing import Tuple
 
@@ -72,6 +73,14 @@ def strip_markdown(text: str | None) -> str:
     ]
 
     return " ".join(" ".join(blocks).split())
+
+
+def clean_and_shorten_description(description: str | None) -> str:
+    """Filtre le markdown d'une description et la raccourcit."""
+    if not description:
+        return ""
+
+    return textwrap.shorten(strip_markdown(description), width=250, placeholder="…")
 
 
 def code_insee_to_code_dept(code_insee):
