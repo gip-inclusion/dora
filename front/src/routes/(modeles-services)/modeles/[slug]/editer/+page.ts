@@ -10,16 +10,23 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
 
   const model = await getModel(params.slug, fetch);
 
-  const servicesOptions = await getServicesOptions(fetch);
-
   if (!model) {
     error(404, "Page Not Found");
   }
 
-  const structure = await getStructure(model.structure, fetch);
+  const [structure, servicesOptions] = await Promise.all([
+    getStructure(model.structure, fetch),
+    getServicesOptions(fetch),
+  ]);
+
+  if (!structure) {
+    throw new Error(
+      `Le fetch d'une structure liée au modèle avec le slug ${params.slug} a échoué`
+    );
+  }
 
   return {
-    title: `Éditer | ${model.name} | ${structure.name} | DORA`,
+    title: `Éditer | ${model.name} | ${structure.name} } | DORA`,
     noIndex: true,
     model,
     servicesOptions,
