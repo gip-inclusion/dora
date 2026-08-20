@@ -18,7 +18,7 @@ from django.utils.text import slugify
 
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
-from dora.core.utils import address_to_one_line
+from dora.core.utils import address_to_one_line, clean_and_shorten_description
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import (
     EPCI,
@@ -317,7 +317,6 @@ class Service(ModerationMixin, models.Model):
     ##############
     # Presentation
     name = models.CharField(verbose_name="Nom de l’offre", max_length=140)
-    short_desc = models.TextField(verbose_name="Résumé", max_length=280, blank=True)
     description = models.TextField(
         verbose_name="Description", max_length=10000, blank=True
     )
@@ -708,6 +707,10 @@ class Service(ModerationMixin, models.Model):
                 )
             )
         )
+
+    @property
+    def short_desc(self) -> str:
+        return clean_and_shorten_description(self.description)
 
     @property
     def contact_info_filled(self):

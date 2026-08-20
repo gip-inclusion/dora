@@ -1,3 +1,4 @@
+import pytest
 from model_bakery import baker
 
 from dora.core.test_utils import make_published_service, make_structure
@@ -33,3 +34,17 @@ def test_alias_takes_precedence_over_description(api_client):
 
     service.refresh_from_db()
     assert service.description == "Après"
+
+
+@pytest.mark.parametrize(
+    "description,expected",
+    [
+        ("**Un résumé** et [un lien](https://example.com)", "Un résumé et un lien"),
+        ("Un mot " * 60, "Un mot " * 35 + "Un…"),
+        ("", ""),
+    ],
+)
+def test_short_desc_is_derived_from_description(description, expected):
+    service = make_published_service(description=description)
+
+    assert service.short_desc == expected

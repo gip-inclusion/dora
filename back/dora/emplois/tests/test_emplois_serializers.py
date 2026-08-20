@@ -48,7 +48,7 @@ def test_reference_data_serializer_fields():
 
 def test_service_serializer_basic_fields():
     service = make_published_service(
-        short_desc="Une courte description",
+        description="**Une courte description**",
         recurrence="Tous les jours de 8h30 à 12h30",
         online_form="https://example.org/formulaire",
         contact_name="John Doe",
@@ -66,6 +66,7 @@ def test_service_serializer_basic_fields():
     data = serialize_service(service)
 
     assert data["id"] == str(service.id)
+    # le résumé est dérivé de la description, en texte brut
     assert data["short_desc"] == "Une courte description"
     assert data["recurrence"] == "Tous les jours de 8h30 à 12h30"
     assert data["online_form"] == "https://example.org/formulaire"
