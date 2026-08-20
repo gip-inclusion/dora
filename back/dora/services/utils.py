@@ -20,7 +20,6 @@ from dora.services.enums import ServiceStatus
 
 SYNC_FIELDS = [
     "name",
-    "short_desc",
     "description",
     "is_cumulative",
     "fee_condition",

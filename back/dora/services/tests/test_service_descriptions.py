@@ -1,3 +1,4 @@
+import pytest
 from model_bakery import baker
 
 from dora.core.test_utils import make_published_service, make_structure
@@ -12,6 +13,21 @@ def test_service_exposes_description_and_its_alias(api_client):
     assert api_client.get(f"/services/{service.slug}/").data["full_desc"] == "Avant"
 
     response = api_client.patch(f"/services/{service.slug}/", {"full_desc": "Après"})
+
+    assert response.status_code == 200
+    service.refresh_from_db()
+    assert service.description == "Après"
+
+
+def test_description_is_saved_without_the_alias(api_client):
+    # Ce que poste le front basculé : il n'envoie plus `full_desc`, sans quoi la valeur
+    # chargée à côté de la description modifiée l'emporterait.
+    user = baker.make("users.User", is_valid=True)
+    structure = make_structure(user)
+    service = make_published_service(structure=structure, description="Avant")
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(f"/services/{service.slug}/", {"description": "Après"})
 
     assert response.status_code == 200
     service.refresh_from_db()
@@ -33,3 +49,29 @@ def test_alias_takes_precedence_over_description(api_client):
 
     service.refresh_from_db()
     assert service.description == "Après"
+
+
+@pytest.mark.parametrize(
+    "description,expected",
+    [
+        ("**Un résumé** et [un lien](https://example.com)", "Un résumé et un lien"),
+        ("Un mot " * 60, "Un mot " * 35 + "Un…"),
+        ("", ""),
+    ],
+)
+def test_short_desc_is_derived_from_description(description, expected):
+    service = make_published_service(description=description)
+
+    assert service.short_desc == expected
+
+
+def test_short_desc_is_read_only(api_client):
+    user = baker.make("users.User", is_valid=True)
+    structure = make_structure(user)
+    service = make_published_service(structure=structure, description="Un descriptif")
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(f"/services/{service.slug}/", {"short_desc": "Ignoré"})
+
+    assert response.status_code == 200
+    assert response.data["short_desc"] == "Un descriptif"
