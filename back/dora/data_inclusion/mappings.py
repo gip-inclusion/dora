@@ -1,5 +1,3 @@
-import textwrap
-
 from data_inclusion.schema.v1 import (
     ModeAccueil,
     ModeMobilisation,
@@ -12,9 +10,9 @@ from django.utils import dateparse, timezone
 
 from dora.core.utils import (
     address_to_one_line,
+    clean_and_shorten_description,
     code_insee_to_code_dept,
     get_category_from_subcategory,
-    strip_markdown,
 )
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
@@ -52,13 +50,6 @@ DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
 # On pourrait avoir envie d'instancier un objet service et de réutiliser la sérialisation implémentée.
 # Les relations m2m nécessitent malheureusement la sauvegarde en db.
 # On pourrait tout de même implémenter les mappings avec des serializers basés sur ceux existants.
-
-
-def clean_and_shorten_description(description: str | None) -> str:
-    if not description:
-        return ""
-
-    return textwrap.shorten(strip_markdown(description), width=250, placeholder="…")
 
 
 def map_search_result(result: dict) -> dict:
