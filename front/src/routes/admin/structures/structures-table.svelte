@@ -8,7 +8,6 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { modifyStructure } from "$lib/requests/structures";
   import type { AdminStructure } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
 
   import StructureModal from "./structure-modal.svelte";
@@ -67,14 +66,12 @@
         </div>
       </div>
 
-      {#if $userInfo.isStaff}
-        <LinkButton
-          to="/admin/structures/{structure.slug}"
-          icon={EyeLineSystem}
-          noBackground
-          otherTab
-        />
-      {/if}
+      <LinkButton
+        to="/admin/structures/{structure.slug}"
+        icon={EyeLineSystem}
+        noBackground
+        otherTab
+      />
       <Button
         onclick={() => {
           currentStructure = structure;
