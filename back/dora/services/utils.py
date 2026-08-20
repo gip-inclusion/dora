@@ -17,6 +17,7 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.services.enums import ServiceStatus
+from dora.services.mobilisation import sync_mobilisation_fields
 
 SYNC_FIELDS = [
     "name",
@@ -128,6 +129,7 @@ def instantiate_service_from_model(model, structure, user):
         )
 
     service.save()
+    sync_mobilisation_fields(service)
     return service
 
 
@@ -143,6 +145,7 @@ def synchronize_service_from_model(service, model):
             getattr(service, field), getattr(model, field).all(), service.structure
         )
 
+    sync_mobilisation_fields(service)
     return service
 
 

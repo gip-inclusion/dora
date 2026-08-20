@@ -10,6 +10,7 @@ from dora.core.constants import WGS84
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
+from dora.services.mobilisation import sync_mobilisation_fields
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -344,6 +345,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     service.beneficiaries_access_modes.add(
         BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
     )
+    sync_mobilisation_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -397,13 +399,60 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "modes_orientation_accompagnateur_autres": "Mêmes modalités que pour les bénéficiaires",
         "modes_orientation_beneficiaire": ["envoyer-un-mail"],
         "modes_orientation_beneficiaire_autres": "Contacter conseiller(e) Pôle Emploi",
+        "modes_mobilisation": [
+            "envoyer-un-courriel",
+            "utiliser-lien-mobilisation",
+        ],
+        "mobilisable_par": ["professionnels", "usagers"],
+        "mobilisation_precisions": None,
+        "lien_mobilisation": service.get_dora_form_url(),
     }
     # Compare with order-independent list fields
-    for key in ("modes_accueil", "modes_orientation_accompagnateur"):
+    for key in (
+        "modes_accueil",
+        "modes_orientation_accompagnateur",
+        "modes_mobilisation",
+        "mobilisable_par",
+    ):
         assert sorted(data[key]) == sorted(expected[key])
     for key, expected_val in expected.items():
-        if key not in ("modes_accueil", "modes_orientation_accompagnateur"):
+        if key not in (
+            "modes_accueil",
+            "modes_orientation_accompagnateur",
+            "modes_mobilisation",
+            "mobilisable_par",
+        ):
             assert data[key] == expected_val
+
+
+def test_service_serialization_mobilisation_v1_fields(authenticated_user, api_client):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        coach_orientation_modes_other="Précision coach",
+        beneficiaries_access_modes_other="",
+        coach_orientation_modes_external_form_link="https://example.com/form",
+    )
+    service.coach_orientation_modes.set(
+        CoachOrientationMode.objects.filter(
+            value__in=["completer-le-formulaire-dadhesion", "telephoner"]
+        )
+    )
+    service.beneficiaries_access_modes.set(
+        BeneficiaryAccessMode.objects.filter(value="professionnel")
+    )
+    sync_mobilisation_fields(service)
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert sorted(data["modes_mobilisation"]) == [
+        "telephoner",
+        "utiliser-lien-mobilisation",
+    ]
+    assert data["mobilisable_par"] == ["professionnels"]
+    assert data["mobilisation_precisions"] is None
+    assert data["lien_mobilisation"] == "https://example.com/form"
 
 
 def test_service_publics_export_empty_maps_to_tous_publics(
