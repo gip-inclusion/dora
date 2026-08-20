@@ -28,12 +28,18 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
     service.model ? getModel(service.model, fetch) : null,
   ]);
 
+  if (!structure) {
+    throw new Error(
+      `Le fetch d'une structure liée au service avec le slug ${params.slug} a échoué`
+    );
+  }
+
   return {
-    title: `Éditer | ${service.name}${structure ? ` | ${structure.name}` : ""} | DORA`,
+    title: `Éditer | ${service.name} | ${structure.name} | DORA`,
     noIndex: true,
     service,
     servicesOptions,
-    structures: structure ? [structure] : [],
+    structures: [structure],
     structure,
     model,
   };
