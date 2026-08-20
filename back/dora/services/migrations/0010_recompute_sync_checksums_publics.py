@@ -4,22 +4,99 @@ Les colonnes DI (`publics_di` / `publics_precisions`) remplacent la M2M `publics
 formulaire : la composition de l'empreinte change donc, et sans ce recalcul les modèles et
 toutes leurs copies encore synchronisées apparaîtraient d'un coup comme « modèle modifié ».
 
-Comme en 0008, `update_sync_checksum` est volontairement importée du code applicatif plutôt
-que recopiée ici : ce qui compte est l'égalité stricte avec ce que l'application calculera au
-prochain enregistrement — une copie figée qui divergerait produirait exactement le faux
-« modèle modifié » que cette migration cherche à éviter.
+Comme en 0008, le calcul est figé ici plutôt qu'importé de `dora.services.utils` : celle-ci
+suit le schéma courant et référence des colonnes qui n'existent pas encore à ce point de
+l'historique. Ce qui compte est l'égalité stricte avec ce que l'application calculera au
+prochain enregistrement, mais cette égalité est la charge de la migration de recalcul la plus
+récente, pas de celle-ci : à l'époque de cette migration, seul l'état de l'époque est correct.
+La copie reproduit donc le code applicatif tel qu'il était au moment du déploiement — y
+compris l'ordre de référence des publics DI, figé lui aussi pour qu'une évolution du
+référentiel `data-inclusion` ne change pas rétroactivement la normalisation.
 """
+
+import hashlib
 
 from django.db import migrations
 
-from dora.services.utils import (
-    SYNC_CUSTOM_M2M_FIELDS,
-    SYNC_M2M_FIELDS,
-    normalize_publics_di,
-    update_sync_checksum,
-)
+SYNC_FIELDS = [
+    "name",
+    "short_desc",
+    "full_desc",
+    "is_cumulative",
+    "fee_condition",
+    "fee_details",
+    "beneficiaries_access_modes_external_form_link",
+    "beneficiaries_access_modes_external_form_link_text",
+    "beneficiaries_access_modes_other",
+    "coach_orientation_modes_external_form_link",
+    "coach_orientation_modes_external_form_link_text",
+    "coach_orientation_modes_other",
+    "duration_weekly_hours",
+    "duration_weeks",
+    "forms",
+    "kind",
+    "online_form",
+    "publics_di",
+    "publics_precisions",
+    "qpv_or_zrr",
+    "recurrence",
+    "suspension_date",
+]
+
+SYNC_FK_FIELDS = {"fee_condition"}
+
+SYNC_M2M_FIELDS = [
+    "categories",
+    "subcategories",
+    "beneficiaries_access_modes",
+    "coach_orientation_modes",
+]
+
+SYNC_CUSTOM_M2M_FIELDS = [
+    "access_conditions",
+    "requirements",
+    "credentials",
+]
+
+DI_PUBLICS_ORDER = {
+    public: index
+    for index, public in enumerate(
+        [
+            "tous-publics",
+            "actifs",
+            "beneficiaires-des-minimas-sociaux",
+            "demandeurs-emploi",
+            "etudiants",
+            "familles",
+            "femmes",
+            "jeunes",
+            "personnes-en-situation-de-handicap",
+            "personnes-en-situation-durgence",
+            "personnes-en-situation-juridique-specifique",
+            "personnes-exilees",
+            "residents-qpv-frr",
+            "seniors",
+        ]
+    )
+}
 
 BATCH = 500
+
+
+def normalize_publics_di(publics):
+    return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
+
+
+def sync_checksum(service):
+    md5 = hashlib.md5(usedforsecurity=False)
+    for field in SYNC_FIELDS:
+        attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
+        md5.update(repr(getattr(service, attr)).encode())
+    for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
+        pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
+        md5.update(repr(pks).encode())
+
+    return md5.hexdigest()
 
 
 def normalize_publics(Service):
@@ -56,7 +133,7 @@ def recompute_sync_checksums(apps, schema_editor):
     )
     for model in models:
         previous = model.sync_checksum
-        model.sync_checksum = update_sync_checksum(model)
+        model.sync_checksum = sync_checksum(model)
         if model.sync_checksum == previous:
             continue
 
