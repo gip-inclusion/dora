@@ -12,10 +12,10 @@
   let { service }: Props = $props();
 </script>
 
-{#if service.fullDesc}
+{#if service.description}
   <ServiceSection title="Description du service">
     <div class="markdown-wrapper prose w-full">
-      <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
+      <TextClamp text={markdownToHTML(service.description, 4)} />
     </div>
   </ServiceSection>
 {/if}

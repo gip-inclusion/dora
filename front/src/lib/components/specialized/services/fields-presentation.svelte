@@ -2,7 +2,6 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
@@ -22,12 +21,12 @@
     noTopPadding = false,
   }: Props = $props();
 
-  let fullDesc: RichTextField;
+  let description: RichTextField;
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
-    if (fieldName === "fullDesc") {
-      fullDesc.updateValue(service.fullDesc);
+    if (fieldName === "description") {
+      description.updateValue(service.description);
     }
   }
 
@@ -50,8 +49,9 @@
   {#snippet help()}
     <div>
       <p class="text-f14">
-        Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
-        les résultats de recherche.
+        La <b>Description</b> présente le service aux professionnels : commencez par
+        une phrase courte, dont le début apparait dans les résultats de recherche,
+        puis détaillez.
       </p>
       <p class="text-f14">
         <strong>Exemple</strong> :
@@ -59,10 +59,6 @@
           Faciliter vos déplacements en cas de reprise d’emploi ou de formation
           (entretien d’embauche, concours public…)
         </i>
-      </p>
-      <p class="text-f14">
-        Si besoin, détaillez dans la partie
-        <b>Description</b>.
       </p>
     </div>
   {/snippet}
@@ -75,22 +71,14 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps.shortDesc ?? {}}>
-    <TextareaField
-      id="shortDesc"
-      bind:value={service.shortDesc}
-      description="Courte description affichée dans les résultats de recherche. 280 caractères maximum."
-    />
-  </FieldModel>
-
-  <FieldModel {...fieldModelProps.fullDesc ?? {}} paddingTop type="markdown">
+  <FieldModel {...fieldModelProps.description ?? {}} paddingTop type="markdown">
     <RichTextField
-      id="fullDesc"
-      bind:this={fullDesc}
+      id="description"
+      bind:this={description}
       placeholder="Cette description sera affichée sur la fiche du service et permettra aux professionnels de mieux comprendre les spécificités et la valeur du service proposé. N’hésitez pas à inclure des liens, des documents à télécharger ou des vidéos explicatives. "
       vertical
-      bind:value={service.fullDesc}
-      description="Décrivez de manière exhaustive le service."
+      bind:value={service.description}
+      description="Décrivez le service. La première phrase sert d’accroche dans les résultats de recherche. 10 000 caractères maximum."
     />
   </FieldModel>
 </FieldSet>

@@ -441,13 +441,13 @@ export interface ServiceModelBase {
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
   department: string;
+  description: string;
   durationWeeklyHours: number | null;
   durationWeeks: number | null;
   feeCondition: FeeCondition | null;
   feeDetails: string;
   forms: string[];
   formsInfo: FileInfo[];
-  fullDesc: string;
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
   isCumulative: boolean;
@@ -463,7 +463,8 @@ export interface ServiceModelBase {
   recurrence: string;
   requirements: CustomizableFK[];
   requirementsDisplay: string[];
-  shortDesc: string;
+  // extrait de la description, dérivé par le back
+  readonly shortDesc: string;
   slug: string;
   structure: string;
   structureInfo: ServiceStructure;

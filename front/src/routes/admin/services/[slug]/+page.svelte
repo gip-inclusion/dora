@@ -22,7 +22,7 @@
   let { data = $bindable() }: Props = $props();
 
   const structure = data.service.structure;
-  const description = markdownToHTML(data.service.fullDesc, 2);
+  const description = markdownToHTML(data.service.description, 2);
 
   async function handleRefresh() {
     data.service = await getServiceAdmin(data.service.slug);
@@ -99,14 +99,8 @@
 
     <h4 id="infos">Informations</h4>
 
-    <InfoLine>
-      <div class="italic">
-        {data.service.shortDesc}
-      </div>
-    </InfoLine>
-
-    <InfoLine condition={data.service.fullDesc}>
-      Description longue:
+    <InfoLine condition={data.service.description}>
+      Description:
       <div class="prose-sm border-gray-02 p-s16 rounded-lg border-2">
         <TextClamp text={description} />
       </div>

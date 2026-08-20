@@ -95,9 +95,9 @@
 </script>
 
 <CenteredGrid>
-  <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
-    <div class="gap-s32 flex basis-2/3 flex-col">
-      {#if showServiceWillBeVisibleSoonNotice}
+  {#if showServiceWillBeVisibleSoonNotice}
+    <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
+      <div class="basis-2/3">
         <Notice
           title="Votre service est publié et sera bientôt visible partout"
           type="warning"
@@ -108,15 +108,9 @@
             d’une heure.
           </p>
         </Notice>
-      {/if}
-      <div class="text-f18 leading-s32 text-gray-text">
-        <p>
-          {service.shortDesc || ""}
-        </p>
       </div>
     </div>
-    <div class="basis-1/3"></div>
-  </div>
+  {/if}
 
   <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
     <div class="md:col-span-2">
