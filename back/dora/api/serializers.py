@@ -1,4 +1,5 @@
 # from django.core.files.storage import default_storage
+from data_inclusion.schema.v1 import ModeMobilisation
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
@@ -208,6 +209,10 @@ class ServiceSerializer(serializers.ModelSerializer):
     modes_orientation_accompagnateur_autres = serializers.SerializerMethodField()
     modes_orientation_beneficiaire = serializers.SerializerMethodField()
     modes_orientation_beneficiaire_autres = serializers.SerializerMethodField()
+    modes_mobilisation = serializers.ReadOnlyField(source="mobilisation_modes")
+    mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
+    mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
+    lien_mobilisation = serializers.SerializerMethodField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
 
@@ -256,6 +261,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             "modes_orientation_accompagnateur_autres",
             "modes_orientation_beneficiaire",
             "modes_orientation_beneficiaire_autres",
+            "modes_mobilisation",
+            "mobilisable_par",
+            "mobilisation_precisions",
+            "lien_mobilisation",
             "temps_passe_duree_hebdomadaire",
             "temps_passe_semaines",
         ]
@@ -329,6 +338,16 @@ class ServiceSerializer(serializers.ModelSerializer):
         elif "formulaire-dora" in coach_orientation_mode_values:
             return obj.get_dora_form_url()
         return obj.online_form if obj.online_form else None
+
+    def get_lien_mobilisation(self, obj):
+        if ModeMobilisation.UTILISER_LIEN_MOBILISATION.value not in (
+            obj.mobilisation_modes or []
+        ):
+            return None
+        link = obj.mobilisation_link
+        if link and link.endswith(f"/services/{obj.slug}/orienter"):
+            link = None
+        return link or obj.get_dora_form_url()
 
     def get_commune(self, obj):
         return obj.city if obj.city else None

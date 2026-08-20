@@ -7,6 +7,8 @@ from data_inclusion.schema.v1 import (
     Categorie,
     Frais,
     ModeAccueil,
+    ModeMobilisation,
+    PersonneMobilisatrice,
     Thematique,
     TypeService,
 )
@@ -29,6 +31,7 @@ from dora.services.utils import (
 )
 from dora.structures.models import Structure, StructureMember
 
+from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -258,6 +261,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     coach_orientation_modes_display = serializers.SlugRelatedField(
         source="coach_orientation_modes", slug_field="label", many=True, read_only=True
     )
+    mobilisation_modes_display = serializers.SerializerMethodField()
+    mobilisable_by_display = serializers.SerializerMethodField()
     department = serializers.SerializerMethodField()
     can_write = serializers.SerializerMethodField()
     has_already_been_unpublished = serializers.SerializerMethodField()
@@ -308,6 +313,12 @@ class ServiceSerializer(serializers.ModelSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "mobilisation_modes",
+            "mobilisation_modes_display",
+            "mobilisable_by",
+            "mobilisable_by_display",
+            "mobilisation_details",
+            "mobilisation_link",
             "publics",
             "publics_display",
             "publics_precisions",
@@ -374,6 +385,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "city",
             "is_model",
+            "mobilisable_by",
+            "mobilisation_details",
+            "mobilisation_link",
+            "mobilisation_modes",
         ]
         lookup_field = "slug"
 
@@ -417,6 +432,16 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_publics_display(self, obj):
         return [DIPublic(public).label for public in obj.publics]
+
+    def get_mobilisation_modes_display(self, obj):
+        if not obj.mobilisation_modes:
+            return None
+        return [ModeMobilisation(mode).label for mode in obj.mobilisation_modes]
+
+    def get_mobilisable_by_display(self, obj):
+        if not obj.mobilisable_by:
+            return None
+        return [PersonneMobilisatrice(value).label for value in obj.mobilisable_by]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
@@ -491,6 +516,16 @@ class ServiceSerializer(serializers.ModelSerializer):
             data["publics"] = normalize_publics(data["publics"])
 
         return data
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        sync_mobilisation_fields(instance)
+        return instance
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        sync_mobilisation_fields(instance)
+        return instance
 
     def _validate_custom_choice(self, field, data, user, user_structures, structure):
         values = data[field]
@@ -572,6 +607,12 @@ class ServiceModelSerializer(ServiceSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "mobilisation_modes",
+            "mobilisation_modes_display",
+            "mobilisable_by",
+            "mobilisable_by_display",
+            "mobilisation_details",
+            "mobilisation_link",
             "publics",
             "publics_display",
             "publics_precisions",
@@ -612,6 +653,10 @@ class ServiceModelSerializer(ServiceSerializer):
         ]
         read_only_fields = [
             "is_model",
+            "mobilisable_by",
+            "mobilisation_details",
+            "mobilisation_link",
+            "mobilisation_modes",
         ]
         lookup_field = "slug"
 
