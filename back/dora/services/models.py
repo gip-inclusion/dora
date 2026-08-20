@@ -423,6 +423,34 @@ class Service(ModerationMixin, models.Model):
     coach_orientation_modes_other = CharField(
         verbose_name="Autre", max_length=280, blank=True
     )
+
+    mobilisation_modes = ArrayField(
+        models.CharField(max_length=255),
+        verbose_name="Modes de mobilisation",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    mobilisable_by = ArrayField(
+        models.CharField(max_length=255),
+        verbose_name="Mobilisable par",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    mobilisation_details = models.TextField(
+        verbose_name="Précisions sur la mobilisation",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    mobilisation_link = URLField(
+        verbose_name="Lien de mobilisation",
+        blank=True,
+        null=True,
+        default=None,
+    )
+
     requirements = models.ManyToManyField(
         Requirement,
         verbose_name="Quels sont les pré-requis ou compétences ?",
