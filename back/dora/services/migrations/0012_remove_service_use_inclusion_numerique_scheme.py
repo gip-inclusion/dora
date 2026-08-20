@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('services', '0009_remove_service_kinds'),
+        ("services", "0011_service_description"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='service',
-            name='use_inclusion_numerique_scheme',
+            model_name="service",
+            name="use_inclusion_numerique_scheme",
         ),
     ]
