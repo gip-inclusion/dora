@@ -24,6 +24,7 @@ interface ReceivedOrientationExportData extends Pick<
   prescriberStructureName: string;
   detailPageUrl: string;
   source: string;
+  beneficiaryFranceTravailNumber: string;
 }
 
 async function fetchOrientationExportData(structureSlug: string) {
@@ -57,6 +58,7 @@ function formatReceivedOrientationExportData(
     "Reçue le": orientation.creationDate,
     Statut: orientation.status,
     Bénéficiaire: orientation.beneficiaryName,
+    "Identifiant FT": orientation.beneficiaryFranceTravailNumber || "N/A",
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
     "Contact émetteur": orientation.prescriberName,
