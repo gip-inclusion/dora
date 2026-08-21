@@ -102,7 +102,7 @@
     // teste si on a le service complet
     // ça n'est pas le cas sur les cards de la page structure par exemple
 
-    if (!Object.prototype.hasOwnProperty.call(service, "fullDesc")) {
+    if (!Object.prototype.hasOwnProperty.call(service, "description")) {
       serviceFull = await getService(service.slug);
     }
 

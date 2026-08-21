@@ -35,10 +35,10 @@ def test_editing_log_multiple_change(api_client):
     struct = make_structure(user)
     model = make_model(structure=struct)
     api_client.force_authenticate(user=user)
-    api_client.patch(f"/models/{model.slug}/", {"name": "xxx", "short_desc": "yyy"})
+    api_client.patch(f"/models/{model.slug}/", {"name": "xxx", "description": "yyy"})
     hitem = ServiceModificationHistoryItem.objects.first()
 
-    assert hitem.fields == ["name", "short_desc"]
+    assert hitem.fields == ["description", "name"]
 
 
 def test_editing_log_m2m_change(api_client):

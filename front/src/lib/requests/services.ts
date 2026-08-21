@@ -18,7 +18,7 @@ import { userInfo } from "$lib/utils/auth";
 import { getAnalyticsId } from "$lib/utils/stats";
 import { logException } from "$lib/utils/logger";
 
-function serviceToBack(service) {
+export function serviceToBack(service) {
   if (service.longitude && service.latitude) {
     service.geom = {
       type: "Point",
@@ -26,7 +26,13 @@ function serviceToBack(service) {
     };
   }
 
-  return service;
+  // `fullDesc` est l'alias de compatibilité de `description` encore servi par l'API, et
+  // l'API lui donne la priorité pour les fronts non basculés : le renvoyer tel qu'il a
+  // été chargé écraserait la description modifiée. À retirer avec l'alias.
+  const payload = { ...service };
+  delete payload.fullDesc;
+
+  return payload;
 }
 
 function serviceToFront(service) {

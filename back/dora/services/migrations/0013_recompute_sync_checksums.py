@@ -1,21 +1,16 @@
-"""Recalcule les empreintes de synchronisation après le passage de `kinds` à `kind`.
+"""Recalcule les empreintes de synchronisation après la sortie de `short_desc`.
 
-`kind` entre dans les champs synchronisés et `kinds` en sort : l'empreinte d'un modèle change
-donc de valeur. Sans ce recalcul, les ~3 000 modèles et toutes leurs copies encore
-synchronisées apparaîtraient d'un coup comme « modèle modifié » aux utilisateurs.
+L'empreinte hache la valeur de chacun des champs synchronisés : en retirer un change
+l'empreinte de tous les modèles. Sans ce recalcul, les ~2 800 modèles et toutes leurs copies
+encore synchronisées apparaîtraient d'un coup comme « modèle modifié » aux utilisateurs.
 
-Le calcul est figé ici plutôt qu'importé de `dora.services.utils` : celle-ci suit le schéma
-courant et référence des colonnes qui n'existent pas encore à ce point de l'historique —
-`full_desc` n'est renommé en `description` que par `0011_service_description`, et un rejeu de
-cette migration sur une base peuplée échouerait. Ce qui compte est l'égalité stricte avec ce
-que l'application calculera au prochain enregistrement, mais cette égalité est la charge de la
-migration de recalcul la plus récente, pas de celle-ci : à l'époque de cette migration, seul
-l'état de l'époque est correct. La copie reproduit donc le code applicatif tel qu'il était au
-moment du déploiement, y compris le hachage des clés étrangères par leur identifiant plutôt
-que par l'instance liée, dont le `repr()` dépend d'un `__str__` absent des modèles historiques.
-
-Elle suppose `Service.kind` déjà renseigné : la colonne est remplie par la commande
-`backfill_service_kind` du déploiement précédent, lancée en one-off avant celui-ci.
+Même patron que `0008_recompute_sync_checksums`, dont le préambule détaille pourquoi le calcul
+est figé ici plutôt qu'importé du code applicatif. Ce qui compte est l'égalité stricte avec ce
+que l'application calculera au prochain enregistrement — une copie qui divergerait produirait
+exactement le faux « modèle modifié » que cette migration cherche à éviter. Cette migration
+étant la plus récente à recalculer les empreintes, c'est elle qui porte cette égalité :
+`test_migrations_sync_checksum.py` la vérifie, et rougira au prochain changement des champs
+synchronisés — signe qu'une nouvelle migration de recalcul est nécessaire.
 """
 
 import hashlib
@@ -24,8 +19,7 @@ from django.db import migrations
 
 SYNC_FIELDS = [
     "name",
-    "short_desc",
-    "full_desc",
+    "description",
     "is_cumulative",
     "fee_condition",
     "fee_details",
@@ -40,6 +34,8 @@ SYNC_FIELDS = [
     "forms",
     "kind",
     "online_form",
+    "publics_di",
+    "publics_precisions",
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
@@ -56,7 +52,6 @@ SYNC_M2M_FIELDS = [
 
 SYNC_CUSTOM_M2M_FIELDS = [
     "access_conditions",
-    "publics",
     "requirements",
     "credentials",
 ]
@@ -108,7 +103,7 @@ def recompute_sync_checksums(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0007_service_kind"),
+        ("services", "0012_remove_service_short_desc"),
     ]
 
     operations = [
