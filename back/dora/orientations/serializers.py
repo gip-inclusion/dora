@@ -292,6 +292,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "prescriber_structure_name",
             "detail_page_url",
             "source",
+            "beneficiary_france_travail_number",
         ]
 
     @staticmethod
