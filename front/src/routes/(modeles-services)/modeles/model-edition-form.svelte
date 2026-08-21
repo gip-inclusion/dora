@@ -16,7 +16,6 @@
   import { createOrModifyModel } from "$lib/requests/services";
   import type { Model, ServicesOptions, ShortStructure } from "$lib/types";
   import { modelSchema } from "$lib/validation/schemas/service";
-  import Notice from "$lib/components/display/notice.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { showNotice } from "$lib/utils/service-update-notices";
   import DocumentUploadNoticeModal from "../services/document-upload-notice-modal.svelte";
@@ -55,8 +54,6 @@
     isModalOpen = false;
     formControls.submit?.();
   }
-
-  const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
 
   function handleChange(validatedData) {
     model = { ...model, ...validatedData };
@@ -100,27 +97,6 @@
 
   <hr />
   <CenteredGrid>
-    {#if model.slug && showMaxCategoriesNotice}
-      <div class="mb-s40">
-        <Notice
-          type="warning"
-          title="Votre modèle comporte plus de 3 thématiques"
-        >
-          <p class="mb-s0 text-f14">
-            Les thématiques permettent de qualifier un service sur Dora et ont
-            pour objectif d’identifier les freins spécifiques (et principaux)
-            que vous aidez à lever dans le cadre de votre accompagnement.
-          </p>
-          <p class="mb-s0 text-f14">
-            Plus vous êtes précis dans le référencement de votre offre, plus
-            vous aidez les personnes accompagnant les publics à identifier le
-            bon service ciblé sur leur besoin et plus les demandes d’orientation
-            que vous recevez seront qualifiées.
-          </p>
-        </Notice>
-      </div>
-    {/if}
-
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure

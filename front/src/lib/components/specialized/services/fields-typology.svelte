@@ -49,7 +49,7 @@
     <FieldCategory
       bind:service
       {servicesOptions}
-      description="Sélectionnez jusqu’à 3 thématiques auxquelles le service correspond."
+      description="Sélectionnez les thématiques auxquelles le service correspond."
     />
   </FieldModel>
   {#snippet help()}
