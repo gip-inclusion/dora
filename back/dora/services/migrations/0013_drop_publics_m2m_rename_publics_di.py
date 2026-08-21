@@ -17,7 +17,7 @@ import dora.services.models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0011_service_description"),
+        ("services", "0012_remove_service_use_inclusion_numerique_scheme"),
     ]
 
     operations = [
