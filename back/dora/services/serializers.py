@@ -151,6 +151,11 @@ def _get_update_frequency_display(obj):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+    # Alias de compatibilité vers `description`, à retirer une fois le front basculé : DRF
+    # ignore les clés inconnues, un front qui posterait encore `fullDesc` perdrait sa
+    # description sans erreur, et une fiche affichée par l'ancien front serait vide.
+    full_desc = serializers.CharField(source="description", read_only=True)
+
     is_available = serializers.SerializerMethodField()
     forms_info = serializers.SerializerMethodField()
     structure = serializers.SlugRelatedField(
@@ -326,6 +331,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "forms",
             "forms_info",
             "full_desc",
+            "description",
             "funding_labels",
             "funding_labels_display",
             "geom",
@@ -426,6 +432,14 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_can_write(self, obj):
         user = self.context.get("request").user
         return obj.can_write(user)
+
+    def to_internal_value(self, data):
+        # Pendant de l'alias `full_desc` : l'ancienne clé l'emporte, car seul un front non
+        # basculé l'envoie — et il renvoie à côté le `description` chargé, donc périmé.
+        if "full_desc" in data:
+            data = data.copy()
+            data["description"] = data["full_desc"]
+        return super().to_internal_value(data)
 
     def validate(self, data):
         user = self.context.get("request").user
@@ -575,6 +589,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "funding_labels",
             "funding_labels_display",
             "full_desc",
+            "description",
             "is_cumulative",
             "is_model",
             "kind",

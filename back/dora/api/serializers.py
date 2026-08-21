@@ -276,7 +276,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.short_desc or None
 
     def get_presentation_detail(self, obj):
-        return obj.full_desc or None
+        return obj.description or None
 
     def get_types(self, obj):
         return [obj.kind] if obj.kind else []

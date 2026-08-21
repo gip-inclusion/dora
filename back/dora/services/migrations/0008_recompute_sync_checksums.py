@@ -1,30 +1,79 @@
 """Recalcule les empreintes de synchronisation après le passage de `kinds` à `kind`.
 
-`kind` entre dans `SYNC_FIELDS` et `kinds` sort de `SYNC_M2M_FIELDS` : l'empreinte d'un modèle
-change donc de valeur. Sans ce recalcul, les ~3 000 modèles et toutes leurs copies encore
+`kind` entre dans les champs synchronisés et `kinds` en sort : l'empreinte d'un modèle change
+donc de valeur. Sans ce recalcul, les ~3 000 modèles et toutes leurs copies encore
 synchronisées apparaîtraient d'un coup comme « modèle modifié » aux utilisateurs.
 
-`update_sync_checksum` est volontairement importée du code applicatif plutôt que recopiée ici :
-ce qui compte est l'égalité stricte avec ce que l'application calculera au prochain
-enregistrement — une copie figée qui divergerait produirait exactement le faux « modèle
-modifié » que cette migration cherche à éviter. Cette égalité suppose que la fonction ne hache
-que des valeurs identiques sur un modèle historique et sur le vrai modèle : c'est pourquoi
-elle hache l'identifiant des clés étrangères et non l'instance liée, dont le `repr()` dépend
-du `__str__` absent ici.
+Le calcul est figé ici plutôt qu'importé de `dora.services.utils` : celle-ci suit le schéma
+courant et référence des colonnes qui n'existent pas encore à ce point de l'historique —
+`full_desc` n'est renommé en `description` que par `0011_service_description`, et un rejeu de
+cette migration sur une base peuplée échouerait. Ce qui compte est l'égalité stricte avec ce
+que l'application calculera au prochain enregistrement, mais cette égalité est la charge de la
+migration de recalcul la plus récente, pas de celle-ci : à l'époque de cette migration, seul
+l'état de l'époque est correct. La copie reproduit donc le code applicatif tel qu'il était au
+moment du déploiement, y compris le hachage des clés étrangères par leur identifiant plutôt
+que par l'instance liée, dont le `repr()` dépend d'un `__str__` absent des modèles historiques.
 
 Elle suppose `Service.kind` déjà renseigné : la colonne est remplie par la commande
 `backfill_service_kind` du déploiement précédent, lancée en one-off avant celui-ci.
 """
 
+import hashlib
+
 from django.db import migrations
 
-from dora.services.utils import (
-    SYNC_CUSTOM_M2M_FIELDS,
-    SYNC_M2M_FIELDS,
-    update_sync_checksum,
-)
+SYNC_FIELDS = [
+    "name",
+    "short_desc",
+    "full_desc",
+    "is_cumulative",
+    "fee_condition",
+    "fee_details",
+    "beneficiaries_access_modes_external_form_link",
+    "beneficiaries_access_modes_external_form_link_text",
+    "beneficiaries_access_modes_other",
+    "coach_orientation_modes_external_form_link",
+    "coach_orientation_modes_external_form_link_text",
+    "coach_orientation_modes_other",
+    "duration_weekly_hours",
+    "duration_weeks",
+    "forms",
+    "kind",
+    "online_form",
+    "qpv_or_zrr",
+    "recurrence",
+    "suspension_date",
+]
+
+SYNC_FK_FIELDS = {"fee_condition"}
+
+SYNC_M2M_FIELDS = [
+    "categories",
+    "subcategories",
+    "beneficiaries_access_modes",
+    "coach_orientation_modes",
+]
+
+SYNC_CUSTOM_M2M_FIELDS = [
+    "access_conditions",
+    "publics",
+    "requirements",
+    "credentials",
+]
 
 BATCH = 500
+
+
+def sync_checksum(service):
+    md5 = hashlib.md5(usedforsecurity=False)
+    for field in SYNC_FIELDS:
+        attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
+        md5.update(repr(getattr(service, attr)).encode())
+    for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
+        pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
+        md5.update(repr(pks).encode())
+
+    return md5.hexdigest()
 
 
 def recompute_sync_checksums(apps, schema_editor):
@@ -38,7 +87,7 @@ def recompute_sync_checksums(apps, schema_editor):
     )
     for model in models:
         previous = model.sync_checksum
-        model.sync_checksum = update_sync_checksum(model)
+        model.sync_checksum = sync_checksum(model)
         if model.sync_checksum == previous:
             continue
 
