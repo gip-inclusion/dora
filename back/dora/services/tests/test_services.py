@@ -63,7 +63,7 @@ from ..utils import (
     SYNC_CUSTOM_M2M_FIELDS,
     SYNC_FIELDS,
     SYNC_M2M_FIELDS,
-    normalize_publics_di,
+    normalize_publics,
     update_sync_checksum,
 )
 from ..views import search_services_view, service_di
@@ -301,9 +301,8 @@ class ServiceTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.my_service.refresh_from_db()
-        self.assertEqual(self.my_service.publics_di, [Public.JEUNES.value])
+        self.assertEqual(self.my_service.publics, [Public.JEUNES.value])
         self.assertEqual(self.my_service.publics_precisions, "jeunes de 16 à 25 ans")
-        self.assertEqual(self.my_service.publics.count(), 0)
 
     def test_write_publics_rejects_unknown_slug(self):
         response = self.client.patch(
@@ -314,7 +313,7 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_read_publics_returns_di_slugs(self):
-        self.my_service.publics_di = [Public.JEUNES.value]
+        self.my_service.publics = [Public.JEUNES.value]
         self.my_service.publics_precisions = "précision"
         self.my_service.save()
         response = self.client.get(f"/services/{self.my_service.slug}/")
@@ -2068,9 +2067,7 @@ class ServiceSyncTestCase(APITestCase):
         for field in SYNC_FIELDS:
             initial_checksum = model.sync_checksum
             patch_field = field
-            if field == "publics_di":
-                # écrit via le champ d'API `publics` (source=publics_di)
-                patch_field = "publics"
+            if field == "publics":
                 new_val = [Public.JEUNES.value]
             elif field == "publics_precisions":
                 new_val = "précision"
@@ -2182,12 +2179,7 @@ class ServiceSyncTestCase(APITestCase):
         for field in SYNC_CUSTOM_M2M_FIELDS:
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
-            rel_models_fields = (
-                {"corresponding_di_publics": [Public.FAMILLES]}
-                if field == "publics"
-                else {}
-            )
-            new_value = baker.make(rel_model, **rel_models_fields)
+            new_value = baker.make(rel_model)
             response = self.client.patch(
                 f"/models/{model.slug}/", {field: [new_value.id]}
             )
@@ -2196,7 +2188,7 @@ class ServiceSyncTestCase(APITestCase):
             self.assertNotEqual(model.sync_checksum, initial_checksum)
 
     def test_publics_are_normalized_on_write(self):
-        # `publics_di` est un ensemble, pas une séquence : l'écriture le dédoublonne et le
+        # `publics` est un ensemble, pas une séquence : l'écriture le dédoublonne et le
         # range dans l'ordre du référentiel, sinon un simple réordonnancement de la saisie
         # basculerait le modèle en « modèle modifié ».
         user = baker.make("users.User", is_valid=True)
@@ -2204,11 +2196,11 @@ class ServiceSyncTestCase(APITestCase):
         model = make_model(structure=struct)
         self.client.force_authenticate(user=user)
 
-        normalized = normalize_publics_di([Public.FAMILLES.value, Public.JEUNES.value])
+        normalized = normalize_publics([Public.FAMILLES.value, Public.JEUNES.value])
         response = self.client.patch(f"/models/{model.slug}/", {"publics": normalized})
         self.assertEqual(response.status_code, 200)
         model.refresh_from_db()
-        self.assertEqual(model.publics_di, normalized)
+        self.assertEqual(model.publics, normalized)
         initial_checksum = model.sync_checksum
 
         response = self.client.patch(
@@ -2217,7 +2209,7 @@ class ServiceSyncTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         model.refresh_from_db()
-        self.assertEqual(model.publics_di, normalized)
+        self.assertEqual(model.publics, normalized)
         self.assertEqual(model.sync_checksum, initial_checksum)
 
 

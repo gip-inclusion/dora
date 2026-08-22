@@ -25,7 +25,7 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
-    normalize_publics_di,
+    normalize_publics,
 )
 from dora.structures.models import Structure, StructureMember
 
@@ -209,7 +209,6 @@ class ServiceSerializer(serializers.ModelSerializer):
                 p.value for p in DIPublic if p.value != DIPublic.TOUS_PUBLICS.value
             ]
         ),
-        source="publics_di",
         required=False,
     )
     publics_display = serializers.SerializerMethodField()
@@ -417,7 +416,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return [item.name for item in obj.access_conditions.all()]
 
     def get_publics_display(self, obj):
-        return [DIPublic(public).label for public in obj.publics_di]
+        return [DIPublic(public).label for public in obj.publics]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
@@ -488,8 +487,8 @@ class ServiceSerializer(serializers.ModelSerializer):
         # rangés dans l'ordre du référentiel) pour qu'un simple changement d'ordre de saisie
         # ne fasse pas diverger l'empreinte de synchronisation, l'historique de modification
         # et le diff « modèle modifié » côté front.
-        if "publics_di" in data:
-            data["publics_di"] = normalize_publics_di(data["publics_di"])
+        if "publics" in data:
+            data["publics"] = normalize_publics(data["publics"])
 
         return data
 
@@ -966,7 +965,7 @@ class SearchResultSerializer(ServiceListSerializer):
         # Côté application/front, publics = restrictions ; une liste vide signifie
         # « aucune restriction » (tous publics). On n'inflate pas en `tous-publics`
         # (ça reste réservé à l'interface DI, cf. api/serializers.py).
-        return obj.publics_di
+        return obj.publics
 
     def get_location_kinds(self, obj):
         """

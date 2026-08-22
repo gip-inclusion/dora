@@ -299,9 +299,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         # totalité du référentiel se traduisent en « tous-publics ». Seul endroit où Dora
         # réintroduit `tous-publics` ; partout ailleurs l'absence de restriction reste [].
         specific_publics = {p.value for p in DiPublic} - {DiPublic.TOUS_PUBLICS.value}
-        if not obj.publics_di or set(obj.publics_di) >= specific_publics:
+        if not obj.publics or set(obj.publics) >= specific_publics:
             return [DiPublic.TOUS_PUBLICS.value]
-        return obj.publics_di
+        return obj.publics
 
     def get_publics_precisions(self, obj):
         return obj.publics_precisions

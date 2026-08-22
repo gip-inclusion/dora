@@ -82,7 +82,7 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
         return False
 
 
-def publics_di_field():
+def publics_field():
     return forms.MultipleChoiceField(
         choices=(
             (p.value, p.label)
@@ -96,7 +96,7 @@ def publics_di_field():
 
 
 class ServiceAdminForm(forms.ModelForm):
-    publics_di = publics_di_field()
+    publics = publics_field()
 
     class Meta:
         model = Service
@@ -136,7 +136,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "requirements",
         "credentials",
     ]
-    exclude = ("publics",)
     inlines = [ServiceStatusHistoryItemInline, ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True
@@ -424,7 +423,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
 
 class ServiceModelAdminForm(forms.ModelForm):
-    publics_di = publics_di_field()
+    publics = publics_field()
 
     class Meta:
         model = ServiceModel
@@ -458,7 +457,6 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "requirements",
         "credentials",
     ]
-    exclude = ("publics",)
     inlines = [ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True

@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 import pytest
-from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.core.management import call_command
 from model_bakery import baker
 
@@ -77,14 +76,6 @@ def test_dry_run_deletes_nothing():
                 "services.AccessCondition", structure=structure
             ),
             id="custom-access-condition",
-        ),
-        pytest.param(
-            lambda structure: baker.make(
-                "services.Public",
-                structure=structure,
-                corresponding_di_publics=[DiPublic.FAMILLES],
-            ),
-            id="custom-public",
         ),
         pytest.param(
             lambda structure: baker.make("services.Requirement", structure=structure),

@@ -95,26 +95,6 @@ class AccessCondition(CustomizableChoice):
         verbose_name_plural = "Critères d’admission"
 
 
-class Public(CustomizableChoice):
-    corresponding_di_publics = ArrayField(
-        models.CharField(
-            max_length=255, validators=[validate_corresponding_di_publics]
-        ),
-        verbose_name="Publics Data Inclusion correspondants",
-        blank=False,
-        null=False,
-        default=list,
-    )
-
-    class Meta(CustomizableChoice.Meta):
-        verbose_name = "Public"
-        verbose_name_plural = "Publics"
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
-
 class ServiceFee(EnumModel):
     class Meta:
         verbose_name = "Frais à charge"
@@ -379,8 +359,7 @@ class Service(ModerationMixin, models.Model):
     access_conditions = models.ManyToManyField(
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
-    publics = models.ManyToManyField(Public, verbose_name="Publics", blank=True)
-    publics_di = ArrayField(
+    publics = ArrayField(
         models.CharField(
             max_length=255, validators=[validate_corresponding_di_publics]
         ),
