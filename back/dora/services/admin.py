@@ -12,6 +12,7 @@ from dora.core.admin import EnumAdmin
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
 from .label_services import LabelServicesHelper
+from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -144,8 +145,16 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "status",
         "data_inclusion_id",
         "data_inclusion_source",
+        "mobilisation_modes",
+        "mobilisable_by",
+        "mobilisation_details",
+        "mobilisation_link",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        sync_mobilisation_fields(form.instance)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -460,8 +469,20 @@ class ServiceModelAdmin(admin.ModelAdmin):
     inlines = [ServiceModificationHistoryItemInline]
     ordering = ["-modification_date"]
     save_as = True
-    readonly_fields = ("creation_date", "modification_date", "status")
+    readonly_fields = (
+        "creation_date",
+        "modification_date",
+        "status",
+        "mobilisation_modes",
+        "mobilisable_by",
+        "mobilisation_details",
+        "mobilisation_link",
+    )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        sync_mobilisation_fields(form.instance)
 
 
 class CustomizableChoiceAdmin(admin.ModelAdmin):

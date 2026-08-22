@@ -208,6 +208,10 @@ class ServiceSerializer(serializers.ModelSerializer):
     modes_orientation_accompagnateur_autres = serializers.SerializerMethodField()
     modes_orientation_beneficiaire = serializers.SerializerMethodField()
     modes_orientation_beneficiaire_autres = serializers.SerializerMethodField()
+    modes_mobilisation = serializers.ReadOnlyField(source="mobilisation_modes")
+    mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
+    mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
+    lien_mobilisation = serializers.ReadOnlyField(source="mobilisation_link")
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
 
@@ -256,6 +260,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             "modes_orientation_accompagnateur_autres",
             "modes_orientation_beneficiaire",
             "modes_orientation_beneficiaire_autres",
+            "modes_mobilisation",
+            "mobilisable_par",
+            "mobilisation_precisions",
+            "lien_mobilisation",
             "temps_passe_duree_hebdomadaire",
             "temps_passe_semaines",
         ]

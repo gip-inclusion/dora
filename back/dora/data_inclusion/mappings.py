@@ -185,6 +185,31 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         code_insee_to_code_dept(structure_insee_code) if structure_insee_code else ""
     )
 
+    mobilisation_modes = None
+    mobilisation_modes_display = None
+    if service_data["modes_mobilisation"] is not None:
+        modes_mobilisation = [
+            mode if isinstance(mode, ModeMobilisation) else ModeMobilisation(mode)
+            for mode in service_data["modes_mobilisation"]
+        ]
+        mobilisation_modes = [mode.value for mode in modes_mobilisation]
+        mobilisation_modes_display = [mode.label for mode in modes_mobilisation]
+
+    mobilisable_by = None
+    mobilisable_by_display = None
+    if service_data["mobilisable_par"] is not None:
+        mobilisable_par = [
+            person
+            if isinstance(person, PersonneMobilisatrice)
+            else PersonneMobilisatrice(person)
+            for person in service_data["mobilisable_par"]
+        ]
+        mobilisable_by = [person.value for person in mobilisable_par]
+        mobilisable_by_display = [person.label for person in mobilisable_par]
+
+    mobilisation_details = service_data["mobilisation_precisions"]
+    mobilisation_link = service_data["lien_mobilisation"]
+
     beneficiaries_access_modes = None
     beneficiaries_access_modes_external_form_link = None
     beneficiaries_access_modes_other = None
@@ -199,11 +224,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
                 for mode in service_data["modes_mobilisation"]
             ]
         )
-        # Autres champs
-        beneficiaries_access_modes_external_form_link = service_data[
-            "lien_mobilisation"
-        ]
-        beneficiaries_access_modes_other = service_data["mobilisation_precisions"]
+        beneficiaries_access_modes_external_form_link = mobilisation_link
+        beneficiaries_access_modes_other = mobilisation_details
 
     coach_orientation_modes = None
     coach_orientation_modes_external_form_link = None
@@ -233,9 +255,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         coach_orientation_modes = CoachOrientationMode.objects.filter(
             value__in=coach_orientation_mode_values
         )
-        # Autres champs
-        coach_orientation_modes_external_form_link = service_data["lien_mobilisation"]
-        coach_orientation_modes_other = service_data["mobilisation_precisions"]
+        coach_orientation_modes_external_form_link = mobilisation_link
+        coach_orientation_modes_other = mobilisation_details
     elif service_data["courriel"]:
         coach_orientation_modes = CoachOrientationMode.objects.filter(
             value="formulaire-dora"
@@ -293,6 +314,12 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_external_form_link": coach_orientation_modes_external_form_link,
         "coach_orientation_modes_external_form_link_text": "",
         "coach_orientation_modes_other": coach_orientation_modes_other,
+        "mobilisation_modes": mobilisation_modes,
+        "mobilisation_modes_display": mobilisation_modes_display,
+        "mobilisable_by": mobilisable_by,
+        "mobilisable_by_display": mobilisable_by_display,
+        "mobilisation_details": mobilisation_details,
+        "mobilisation_link": mobilisation_link,
         "publics": [p.value for p in publics] if publics is not None else None,
         "publics_display": [p.label for p in publics] if publics is not None else None,
         "publics_precisions": service_data["publics_precisions"],
