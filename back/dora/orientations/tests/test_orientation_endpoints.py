@@ -631,6 +631,7 @@ class OrientationsExportTestCase(APITestCase):
             status=OrientationStatus.ACCEPTED,
             prescriber_structure=self.structure,
             prescriber=prescriber,
+            beneficiary_france_travail_number="12345678901",
         )
 
         orientation_2 = baker.make(
@@ -680,6 +681,7 @@ class OrientationsExportTestCase(APITestCase):
                     "service_name": orientation_1.get_service_name(),
                     "detail_page_url": orientation_1.get_magic_link(),
                     "source": "DORA",
+                    "beneficiary_france_travail_number": "12345678901",
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
@@ -690,6 +692,7 @@ class OrientationsExportTestCase(APITestCase):
                     "service_name": orientation_2.get_service_name(),
                     "detail_page_url": orientation_2.get_magic_link(),
                     "source": "DORA",
+                    "beneficiary_france_travail_number": "",
                 },
             ],
         )

@@ -24,6 +24,7 @@ interface ReceivedOrientationExportData extends Pick<
   prescriberStructureName: string;
   detailPageUrl: string;
   source: string;
+  beneficiaryFranceTravailNumber: string;
 }
 
 async function fetchOrientationExportData(structureSlug: string) {
@@ -37,32 +38,49 @@ async function fetchOrientationExportData(structureSlug: string) {
   return result.data;
 }
 
+const FALLBACK_TEXT = "N/A";
+
+// Remplace les valeurs vides (null, undefined ou chaîne vide) par FALLBACK_TEXT
+function withFallbacks<T extends Record<string, unknown>>(row: T) {
+  return Object.fromEntries(
+    Object.entries(row).map(([key, value]) => [
+      key,
+      value == null || value === "" ? FALLBACK_TEXT : value,
+    ])
+  ) as { [K in keyof T]: T[K] | typeof FALLBACK_TEXT };
+}
+
 function formatSentOrientationExportData(
   exportData: Array<SentOrientationExportData>
 ) {
-  return exportData.map((orientation) => ({
-    "Envoyée le": orientation.creationDate,
-    Statut: orientation.status,
-    Bénéficiaire: orientation.beneficiaryName,
-    "Structure concernée": orientation.structureName,
-    "Service concerné": orientation.serviceName,
-    Émetteur: orientation.prescriberName,
-  }));
+  return exportData.map((orientation) =>
+    withFallbacks({
+      "Envoyée le": orientation.creationDate,
+      Statut: orientation.status,
+      Bénéficiaire: orientation.beneficiaryName,
+      "Structure concernée": orientation.structureName,
+      "Service concerné": orientation.serviceName,
+      Émetteur: orientation.prescriberName,
+    })
+  );
 }
 
 function formatReceivedOrientationExportData(
   exportData: Array<ReceivedOrientationExportData>
 ) {
-  return exportData.map((orientation) => ({
-    "Reçue le": orientation.creationDate,
-    Statut: orientation.status,
-    Bénéficiaire: orientation.beneficiaryName,
-    "Service concerné": orientation.serviceName,
-    "Structure émettrice": orientation.prescriberStructureName,
-    "Contact émetteur": orientation.prescriberName,
-    Source: orientation.source,
-    Lien: orientation.detailPageUrl,
-  }));
+  return exportData.map((orientation) =>
+    withFallbacks({
+      "Reçue le": orientation.creationDate,
+      Statut: orientation.status,
+      Bénéficiaire: orientation.beneficiaryName,
+      "Identifiant FT": orientation.beneficiaryFranceTravailNumber,
+      "Service concerné": orientation.serviceName,
+      "Structure émettrice": orientation.prescriberStructureName,
+      "Contact émetteur": orientation.prescriberName,
+      Source: orientation.source,
+      Lien: orientation.detailPageUrl,
+    })
+  );
 }
 
 export async function generateOrientationExport(structureSlug: string) {
