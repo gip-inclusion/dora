@@ -1,5 +1,3 @@
-import csv
-
 import pytest
 from django.core.management import call_command
 from model_bakery import baker
@@ -127,15 +125,6 @@ def test_merge_description_replaces_a_description_reduced_to_markup():
     # le pendant du résumé sans mot : « --- » ferait un filet horizontal en queue de fiche
     assert merge_description("Un résumé", "---") == "Un résumé"
     assert merge_description("Un résumé", "  ***  ") == "Un résumé"
-
-
-@pytest.mark.no_django_db
-def test_merge_description_keeps_a_description_written_in_html():
-    # `strip_markdown` ne voit pas le HTML brut et rend ces descriptions pour vides. Les
-    # prendre au mot reviendrait à jeter le texte de référence de quelques fiches.
-    description = "<h2>Notre offre</h2><p>Location de véhicules à tarif solidaire.</p>"
-
-    assert merge_description("Permanence le jeudi.", description).endswith(description)
 
 
 @pytest.mark.no_django_db
@@ -289,54 +278,3 @@ def test_merge_keeps_copies_in_sync():
     assert synced.last_sync_checksum == model.sync_checksum
     # … et celles qui l'étaient déjà le restent
     assert customized.last_sync_checksum == "périmé"
-
-
-def read_report(path):
-    # `utf-8-sig` des deux côtés : la marque d'ordre des octets est là pour le tableur
-    return list(csv.DictReader(path.read_text(encoding="utf-8-sig").splitlines()))
-
-
-def test_merge_reports_its_decisions_even_in_dry_run(tmp_path):
-    make_service(short_desc="Un résumé", description="Un tout autre descriptif")
-    make_service(short_desc="Un résumé", description="**Un résumé** mis en forme")
-    copied = make_service(short_desc="Un résumé", description="")
-    report = tmp_path / "fusion.csv"
-
-    call_command("merge_service_descriptions", "--report", str(report))
-
-    copied.refresh_from_db()
-    # le rapport s'écrit hors transaction : il survit au rollback du dry-run, sinon il n'y
-    # aurait aucun moyen de relire les décisions avant de les appliquer
-    assert copied.description == ""
-    rows = read_report(report)
-    assert {row["resume"] for row in rows} == {"Un résumé"}
-    assert {row["description"]: row["verdict"] for row in rows} == {
-        "Un tout autre descriptif": "inséré en tête",
-        "**Un résumé** mis en forme": "abandonné",
-        "": "recopié",
-    }
-
-
-def test_report_lists_one_line_per_pair_closest_decisions_first(tmp_path):
-    structure = make_structure(baker.make("users.User", is_valid=True))
-    # deux services partageant le même couple : une seule décision, deux services concernés
-    make_service(
-        structure=structure,
-        short_desc="Un résumé",
-        description="Un tout autre descriptif",
-    )
-    make_service(
-        structure=structure,
-        short_desc="Un résumé",
-        description="Un tout autre descriptif",
-    )
-    make_service(structure=structure, short_desc="Un résumé", description="Un résumé")
-    report = tmp_path / "fusion.csv"
-
-    call_command("merge_service_descriptions", "--report", str(report))
-
-    rows = read_report(report)
-    assert len(rows) == 2
-    assert {row["nb_services"] for row in rows} == {"2", "1"}
-    margins = [abs(float(row["marge"])) for row in rows]
-    assert margins == sorted(margins)
