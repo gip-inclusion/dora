@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest.mock import patch
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -18,6 +19,10 @@ from dora.core.test_utils import (
 from dora.structures.models import ModerationStatus, StructureMember
 
 from ..models import Orientation, OrientationStatus
+
+SLACK_NOTIFICATION = (
+    "dora.orientations.views.send_orientation_moderation_pending_notification"
+)
 
 
 def test_query_refresh(api_client, orientation):
@@ -344,7 +349,10 @@ def get_new_di_service_orientation_data(user, structure, service):
     ),
 )
 def test_query_create_triggers_moderation(
-    api_client, get_new_orientation_data, moderation_status
+    api_client,
+    get_new_orientation_data,
+    moderation_status,
+    django_capture_on_commit_callbacks,
 ):
     user = make_user()
     structure = make_structure(user, moderation_status=moderation_status)
@@ -354,7 +362,9 @@ def test_query_create_triggers_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
-    response = api_client.post("/orientations/", data=data, follow=True)
+    with patch(SLACK_NOTIFICATION) as send_slack_notification:
+        with django_capture_on_commit_callbacks(execute=True):
+            response = api_client.post("/orientations/", data=data, follow=True)
 
     assert response.status_code == 201
     assert response.data["status"] == "MODÉRATION_EN_COURS"
@@ -367,12 +377,16 @@ def test_query_create_triggers_moderation(
 
     assert len(mail.outbox) == 0
 
+    send_slack_notification.assert_called_once_with(orientation)
+
 
 @pytest.mark.parametrize(
     "get_new_orientation_data",
     (get_new_dora_service_orientation_data, get_new_di_service_orientation_data),
 )
-def test_query_create_does_not_trigger_moderation(api_client, get_new_orientation_data):
+def test_query_create_does_not_trigger_moderation(
+    api_client, get_new_orientation_data, django_capture_on_commit_callbacks
+):
     user = make_user()
     structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
     service = make_service(contact_email="contact.service@example.com")
@@ -381,7 +395,11 @@ def test_query_create_does_not_trigger_moderation(api_client, get_new_orientatio
 
     data = get_new_orientation_data(user, structure, service)
 
-    response = api_client.post("/orientations/", data=data, follow=True)
+    with patch(SLACK_NOTIFICATION) as send_slack_notification:
+        with django_capture_on_commit_callbacks(execute=True):
+            response = api_client.post("/orientations/", data=data, follow=True)
+
+    send_slack_notification.assert_not_called()
 
     assert response.status_code == 201
     assert response.data["status"] == "OUVERTE"

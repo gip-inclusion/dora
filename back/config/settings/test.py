@@ -37,6 +37,9 @@ AUTH_COOKIE_NAME = "token_test"
 # Configuration nécessaire pour les tests :
 BREVO_ACTIVE = False
 
+# Aucune notification Slack ne doit partir depuis les tests
+SLACK_MODERATION_WEBHOOK_URL = ""
+
 # Nécessaire pour la C.I. : fixe des valeurs par défaut pour les conteneurs
 # faire correspondre les valeurs définies dans la configuration de la CI
 CORS_ALLOWED_ORIGIN_REGEXES = [os.getenv("DJANGO_CORS_ALLOWED_ORIGIN_REGEXES", "*")]

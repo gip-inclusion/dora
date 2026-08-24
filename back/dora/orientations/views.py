@@ -50,6 +50,7 @@ from .serializers import (
     ReceivedOrientationExportSerializer,
     SentOrientationExportSerializer,
 )
+from .slack import send_orientation_moderation_pending_notification
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +110,11 @@ class OrientationViewSet(
         else:
             orientation.status = OrientationStatus.MODERATION_PENDING
             orientation.save()
+            transaction.on_commit(
+                functools.partial(
+                    send_orientation_moderation_pending_notification, orientation
+                )
+            )
 
     @action(
         detail=True,
