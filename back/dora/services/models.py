@@ -11,6 +11,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db.models import CharField, Q, URLField
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
@@ -673,7 +674,8 @@ class Service(ModerationMixin, models.Model):
         return f"{self.get_frontend_url()}/orienter"
 
     def get_admin_url(self):
-        return f"https://{settings.ALLOWED_HOSTS[0]}/services/service/{self.id}/change"
+        admin_path = reverse("admin:services_service_change", args=[self.id])
+        return f"{settings.BACKEND_URL}{admin_path}"
 
     def log_note(self, user, msg):
         LogItem.objects.create(service=self, user=user, message=msg.strip())
