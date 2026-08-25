@@ -1,5 +1,4 @@
 from datetime import datetime
-from unittest.mock import patch
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -349,6 +348,7 @@ def get_new_di_service_orientation_data(user, structure, service):
     ),
 )
 def test_query_create_triggers_moderation(
+    mocker,
     api_client,
     get_new_orientation_data,
     moderation_status,
@@ -362,9 +362,9 @@ def test_query_create_triggers_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
-    with patch(SLACK_NOTIFICATION) as send_slack_notification:
-        with django_capture_on_commit_callbacks(execute=True):
-            response = api_client.post("/orientations/", data=data, follow=True)
+    send_slack_notification = mocker.patch(SLACK_NOTIFICATION)
+    with django_capture_on_commit_callbacks(execute=True):
+        response = api_client.post("/orientations/", data=data, follow=True)
 
     assert response.status_code == 201
     assert response.data["status"] == "MODÉRATION_EN_COURS"
@@ -385,7 +385,10 @@ def test_query_create_triggers_moderation(
     (get_new_dora_service_orientation_data, get_new_di_service_orientation_data),
 )
 def test_query_create_does_not_trigger_moderation(
-    api_client, get_new_orientation_data, django_capture_on_commit_callbacks
+    mocker,
+    api_client,
+    get_new_orientation_data,
+    django_capture_on_commit_callbacks,
 ):
     user = make_user()
     structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
@@ -395,9 +398,9 @@ def test_query_create_does_not_trigger_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
-    with patch(SLACK_NOTIFICATION) as send_slack_notification:
-        with django_capture_on_commit_callbacks(execute=True):
-            response = api_client.post("/orientations/", data=data, follow=True)
+    send_slack_notification = mocker.patch(SLACK_NOTIFICATION)
+    with django_capture_on_commit_callbacks(execute=True):
+        response = api_client.post("/orientations/", data=data, follow=True)
 
     send_slack_notification.assert_not_called()
 

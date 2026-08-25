@@ -8,5 +8,6 @@ model-bakery
 ruff
 pytest
 pytest-django
+pytest-mock
 PyYAML
 syrupy
