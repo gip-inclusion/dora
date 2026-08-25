@@ -4,7 +4,11 @@ from typing import Optional
 from urllib.parse import unquote
 
 import requests
-from data_inclusion.schema.v1 import TypeService
+from data_inclusion.schema.v1 import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    TypeService,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
@@ -740,6 +744,12 @@ def options(request):
         "coach_orientation_modes": CoachOrientationModeSerializer(
             CoachOrientationMode.objects.all(), many=True
         ).data,
+        "mobilisation_modes": [
+            {"value": m.value, "label": m.label} for m in ModeMobilisation
+        ],
+        "mobilisable_by": [
+            {"value": p.value, "label": p.label} for p in PersonneMobilisatrice
+        ],
         "location_kinds": LocationKindSerializer(
             LocationKind.objects.all(), many=True
         ).data,

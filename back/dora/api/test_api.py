@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema.v1 import ModeAccueil
+from data_inclusion.schema.v1 import ModeAccueil, ModeMobilisation
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from django.utils import timezone
@@ -458,11 +458,10 @@ def test_service_serialization_mobilisation_v1_fields(authenticated_user, api_cl
 def test_lien_mobilisation_builds_dora_form_url_from_mode(
     authenticated_user, api_client
 ):
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="formulaire-dora")
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        mobilisation_modes=[ModeMobilisation.UTILISER_LIEN_MOBILISATION.value],
     )
-    sync_mobilisation_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -500,67 +499,30 @@ def test_service_publics_export_all_maps_to_tous_publics(
     assert response.json()["publics"] == ["tous-publics"]
 
 
-def test_service_serialization_formulaire_en_ligne(
-    authenticated_user, api_client, settings
-):
-    # Initialisation du service
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.coach_orientation_modes.clear()
-    service.coach_orientation_modes_external_form_link = "http://example.com/coach-form"
-    service.coach_orientation_modes.add(
-        CoachOrientationMode.objects.get(value="formulaire-dora"),
-        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion"),
+def test_service_serialization_formulaire_en_ligne(authenticated_user, api_client):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        mobilisation_modes=[ModeMobilisation.UTILISER_LIEN_MOBILISATION.value],
+        mobilisation_link="http://example.com/form",
+        online_form="http://example.com/online-form",
     )
-    service.beneficiaries_access_modes.clear()
-    service.beneficiaries_access_modes.add(
-        BeneficiaryAccessMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
-    service.beneficiaries_access_modes_external_form_link = (
-        "http://example.com/beneficiary-form"
-    )
-    service.online_form = "http://example.com/online-form"
-    service.save()
 
-    # Formulaire en ligne = formulaire accompagnateur
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] == "http://example.com/coach-form"
+    assert response.json()["formulaire_en_ligne"] == "http://example.com/form"
 
-    # Formulaire en ligne = formulaire bénéficiaire
-    service.coach_orientation_modes.remove(
-        CoachOrientationMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
+    service.mobilisation_link = None
+    service.mobilisation_modes = None
+    service.save(update_fields=["mobilisation_link", "mobilisation_modes"])
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] == "http://example.com/beneficiary-form"
+    assert response.json()["formulaire_en_ligne"] == "http://example.com/online-form"
 
-    # Formulaire en ligne = formulaire DORA
-    service.beneficiaries_access_modes.remove(
-        BeneficiaryAccessMode.objects.get(value="completer-le-formulaire-dadhesion")
-    )
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-    assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] == service.get_dora_form_url()
-
-    # Formulaire en ligne = lien documents
-    service.coach_orientation_modes.remove(
-        CoachOrientationMode.objects.get(value="formulaire-dora")
-    )
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-    assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] == "http://example.com/online-form"
-
-    # Formulaire en ligne = aucun
     service.online_form = ""
     service.save()
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.status_code == 200
-    json = response.json()
-    assert json["formulaire_en_ligne"] is None
+    assert response.json()["formulaire_en_ligne"] is None
 
 
 def test_service_serialization_exemple_need_di_user(api_client):

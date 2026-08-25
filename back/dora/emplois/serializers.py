@@ -71,10 +71,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
     def get_is_orientable_with_form(self, obj):
-        return obj.is_orientable() and any(
-            mode.value == "formulaire-dora"
-            for mode in obj.coach_orientation_modes.all()
-        )
+        return obj.is_orientable() and obj.mobilisation_link == obj.get_dora_form_url()
 
     def get_average_orientation_response_delay_days(self, obj):
         """Délai moyen de réponse aux demandes d'orientation, en jours."""

@@ -203,7 +203,7 @@ def test_sync_mobilisation_fields_professionnel_adds_professionnels():
     ]
 
 
-def test_service_patch_syncs_mobilisation_fields(api_client):
+def test_service_patch_writes_mobilisation_fields(api_client):
     user = make_user(is_valid=True)
     structure = make_structure(user)
     service = make_service(structure=structure, status=ServiceStatus.DRAFT)
@@ -212,10 +212,10 @@ def test_service_patch_syncs_mobilisation_fields(api_client):
     response = api_client.patch(
         f"/services/{service.slug}/",
         {
-            "coachOrientationModes": ["envoyer-un-mail"],
-            "beneficiariesAccessModes": ["se-presenter"],
-            "mobilisationDetails": "ne doit pas être pris en compte",
-            "mobilisationLink": "https://ignored.example.com",
+            "mobilisationModes": ["envoyer-un-courriel", "se-presenter"],
+            "mobilisableBy": ["usagers", "professionnels"],
+            "mobilisationDetails": "Précision",
+            "mobilisationLink": "https://example.com/form",
         },
         format="json",
     )
@@ -242,8 +242,57 @@ def test_service_patch_syncs_mobilisation_fields(api_client):
         PersonneMobilisatrice.USAGERS.value,
         PersonneMobilisatrice.PROFESSIONNELS.value,
     ]
-    assert service.mobilisation_details is None
-    assert service.mobilisation_link is None
+    assert service.mobilisation_details == "Précision"
+    assert service.mobilisation_link == "https://example.com/form"
+
+
+def test_service_patch_other_field_does_not_overwrite_mobilisation(api_client):
+    user = make_user(is_valid=True)
+    structure = make_structure(user)
+    service = make_service(
+        structure=structure,
+        status=ServiceStatus.DRAFT,
+        mobilisation_modes=[ModeMobilisation.TELEPHONER.value],
+        mobilisable_by=[PersonneMobilisatrice.PROFESSIONNELS.value],
+        mobilisation_details="À garder",
+    )
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(
+        f"/services/{service.slug}/",
+        {"name": "Nouveau nom"},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    service.refresh_from_db()
+    assert service.mobilisation_modes == [ModeMobilisation.TELEPHONER.value]
+    assert service.mobilisable_by == [PersonneMobilisatrice.PROFESSIONNELS.value]
+    assert service.mobilisation_details == "À garder"
+
+
+def test_service_patch_legacy_modes_are_ignored(api_client):
+    user = make_user(is_valid=True)
+    structure = make_structure(user)
+    service = make_service(
+        structure=structure,
+        status=ServiceStatus.DRAFT,
+        mobilisation_modes=[ModeMobilisation.TELEPHONER.value],
+    )
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(
+        f"/services/{service.slug}/",
+        {
+            "coachOrientationModes": ["envoyer-un-mail"],
+            "beneficiariesAccessModes": ["se-presenter"],
+        },
+        format="json",
+    )
+
+    assert response.status_code == 200
+    service.refresh_from_db()
+    assert service.mobilisation_modes == [ModeMobilisation.TELEPHONER.value]
 
 
 def test_sync_mobilisation_fields_keeps_formulaire_dora_on_model_without_url():
@@ -279,15 +328,17 @@ def test_sync_mobilisation_fields_keeps_external_link_on_model():
     assert model.mobilisation_link == "https://example.com/form"
 
 
-def test_synchronize_service_from_model_recomputes_mobilisation():
+def test_synchronize_service_from_model_copies_mobilisation():
     structure = make_structure()
-    model = make_model(structure=structure)
-    model.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="telephoner")
+    model = make_model(
+        structure=structure,
+        mobilisation_modes=[ModeMobilisation.TELEPHONER.value],
+        mobilisable_by=[PersonneMobilisatrice.PROFESSIONNELS.value],
     )
     service = make_service(structure=structure, model=model)
 
     synchronize_service_from_model(service, model)
+    service.save()
     service.refresh_from_db()
 
     assert service.mobilisation_modes == [ModeMobilisation.TELEPHONER.value]
@@ -297,11 +348,11 @@ def test_synchronize_service_from_model_recomputes_mobilisation():
 def test_instantiate_service_from_model_keeps_empty_dora_form_link():
     structure = make_structure()
     user = make_user()
-    model = make_model(structure=structure)
-    model.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="formulaire-dora")
+    model = make_model(
+        structure=structure,
+        mobilisation_modes=[ModeMobilisation.UTILISER_LIEN_MOBILISATION.value],
+        mobilisable_by=[PersonneMobilisatrice.PROFESSIONNELS.value],
     )
-    sync_mobilisation_fields(model)
 
     service = instantiate_service_from_model(model, structure, user)
     service.refresh_from_db()

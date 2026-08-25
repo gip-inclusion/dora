@@ -17,7 +17,6 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.services.enums import ServiceStatus
-from dora.services.mobilisation import sync_mobilisation_fields
 
 SYNC_FIELDS = [
     "name",
@@ -26,12 +25,6 @@ SYNC_FIELDS = [
     "is_cumulative",
     "fee_condition",
     "fee_details",
-    "beneficiaries_access_modes_external_form_link",
-    "beneficiaries_access_modes_external_form_link_text",
-    "beneficiaries_access_modes_other",
-    "coach_orientation_modes_external_form_link",
-    "coach_orientation_modes_external_form_link_text",
-    "coach_orientation_modes_other",
     "duration_weekly_hours",
     "duration_weeks",
     "forms",
@@ -42,6 +35,10 @@ SYNC_FIELDS = [
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
+    "mobilisation_modes",
+    "mobilisable_by",
+    "mobilisation_details",
+    "mobilisation_link",
 ]
 
 # Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
@@ -54,8 +51,6 @@ SYNC_FK_FIELDS = {"fee_condition"}
 SYNC_M2M_FIELDS = [
     "categories",
     "subcategories",
-    "beneficiaries_access_modes",
-    "coach_orientation_modes",
 ]
 
 # Custom Many to many fields
@@ -129,7 +124,6 @@ def instantiate_service_from_model(model, structure, user):
         )
 
     service.save()
-    sync_mobilisation_fields(service)
     return service
 
 
@@ -145,7 +139,6 @@ def synchronize_service_from_model(service, model):
             getattr(service, field), getattr(model, field).all(), service.structure
         )
 
-    sync_mobilisation_fields(service)
     return service
 
 

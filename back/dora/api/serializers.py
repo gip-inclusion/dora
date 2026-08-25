@@ -325,19 +325,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return [c.name for c in obj.credentials.all()]
 
     def get_formulaire_en_ligne(self, obj):
-        coach_orientation_mode_values = set(
-            m.value for m in obj.coach_orientation_modes.all()
-        )
-        beneficiaries_access_mode_values = set(
-            m.value for m in obj.beneficiaries_access_modes.all()
-        )
-        if "completer-le-formulaire-dadhesion" in coach_orientation_mode_values:
-            return obj.coach_orientation_modes_external_form_link
-        elif "completer-le-formulaire-dadhesion" in beneficiaries_access_mode_values:
-            return obj.beneficiaries_access_modes_external_form_link
-        elif "formulaire-dora" in coach_orientation_mode_values:
-            return obj.get_dora_form_url()
-        return obj.online_form if obj.online_form else None
+        return self.get_lien_mobilisation(obj) or obj.online_form or None
 
     def get_lien_mobilisation(self, obj):
         if ModeMobilisation.UTILISER_LIEN_MOBILISATION.value not in (

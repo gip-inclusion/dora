@@ -184,11 +184,9 @@ def test_service_serializer_is_orientable_with_form_when_orientable_and_mode(
     orientable_service_via_dora_form,
 ):
     service = orientable_service_via_dora_form
+    service.mobilisation_link = service.get_dora_form_url()
+    service.save()
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
-
-    # Vérification de cohérence sur la logique métier sous-jacente
     assert service.is_orientable() is True
 
     data = serialize_service(service)
@@ -202,8 +200,8 @@ def test_service_serializer_is_not_orientable_with_form_when_not_orientable():
     service.structure.save()
     service.save()
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
+    service.mobilisation_link = service.get_dora_form_url()
+    service.save()
 
     assert service.is_orientable() is False
 
@@ -217,10 +215,7 @@ def test_service_serializer_is_not_orientable_with_form_without_dora_mode(
     service = orientable_service_via_dora_form
 
     assert service.is_orientable() is True
-    assert (
-        service.coach_orientation_modes.filter(value="formulaire-dora").exists()
-        is False
-    )
+    assert service.mobilisation_link != service.get_dora_form_url()
 
     data = serialize_service(service)
     assert data["is_orientable_with_form"] is False
@@ -237,8 +232,8 @@ def test_service_serializer_is_orientable_with_form_when_ft_whitelisted(
     service.structure.save()
     service.save()
 
-    mode = CoachOrientationMode.objects.get(value="formulaire-dora")
-    service.coach_orientation_modes.add(mode)
+    service.mobilisation_link = service.get_dora_form_url()
+    service.save()
 
     assert service.is_orientable_ft_service() is True
     assert service.is_orientable() is True

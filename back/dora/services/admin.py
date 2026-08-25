@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
 from django.contrib.admin import RelatedOnlyFieldListFilter
@@ -12,7 +13,6 @@ from dora.core.admin import EnumAdmin
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
 from .label_services import LabelServicesHelper
-from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -98,6 +98,16 @@ def publics_field():
 
 class ServiceAdminForm(forms.ModelForm):
     publics = publics_field()
+    mobilisation_modes = forms.MultipleChoiceField(
+        choices=[(m.value, m.label) for m in ModeMobilisation],
+        widget=forms.SelectMultiple(attrs={"size": "5"}),
+        required=False,
+    )
+    mobilisable_by = forms.MultipleChoiceField(
+        choices=[(p.value, p.label) for p in PersonneMobilisatrice],
+        widget=forms.SelectMultiple(attrs={"size": "3"}),
+        required=False,
+    )
 
     class Meta:
         model = Service
@@ -145,16 +155,16 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "status",
         "data_inclusion_id",
         "data_inclusion_source",
-        "mobilisation_modes",
-        "mobilisable_by",
-        "mobilisation_details",
-        "mobilisation_link",
+        "beneficiaries_access_modes",
+        "beneficiaries_access_modes_external_form_link",
+        "beneficiaries_access_modes_external_form_link_text",
+        "beneficiaries_access_modes_other",
+        "coach_orientation_modes",
+        "coach_orientation_modes_external_form_link",
+        "coach_orientation_modes_external_form_link_text",
+        "coach_orientation_modes_other",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
-
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-        sync_mobilisation_fields(form.instance)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -433,6 +443,16 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
 class ServiceModelAdminForm(forms.ModelForm):
     publics = publics_field()
+    mobilisation_modes = forms.MultipleChoiceField(
+        choices=[(m.value, m.label) for m in ModeMobilisation],
+        widget=forms.SelectMultiple(attrs={"size": "5"}),
+        required=False,
+    )
+    mobilisable_by = forms.MultipleChoiceField(
+        choices=[(p.value, p.label) for p in PersonneMobilisatrice],
+        widget=forms.SelectMultiple(attrs={"size": "3"}),
+        required=False,
+    )
 
     class Meta:
         model = ServiceModel
@@ -473,16 +493,16 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "creation_date",
         "modification_date",
         "status",
-        "mobilisation_modes",
-        "mobilisable_by",
-        "mobilisation_details",
-        "mobilisation_link",
+        "beneficiaries_access_modes",
+        "beneficiaries_access_modes_external_form_link",
+        "beneficiaries_access_modes_external_form_link_text",
+        "beneficiaries_access_modes_other",
+        "coach_orientation_modes",
+        "coach_orientation_modes_external_form_link",
+        "coach_orientation_modes_external_form_link_text",
+        "coach_orientation_modes_other",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
-
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-        sync_mobilisation_fields(form.instance)
 
 
 class CustomizableChoiceAdmin(admin.ModelAdmin):

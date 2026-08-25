@@ -31,12 +31,9 @@ from dora.services.utils import (
 )
 from dora.structures.models import Structure, StructureMember
 
-from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
-    BeneficiaryAccessMode,
     Bookmark,
-    CoachOrientationMode,
     Credential,
     FundingLabel,
     LocationKind,
@@ -242,9 +239,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     diffusion_zone_details_display = serializers.SerializerMethodField()
     beneficiaries_access_modes = serializers.SlugRelatedField(
         slug_field="value",
-        queryset=BeneficiaryAccessMode.objects.all(),
         many=True,
-        required=False,
+        read_only=True,
     )
     beneficiaries_access_modes_display = serializers.SlugRelatedField(
         source="beneficiaries_access_modes",
@@ -254,15 +250,30 @@ class ServiceSerializer(serializers.ModelSerializer):
     )
     coach_orientation_modes = serializers.SlugRelatedField(
         slug_field="value",
-        queryset=CoachOrientationMode.objects.all(),
         many=True,
-        required=False,
+        read_only=True,
     )
     coach_orientation_modes_display = serializers.SlugRelatedField(
         source="coach_orientation_modes", slug_field="label", many=True, read_only=True
     )
+    mobilisation_modes = serializers.ListField(
+        child=serializers.ChoiceField(choices=ModeMobilisation),
+        required=False,
+        allow_null=True,
+    )
     mobilisation_modes_display = serializers.SerializerMethodField()
+    mobilisable_by = serializers.ListField(
+        child=serializers.ChoiceField(choices=PersonneMobilisatrice),
+        required=False,
+        allow_null=True,
+    )
     mobilisable_by_display = serializers.SerializerMethodField()
+    mobilisation_details = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
+    mobilisation_link = serializers.URLField(
+        required=False, allow_blank=True, allow_null=True
+    )
     department = serializers.SerializerMethodField()
     can_write = serializers.SerializerMethodField()
     has_already_been_unpublished = serializers.SerializerMethodField()
@@ -385,10 +396,14 @@ class ServiceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "city",
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
+            "beneficiaries_access_modes",
+            "beneficiaries_access_modes_external_form_link",
+            "beneficiaries_access_modes_external_form_link_text",
+            "beneficiaries_access_modes_other",
+            "coach_orientation_modes",
+            "coach_orientation_modes_external_form_link",
+            "coach_orientation_modes_external_form_link_text",
+            "coach_orientation_modes_other",
         ]
         lookup_field = "slug"
 
@@ -476,14 +491,27 @@ class ServiceSerializer(serializers.ModelSerializer):
         # empreinte de synchronisation (`update_sync_checksum` hache des `repr()`), et toutes
         # les copies d'un modèle passeraient en « modèle modifié » à sa première édition.
         if "kind" in data:
-            data["kind"] = str(data["kind"]) if data["kind"] else None
+            data["kind"] = getattr(data["kind"], "value", data["kind"]) or None
 
-        if structure.no_dora_form() and "coach_orientation_modes" in data:
-            data["coach_orientation_modes"] = [
-                mode
-                for mode in data["coach_orientation_modes"]
-                if mode.value != "formulaire-dora"
-            ]
+        if "mobilisation_modes" in data:
+            data["mobilisation_modes"] = [
+                getattr(mode, "value", mode) for mode in data["mobilisation_modes"]
+            ] or None
+        if "mobilisable_by" in data:
+            data["mobilisable_by"] = [
+                getattr(value, "value", value) for value in data["mobilisable_by"]
+            ] or None
+        if "mobilisation_details" in data:
+            data["mobilisation_details"] = data["mobilisation_details"] or None
+        if "mobilisation_link" in data:
+            link = data["mobilisation_link"] or None
+            if (
+                link
+                and self.instance
+                and link.endswith(f"/services/{self.instance.slug}/orienter")
+            ):
+                link = None
+            data["mobilisation_link"] = link
 
         user_structures = StructureMember.objects.filter(user_id=user.id).values_list(
             "structure_id", flat=True
@@ -516,16 +544,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             data["publics"] = normalize_publics(data["publics"])
 
         return data
-
-    def create(self, validated_data):
-        instance = super().create(validated_data)
-        sync_mobilisation_fields(instance)
-        return instance
-
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
-        sync_mobilisation_fields(instance)
-        return instance
 
     def _validate_custom_choice(self, field, data, user, user_structures, structure):
         values = data[field]
@@ -653,10 +671,14 @@ class ServiceModelSerializer(ServiceSerializer):
         ]
         read_only_fields = [
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
+            "beneficiaries_access_modes",
+            "beneficiaries_access_modes_external_form_link",
+            "beneficiaries_access_modes_external_form_link_text",
+            "beneficiaries_access_modes_other",
+            "coach_orientation_modes",
+            "coach_orientation_modes_external_form_link",
+            "coach_orientation_modes_external_form_link_text",
+            "coach_orientation_modes_other",
         ]
         lookup_field = "slug"
 

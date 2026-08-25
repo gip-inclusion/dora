@@ -1135,15 +1135,6 @@ class ServiceTestCase(APITestCase):
         self.assertEqual(response.data["has_already_been_unpublished"], True)
 
     def test_service_no_dora_form_enforce_post(self):
-        input_coach_orientation_modes = [
-            "autre",
-            "envoyer-un-mail",
-            "telephoner",
-            "formulaire-dora",
-        ]
-        kept_coach_orientation_modes = [
-            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
-        ]
         user = baker.make("users.User", is_valid=True)
         blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
         structure = make_structure(user, siret=blacklisted_siret)
@@ -1153,32 +1144,14 @@ class ServiceTestCase(APITestCase):
             {
                 "name": "dummy",
                 "structure": structure.slug,
-                "coachOrientationModes": input_coach_orientation_modes,
+                "mobilisationModes": ["utiliser-lien-mobilisation"],
             },
         )
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(
-            sorted(response.data["coach_orientation_modes"]),
-            sorted(kept_coach_orientation_modes),
-        )
         service = Service.objects.get(slug=response.data["slug"])
-        self.assertEqual(
-            sorted(
-                list(service.coach_orientation_modes.values_list("value", flat=True))
-            ),
-            sorted(kept_coach_orientation_modes),
-        )
+        self.assertIsNone(service.mobilisation_link)
 
     def test_service_no_dora_form_enforce_patch(self):
-        input_coach_orientation_modes = [
-            "autre",
-            "envoyer-un-mail",
-            "telephoner",
-            "formulaire-dora",
-        ]
-        kept_coach_orientation_modes = [
-            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
-        ]
         user = baker.make("users.User", is_valid=True)
         blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
         structure = make_structure(user, siret=blacklisted_siret)
@@ -1186,19 +1159,11 @@ class ServiceTestCase(APITestCase):
         self.client.force_authenticate(user=user)
         response = self.client.patch(
             f"/services/{service.slug}/",
-            {"coachOrientationModes": input_coach_orientation_modes},
+            {"mobilisationLink": service.get_dora_form_url()},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            sorted(response.data["coach_orientation_modes"]),
-            sorted(kept_coach_orientation_modes),
-        )
-        self.assertEqual(
-            sorted(
-                list(service.coach_orientation_modes.values_list("value", flat=True))
-            ),
-            sorted(kept_coach_orientation_modes),
-        )
+        service.refresh_from_db()
+        self.assertIsNone(service.mobilisation_link)
 
     def test_mark_services_as_up_to_date(self):
         user = baker.make("users.User", is_valid=True)
@@ -2076,10 +2041,13 @@ class ServiceSyncTestCase(APITestCase):
             elif field in (
                 "online_form",
                 "remote_url",
-                "beneficiaries_access_modes_external_form_link",
-                "coach_orientation_modes_external_form_link",
+                "mobilisation_link",
             ):
                 new_val = "https://example.com"
+            elif field == "mobilisation_modes":
+                new_val = ["telephoner"]
+            elif field == "mobilisable_by":
+                new_val = ["professionnels"]
             elif field in ("duration_weekly_hours", "duration_weeks"):
                 new_val = 4
             elif field == "forms":
