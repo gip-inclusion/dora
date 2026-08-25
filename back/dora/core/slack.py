@@ -20,4 +20,5 @@ def send_slack_message(webhook_url: str, text: str):
         )
         response.raise_for_status()
     except Exception:
+        # On empêche l'échec de l'envoi du message de faire échouer l'ensemble de l'action
         logger.exception("Slack : échec de l'envoi du message")

@@ -110,6 +110,7 @@ class OrientationViewSet(
         else:
             orientation.status = OrientationStatus.MODERATION_PENDING
             orientation.save()
+            # Malgré l'utilisation, de on_commit, on est en autocommit donc le message est envoyé de façon synchrone.
             transaction.on_commit(
                 functools.partial(
                     send_orientation_moderation_pending_notification, orientation
