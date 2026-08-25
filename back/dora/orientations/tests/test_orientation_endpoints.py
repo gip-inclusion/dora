@@ -19,10 +19,6 @@ from dora.structures.models import ModerationStatus, StructureMember
 
 from ..models import Orientation, OrientationStatus
 
-SLACK_NOTIFICATION = (
-    "dora.orientations.views.send_orientation_moderation_pending_notification"
-)
-
 
 def test_query_refresh(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/refresh/"
@@ -362,7 +358,9 @@ def test_query_create_triggers_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
-    send_slack_notification = mocker.patch(SLACK_NOTIFICATION)
+    mock_send_orientation_moderation_pending_notification = mocker.patch(
+        "dora.orientations.views.send_orientation_moderation_pending_notification"
+    )
     with django_capture_on_commit_callbacks(execute=True):
         response = api_client.post("/orientations/", data=data, follow=True)
 
@@ -377,7 +375,9 @@ def test_query_create_triggers_moderation(
 
     assert len(mail.outbox) == 0
 
-    send_slack_notification.assert_called_once_with(orientation)
+    mock_send_orientation_moderation_pending_notification.assert_called_once_with(
+        orientation
+    )
 
 
 @pytest.mark.parametrize(
@@ -398,11 +398,13 @@ def test_query_create_does_not_trigger_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
-    send_slack_notification = mocker.patch(SLACK_NOTIFICATION)
+    mock_send_orientation_moderation_pending_notification = mocker.patch(
+        "dora.orientations.views.send_orientation_moderation_pending_notification"
+    )
     with django_capture_on_commit_callbacks(execute=True):
         response = api_client.post("/orientations/", data=data, follow=True)
 
-    send_slack_notification.assert_not_called()
+    mock_send_orientation_moderation_pending_notification.assert_not_called()
 
     assert response.status_code == 201
     assert response.data["status"] == "OUVERTE"
