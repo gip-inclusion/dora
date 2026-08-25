@@ -20,6 +20,7 @@ from django.db.models import (
     When,
 )
 from django.db.models.functions import Length
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
@@ -613,9 +614,8 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         return f"{settings.FRONTEND_URL}/structures/{self.slug}"
 
     def get_admin_url(self):
-        return (
-            f"https://{settings.ALLOWED_HOSTS[0]}/structures/structure/{self.id}/change"
-        )
+        admin_path = reverse("admin:structures_structure_change", args=[self.id])
+        return f"{settings.BACKEND_URL}{admin_path}"
 
     def log_note(self, user, msg):
         LogItem.objects.create(structure=self, user=user, message=msg.strip())

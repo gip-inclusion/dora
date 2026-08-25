@@ -159,6 +159,9 @@ ALLOWED_HOSTS = (
     else None
 )
 
+# URL publique du backend, utilisée pour construire des liens absolus (admin Django).
+BACKEND_URL = os.getenv("BACKEND_URL")
+
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

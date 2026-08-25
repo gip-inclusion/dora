@@ -38,6 +38,9 @@ if allowed_hosts := os.getenv("ALLOWED_HOSTS"):
 else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.0.1", "0.0.0.0"]
 
+# En développement le serveur est servi en HTTP, sur le port du `runserver`.
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+
 # Validation des formats de mots de passe :
 # pas nécessaire pour un environnement de dev, peut éventuellement être
 # modifié dans un environnement de test / custom / local
