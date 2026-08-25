@@ -304,6 +304,14 @@ export type BeneficiaryAccessModes =
   | "telephoner"
   | "autre";
 
+export type MobilisationMode =
+  | "envoyer-un-courriel"
+  | "se-presenter"
+  | "telephoner"
+  | "utiliser-lien-mobilisation";
+
+export type MobilisableBy = "usagers" | "professionnels";
+
 export type UpdateFrequency =
   | "tous-les-mois"
   | "tous-les-3-mois"
@@ -437,6 +445,12 @@ export interface ServiceModelBase {
   coachOrientationModesExternalFormLink: string;
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesOther: string;
+  mobilisationModes: MobilisationMode[];
+  mobilisationModesDisplay: string[];
+  mobilisableBy: MobilisableBy[];
+  mobilisableByDisplay: string[];
+  mobilisationDetails: string;
+  mobilisationLink: string;
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
@@ -597,6 +611,8 @@ export type ServicesOptions = {
   beneficiariesAccessModes: { value: BeneficiaryAccessModes; label: string }[];
   categories: { value: ServiceCategory; label: string }[];
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
+  mobilisationModes: { value: MobilisationMode; label: string }[];
+  mobilisableBy: { value: MobilisableBy; label: string }[];
 
   publics: { value: Public; label: string }[];
   credentials: CustomChoice[];

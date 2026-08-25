@@ -132,6 +132,14 @@ export function isDurationValid(service: Service | Model): boolean {
   );
 }
 
+export function usesDoraForm(service: Service | Model): boolean {
+  const link = service.mobilisationLink;
+  return (
+    !!service.mobilisationModes?.includes("utiliser-lien-mobilisation") &&
+    (!link || link.endsWith(`/services/${service.slug}/orienter`))
+  );
+}
+
 export function isServiceRecentlyPublished(service: Service): boolean {
   return (
     !!service.publicationDate && isLessThanOneHourAgo(service.publicationDate)

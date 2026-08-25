@@ -3,13 +3,9 @@
 
   import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
   import Linkify from "$lib/components/display/linkify.svelte";
-  import type {
-    BeneficiaryAccessModes,
-    CoachOrientationModes,
-    Model,
-    Service,
-  } from "$lib/types";
+  import type { Model, Service } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
+  import { usesDoraForm } from "$lib/utils/service";
 
   import ServiceList from "./components/service-list.svelte";
   import ServiceSection from "./components/service-section.svelte";
@@ -22,112 +18,87 @@
 
   let { service, onTrackMobilisation }: Props = $props();
 
-  const orderedCoachOrientationModeValues: Record<
-    CoachOrientationModes,
-    number
-  > = {
-    "formulaire-dora": 0,
-    "envoyer-un-mail-avec-une-fiche-de-prescription": 1,
-    "completer-le-formulaire-dadhesion": 2,
-    "envoyer-un-mail": 3,
-    telephoner: 4,
-    autre: 5,
-  };
-
-  const orderedBeneficiariesAccessModeValues: Record<
-    BeneficiaryAccessModes,
-    number
-  > = {
-    "se-presenter": 0,
-    "completer-le-formulaire-dadhesion": 1,
-    "envoyer-un-mail": 2,
-    telephoner: 3,
-    professionnel: 4,
-    autre: 5,
-  };
-
   let isDI = $derived("source" in service);
   // Passe le `searchId` (dans l'URL) vers le détail de la structure afin de
   // lier la consultation à la recherche originale.
   let searchId = $derived(page.url.searchParams.get("searchId"));
-
-  let coachOrientationModesValueAndDisplay = $derived(
-    (service.coachOrientationModes ?? [])
-      .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
-      .sort(
-        (a, b) =>
-          orderedCoachOrientationModeValues[a[0]] -
-          orderedCoachOrientationModeValues[b[0]]
-      )
+  let hasProfessionnels = $derived(
+    !!service.mobilisableBy?.includes("professionnels")
   );
-
-  let beneficiariesAccessModesValueAndDisplay = $derived(
-    (service.beneficiariesAccessModes ?? [])
-      .map((val, index) => [
-        val,
-        service.beneficiariesAccessModesDisplay[index],
-      ])
-      .sort(
-        (a, b) =>
-          orderedBeneficiariesAccessModeValues[a[0]] -
-          orderedBeneficiariesAccessModeValues[b[0]]
-      )
+  let hasUsagers = $derived(!!service.mobilisableBy?.includes("usagers"));
+  let modeEntries = $derived(
+    (service.mobilisationModes ?? []).map((val, index) => [
+      val,
+      service.mobilisationModesDisplay?.[index],
+    ])
   );
 </script>
 
 <ServiceSection title="Les démarches à réaliser">
   <ServiceSubsection title="Pour les professionnels de l’accompagnement">
     <ServiceList>
-      {#each coachOrientationModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
-        <li>
-          {#if modeValue === "formulaire-dora"}
-            Orienter votre bénéficiaire via le formulaire DORA
-          {:else if modeValue === "envoyer-un-mail-avec-une-fiche-de-prescription" && "contactEmail" in service}
-            Envoyer un email avec une fiche de prescription
-          {:else if modeValue === "autre"}
+      {#if hasProfessionnels && (modeEntries.length || service.mobilisationDetails)}
+        {#each modeEntries as [modeValue, modeDisplay] (modeValue)}
+          <li>
+            {#if modeValue === "utiliser-lien-mobilisation" && usesDoraForm(service)}
+              Orienter votre bénéficiaire via le formulaire DORA
+            {:else if modeValue === "utiliser-lien-mobilisation" && service.mobilisationLink}
+              <a
+                href={service.mobilisationLink}
+                target="_blank"
+                onclick={() => onTrackMobilisation(service.mobilisationLink)}
+                class="text-magenta-cta underline"
+                >Faire une demande<ExternalLinkIcon /></a
+              >
+            {:else}
+              {modeDisplay}
+            {/if}
+          </li>
+        {/each}
+        {#if service.mobilisationDetails}
+          <li>
             <Linkify
-              text={service.coachOrientationModesOther}
+              text={service.mobilisationDetails}
               onLinkClick={onTrackMobilisation}
             />
-          {:else}
-            {modeDisplay}
-          {/if}
-        </li>
+          </li>
+        {/if}
       {:else}
         <li>Non renseigné</li>
-      {/each}
+      {/if}
     </ServiceList>
   </ServiceSubsection>
   <ServiceSubsection title="Pour les particuliers">
     <ServiceList>
-      {#each beneficiariesAccessModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
-        <li>
-          {#if modeValue === "completer-le-formulaire-dadhesion"}
-            <a
-              href={service.beneficiariesAccessModesExternalFormLink}
-              target="_blank"
-              onclick={() =>
-                onTrackMobilisation(
-                  service.beneficiariesAccessModesExternalFormLink ?? undefined
-                )}
-              class="text-magenta-cta underline"
-              >{service.beneficiariesAccessModesExternalFormLinkText ||
-                "Faire une demande"}<ExternalLinkIcon /></a
-            >
-          {:else if modeValue === "professionnel"}
-            Orientation par un professionnel
-          {:else if modeValue === "autre"}
+      {#if hasUsagers && (modeEntries.length || service.mobilisationDetails)}
+        {#each modeEntries as [modeValue, modeDisplay] (modeValue)}
+          <li>
+            {#if modeValue === "utiliser-lien-mobilisation" && usesDoraForm(service)}
+              Orienter votre bénéficiaire via le formulaire DORA
+            {:else if modeValue === "utiliser-lien-mobilisation" && service.mobilisationLink}
+              <a
+                href={service.mobilisationLink}
+                target="_blank"
+                onclick={() => onTrackMobilisation(service.mobilisationLink)}
+                class="text-magenta-cta underline"
+                >Faire une demande<ExternalLinkIcon /></a
+              >
+            {:else}
+              {modeDisplay}
+            {/if}
+          </li>
+        {/each}
+        {#if service.mobilisationDetails}
+          <li>
             <Linkify
-              text={service.beneficiariesAccessModesOther}
+              text={service.mobilisationDetails}
               onLinkClick={onTrackMobilisation}
             />
-          {:else}
-            {modeDisplay}
-          {/if}
-        </li>
+          </li>
+        {/if}
       {:else}
         <li>Non renseigné</li>
-      {/each}
+      {/if}
     </ServiceList>
     {#if !$userInfo && !isDI}
       <div class="mt-s16">

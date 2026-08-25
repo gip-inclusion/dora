@@ -14,25 +14,6 @@ function formatBulletList(
 }
 
 /**
- * Retourne la liste des modes de mobilisation en remplaçant l'entrée
- * « Autre » par le texte libre saisi par la structure le cas échéant.
- */
-function buildMobilizationModes(
-  modes: ReadonlyArray<string> | null | undefined,
-  modesDisplay: ReadonlyArray<string> | null | undefined,
-  otherText: string | null | undefined
-): string[] {
-  const hasOther = modes?.includes("autre") ?? false;
-  const items = (modesDisplay ?? []).filter(
-    (label) => !hasOther || label.toLowerCase() !== "autre"
-  );
-  if (hasOther && otherText?.trim()) {
-    items.push(otherText.trim());
-  }
-  return items;
-}
-
-/**
  * Construit une URL `mailto:` permettant à l'utilisateur de partager
  * une fiche service via son client de messagerie habituel.
  *
@@ -44,16 +25,12 @@ export function buildServiceShareMailto(
 ): string {
   const serviceUrl = `${CANONICAL_URL}/services/${isDI ? "di--" : ""}${service.slug}`;
 
-  const beneficiaryModes = buildMobilizationModes(
-    service.beneficiariesAccessModes,
-    service.beneficiariesAccessModesDisplay,
-    service.beneficiariesAccessModesOther
-  );
-  const professionalModes = buildMobilizationModes(
-    service.coachOrientationModes,
-    service.coachOrientationModesDisplay,
-    service.coachOrientationModesOther
-  );
+  const modes = [...(service.mobilisationModesDisplay ?? [])];
+  if (service.mobilisationDetails?.trim()) {
+    modes.push(service.mobilisationDetails.trim());
+  }
+  const hasUsagers = !!service.mobilisableBy?.includes("usagers");
+  const hasProfessionnels = !!service.mobilisableBy?.includes("professionnels");
 
   const subject = `On vous a recommandé une solution solidaire`;
 
@@ -79,10 +56,10 @@ export function buildServiceShareMailto(
     "Comment mobiliser ce service :",
     "",
     "Si vous êtes un particulier :",
-    formatBulletList(beneficiaryModes),
+    formatBulletList(hasUsagers ? modes : []),
     "",
     "Si vous êtes un professionnel :",
-    formatBulletList(professionalModes),
+    formatBulletList(hasProfessionnels ? modes : []),
     "",
     `Consulter le service : ${serviceUrl}`,
     "",

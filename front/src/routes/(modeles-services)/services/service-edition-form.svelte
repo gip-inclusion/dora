@@ -131,17 +131,6 @@
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
-
-  const modalitiesServicesOptions = $derived(
-    structure?.noDoraForm
-      ? {
-          ...servicesOptions,
-          coachOrientationModes: servicesOptions.coachOrientationModes.filter(
-            (mode) => mode.value !== "formulaire-dora"
-          ),
-        }
-      : servicesOptions
-  );
 </script>
 
 <FormErrors />
@@ -223,11 +212,7 @@
 
         <FieldsPublics bind:service {servicesOptions} {model} />
 
-        <FieldsModalities
-          bind:service
-          servicesOptions={modalitiesServicesOptions}
-          {model}
-        />
+        <FieldsModalities bind:service {servicesOptions} {model} />
 
         <FieldsDocuments bind:service {servicesOptions} {model} />
 

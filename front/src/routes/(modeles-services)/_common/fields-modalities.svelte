@@ -1,6 +1,10 @@
 <script lang="ts">
+  import { untrack } from "svelte";
+
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
@@ -8,13 +12,6 @@
   import { isNotFreeService } from "$lib/utils/service";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import { currentSchema } from "$lib/validation/validation";
-
-  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
-  import FieldsModalitiesCoach from "./fields-modalities-coach.svelte";
-  import {
-    orderedBeneficiariesAccessModeValues,
-    orderedCoachOrientationModeValues,
-  } from "./modalities-order";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -24,9 +21,14 @@
 
   let { servicesOptions, service = $bindable(), model }: Props = $props();
 
+  service.mobilisationModes ??= [];
+  service.mobilisableBy ??= [];
+  service.mobilisationLink ??= "";
+  service.mobilisationDetails ??= "";
+
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;
-    service = { ...service }; // Force le re-rendu
+    service = { ...service };
   }
 
   let showModel = $derived(!!service.model);
@@ -45,39 +47,11 @@
   );
 
   $effect(() => {
-    fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
-      return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
-      return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
-    });
+    if (!service.mobilisationModes?.includes("utiliser-lien-mobilisation")) {
+      untrack(() => {
+        service.mobilisationLink = "";
+      });
+    }
   });
 </script>
 
@@ -93,77 +67,46 @@
     showIcon={false}
     titleLevel="h3"
   >
-    Afin que le service puisse être mobilisable, merci de choisir au moins une
-    méthode d’orientation – soit pour l’accompagnateur, soit pour le
-    bénéficiaire.
+    Afin que le service puisse être mobilisable, merci de choisir qui peut le
+    mobiliser.
   </Notice>
 
-  <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "coachOrientationModes" in $currentSchema && "coachOrientationModesExternalFormLink" in $currentSchema && "coachOrientationModesExternalFormLinkText" in $currentSchema && "coachOrientationModesOther" in $currentSchema}
-      <FieldModel
-        {...fieldModelProps.coachOrientationModes ?? {}}
-        subFields={fieldModelProps.coachOrientationModes
-          ? {
-              "completer-le-formulaire-dadhesion": [
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLink.label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLinkText,
-                },
-              ],
-              autre: [fieldModelProps.coachOrientationModesOther],
-            }
-          : undefined}
-        type="array"
-      >
-        <FieldsModalitiesCoach
-          id="coachOrientationModes"
-          {service}
-          {servicesOptions}
-        />
-      </FieldModel>
-    {/if}
-  </div>
+  <FieldModel {...fieldModelProps.mobilisableBy ?? {}} type="array">
+    <CheckboxesField
+      id="mobilisableBy"
+      bind:value={service.mobilisableBy}
+      choices={servicesOptions.mobilisableBy}
+      description="Plusieurs choix possibles."
+    />
+  </FieldModel>
 
-  <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema && "beneficiariesAccessModesExternalFormLink" in $currentSchema && "beneficiariesAccessModesExternalFormLinkText" in $currentSchema && "beneficiariesAccessModesOther" in $currentSchema}
-      <FieldModel
-        {...fieldModelProps.beneficiariesAccessModes ?? {}}
-        subFields={fieldModelProps.beneficiariesAccessModes
-          ? {
-              "completer-le-formulaire-dadhesion": [
-                {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLink
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLinkText,
-                },
-              ],
-              autre: [fieldModelProps.beneficiariesAccessModesOther],
-            }
-          : undefined}
-        type="array"
-      >
-        <FieldsModalitiesBeneficiary
-          id="beneficiariesAccessModes"
-          {service}
-          {servicesOptions}
-        />
-      </FieldModel>
-    {/if}
-  </div>
+  <FieldModel {...fieldModelProps.mobilisationModes ?? {}} type="array">
+    <CheckboxesField
+      id="mobilisationModes"
+      bind:value={service.mobilisationModes}
+      choices={servicesOptions.mobilisationModes}
+      description="Plusieurs choix possibles."
+    />
+  </FieldModel>
+
+  {#if service.mobilisationModes?.includes("utiliser-lien-mobilisation")}
+    <FieldModel {...fieldModelProps.mobilisationLink ?? {}}>
+      <BasicInputField
+        id="mobilisationLink"
+        type="url"
+        descriptionText="Laissez vide pour utiliser le formulaire DORA. Format attendu : https://exemple.fr"
+        bind:value={service.mobilisationLink}
+      />
+    </FieldModel>
+  {/if}
+
+  <FieldModel {...fieldModelProps.mobilisationDetails ?? {}}>
+    <TextareaField
+      id="mobilisationDetails"
+      description="Précisions libres, par exemple un mode « autre »."
+      bind:value={service.mobilisationDetails}
+    />
+  </FieldModel>
 
   <div class="gap-s24 flex flex-col">
     <FieldModel

@@ -8,6 +8,7 @@
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
   import { isAuthenticated } from "$lib/utils/auth";
+  import { usesDoraForm } from "$lib/utils/service";
   import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
   import { trackMatomoEvent } from "$lib/utils/matomo";
 
@@ -28,12 +29,13 @@
   }: Props = $props();
 
   let isOrientableWithDoraForm = $derived(
-    (service.isOrientable &&
-      service.coachOrientationModes?.includes("formulaire-dora")) ||
+    (service.isOrientable && usesDoraForm(service)) ||
       service.isOrientableFtService
   );
   let hasExternalForm = $derived(
-    service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
+    !!service.mobilisationLink &&
+      !usesDoraForm(service) &&
+      service.mobilisationModes?.includes("utiliser-lien-mobilisation")
   );
 
   let contactBoxOpen = $state(false);
@@ -52,10 +54,6 @@
     contactBoxOpen = true;
     // on tracke comme une MER si les contacts du service sont publics
     onTrackMobilisation();
-  }
-
-  function handleExternalFormClick(externalUrl: string) {
-    onTrackMobilisation(externalUrl);
   }
 
   function handleShareClick() {
@@ -96,12 +94,10 @@
 
   {#if hasExternalForm}
     <LinkButton
-      onclick={() =>
-        handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
-      to={service.coachOrientationModesExternalFormLink}
+      onclick={() => onTrackMobilisation(service.mobilisationLink)}
+      to={service.mobilisationLink}
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
-      label={service.coachOrientationModesExternalFormLinkText ||
-        "Orienter votre bénéficiaire"}
+      label="Orienter votre bénéficiaire"
       icon={ExternalLinkLineSystem}
       iconOnRight
       otherTab
