@@ -160,10 +160,7 @@ ALLOWED_HOSTS = (
 )
 
 # URL publique du backend, utilisée pour construire des liens absolus (admin Django).
-# À défaut, on la déduit d'ALLOWED_HOSTS : le cas des environnements déployés, en HTTPS.
-BACKEND_URL = os.getenv("BACKEND_URL") or (
-    f"https://{ALLOWED_HOSTS[0]}" if ALLOWED_HOSTS else ""
-)
+BACKEND_URL = os.getenv("BACKEND_URL")
 
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
