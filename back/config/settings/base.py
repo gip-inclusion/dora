@@ -713,3 +713,11 @@ except (TypeError, ValueError):
 # ---------------------------------------
 KEYWORD_SEARCH_PAGE_SIZE = int(os.getenv("KEYWORD_SEARCH_PAGE_SIZE", 50))
 KEYWORD_SEARCH_MAX_PAGES = int(os.getenv("KEYWORD_SEARCH_MAX_PAGES", 3))
+
+
+# Slack
+# ---------------------------------------
+# URL d'un Incoming Webhook ; si elle est vide, aucune notification n'est envoyée.
+# En pratique, seule la production la définit.
+SLACK_MODERATION_WEBHOOK_URL = os.getenv("SLACK_MODERATION_WEBHOOK_URL")
+SLACK_TIMEOUT_SECONDS = int(os.getenv("SLACK_TIMEOUT_SECONDS", 5))
