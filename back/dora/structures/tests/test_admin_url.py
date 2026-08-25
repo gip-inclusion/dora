@@ -29,9 +29,9 @@ def test_service_admin_url_points_to_the_django_admin(user):
     )
 
 
-@override_settings(BACKEND_URL="http://localhost:8000")
+@override_settings(BACKEND_URL="http://example:1234")
 def test_admin_url_supports_a_non_https_host_with_a_port(user):
     # en développement l'API est servie en HTTP, sur le port du `runserver`
     structure = make_structure(user)
 
-    assert structure.get_admin_url().startswith("http://localhost:8000/admin/")
+    assert structure.get_admin_url().startswith("http://example:1234/admin/")
