@@ -35,29 +35,61 @@ sources:
         description: |
           Données Les Emplois associées à une orientation créée via l'API Les Emplois ou depuis un JWT Emplois.
           Relation un-à-un avec orientations_orientation (orientation_id est la clé primaire).
+          Les identifiants font donc référence aux tables Les Emplois.
         columns:
         - name: orientation_id
           description: |
             Identifiant de l'orientation associée, clé primaire de la table orientations_orientation.
+            N’a pas de correspondance sur Les Emplois.
         - name: emplois_sync_uid
           description: |
-            UID de synchronisation avec Les Emplois (unique).
+            UID de synchronisation avec Les Emplois.
+            Correspond à :
+            - les-emplois.insertion_orientation.id
+            - il n’y a pas encore d’export des orientations Les Emplois sur Pilotage
         - name: beneficiary_id
           description: |
-            Identifiant du bénéficiaire côté Les Emplois.
+            UID du bénéficiaire.
+            Correspond à :
+            - les-emplois.users_user.public_id
+            - pilotage.candidats_v0.uid
         - name: structure_id
           description: |
-            Identifiant de la structure côté Les Emplois.
+            UID de la structure côté Les Emplois : organisation prescriptrice ou entreprise.
+            Correspond à :
+            - organisation prescriptrice :
+              - les-emplois.prescribers_prescriberorganization.uid
+              - pilotage.organisations_v0.uid
+            - entreprise :
+              - les-emplois.companies_company.uid
+              - pilotag.structures_v0.uid
         - name: structure_name
           description: |
-            Nom de la structure côté Les Emplois.
+            Nom de la structure côté Les Emplois : organisation prescriptrice ou entreprise.
+            Correspond à :
+            - organisation prescriptrice :
+              - les-emplois.prescribers_prescriberorganization.brand ou les-emplois.prescribers_prescriberorganization.name
+              - pilotage.organisations_v0.nom
+            - entreprise :
+              - les-emplois.companies_company.brand ou les-emplois.companies_company.name
+              - pilotage.structures_v0.nom
         - name: structure_siret
           description: |
-            SIRET de la structure côté Les Emplois.
+            SIRET de la structure côté Les Emplois : organisation prescriptrice ou entreprise.
+            Correspond à :
+            - organisation prescriptrice :
+              - les-emplois.prescribers_prescriberorganization.siret
+              - pilotage.organisations_v0.siret
+            - entreprise :
+              - les-emplois.companies_company.siret
+              - pilotage.structures_v0.siret
         - name: prescriber_id
           description: |
-            Identifiant du prescripteur côté Les Emplois (peut être vide).
-
+            UID du professionnel (prescripteur ou employeur) côté Les Emplois.
+            Vide si l’orientation a été réalisée par JWT, méthode qui n’est plus utilisée depuis début juillet 2026.
+            Correspond à :
+            - les-emplois.users_user.public_id
+            - pilotage.candidats_v0.uid
       - name: orientations_rejectionreason
         description: |
           Table de correspondance id-label des motifs de refus des orientations refusées.
