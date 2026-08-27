@@ -173,6 +173,52 @@ def test_idf_saves_a_summary_whose_only_addition_is_a_rare_name():
     assert merge_description(short_desc, description, weight) is not None
 
 
+def empty_the_description(service):
+    """Remet le service dans l'état où le déploiement le trouve : description à composer."""
+    Service._base_manager.filter(pk=service.pk).update(description="")
+
+
+@pytest.mark.parametrize(
+    "short_desc,full_desc,expected",
+    [
+        (
+            "Un résumé",
+            "Un tout autre descriptif",
+            "Un résumé\n\nUn tout autre descriptif",
+        ),
+        ("Un résumé", "**Un résumé** mis en forme", "**Un résumé** mis en forme"),
+        ("Un résumé", "", "Un résumé"),
+    ],
+)
+def test_description_is_derived_from_the_pair(short_desc, full_desc, expected):
+    service = make_service(short_desc=short_desc, full_desc=full_desc)
+
+    assert service.description == expected
+
+
+def test_partial_save_leaves_the_description_alone():
+    # L'instance vient souvent d'un `only()` qui n'a chargé ni résumé ni descriptif.
+    service = make_service(short_desc="Un résumé", full_desc="Un descriptif")
+    empty_the_description(service)
+
+    service = Service._base_manager.get(pk=service.pk)
+    service.name = "Un autre nom"
+    service.save(update_fields=["name"])
+
+    service.refresh_from_db()
+    assert service.description == ""
+
+
+def test_sync_checksum_ignores_the_derived_description():
+    # Ce qui dispense d'une migration de recalcul des empreintes.
+    model = make_model(short_desc="Un résumé", full_desc="Un descriptif")
+    checksum = update_sync_checksum(model)
+
+    model.description = "Une description composée autrement"
+
+    assert update_sync_checksum(model) == checksum
+
+
 def test_merge_copies_short_desc_when_full_desc_is_empty():
     service = make_service(short_desc="Un résumé", full_desc="")
     modification_date = service.modification_date
