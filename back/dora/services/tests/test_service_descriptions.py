@@ -8,10 +8,7 @@ from dora.core.test_utils import (
     make_service,
     make_structure,
 )
-from dora.services.management.commands.merge_service_descriptions import (
-    build_idf,
-    merge_description,
-)
+from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
 from dora.services.utils import instantiate_service_from_model, update_sync_checksum
 
