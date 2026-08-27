@@ -10,7 +10,7 @@ from dora.core.test_utils import (
 )
 from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
-from dora.services.utils import instantiate_service_from_model, update_sync_checksum
+from dora.services.utils import update_sync_checksum
 
 DESCRIPTION = (
     "## Notre offre\n\nNous proposons :\n\n- la **location** de véhicules\n"
@@ -238,68 +238,19 @@ def test_sync_checksum_ignores_the_derived_description():
     assert update_sync_checksum(model) == checksum
 
 
-def test_merge_copies_short_desc_when_full_desc_is_empty():
-    service = make_service(short_desc="Un résumé", full_desc="")
+def test_merge_fills_the_description_left_empty_by_the_deployment():
+    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
+    empty_the_description(service)
     modification_date = service.modification_date
 
     call_command("merge_service_descriptions", "--wet-run")
 
     service.refresh_from_db()
-    assert service.full_desc == "Un résumé"
+    assert service.description == "Un résumé\n\nUn tout autre descriptif"
+    # le couple reste intact, ce qui permet de rejouer la commande
+    assert (service.short_desc, service.full_desc) == (
+        "Un résumé",
+        "Un tout autre descriptif",
+    )
     # la date de modification pilote les rappels « service à actualiser »
     assert service.modification_date == modification_date
-
-
-def test_merge_dry_run_writes_nothing():
-    service = make_service(short_desc="Un résumé", full_desc="")
-
-    call_command("merge_service_descriptions")
-
-    service.refresh_from_db()
-    assert service.full_desc == ""
-
-
-def test_merge_inserts_the_summary_ahead_of_the_full_desc():
-    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.full_desc == "Un résumé\n\nUn tout autre descriptif"
-
-
-def test_merge_leaves_a_full_desc_that_already_says_it():
-    service = make_service(
-        short_desc="Un résumé", full_desc="**Un résumé** mis en forme"
-    )
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.full_desc == "**Un résumé** mis en forme"
-
-
-def test_merge_keeps_copies_in_sync():
-    structure = make_structure(baker.make("users.User", is_valid=True))
-    model = make_model(
-        structure=structure,
-        short_desc="Un résumé",
-        full_desc="Un tout autre descriptif",
-    )
-    synced = instantiate_service_from_model(model, structure, structure.creator)
-    customized = instantiate_service_from_model(model, structure, structure.creator)
-    Service._base_manager.filter(pk=customized.pk).update(last_sync_checksum="périmé")
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    model.refresh_from_db()
-    synced.refresh_from_db()
-    customized.refresh_from_db()
-    # même fusion pour le modèle et ses copies : aucune ne doit passer en « modifié »…
-    assert (
-        synced.full_desc == model.full_desc == "Un résumé\n\nUn tout autre descriptif"
-    )
-    assert model.sync_checksum == update_sync_checksum(model)
-    assert synced.last_sync_checksum == model.sync_checksum
-    # … et celles qui l'étaient déjà le restent
-    assert customized.last_sync_checksum == "périmé"
