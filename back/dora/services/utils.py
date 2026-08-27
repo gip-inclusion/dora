@@ -22,7 +22,7 @@ from dora.services.mobilisation import sync_mobilisation_fields
 SYNC_FIELDS = [
     "name",
     "short_desc",
-    "description",
+    "full_desc",
     "is_cumulative",
     "fee_condition",
     "fee_details",

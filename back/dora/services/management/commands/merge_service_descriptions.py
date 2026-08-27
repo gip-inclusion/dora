@@ -32,8 +32,8 @@ class Command(AtomicHandleMixin, BaseCommand):
     @dry_runnable
     def handle(self, *args, **options):
         weight = build_idf(
-            Service._base_manager.exclude(description="")
-            .values_list("description", flat=True)
+            Service._base_manager.exclude(full_desc="")
+            .values_list("full_desc", flat=True)
             .iterator(chunk_size=BATCH)
         )
 
@@ -41,7 +41,7 @@ class Command(AtomicHandleMixin, BaseCommand):
         copied = dropped = inserted = 0
 
         services = (
-            Service._base_manager.only("pk", "is_model", "short_desc", "description")
+            Service._base_manager.only("pk", "is_model", "short_desc", "full_desc")
             .order_by("pk")
             .iterator(chunk_size=BATCH)
         )
@@ -49,26 +49,26 @@ class Command(AtomicHandleMixin, BaseCommand):
             if not service.short_desc.strip():
                 continue
 
-            merged = merge_description(service.short_desc, service.description, weight)
+            merged = merge_description(service.short_desc, service.full_desc, weight)
             if merged is None:
                 dropped += 1
                 continue
 
-            if is_blank(service.description):
+            if is_blank(service.full_desc):
                 copied += 1
             else:
                 inserted += 1
 
-            service.description = merged
+            service.full_desc = merged
             if service.is_model:
                 touched_models.add(service.pk)
             updated.append(service)
             if len(updated) >= BATCH:
-                Service._base_manager.bulk_update(updated, ["description"])
+                Service._base_manager.bulk_update(updated, ["full_desc"])
                 updated = []
 
         if updated:
-            Service._base_manager.bulk_update(updated, ["description"])
+            Service._base_manager.bulk_update(updated, ["full_desc"])
 
         self.stdout.write(f"{copied:>7} descriptions reprises du résumé")
         self.stdout.write(f"{inserted:>7} résumés insérés en tête de la description")

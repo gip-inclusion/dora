@@ -4,7 +4,6 @@ from model_bakery import baker
 
 from dora.core.test_utils import (
     make_model,
-    make_published_service,
     make_service,
     make_structure,
 )
@@ -174,79 +173,45 @@ def test_idf_saves_a_summary_whose_only_addition_is_a_rare_name():
     assert merge_description(short_desc, description, weight) is not None
 
 
-def test_service_exposes_description_and_its_alias(api_client):
-    user = baker.make("users.User", is_valid=True)
-    structure = make_structure(user)
-    service = make_published_service(structure=structure, description="Avant")
-    api_client.force_authenticate(user=user)
-
-    assert api_client.get(f"/services/{service.slug}/").data["full_desc"] == "Avant"
-
-    response = api_client.patch(f"/services/{service.slug}/", {"full_desc": "Après"})
-
-    assert response.status_code == 200
-    service.refresh_from_db()
-    assert service.description == "Après"
-
-
-def test_alias_takes_precedence_over_description(api_client):
-    # Ce que poste un front non basculé : il édite `full_desc` et réexpédie tel quel le
-    # `description` reçu au chargement. Retenir ce dernier annulerait la modification.
-    user = baker.make("users.User", is_valid=True)
-    structure = make_structure(user)
-    service = make_published_service(structure=structure, description="Avant")
-    api_client.force_authenticate(user=user)
-
-    api_client.patch(
-        f"/services/{service.slug}/",
-        {"full_desc": "Après", "description": "Avant"},
-    )
-
-    service.refresh_from_db()
-    assert service.description == "Après"
-
-
-def test_merge_copies_short_desc_when_description_is_empty():
-    service = make_service(short_desc="Un résumé", description="")
+def test_merge_copies_short_desc_when_full_desc_is_empty():
+    service = make_service(short_desc="Un résumé", full_desc="")
     modification_date = service.modification_date
 
     call_command("merge_service_descriptions", "--wet-run")
 
     service.refresh_from_db()
-    assert service.description == "Un résumé"
+    assert service.full_desc == "Un résumé"
     # la date de modification pilote les rappels « service à actualiser »
     assert service.modification_date == modification_date
 
 
 def test_merge_dry_run_writes_nothing():
-    service = make_service(short_desc="Un résumé", description="")
+    service = make_service(short_desc="Un résumé", full_desc="")
 
     call_command("merge_service_descriptions")
 
     service.refresh_from_db()
-    assert service.description == ""
+    assert service.full_desc == ""
 
 
-def test_merge_inserts_the_summary_ahead_of_the_description():
+def test_merge_inserts_the_summary_ahead_of_the_full_desc():
+    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
+
+    call_command("merge_service_descriptions", "--wet-run")
+
+    service.refresh_from_db()
+    assert service.full_desc == "Un résumé\n\nUn tout autre descriptif"
+
+
+def test_merge_leaves_a_full_desc_that_already_says_it():
     service = make_service(
-        short_desc="Un résumé", description="Un tout autre descriptif"
+        short_desc="Un résumé", full_desc="**Un résumé** mis en forme"
     )
 
     call_command("merge_service_descriptions", "--wet-run")
 
     service.refresh_from_db()
-    assert service.description == "Un résumé\n\nUn tout autre descriptif"
-
-
-def test_merge_leaves_a_description_that_already_says_it():
-    service = make_service(
-        short_desc="Un résumé", description="**Un résumé** mis en forme"
-    )
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.description == "**Un résumé** mis en forme"
+    assert service.full_desc == "**Un résumé** mis en forme"
 
 
 def test_merge_keeps_copies_in_sync():
@@ -254,7 +219,7 @@ def test_merge_keeps_copies_in_sync():
     model = make_model(
         structure=structure,
         short_desc="Un résumé",
-        description="Un tout autre descriptif",
+        full_desc="Un tout autre descriptif",
     )
     synced = instantiate_service_from_model(model, structure, structure.creator)
     customized = instantiate_service_from_model(model, structure, structure.creator)
@@ -267,9 +232,7 @@ def test_merge_keeps_copies_in_sync():
     customized.refresh_from_db()
     # même fusion pour le modèle et ses copies : aucune ne doit passer en « modifié »…
     assert (
-        synced.description
-        == model.description
-        == "Un résumé\n\nUn tout autre descriptif"
+        synced.full_desc == model.full_desc == "Un résumé\n\nUn tout autre descriptif"
     )
     assert model.sync_checksum == update_sync_checksum(model)
     assert synced.last_sync_checksum == model.sync_checksum
