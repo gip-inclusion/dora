@@ -4,6 +4,7 @@ from model_bakery import baker
 
 from dora.core.test_utils import (
     make_model,
+    make_published_service,
     make_service,
     make_structure,
 )
@@ -194,6 +195,24 @@ def test_description_is_derived_from_the_pair(short_desc, full_desc, expected):
     service = make_service(short_desc=short_desc, full_desc=full_desc)
 
     assert service.description == expected
+
+
+def test_description_is_read_only(api_client):
+    user = baker.make("users.User", is_valid=True)
+    structure = make_structure(user)
+    service = make_published_service(
+        structure=structure, short_desc="Un résumé", full_desc="Un descriptif"
+    )
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(
+        f"/services/{service.slug}/",
+        {"description": "Saisie directe", "full_desc": "Location de scooters"},
+    )
+
+    assert response.status_code == 200
+    service.refresh_from_db()
+    assert service.description == "Un résumé\n\nLocation de scooters"
 
 
 def test_partial_save_leaves_the_description_alone():

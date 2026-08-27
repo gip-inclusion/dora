@@ -336,6 +336,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "forms",
             "forms_info",
             "full_desc",
+            "description",
             "funding_labels",
             "funding_labels_display",
             "geom",
@@ -378,6 +379,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "city",
+            "description",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",
@@ -615,6 +617,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "funding_labels",
             "funding_labels_display",
             "full_desc",
+            "description",
             "is_cumulative",
             "is_model",
             "kind",
@@ -637,6 +640,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "update_frequency",
         ]
         read_only_fields = [
+            "description",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",

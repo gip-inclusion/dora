@@ -330,6 +330,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "credentials": [],
         "credentials_display": [],
         "department": department,
+        "description": service_data["description"] or "",
         "diffusion_zone_details": diffusion_zone_info["diffusion_zone_details"],
         "diffusion_zone_details_display": diffusion_zone_info[
             "diffusion_zone_details_display"
