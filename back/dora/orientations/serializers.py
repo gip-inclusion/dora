@@ -280,6 +280,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
 class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     prescriber_structure_name = serializers.SerializerMethodField()
     detail_page_url = serializers.SerializerMethodField()
+    beneficiary_france_travail_number = serializers.SerializerMethodField()
 
     class Meta:
         model = Orientation
@@ -292,6 +293,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "prescriber_structure_name",
             "detail_page_url",
             "source",
+            "beneficiary_france_travail_number",
         ]
 
     @staticmethod
@@ -301,6 +303,12 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     @staticmethod
     def get_detail_page_url(obj: Orientation) -> str:
         return obj.get_magic_link()
+
+    @staticmethod
+    def get_beneficiary_france_travail_number(obj: Orientation) -> str:
+        if obj.status == OrientationStatus.ACCEPTED:
+            return obj.beneficiary_france_travail_number
+        return ""
 
 
 class OrientationBeneficiaryInfoInputSerializer(serializers.Serializer):

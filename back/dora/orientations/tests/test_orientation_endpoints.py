@@ -654,6 +654,7 @@ class OrientationsExportTestCase(APITestCase):
             status=OrientationStatus.ACCEPTED,
             prescriber_structure=self.structure,
             prescriber=prescriber,
+            beneficiary_france_travail_number="12345678901",
         )
 
         orientation_2 = baker.make(
@@ -663,6 +664,16 @@ class OrientationsExportTestCase(APITestCase):
             status=OrientationStatus.REJECTED,
             prescriber_structure=None,
             prescriber=None,
+        )
+
+        orientation_3 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=3),
+            service=self.service,
+            status=OrientationStatus.PENDING,
+            prescriber_structure=self.structure,
+            prescriber=prescriber,
+            beneficiary_france_travail_number="98765432109",
         )
 
         # Assurer que ces orientations ne sont pas incluses dans les résultats
@@ -690,7 +701,7 @@ class OrientationsExportTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 3)
         self.assertEqual(
             response.data,
             [
@@ -703,6 +714,7 @@ class OrientationsExportTestCase(APITestCase):
                     "service_name": orientation_1.get_service_name(),
                     "detail_page_url": orientation_1.get_magic_link(),
                     "source": "DORA",
+                    "beneficiary_france_travail_number": "12345678901",
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
@@ -713,6 +725,18 @@ class OrientationsExportTestCase(APITestCase):
                     "service_name": orientation_2.get_service_name(),
                     "detail_page_url": orientation_2.get_magic_link(),
                     "source": "DORA",
+                    "beneficiary_france_travail_number": "",
+                },
+                {
+                    "creation_date": orientation_3.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Ouverte / En cours de traitement",
+                    "beneficiary_name": orientation_3.get_beneficiary_full_name(),
+                    "prescriber_name": prescriber.get_full_name(),
+                    "prescriber_structure_name": orientation_3.prescriber_structure.name,
+                    "service_name": orientation_3.get_service_name(),
+                    "detail_page_url": orientation_3.get_magic_link(),
+                    "source": "DORA",
+                    "beneficiary_france_travail_number": "",  # Identifiant FT non publié pour les orientations non validées
                 },
             ],
         )
