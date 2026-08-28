@@ -94,7 +94,7 @@ class LabelServicesHelper(BaseImportAdminMixin):
 
                     try:
                         label_name = line["label"]
-                        label = FundingLabel.objects.get(label=label_name)
+                        label = FundingLabel.objects.get(value=label_name)
                     except FundingLabel.DoesNotExist:
                         error_msg = f"[{idx}] Le label de financement '{label_name}' n'existe pas."
                         logger.warning(error_msg)
