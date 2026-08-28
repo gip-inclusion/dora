@@ -142,6 +142,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     save_as = True
     readonly_fields = (
         "creation_date",
+        "description",
         "status",
         "data_inclusion_id",
         "data_inclusion_source",
@@ -471,6 +472,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
     save_as = True
     readonly_fields = (
         "creation_date",
+        "description",
         "modification_date",
         "status",
         "mobilisation_modes",

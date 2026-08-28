@@ -1805,7 +1805,6 @@ class DataInclusionSearchTestCase(APITestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["name"], service_data["nom"])
                 self.assertEqual(response.data["description"], desc)
-                # alias de compatibilité, à retirer avec lui
                 self.assertEqual(response.data["full_desc"], desc)
                 self.assertEqual(response.data["short_desc"], desc)
 

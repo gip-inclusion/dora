@@ -345,8 +345,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "fee_details": service_data["frais_precisions"],
         "forms": None,
         "forms_info": None,
-        # Alias de compatibilité : ce dict part en réponse sans passer par un serializer, il
-        # ne bénéficie donc pas de celui déclaré sur `ServiceSerializer`. À retirer avec lui.
         "full_desc": service_data["description"] or "",
         "funding_labels": [],
         "funding_labels_display": [],

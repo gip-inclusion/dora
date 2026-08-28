@@ -8,12 +8,9 @@ from dora.core.test_utils import (
     make_service,
     make_structure,
 )
-from dora.services.management.commands.merge_service_descriptions import (
-    build_idf,
-    merge_description,
-)
+from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
-from dora.services.utils import instantiate_service_from_model, update_sync_checksum
+from dora.services.utils import update_sync_checksum
 
 DESCRIPTION = (
     "## Notre offre\n\nNous proposons :\n\n- la **location** de véhicules\n"
@@ -177,104 +174,83 @@ def test_idf_saves_a_summary_whose_only_addition_is_a_rare_name():
     assert merge_description(short_desc, description, weight) is not None
 
 
-def test_service_exposes_description_and_its_alias(api_client):
+def empty_the_description(service):
+    """Remet le service dans l'état où le déploiement le trouve : description à composer."""
+    Service._base_manager.filter(pk=service.pk).update(description="")
+
+
+@pytest.mark.parametrize(
+    "short_desc,full_desc,expected",
+    [
+        (
+            "Un résumé",
+            "Un tout autre descriptif",
+            "Un résumé\n\nUn tout autre descriptif",
+        ),
+        ("Un résumé", "**Un résumé** mis en forme", "**Un résumé** mis en forme"),
+        ("Un résumé", "", "Un résumé"),
+    ],
+)
+def test_description_is_derived_from_the_pair(short_desc, full_desc, expected):
+    service = make_service(short_desc=short_desc, full_desc=full_desc)
+
+    assert service.description == expected
+
+
+def test_description_is_read_only(api_client):
     user = baker.make("users.User", is_valid=True)
     structure = make_structure(user)
-    service = make_published_service(structure=structure, description="Avant")
+    service = make_published_service(
+        structure=structure, short_desc="Un résumé", full_desc="Un descriptif"
+    )
     api_client.force_authenticate(user=user)
 
-    assert api_client.get(f"/services/{service.slug}/").data["full_desc"] == "Avant"
-
-    response = api_client.patch(f"/services/{service.slug}/", {"full_desc": "Après"})
+    response = api_client.patch(
+        f"/services/{service.slug}/",
+        {"description": "Saisie directe", "full_desc": "Location de scooters"},
+    )
 
     assert response.status_code == 200
     service.refresh_from_db()
-    assert service.description == "Après"
+    assert service.description == "Un résumé\n\nLocation de scooters"
 
 
-def test_alias_takes_precedence_over_description(api_client):
-    # Ce que poste un front non basculé : il édite `full_desc` et réexpédie tel quel le
-    # `description` reçu au chargement. Retenir ce dernier annulerait la modification.
-    user = baker.make("users.User", is_valid=True)
-    structure = make_structure(user)
-    service = make_published_service(structure=structure, description="Avant")
-    api_client.force_authenticate(user=user)
+def test_partial_save_leaves_the_description_alone():
+    # L'instance vient souvent d'un `only()` qui n'a chargé ni résumé ni descriptif.
+    service = make_service(short_desc="Un résumé", full_desc="Un descriptif")
+    empty_the_description(service)
 
-    api_client.patch(
-        f"/services/{service.slug}/",
-        {"full_desc": "Après", "description": "Avant"},
-    )
-
-    service.refresh_from_db()
-    assert service.description == "Après"
-
-
-def test_merge_copies_short_desc_when_description_is_empty():
-    service = make_service(short_desc="Un résumé", description="")
-    modification_date = service.modification_date
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.description == "Un résumé"
-    # la date de modification pilote les rappels « service à actualiser »
-    assert service.modification_date == modification_date
-
-
-def test_merge_dry_run_writes_nothing():
-    service = make_service(short_desc="Un résumé", description="")
-
-    call_command("merge_service_descriptions")
+    service = Service._base_manager.get(pk=service.pk)
+    service.name = "Un autre nom"
+    service.save(update_fields=["name"])
 
     service.refresh_from_db()
     assert service.description == ""
 
 
-def test_merge_inserts_the_summary_ahead_of_the_description():
-    service = make_service(
-        short_desc="Un résumé", description="Un tout autre descriptif"
-    )
+def test_sync_checksum_ignores_the_derived_description():
+    # Ce qui dispense d'une migration de recalcul des empreintes.
+    model = make_model(short_desc="Un résumé", full_desc="Un descriptif")
+    checksum = update_sync_checksum(model)
+
+    model.description = "Une description composée autrement"
+
+    assert update_sync_checksum(model) == checksum
+
+
+def test_merge_fills_the_description_left_empty_by_the_deployment():
+    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
+    empty_the_description(service)
+    modification_date = service.modification_date
 
     call_command("merge_service_descriptions", "--wet-run")
 
     service.refresh_from_db()
     assert service.description == "Un résumé\n\nUn tout autre descriptif"
-
-
-def test_merge_leaves_a_description_that_already_says_it():
-    service = make_service(
-        short_desc="Un résumé", description="**Un résumé** mis en forme"
+    # le couple reste intact, ce qui permet de rejouer la commande
+    assert (service.short_desc, service.full_desc) == (
+        "Un résumé",
+        "Un tout autre descriptif",
     )
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.description == "**Un résumé** mis en forme"
-
-
-def test_merge_keeps_copies_in_sync():
-    structure = make_structure(baker.make("users.User", is_valid=True))
-    model = make_model(
-        structure=structure,
-        short_desc="Un résumé",
-        description="Un tout autre descriptif",
-    )
-    synced = instantiate_service_from_model(model, structure, structure.creator)
-    customized = instantiate_service_from_model(model, structure, structure.creator)
-    Service._base_manager.filter(pk=customized.pk).update(last_sync_checksum="périmé")
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    model.refresh_from_db()
-    synced.refresh_from_db()
-    customized.refresh_from_db()
-    # même fusion pour le modèle et ses copies : aucune ne doit passer en « modifié »…
-    assert (
-        synced.description
-        == model.description
-        == "Un résumé\n\nUn tout autre descriptif"
-    )
-    assert model.sync_checksum == update_sync_checksum(model)
-    assert synced.last_sync_checksum == model.sync_checksum
-    # … et celles qui l'étaient déjà le restent
-    assert customized.last_sync_checksum == "périmé"
+    # la date de modification pilote les rappels « service à actualiser »
+    assert service.modification_date == modification_date
