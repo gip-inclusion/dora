@@ -25,7 +25,7 @@ class LabelServicesTestCase(TestCase):
 
     def test_label_services_wet_run(self):
         service_2 = make_service()
-        csv_content = f"{self.csv_headers}\n{self.service_url},{self.funding_label.label}\n{service_2.slug},{self.funding_label.label}"
+        csv_content = f"{self.csv_headers}\n{self.service_url},{self.funding_label.value}\n{service_2.slug},{self.funding_label.value}"
         reader = csv.reader(io.StringIO(csv_content))
 
         with freeze_time("2026-01-01"):
@@ -56,7 +56,7 @@ class LabelServicesTestCase(TestCase):
 
     def test_label_services_dry_run(self):
         csv_content = (
-            f"{self.csv_headers}\n{self.service_url},{self.funding_label.label}"
+            f"{self.csv_headers}\n{self.service_url},{self.funding_label.value}"
         )
         reader = csv.reader(io.StringIO(csv_content))
 
@@ -71,7 +71,7 @@ class LabelServicesTestCase(TestCase):
         self.assertEqual(self.service.funding_labels.count(), 0)
 
     def test_funding_label_does_not_exist(self):
-        csv_content = f"{self.csv_headers}\n{self.service_url},invalid-label\n{self.service_url},{self.funding_label.label}"
+        csv_content = f"{self.csv_headers}\n{self.service_url},invalid-label\n{self.service_url},{self.funding_label.value}"
         reader = csv.reader(io.StringIO(csv_content))
 
         result = self.label_services_helper.label_services(
@@ -88,7 +88,7 @@ class LabelServicesTestCase(TestCase):
         self.assertEqual(self.service.funding_labels.count(), 0)
 
     def test_service_does_not_exist(self):
-        csv_content = f"{self.csv_headers}\n{self.service_url},{self.funding_label.label}\ninvalid-service,{self.funding_label.label}\n"
+        csv_content = f"{self.csv_headers}\n{self.service_url},{self.funding_label.value}\ninvalid-service,{self.funding_label.value}\n"
         reader = csv.reader(io.StringIO(csv_content))
 
         result = self.label_services_helper.label_services(
