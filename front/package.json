@@ -68,7 +68,7 @@
     "svelte": "^5.55.4",
     "svelte-check": "^4.7.6",
     "svelte-portal": "^2.2.1",
-    "svelte-remix": "^3.1.0",
+    "svelte-remix": "^3.1.1",
     "sveltekit-rate-limiter": "^0.7.0",
     "svgo": "^4.0.2",
     "tailwindcss": "^4.2.1",
