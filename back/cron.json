@@ -22,7 +22,7 @@
     },
     {
       "command": "0 1 3 * * tools/import-sirene.sh",
-      "size": "M"
+      "size": "XL"
     },
     {
       "command": "0 8 * * * tools/close-expired-orientations.sh",
