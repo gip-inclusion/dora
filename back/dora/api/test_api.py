@@ -405,7 +405,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ],
         "mobilisable_par": ["professionnels", "usagers"],
         "mobilisation_precisions": None,
-        "lien_mobilisation": service.get_dora_form_url(),
+        "lien_mobilisation": "https://example.com",
     }
     # Compare with order-independent list fields
     for key in (

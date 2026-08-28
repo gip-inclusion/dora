@@ -26,11 +26,19 @@ def sync_v1_service_fields(service, *, save=True):
         mode.value for mode in service.beneficiaries_access_modes.all()
     }
 
-    link = None
-    if "completer-le-formulaire-dadhesion" in coach_values:
-        link = service.coach_orientation_modes_external_form_link or None
-    if not link and "completer-le-formulaire-dadhesion" in beneficiary_values:
-        link = service.beneficiaries_access_modes_external_form_link or None
+    links = list(
+        dict.fromkeys(
+            link
+            for link in (
+                service.appointment_link or None,
+                service.online_form or None,
+                service.coach_orientation_modes_external_form_link or None,
+                service.beneficiaries_access_modes_external_form_link or None,
+            )
+            if link
+        )
+    )
+    primary_link, *extra_links = links or [None]
 
     modes = set()
     for value in coach_values:
@@ -42,7 +50,10 @@ def sync_v1_service_fields(service, *, save=True):
             modes.add(ModeMobilisation.SE_PRESENTER.value)
         elif value == "telephoner":
             modes.add(ModeMobilisation.TELEPHONER.value)
-        elif value == "completer-le-formulaire-dadhesion" and link:
+        elif (
+            value == "completer-le-formulaire-dadhesion"
+            and service.coach_orientation_modes_external_form_link
+        ):
             modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
         elif value == "formulaire-dora":
             modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
@@ -54,16 +65,19 @@ def sync_v1_service_fields(service, *, save=True):
             modes.add(ModeMobilisation.SE_PRESENTER.value)
         elif value == "telephoner":
             modes.add(ModeMobilisation.TELEPHONER.value)
-        elif value == "completer-le-formulaire-dadhesion" and link:
+        elif (
+            value == "completer-le-formulaire-dadhesion"
+            and service.beneficiaries_access_modes_external_form_link
+        ):
             modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
 
-    has_professionnels = bool(coach_values) or "professionnel" in beneficiary_values
-    has_usagers = any(value != "professionnel" for value in beneficiary_values)
+    if primary_link:
+        modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
 
     mobilisable_by = []
-    if has_usagers:
+    if any(value != "professionnel" for value in beneficiary_values):
         mobilisable_by.append(PersonneMobilisatrice.USAGERS.value)
-    if has_professionnels:
+    if coach_values or "professionnel" in beneficiary_values:
         mobilisable_by.append(PersonneMobilisatrice.PROFESSIONNELS.value)
 
     coach_details = (
@@ -81,10 +95,18 @@ def sync_v1_service_fields(service, *, save=True):
     else:
         mobilisation_details = coach_details or beneficiary_details or None
 
+    if extra_links:
+        extra_line = f"Liens supplémentaires: {', '.join(extra_links)}"
+        mobilisation_details = (
+            f"{mobilisation_details}\n{extra_line}"
+            if mobilisation_details
+            else extra_line
+        )
+
     service.mobilisation_modes = sorted(modes) or None
     service.mobilisable_by = mobilisable_by or None
     service.mobilisation_details = mobilisation_details
-    service.mobilisation_link = link
+    service.mobilisation_link = primary_link
     if save:
         service.save(update_fields=SERVICE_DI_V1_FIELDS)
 

@@ -1,13 +1,24 @@
+import pytest
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from django.core.management import call_command
 
 from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
 from dora.services.enums import ServiceStatus
-from dora.services.models import BeneficiaryAccessMode, CoachOrientationMode
+from dora.services.models import BeneficiaryAccessMode, CoachOrientationMode, Service
 from dora.services.utils import (
     instantiate_service_from_model,
     synchronize_service_from_model,
 )
+
+
+def test_backfill_di_v1_mobilisation_link():
+    service = make_service(appointment_link="https://example.com/appt")
+    Service.objects.filter(pk=service.pk).update(mobilisation_link=None)
+
+    call_command("backfill_di_v1", "--services", "--wet-run")
+    service.refresh_from_db()
+    assert service.mobilisation_link == "https://example.com/appt"
 
 
 def test_sync_mobilisation_fields_from_orientation_modes():
@@ -28,12 +39,13 @@ def test_sync_mobilisation_fields_from_orientation_modes():
         ModeMobilisation.ENVOYER_UN_COURRIEL.value,
         ModeMobilisation.SE_PRESENTER.value,
         ModeMobilisation.TELEPHONER.value,
+        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
     ]
     assert service.mobilisable_by == [
         PersonneMobilisatrice.USAGERS.value,
         PersonneMobilisatrice.PROFESSIONNELS.value,
     ]
-    assert service.mobilisation_link is None
+    assert service.mobilisation_link == "https://example.com/coach"
     assert service.mobilisation_details is None
 
 
@@ -54,28 +66,63 @@ def test_sync_mobilisation_fields_maps_adhesion_form_with_coach_link():
     assert service.mobilisation_link == "https://example.com/coach-form"
 
 
-def test_sync_mobilisation_fields_ignores_stale_coach_link_without_adhesion_mode():
-    service = make_service(
-        coach_orientation_modes_external_form_link="https://example.com/stale",
-        beneficiaries_access_modes_external_form_link=(
-            "https://example.com/beneficiary-form"
+@pytest.mark.parametrize(
+    ("service_kwargs", "coach_modes", "expected_link", "expected_details"),
+    [
+        (
+            {
+                "appointment_link": "https://example.com/rdv",
+                "online_form": "https://example.com/online",
+                "coach_orientation_modes_external_form_link": "https://example.com/coach",
+            },
+            ["telephoner"],
+            "https://example.com/rdv",
+            "Liens supplémentaires: https://example.com/online, https://example.com/coach",
         ),
-    )
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="envoyer-un-mail")
-    )
-    service.beneficiaries_access_modes.set(
-        BeneficiaryAccessMode.objects.filter(value="completer-le-formulaire-dadhesion")
-    )
-
+        (
+            {
+                "appointment_link": "https://example.com/link",
+                "online_form": "https://example.com/link",
+                "coach_orientation_modes_external_form_link": "https://example.com/other",
+            },
+            [],
+            "https://example.com/link",
+            "Liens supplémentaires: https://example.com/other",
+        ),
+        (
+            {
+                "coach_orientation_modes_external_form_link": "https://example.com/stale",
+                "beneficiaries_access_modes_external_form_link": (
+                    "https://example.com/beneficiary"
+                ),
+            },
+            ["envoyer-un-mail"],
+            "https://example.com/stale",
+            "Liens supplémentaires: https://example.com/beneficiary",
+        ),
+        (
+            {"online_form": "https://example.com/online"},
+            [],
+            "https://example.com/online",
+            None,
+        ),
+    ],
+)
+def test_sync_mobilisation_fields_aggregates_links(
+    service_kwargs, coach_modes, expected_link, expected_details
+):
+    service = make_service(**service_kwargs)
+    if coach_modes:
+        service.coach_orientation_modes.set(
+            CoachOrientationMode.objects.filter(value__in=coach_modes)
+        )
     sync_v1_service_fields(service)
     service.refresh_from_db()
-
-    assert service.mobilisation_modes == [
-        ModeMobilisation.ENVOYER_UN_COURRIEL.value,
-        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
-    ]
-    assert service.mobilisation_link == "https://example.com/beneficiary-form"
+    assert service.mobilisation_link == expected_link
+    assert service.mobilisation_details == expected_details
+    assert ModeMobilisation.UTILISER_LIEN_MOBILISATION.value in (
+        service.mobilisation_modes or []
+    )
 
 
 def test_sync_mobilisation_fields_maps_adhesion_form_with_beneficiary_link():
