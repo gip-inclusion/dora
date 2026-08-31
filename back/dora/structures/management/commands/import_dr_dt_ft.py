@@ -4,6 +4,7 @@ from pathlib import Path
 from django.db import transaction
 
 from dora.core.commands import BaseCommand
+from dora.core.di_v1 import sync_v1_structure_fields
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.data_inclusion.enums import TypologieStructure
@@ -38,6 +39,7 @@ class Command(BaseCommand):
             )
         else:
             structure.national_labels.add(LABEL)
+            sync_v1_structure_fields(structure)
             send_moderation_notification(
                 structure,
                 BOT_USER,

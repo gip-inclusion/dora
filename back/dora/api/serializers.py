@@ -66,6 +66,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "nom",
             "presentation_detail",
             "presentation_resume",
+            "reseaux_porteurs",
             "rna",
             "siret",
             "parent_siret",

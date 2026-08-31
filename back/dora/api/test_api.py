@@ -7,7 +7,7 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
+from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
@@ -203,6 +203,7 @@ def test_structures_serialization_exemple(
         )
     )
     struct.save()
+    sync_v1_structure_fields(struct)
     response = api_client.get(f"/api/v2/structures/{struct.id}/")
 
     assert 200 == response.status_code
@@ -228,6 +229,7 @@ def test_structures_serialization_exemple(
         "nom": "MOBILETTE",
         "presentation_detail": None,
         "presentation_resume": "L’association Mobilette propose des solutions de déplacement aux personnes pour qui la non mobilité est un frein à l’insertion professionnelle : - connaissance de l'offre de transport du territoire - accès à un véhicule 2 ou 4 roues - transport solidaire - accès au permis",
+        "reseaux_porteurs": ["afpa"],
         "rna": None,
         "siret": "60487647500499",
         "parent_siret": parent.siret,

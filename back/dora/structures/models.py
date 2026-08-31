@@ -420,6 +420,13 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         blank=True,
         default=list,
     )
+    reseaux_porteurs = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        default=None,
+        null=True,
+        verbose_name="Réseaux porteurs",
+    )
     creation_date = models.DateTimeField(auto_now_add=True)
     modification_date = models.DateTimeField(blank=True, null=True)
     has_been_edited = models.BooleanField(default=False)
