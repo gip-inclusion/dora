@@ -7,10 +7,10 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
+from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
-from dora.services.mobilisation import sync_mobilisation_fields
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -345,7 +345,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     service.beneficiaries_access_modes.add(
         BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
     )
-    sync_mobilisation_fields(service)
+    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -440,7 +440,7 @@ def test_service_serialization_mobilisation_v1_fields(authenticated_user, api_cl
     service.beneficiaries_access_modes.set(
         BeneficiaryAccessMode.objects.filter(value="professionnel")
     )
-    sync_mobilisation_fields(service)
+    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -462,7 +462,7 @@ def test_lien_mobilisation_builds_dora_form_url_from_mode(
     service.coach_orientation_modes.set(
         CoachOrientationMode.objects.filter(value="formulaire-dora")
     )
-    sync_mobilisation_fields(service)
+    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
