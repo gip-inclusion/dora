@@ -8,11 +8,11 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
+from dora.core.di_v1 import sync_v1_service_fields
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
 from .label_services import LabelServicesHelper
-from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -155,7 +155,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
-        sync_mobilisation_fields(form.instance)
+        sync_v1_service_fields(form.instance)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -484,7 +484,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
-        sync_mobilisation_fields(form.instance)
+        sync_v1_service_fields(form.instance)
 
 
 class CustomizableChoiceAdmin(admin.ModelAdmin):

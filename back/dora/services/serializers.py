@@ -22,6 +22,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
+from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
@@ -31,7 +32,6 @@ from dora.services.utils import (
 )
 from dora.structures.models import Structure, StructureMember
 
-from .mobilisation import sync_mobilisation_fields
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -507,12 +507,12 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super().create(validated_data)
-        sync_mobilisation_fields(instance)
+        sync_v1_service_fields(instance)
         return instance
 
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        sync_mobilisation_fields(instance)
+        sync_v1_service_fields(instance)
         return instance
 
     def _validate_custom_choice(self, field, data, user, user_structures, structure):

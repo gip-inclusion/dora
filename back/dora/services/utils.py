@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from dora.core.constants import WGS84
+from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.models import ModerationStatus
 from dora.decoupage_administratif.models import (
     EPCI,
@@ -17,7 +18,6 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.services.enums import ServiceStatus
-from dora.services.mobilisation import sync_mobilisation_fields
 
 SYNC_FIELDS = [
     "name",
@@ -129,7 +129,7 @@ def instantiate_service_from_model(model, structure, user):
         )
 
     service.save()
-    sync_mobilisation_fields(service)
+    sync_v1_service_fields(service)
     return service
 
 
@@ -145,7 +145,7 @@ def synchronize_service_from_model(service, model):
             getattr(service, field), getattr(model, field).all(), service.structure
         )
 
-    sync_mobilisation_fields(service)
+    sync_v1_service_fields(service)
     return service
 
 
