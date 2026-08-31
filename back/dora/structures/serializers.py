@@ -101,6 +101,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "phone",
             "postal_code",
             "quick_start_done",
+            "reseaux_porteurs",
             "services",
             "short_admin_names",
             "short_desc",
@@ -119,6 +120,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "parent_name",
             "parent_slug",
             "parent_siret",
+            "reseaux_porteurs",
         ]
 
     def get_parent_name(self, obj):

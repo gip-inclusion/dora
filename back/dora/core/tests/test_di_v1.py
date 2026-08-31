@@ -2,14 +2,16 @@ import pytest
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 from django.core.management import call_command
 
-from dora.core.di_v1 import sync_v1_service_fields
+from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
+from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.services.models import BeneficiaryAccessMode, CoachOrientationMode, Service
 from dora.services.utils import (
     instantiate_service_from_model,
     synchronize_service_from_model,
 )
+from dora.structures.models import Structure, StructureNationalLabel
 
 
 def test_backfill_di_v1_mobilisation_link():
@@ -358,3 +360,61 @@ def test_instantiate_service_from_model_keeps_empty_dora_form_link():
         ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
     ]
     assert service.mobilisation_link is None
+
+
+@pytest.mark.parametrize(
+    ("typology", "national_labels", "expected"),
+    [
+        pytest.param(
+            TypologieStructure.FT.value,
+            [],
+            ["france-travail"],
+            id="typology",
+        ),
+        pytest.param(
+            TypologieStructure.ASSO.value,
+            ["mission-locale"],
+            ["mission-locale"],
+            id="national_label",
+        ),
+        pytest.param(
+            TypologieStructure.FT.value,
+            ["france-travail"],
+            ["france-travail"],
+            id="deduplicates_typology_and_label",
+        ),
+        pytest.param(
+            TypologieStructure.ASSO.value,
+            ["cci"],
+            ["chambres-consulaires"],
+            id="label_alias",
+        ),
+        pytest.param(
+            TypologieStructure.ASSO.value,
+            [],
+            None,
+            id="no_mapping",
+        ),
+    ],
+)
+def test_reseaux_porteurs(typology, national_labels, expected):
+    structure = make_structure(typology=typology)
+    for label in national_labels:
+        structure.national_labels.add(StructureNationalLabel.objects.get(value=label))
+
+    sync_v1_structure_fields(structure)
+    structure.refresh_from_db()
+
+    assert structure.reseaux_porteurs == expected
+
+
+def test_backfill_di_v1_reseaux_porteurs():
+    structure = make_structure(typology=TypologieStructure.FT.value)
+    structure.national_labels.add(
+        StructureNationalLabel.objects.get(value="france-travail")
+    )
+    Structure.objects.filter(pk=structure.pk).update(reseaux_porteurs=None)
+
+    call_command("backfill_di_v1", "--structures", "--wet-run")
+    structure.refresh_from_db()
+    assert structure.reseaux_porteurs == ["france-travail"]

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
+from dora.core.di_v1 import sync_v1_structure_fields
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.utils import normalize_phone_number
@@ -228,6 +229,7 @@ class Command(BaseCommand):
                         structure.last_editor = bot_user
                         structure.modification_date = timezone.now()
                         structure.save()
+                        sync_v1_structure_fields(structure)
 
                     if not existing:
                         created_count += 1

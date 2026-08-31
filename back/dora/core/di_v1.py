@@ -10,6 +10,11 @@ For every new field or set of fields:
 
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 
+from dora.structures.reseaux_porteurs_mappings import (
+    LABEL_NATIONAL_TO_RESEAU,
+    TYPOLOGY_TO_RESEAU,
+)
+
 SERVICE_DI_V1_FIELDS = [
     "mobilisation_modes",
     "mobilisable_by",
@@ -17,7 +22,7 @@ SERVICE_DI_V1_FIELDS = [
     "mobilisation_link",
 ]
 
-STRUCTURE_DI_V1_FIELDS = []
+STRUCTURE_DI_V1_FIELDS = ["reseaux_porteurs"]
 
 
 def sync_v1_service_fields(service, *, save=True):
@@ -112,5 +117,13 @@ def sync_v1_service_fields(service, *, save=True):
 
 
 def sync_v1_structure_fields(structure, *, save=True):
-    if save and STRUCTURE_DI_V1_FIELDS:
+    reseaux = set()
+    if structure.typology:
+        if reseau := TYPOLOGY_TO_RESEAU.get(structure.typology):
+            reseaux.add(reseau)
+    for label in structure.national_labels.all():
+        if reseau := LABEL_NATIONAL_TO_RESEAU.get(label.value):
+            reseaux.add(reseau)
+    structure.reseaux_porteurs = sorted(reseaux) or None
+    if save:
         structure.save(update_fields=STRUCTURE_DI_V1_FIELDS)

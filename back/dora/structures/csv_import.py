@@ -8,6 +8,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from dora.core.di_v1 import sync_v1_structure_fields
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.utils import skip_csv_lines
@@ -120,6 +121,7 @@ class ImportStructuresHelper:
                     logger.info(structure.get_frontend_url())
                     self.invite_users(structure, data["admins"])
                     self.add_labels(structure, data["labels"])
+                    sync_v1_structure_fields(structure)
                     self.create_services(structure, data["models"], importing_user)
             else:
                 self.map_line_to_errors[idx] = [
@@ -290,6 +292,7 @@ class ImportStructuresHelper:
             structure.last_editor = importing_user
             structure.source = self.source
             structure.save()
+            sync_v1_structure_fields(structure)
 
             logger.info(
                 "Création de la structure %s %s (%s)",

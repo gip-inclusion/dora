@@ -7,6 +7,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 
 from dora import onboarding
+from dora.core.di_v1 import sync_v1_structure_fields
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
@@ -131,6 +132,7 @@ class StructureViewSet(
             "Création",
             ModerationStatus.NEED_INITIAL_MODERATION,
         )
+        sync_v1_structure_fields(structure)
 
     def perform_update(self, serializer):
         structure = serializer.save(
@@ -139,6 +141,7 @@ class StructureViewSet(
             has_been_edited=True,
         )
         structure.log_note(self.request.user, "Structure modifiée")
+        sync_v1_structure_fields(structure)
 
 
 class StructureMemberViewset(viewsets.ModelViewSet):
