@@ -5,6 +5,7 @@ import tempfile
 
 from django.contrib.gis.gdal import CoordTransform, GDALException, SpatialReference
 from django.contrib.gis.geos import Point
+from django.core.management.base import CommandError
 from django.db.utils import DataError
 
 from dora.core.commands import BaseCommand
@@ -256,11 +257,10 @@ class Command(BaseCommand):
         self.logger.warning("Activation de la table de travail")
 
         if not table_exists(TMP_TABLE):
-            self.logger.error(
-                "La table %s n'existe pas. Exécutez d'abord --import-units puis --import-estab.",
-                TMP_TABLE,
+            raise CommandError(
+                f"La table {TMP_TABLE} n'existe pas. "
+                "Exécutez d'abord --import-units puis --import-estab."
             )
-            return
 
         # on sauvegarde la base de production
         self.logger.info(" > sauvegarde de la table actuelle")
@@ -280,8 +280,7 @@ class Command(BaseCommand):
         self.logger.warning("Activation de la table sauvegardée")
 
         if not table_exists(BACKUP_TABLE):
-            self.logger.error("La table %s n'existe pas.", BACKUP_TABLE)
-            return
+            raise CommandError(f"La table {BACKUP_TABLE} n'existe pas.")
 
         rename_table(SIRENE_TABLE, TMP_TABLE)
         rename_table(BACKUP_TABLE, SIRENE_TABLE)
@@ -362,11 +361,10 @@ class Command(BaseCommand):
 
         # Vérification des prérequis
         if not table_exists(LEGAL_UNITS_TMP_TABLE):
-            self.logger.error(
-                "La table %s n'existe pas. Exécutez d'abord --import-units.",
-                LEGAL_UNITS_TMP_TABLE,
+            raise CommandError(
+                f"La table {LEGAL_UNITS_TMP_TABLE} n'existe pas. "
+                "Exécutez d'abord --import-units."
             )
-            return
 
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             tmp_dir = pathlib.Path(tmp_dir_name)
