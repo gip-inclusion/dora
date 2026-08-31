@@ -23,6 +23,27 @@ def test_backfill_di_v1_mobilisation_link():
     assert service.mobilisation_link == "https://example.com/appt"
 
 
+@pytest.mark.parametrize(
+    ("diffusion_zone_type", "diffusion_zone_details", "expected"),
+    [
+        ("country", "", ["france"]),
+        ("department", "29", ["29"]),
+    ],
+)
+def test_backfill_di_v1_zone_eligibilite(
+    diffusion_zone_type, diffusion_zone_details, expected
+):
+    service = make_service(
+        diffusion_zone_type=diffusion_zone_type,
+        diffusion_zone_details=diffusion_zone_details,
+    )
+    Service.objects.filter(pk=service.pk).update(zone_eligibilite=None)
+
+    call_command("backfill_di_v1", "--services", "--wet-run")
+    service.refresh_from_db()
+    assert service.zone_eligibilite == expected
+
+
 def test_sync_mobilisation_fields_from_orientation_modes():
     service = make_service(
         coach_orientation_modes_external_form_link="https://example.com/coach",

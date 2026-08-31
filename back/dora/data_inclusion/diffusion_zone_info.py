@@ -107,6 +107,36 @@ def get_region_if_all_department_codes_belong_to_it(
     return Region.objects.filter(code=region_code).first()
 
 
+def get_zone_eligibilite_from_diffusion_zone(
+    diffusion_zone_type, diffusion_zone_details
+):
+    if not diffusion_zone_type:
+        return None
+
+    if diffusion_zone_type == AdminDivisionType.COUNTRY.value:
+        return ["france"]
+
+    if not diffusion_zone_details:
+        return None
+
+    if (
+        diffusion_zone_type == AdminDivisionType.CITY.value
+        or diffusion_zone_type == AdminDivisionType.DEPARTMENT.value
+        or diffusion_zone_type == AdminDivisionType.EPCI.value
+    ):
+        return [diffusion_zone_details]
+
+    if diffusion_zone_type == AdminDivisionType.REGION.value:
+        department_codes = list(
+            Department.objects.filter(region=diffusion_zone_details)
+            .order_by("code")
+            .values_list("code", flat=True)
+        )
+        return department_codes or None
+
+    return None
+
+
 def get_diffusion_zone_info(zone_codes: list[str] | None) -> list[str]:
     if zone_codes is None:
         return {

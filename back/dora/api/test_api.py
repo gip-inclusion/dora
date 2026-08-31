@@ -393,6 +393,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "zone_diffusion_code": "29",
         "zone_diffusion_nom": "Finistère",
         "zone_diffusion_type": "departement",
+        "zone_eligibilite": ["29"],
         "modes_orientation_accompagnateur": [
             "completer-le-formulaire-dadhesion",
             "envoyer-un-mail",
