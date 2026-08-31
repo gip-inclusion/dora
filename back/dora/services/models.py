@@ -456,6 +456,13 @@ class Service(ModerationMixin, models.Model):
         null=True,
         default=None,
     )
+    zone_eligibilite = ArrayField(
+        models.CharField(max_length=255),
+        verbose_name="Zone d’éligibilité",
+        blank=True,
+        null=True,
+        default=None,
+    )
 
     requirements = models.ManyToManyField(
         Requirement,

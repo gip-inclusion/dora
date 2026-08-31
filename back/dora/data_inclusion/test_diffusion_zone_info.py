@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.gis.geos import Point
+from model_bakery import baker
 
 from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import (
@@ -10,7 +11,10 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 
-from .diffusion_zone_info import get_diffusion_zone_info
+from .diffusion_zone_info import (
+    get_diffusion_zone_info,
+    get_zone_eligibilite_from_diffusion_zone,
+)
 
 
 def test_get_diffusion_zone_info_france():
@@ -318,3 +322,35 @@ def test_get_diffusion_zone_info_corse():
         "diffusion_zone_type": AdminDivisionType.REGION.value,
         "diffusion_zone_type_display": AdminDivisionType.REGION.label,
     }
+
+
+@pytest.mark.parametrize(
+    ("zone_type", "zone_details", "expected"),
+    [
+        (AdminDivisionType.COUNTRY.value, None, ["france"]),
+        (None, None, None),
+        ("", "75", None),
+        (AdminDivisionType.CITY.value, "", None),
+        (AdminDivisionType.CITY.value, "75056", ["75056"]),
+        (AdminDivisionType.DEPARTMENT.value, "75", ["75"]),
+        (AdminDivisionType.EPCI.value, "200054781", ["200054781"]),
+        (AdminDivisionType.REGION.value, "11", ["75", "77", "78"]),
+    ],
+)
+def test_get_zone_eligibilite_from_diffusion_zone(zone_type, zone_details, expected):
+    baker.make(Region, code="11", name="Île-de-France")
+    baker.make(Department, code="75", name="Paris", region="11")
+    baker.make(Department, code="77", name="Seine-et-Marne", region="11")
+    baker.make(Department, code="78", name="Yvelines", region="11")
+    baker.make(
+        City,
+        code="75056",
+        name="Paris",
+        department="75",
+        epci="200054781",
+        region="11",
+        center=Point(2.3522, 48.8566, srid=WGS84),
+    )
+    baker.make(EPCI, code="200054781", name="Métropole du Grand Paris")
+
+    assert get_zone_eligibilite_from_diffusion_zone(zone_type, zone_details) == expected
