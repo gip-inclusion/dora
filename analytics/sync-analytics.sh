@@ -85,7 +85,7 @@ fetch_and_export_dora_data() {
 
     # Export des données de la base de données DORA dans un fichier dump
     time pg_dump "$DORA_DATABASE_URL" --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
-    
+
     # Copie des données vers la base de données analytics.
     # On purge aussi un éventuel raw_dora résiduel (cf. export pilotage plus bas)
     time psql "$DATABASE_URL" -c "DROP SCHEMA IF EXISTS public CASCADE; DROP SCHEMA IF EXISTS raw_dora CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
@@ -98,7 +98,7 @@ fetch_and_export_dora_data() {
 
     # Suppression des colonnes sensibles ou inutiles
     time psql "$DATABASE_URL" <<SQL
-ALTER TABLE public.orientations_orientation 
+ALTER TABLE public.orientations_orientation
 DROP COLUMN IF EXISTS beneficiary_last_name,
 DROP COLUMN IF EXISTS beneficiary_first_name,
 DROP COLUMN IF EXISTS beneficiary_phone,
@@ -107,17 +107,18 @@ DROP COLUMN IF EXISTS referent_last_name,
 DROP COLUMN IF EXISTS referent_first_name,
 DROP COLUMN IF EXISTS referent_phone,
 DROP COLUMN IF EXISTS referent_email,
+DROP COLUMN IF EXISTS orientation_reasons,
 DROP COLUMN IF EXISTS di_contact_email,
 DROP COLUMN IF EXISTS di_contact_phone,
 DROP COLUMN IF EXISTS di_contact_name;
 
-ALTER TABLE public.services_service 
+ALTER TABLE public.services_service
 DROP COLUMN IF EXISTS contact_name,
 DROP COLUMN IF EXISTS contact_email,
 DROP COLUMN IF EXISTS contact_phone,
 DROP COLUMN IF EXISTS is_contact_info_public;
 
-ALTER TABLE public.users_user 
+ALTER TABLE public.users_user
 DROP COLUMN IF EXISTS password;
 
 ALTER TABLE public.logs_actionlog
