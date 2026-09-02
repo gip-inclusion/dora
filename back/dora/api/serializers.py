@@ -215,6 +215,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
     lien_mobilisation = serializers.SerializerMethodField()
     zone_eligibilite = serializers.ReadOnlyField()
+    conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
 
@@ -260,6 +261,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "zone_diffusion_nom",
             "zone_diffusion_type",
             "zone_eligibilite",
+            "conditions_acces",
             "modes_orientation_accompagnateur",
             "modes_orientation_accompagnateur_autres",
             "modes_orientation_beneficiaire",

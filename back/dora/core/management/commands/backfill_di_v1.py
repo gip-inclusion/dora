@@ -11,7 +11,9 @@ from itoutils.django.commands import AtomicHandleMixin, dry_runnable
 from dora.core.commands import BaseCommand
 from dora.core.di_v1 import (
     SERVICE_DI_V1_FIELDS,
+    SERVICE_SYNC_PREFETCHES,
     STRUCTURE_DI_V1_FIELDS,
+    STRUCTURE_SYNC_PREFETCHES,
     sync_v1_service_fields,
     sync_v1_structure_fields,
 )
@@ -45,16 +47,13 @@ class Command(AtomicHandleMixin, BaseCommand):
     def handle(self, *args, **options):
         if not options["services"]:
             self._backfill_queryset(
-                Structure._base_manager.prefetch_related("national_labels"),
+                Structure._base_manager.prefetch_related(*STRUCTURE_SYNC_PREFETCHES),
                 sync_v1_structure_fields,
                 STRUCTURE_DI_V1_FIELDS,
             )
         if not options["structures"]:
             self._backfill_queryset(
-                Service._base_manager.prefetch_related(
-                    "coach_orientation_modes",
-                    "beneficiaries_access_modes",
-                ),
+                Service._base_manager.prefetch_related(*SERVICE_SYNC_PREFETCHES),
                 sync_v1_service_fields,
                 SERVICE_DI_V1_FIELDS,
             )

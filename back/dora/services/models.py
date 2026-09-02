@@ -362,6 +362,17 @@ class Service(ModerationMixin, models.Model):
     ############
     # Conditions
 
+    conditions_acces = models.TextField(
+        verbose_name="Conditions d'accès", blank=True, null=True, default=None
+    )
+    publics_derived_from_conditions = ArrayField(
+        models.CharField(
+            max_length=255, validators=[validate_corresponding_di_publics]
+        ),
+        default=list,
+        blank=True,
+        verbose_name="Publics dérivés des conditions d'accès",
+    )
     access_conditions = models.ManyToManyField(
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
