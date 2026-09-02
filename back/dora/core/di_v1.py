@@ -9,10 +9,10 @@ For every new field or set of fields:
 """
 
 import re
-import unicodedata
 
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 from django.db.models import prefetch_related_objects
+from unidecode import unidecode
 
 from dora.data_inclusion.diffusion_zone_info import (
     get_zone_eligibilite_from_diffusion_zone,
@@ -183,30 +183,12 @@ KEYWORDS_TO_PUBLICS_MAP = {
     "zrr": "residents-qpv-frr",
 }
 
-# Les libellés sont saisis librement : le mot-clé doit commencer sur une frontière de mot,
-# sinon « rsa » se déclencherait sur « conversation » ou « universalité » — un faux positif
-# ajoute un public erroné *et* fait disparaître le libellé de `conditions_acces`. Le suffixe
-# reste libre pour absorber les accords (« mal logés », « bénéficiaires de l'aah »).
 KEYWORDS_TO_PUBLICS_PATTERNS = [
     (re.compile(rf"\b{re.escape(keyword)}\w*"), public)
     for keyword, public in KEYWORDS_TO_PUBLICS_MAP.items()
 ]
 
-# Les apostrophes typographiques saisies par les utilisateurs (« carte d’invalidité ») ne
-# correspondent pas à celles des mots-clés : on les ramène à l'apostrophe droite.
 APOSTROPHES = str.maketrans({"’": "'", "‘": "'"})
-
-LIGATURES = str.maketrans({"œ": "oe", "Œ": "OE", "æ": "ae", "Æ": "AE"})
-
-
-def _alphabetical_key(name):
-    # `conditions_acces` est un texte lu par un humain : il se trie comme un index
-    # français, pas par point de code — sinon « Être majeur » passerait après « Zone
-    # rurale » au lieu de se ranger sous le E. On retire les diacritiques et on ignore la
-    # casse, le libellé d'origine ne servant qu'à départager les ex æquo.
-    decomposed = unicodedata.normalize("NFKD", name.translate(LIGATURES))
-    stripped = "".join(char for char in decomposed if not unicodedata.combining(char))
-    return (stripped.casefold(), name)
 
 
 def extract_conditions_acces_and_publics(service):
@@ -239,6 +221,9 @@ def extract_conditions_acces_and_publics(service):
             publics.add(public)
             matched_names |= matching
 
-    conditions_acces = "\n".join(sorted(names, key=_alphabetical_key)) or None
+    conditions_acces = (
+        "\n".join(sorted(names, key=lambda name: (unidecode(name).casefold(), name)))
+        or None
+    )
 
     return conditions_acces, sorted(publics)
