@@ -28,22 +28,26 @@ Créer et démarrer les conteneurs :
 docker compose up
 ```
 
-Importer une sauvegarde de base de données anonymisée à partir d'un fichier `.sql` (texte) :
+### Staging anonymisé
+
+[pg_datanymizer](https://github.com/datanymizer/datanymizer/releases) + prod en local.
 
 ```bash
-docker compose exec -T db psql dora -U POSTGRES_USER < dump-anon.sql
+python tools/anonymized_db.py dump
+python tools/anonymized_db.py restore-staging
 ```
 
-Ou à partir d'un fichier `.pgsql` (binaire) :
+### Import local
 
 ```bash
-docker compose exec -T db pg_restore -d dora -U POSTGRES_USER < dump-anon.pgsql
+docker compose exec -T db psql "$POSTGRES_DB" -U "$POSTGRES_USER" < dump.sql
+docker compose exec -T db pg_restore -d "$POSTGRES_DB" -U "$POSTGRES_USER" < dump.pgsql
 ```
 
 Utiliser _psql_ :
 
 ```bash
-docker compose exec db psql dora -U POSTGRES_USER
+docker compose exec db psql "$POSTGRES_DB" -U "$POSTGRES_USER"
 ```
 
 Accéder à pgAdmin 4 via http://localhost:8888/ en utilisant l'adresse e-mail et le mot de passe configurés par les variables d'environnement `PGADMIN_DEFAULT_EMAIL` et `PGADMIN_DEFAULT_PASSWORD`. Le nom d'hôte de la base de données est `db`.
