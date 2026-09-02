@@ -701,3 +701,23 @@ def test_service_includes_contact_info_even_when_not_public(
     assert response.data["telephone"] == "0123456789"
     assert response.data["contact_nom_prenom"] == "Test Person"
     assert response.data["contact_public"] is False
+
+
+def test_service_combines_all_publics_after_sync(authenticated_user, api_client):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        publics=["familles", "personnes-en-situation-de-handicap"],
+    )
+    service.access_conditions.add(baker.make(AccessCondition, name="Résident QPV"))
+    service.credentials.add(baker.make(Credential, name="Carte d'invalidité"))
+
+    sync_v1_service_fields(service)
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    assert response.data["publics"] == [
+        "familles",
+        "personnes-en-situation-de-handicap",
+        "residents-qpv-frr",
+    ]
