@@ -167,20 +167,20 @@ def sync_v1_structure_fields(structure, *, save=True):
 
 
 KEYWORDS_TO_PUBLICS_MAP = {
-    "qpv": "residents-qpv-frr",
-    "zrr": "residents-qpv-frr",
-    "zfrr": "residents-qpv-frr",
-    "cdaph": "personnes-en-situation-de-handicap",
-    "carte d'invalidité": "personnes-en-situation-de-handicap",
-    "rqth": "personnes-en-situation-de-handicap",
     "aah": "personnes-en-situation-de-handicap",
-    "rsa": "beneficiaires-des-minimas-sociaux",
     "allocation spécifique de solidarité": "beneficiaires-des-minimas-sociaux",
+    "carte d'invalidité": "personnes-en-situation-de-handicap",
+    "cdaph": "personnes-en-situation-de-handicap",
+    "contrat d'intégration républicaine": "personnes-exilees",
     "france travail": "demandeurs-emploi",
-    "sans logement": "personnes-en-situation-durgence",
     "mal logé": "personnes-en-situation-durgence",
     "mission locale": "jeunes",
-    "contrat d'intégration républicaine": "personnes-exilees",
+    "qpv": "residents-qpv-frr",
+    "rqth": "personnes-en-situation-de-handicap",
+    "rsa": "beneficiaires-des-minimas-sociaux",
+    "sans logement": "personnes-en-situation-durgence",
+    "zfrr": "residents-qpv-frr",
+    "zrr": "residents-qpv-frr",
 }
 
 # Les libellés sont saisis librement : le mot-clé doit commencer sur une frontière de mot,
