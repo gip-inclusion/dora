@@ -359,10 +359,6 @@ RECENT_SERVICES_CUTOFF_DAYS = 30
 # Bot user :
 DORA_BOT_USER = "dora-bot@dora.beta.gouv.fr"
 
-# Authentifications tierces parties :
-FT_CLIENT_ID = os.getenv("FT_CLIENT_ID")
-FT_CLIENT_SECRET = os.getenv("FT_CLIENT_SECRET")
-
 # Compte utilisateur Data·Inclusion
 DATA_INCLUSION_EMAIL = "data.inclusion@beta.gouv.fr"
 DATA_INCLUSION_URL = os.getenv("DATA_INCLUSION_URL")
