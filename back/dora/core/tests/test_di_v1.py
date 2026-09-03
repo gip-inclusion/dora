@@ -21,6 +21,15 @@ from dora.services.utils import (
 from dora.structures.models import Structure, StructureNationalLabel
 
 
+def test_backfill_di_v1_description():
+    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
+    Service.objects.filter(pk=service.pk).update(description="")
+
+    call_command("backfill_di_v1", "--services", "--wet-run")
+    service.refresh_from_db()
+    assert service.description == "Un résumé\n\nUn tout autre descriptif"
+
+
 def test_backfill_di_v1_mobilisation_link():
     service = make_service(appointment_link="https://example.com/appt")
     Service.objects.filter(pk=service.pk).update(mobilisation_link=None)

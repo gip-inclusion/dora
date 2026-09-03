@@ -371,6 +371,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "date_creation": "2023-02-04T12:34:44Z",
         "date_maj": "2023-03-11T16:54:10Z",
         "date_suspension": None,
+        "description": (
+            "Accompagnement des familles à domicile\n\n"
+            "Service de proximité visant à soutenir les familles ayant la "
+            "responsabilité de jeunes enfants, en particulier les familles "
+            "monoparentales."
+        ),
         "temps_passe_duree_hebdomadaire": None,
         "temps_passe_semaines": None,
         "formulaire_en_ligne": service.get_dora_form_url(),

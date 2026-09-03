@@ -176,6 +176,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     nom = serializers.SerializerMethodField()
     presentation_resume = serializers.SerializerMethodField()
     presentation_detail = serializers.SerializerMethodField()
+    description = serializers.ReadOnlyField()
     types = serializers.SerializerMethodField()
     thematiques = serializers.SerializerMethodField()
     prise_rdv = serializers.SerializerMethodField()
@@ -236,6 +237,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "date_creation",
             "date_maj",
             "date_suspension",
+            "description",
             "formulaire_en_ligne",
             "frais_autres",
             "frais",
