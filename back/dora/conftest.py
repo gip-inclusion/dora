@@ -16,7 +16,6 @@ def pytest_collection_modifyitems(config, items):
 STRUCTURE_SOURCES = [
     ("porteur", "Porteur"),
     ("equipe-dora", "Équipe DORA"),
-    ("dr-dt-france-travail", "DR/DT France Travail"),
     ("invitations-masse", "Invitations en masse"),
     ("solidagregateur", "Solidagrégateur"),
 ]
