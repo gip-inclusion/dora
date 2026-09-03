@@ -162,3 +162,58 @@ def merged_description(
     elle vaut le descriptif.
     """
     return merge_description(short_desc, full_desc, weight) or full_desc
+
+
+def derive_description(
+    short_desc: str,
+    full_desc: str,
+    weight: Callable[[str], float] = uniform_weight,
+) -> tuple[str, str | None]:
+    """Description dérivée et motif de composition pour le backfill."""
+    merged = merge_description(short_desc, full_desc, weight)
+    if merged is None:
+        if not is_blank(short_desc):
+            return full_desc, "dropped"
+        return full_desc, None
+    if is_blank(full_desc):
+        return merged, "copied"
+    return merged, "composed"
+
+
+def backfill_service_descriptions(*, batch: int = 500) -> dict[str, int]:
+    from dora.services.models import Service
+
+    weight = build_idf(
+        Service._base_manager.exclude(full_desc="")
+        .values_list("full_desc", flat=True)
+        .iterator(chunk_size=batch)
+    )
+
+    stats = {"composed": 0, "copied": 0, "dropped": 0, "written": 0}
+    updated = []
+
+    services = (
+        Service._base_manager.only("pk", "short_desc", "full_desc", "description")
+        .order_by("pk")
+        .iterator(chunk_size=batch)
+    )
+    for service in services:
+        description, reason = derive_description(
+            service.short_desc, service.full_desc, weight
+        )
+        if reason:
+            stats[reason] += 1
+        if description == service.description:
+            continue
+
+        service.description = description
+        stats["written"] += 1
+        updated.append(service)
+        if len(updated) >= batch:
+            Service._base_manager.bulk_update(updated, ["description"])
+            updated = []
+
+    if updated:
+        Service._base_manager.bulk_update(updated, ["description"])
+
+    return stats

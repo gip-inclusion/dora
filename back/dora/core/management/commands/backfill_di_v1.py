@@ -17,6 +17,7 @@ from dora.core.di_v1 import (
     sync_v1_service_fields,
     sync_v1_structure_fields,
 )
+from dora.services.descriptions import backfill_service_descriptions
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -57,6 +58,7 @@ class Command(AtomicHandleMixin, BaseCommand):
                 sync_v1_service_fields,
                 SERVICE_DI_V1_FIELDS,
             )
+            backfill_service_descriptions(batch=BATCH)
 
     def _backfill_queryset(self, queryset, sync_fn, fields):
         updated = []

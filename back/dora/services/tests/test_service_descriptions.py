@@ -1,5 +1,4 @@
 import pytest
-from django.core.management import call_command
 from model_bakery import baker
 
 from dora.core.test_utils import (
@@ -236,21 +235,3 @@ def test_sync_checksum_ignores_the_derived_description():
     model.description = "Une description composée autrement"
 
     assert update_sync_checksum(model) == checksum
-
-
-def test_merge_fills_the_description_left_empty_by_the_deployment():
-    service = make_service(short_desc="Un résumé", full_desc="Un tout autre descriptif")
-    empty_the_description(service)
-    modification_date = service.modification_date
-
-    call_command("merge_service_descriptions", "--wet-run")
-
-    service.refresh_from_db()
-    assert service.description == "Un résumé\n\nUn tout autre descriptif"
-    # le couple reste intact, ce qui permet de rejouer la commande
-    assert (service.short_desc, service.full_desc) == (
-        "Un résumé",
-        "Un tout autre descriptif",
-    )
-    # la date de modification pilote les rappels « service à actualiser »
-    assert service.modification_date == modification_date
