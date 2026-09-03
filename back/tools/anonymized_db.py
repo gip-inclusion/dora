@@ -4,8 +4,10 @@ import argparse
 import os
 import re
 import subprocess
+import time
 from contextlib import contextmanager
 from pathlib import Path
+from urllib.parse import urlparse
 
 import environ
 
@@ -71,7 +73,7 @@ def scalingo_db_tunnel():
         [*STAGING_CMD, "db-tunnel", "-p", str(TUNNEL_PORT), "DATABASE_URL"],
     )
     try:
-        yield
+        yield tunnel_process
     finally:
         tunnel_process.terminate()
         tunnel_process.wait()
@@ -123,7 +125,26 @@ def main():
     )
     restore_env = {**os.environ, "PGOPTIONS": "-c statement_timeout=0"}
 
-    with scalingo_db_tunnel():
+    with scalingo_db_tunnel() as tunnel_process:
+        expected_db = urlparse(scalingo_pg_url).path.lstrip("/")
+        for _ in range(30):
+            if tunnel_process.poll() is not None:
+                raise SystemExit("db-tunnel exited (port already in use?)")
+            try:
+                actual = psql(
+                    staging_tunnel_pg_url, query="SELECT current_database()"
+                ).strip()
+            except subprocess.CalledProcessError:
+                time.sleep(1)
+                continue
+            if actual != expected_db:
+                raise SystemExit(
+                    f"tunnel points at {actual!r}, expected {expected_db!r}"
+                )
+            break
+        else:
+            raise SystemExit("tunnel not ready")
+
         psql(staging_tunnel_pg_url, input=DROP_STAGING_TABLES, text=True)
         psql(staging_tunnel_pg_url, "-f", str(args.dump), env=restore_env)
         service_count = psql(
