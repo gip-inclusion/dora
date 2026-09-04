@@ -11,9 +11,11 @@ For every new field or set of fields:
 import re
 
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from django.core.exceptions import ValidationError
 from django.db.models import prefetch_related_objects
 from unidecode import unidecode
 
+from dora.core.validators import validate_opening_hours_str
 from dora.data_inclusion.diffusion_zone_info import (
     get_zone_eligibilite_from_diffusion_zone,
 )
@@ -30,6 +32,7 @@ SERVICE_DI_V1_FIELDS = [
     "zone_eligibilite",
     "conditions_acces",
     "publics_derived_from_conditions",
+    "horaires_accueil",
 ]
 
 STRUCTURE_DI_V1_FIELDS = ["reseaux_porteurs"]
@@ -146,6 +149,14 @@ def sync_v1_service_fields(service, *, save=True):
     conditions_acces, publics = extract_conditions_acces_and_publics(service)
     service.conditions_acces = conditions_acces
     service.publics_derived_from_conditions = publics
+
+    if service.recurrence:
+        try:
+            validate_opening_hours_str(service.recurrence)
+        except ValidationError:
+            pass
+        else:
+            service.horaires_accueil = service.recurrence
 
     if save:
         service.save(update_fields=SERVICE_DI_V1_FIELDS)
