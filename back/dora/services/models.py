@@ -545,6 +545,12 @@ class Service(ModerationMixin, models.Model):
     qpv_or_zrr = models.BooleanField(default=False)
 
     recurrence = models.CharField(verbose_name="Récurrence", max_length=140, blank=True)
+    horaires_accueil = models.CharField(
+        verbose_name="Horaires d'accueil du public",
+        max_length=255,
+        blank=True,
+        null=True,
+    )
 
     suspension_date = models.DateField(
         verbose_name="Jusqu’au", null=True, blank=True, db_index=True

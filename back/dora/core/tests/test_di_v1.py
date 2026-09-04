@@ -60,6 +60,28 @@ def test_backfill_di_v1_zone_eligibilite(
     assert service.zone_eligibilite == expected
 
 
+def test_sync_horaires_accueil_from_recurrence_when_osm_valid():
+    service = make_service(recurrence="Mo-Fr 08:30-12:30")
+    Service.objects.filter(pk=service.pk).update(horaires_accueil=None)
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.horaires_accueil == "Mo-Fr 08:30-12:30"
+
+
+def test_sync_horaires_accueil_unchanged_when_recurrence_not_osm():
+    service = make_service(
+        recurrence="Tous les jours de 8h à 12h",
+        horaires_accueil="Mo-Fr 09:00-12:00",
+    )
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.horaires_accueil == "Mo-Fr 09:00-12:00"
+
+
 def test_sync_mobilisation_fields_from_orientation_modes():
     service = make_service(
         coach_orientation_modes_external_form_link="https://example.com/coach",
