@@ -118,12 +118,12 @@
                  AND "services_service"."status" = %s
                  AND NOT ("structures_structure"."is_obsolete")
                  AND NOT ("services_service"."structure_id" IN
-                            (SELECT U0."id"
-                             FROM "structures_structure" U0
-                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
-                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
-                             WHERE (U1."id" IS NULL
-                                    AND U2."id" IS NULL)))
+                            (SELECT "U0"."id"
+                             FROM "structures_structure" "U0"
+                             LEFT OUTER JOIN "structures_structuremember" "U1" ON ("U0"."id" = "U1"."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" "U2" ON ("U0"."id" = "U2"."structure_id")
+                             WHERE ("U1"."id" IS NULL
+                                    AND "U2"."id" IS NULL)))
                  AND NOT ("services_service"."suspension_date" < %s
                           AND "services_service"."suspension_date" IS NOT NULL)
                  AND "services_service"."id" = %s)
@@ -264,12 +264,12 @@
                  AND "services_service"."status" = %s
                  AND NOT ("structures_structure"."is_obsolete")
                  AND NOT ("services_service"."structure_id" IN
-                            (SELECT U0."id"
-                             FROM "structures_structure" U0
-                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
-                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
-                             WHERE (U1."id" IS NULL
-                                    AND U2."id" IS NULL)))
+                            (SELECT "U0"."id"
+                             FROM "structures_structure" "U0"
+                             LEFT OUTER JOIN "structures_structuremember" "U1" ON ("U0"."id" = "U1"."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" "U2" ON ("U0"."id" = "U2"."structure_id")
+                             WHERE ("U1"."id" IS NULL
+                                    AND "U2"."id" IS NULL)))
                  AND NOT ("services_service"."suspension_date" < %s
                           AND "services_service"."suspension_date" IS NOT NULL))
         ''',
@@ -390,12 +390,12 @@
                  AND "services_service"."status" = %s
                  AND NOT ("structures_structure"."is_obsolete")
                  AND NOT ("services_service"."structure_id" IN
-                            (SELECT U0."id"
-                             FROM "structures_structure" U0
-                             LEFT OUTER JOIN "structures_structuremember" U1 ON (U0."id" = U1."structure_id")
-                             LEFT OUTER JOIN "structures_structureputativemember" U2 ON (U0."id" = U2."structure_id")
-                             WHERE (U1."id" IS NULL
-                                    AND U2."id" IS NULL)))
+                            (SELECT "U0"."id"
+                             FROM "structures_structure" "U0"
+                             LEFT OUTER JOIN "structures_structuremember" "U1" ON ("U0"."id" = "U1"."structure_id")
+                             LEFT OUTER JOIN "structures_structureputativemember" "U2" ON ("U0"."id" = "U2"."structure_id")
+                             WHERE ("U1"."id" IS NULL
+                                    AND "U2"."id" IS NULL)))
                  AND NOT ("services_service"."suspension_date" < %s
                           AND "services_service"."suspension_date" IS NOT NULL))
           ORDER BY "services_service"."id" ASC
