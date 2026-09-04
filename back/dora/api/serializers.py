@@ -6,6 +6,7 @@ from rest_framework import serializers
 from dora.services.models import (
     Service,
 )
+from dora.services.utils import normalize_publics
 from dora.structures.models import Structure
 
 ############
@@ -215,6 +216,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
     lien_mobilisation = serializers.SerializerMethodField()
     zone_eligibilite = serializers.ReadOnlyField()
+    conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
 
@@ -260,6 +262,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "zone_diffusion_nom",
             "zone_diffusion_type",
             "zone_eligibilite",
+            "conditions_acces",
             "modes_orientation_accompagnateur",
             "modes_orientation_accompagnateur_autres",
             "modes_orientation_beneficiaire",
@@ -311,9 +314,12 @@ class ServiceSerializer(serializers.ModelSerializer):
         # totalité du référentiel se traduisent en « tous-publics ». Seul endroit où Dora
         # réintroduit `tous-publics` ; partout ailleurs l'absence de restriction reste [].
         specific_publics = {p.value for p in DiPublic} - {DiPublic.TOUS_PUBLICS.value}
-        if not obj.publics or set(obj.publics) >= specific_publics:
+        all_publics = normalize_publics(
+            obj.publics + obj.publics_derived_from_conditions
+        )
+        if not all_publics or set(all_publics) >= specific_publics:
             return [DiPublic.TOUS_PUBLICS.value]
-        return obj.publics
+        return all_publics
 
     def get_publics_precisions(self, obj):
         return obj.publics_precisions

@@ -8,7 +8,11 @@ For every new field or set of fields:
 5. Backfill existing rows after deploy with backfill_di_v1 --wet-run
 """
 
+import re
+
 from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from django.db.models import prefetch_related_objects
+from unidecode import unidecode
 
 from dora.data_inclusion.diffusion_zone_info import (
     get_zone_eligibilite_from_diffusion_zone,
@@ -24,12 +28,30 @@ SERVICE_DI_V1_FIELDS = [
     "mobilisation_details",
     "mobilisation_link",
     "zone_eligibilite",
+    "conditions_acces",
+    "publics_derived_from_conditions",
 ]
 
 STRUCTURE_DI_V1_FIELDS = ["reseaux_porteurs"]
 
+# M2M lues par `sync_v1_service_fields`. Le `prefetch_related_objects` en tête de la
+# fonction ne coûte rien quand l'appelant a déjà préchargé (cas du backfill, qui itère
+# sur des milliers de lignes) et évite les requêtes une-par-relation sur les appels
+# unitaires (sérialiseurs, admin, synchronisation depuis un modèle).
+SERVICE_SYNC_PREFETCHES = [
+    "coach_orientation_modes",
+    "beneficiaries_access_modes",
+    "access_conditions",
+    "requirements",
+    "credentials",
+]
+
+STRUCTURE_SYNC_PREFETCHES = ["national_labels"]
+
 
 def sync_v1_service_fields(service, *, save=True):
+    prefetch_related_objects([service], *SERVICE_SYNC_PREFETCHES)
+
     coach_values = {mode.value for mode in service.coach_orientation_modes.all()}
     beneficiary_values = {
         mode.value for mode in service.beneficiaries_access_modes.all()
@@ -120,11 +142,18 @@ def sync_v1_service_fields(service, *, save=True):
         service.diffusion_zone_type,
         service.diffusion_zone_details,
     )
+
+    conditions_acces, publics = extract_conditions_acces_and_publics(service)
+    service.conditions_acces = conditions_acces
+    service.publics_derived_from_conditions = publics
+
     if save:
         service.save(update_fields=SERVICE_DI_V1_FIELDS)
 
 
 def sync_v1_structure_fields(structure, *, save=True):
+    prefetch_related_objects([structure], *STRUCTURE_SYNC_PREFETCHES)
+
     reseaux = set()
     if structure.typology:
         if reseau := TYPOLOGY_TO_RESEAU.get(structure.typology):
@@ -135,3 +164,66 @@ def sync_v1_structure_fields(structure, *, save=True):
     structure.reseaux_porteurs = sorted(reseaux) or None
     if save:
         structure.save(update_fields=STRUCTURE_DI_V1_FIELDS)
+
+
+KEYWORDS_TO_PUBLICS_MAP = {
+    "aah": "personnes-en-situation-de-handicap",
+    "allocation spécifique de solidarité": "beneficiaires-des-minimas-sociaux",
+    "carte d'invalidité": "personnes-en-situation-de-handicap",
+    "cdaph": "personnes-en-situation-de-handicap",
+    "contrat d'intégration républicaine": "personnes-exilees",
+    "france travail": "demandeurs-emploi",
+    "mal logé": "personnes-en-situation-durgence",
+    "mission locale": "jeunes",
+    "qpv": "residents-qpv-frr",
+    "rqth": "personnes-en-situation-de-handicap",
+    "rsa": "beneficiaires-des-minimas-sociaux",
+    "sans logement": "personnes-en-situation-durgence",
+    "zfrr": "residents-qpv-frr",
+    "zrr": "residents-qpv-frr",
+}
+
+KEYWORDS_TO_PUBLICS_PATTERNS = [
+    (re.compile(rf"\b{re.escape(keyword)}\w*"), public)
+    for keyword, public in KEYWORDS_TO_PUBLICS_MAP.items()
+]
+
+APOSTROPHES = str.maketrans({"’": "'", "‘": "'"})
+
+
+def extract_conditions_acces_and_publics(service):
+    # Fonction pure des M2M de conditions : on ne réinjecte pas `service.publics`, saisi
+    # par l'utilisateur. Sinon un public déduit une fois ne pourrait plus jamais être
+    # retiré, la suppression de la condition qui l'a produit laissant la valeur en base.
+    publics = set()
+
+    # Un même libellé peut apparaître dans plusieurs des trois relations, et les choix
+    # personnalisés sont dupliqués par structure : on dédoublonne pour ne pas répéter la
+    # ligne dans `conditions_acces`.
+    names = {
+        obj.name
+        for relation in (
+            service.access_conditions,
+            service.credentials,
+            service.requirements,
+        )
+        for obj in relation.all()
+    }
+
+    matched_names = set()
+    for pattern, public in KEYWORDS_TO_PUBLICS_PATTERNS:
+        matching = {
+            name
+            for name in names
+            if pattern.search(name.lower().translate(APOSTROPHES))
+        }
+        if matching:
+            publics.add(public)
+            matched_names |= matching
+
+    conditions_acces = (
+        "\n".join(sorted(names, key=lambda name: (unidecode(name).casefold(), name)))
+        or None
+    )
+
+    return conditions_acces, sorted(publics)

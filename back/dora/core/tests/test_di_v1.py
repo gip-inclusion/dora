@@ -6,7 +6,14 @@ from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
-from dora.services.models import BeneficiaryAccessMode, CoachOrientationMode, Service
+from dora.services.models import (
+    AccessCondition,
+    BeneficiaryAccessMode,
+    CoachOrientationMode,
+    Credential,
+    Requirement,
+    Service,
+)
 from dora.services.utils import (
     instantiate_service_from_model,
     synchronize_service_from_model,
@@ -439,3 +446,188 @@ def test_backfill_di_v1_reseaux_porteurs():
     call_command("backfill_di_v1", "--structures", "--wet-run")
     structure.refresh_from_db()
     assert structure.reseaux_porteurs == ["france-travail"]
+
+
+@pytest.mark.parametrize(
+    ("names", "expected_publics"),
+    [
+        pytest.param(["Résident en qpv"], ["residents-qpv-frr"], id="single_keyword"),
+        pytest.param(
+            ["Résident en QPV"],
+            ["residents-qpv-frr"],
+            id="case_insensitive",
+        ),
+        pytest.param(
+            ["Habite en qpv", "Habite en zfrr"],
+            ["residents-qpv-frr"],
+            id="two_keywords_same_public",
+        ),
+        pytest.param(
+            ["Bénéficiaire du rsa", "Inscrit à france travail"],
+            ["beneficiaires-des-minimas-sociaux", "demandeurs-emploi"],
+            id="two_publics_sorted",
+        ),
+        pytest.param(["Être majeur"], [], id="no_keyword"),
+        pytest.param(
+            ["Après un entretien de conversation"],
+            [],
+            id="keyword_inside_another_word",
+        ),
+        pytest.param(
+            ["Critère d'universalité"],
+            [],
+            id="keyword_inside_another_accented_word",
+        ),
+        pytest.param(
+            ["Personnes mal logées"],
+            ["personnes-en-situation-durgence"],
+            id="keyword_with_accord",
+        ),
+        pytest.param(
+            ["Carte d’invalidité"],
+            ["personnes-en-situation-de-handicap"],
+            id="typographic_apostrophe",
+        ),
+        pytest.param(
+            ["Bénéficiaire de l'aah"],
+            ["personnes-en-situation-de-handicap"],
+            id="keyword_after_elision",
+        ),
+    ],
+)
+def test_extract_conditions_acces_and_publics_maps_publics(names, expected_publics):
+    service = make_service()
+    for name in names:
+        service.access_conditions.add(AccessCondition.objects.create(name=name))
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.publics_derived_from_conditions == expected_publics
+
+
+def test_extract_conditions_acces_and_publics_dedupes_names_across_relations():
+    service = make_service()
+    service.access_conditions.add(AccessCondition.objects.create(name="Être majeur"))
+    service.credentials.add(Credential.objects.create(name="Être majeur"))
+    service.requirements.add(Requirement.objects.create(name="Avoir un CV"))
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.conditions_acces == "Avoir un CV\nÊtre majeur"
+
+
+def test_extract_conditions_acces_and_publics_keeps_false_positives_in_conditions_acces():
+    service = make_service()
+    service.access_conditions.add(
+        AccessCondition.objects.create(name="Après un entretien de conversation")
+    )
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.conditions_acces == "Après un entretien de conversation"
+    assert service.publics_derived_from_conditions == []
+
+
+def test_extract_conditions_acces_and_publics_leaves_user_publics_untouched():
+    service = make_service(publics=["jeunes"])
+    service.access_conditions.add(
+        AccessCondition.objects.create(name="Bénéficiaire du rsa")
+    )
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.publics == ["jeunes"]
+    assert service.publics_derived_from_conditions == [
+        "beneficiaires-des-minimas-sociaux"
+    ]
+
+
+def test_extract_conditions_acces_and_publics_drops_publics_whose_condition_disappeared():
+    service = make_service()
+    condition = AccessCondition.objects.create(name="Bénéficiaire du rsa")
+    service.access_conditions.add(condition)
+    sync_v1_service_fields(service)
+
+    service.access_conditions.remove(condition)
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.publics_derived_from_conditions == []
+
+
+def test_extract_conditions_acces_and_publics_reads_all_three_relations():
+    service = make_service()
+    service.access_conditions.add(AccessCondition.objects.create(name="Résident qpv"))
+    service.credentials.add(Credential.objects.create(name="Notification rqth"))
+    service.requirements.add(Requirement.objects.create(name="Suivi mission locale"))
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.publics_derived_from_conditions == [
+        "jeunes",
+        "personnes-en-situation-de-handicap",
+        "residents-qpv-frr",
+    ]
+    assert (
+        service.conditions_acces
+        == "Notification rqth\nRésident qpv\nSuivi mission locale"
+    )
+
+
+def test_extract_conditions_acces_and_publics_keeps_unmatched_names_sorted():
+    service = make_service()
+    service.access_conditions.add(AccessCondition.objects.create(name="Être majeur"))
+    service.credentials.add(Credential.objects.create(name="Pièce d'identité"))
+    service.requirements.add(Requirement.objects.create(name="Avoir un CV"))
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.conditions_acces == "Avoir un CV\nÊtre majeur\nPièce d'identité"
+    assert service.publics_derived_from_conditions == []
+
+
+def test_extract_conditions_acces_and_publics_excludes_matched_names_from_conditions_acces():
+    service = make_service()
+    service.access_conditions.add(
+        AccessCondition.objects.create(name="Résident QPV"),
+        AccessCondition.objects.create(name="Être majeur"),
+    )
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.conditions_acces == "Être majeur\nRésident QPV"
+    assert service.publics_derived_from_conditions == ["residents-qpv-frr"]
+
+
+def test_extract_conditions_acces_and_publics_without_relations():
+    service = make_service()
+
+    sync_v1_service_fields(service)
+    service.refresh_from_db()
+
+    assert service.conditions_acces is None
+    assert service.publics_derived_from_conditions == []
+
+
+def test_backfill_di_v1_access_conditions():
+    service = make_service()
+    service.access_conditions.add(
+        AccessCondition.objects.create(name="Résident en qpv"),
+        AccessCondition.objects.create(name="Être majeur"),
+    )
+    Service.objects.filter(pk=service.pk).update(
+        conditions_acces=None, publics_derived_from_conditions=[]
+    )
+
+    call_command("backfill_di_v1", "--services", "--wet-run")
+    service.refresh_from_db()
+
+    assert service.conditions_acces == "Être majeur\nRésident en qpv"
+    assert service.publics_derived_from_conditions == ["residents-qpv-frr"]

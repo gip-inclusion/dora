@@ -12,6 +12,7 @@ from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
 from dora.services.models import (
+    AccessCondition,
     BeneficiaryAccessMode,
     CoachOrientationMode,
     Credential,
@@ -331,6 +332,9 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         LocationKind.objects.get(value=ModeAccueil.EN_PRESENTIEL)
     )
     service.location_kinds.add(LocationKind.objects.get(value=ModeAccueil.A_DISTANCE))
+    service.access_conditions.add(
+        baker.make(AccessCondition, name="Acceptation du Pass IAE")
+    )
     service.requirements.add(
         baker.make(Requirement, name="Bonne connaissance du français oral et écrit"),
     )
@@ -359,6 +363,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "code_postal": "29630",
         "commune": "Plougasnou",
         "complement_adresse": None,
+        "conditions_acces": "Acceptation du Pass IAE\nBonne connaissance du français oral et écrit\nCarte d'identité, passeport ou permis de séjour",
         "contact_nom_prenom": "Prénom Nom",
         "contact_public": True,
         "courriel": "contact@alys.fr",
@@ -696,3 +701,23 @@ def test_service_includes_contact_info_even_when_not_public(
     assert response.data["telephone"] == "0123456789"
     assert response.data["contact_nom_prenom"] == "Test Person"
     assert response.data["contact_public"] is False
+
+
+def test_service_combines_all_publics_after_sync(authenticated_user, api_client):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        publics=["familles", "personnes-en-situation-de-handicap"],
+    )
+    service.access_conditions.add(baker.make(AccessCondition, name="Résident QPV"))
+    service.credentials.add(baker.make(Credential, name="Carte d'invalidité"))
+
+    sync_v1_service_fields(service)
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    assert response.data["publics"] == [
+        "familles",
+        "personnes-en-situation-de-handicap",
+        "residents-qpv-frr",
+    ]
