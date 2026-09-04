@@ -3,6 +3,7 @@ import random
 from datetime import timedelta
 from unittest import mock
 
+import pytest
 import requests
 from data_inclusion.schema.v1 import (
     ModeAccueil,
@@ -69,6 +70,45 @@ from ..utils import (
 from ..views import search_services_view, service_di
 
 DUMMY_SERVICE = {"name": "Mon service"}
+
+
+@pytest.mark.parametrize(
+    "recurrence,initial_horaires_accueil,expected_horaires_accueil",
+    [
+        pytest.param(
+            "Mo-Fr 08:30-12:30",
+            None,
+            "Mo-Fr 08:30-12:30",
+            id="osm_valid",
+        ),
+        pytest.param(
+            "Tous les jours de 8h à 12h",
+            "Mo-Fr 09:00-12:00",
+            "Mo-Fr 09:00-12:00",
+            id="osm_invalid",
+        ),
+    ],
+)
+def test_update_recurrence_syncs_horaires_accueil_when_osm_valid(
+    api_client, recurrence, initial_horaires_accueil, expected_horaires_accueil
+):
+    me = baker.make("users.User", is_valid=True)
+    my_struct = make_structure(me)
+    my_service = make_service(
+        structure=my_struct, status=ServiceStatus.PUBLISHED, creator=me
+    )
+    Service.objects.filter(pk=my_service.pk).update(
+        horaires_accueil=initial_horaires_accueil
+    )
+    api_client.force_authenticate(user=me)
+    response = api_client.patch(
+        f"/services/{my_service.slug}/",
+        {"recurrence": recurrence},
+    )
+    assert response.status_code == 200
+    my_service.refresh_from_db()
+    assert my_service.recurrence == recurrence
+    assert my_service.horaires_accueil == expected_horaires_accueil
 
 
 class ServiceTestCase(APITestCase):
@@ -1826,7 +1866,9 @@ class DataInclusionSearchTestCase(APITestCase):
         self.assertEqual(response.data["creation_date"], None)
         self.assertEqual(response.data["modification_date"], service_data["date_maj"])
         self.assertEqual(response.data["publication_date"], None)
-        self.assertEqual(response.data["recurrence"], service_data["horaires_accueil"])
+        self.assertEqual(
+            response.data["horaires_accueil"], service_data["horaires_accueil"]
+        )
 
     def test_service_di_structure(self):
         service_data = self.make_di_service(

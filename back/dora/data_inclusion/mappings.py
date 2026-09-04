@@ -374,6 +374,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "publication_date": None,
         "qpv_or_zrr": None,
         "recurrence": service_data["horaires_accueil"],
+        "horaires_accueil": service_data["horaires_accueil"],
         "remote_url": None,
         "requirements": requirements,
         "requirements_display": requirements_display,

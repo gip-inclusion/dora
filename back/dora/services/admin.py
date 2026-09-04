@@ -150,6 +150,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "mobilisable_by",
         "mobilisation_details",
         "mobilisation_link",
+        "horaires_accueil",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
@@ -479,6 +480,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "mobilisable_by",
         "mobilisation_details",
         "mobilisation_link",
+        "horaires_accueil",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
