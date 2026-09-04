@@ -133,6 +133,13 @@ tables:
       prescriber_email:
         template:
           format: "test+{{ final.prescriber_first_name | slugify }}.{{ final.prescriber_last_name | slugify }}.{{ prev.orientation_id }}@dora.inclusion.beta.gouv.fr"
+
+  - name: structures_disableddoraformdistructure
+    rules:
+      comment:
+        template:
+          format: ""
+
 filter:
   except:
     # Schéma PostGIS (non applicatif).
@@ -146,8 +153,7 @@ filter:
     - public.authtoken_token
 
     # Événements analytics : `recipient_email`, hashes anonymes stables,
-    # FKs utilisateurs et chemins d'URL. `stats_deploymentstate` n'est
-    # volontairement pas listé (pas de PII, utile en dev).
+    # FKs utilisateurs et chemins d'URL.
     - public.stats_pageview
     - public.stats_searchview
     - public.stats_structureview
@@ -158,6 +164,9 @@ filter:
     - public.stats_serviceshare
     - public.stats_mobilisationevent
     - public.stats_dimobilisationevent
+
+    # Suivi déploiement par département (recréable, inutile en staging).
+    - public.stats_deploymentstate
 
     # Logs applicatifs : `msg` et `payload` peuvent contenir des PII.
     - public.logs_actionlog
@@ -171,3 +180,40 @@ filter:
 
     # Consentement RGPD : pseudonyme stable par utilisateur (userHash).
     - public.users_consentrecord
+
+    # Jobs et logs techniques.
+    - public.core_importjob
+    - public.core_logitem
+
+    # Historique de modifications services (audit, volumineux).
+    - public.services_servicemodificationhistoryitem
+    - public.services_servicestatushistoryitem
+
+    # Emails de contact envoyés.
+    - public.orientations_sentcontactemail
+
+    # Préférences utilisateur (hors périmètre staging).
+    - public.services_bookmark
+    - public.services_savedsearch
+    - public.services_savedsearch_fees
+    - public.services_savedsearch_funding_labels
+    - public.services_savedsearch_location_kinds
+    - public.services_savedsearch_subcategories
+
+    # Tables de jointure analytics (inutiles hors prod).
+    - public.stats_dimobilisationevent_categories
+    - public.stats_dimobilisationevent_subcategories
+    - public.stats_diserviceview_categories
+    - public.stats_diserviceview_subcategories
+    - public.stats_mobilisationevent_categories
+    - public.stats_mobilisationevent_subcategories
+    - public.stats_orientationview_categories
+    - public.stats_orientationview_subcategories
+    - public.stats_searchview_categories
+    - public.stats_searchview_fee_conditions
+    - public.stats_searchview_location_kinds
+    - public.stats_searchview_subcategories
+    - public.stats_serviceshare_categories
+    - public.stats_serviceshare_subcategories
+    - public.stats_serviceview_categories
+    - public.stats_serviceview_subcategories
