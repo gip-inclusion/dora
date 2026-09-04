@@ -196,6 +196,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     longitude = serializers.SerializerMethodField()
     latitude = serializers.SerializerMethodField()
     recurrence = serializers.SerializerMethodField()
+    horaires_accueil = serializers.ReadOnlyField()
     date_creation = serializers.SerializerMethodField()
     date_maj = serializers.SerializerMethodField()
     date_suspension = serializers.SerializerMethodField()
@@ -255,6 +256,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "publics",
             "publics_precisions",
             "recurrence",
+            "horaires_accueil",
             "source",
             "structure_id",
             "telephone",

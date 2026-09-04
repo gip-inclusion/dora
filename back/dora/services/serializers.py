@@ -360,6 +360,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "publication_date",
             "qpv_or_zrr",
             "recurrence",
+            "horaires_accueil",
             "remote_url",
             "requirements",
             "requirements_display",
@@ -380,6 +381,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "city",
             "description",
+            "horaires_accueil",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",
@@ -628,6 +630,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "online_form",
             "qpv_or_zrr",
             "recurrence",
+            "horaires_accueil",
             "requirements",
             "requirements_display",
             "short_desc",
@@ -641,6 +644,7 @@ class ServiceModelSerializer(ServiceSerializer):
         ]
         read_only_fields = [
             "description",
+            "horaires_accueil",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",
