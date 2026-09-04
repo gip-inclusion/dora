@@ -243,6 +243,28 @@ export function osmHoursNotContainsInvalid(msg = "") {
   });
 }
 
+export function isNotAllUpperCase(msg = "") {
+  return (name, value, _data) => {
+    const text = value ?? "";
+    const valid = !/\p{Lu}/u.test(text) || /\p{Ll}/u.test(text);
+    return {
+      valid,
+      msg: msg || "Le texte ne doit pas être entièrement en majuscules.",
+    };
+  };
+}
+
+export function doesNotEndWithAPeriod(msg = "") {
+  return (name, value, _data) => {
+    const text = value ?? "";
+    const valid = text[text.length - 1] !== ".";
+    return {
+      valid,
+      msg: msg || "Le texte ne doit pas terimer par un point.",
+    };
+  };
+}
+
 // ----- Preprocessing
 export function removeAllSpaces(value) {
   return value.replace(/ /g, "");

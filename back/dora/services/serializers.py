@@ -379,7 +379,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "city",
-            "description",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",
@@ -640,7 +639,6 @@ class ServiceModelSerializer(ServiceSerializer):
             "update_frequency",
         ]
         read_only_fields = [
-            "description",
             "is_model",
             "mobilisable_by",
             "mobilisation_details",

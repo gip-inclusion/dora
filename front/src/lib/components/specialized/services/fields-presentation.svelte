@@ -2,7 +2,6 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
@@ -22,12 +21,12 @@
     noTopPadding = false,
   }: Props = $props();
 
-  let fullDesc: RichTextField;
+  let description: RichTextField;
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
-    if (fieldName === "fullDesc") {
-      fullDesc.updateValue(service.fullDesc);
+    if (fieldName === "description") {
+      description.updateValue(service.description);
     }
   }
 
@@ -71,25 +70,17 @@
     <BasicInputField
       id="name"
       bind:value={service.name}
-      descriptionText="140 caractères maximum"
+      descriptionText="150 caractères maximum"
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps.shortDesc ?? {}}>
-    <TextareaField
-      id="shortDesc"
-      bind:value={service.shortDesc}
-      description="Courte description affichée dans les résultats de recherche. 280 caractères maximum."
-    />
-  </FieldModel>
-
-  <FieldModel {...fieldModelProps.fullDesc ?? {}} paddingTop type="markdown">
+  <FieldModel {...fieldModelProps.description ?? {}} paddingTop type="markdown">
     <RichTextField
-      id="fullDesc"
-      bind:this={fullDesc}
+      id="description"
+      bind:this={description}
       placeholder="Cette description sera affichée sur la fiche du service et permettra aux professionnels de mieux comprendre les spécificités et la valeur du service proposé. N’hésitez pas à inclure des liens, des documents à télécharger ou des vidéos explicatives. "
       vertical
-      bind:value={service.fullDesc}
+      bind:value={service.description}
       description="Décrivez de manière exhaustive le service."
     />
   </FieldModel>

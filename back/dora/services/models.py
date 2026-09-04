@@ -671,25 +671,7 @@ class Service(ModerationMixin, models.Model):
         if not self.slug:
             self.slug = make_unique_slug(self, self.structure.slug, self.name)
         self.city = get_clean_city_name(self.city_code)
-        self._derive_description(kwargs)
         return super().save(*args, **kwargs)
-
-    def _derive_description(self, kwargs):
-        """Recompose `description` quand `short_desc` ou `full_desc` est mis à jour.
-
-        Pondération neutre : l'IDF que sait tirer `build_idf` suppose un parcours de toutes
-        les descriptions, hors de portée d'un enregistrement — il ne sert qu'au remplissage
-        initial.
-        """
-        update_fields = kwargs.get("update_fields")
-        if update_fields is not None and not {"short_desc", "full_desc"} & set(
-            update_fields
-        ):
-            return
-
-        self.description = merged_description(self.short_desc, self.full_desc)
-        if update_fields is not None:
-            kwargs["update_fields"] = [*update_fields, "description"]
 
     def can_read(self, user):
         return self.status == ServiceStatus.PUBLISHED or (
