@@ -308,6 +308,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "conditions_acces",
             "mobilisation_modes",
             "mobilisation_modes_display",
             "mobilisable_by",
@@ -508,11 +509,6 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super().create(validated_data)
-        sync_v1_service_fields(instance)
-        return instance
-
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
         sync_v1_service_fields(instance)
         return instance
 
