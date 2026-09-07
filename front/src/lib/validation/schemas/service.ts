@@ -116,11 +116,6 @@ export const serviceSchema: v.Schema = {
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
-  isCumulative: {
-    label: "Service cumulable",
-    default: true,
-    rules: [v.isBool()],
-  },
   feeCondition: {
     label: "Frais à charge",
     default: "gratuit",
@@ -213,7 +208,6 @@ export const serviceSchema: v.Schema = {
     },
     maxLength: 280,
   },
-
   credentials: {
     label: "Justificatifs à fournir",
     default: [],
@@ -393,7 +387,6 @@ export const draftSchema: v.Schema = {
   publics: serviceSchema.publics,
   publicsPrecisions: serviceSchema.publicsPrecisions,
   requirements: serviceSchema.requirements,
-  isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
@@ -442,7 +435,6 @@ export const modelSchema: v.Schema = {
   publics: serviceSchema.publics,
   publicsPrecisions: serviceSchema.publicsPrecisions,
   requirements: serviceSchema.requirements,
-  isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
