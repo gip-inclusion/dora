@@ -141,9 +141,12 @@ tables:
           format: ""
 
 filter:
-  except:
-    # Schéma PostGIS (non applicatif).
+  # `except` saute le COPY ; `schema.except` saute le CREATE TABLE.
+  except: &tables_skipped_in_dump
+    # PostGIS (pas des données applicatives).
     - public.spatial_ref_sys
+    - tiger.*
+    - topology.*
 
     # Tables Django sensibles ou inutiles hors prod.
     # `django_admin_log.object_repr` peut contenir des PII sérialisés : on
@@ -151,6 +154,15 @@ filter:
     - public.django_admin_log
     - public.django_session
     - public.authtoken_token
+
+    # Copies locales / tables temporaires.
+    - public._*
+    - public.old_*
+    - public.test_*
+
+    # Modèles Metabase (`mb_*`) et requêtes sauvegardées (`q_*`).
+    - public.mb_*
+    - public.q_*
 
     # Événements analytics : `recipient_email`, hashes anonymes stables,
     # FKs utilisateurs et chemins d'URL. Couvre aussi le suivi de
@@ -184,3 +196,5 @@ filter:
     # Préférences utilisateur (hors périmètre staging).
     - public.services_bookmark
     - public.services_savedsearch*
+  schema:
+    except: *tables_skipped_in_dump
