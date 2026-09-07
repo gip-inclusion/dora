@@ -19,6 +19,24 @@ STAGING_REGION = "osc-fr1"
 TUNNEL_PORT = 10001
 STAGING_CMD = ["scalingo", "--region", STAGING_REGION, "--app", STAGING_APP]
 
+ANALYTICS_VIEWS = (
+    "mb_model",
+    "mb_service",
+    "q_members_invited",
+    "q_members_invited_invalid",
+    "q_members_invited_valid",
+    "v_searches_for_user",
+    "v_service_views_for_user",
+    "v_structure_views_for_user",
+)
+PG_DUMP_FLAGS = [
+    "--no-owner",
+    "--no-privileges",
+    "--exclude-schema=tiger",
+    "--exclude-schema=topology",
+    *(f"--exclude-table=public.{name}" for name in ANALYTICS_VIEWS),
+]
+
 DROP_STAGING_TABLES = """
 DO $$
 DECLARE r RECORD;
@@ -36,13 +54,13 @@ END $$;
 def psql(pg_url, *args, query=None, input=None, text=None, env=None):
     if query is not None:
         return subprocess.run(
-            ["psql", pg_url, "-Atc", query],
+            ["psql", "-X", pg_url, "-Atc", query],
             capture_output=True,
             text=True,
             check=True,
         ).stdout
     return subprocess.run(
-        ["psql", pg_url, "-v", "ON_ERROR_STOP=1", *args],
+        ["psql", "-X", pg_url, "-v", "ON_ERROR_STOP=1", *args],
         input=input,
         text=text,
         env=env,
@@ -109,8 +127,7 @@ def main():
                 str(args.output),
                 local_pg_url,
                 "--",
-                "--no-owner",
-                "--no-privileges",
+                *PG_DUMP_FLAGS,
             ],
             check=True,
         )
