@@ -27,7 +27,7 @@
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.6",
+    "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
@@ -36,15 +36,15 @@
     "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
-    "@tiptap/core": "3.30.5",
-    "@tiptap/extension-link": "3.30.5",
-    "@tiptap/extension-placeholder": "3.30.5",
-    "@tiptap/starter-kit": "3.30.5",
+    "@tiptap/core": "3.31.0",
+    "@tiptap/extension-link": "3.31.0",
+    "@tiptap/extension-placeholder": "3.31.0",
+    "@tiptap/starter-kit": "3.31.0",
     "@types/iframe-resizer": "^4.0.0",
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.19.0",
@@ -52,7 +52,7 @@
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.23.0",
-    "globals": "^17.11.0",
+    "globals": "^17.12.0",
     "hexoid": "^2.0.0",
     "husky": "^9.1.7",
     "insane": "^2.6.2",
@@ -96,7 +96,7 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.72.0"
+    "@sentry/sveltekit": "^10.73.0"
   },
   "allowScripts": {
     "@sentry/cli@2.58.5": true
