@@ -148,6 +148,8 @@ filter:
     - tiger.*
     - topology.*
 
+    - public.sirene_establishment
+
     # Tables Django sensibles ou inutiles hors prod.
     # `django_admin_log.object_repr` peut contenir des PII sérialisés : on
     # n'est pas tenté de "le remettre pour debugger" en review app.

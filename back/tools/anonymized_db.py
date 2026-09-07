@@ -37,13 +37,16 @@ PG_DUMP_FLAGS = [
     *(f"--exclude-table=public.{name}" for name in ANALYTICS_VIEWS),
 ]
 
-DROP_STAGING_TABLES = """
+TABLES_TO_KEEP = ("spatial_ref_sys", "sirene_establishment")
+
+DROP_STAGING_TABLES = f"""
 DO $$
 DECLARE r RECORD;
 BEGIN
   FOR r IN (
     SELECT tablename FROM pg_tables
-    WHERE schemaname = 'public' AND tablename <> 'spatial_ref_sys'
+    WHERE schemaname = 'public'
+      AND tablename NOT IN ({", ".join(f"'{name}'" for name in TABLES_TO_KEEP)})
   ) LOOP
     EXECUTE format('DROP TABLE IF EXISTS %I.%I CASCADE', 'public', r.tablename);
   END LOOP;
@@ -189,6 +192,7 @@ def main():
             table_name
             for table_name in local_table_names
             if table_name not in staging_table_names
+            and table_name not in TABLES_TO_KEEP
         )
         if missing_table_names:
             pg_dump_args = ["--schema-only"]
