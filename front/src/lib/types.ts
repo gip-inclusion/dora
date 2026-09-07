@@ -408,8 +408,8 @@ export interface Point {
 // Les champs partagés entre Service and Model. Les deux sont générés par le même serializer du back
 // (ServiceModelSerializer extends ServiceSerializer)
 export interface ServiceModelBase {
-  accessConditions: CustomizableFK[];
-  accessConditionsDisplay: string[];
+  accessConditions: CustomizableFK[]; //  deprecated
+  accessConditionsDisplay: string[]; //   deprecated
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
   beneficiariesAccessModesExternalFormLink: string;
@@ -423,6 +423,7 @@ export interface ServiceModelBase {
   coachOrientationModesExternalFormLink: string;
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesOther: string;
+  conditionsAcces: string | null;
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
@@ -448,9 +449,9 @@ export interface ServiceModelBase {
   publicsPrecisions: string;
   qpvOrZrr: boolean;
   recurrence: string;
-  requirements: CustomizableFK[];
-  requirementsDisplay: string[];
-  shortDesc: string; //deprecated
+  requirements: CustomizableFK[]; // deprecated
+  requirementsDisplay: string[]; // deprecated
+  shortDesc: string; // deprecated
   slug: string;
   structure: string;
   structureInfo: ServiceStructure;
