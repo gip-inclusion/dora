@@ -1,6 +1,5 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import AddableMultiSelectField from "$lib/components/forms/fields/addable-multiselect-field.svelte";
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -79,33 +78,15 @@
     </FieldModel>
   {/if}
 
-  {#if servicesOptions.accessConditions.length}
-    <FieldModel {...fieldModelProps.accessConditions ?? {}} type="array">
-      <AddableMultiSelectField
-        id="accessConditions"
-        bind:values={service.accessConditions}
-        structureSlug={service.structure}
-        choices={servicesOptions.accessConditions}
-        sort
-        description="Critères auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
-        placeholder="Aucun"
-        canAdd={false}
-      />
-    </FieldModel>
-  {/if}
-
-  {#if servicesOptions.requirements.length}
-    <FieldModel {...fieldModelProps.requirements ?? {}} type="array">
-      <AddableMultiSelectField
-        id="requirements"
-        bind:values={service.requirements}
-        structureSlug={service.structure}
-        choices={servicesOptions.requirements}
-        sort
-        description="Prérequis ou compétences auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
-        placeholder="Aucun"
-        canAdd={false}
-      />
-    </FieldModel>
-  {/if}
+  <FieldModel {...fieldModelProps.conditionsAcces ?? {}}>
+    <TextareaField
+      id="conditionsAcces"
+      bind:value={
+        () => service.conditionsAcces ?? "",
+        (v) => (service.conditionsAcces = v)
+      }
+      description="Y a-t-il des pré-requis ou justificatifs à fournir pour accéder au service&nbsp;?"
+      placeholder="Exemple&nbsp;:&nbsp;Etre bénéficiaire du RSA…"
+    />
+  </FieldModel>
 </FieldSet>
