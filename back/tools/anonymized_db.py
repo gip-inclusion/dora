@@ -53,6 +53,34 @@ BEGIN
 END $$;
 """
 
+DROP_ANALYTICS_VIEWS = "\n".join(
+    f"DROP VIEW IF EXISTS public.{name} CASCADE;" for name in ANALYTICS_VIEWS
+)
+# Datanymizer `schema.except` skips CREATE TABLE but not CREATE SEQUENCE, so
+# the dump leaves sequences without a table. Only drop those: keep 'a'
+# (serial), 'i' (identity) and 'e' (extension).
+DROP_ORPHAN_SEQUENCES = """
+DO $$
+DECLARE r RECORD;
+BEGIN
+  FOR r IN (
+    SELECT c.relname
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'public'
+      AND c.relkind = 'S'
+      AND NOT EXISTS (
+        SELECT 1 FROM pg_depend d
+        WHERE d.classid = 'pg_class'::regclass
+          AND d.objid = c.oid
+          AND d.deptype IN ('a', 'i', 'e')
+      )
+  ) LOOP
+    EXECUTE format('DROP SEQUENCE IF EXISTS %I.%I', 'public', r.relname);
+  END LOOP;
+END $$;
+"""
+
 
 def psql(pg_url, *args, query=None, input=None, text=None, env=None):
     if query is not None:
@@ -165,12 +193,17 @@ def main():
         else:
             raise SystemExit("tunnel not ready")
 
+        psql(staging_tunnel_pg_url, input=DROP_ANALYTICS_VIEWS, text=True)
         psql(staging_tunnel_pg_url, input=DROP_STAGING_TABLES, text=True)
+        psql(staging_tunnel_pg_url, input=DROP_ORPHAN_SEQUENCES, text=True)
         psql(staging_tunnel_pg_url, "-f", str(args.dump), env=restore_env)
         service_count = psql(
             staging_tunnel_pg_url, query="SELECT count(*) FROM services_service"
         ).strip()
         print(f"restored {service_count} services")
+        # After the restore, sequences might have been restored from the dump
+        # even for tables that do not exist
+        psql(staging_tunnel_pg_url, input=DROP_ORPHAN_SEQUENCES, text=True)
         psql(staging_tunnel_pg_url, "-c", "TRUNCATE django_migrations")
         migrations_dump = pg_dump(
             local_pg_url,
