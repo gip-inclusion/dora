@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formatErrors } from "$lib/validation/validation";
+  import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
 
   interface Props {
     id: string;
@@ -63,6 +64,16 @@
       </div>
       <span class="ml-s16 text-f16 text-gray-text inline-block">
         {choice.label}
+        {#if choice.link}
+          <a
+            href={choice.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline"
+          >
+            <ExternalLinkIcon />
+          </a>
+        {/if}
       </span>
     </label>
   {/each}
