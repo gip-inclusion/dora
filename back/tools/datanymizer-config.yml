@@ -133,10 +133,22 @@ tables:
       prescriber_email:
         template:
           format: "test+{{ final.prescriber_first_name | slugify }}.{{ final.prescriber_last_name | slugify }}.{{ prev.orientation_id }}@dora.inclusion.beta.gouv.fr"
+
+  - name: structures_disableddoraformdistructure
+    rules:
+      comment:
+        template:
+          format: ""
+
 filter:
-  except:
-    # Schéma PostGIS (non applicatif).
+  # `except` saute le COPY ; `schema.except` saute le CREATE TABLE.
+  except: &tables_skipped_in_dump
+    # PostGIS (pas des données applicatives).
     - public.spatial_ref_sys
+    - tiger.*
+    - topology.*
+
+    - public.sirene_establishment
 
     # Tables Django sensibles ou inutiles hors prod.
     # `django_admin_log.object_repr` peut contenir des PII sérialisés : on
@@ -145,19 +157,19 @@ filter:
     - public.django_session
     - public.authtoken_token
 
+    # Copies locales / tables temporaires.
+    - public._*
+    - public.old_*
+    - public.test_*
+
+    # Modèles Metabase (`mb_*`) et requêtes sauvegardées (`q_*`).
+    - public.mb_*
+    - public.q_*
+
     # Événements analytics : `recipient_email`, hashes anonymes stables,
-    # FKs utilisateurs et chemins d'URL. `stats_deploymentstate` n'est
-    # volontairement pas listé (pas de PII, utile en dev).
-    - public.stats_pageview
-    - public.stats_searchview
-    - public.stats_structureview
-    - public.stats_structureinfosview
-    - public.stats_serviceview
-    - public.stats_diserviceview
-    - public.stats_orientationview
-    - public.stats_serviceshare
-    - public.stats_mobilisationevent
-    - public.stats_dimobilisationevent
+    # FKs utilisateurs et chemins d'URL. Couvre aussi le suivi de
+    # déploiement et les tables de jointure (`stats_*_*`).
+    - public.stats_*
 
     # Logs applicatifs : `msg` et `payload` peuvent contenir des PII.
     - public.logs_actionlog
@@ -171,3 +183,20 @@ filter:
 
     # Consentement RGPD : pseudonyme stable par utilisateur (userHash).
     - public.users_consentrecord
+
+    # Jobs et logs techniques.
+    - public.core_importjob
+    - public.core_logitem
+
+    # Historique de modifications services (audit, volumineux).
+    - public.services_servicemodificationhistoryitem
+    - public.services_servicestatushistoryitem
+
+    # Emails de contact envoyés.
+    - public.orientations_sentcontactemail
+
+    # Préférences utilisateur (hors périmètre staging).
+    - public.services_bookmark
+    - public.services_savedsearch*
+  schema:
+    except: *tables_skipped_in_dump

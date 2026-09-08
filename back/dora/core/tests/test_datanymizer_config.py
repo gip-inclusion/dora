@@ -6,6 +6,7 @@ couvert par une règle d'anonymisation, exclu via `filter.except`, ou déclaré
 comme faux positif dans `PII_FIELD_FALSE_POSITIVES`.
 """
 
+import fnmatch
 import re
 from pathlib import Path
 
@@ -50,15 +51,25 @@ def datanymizer_config() -> dict:
         return yaml.safe_load(fh)
 
 
-def _excluded_tables(config: dict) -> set[str]:
-    return {
-        entry.split(".", 1)[-1]
-        for entry in (config.get("filter") or {}).get("except") or []
-    }
+def _except_patterns(config: dict) -> list[str]:
+    return list((config.get("filter") or {}).get("except") or [])
+
+
+def _is_wildcard(pattern: str) -> bool:
+    return "*" in pattern or "?" in pattern
+
+
+def _table_name(pattern: str) -> str:
+    return pattern.split(".", 1)[-1]
+
+
+def _is_excluded(table: str, patterns: list[str]) -> bool:
+    qualified = f"public.{table}"
+    return any(fnmatch.fnmatch(qualified, pattern) for pattern in patterns)
 
 
 def test_datanymizer_config_covers_pii_fields(datanymizer_config):
-    excluded = _excluded_tables(datanymizer_config)
+    patterns = _except_patterns(datanymizer_config)
     rules_by_table = {
         entry["name"]: set((entry.get("rules") or {}).keys())
         for entry in datanymizer_config.get("tables") or []
@@ -67,7 +78,7 @@ def test_datanymizer_config_covers_pii_fields(datanymizer_config):
     uncovered: set[str] = set()
     for model in apps.get_models():
         table = model._meta.db_table
-        if table in excluded:
+        if _is_excluded(table, patterns):
             continue
         for field in model._meta.fields:
             column = field.column
@@ -89,11 +100,15 @@ def test_datanymizer_config_covers_pii_fields(datanymizer_config):
 
 def test_datanymizer_referenced_tables_exist(datanymizer_config):
     known = set(connection.introspection.django_table_names())
-    excluded = _excluded_tables(datanymizer_config)
+    exact_names = {
+        _table_name(pattern)
+        for pattern in _except_patterns(datanymizer_config)
+        if not _is_wildcard(pattern)
+    }
 
     bad = [
         f"filter.except: {entry}"
-        for entry in sorted(excluded - known - ALLOWED_EXTRA_EXCLUDED_TABLES)
+        for entry in sorted(exact_names - known - ALLOWED_EXTRA_EXCLUDED_TABLES)
     ] + [
         f"tables[].name: {entry['name']}"
         for entry in datanymizer_config.get("tables") or []
