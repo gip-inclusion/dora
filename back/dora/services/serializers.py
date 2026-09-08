@@ -383,10 +383,6 @@ class ServiceSerializer(serializers.ModelSerializer):
             "city",
             "horaires_accueil",
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
         ]
         lookup_field = "slug"
 
@@ -640,10 +636,6 @@ class ServiceModelSerializer(ServiceSerializer):
         read_only_fields = [
             "horaires_accueil",
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
         ]
         lookup_field = "slug"
 

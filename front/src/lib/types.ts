@@ -425,18 +425,18 @@ export interface ServiceModelBase {
   accessConditions: CustomizableFK[]; //  deprecated
   accessConditionsDisplay: string[]; //   deprecated
   beneficiariesAccessModes: BeneficiaryAccessModes[];
-  beneficiariesAccessModesDisplay: string[];
-  beneficiariesAccessModesExternalFormLink: string;
-  beneficiariesAccessModesExternalFormLinkText: string;
-  beneficiariesAccessModesOther: string;
+  beneficiariesAccessModesDisplay: string[]; //  deprecated
+  beneficiariesAccessModesExternalFormLink: string; //  deprecated
+  beneficiariesAccessModesExternalFormLinkText: string; //  deprecated
+  beneficiariesAccessModesOther: string; //  deprecated
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[];
-  coachOrientationModesDisplay: string[];
-  coachOrientationModesExternalFormLink: string;
-  coachOrientationModesExternalFormLinkText: string;
-  coachOrientationModesOther: string;
+  coachOrientationModes: CoachOrientationModes[]; //  deprecated
+  coachOrientationModesDisplay: string[]; //  deprecated
+  coachOrientationModesExternalFormLink: string; //  deprecated
+  coachOrientationModesExternalFormLinkText: string; //  deprecated
+  coachOrientationModesOther: string; //  deprecated
   conditionsAcces: string | null;
   creationDate: string;
   credentials: CustomizableFK[];
@@ -455,6 +455,10 @@ export interface ServiceModelBase {
   isCumulative: boolean;
   kind: ServiceKind | null;
   kindDisplay: string | null;
+  mobilisableBy: string[] | null;
+  mobilisationDetails: string | null;
+  mobilisationLink: string | null;
+  mobilisationModes: string[] | null;
   modificationDate: string | null;
   name: string;
   onlineForm: string;
