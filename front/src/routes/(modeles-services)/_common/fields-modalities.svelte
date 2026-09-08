@@ -1,7 +1,12 @@
 <script lang="ts">
+  import { untrack } from "svelte";
+
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -9,12 +14,7 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import { currentSchema } from "$lib/validation/validation";
 
-  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
-  import FieldsModalitiesCoach from "./fields-modalities-coach.svelte";
-  import {
-    orderedBeneficiariesAccessModeValues,
-    orderedCoachOrientationModeValues,
-  } from "./modalities-order";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -31,6 +31,25 @@
 
   let showModel = $derived(!!service.model);
 
+  let mobilisationLinkSource: "dora" | "custom" = $state(
+    service.mobilisationLink ? "custom" : "dora"
+  );
+
+  $effect(() => {
+    if (mobilisationLinkSource === "dora") {
+      untrack(() => (service.mobilisationLink = null));
+    }
+  });
+
+  $effect(() => {
+    if (!service.mobilisationModes?.includes("utiliser-lien-mobilisation")) {
+      untrack(() => {
+        mobilisationLinkSource = "dora";
+        service.mobilisationLink = null;
+      });
+    }
+  });
+
   let fieldModelProps = $derived(
     model
       ? getModelInputProps({
@@ -43,42 +62,6 @@
         })
       : {}
   );
-
-  $effect(() => {
-    fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
-      return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
-      return (
-        orderedCoachOrientationModeValues[a] -
-        orderedCoachOrientationModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
-    });
-  });
-
-  $effect(() => {
-    fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
-      return (
-        orderedBeneficiariesAccessModeValues[a] -
-        orderedBeneficiariesAccessModeValues[b]
-      );
-    });
-  });
 </script>
 
 <FieldSet title="Modalités" {showModel}>
@@ -98,71 +81,88 @@
     bénéficiaire.
   </Notice>
 
-  <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "coachOrientationModes" in $currentSchema && "coachOrientationModesExternalFormLink" in $currentSchema && "coachOrientationModesExternalFormLinkText" in $currentSchema && "coachOrientationModesOther" in $currentSchema}
-      <FieldModel
-        {...fieldModelProps.coachOrientationModes ?? {}}
-        subFields={fieldModelProps.coachOrientationModes
-          ? {
-              "completer-le-formulaire-dadhesion": [
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLink.label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.coachOrientationModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.coachOrientationModesExternalFormLinkText,
-                },
-              ],
-              autre: [fieldModelProps.coachOrientationModesOther],
-            }
-          : undefined}
-        type="array"
+  <div class="gap-s24 flex flex-col">
+    <FieldModel {...fieldModelProps.mobilisableBy ?? {}} type="array">
+      <CheckboxesField
+        id="mobilisableBy"
+        bind:value={
+          () => service.mobilisableBy ?? [],
+          (value) => (service.mobilisableBy = value)
+        }
+        choices={[
+          { label: "Usagers", value: "usagers" },
+          { label: "Professionnels", value: "professionnels" },
+        ]}
+        description="Plusieurs choix possibles."
+      />
+    </FieldModel>
+    <FieldModel {...fieldModelProps.mobilisationModes ?? {}} type="array">
+      <CheckboxesField
+        id="mobilisationModes"
+        bind:value={
+          () => service.mobilisationModes ?? [],
+          (value) => (service.mobilisationModes = value)
+        }
+        choices={[
+          { label: "Envoyer un courriel", value: "envoyer-un-courriel" },
+          { label: "Se présenter", value: "se-presenter" },
+          { label: "Téléphoner", value: "telephoner" },
+          {
+            label: "Utiliser un formulaire en ligne",
+            value: "utiliser-lien-mobilisation",
+          },
+        ]}
+        description="Au moins un mode de mobilisation requis. Plusieurs choix possibles."
+      />
+    </FieldModel>
+    {#if service.mobilisationModes?.includes("utiliser-lien-mobilisation")}
+      <div
+        class="border-magenta-cta bg-magenta-10 p-s24 gap-s16 flex w-full flex-col self-end border-l-4 lg:w-2/3"
       >
-        <FieldsModalitiesCoach
-          id="coachOrientationModes"
-          {service}
-          {servicesOptions}
+        <h3 class="text-f18 text-gray-dark font-bold">
+          Configuration du formulaire
+        </h3>
+        <RadioButtons
+          id="mobilisationLinkSource"
+          bind:group={mobilisationLinkSource}
+          choices={[
+            {
+              label: "Formulaire Dora (par défaut)",
+              value: "dora",
+              link: `${URL_HELP_SITE}article/orienter-un-ou-une-beneficiaire-as9agp/`,
+              linkLabel: "En savoir plus sur le formulaire Dora",
+            },
+            { label: "Votre propre formulaire", value: "custom" },
+          ]}
         />
-      </FieldModel>
-    {/if}
-  </div>
-
-  <div class="lg:gap-s8 flex flex-col">
-    {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema && "beneficiariesAccessModesExternalFormLink" in $currentSchema && "beneficiariesAccessModesExternalFormLinkText" in $currentSchema && "beneficiariesAccessModesOther" in $currentSchema}
-      <FieldModel
-        {...fieldModelProps.beneficiariesAccessModes ?? {}}
-        subFields={fieldModelProps.beneficiariesAccessModes
-          ? {
-              "completer-le-formulaire-dadhesion": [
-                {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLink
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLink,
-                },
-                {
-                  label:
-                    $currentSchema.beneficiariesAccessModesExternalFormLinkText
-                      .label,
-                  ...fieldModelProps.beneficiariesAccessModesExternalFormLinkText,
-                },
-              ],
-              autre: [fieldModelProps.beneficiariesAccessModesOther],
+        <FieldModel {...fieldModelProps.mobilisationLink ?? {}}>
+          <BasicInputField
+            extraClass="bg-white"
+            id="mobilisationLink"
+            type="url"
+            disabled={mobilisationLinkSource === "dora"}
+            bind:value={
+              () => service.mobilisationLink ?? "",
+              (value) => (service.mobilisationLink = value)
             }
-          : undefined}
-        type="array"
-      >
-        <FieldsModalitiesBeneficiary
-          id="beneficiariesAccessModes"
-          {service}
-          {servicesOptions}
-        />
-      </FieldModel>
+            placeholder="https://exemple.fr/mon-formulaire"
+            hideLabel
+            vertical
+          />
+        </FieldModel>
+      </div>
     {/if}
+    <FieldModel {...fieldModelProps.mobilisationDetails ?? {}}>
+      <BasicInputField
+        id="mobilisationDetails"
+        bind:value={
+          () => service.mobilisationDetails ?? "",
+          (value) => (service.mobilisationDetails = value)
+        }
+        descriptionText="Ajouter des précisions sur les modes de mobilisation"
+        placeholder="Apportez des précisions sur les modalités…"
+      />
+    </FieldModel>
   </div>
 
   <div class="gap-s24 flex flex-col">
