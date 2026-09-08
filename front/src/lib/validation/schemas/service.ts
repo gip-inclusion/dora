@@ -125,6 +125,28 @@ export const serviceSchema: v.Schema = {
       return data.feeCondition !== "gratuit";
     },
   },
+  mobilisableBy: {
+    label: "Mobilisable par…",
+    default: [],
+    rules: [v.isArray([v.isString()])],
+  },
+  mobilisationLink: {
+    label: "Configuration du formulaire",
+    default: null,
+    rules: [v.isURL()],
+  },
+  mobilisationModes: {
+    label: "Mode de mobilisation du service",
+    default: [],
+    rules: [v.isArray([v.isString()])],
+    required: true,
+  },
+  mobilisationDetails: {
+    label: "Précisions sur les modalités",
+    default: "",
+    rules: [v.isString()],
+    post: [v.trim],
+  },
   beneficiariesAccessModes: {
     label: "Pour les bénéficiaires",
     default: [],
