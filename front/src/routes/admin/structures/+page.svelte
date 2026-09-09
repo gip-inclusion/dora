@@ -15,8 +15,9 @@
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
 
+  import DepartmentSelector from "$lib/components/specialized/department-selector.svelte";
+
   import type { PageData } from "./$types";
-  import DepartmentList from "./department-list.svelte";
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
@@ -31,7 +32,7 @@
   let { data }: Props = $props();
 
   let selectedDepartment = $state(data.department);
-  let searchStatus: StatusFilter = $state("all");
+  let searchStatus: StatusFilter = $state(data.initialStatus);
   let filterDefinition: string | undefined = $state();
   let filterActions: string | undefined = $state();
   let structures: AdminStructure[] = $state([]);
@@ -135,10 +136,10 @@
             class="gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
           >
             {#if data.departments?.length > 1}
-              <DepartmentList
+              <DepartmentSelector
                 departments={data.departments}
                 {selectedDepartment}
-                onRefresh={handleDepartmentChange}
+                onChange={handleDepartmentChange}
               />
             {:else}
               <span class="text-f23 font-bold">

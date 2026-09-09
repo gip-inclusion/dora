@@ -23,6 +23,7 @@ export async function getCityLabel(
 
 export type DepartmentChoice = { value: GeoApiValue; label: string };
 
+/** Départements (nom + code) correspondant à une liste de codes de département. */
 export async function getDepartments(
   departmentCodes: string[],
   fetchFunction = fetch

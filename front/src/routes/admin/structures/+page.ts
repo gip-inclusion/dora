@@ -6,8 +6,9 @@ import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import type { GeoApiValue } from "$lib/types";
 import { error } from "@sveltejs/kit";
+import { parseStatusFilter } from "./structures-filters";
 
-export const load: PageLoad = async ({ fetch, parent }) => {
+export const load: PageLoad = async ({ fetch, parent, url }) => {
   await parent();
 
   const [servicesOptions, structuresOptions] = await Promise.all([
@@ -33,6 +34,8 @@ export const load: PageLoad = async ({ fetch, parent }) => {
   return {
     title,
     noIndex: true,
+    // Permet de pointer directement sur un onglet depuis « Gérer mon territoire »
+    initialStatus: parseStatusFilter(url.searchParams.get("statut")),
     servicesOptions,
     structuresOptions,
     isManager: Boolean(user.isManager && department),
