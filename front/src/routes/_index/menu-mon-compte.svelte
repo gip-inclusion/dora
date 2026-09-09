@@ -22,7 +22,8 @@
   <a href="/admin/gerer-mon-territoire" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
-      class:text-magenta-cta={$page.url.pathname === "/admin/gerer-mon-territoire"}
+      class:text-magenta-cta={$page.url.pathname ===
+        "/admin/gerer-mon-territoire"}
       aria-hidden="true"
     >
       <!-- Icon `road-map-line` from Remix Icon not provided by svelte-remixicon: https://remixicon.com/icon/road-map-line -->

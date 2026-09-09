@@ -29,7 +29,8 @@
     | "orientation"
     | "orientation-export"
     | "service"
-    | "manager-dashboard";
+    | "manager-dashboard"
+    | "manager-territory";
 
   interface Props {
     structure?: Structure;
@@ -60,6 +61,7 @@
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
     "manager-dashboard": "Gestion du territoire",
+    "manager-territory": "Gérer mon territoire",
   };
 
   function getStructureData(location) {
