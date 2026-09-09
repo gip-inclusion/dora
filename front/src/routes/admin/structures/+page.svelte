@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
+  import { page } from "$app/state";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import {
     DI_METABASE_STATS_DASHBOARD_URL,
@@ -14,13 +15,19 @@
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
+  import { saveLastDepartment } from "$lib/utils/manager-department";
+
+  import DepartmentSelector from "$lib/components/specialized/department-selector.svelte";
 
   import type { PageData } from "./$types";
-  import DepartmentList from "./department-list.svelte";
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import { getStructureStatus, getStatusLabel } from "./structures-filters";
+  import {
+    getStructureStatus,
+    getStatusLabel,
+    parseStatusFilter,
+  } from "./structures-filters";
   import type { StatusFilter } from "./types";
   import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 
@@ -31,7 +38,20 @@
   let { data }: Props = $props();
 
   let selectedDepartment = $state(data.department);
-  let searchStatus: StatusFilter = $state("all");
+  // Correspondance entre le paramètre d'URL `statut` et le filtre basé sur le statut correspondant.
+  const searchStatus = $derived(
+    parseStatusFilter(page.url.searchParams.get("statut"))
+  );
+
+  function setSearchStatus(status: StatusFilter) {
+    const url = new URL(page.url);
+    if (status === "all") {
+      url.searchParams.delete("statut");
+    } else {
+      url.searchParams.set("statut", status);
+    }
+    goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+  }
   let filterDefinition: string | undefined = $state();
   let filterActions: string | undefined = $state();
   let structures: AdminStructure[] = $state([]);
@@ -43,11 +63,8 @@
     structures = [];
     loading = true;
     selectedDepartment = dept;
-    if (selectedDepartment.code) {
-      structures = await getStructuresAdmin(selectedDepartment.code);
-    } else {
-      structures = [];
-    }
+    saveLastDepartment(dept);
+    structures = await getStructuresAdmin(dept.code);
     loading = false;
   }
 
@@ -102,24 +119,8 @@
     });
   }
 
-  if (data.isManager && data.department) {
-    handleDepartmentChange(data.department);
-  }
+  handleDepartmentChange(data.department);
 </script>
-
-{#if !data.isManager && !selectedDepartment}
-  <CenteredGrid>
-    <div class="mb-s16 flex flex-col">
-      <label for="department" class="font-bold">Département</label>
-      <AdminDivisionSearch
-        id="department"
-        searchType="department"
-        onChange={handleDepartmentChange}
-        placeholder="numéro ou nom"
-      />
-    </div>
-  </CenteredGrid>
-{/if}
 
 {#if selectedDepartment}
   <CenteredGrid bgColor="bg-service-green">
@@ -135,10 +136,10 @@
             class="gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
           >
             {#if data.departments?.length > 1}
-              <DepartmentList
+              <DepartmentSelector
                 departments={data.departments}
                 {selectedDepartment}
-                onRefresh={handleDepartmentChange}
+                onChange={handleDepartmentChange}
               />
             {:else}
               <span class="text-f23 font-bold">
@@ -180,7 +181,7 @@
     <Filters
       {structures}
       bind:filteredStructures
-      bind:searchStatus
+      bind:searchStatus={() => searchStatus, setSearchStatus}
       bind:filterDefinition
       bind:filterActions
       servicesOptions={data.servicesOptions}

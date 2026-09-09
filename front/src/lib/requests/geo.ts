@@ -23,10 +23,14 @@ export async function getCityLabel(
 
 export type DepartmentChoice = { value: GeoApiValue; label: string };
 
+/**
+ * Départements (nom + code) correspondant à une liste de codes de département,
+ * ou `null` si l'appel a échoué (à distinguer d'une liste vide).
+ */
 export async function getDepartments(
   departmentCodes: string[],
   fetchFunction = fetch
-): Promise<DepartmentChoice[]> {
+): Promise<DepartmentChoice[] | null> {
   const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
     departmentCodes.join(",")
   )}`;
@@ -34,7 +38,7 @@ export async function getDepartments(
   const result = await fetchData<GeoApiValue[]>(url, fetchFunction);
 
   if (!result.ok) {
-    return [];
+    return null;
   }
 
   return result.data.map((department) => ({
