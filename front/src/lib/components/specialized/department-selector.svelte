@@ -3,15 +3,15 @@
 
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import Button from "$lib/components/display/button.svelte";
+  import type { GeoApiValue } from "$lib/types";
 
   interface Props {
-    // on pourrait affiner les types, mais ça alourdirait de beaucoup
-    departments: any;
-    selectedDepartment: any;
-    onRefresh: any;
+    departments: { value: GeoApiValue; label: string }[];
+    selectedDepartment: GeoApiValue;
+    onChange: (department: GeoApiValue) => void;
   }
 
-  let { departments, selectedDepartment, onRefresh }: Props = $props();
+  let { departments, selectedDepartment, onChange }: Props = $props();
 </script>
 
 <ButtonMenu
@@ -30,7 +30,7 @@
       {#each departments as dpt}
         <Button
           onclick={() => {
-            onRefresh(dpt.value);
+            onChange(dpt.value);
             onCloseParent();
           }}
           label={dpt.label}

@@ -22,6 +22,21 @@ export const SEARCH_RADIUS_KM = 50;
 // Endpoint de recherche de la Base Adresse Nationale (BAN)
 export const BAN_API_SEARCH_URL = "https://data.geopf.fr/geocodage/search/";
 
+// Lien vers l'article expliquant le rôle de gestionnaire de territoire, affichée sur la page « Gérer mon territoire »
+export const URL_MANAGER_HELP_NOTICE = `${URL_HELP_SITE}article/quest-ce-quun-profil-gestionnaire-de-territoire-16sn5g2/`;
+
+// Tableau de bord Autometa du gestionnaire de territoire.
+// L'URL est pour l'instant figée sur le département pilote (Bas-Rhin), en
+// attendant que chaque département ait un tableau de bord accessible.
+const AUTOMETA_MANAGER_DASHBOARD_URL =
+  "https://autometa.inclusion.gouv.fr/interactive/bas-rhin-gt-wip-iframe/";
+
+export const AUTOMETA_MANAGER_DASHBOARD_URLS = {
+  accompagnements: `${AUTOMETA_MANAGER_DASHBOARD_URL}#accomp`,
+  services: `${AUTOMETA_MANAGER_DASHBOARD_URL}#services`,
+  structures: `${AUTOMETA_MANAGER_DASHBOARD_URL}#structures`,
+};
+
 export const METABASE_DASHBOARD_URL = (departmentCode: string) =>
   `https://metabase.dora.inclusion.gouv.fr/public/dashboard/cac884d0-fdeb-4d69-b1cc-9ae58a4cd32f?d%25C3%25A9partement_de_la_structure=${departmentCode}`;
 
