@@ -78,6 +78,14 @@
               <li>
                 <a
                   class="text-f14 text-magenta-cta font-bold hover:underline"
+                  href="/gerer-mon-territoire"
+                >
+                  Gérer mon territoire
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-f14 text-magenta-cta font-bold hover:underline"
                   href="/admin/structures"
                 >
                   Tableau de bord département

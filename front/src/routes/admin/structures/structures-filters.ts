@@ -43,3 +43,7 @@ export function getStatusLabel(status?: StatusFilter): string {
   }
   return STATUS_LABELS[status] ?? "";
 }
+
+export function parseStatusFilter(value: string | null): StatusFilter {
+  return value && value in STATUS_LABELS ? (value as StatusFilter) : "all";
+}
