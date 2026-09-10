@@ -61,14 +61,6 @@
               <li>
                 <a
                   class="text-f14 text-magenta-cta font-bold hover:underline"
-                  href="/admin"
-                >
-                  Administration
-                </a>
-              </li>
-              <li>
-                <a
-                  class="text-f14 text-magenta-cta font-bold hover:underline"
                   href="/admin/structures/creer"
                 >
                   Créer une structure
