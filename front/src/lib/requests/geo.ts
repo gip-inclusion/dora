@@ -19,3 +19,20 @@ export async function getCityLabel(
 
   return result.ok ? result.data : null;
 }
+
+export interface EpcisAndCitiesResults {
+  // pour une commune le code INSEE, pour un EPCI ses codes de départements
+  cities: Array<{ label: string; value: string }>;
+  epcis: Array<{ label: string; value: string[] }>;
+}
+
+export async function searchEpcisAndCities(
+  query: string,
+  fetchFunction = fetch
+): Promise<EpcisAndCitiesResults | null> {
+  const url = `${getApiURL()}/admin-division-search-epcis-cities/?q=${encodeURIComponent(query)}`;
+
+  const result = await fetchData<EpcisAndCitiesResults>(url, fetchFunction);
+
+  return result.ok ? result.data : null;
+}
