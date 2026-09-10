@@ -7,7 +7,11 @@
     serializeLocation,
   } from "$lib/utils/service-search-keyword";
   import Select from "$lib/components/inputs/select/select.svelte";
-  import { searchDepartment, searchRegion } from "$lib/utils/search-area";
+  import {
+    getRegionDepartments,
+    searchDepartment,
+    searchRegion,
+  } from "$lib/utils/search-area";
   import {
     type EpcisAndCitiesResults,
     searchEpcisAndCities,
@@ -92,7 +96,7 @@
         label: region.label,
         value: serializeLocation({
           type: LocationType.Region,
-          codes: [region.code],
+          codes: getRegionDepartments(region.code),
         }),
       });
     }
