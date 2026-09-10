@@ -1,109 +1,111 @@
+import pytest
 from django.contrib.gis.geos import Point
-from django.test import TestCase
-from rest_framework.test import APIClient
 
 from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import EPCI, City
 
+URL = "/admin-division-search-epcis-cities/"
 
-class SearchEpcisAndCitiesViewTests(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.client = APIClient()
 
-        cls.lyon = City.objects.create(
-            code="69123",
-            name="Lyon",
-            department="69",
-            epci="200046977",
-            region="84",
-            postal_codes=["69001"],
-            population=522969,
-            normalized_name="LYON",
-            center=Point(4.8357, 45.7640, srid=WGS84),
-        )
-        cls.marseille = City.objects.create(
-            code="13055",
-            name="Marseille",
-            department="13",
-            epci="200054807",
-            region="93",
-            postal_codes=["13001"],
-            population=870731,
-            normalized_name="MARSEILLE",
-            center=Point(5.3698, 43.2965, srid=WGS84),
-        )
+def make_city(code, name, normalized_name=None, population=1000, department="69"):
+    return City.objects.create(
+        code=code,
+        name=name,
+        normalized_name=normalized_name or name.upper(),
+        department=department,
+        epci="",
+        region="84",
+        postal_codes=[],
+        population=population,
+        center=Point(4.8, 45.7, srid=WGS84),
+    )
 
-        cls.metropole_lyon = EPCI.objects.create(
-            code="200046977",
-            name="Métropole de Lyon",
-            departments=["69"],
-            regions=["84"],
-            normalized_name="METROPOLE DE LYON",
-        )
-        cls.epci_multi = EPCI.objects.create(
-            code="200070340",
-            name="CC des Deux Rives",
-            departments=["45", "89"],
-            regions=["24", "27"],
-            normalized_name="CC DES DEUX RIVES",
-        )
 
-    def test_matches_city_on_name(self):
-        response = self.client.get("/admin-division-search-epcis-cities/?q=Lyon")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            {"label": "Lyon", "value": ["69123"]},
-            response.json()["cities"],
-        )
+def make_epci(code, name, normalized_name=None, departments=None):
+    return EPCI.objects.create(
+        code=code,
+        name=name,
+        normalized_name=normalized_name or name.upper(),
+        departments=departments or ["69"],
+        regions=["84"],
+    )
 
-    def test_matches_epci_on_name(self):
-        response = self.client.get("/admin-division-search-epcis-cities/?q=Deux Rives")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            {"label": "CC des Deux Rives", "value": ["45", "89"]},
-            response.json()["epcis"],
-        )
 
-    def test_matches_epci_on_code(self):
-        response = self.client.get("/admin-division-search-epcis-cities/?q=200070340")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            {"label": "CC des Deux Rives", "value": ["45", "89"]},
-            response.json()["epcis"],
-        )
+@pytest.fixture
+def territories():
+    make_city("69123", "Lyon", population=522969)
+    make_city("13055", "Marseille", population=870731, department="13")
+    make_epci("200046977", "Métropole de Lyon", "METROPOLE DE LYON")
+    make_epci("200070340", "CC des Deux Rives", "CC DES DEUX RIVES", ["45", "89"])
 
-    def test_no_match(self):
-        response = self.client.get("/admin-division-search-epcis-cities/?q=Zzzzzzzz")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"cities": [], "epcis": []})
 
-    def test_q_is_required(self):
-        response = self.client.get("/admin-division-search-epcis-cities/")
-        self.assertEqual(response.status_code, 400)
+@pytest.mark.parametrize(
+    "query,group,expected",
+    [
+        pytest.param(
+            "Lyon",
+            "cities",
+            {"label": "Lyon", "value": "69123"},
+            id="commune-par-nom",
+        ),
+        pytest.param(
+            "Deux Rives",
+            "epcis",
+            {"label": "CC des Deux Rives", "value": "200070340"},
+            id="epci-par-nom",
+        ),
+        pytest.param(
+            "200070340",
+            "epcis",
+            {"label": "CC des Deux Rives", "value": "200070340"},
+            id="epci-par-code",
+        ),
+    ],
+)
+def test_search_returns_the_matching_territory(
+    api_client, territories, query, group, expected
+):
+    response = api_client.get(URL, {"q": query})
+    assert response.status_code == 200
+    assert expected in response.json()[group]
 
-    def test_caps_total_results(self):
-        for i in range(8):
-            City.objects.create(
-                code=f"6900{i}",
-                name=f"Lyonnet {i}",
-                department="69",
-                epci="",
-                region="84",
-                postal_codes=[],
-                population=1000 - i,
-                normalized_name=f"LYONNET {i}",
-                center=Point(4.8, 45.7, srid=WGS84),
-            )
-            EPCI.objects.create(
-                code=f"20000000{i}",
-                name=f"CC Lyonnaise {i}",
-                departments=["69"],
-                regions=["84"],
-                normalized_name=f"CC LYONNAISE {i}",
-            )
 
-        response = self.client.get("/admin-division-search-epcis-cities/?q=Lyon")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(len(data["cities"]) + len(data["epcis"]), 10)
+def test_search_returns_nothing_without_a_match(api_client, territories):
+    response = api_client.get(URL, {"q": "Zzzzzzzz"})
+    assert response.status_code == 200
+    assert response.json() == {"cities": [], "epcis": []}
+
+
+def test_search_requires_a_query(api_client):
+    response = api_client.get(URL)
+    assert response.status_code == 400
+
+
+def test_search_caps_the_total_number_of_results(api_client, territories):
+    for i in range(8):
+        make_city(f"6900{i}", f"Lyonnet {i}", population=1000 - i)
+        make_epci(f"20000000{i}", f"CC Lyonnaise {i}")
+
+    response = api_client.get(URL, {"q": "Lyon"})
+
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data["cities"]) + len(data["epcis"]) == 10
+
+
+def test_search_ranks_an_epci_code_match_above_name_matches(api_client, territories):
+    """Une correspondance sur le code d'un EPCI ne doit rien à son nom : sa
+    similarité textuelle vaut 0. Sans traitement particulier elle serait classée
+    derrière n'importe quelle correspondance sur un nom, et donc écartée dès
+    qu'il y a assez de résultats pour atteindre la limite."""
+    # dix communes suffisent à elles seules à remplir les MAX_RESULTS places
+    for i in range(1, 11):
+        make_city(f"9000{i - 1}", f"Commune 20007034{i}", f"20007034{i}")
+
+    response = api_client.get(URL, {"q": "200070340"})
+
+    assert response.status_code == 200
+    data = response.json()
+    # l'EPCI prend la place d'une des dix communes, il n'est pas simplement ajouté
+    assert data["epcis"] == [{"label": "CC des Deux Rives", "value": "200070340"}]
+    assert len(data["cities"]) == 9

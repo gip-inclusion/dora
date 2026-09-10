@@ -23,6 +23,7 @@ from .serializers import (
 )
 
 MAX_RESULTS = 10
+MIN_SIMILARITY = 0.1
 
 
 @api_view(["GET"])
@@ -131,17 +132,15 @@ def search_epcis_and_cities(request):
     q = serializer.validated_data["q"].strip().upper()
     norm_q = normalize_string_for_search(q)
 
-    min_similarity = 0.1 if len(q) > 3 else 0
-
     cities = (
         City.objects.annotate(similarity=TrigramSimilarity("normalized_name", norm_q))
-        .filter(similarity__gt=min_similarity)
+        .filter(similarity__gt=MIN_SIMILARITY)
         .order_by("-similarity", "-population")[:MAX_RESULTS]
     )
 
     epcis = (
         EPCI.objects.annotate(similarity=TrigramSimilarity("normalized_name", norm_q))
-        .filter(Q(similarity__gt=min_similarity) | Q(code__startswith=q))
+        .filter(Q(similarity__gt=MIN_SIMILARITY) | Q(code__startswith=q))
         .order_by("-similarity", "normalized_name")[:MAX_RESULTS]
     )
 
@@ -156,7 +155,7 @@ def search_epcis_and_cities(request):
         results[group].append(
             {
                 "label": obj.name,
-                "value": [obj.code] if group == "cities" else obj.departments,
+                "value": obj.code,
             }
         )
 
