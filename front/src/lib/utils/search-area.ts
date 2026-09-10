@@ -34,12 +34,16 @@ const DEPARTMENTS: GeoSearchData[] = Object.entries(DEPARTMENTS_DATA).map(
   })
 );
 const REGIONS: GeoSearchData[] = Object.entries(REGIONS_DATA).map(
-  ([code, name]) => ({
-    code: code,
+  ([code, { name }]) => ({
+    code,
     label: name,
     normalized: normalize(name),
   })
 );
+
+export function getRegionDepartments(code: string): string[] {
+  return REGIONS_DATA[code as keyof typeof REGIONS_DATA]?.departments ?? [];
+}
 
 function bestMatch(
   data: GeoSearchData[],
