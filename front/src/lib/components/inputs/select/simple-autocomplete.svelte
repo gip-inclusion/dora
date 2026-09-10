@@ -22,6 +22,7 @@
   interface Props {
     // the list of items the user can select from
     items?: any;
+    initialLabels?: Array<{ value: any; label: string }>;
     // a list of items values that the user can not remove (ex: structure national labels)
     fixedItemsValues?: string[];
     // function to use to get all items (alternative to providing items)
@@ -110,6 +111,7 @@
 
   let {
     items = $bindable([]),
+    initialLabels = [],
     fixedItemsValues = [],
     searchFunction,
     textCleanFunction = function (userEnteredText) {
@@ -182,9 +184,20 @@
 
   // -- Reactivity --
 
+  // `items` est remplacé à chaque nouvelle recherche : on mémorise le libellé
+  // des valeurs sélectionnées pour pouvoir continuer à les afficher ensuite.
+  // `initialLabels` amorce ce cache pour les valeurs déjà sélectionnées au
+  // chargement, qui ne figurent dans aucun résultat de recherche.
+  const selectedLabels = new Map(
+    initialLabels.map(({ value, label }) => [value, label])
+  );
+
   function getLabelForValue(val) {
     const item = items.find((i) => i.value === val);
-    return item?.label;
+    if (item) {
+      selectedLabels.set(val, item.label);
+    }
+    return item?.label ?? selectedLabels.get(val);
   }
 
   function isFixedItem(val) {
@@ -442,7 +455,13 @@
     return true;
   }
 
-  function selectListItem(newValue) {
+  function selectListItem(listItem) {
+    const newValue = listItem.value;
+
+    // on mémorise le libellé de l'élément choisi : `items` sera remplacé à la
+    // prochaine recherche et on ne pourrait plus l'y retrouver
+    selectedLabels.set(newValue, listItem.label);
+
     // simple selection
     if (!multiple) {
       updateValue(newValue);
@@ -466,7 +485,7 @@
   function selectItem() {
     if (filteredListItems.length && highlightIndex >= 0) {
       const listItem = filteredListItems[highlightIndex];
-      if (selectListItem(listItem.value)) {
+      if (selectListItem(listItem)) {
         close();
         if (multiple) {
           input?.focus();
@@ -497,7 +516,7 @@
   }
 
   function onListItemClick(listItem) {
-    if (selectListItem(listItem.value)) {
+    if (selectListItem(listItem)) {
       close();
       if (multiple) {
         input?.focus();

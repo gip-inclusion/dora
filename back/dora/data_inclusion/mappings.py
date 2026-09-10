@@ -398,4 +398,5 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "update_frequency_display": None,
         "update_needed": update_needed,
         "is_orientable_ft_service": False,
+        "zone_eligibilite": service_data["zone_eligibilite"],
     }
