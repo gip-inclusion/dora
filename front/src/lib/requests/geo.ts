@@ -48,9 +48,9 @@ export async function getDepartments(
 }
 
 export interface EpcisAndCitiesResults {
-  // pour une commune le code INSEE, pour un EPCI ses codes de départements
+  // le code de l'entité : code INSEE pour une commune, code de l'EPCI sinon
   cities: Array<{ label: string; value: string }>;
-  epcis: Array<{ label: string; value: string[] }>;
+  epcis: Array<{ label: string; value: string }>;
 }
 
 export async function searchEpcisAndCities(
