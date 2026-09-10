@@ -88,6 +88,10 @@ private_api_patterns = [
         dora.decoupage_administratif.views.get_departments,
     ),
     path(
+        "admin-division-search-epcis-cities/",
+        dora.decoupage_administratif.views.search_epcis_and_cities,
+    ),
+    path(
         "city-label/<insee_code:insee_code>/",
         dora.decoupage_administratif.views.get_city_label,
     ),

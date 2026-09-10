@@ -1,7 +1,7 @@
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.postgres.search import TrigramSimilarity
-from django.db.models import Value
+from django.db.models import Q, Value
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
@@ -18,8 +18,12 @@ from .serializers import (
     GetDepartmentsQuerySerializer,
     ReverseSearchAdminDivisionSerializer,
     ReverseSearchQuerySerializer,
+    SearchEpcisAndCitiesQuerySerializer,
     SearchQuerySerializer,
 )
+
+MAX_RESULTS = 10
+MIN_SIMILARITY = 0.1
 
 
 @api_view(["GET"])
@@ -117,3 +121,42 @@ def get_city_label(request, insee_code):
     if city := City.objects.get_from_code(insee_code):
         return Response(city.name)
     raise NotFound
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def search_epcis_and_cities(request):
+    serializer = SearchEpcisAndCitiesQuerySerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+
+    q = serializer.validated_data["q"].strip().upper()
+    norm_q = normalize_string_for_search(q)
+
+    cities = (
+        City.objects.annotate(similarity=TrigramSimilarity("normalized_name", norm_q))
+        .filter(similarity__gt=MIN_SIMILARITY)
+        .order_by("-similarity", "-population")[:MAX_RESULTS]
+    )
+
+    epcis = (
+        EPCI.objects.annotate(similarity=TrigramSimilarity("normalized_name", norm_q))
+        .filter(Q(similarity__gt=MIN_SIMILARITY) | Q(code__startswith=q))
+        .order_by("-similarity", "normalized_name")[:MAX_RESULTS]
+    )
+
+    candidates = [("cities", city.similarity, city) for city in cities] + [
+        ("epcis", 1 if epci.code.startswith(q) else epci.similarity, epci)
+        for epci in epcis
+    ]
+    candidates.sort(key=lambda candidate: candidate[1], reverse=True)
+
+    results = {"cities": [], "epcis": []}
+    for group, _similarity, obj in candidates[:MAX_RESULTS]:
+        results[group].append(
+            {
+                "label": obj.name,
+                "value": obj.code,
+            }
+        )
+
+    return Response(results)

@@ -51,3 +51,7 @@ class AdminDivisionSerializer(serializers.Serializer):
 
 class AdminDivisionSearchResultSerializer(AdminDivisionSerializer):
     similarity = serializers.FloatField()
+
+
+class SearchEpcisAndCitiesQuerySerializer(serializers.Serializer):
+    q = serializers.CharField(required=True)
