@@ -378,6 +378,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "update_frequency_display",
             "update_needed",
             "is_orientable_ft_service",
+            "zone_eligibilite",
         ]
         read_only_fields = [
             "city",

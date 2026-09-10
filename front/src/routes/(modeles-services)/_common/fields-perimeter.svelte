@@ -1,33 +1,57 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import AdminDivisionSearchField from "$lib/components/forms/fields/admin-division-search-field.svelte";
-  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
-  import SelectField from "$lib/components/forms/fields/select-field.svelte";
-  import type { GeoApiValue, Service, ServicesOptions } from "$lib/types";
+  import type { Service, ServicesOptions } from "$lib/types";
+  import AddressSearchSelect from "$lib/components/specialized/address-search-select.svelte";
+  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
+  import { getDepartment } from "$lib/utils/search-area";
+  import {
+    LocationType,
+    parseLocation,
+    serializeLocation,
+  } from "$lib/utils/service-search-keyword";
 
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
   }
 
-  let { servicesOptions, service = $bindable() }: Props = $props();
-  let adminDivisionChoices = $state([]);
+  let { service = $bindable() }: Props = $props();
 
-  function handleDiffusionZoneTypeChange(type) {
-    if (type !== service.diffusionZoneType) {
-      service.diffusionZoneType = type;
-      service.diffusionZoneDetails = "";
-      service.diffusionZoneDetailsDisplay = "";
-      adminDivisionChoices = [];
+  let addressFieldValue = $state("");
+  let addressSelectErrorMessage = $state("");
+
+  // les départements déjà enregistrés ne figurent dans aucun résultat de
+  // recherche : on fournit leurs libellés au Select pour qu’il puisse les afficher
+  const initialChoices = (service.zoneEligibilite ?? [])
+    .map((code) => getDepartment(code))
+    .filter((department) => department !== null)
+    .map((department) => ({
+      label: `${department.label} (${department.code})`,
+      value: serializeLocation({
+        type: LocationType.Department,
+        codes: [department.code],
+      }),
+    }));
+
+  let selectedValues = $state(initialChoices.map((choice) => choice.value));
+
+  // en sélection multiple, le Select transmet la totalité des valeurs
+  // sélectionnées, et non la dernière ajoutée
+  function handleAddressChange(newLocations: string[] | null) {
+    if (newLocations?.length) {
+      service.zoneEligibilite = [
+        ...new Set(
+          newLocations.flatMap((location) => parseLocation(location).codes)
+        ),
+      ];
+    } else {
+      addressFieldValue = "";
     }
-  }
-
-  function handlediffusionZoneDetailsChange(details: GeoApiValue) {
-    service.diffusionZoneDetails = details?.code;
   }
 </script>
 
-<FieldSet title="Périmètre géographique d’intervention">
+<FieldSet title="Périmètre d'éligibilité">
   {#snippet help()}
     <div>
       <p class="text-f14">
@@ -45,28 +69,23 @@
     </div>
   {/snippet}
 
-  <SelectField
-    id="diffusionZoneType"
-    choices={servicesOptions.diffusionZoneType}
-    onChange={handleDiffusionZoneTypeChange}
-    initialValue={service.diffusionZoneTypeDisplay}
-    description="Territoire déterminant l’éligibilité des bénéficiaires."
-  />
-
-  {#if service.diffusionZoneType !== "country"}
-    <AdminDivisionSearchField
-      id="diffusionZoneDetails"
-      description="Commencez à saisir le nom et choisissez dans la liste."
-      searchType={service.diffusionZoneType}
-      onChange={handlediffusionZoneDetailsChange}
-      initialValue={service.diffusionZoneDetailsDisplay}
-      bind:choices={adminDivisionChoices}
-    />
-  {/if}
-
-  <BooleanRadioButtonsField
-    id="qpvOrZrr"
-    bind:value={service.qpvOrZrr}
-    description="Le service est destiné aux quartiers prioritaire de la politique de la ville (QPV) ou aux zones France ruralités revitalisation (ZFRR)."
-  />
+  <FieldModel>
+    <FieldWrapper
+      id="zoneEligibilite"
+      label="Secteurs éligibles"
+      descriptionText="Par défaut au national. Précisez le ou les territoires concernés : départements, communes,…"
+    >
+      <AddressSearchSelect
+        id="zoneEligibilite"
+        placeholder="Saisissez un département, une commune…"
+        multiple
+        bind:addressFieldValue
+        {handleAddressChange}
+        {addressSelectErrorMessage}
+        bind:value={selectedValues}
+        initialLabels={initialChoices}
+        extraClass="w-full"
+      />
+    </FieldWrapper>
+  </FieldModel>
 </FieldSet>

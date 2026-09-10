@@ -358,26 +358,10 @@ export const serviceSchema: v.Schema = {
       return data.locationKinds.includes("en-presentiel");
     },
   },
-  diffusionZoneType: {
-    label: "Périmètre",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(10)],
-    required: true,
-  },
-
-  diffusionZoneDetails: {
-    label: "Territoire",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(9)],
-    maxLength: 9,
-    required: (data: { diffusionZoneType: AdminDivisionType }) => {
-      return data.diffusionZoneType !== "country";
-    },
-  },
-  qpvOrZrr: {
-    label: "Uniquement QPV ou ZFRR",
-    default: false,
-    rules: [v.isBool()],
+  zoneEligibilite: {
+    label: "Secteurs éligibles",
+    default: [],
+    rules: [v.isArray([])],
   },
   suspensionDate: {
     label: "Date de fin",
