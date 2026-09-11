@@ -25,6 +25,7 @@
     hideLabel?: boolean;
     vertical?: boolean;
     description?: Snippet;
+    extraClass?: string;
   }
 
   let {
@@ -41,6 +42,7 @@
     hideLabel = false,
     vertical = false,
     description,
+    extraClass = "",
   }: Props = $props();
 
   // Get readonly and maxLength from schema if not provided
@@ -78,8 +80,7 @@
     maxLength,
   });
 
-  const inputClasses =
-    "h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden grow read-only:text-gray-03 disabled:bg-gray-00 disabled:text-gray-text-alt2 disabled:cursor-not-allowed";
+  const inputClasses = `${extraClass ? extraClass + " " : ""}h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden grow read-only:text-gray-03 disabled:bg-gray-00 disabled:text-gray-text-alt2 disabled:cursor-not-allowed`;
 </script>
 
 {#if $currentSchema && id in $currentSchema}

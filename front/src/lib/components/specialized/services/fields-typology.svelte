@@ -1,6 +1,5 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -124,14 +123,6 @@
       bind:value={service.kind}
       choices={servicesOptions.kinds}
       description="Sélectionnez la typologie qui correspond le mieux au service."
-    />
-  </FieldModel>
-
-  <FieldModel {...fieldModelProps.isCumulative ?? {}} type="boolean">
-    <BooleanRadioButtonsField
-      id="isCumulative"
-      bind:value={service.isCumulative}
-      description="Cochez « Non » si le service n’est pas cumulable avec d’autres dispositifs."
     />
   </FieldModel>
 </FieldSet>

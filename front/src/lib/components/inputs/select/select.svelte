@@ -8,6 +8,7 @@
   interface Props {
     id: string;
     choices?: Choice[];
+    initialLabels?: Choice[];
     fixedItemsValues?: any[];
     sort?: boolean;
     value?: any | any[];
@@ -36,6 +37,7 @@
   let {
     id,
     choices = $bindable([]),
+    initialLabels = [],
     fixedItemsValues = [],
     sort = false,
     value = $bindable(undefined),
@@ -80,6 +82,7 @@
   {minCharactersToSearch}
   {onChange}
   bind:items={choices}
+  {initialLabels}
   {fixedItemsValues}
   {initialValue}
   {disabled}
