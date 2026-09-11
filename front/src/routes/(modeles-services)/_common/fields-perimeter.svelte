@@ -4,9 +4,8 @@
   import AddressSearchSelect from "$lib/components/specialized/address-search-select.svelte";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import { getDepartment } from "$lib/utils/search-area";
   import {
-    LocationType,
+    LOCATION_TYPE_BY_NAME,
     parseLocation,
     serializeLocation,
   } from "$lib/utils/service-search-keyword";
@@ -21,18 +20,15 @@
   let addressFieldValue = $state("");
   let addressSelectErrorMessage = $state("");
 
-  // les départements déjà enregistrés ne figurent dans aucun résultat de
-  // recherche : on fournit leurs libellés au Select pour qu’il puisse les afficher
-  const initialChoices = (service.zoneEligibilite ?? [])
-    .map((code) => getDepartment(code))
-    .filter((department) => department !== null)
-    .map((department) => ({
-      label: `${department.label} (${department.code})`,
-      value: serializeLocation({
-        type: LocationType.Department,
-        codes: [department.code],
-      }),
-    }));
+  // les territoires déjà enregistrés ne figurent dans aucun résultat de
+  // recherche : le back nous en fournit les libellés, reconstitués à partir des
+  // seuls codes stockés
+  const initialChoices = (service.zoneEligibiliteDisplay ?? []).map(
+    ({ label, type, codes }) => ({
+      label,
+      value: serializeLocation({ type: LOCATION_TYPE_BY_NAME[type], codes }),
+    })
+  );
 
   let selectedValues = $state(initialChoices.map((choice) => choice.value));
 
