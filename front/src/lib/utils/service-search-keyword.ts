@@ -20,6 +20,14 @@ export interface LocationOption {
   label: string;
 }
 
+// types renvoyés par l'API (`AdminDivisionType` côté back)
+export const LOCATION_TYPE_BY_NAME: Record<string, LocationType> = {
+  city: LocationType.City,
+  epci: LocationType.EPCI,
+  department: LocationType.Department,
+  region: LocationType.Region,
+};
+
 const LOCATION_KEY_SEPARATOR = "|";
 
 export function serializeLocation({ type, codes }: LocationValue): string {

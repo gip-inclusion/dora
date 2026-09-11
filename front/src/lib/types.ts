@@ -477,6 +477,11 @@ export interface ServiceModelBase {
   subcategoriesDisplay: string[];
   suspensionDate: string | null;
   zoneEligibilite: string[] | null;
+  zoneEligibiliteDisplay: Array<{
+    label: string;
+    type: string;
+    codes: string[];
+  }> | null;
 }
 
 export interface Service extends ServiceModelBase {
