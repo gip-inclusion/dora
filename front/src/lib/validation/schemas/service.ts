@@ -82,13 +82,6 @@ export const serviceSchema: v.Schema = {
     required: true,
     maxLength: 150,
   },
-  recurrence: {
-    label: "Fréquence et horaires",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(140)],
-    post: [v.trim],
-    maxLength: 140,
-  },
   description: {
     label: "Description",
     default: "",
@@ -363,11 +356,10 @@ export const serviceSchema: v.Schema = {
     default: [],
     rules: [v.isArray([])],
   },
-  suspensionDate: {
-    label: "Date de fin",
-    default: null,
-    rules: [v.isDate()],
-    post: [v.nullEmpty],
+  openingHours: {
+    label: "Horaires du service",
+    default: "",
+    rules: [v.isString()],
   },
   updateFrequency: {
     label: "Périodicité de mise à jour",
@@ -419,8 +411,6 @@ export const draftSchema: v.Schema = {
   diffusionZoneType: serviceSchema.diffusionZoneType,
   diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
   qpvOrZrr: serviceSchema.qpvOrZrr,
-  recurrence: serviceSchema.recurrence,
-  suspensionDate: serviceSchema.suspensionDate,
   updateFrequency: serviceSchema.updateFrequency,
 };
 
@@ -453,7 +443,5 @@ export const modelSchema: v.Schema = {
   durationWeeks: serviceSchema.durationWeeks,
   forms: serviceSchema.forms,
   onlineForm: serviceSchema.onlineForm,
-  recurrence: serviceSchema.recurrence,
-  suspensionDate: serviceSchema.suspensionDate,
   updateFrequency: serviceSchema.updateFrequency,
 };
