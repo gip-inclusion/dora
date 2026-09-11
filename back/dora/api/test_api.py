@@ -16,6 +16,7 @@ from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     ServiceFee,
@@ -514,6 +515,54 @@ def test_service_publics_export_all_maps_to_tous_publics(
 
     assert response.status_code == 200
     assert response.json()["publics"] == ["tous-publics"]
+
+
+def test_service_serialization_complementary_di_fields(authenticated_user, api_client):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        forms=["structure-id/dossier-inscription.pdf"],
+        online_form="https://example.com/formulaire-inscription",
+    )
+    service.funding_labels.set(
+        [
+            FundingLabel.objects.create(label="France Travail", value="france-travail"),
+            FundingLabel.objects.create(
+                label="Conseil départemental", value="conseil-departemental"
+            ),
+        ]
+    )
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["labels_financement"] == [
+        "Conseil départemental",
+        "France Travail",
+    ]
+    assert data["documents_a_completer"] == [
+        {
+            "nom": "dossier-inscription.pdf",
+            "fichier": "structure-id/dossier-inscription.pdf",
+        }
+    ]
+    assert data["formulaire_en_ligne_a_completer"] == (
+        "https://example.com/formulaire-inscription"
+    )
+
+
+def test_service_serialization_complementary_di_fields_empty(
+    authenticated_user, api_client
+):
+    service = make_service(status=ServiceStatus.PUBLISHED, forms=[], online_form="")
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["labels_financement"] == []
+    assert data["documents_a_completer"] == []
+    assert data["formulaire_en_ligne_a_completer"] is None
 
 
 def test_service_serialization_formulaire_en_ligne(

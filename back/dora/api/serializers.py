@@ -221,6 +221,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
+    labels_financement = serializers.SerializerMethodField()
+    documents_a_completer = serializers.SerializerMethodField()
+    formulaire_en_ligne_a_completer = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -239,11 +242,14 @@ class ServiceSerializer(serializers.ModelSerializer):
             "date_maj",
             "date_suspension",
             "description",
+            "documents_a_completer",
             "formulaire_en_ligne",
+            "formulaire_en_ligne_a_completer",
             "frais_autres",
             "frais",
             "id",
             "justificatifs",
+            "labels_financement",
             "latitude",
             "lien_source",
             "longitude",
@@ -457,3 +463,15 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_temps_passe_semaines(self, obj):
         return obj.duration_weeks
+
+    def get_labels_financement(self, obj):
+        return sorted(label.label for label in obj.funding_labels.all())
+
+    def get_documents_a_completer(self, obj):
+        return [
+            {"nom": fichier.rsplit("/", 1)[-1], "fichier": fichier}
+            for fichier in obj.forms
+        ]
+
+    def get_formulaire_en_ligne_a_completer(self, obj):
+        return obj.online_form or None
