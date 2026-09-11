@@ -7,14 +7,12 @@ from dora.decoupage_administratif.models import (
     Department,
     Region,
 )
-
-FRANCE_INSEE_CODE = "99100"
-
-COUNTRY_CODE_PATTERN = r"^99[0-5]\d{2}$"
-CITY_CODE_PATTERN = r"^\w{5}$"
-DEPARTMENT_CODE_PATTERN = r"^\w{2,3}$"
-EPCI_CODE_PATTERN = r"^\d{9}$"
-REGION_CODE_PATTERN = r"^\w{2}$"
+from dora.decoupage_administratif.utils import (
+    CITY_CODE_PATTERN,
+    DEPARTMENT_CODE_PATTERN,
+    EPCI_CODE_PATTERN,
+    FRANCE_INSEE_CODE,
+)
 
 
 def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
