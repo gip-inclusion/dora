@@ -72,8 +72,3 @@ export function searchDepartment(term: string): GeoSearchResult | null {
 export function searchRegion(term: string): GeoSearchResult | null {
   return bestMatch(REGIONS, term);
 }
-
-export function getDepartment(code: string): GeoSearchResult | null {
-  const department = DEPARTMENTS.find((dept) => dept.code === code);
-  return department ? { code: department.code, label: department.label } : null;
-}

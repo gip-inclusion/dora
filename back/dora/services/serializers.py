@@ -25,6 +25,7 @@ import dora.data_inclusion.client
 from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
+from dora.decoupage_administratif.utils import get_zone_eligibilite_choices
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
@@ -284,6 +285,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     is_orientable_ft_service = serializers.SerializerMethodField()
 
+    zone_eligibilite_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
 
@@ -379,6 +382,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "update_needed",
             "is_orientable_ft_service",
             "zone_eligibilite",
+            "zone_eligibilite_display",
         ]
         read_only_fields = [
             "city",
@@ -451,6 +455,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_can_write(self, obj):
         user = self.context.get("request").user
         return obj.can_write(user)
+
+    def get_zone_eligibilite_display(self, obj):
+        return get_zone_eligibilite_choices(obj.zone_eligibilite)
 
     def validate(self, data):
         user = self.context.get("request").user
