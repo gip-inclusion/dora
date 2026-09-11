@@ -88,6 +88,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
                 "beneficiaries_access_modes",
                 "requirements",
                 "credentials",
+                "funding_labels",
             )
             .order_by("pk")
         )
