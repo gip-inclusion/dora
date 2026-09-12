@@ -128,6 +128,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "url",
             "phone",
             "email",
+            "opening_hours",
         ]
         read_only_fields = [
             "city",
@@ -385,7 +386,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "city",
-            "horaires_accueil",
             "is_model",
         ]
         lookup_field = "slug"

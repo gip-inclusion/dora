@@ -393,6 +393,7 @@ export interface ServiceStructure {
   hasAdmin: boolean;
   name: string;
   numServices: number;
+  openingHours: string | null;
   phone: string;
   postalCode: string;
   siret: string;
@@ -489,6 +490,7 @@ export interface Service extends ServiceModelBase {
   fillingDuration?: number;
   geom: Point | null;
   hasAlreadyBeenUnpublished: boolean | null;
+  horairesAccueil: string | null;
   isAvailable: boolean;
   isContactInfoPublic: boolean | null;
   isOrientable: boolean;
