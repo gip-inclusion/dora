@@ -129,7 +129,7 @@
   class:w-full={wFull}
   class:whitespace-nowrap={noWrap}
   class:hover:underline={hoverUnderline}
-  class:flex={!!Icon || loading}
+  class:flex={!!Icon || loading || extraClass.includes("flex")}
   class:flex-row={!!Icon || loading}
   class:items-center={!!Icon || loading}
   {...ariaAttributes}
