@@ -54,6 +54,7 @@ from dora.services.models import (
     ServiceStatusHistoryItem,
     ServiceSubCategory,
     UpdateFrequency,
+    FundingLabel,
 )
 from dora.services.search import (
     MAX_DISTANCE,
@@ -687,6 +688,11 @@ def options(request):
             model = ServiceFee
             fields = ["value", "label"]
 
+    class FundingLabelsSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = FundingLabel
+            fields = ["value", "label"]
+
     def filter_custom_choices(choices):
         user = request.user
         if user.is_staff:
@@ -781,6 +787,9 @@ def options(request):
                 state__in=[DeploymentLevel.IN_PROGRESS, DeploymentLevel.FINALIZING]
             ).values()
         ],
+        "funding_labels": FundingLabelsSerializer(
+            FundingLabel.objects.all(), many=True
+        ).data,
     }
 
     cache.set(cache_key, result, timeout=3600)
