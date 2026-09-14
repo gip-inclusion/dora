@@ -8,6 +8,7 @@
   import FieldSubcategory from "./field-subcategory.svelte";
   import { currentSchema } from "$lib/validation/validation";
   import { URL_HELP_SITE } from "$lib/consts";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -116,6 +117,36 @@
       bind:value={service.kind}
       choices={servicesOptions.kinds}
       description="Sélectionnez la typologie qui correspond le mieux au service."
+    />
+  </FieldModel>
+
+  <hr />
+  {#snippet fundingLabelsDescription()}
+    <small>
+      Choisissez un ou plusieurs financeurs. S’il ne figure pas dans la liste,
+      demandez son ajout au
+      <a
+        href="mailto:support.dora@inclusion.gouv.fr"
+        class="accent-gray-02 underline"
+        target="_blank"
+        title="Ouverture dans une nouvelle fenêtre"
+        rel="noopener"
+      >
+        support Dora
+      </a>.
+    </small>
+  {/snippet}
+
+  <FieldModel
+    {...fieldModelProps.fundingLabels ?? {}}
+    type="array"
+    options="{servicesOptions.fundingLabels}}"
+  >
+    <MultiSelectField
+      id="fundingLabels"
+      choices={servicesOptions.fundingLabels}
+      bind:value={service.fundingLabels}
+      descriptionSnippet={fundingLabelsDescription}
     />
   </FieldModel>
 </FieldSet>

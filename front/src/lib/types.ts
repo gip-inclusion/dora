@@ -622,6 +622,7 @@ export type ServicesOptions = {
   requirements: CustomChoice[];
   subcategories: { value: string; label: string }[];
   updateFrequencies: { value: string; label: string }[];
+  fundingLabels: { value: string; label: string }[];
 };
 
 export type Partner = {
