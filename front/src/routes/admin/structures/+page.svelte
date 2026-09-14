@@ -6,13 +6,8 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import {
-    DI_METABASE_STATS_DASHBOARD_URL,
-    METABASE_DASHBOARD_URL,
-    URL_HELP_SITE,
-  } from "$lib/consts";
+  import { URL_MANAGER_DASHBOARD_HELP_NOTICE } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
-  import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
   import { saveLastDepartment } from "$lib/utils/manager-department";
@@ -72,12 +67,14 @@
     structures = await getStructuresAdmin(selectedDepartment?.code);
   }
 
-  function handleClick() {
-    if (!selectedDepartment) {
+  // Exporte la liste entière des structures du territoire, sans tenir compte
+  // des filtres actifs.
+  function handleDownload() {
+    if (!selectedDepartment || !structures?.length) {
       return;
     }
 
-    const sheetData = filteredStructures.map((structure) => {
+    const sheetData = structures.map((structure) => {
       const structStatus = getStructureStatus(structure);
       const status = getStatusLabel(structStatus);
 
@@ -123,61 +120,46 @@
 </script>
 
 {#if selectedDepartment}
-  <CenteredGrid bgColor="bg-service-green">
-    <div class="gap-s16 relative lg:flex-row-reverse lg:justify-between">
-      <div class="mb-s48 print:mb-s0">
-        <Breadcrumb currentLocation="manager-dashboard" />
-      </div>
+  <CenteredGrid>
+    <div class="mb-s32">
+      <Breadcrumb currentLocation="manager-dashboard" />
+    </div>
 
+    <div class="gap-s16 mb-s48 flex flex-col justify-between md:flex-row">
       <div>
-        <h1 class="mb-s12 mr-s12 text-france-blue">Tableau de bord</h1>
-        <div class="gap-s16 flex flex-col justify-between md:flex-row">
-          <div
-            class="gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
-          >
-            {#if data.departments?.length > 1}
-              <DepartmentSelector
-                departments={data.departments}
-                {selectedDepartment}
-                onChange={handleDepartmentChange}
-              />
-            {:else}
-              <span class="text-f23 font-bold">
-                {selectedDepartment.name}({selectedDepartment.code})
-              </span>
-              <span class="text-f23 hidden font-bold md:block">•</span>
-            {/if}
-          </div>
+        <h1 class="mb-s8 text-france-blue">Mes structures & services Dora</h1>
 
-          <div class="flex flex-col items-end">
-            <LinkButton
-              label="Ajouter une structure"
-              to="/admin/structures/creer"
-              icon={AddFillSystem}
-              extraClass="mb-s12"
+        <div class="text-france-blue">
+          {#if data.departments?.length > 1}
+            <DepartmentSelector
+              departments={data.departments}
+              {selectedDepartment}
+              onChange={handleDepartmentChange}
             />
-            <a
-              href={DI_METABASE_STATS_DASHBOARD_URL(selectedDepartment.name)}
-              target="_blank"
-              rel="noopener nofollow"
-              class="text-f18 text-france-blue leading-32 underline"
-            >
-              Cartographie des structures et services référencés
-            </a>
-            <a
-              href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
-              target="_blank"
-              rel="noopener nofollow"
-              class="text-f18 text-france-blue leading-32 underline"
-            >
-              Statistiques d’utilisation de mon territoire
-            </a>
-          </div>
+          {:else}
+            <span class="text-f23 font-bold">
+              {selectedDepartment.name} ({selectedDepartment.code})
+            </span>
+          {/if}
         </div>
       </div>
+
+      <div class="gap-s16 flex shrink-0 flex-wrap items-start">
+        <LinkButton
+          label="Notice"
+          to={URL_MANAGER_DASHBOARD_HELP_NOTICE}
+          otherTab
+          nofollow
+          secondary
+        />
+        <Button
+          onclick={handleDownload}
+          label="Télécharger la liste (xlsx)"
+          disabled={loading || !structures?.length}
+        />
+      </div>
     </div>
-  </CenteredGrid>
-  <CenteredGrid>
+
     <Filters
       {structures}
       bind:filteredStructures
@@ -204,12 +186,6 @@
             <StructuresMap {filteredStructures} bind:selectedStructureSlug />
           </div>
           <div class="gap-s24 flex w-full flex-col">
-            <Button
-              onclick={handleClick}
-              label="Télécharger"
-              secondary
-              disabled={!filteredStructures.length}
-            />
             {#if searchStatus !== "all" && filterDefinition}
               <Notice type="info" title={filterDefinition}>
                 <div>
@@ -217,7 +193,7 @@
                     Action(s)&#8239;: {filterActions}
                   {/if}
                   <a
-                    href={`${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`}
+                    href={URL_MANAGER_DASHBOARD_HELP_NOTICE}
                     target="_blank"
                     class="text-magenta-cta underline"
                   >
