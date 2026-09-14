@@ -547,6 +547,7 @@ class StructureAdminTestCase(APITestCase):
             "num_outdated_services",
             "num_published_services",
             "num_services",
+            "reseaux_porteurs",
             "siret",
             "slug",
             "typology",
