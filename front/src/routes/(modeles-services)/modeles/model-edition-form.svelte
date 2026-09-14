@@ -10,7 +10,7 @@
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
   import type { Model, ServicesOptions, ShortStructure } from "$lib/types";
@@ -128,7 +128,7 @@
           {structure}
         />
 
-        <FieldsPeriodicity bind:service={model} {servicesOptions} {model} />
+        <FieldsetNotifications bind:service={model} {servicesOptions} {model} />
       {/if}
     </div>
 
