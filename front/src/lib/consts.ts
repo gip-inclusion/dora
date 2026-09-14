@@ -25,6 +25,9 @@ export const BAN_API_SEARCH_URL = "https://data.geopf.fr/geocodage/search/";
 // Lien vers l'article expliquant le rôle de gestionnaire de territoire, affichée sur la page d'accueil « Gérer mon territoire »
 export const URL_MANAGER_HELP_NOTICE = `${URL_HELP_SITE}article/quest-ce-quun-profil-gestionnaire-de-territoire-16sn5g2/`;
 
+// Lien vers le mode d'emploi du tableau de bord « Mes structures & services Dora » du gestionnaire de territoire
+export const URL_MANAGER_DASHBOARD_HELP_NOTICE = `${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`;
+
 // Tableau de bord Autometa du gestionnaire de territoire.
 // L'URL est pour l'instant figée sur le département pilote (Bas-Rhin), en
 // attendant que chaque département ait un tableau de bord accessible.
@@ -36,15 +39,6 @@ export const AUTOMETA_MANAGER_DASHBOARD_URLS = {
   services: `${AUTOMETA_MANAGER_DASHBOARD_URL}#services`,
   structures: `${AUTOMETA_MANAGER_DASHBOARD_URL}#structures`,
 };
-
-export const METABASE_DASHBOARD_URL = (departmentCode: string) =>
-  `https://metabase.dora.inclusion.gouv.fr/public/dashboard/cac884d0-fdeb-4d69-b1cc-9ae58a4cd32f?d%25C3%25A9partement_de_la_structure=${departmentCode}`;
-
-export const DI_METABASE_STATS_DASHBOARD_URL = (
-  departmentName: string,
-  dataSource: string = "dora"
-) =>
-  `https://stats.inclusion.beta.gouv.fr/public/dashboard/3b0582bc-cdff-41a8-b94d-a57e4d97f512?d%25C3%25A9partement=${departmentName}&producteur_de_donn%25C3%25A9es=${dataSource}`;
 
 export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
