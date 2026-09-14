@@ -6,9 +6,8 @@
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
-  import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
+  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
-  import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
   import FieldsModalities from "../_common/fields-modalities.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
@@ -115,14 +114,7 @@
   <CenteredGrid>
     <div class="lg:w-2/3">
       {#if model?.structure}
-        <FieldsTypology
-          noTopPadding
-          bind:service={model}
-          {servicesOptions}
-          {model}
-        />
-
-        <FieldsPresentation bind:service={model} {servicesOptions} {model} />
+        <FieldsetPrincipalInfo bind:service={model} {servicesOptions} {model} />
 
         <FieldsDuration bind:service={model} {servicesOptions} {model} />
 
