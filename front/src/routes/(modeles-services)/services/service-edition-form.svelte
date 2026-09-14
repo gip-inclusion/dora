@@ -9,13 +9,12 @@
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsModalities from "../_common/fields-modalities.svelte";
-  import FieldsPerimeter from "../_common/fields-perimeter.svelte";
+  import FieldgroupModalities from "$lib/components/specialized/services/fieldgroup-modalities.svelte";
+  import FieldgroupPerimeter from "$lib/components/specialized/services/fieldgroup-perimeter.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
   import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
-  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
+  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import FieldgroupTypology from "$lib/components/specialized/services/fieldgroup-typology.svelte";
   import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
@@ -217,23 +216,13 @@
       <div class={service.model ? "" : "lg:w-2/3"}>
         <FieldsetPrincipalInfo bind:service {servicesOptions} {model} />
 
+        <FieldsetEligibility bind:service {servicesOptions} {model} />
+
         <FieldsDuration bind:service {servicesOptions} {model} />
-
-        <FieldsPublics bind:service {servicesOptions} {model} />
-
-        <FieldsModalities
-          bind:service
-          servicesOptions={modalitiesServicesOptions}
-          {model}
-        />
-
-        <FieldsDocuments bind:service {servicesOptions} {model} />
 
         <FieldsPeriodicity bind:service {servicesOptions} {model} />
       </div>
       <div class="lg:w-2/3">
-        <FieldsPerimeter bind:service {servicesOptions} />
-
         <FieldsPlace bind:service {structure} {servicesOptions} />
 
         <FieldsContact bind:service />
