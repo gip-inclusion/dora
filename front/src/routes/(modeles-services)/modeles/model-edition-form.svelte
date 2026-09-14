@@ -7,9 +7,10 @@
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
-  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
+  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldgroupPublics from "$lib/components/specialized/services/fieldgroup-publics.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsModalities from "../_common/fields-modalities.svelte";
+  import FieldgroupModalities from "$lib/components/specialized/services/fieldgroup-modalities.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
@@ -116,11 +117,9 @@
       {#if model?.structure}
         <FieldsetPrincipalInfo bind:service={model} {servicesOptions} {model} />
 
+        <FieldsetEligibility bind:service={model} {servicesOptions} {model} />
+
         <FieldsDuration bind:service={model} {servicesOptions} {model} />
-
-        <FieldsPublics bind:service={model} {servicesOptions} {model} />
-
-        <FieldsModalities bind:service={model} {servicesOptions} {model} />
 
         <FieldsDocuments bind:service={model} {servicesOptions} {model} />
 
