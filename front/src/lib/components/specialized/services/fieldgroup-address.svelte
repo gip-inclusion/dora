@@ -1,5 +1,6 @@
 <script lang="ts">
   import FieldGroup from "$lib/components/display/field-group.svelte";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import AddressSearchField from "$lib/components/forms/fields/address-search-field.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
