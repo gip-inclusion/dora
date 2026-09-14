@@ -8,9 +8,8 @@
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
-  import FieldgroupPublics from "$lib/components/specialized/services/fieldgroup-publics.svelte";
+  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldgroupModalities from "$lib/components/specialized/services/fieldgroup-modalities.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
@@ -119,9 +118,11 @@
 
         <FieldsetEligibility bind:service={model} {servicesOptions} {model} />
 
-        <FieldsDuration bind:service={model} {servicesOptions} {model} />
-
-        <FieldsDocuments bind:service={model} {servicesOptions} {model} />
+        <FieldsetReceptionConditions
+          bind:service={model}
+          {servicesOptions}
+          {model}
+        />
 
         <FieldsPeriodicity bind:service={model} {servicesOptions} {model} />
       {/if}
