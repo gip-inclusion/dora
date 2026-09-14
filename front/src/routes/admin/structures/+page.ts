@@ -1,29 +1,11 @@
+import { getDepartments, type DepartmentChoice } from "$lib/requests/geo";
 import { getServicesOptions } from "$lib/requests/services";
 import { getStructuresOptions } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getApiURL } from "$lib/utils/api";
 import type { GeoApiValue } from "$lib/types";
 import { error } from "@sveltejs/kit";
-
-async function getDepartments(
-  departmentCodes: string[],
-  fetchFunction: typeof fetch
-) {
-  const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
-    departmentCodes.join(",")
-  )}`;
-  const response = await fetchFunction(url);
-  const jsonResponse = (await response.json()) as GeoApiValue[];
-  const results = jsonResponse.map((result) => ({
-    value: result,
-    label: `${result.name} (${result.code})`,
-  }));
-  return results;
-}
-
-type GetDepartmentsResults = Awaited<ReturnType<typeof getDepartments>>;
 
 export const load: PageLoad = async ({ fetch, parent }) => {
   await parent();
@@ -35,7 +17,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
   const user = get(userInfo);
 
-  let departments: GetDepartmentsResults = [];
+  let departments: DepartmentChoice[] = [];
   let department: GeoApiValue | undefined;
   let title = "Structures | Administration | DORA";
 
