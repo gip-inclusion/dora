@@ -2,7 +2,7 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import FieldsAddress from "./fields-address.svelte";
+  import FieldgroupAddress from "./fieldgroup-address.svelte";
   import type { Service, ServicesOptions, Structure } from "$lib/types";
   import { moveToTheEnd } from "$lib/utils/misc";
 
@@ -33,6 +33,6 @@
   {/if}
 
   {#if service.locationKinds.includes("en-presentiel")}
-    <FieldsAddress bind:entity={service} parent={structure} />
+    <FieldgroupAddress bind:entity={service} parent={structure} />
   {/if}
 </FieldSet>
