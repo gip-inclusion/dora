@@ -1,6 +1,7 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/fil-d-ariane
   import type { Model, Service, Structure } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
 
   type BreadcrumbLocation =
     | "home"
@@ -61,7 +62,7 @@
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
     "manager-homepage": "Gérer mon territoire",
-    "manager-dashboard": "Gestion du territoire",
+    "manager-dashboard": "Mes structures & services Dora",
   };
 
   function getStructureData(location) {
@@ -160,6 +161,11 @@
         <a href="/mes-alertes">
           <span class="hidden lg:inline">Mes alertes</span>
         </a>
+      </li>
+    {/if}
+    {#if currentLocation === "manager-dashboard" && $userInfo?.isManager}
+      <li>
+        <a href="/admin/gerer-mon-territoire">Gérer mon territoire</a>
       </li>
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
