@@ -6,6 +6,7 @@
   } from "$lib/utils/opening-hours/parse";
   import { fromJsonToOsmString } from "$lib/utils/opening-hours/serialize";
   import DayField from "./day-field.svelte";
+  import Toggle from "./toggle.svelte";
 
   interface Props {
     value: string;
@@ -74,6 +75,10 @@
       </div>
     </div>
   {/each}
+  <div class="gap-s8 flex items-center self-center">
+    <span class="block text-center font-bold">Fermé les jours fériés</span>
+    <Toggle id="phOff" bind:checked={data.phOff} onchange={handleHourChange} />
+  </div>
 </div>
 
 <style lang="postcss">
