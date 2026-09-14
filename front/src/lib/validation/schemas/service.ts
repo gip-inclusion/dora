@@ -367,6 +367,11 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString()],
     required: true,
   },
+  fundingLabels: {
+    label: "Financeur(s)",
+    default: [],
+    rules: [v.isArray([])],
+  },
 };
 
 export const draftSchema: v.Schema = {
@@ -413,6 +418,7 @@ export const draftSchema: v.Schema = {
   qpvOrZrr: serviceSchema.qpvOrZrr,
   updateFrequency: serviceSchema.updateFrequency,
   openingHours: serviceSchema.openingHours,
+  fundingLabels: serviceSchema.fundingLabels,
 };
 
 export const modelSchema: v.Schema = {
@@ -446,4 +452,5 @@ export const modelSchema: v.Schema = {
   onlineForm: serviceSchema.onlineForm,
   updateFrequency: serviceSchema.updateFrequency,
   openingHours: serviceSchema.openingHours,
+  fundingLabels: serviceSchema.fundingLabels,
 };
