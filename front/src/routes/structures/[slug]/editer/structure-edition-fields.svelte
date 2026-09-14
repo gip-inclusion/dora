@@ -6,7 +6,7 @@
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
+  import FieldgroupAddress from "$lib/components/specialized/services/fieldgroup-address.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import type { NationalLabel } from "$lib/types";
@@ -51,7 +51,7 @@
   sort
 />
 
-<FieldsAddress bind:entity={structure} />
+<FieldgroupAddress bind:entity={structure} />
 
 <BasicInputField
   type="url"
