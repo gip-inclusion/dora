@@ -112,7 +112,7 @@
 
     generateSpreadsheet({
       sheetData,
-      sheetName: `structures-dora-${selectedDepartment.code}-${searchStatus}`,
+      sheetName: `structures-dora-${selectedDepartment.code}`,
     });
   }
 
