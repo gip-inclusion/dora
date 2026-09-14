@@ -1,6 +1,6 @@
 import type { OsmOpeningHours } from "$lib/types";
 
-import { formatDay } from "./parse";
+import { formatDay, PUBLIC_HOLIDAYS_OFF } from "./parse";
 
 export function fromJsonToOsmString(data: OsmOpeningHours) {
   let days: string[] = [];
@@ -14,10 +14,16 @@ export function fromJsonToOsmString(data: OsmOpeningHours) {
   days.push(formatDay(data.sunday, "Su") || "");
 
   days = days.filter(Boolean);
-  if (days.length) {
-    return days.join(";");
+
+  if (!days.length) {
+    return null;
   }
 
-  // TODO: vérifier le meilleur moyen de propager l'erreur
-  return null;
+  let osmString = days.join(";");
+
+  if (data.phOff) {
+    osmString += `; ${PUBLIC_HOLIDAYS_OFF}`;
+  }
+
+  return osmString;
 }

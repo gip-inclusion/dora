@@ -258,6 +258,7 @@ export type OsmOpeningHours = {
   friday: OsmDay;
   saturday: OsmDay;
   sunday: OsmDay;
+  phOff: boolean;
 };
 
 // SERVICES
