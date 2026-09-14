@@ -1,5 +1,5 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -14,15 +14,9 @@
     servicesOptions: ServicesOptions;
     service: Service | Model;
     model?: Model;
-    noTopPadding?: boolean;
   }
 
-  let {
-    servicesOptions,
-    service = $bindable(),
-    model,
-    noTopPadding = false,
-  }: Props = $props();
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -44,7 +38,7 @@
   );
 </script>
 
-<FieldSet title="Typologie" {showModel} {noTopPadding}>
+<FieldGroup title="Typologie du service" showSeparator={false}>
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
     <FieldCategory
       bind:service
@@ -149,4 +143,4 @@
       descriptionSnippet={fundingLabelsDescription}
     />
   </FieldModel>
-</FieldSet>
+</FieldGroup>
