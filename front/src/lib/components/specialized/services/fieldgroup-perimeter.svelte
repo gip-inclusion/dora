@@ -1,8 +1,7 @@
 <script lang="ts">
   import insane from "insane";
 
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -14,10 +13,6 @@
     serializeLocation,
   } from "$lib/utils/service-search-keyword";
 
-  interface Props {
-    servicesOptions: ServicesOptions;
-    service: Service;
-  }
   import {
     getRegionDepartments,
     searchDepartment,
@@ -27,8 +22,9 @@
     type EpcisAndCitiesResults,
     searchEpcisAndCities,
   } from "$lib/requests/geo";
+  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
 
-  let { service = $bindable() }: Props = $props();
+  let { service = $bindable() }: Omit<FieldGroupProps, "model"> = $props();
 
   const MIN_CHARACTERS_TO_TRIGGER_SEARCH = 3;
 
@@ -144,24 +140,7 @@
   </span>
 {/snippet}
 
-<FieldSet title="Périmètre d'éligibilité">
-  {#snippet help()}
-    <div>
-      <p class="text-f14">
-        Qu’il soit national, régional, départemental, intercommunal ou communal,
-        le service peut être délimité aux bénéficiaires habitant sur un
-        territoire spécifique.
-      </p>
-
-      <h5 class="mb-s0">QPV et ZFRR</h5>
-      <p class="text-f14">
-        Activez cette option si votre offre s’adresse uniquement aux
-        bénéficiaires résidants dans des quartiers prioritaires de la politique
-        de la ville (QPV) ou des zones France ruralités revitalisation (ZFRR).
-      </p>
-    </div>
-  {/snippet}
-
+<FieldGroup title="Périmètre d'éligibilité" showSeparator={false}>
   <FieldModel>
     <FieldWrapper
       id="zoneEligibilite"
@@ -200,4 +179,4 @@
       </div>
     </FieldWrapper>
   </FieldModel>
-</FieldSet>
+</FieldGroup>

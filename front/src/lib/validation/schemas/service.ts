@@ -238,14 +238,10 @@ export const serviceSchema: v.Schema = {
     minNumber: 1,
   },
   forms: {
-    label: "Documents à compléter",
+    label: "Documents à fournir",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "envoyer-un-mail-avec-une-fiche-de-prescription"
-      );
-    },
+    required: false,
   },
   onlineForm: {
     label: "Lien",
