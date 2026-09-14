@@ -5,10 +5,10 @@
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
+  import FieldsetContact from "$lib/components/specialized/services/fieldset-contact.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
-  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
@@ -224,7 +224,8 @@
         />
       </div>
       <div class="lg:w-2/3">
-        <FieldsContact bind:service />
+        <FieldsetContact bind:service />
+        <FieldsetNotifications bind:service {servicesOptions} {model} />
       </div>
     </CenteredGrid>
 
