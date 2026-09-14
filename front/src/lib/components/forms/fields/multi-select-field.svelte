@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends string | number = string">
+  import type { Snippet } from "svelte";
+
   import type { Choice } from "$lib/types";
   import {
     currentFormData,
@@ -23,6 +25,7 @@
     fixedItemsValues?: string[];
     // Proxy vers le FieldWrapper
     description?: string;
+    descriptionSnippet?: Snippet;
     hidden?: boolean;
     hideLabel?: boolean;
     vertical?: boolean;
@@ -41,6 +44,7 @@
     placeholderMulti = "Choisir",
     fixedItemsValues = [],
     description = "",
+    descriptionSnippet,
     hidden = false,
     hideLabel = false,
     vertical = false,
@@ -53,6 +57,7 @@
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     descriptionText={description}
+    description={descriptionSnippet}
     {hidden}
     {hideLabel}
     {vertical}
