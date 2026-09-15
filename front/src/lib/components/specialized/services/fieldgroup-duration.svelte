@@ -9,7 +9,7 @@
 
   let {
     servicesOptions,
-    service,
+    service = $bindable(),
     model = $bindable(),
   }: FieldSetProps = $props();
 

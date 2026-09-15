@@ -60,7 +60,7 @@
   {#if service.locationKinds.includes("en-presentiel")}
     <FieldGroupAddress bind:entity={service} parent={structure} />
   {/if}
-  <FieldGroupDuration {service} {model} {servicesOptions} />
+  <FieldGroupDuration bind:service {model} {servicesOptions} />
   <FieldModel {...fieldModelProps.openingHours ?? {}}>
     {#if showOpeningHoursField}
       <OpeningHoursField
