@@ -6,11 +6,12 @@
   import { markdownToHTML } from "$lib/utils/misc";
   import History from "../../history.svelte";
   import InfoLine from "../../info-line.svelte";
-  import ModerationButtonMenu from "../../moderation-button-menu.svelte";
   import SmallLink from "../../small-link.svelte";
   import StructureContacts from "../../structure-contacts.svelte";
   import UserInfo from "../../user-info.svelte";
   import GoogleSearchLink from "../../google-search-link.svelte";
+  import StructureEditLinks from "../structure-edit-links.svelte";
+  import StructureModerationMenu from "../structure-moderation-menu.svelte";
   import type { PageData } from "./$types";
 
   interface Props {
@@ -48,7 +49,13 @@
             >{/if}
         </span>
       </h2>
-      <ModerationButtonMenu entity={data.structure} onRefresh={handleRefresh} />
+      <div class="gap-s4 text-f16 flex flex-row items-center font-bold">
+        Modération :
+        <StructureModerationMenu
+          structure={data.structure}
+          onRefresh={handleRefresh}
+        />
+      </div>
     </div>
     <h3>
       {data.structure.name}
@@ -69,6 +76,10 @@
         />
       </InfoLine>
     {/if}
+
+    <div class="mb-s16">
+      <StructureEditLinks structureSlug={data.structure.slug} />
+    </div>
 
     <h4>Historique</h4>
     <History notes={data.structure.notes} />

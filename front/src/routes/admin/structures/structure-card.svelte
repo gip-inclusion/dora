@@ -2,7 +2,6 @@
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
 
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import Spinner from "$lib/components/display/spinner.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
   import type { AdminStructure, StructureMember } from "$lib/types";
@@ -14,6 +13,7 @@
     getStructureStatusBadges,
     type StructureStatusColor,
   } from "./structure-statuses";
+  import StructureEditLinks from "./structure-edit-links.svelte";
   import StructureModerationMenu from "./structure-moderation-menu.svelte";
 
   // Champs supplémentaires renvoyés lorsqu'on consulte le détail d'une structure.
@@ -161,28 +161,8 @@
             <History notes={details.notes} />
           </section>
         {/if}
-
-        <div class="gap-s16 flex flex-row flex-wrap justify-end">
-          <LinkButton
-            label="Modifier les services"
-            to="/structures/{structure.slug}/services"
-            otherTab
-            secondary
-          />
-          <LinkButton
-            label="Modifier la structure"
-            to="/structures/{structure.slug}"
-            otherTab
-            secondary
-          />
-          <LinkButton
-            label="Gérer les administrateurs"
-            to="/structures/{structure.slug}/collaborateurs"
-            otherTab
-            secondary
-          />
-        </div>
       {/if}
+      <StructureEditLinks structureSlug={structure.slug} small />
     </div>
   {/if}
 </div>
