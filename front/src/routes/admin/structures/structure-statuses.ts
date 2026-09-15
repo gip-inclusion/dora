@@ -20,7 +20,9 @@ function getServicesBadge(structure: AdminStructure): StructureStatusBadge {
 }
 
 // On utilise les mêmes règles que pour les filtres de statut du tableau de bord.
-function getAdminsBadge(structure: AdminStructure): StructureStatusBadge {
+export function getAdminsBadge(
+  structure: AdminStructure
+): StructureStatusBadge {
   const status = getStructureStatus(structure);
 
   if (status === "awaitingModeration") {
