@@ -41,8 +41,13 @@ export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
   return (await fetchData<Service>(url, fetchFunction)).data;
 }
 
-export async function setModerationState(entity, status: ModerationStatus) {
-  const urlFragment = entity.services ? "structures-admin" : "services-admin";
+export async function setModerationState(
+  entity: { slug: string },
+  status: ModerationStatus,
+  kind: "structure" | "service"
+) {
+  const urlFragment =
+    kind === "structure" ? "structures-admin" : "services-admin";
   const url = `${getApiURL()}/${urlFragment}/${entity.slug}/`;
   const method = "PATCH";
   const response = await fetch(url, {

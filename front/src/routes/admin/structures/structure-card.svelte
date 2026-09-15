@@ -2,7 +2,6 @@
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
 
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Spinner from "$lib/components/display/spinner.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
@@ -10,13 +9,12 @@
 
   import EmailLine from "../email-line.svelte";
   import History from "../history.svelte";
-  import ModerationLabel from "../moderation-label.svelte";
-  import ModerationMenu from "../moderation-menu.svelte";
   import UserInfo from "../user-info.svelte";
   import {
     getStructureStatusBadges,
     type StructureStatusColor,
   } from "./structure-statuses";
+  import StructureModerationMenu from "./structure-moderation-menu.svelte";
 
   // Champs supplémentaires renvoyés lorsqu'on consulte le détail d'une structure.
   type AdminStructureDetails = AdminStructure & {
@@ -130,30 +128,10 @@
       {:else if details}
         <section>
           <h4 class="mb-s8">Modération</h4>
-          <div
-            class="border-gray-01 inline-flex items-center rounded-sm border"
-          >
-            <div class="px-s12 py-s6">
-              <ModerationLabel
-                status={details.moderationStatus}
-                date={details.moderationDate}
-              />
-            </div>
-            <div class="text-gray-02">|</div>
-            <ButtonMenu icon={ArrowDownSLineArrows} small>
-              {#snippet children({ onClose: onCloseParent })}
-                <div class="w-max">
-                  <ModerationMenu
-                    entity={details}
-                    onRefresh={async () => {
-                      await onCloseParent();
-                      await handleModerationRefresh();
-                    }}
-                  />
-                </div>
-              {/snippet}
-            </ButtonMenu>
-          </div>
+          <StructureModerationMenu
+            structure={details}
+            onRefresh={handleModerationRefresh}
+          />
         </section>
 
         {#if administrators.length}
