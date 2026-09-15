@@ -6,7 +6,10 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import { URL_MANAGER_DASHBOARD_HELP_NOTICE } from "$lib/consts";
+  import {
+    URL_MANAGER_DASHBOARD_HELP_NOTICE,
+    URL_MANAGER_DATA_INCLUSION_NOTICE,
+  } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
@@ -169,6 +172,26 @@
       structuresOptions={data.structuresOptions}
     />
 
+    {#if searchStatus === "all"}
+      <aside class="border-info bg-info-light mb-s8 px-s20 py-s16 border-l-4">
+        <h3 class="text-f18 text-info mb-s8 leading-28">
+          Vous pouvez agir uniquement sur les structures et services créés via
+          Dora
+        </h3>
+        <p class="text-f14 text-gray-text mb-s0 leading-24">
+          Vous voyez dans ce tableau de bord uniquement les services créés dans
+          Dora. Les visiteurs voient également les services issus de
+          data·inclusion. N’hésitez pas à nous signaler tout problème dans les
+          données data·inclusion en suivant
+          <a
+            href={URL_MANAGER_DATA_INCLUSION_NOTICE}
+            target="_blank"
+            rel="noopener"
+            class="underline">cette notice</a
+          >.
+        </p>
+      </aside>
+    {/if}
     <div class="mb-s8 text-gray-text">
       {#if loading}
         <strong>Chargement en cours…</strong>
