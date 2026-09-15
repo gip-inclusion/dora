@@ -57,15 +57,15 @@
         <div class="mb-s24 border-gray-03 p-s24 rounded-lg border">
           <h2 class="mb-s20 text-f18 text-gray-dark leading-20">Raccourcis</h2>
           <ul class="gap-s10 flex flex-col">
+            <li>
+              <a
+                class="text-f14 text-magenta-cta font-bold hover:underline"
+                href="/admin/gerer-mon-territoire"
+              >
+                Gérer mon territoire
+              </a>
+            </li>
             {#if $userInfo.isStaff}
-              <li>
-                <a
-                  class="text-f14 text-magenta-cta font-bold hover:underline"
-                  href="/admin"
-                >
-                  Administration
-                </a>
-              </li>
               <li>
                 <a
                   class="text-f14 text-magenta-cta font-bold hover:underline"

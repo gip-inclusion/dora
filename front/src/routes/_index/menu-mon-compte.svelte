@@ -5,8 +5,10 @@
   import Notification3LineMedia from "svelte-remix/Notification3LineMedia.svelte";
 
   import { page } from "$app/stores";
+  import RoadMapIcon from "$lib/assets/icons/ico-road-map.svelte";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
   import { OIDC_AUTH_BACKEND } from "$lib/env";
+  import { userInfo } from "$lib/utils/auth";
 
   interface Props {
     mobileDesign?: boolean;
@@ -19,6 +21,20 @@
 </script>
 
 <DropdownMenu labelText="Mon compte" withBorders {mobileDesign}>
+  {#if $userInfo?.isStaff || $userInfo?.isManager}
+    <a href="/admin/gerer-mon-territoire" class={aClass}>
+      <span
+        class="mr-s10 h-s24 w-s24 inline-block fill-current"
+        class:text-magenta-cta={$page.url.pathname ===
+          "/admin/gerer-mon-territoire"}
+        aria-hidden="true"
+      >
+        <RoadMapIcon />
+      </span>
+      Gérer mon territoire
+    </a>
+  {/if}
+
   <a href="/mon-compte" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
