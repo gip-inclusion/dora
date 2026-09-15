@@ -8,7 +8,7 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import Button from "$lib/components/display/button.svelte";
-  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
+  import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
   import OpeningHoursField from "$lib/components/forms/fields/opening-hours-field.svelte";
 
@@ -67,16 +67,15 @@
     {:else}
       <FieldWrapper vertical id="openingHours" label="Horaires d'accueil">
         <div class="flex-start gap-y-s16 flex w-1/2 flex-col">
-          <Button
-            small
-            noBackground
-            noPadding
-            icon={SyncIcon}
-            label="Utiliser les horaires de la structure"
+          <UseStructureInfoButton
             onclick={() => {
               showOpeningHoursField = true;
-              service.horairesAccueil = service.structureInfo.openingHours;
+              service = {
+                ...service,
+                horairesAccueil: service.structureInfo.openingHours,
+              };
             }}
+            label="les horaires"
             extraClass="mt-s8"
           />
           <span class="text-f14 font-bold">ou</span>

@@ -49,7 +49,7 @@
   readonly = readonly ?? $currentSchema?.[id]?.readonly;
   maxLength = maxLength ?? $currentSchema?.[id]?.maxLength;
 
-  let phoneValue = $state(value);
+  let phoneValue = $derived(value);
 
   function handlePhoneChange() {
     if (phoneValue) {
