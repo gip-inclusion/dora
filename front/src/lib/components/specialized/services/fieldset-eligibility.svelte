@@ -14,8 +14,8 @@
 </script>
 
 <FieldSet title="Éligibilité au service">
-  <FieldGroupPublics {service} {model} {servicesOptions} />
-  <FieldGroupAccessConditions {service} {model} {servicesOptions} />
-  <FieldGroupModalities {service} {model} {servicesOptions} />
-  <FieldGroupPerimeter {service} {servicesOptions} />
+  <FieldGroupPublics bind:service {model} {servicesOptions} />
+  <FieldGroupAccessConditions bind:service {model} {servicesOptions} />
+  <FieldGroupModalities bind:service {model} {servicesOptions} />
+  <FieldGroupPerimeter bind:service {servicesOptions} />
 </FieldSet>
