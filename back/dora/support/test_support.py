@@ -520,6 +520,20 @@ class StructureAdminTestCase(APITestCase):
         self.assertTrue(obsolete_data["is_obsolete"])
         self.assertFalse(normal_data["is_obsolete"])
 
+    def test_structures_admin_detail_obsolete_status(self):
+        obsolete_structure = make_structure(department="31", is_obsolete=True)
+        normal_structure = make_structure(department="31", is_obsolete=False)
+
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        response = self.client.get(f"/structures-admin/{obsolete_structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_obsolete"])
+
+        response = self.client.get(f"/structures-admin/{normal_structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.data["is_obsolete"])
+
     def test_structures_admin_list_required_fields_present(self):
         make_structure(department="31")
 
