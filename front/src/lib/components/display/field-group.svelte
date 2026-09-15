@@ -25,7 +25,7 @@
     </h3>
     {#if tooltipContent}
       <Tooltip content={tooltipContent}>
-        <InformationLineSystem />
+        <InformationLineSystem class="text-france-blue" />
       </Tooltip>
     {/if}
   </div>
