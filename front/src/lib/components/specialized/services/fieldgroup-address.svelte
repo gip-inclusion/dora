@@ -1,13 +1,12 @@
 <script lang="ts">
   import FieldGroup from "$lib/components/display/field-group.svelte";
-  import Button from "$lib/components/display/button.svelte";
   import AddressSearchField from "$lib/components/forms/fields/address-search-field.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
-  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
   import type { GeoApiValue, Service, Structure } from "$lib/types";
   import { randomId } from "$lib/utils/random";
+  import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
   interface Props {
     entity: Service | Structure;
@@ -64,13 +63,9 @@
     <div class="flex flex-col">
       {#if parent}
         <div class="mb-s8 lg:w-2/3 lg:self-end">
-          <Button
+          <UseStructureInfoButton
             onclick={fillAddress}
-            icon={SyncIcon}
-            noBackground
-            small
-            noPadding
-            label="Utiliser les coordonnées de la structure"
+            label="les coordonnées"
           />
         </div>
       {/if}
