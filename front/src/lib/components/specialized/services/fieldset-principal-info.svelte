@@ -35,7 +35,7 @@
     </div>
   {/snippet}
 
-  <FieldgroupPresentation {service} {servicesOptions} {model} />
+  <FieldgroupPresentation bind:service {servicesOptions} {model} />
 
-  <FieldgroupTypology {service} {servicesOptions} {model} />
+  <FieldgroupTypology bind:service {servicesOptions} {model} />
 </FieldSet>
