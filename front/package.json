@@ -44,10 +44,10 @@
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.69.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
-    "bits-ui": "^2.19.0",
+    "bits-ui": "^2.19.2",
     "dayjs": "^1.11.23",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
@@ -58,7 +58,7 @@
     "insane": "^2.6.2",
     "js-cookie": "^3.0.8",
     "lint-staged": "^17.5.0",
-    "maplibre-gl": "^6.7.0",
+    "maplibre-gl": "^6.9.0",
     "opening_hours": "^3.14.0",
     "prettier": "^3.9.6",
     "prettier-plugin-svelte": "^4.1.1",
@@ -96,7 +96,7 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.73.0"
+    "@sentry/sveltekit": "^10.74.0"
   },
   "allowScripts": {
     "@sentry/cli@2.58.5": true
