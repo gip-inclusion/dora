@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from data_inclusion.schema.v1 import ReseauPorteur
 from django.core import mail
 from model_bakery import baker
 from rest_framework.test import APITestCase
@@ -1344,3 +1345,12 @@ def test_restricted_national_labels(api_client, load_labels):
     assert tuple(values) == RESTRICTED_NATIONAL_LABELS, (
         "la liste des labels restreints est incorrecte"
     )
+
+
+def test_options_contain_reseaux_porteurs(api_client):
+    response = api_client.get("/structures-options", follow=True)
+    data = response.json()
+
+    values = {reseau["value"] for reseau in data["reseauxPorteurs"]}
+
+    assert values == {reseau.value for reseau in ReseauPorteur}

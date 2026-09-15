@@ -5,11 +5,11 @@ const STATUS_LABELS: Record<StatusFilter, string> = {
   all: "Toutes",
   orphan: "Sans utilisateur",
   waiting: "Administrateur invité",
-  expiredInvitation: "Invitation expirée",
-  awaitingModeration: "À valider",
-  awaitingActivation: "Sans service",
-  awaitingUpdate: "Services à actualiser",
-  obsolete: "Obsolète",
+  expiredInvitation: "Sans administrateur",
+  awaitingModeration: "Administrateur à valider",
+  awaitingActivation: "Sans service : non visible sur Dora",
+  awaitingUpdate: "Service à actualiser",
+  obsolete: "Désactivée",
 };
 
 export function getStructureStatus(
@@ -42,4 +42,8 @@ export function getStatusLabel(status?: StatusFilter): string {
     return "";
   }
   return STATUS_LABELS[status] ?? "";
+}
+
+export function parseStatusFilter(value: string | null): StatusFilter {
+  return value && value in STATUS_LABELS ? (value as StatusFilter) : "all";
 }
