@@ -14,12 +14,18 @@
 
   import type { FieldSetProps } from "$lib/components/specialized/services/types.ts";
   import { getModelInputProps } from "$lib/utils/forms";
+  import type { ShortStructure } from "$lib/types";
+
+  interface Props extends FieldSetProps {
+    structure?: ShortStructure;
+  }
 
   let {
     servicesOptions,
-    service,
+    service = $bindable(),
     model = $bindable(),
-  }: FieldSetProps = $props();
+    structure,
+  }: Props = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -52,7 +58,7 @@
   />
   <hr />
   {#if service.locationKinds.includes("en-presentiel")}
-    <FieldGroupAddress bind:entity={service} parent={service.structure} />
+    <FieldGroupAddress bind:entity={service} parent={structure} />
   {/if}
   <FieldGroupDuration {service} {model} {servicesOptions} />
   <FieldModel {...fieldModelProps.openingHours ?? {}}>

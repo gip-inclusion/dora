@@ -122,6 +122,7 @@
           bind:service={model}
           {servicesOptions}
           {model}
+          {structure}
         />
 
         <FieldsetNotifications bind:service={model} {servicesOptions} {model} />

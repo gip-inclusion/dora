@@ -216,7 +216,12 @@
 
         <FieldsetEligibility bind:service {servicesOptions} {model} />
 
-        <FieldsetReceptionConditions bind:service {servicesOptions} {model} />
+        <FieldsetReceptionConditions
+          bind:service
+          {servicesOptions}
+          {model}
+          {structure}
+        />
       </div>
       <div class="lg:w-2/3">
         <FieldsetContact bind:service />
