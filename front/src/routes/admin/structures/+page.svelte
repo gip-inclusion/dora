@@ -183,7 +183,10 @@
     <div class="gap-s12 flex flex-col">
       {#if structures}
         <div class="gap-s16 flex flex-col lg:flex-row">
-          <div class="h-s512 lg:w-s512 relative w-full shrink-0 lg:h-[800px]">
+          <!-- Sur mobile, la carte reste au-dessus des résultats pour ne pas être cachée lorsque les résultats sont nombreux. -->
+          <div
+            class="h-s512 lg:w-s512 relative w-full shrink-0 lg:order-last lg:h-[800px]"
+          >
             <StructuresMap {filteredStructures} bind:selectedStructureSlug />
           </div>
           <div class="gap-s24 flex w-full flex-col">
