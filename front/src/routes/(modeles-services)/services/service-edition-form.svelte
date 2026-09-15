@@ -5,17 +5,14 @@
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
+  import FieldsetContact from "$lib/components/specialized/services/fieldset-contact.svelte";
   import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
-  import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
-  import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsModalities from "../_common/fields-modalities.svelte";
-  import FieldsPerimeter from "../_common/fields-perimeter.svelte";
-  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
+  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
-  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
+  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
   import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
@@ -215,30 +212,20 @@
       {/if}
 
       <div class={service.model ? "" : "lg:w-2/3"}>
-        <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
+        <FieldsetPrincipalInfo bind:service {servicesOptions} {model} />
 
-        <FieldsPresentation bind:service {servicesOptions} {model} />
+        <FieldsetEligibility bind:service {servicesOptions} {model} />
 
-        <FieldsDuration bind:service {servicesOptions} {model} />
-
-        <FieldsPublics bind:service {servicesOptions} {model} />
-
-        <FieldsModalities
+        <FieldsetReceptionConditions
           bind:service
-          servicesOptions={modalitiesServicesOptions}
+          {servicesOptions}
           {model}
+          {structure}
         />
-
-        <FieldsDocuments bind:service {servicesOptions} {model} />
-
-        <FieldsPeriodicity bind:service {servicesOptions} {model} />
       </div>
       <div class="lg:w-2/3">
-        <FieldsPerimeter bind:service {servicesOptions} />
-
-        <FieldsPlace bind:service {structure} {servicesOptions} />
-
-        <FieldsContact bind:service />
+        <FieldsetContact bind:service />
+        <FieldsetNotifications bind:service {servicesOptions} {model} />
       </div>
     </CenteredGrid>
 

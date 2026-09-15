@@ -71,36 +71,28 @@ export const serviceSchema: v.Schema = {
   name: {
     label: "Titre",
     default: "",
-    rules: [v.isString(), v.maxStrLength(140)],
+    rules: [
+      v.isString(),
+      v.minStrLength(3),
+      v.maxStrLength(150),
+      v.doesNotEndWithAPeriod(),
+      v.isNotAllUpperCase(),
+    ],
     post: [v.trim],
     required: true,
-    maxLength: 140,
+    maxLength: 150,
   },
-  shortDesc: {
-    label: "Résumé",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    post: [v.trim],
-    maxLength: 280,
-    required: true,
-  },
-  recurrence: {
-    label: "Fréquence et horaires",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(140)],
-    post: [v.trim],
-    maxLength: 140,
-  },
-  fullDesc: {
+  description: {
     label: "Description",
     default: "",
     rules: [v.isString()],
     post: [v.trim],
+    required: true,
   },
-  accessConditions: {
-    label: "Critères",
-    default: [],
-    rules: [v.isArray([v.isCustomizablePK()])],
+  conditionsAcces: {
+    label: "Conditions d'accès",
+    default: "",
+    rules: [v.isString()],
   },
   publics: {
     label: "Choix du public",
@@ -111,16 +103,6 @@ export const serviceSchema: v.Schema = {
     label: "Précisions concernant les publics",
     default: "",
     rules: [v.isString()],
-  },
-  requirements: {
-    label: "Prérequis ou compétences",
-    default: [],
-    rules: [v.isArray([v.isCustomizablePK()])],
-  },
-  isCumulative: {
-    label: "Service cumulable",
-    default: true,
-    rules: [v.isBool()],
   },
   feeCondition: {
     label: "Frais à charge",
@@ -135,6 +117,28 @@ export const serviceSchema: v.Schema = {
     required: (data: { feeCondition: FeeCondition }) => {
       return data.feeCondition !== "gratuit";
     },
+  },
+  mobilisableBy: {
+    label: "Mobilisable par…",
+    default: [],
+    rules: [v.isArray([v.isString()])],
+  },
+  mobilisationLink: {
+    label: "Configuration du formulaire",
+    default: null,
+    rules: [v.isURL()],
+  },
+  mobilisationModes: {
+    label: "Mode de mobilisation du service",
+    default: [],
+    rules: [v.isArray([v.isString()])],
+    required: true,
+  },
+  mobilisationDetails: {
+    label: "Précisions sur les modalités",
+    default: "",
+    rules: [v.isString()],
+    post: [v.trim],
   },
   beneficiariesAccessModes: {
     label: "Pour les bénéficiaires",
@@ -214,7 +218,6 @@ export const serviceSchema: v.Schema = {
     },
     maxLength: 280,
   },
-
   credentials: {
     label: "Justificatifs à fournir",
     default: [],
@@ -235,14 +238,10 @@ export const serviceSchema: v.Schema = {
     minNumber: 1,
   },
   forms: {
-    label: "Documents à compléter",
+    label: "Documents à fournir",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "envoyer-un-mail-avec-une-fiche-de-prescription"
-      );
-    },
+    required: false,
   },
   onlineForm: {
     label: "Lien",
@@ -348,38 +347,26 @@ export const serviceSchema: v.Schema = {
       return data.locationKinds.includes("en-presentiel");
     },
   },
-  diffusionZoneType: {
-    label: "Périmètre",
+  zoneEligibilite: {
+    label: "Secteurs éligibles",
+    default: [],
+    rules: [v.isArray([])],
+  },
+  openingHours: {
+    label: "Horaires du service",
     default: "",
-    rules: [v.isString(), v.maxStrLength(10)],
-    required: true,
-  },
-
-  diffusionZoneDetails: {
-    label: "Territoire",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(9)],
-    maxLength: 9,
-    required: (data: { diffusionZoneType: AdminDivisionType }) => {
-      return data.diffusionZoneType !== "country";
-    },
-  },
-  qpvOrZrr: {
-    label: "Uniquement QPV ou ZFRR",
-    default: false,
-    rules: [v.isBool()],
-  },
-  suspensionDate: {
-    label: "Date de fin",
-    default: null,
-    rules: [v.isDate()],
-    post: [v.nullEmpty],
+    rules: [v.isString()],
   },
   updateFrequency: {
     label: "Périodicité de mise à jour",
     default: "tous-les-6-mois",
     rules: [v.isString()],
     required: true,
+  },
+  fundingLabels: {
+    label: "Financeur(s)",
+    default: [],
+    rules: [v.isArray([])],
   },
 };
 
@@ -389,13 +376,10 @@ export const draftSchema: v.Schema = {
   subcategories: serviceSchema.subcategories,
   kind: serviceSchema.kind,
   name: serviceSchema.name,
-  shortDesc: serviceSchema.shortDesc,
-  fullDesc: serviceSchema.fullDesc,
-  accessConditions: serviceSchema.accessConditions,
+  description: serviceSchema.description,
+  conditionsAcces: serviceSchema.conditionsAcces,
   publics: serviceSchema.publics,
   publicsPrecisions: serviceSchema.publicsPrecisions,
-  requirements: serviceSchema.requirements,
-  isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
@@ -428,9 +412,9 @@ export const draftSchema: v.Schema = {
   diffusionZoneType: serviceSchema.diffusionZoneType,
   diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
   qpvOrZrr: serviceSchema.qpvOrZrr,
-  recurrence: serviceSchema.recurrence,
-  suspensionDate: serviceSchema.suspensionDate,
   updateFrequency: serviceSchema.updateFrequency,
+  openingHours: serviceSchema.openingHours,
+  fundingLabels: serviceSchema.fundingLabels,
 };
 
 export const modelSchema: v.Schema = {
@@ -439,13 +423,10 @@ export const modelSchema: v.Schema = {
   subcategories: serviceSchema.subcategories,
   kind: serviceSchema.kind,
   name: serviceSchema.name,
-  shortDesc: serviceSchema.shortDesc,
-  fullDesc: serviceSchema.fullDesc,
-  accessConditions: serviceSchema.accessConditions,
+  description: serviceSchema.description,
+  conditionsAcces: serviceSchema.conditionsAcces,
   publics: serviceSchema.publics,
   publicsPrecisions: serviceSchema.publicsPrecisions,
-  requirements: serviceSchema.requirements,
-  isCumulative: serviceSchema.isCumulative,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
@@ -465,7 +446,7 @@ export const modelSchema: v.Schema = {
   durationWeeks: serviceSchema.durationWeeks,
   forms: serviceSchema.forms,
   onlineForm: serviceSchema.onlineForm,
-  recurrence: serviceSchema.recurrence,
-  suspensionDate: serviceSchema.suspensionDate,
   updateFrequency: serviceSchema.updateFrequency,
+  openingHours: serviceSchema.openingHours,
+  fundingLabels: serviceSchema.fundingLabels,
 };
