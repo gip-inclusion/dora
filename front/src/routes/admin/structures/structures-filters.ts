@@ -3,13 +3,13 @@ import type { StatusFilter } from "./types";
 
 const STATUS_LABELS: Record<StatusFilter, string> = {
   all: "Toutes",
-  orphan: "Sans utilisateur",
+  orphan: "Sans administrateur",
   waiting: "Administrateur invité",
   expiredInvitation: "Invitation expirée",
-  awaitingModeration: "À valider",
-  awaitingActivation: "Sans service",
-  awaitingUpdate: "Services à actualiser",
-  obsolete: "Obsolète",
+  awaitingModeration: "Administrateur à valider",
+  awaitingActivation: "Sans service : non visible sur Dora",
+  awaitingUpdate: "Service à actualiser",
+  obsolete: "Désactivée",
 };
 
 export function getStructureStatus(

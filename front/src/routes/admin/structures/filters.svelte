@@ -10,7 +10,6 @@
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
-    Typology,
   } from "$lib/types";
 
   import { getStructureStatus, getStatusLabel } from "./structures-filters";
@@ -38,18 +37,25 @@
 
   const statusFilterSettings: {
     status: StatusFilter;
+    label: string;
     definition: string;
     actions?: string;
   }[] = [
-    { status: "all", definition: "Toutes les structures" },
+    {
+      status: "all",
+      label: getStatusLabel("all"),
+      definition: "Toutes les structures",
+    },
     {
       status: "expiredInvitation",
+      label: getStatusLabel("expiredInvitation"),
       definition:
         "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
       actions: "Identifier un autre administrateur.",
     },
     {
       status: "awaitingModeration",
+      label: getStatusLabel("awaitingModeration"),
       definition:
         "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
       actions:
@@ -57,6 +63,7 @@
     },
     {
       status: "awaitingActivation",
+      label: getStatusLabel("awaitingActivation"),
       definition:
         "Structures avec un administrateur validé sans services publiés",
       actions:
@@ -64,6 +71,7 @@
     },
     {
       status: "awaitingUpdate",
+      label: getStatusLabel("awaitingUpdate"),
       definition:
         "Structures ayant un ou des services publiés qui nécessitent une actualisation",
       actions:
@@ -71,6 +79,7 @@
     },
     {
       status: "obsolete",
+      label: "Désactivées",
       definition:
         "Structures désactivées - qui n’existent plus ou qui ne respectent pas la charte DORA",
     },
@@ -90,18 +99,16 @@
   type SortingChoice = (typeof SORTING_CHOICES)[number]["value"];
 
   interface SearchParams {
-    nationalLabels: string[];
     searchString: string;
     selectedCategories: ServiceCategory[];
-    selectedTypologies: Typology[][number]["value"][];
+    selectedReseauxPorteurs: string[];
     sortChoice: SortingChoice;
   }
 
   const emptySearchParams: SearchParams = {
     searchString: "",
-    nationalLabels: [],
     selectedCategories: [],
-    selectedTypologies: [],
+    selectedReseauxPorteurs: [],
     sortChoice: "name",
   };
 
@@ -145,16 +152,10 @@
       })
       .filter((struct) => {
         return (
-          !params.nationalLabels.length ||
-          struct.nationalLabels.some((label: string) =>
-            params.nationalLabels.includes(label)
+          !params.selectedReseauxPorteurs.length ||
+          (struct.reseauxPorteurs ?? []).some((reseau) =>
+            params.selectedReseauxPorteurs.includes(reseau)
           )
-        );
-      })
-      .filter((struct) => {
-        return (
-          !params.selectedTypologies.length ||
-          params.selectedTypologies.includes(struct.typology)
         );
       })
       .filter((struct) => {
@@ -186,11 +187,6 @@
       });
   }
 
-  function resetSearchParams() {
-    searchParams = emptySearchParams;
-    searchStatus = "all";
-  }
-
   // La définition et les actions suivent le filtre courant, y compris quand
   // celui-ci est défini via l'URL.
   $effect(() => {
@@ -210,18 +206,18 @@
   });
 </script>
 
-<div class="mb-s8 font-bold">Structures DORA sur mon territoire&#8239;:</div>
+<h2 class="mb-s12 text-f18 text-gray-dark font-bold">
+  Filtrer les {structures.length} structures de mon territoire
+</h2>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each statusFilterSettings as { status, definition }}
+  {#each statusFilterSettings as { status, label, definition }}
     <Tooltip>
       <Button
-        onclick={() => {
-          resetSearchParams();
-          searchStatus = status;
-        }}
-        label={`${getStatusLabel(status)} (${filterAndSortEntities(structures, searchParams, status).length})`}
+        onclick={() => (searchStatus = status)}
+        label={`${label} (${filterAndSortEntities(structures, searchParams, status).length})`}
         secondary={searchStatus !== status}
+        small
       />
       {#snippet content()}
         <div class="max-w-s256 text-center">{definition}</div>
@@ -258,14 +254,16 @@
     class="mx-s8 border-gray-01 p-s16 rounded-sm border"
   >
     <div class="mb-s16 gap-s24 flex flex-col">
-      <div class="gap-s16 flex justify-between">
+      <div class="gap-s16 flex flex-col justify-between md:flex-row">
         <div class="flex grow flex-col">
-          <label for="typologies">Typologies</label>
+          <label for="reseaux-porteurs">Réseaux porteurs</label>
           <Select
-            id="typologies"
+            id="reseaux-porteurs"
             multiple
-            bind:value={searchParams.selectedTypologies}
-            choices={structuresOptions.typologies}
+            bind:value={searchParams.selectedReseauxPorteurs}
+            choices={structuresOptions.reseauxPorteurs ?? []}
+            placeholder="Choisir…"
+            placeholderMulti="Choisir…"
             sort
           />
         </div>
@@ -283,19 +281,9 @@
         </div>
       </div>
 
-      <div class="flex grow flex-col">
-        <label for="moderation">Labels nationaux…</label>
-        <Select
-          id="sort"
-          multiple
-          bind:value={searchParams.nationalLabels}
-          choices={structuresOptions.nationalLabels}
-        />
-      </div>
-
       <div class="gap-s16 flex justify-between">
         <div class="flex grow flex-col">
-          <label for="moderation">Trier par…</label>
+          <label for="sort">Trier par…</label>
           <Select
             id="sort"
             bind:value={searchParams.sortChoice}
