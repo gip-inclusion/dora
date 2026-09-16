@@ -2,6 +2,7 @@
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
 
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import Spinner from "$lib/components/display/spinner.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
   import type { AdminStructure, StructureMember } from "$lib/types";
@@ -126,13 +127,24 @@
           <Spinner />
         </div>
       {:else if details}
-        <section>
-          <h4 class="mb-s8">Modération</h4>
-          <StructureModerationMenu
-            structure={details}
-            onRefresh={handleModerationRefresh}
+        <div class="gap-s16 flex flex-row flex-wrap justify-between">
+          <section>
+            <h4 class="mb-s8">Modération</h4>
+            <StructureModerationMenu
+              structure={details}
+              onRefresh={handleModerationRefresh}
+            />
+          </section>
+
+          <LinkButton
+            label="Accéder à la fiche complète"
+            to="/admin/structures/{structure.slug}"
+            extraClass="self-start"
+            otherTab
+            secondary
+            small
           />
-        </section>
+        </div>
 
         {#if administrators.length}
           <section>
