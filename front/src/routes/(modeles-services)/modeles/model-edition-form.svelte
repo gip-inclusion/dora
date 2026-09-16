@@ -25,6 +25,7 @@
     servicesOptions: ServicesOptions;
     structures: ShortStructure[];
     structure: ShortStructure;
+    managedStructureSearchMode?: boolean;
     showUpdateAllServicesModal?: boolean;
   }
 
@@ -33,6 +34,7 @@
     servicesOptions = $bindable(),
     structures,
     structure = $bindable(),
+    managedStructureSearchMode = false,
     showUpdateAllServicesModal = $bindable(false),
   }: Props = $props();
   let shouldUpdateAllServices = $state(false);
@@ -97,13 +99,14 @@
 
   <hr />
   <CenteredGrid>
-    {#if structures.length}
+    {#if managedStructureSearchMode || structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
           bind:structure
           bind:service={model}
           bind:servicesOptions
           {structures}
+          {managedStructureSearchMode}
           isModel
         />
       </div>
