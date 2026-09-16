@@ -184,8 +184,11 @@
   }
 </script>
 
-<form onsubmit={handleSubmit} class="mb-s8 cursor-pointer">
-  <label>
+<form onsubmit={handleSubmit} class="mb-s8">
+  <label
+    class="gap-s8 group flex items-center"
+    class:cursor-pointer={!disabled}
+  >
     <input
       name={id}
       {id}
@@ -196,8 +199,16 @@
       type="file"
       accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
       multiple
-      class="file:border-magenta-cta file:px-s8 file:py-s6 file:text-f14 file:text-magenta-cta read-only:text-gray-text file:hover:border-magenta-hover file:hover:bg-magenta-hover file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:text-gray-text-alt2 lg:file:px-s10 file:rounded-sm file:border file:bg-white file:leading-normal file:hover:text-white!"
-    />{progress != null ? `${Math.round(progress)} %` : ""}
+      class="peer sr-only"
+    />
+    <span
+      class="border-magenta-cta px-s8 py-s6 text-f14 text-magenta-cta peer-enabled:group-hover:border-magenta-hover peer-enabled:group-hover:bg-magenta-hover peer-enabled:group-active:border-france-blue peer-enabled:group-active:text-france-blue peer-disabled:border-gray-01 peer-disabled:text-gray-text-alt2 peer-focus-visible:outline-france-blue lg:px-s10 rounded-sm border bg-white leading-normal peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-enabled:group-hover:text-white!"
+    >
+      Choisir un fichier
+    </span>
+    <span class="text-f14 text-gray-text">
+      {progress != null ? `${Math.round(progress)} %` : ""}
+    </span>
   </label>
 
   {#if errorMessage}
