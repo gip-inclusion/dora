@@ -1,3 +1,5 @@
+import pytest
+from django.core.exceptions import ValidationError
 from model_bakery import baker
 
 from dora.core.test_utils import make_model, make_service, make_structure
@@ -7,6 +9,7 @@ from dora.services.models import (
     ServiceCategory,
     ServiceModel,
     ServiceSubCategory,
+    validate_unique_form_names,
 )
 
 DUMMY_SERVICE = {"name": "Mon service"}
@@ -593,3 +596,38 @@ def test_is_orientable_with_orientation_form():
     structure.disable_orientation_form = True
 
     assert not service.is_orientable()
+
+
+def test_validate_unique_form_names_rejects_duplicate_file_names():
+    # Deux clés S3 distinctes peuvent pointer vers le même nom de fichier :
+    # c'est ce nom, seul affiché, qui doit rester unique.
+    with pytest.raises(ValidationError):
+        validate_unique_form_names(["prod/42/dossier.pdf", "prod/51/dossier.pdf"])
+
+
+def test_validate_unique_form_names_accepts_distinct_file_names():
+    validate_unique_form_names(["prod/42/dossier.pdf", "prod/42/attestation.pdf"])
+
+
+def test_service_forms_reject_duplicate_file_names():
+    service = make_service(forms=["prod/42/dossier.pdf", "prod/42/dossier.pdf"])
+
+    with pytest.raises(ValidationError) as excinfo:
+        service.full_clean()
+
+    assert "forms" in excinfo.value.error_dict
+
+
+def test_service_api_rejects_duplicate_form_names(api_client):
+    user = baker.make("users.User", is_valid=True)
+    structure = make_structure(user)
+    service = make_service(structure=structure, status=ServiceStatus.DRAFT)
+    api_client.force_authenticate(user=user)
+
+    response = api_client.patch(
+        f"/services/{service.slug}/",
+        {"forms": ["prod/42/dossier.pdf", "prod/51/dossier.pdf"]},
+    )
+
+    assert 400 == response.status_code
+    assert "forms" in response.data

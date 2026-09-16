@@ -50,6 +50,22 @@ def make_unique_slug(instance, parent_slug, value, length=20):
     return unique_slug
 
 
+def validate_unique_form_names(value):
+    """Interdit deux documents portant le même nom dans `Service.forms`.
+
+    Les valeurs stockées sont des clés S3 préfixées par l'environnement et la structure
+    (`prod/42/dossier.pdf`) : c'est le nom de fichier, seul affiché à l'utilisateur, qui
+    doit rester distinct.
+    """
+    names = [form.rsplit("/", 1)[-1] for form in value]
+    duplicates = sorted({name for name in names if names.count(name) > 1})
+    if duplicates:
+        raise ValidationError(
+            "Deux documents ne peuvent pas porter le même nom : "
+            + ", ".join(duplicates)
+        )
+
+
 def validate_corresponding_di_publics(value):
     valid_values = {p.value for p in DiPublic}
     if value not in valid_values:
@@ -489,6 +505,7 @@ class Service(ModerationMixin, models.Model):
         verbose_name="Partagez les documents à compléter",
         blank=True,
         default=list,
+        validators=[validate_unique_form_names],
     )
     online_form = models.URLField(
         verbose_name="Formulaire en ligne à compléter",
