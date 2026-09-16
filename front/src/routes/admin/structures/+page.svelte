@@ -63,18 +63,21 @@
     loading = true;
     selectedDepartment = dept;
     saveLastDepartment(dept);
-    structures = await getStructuresAdmin(dept.code);
-    loading = false;
+    try {
+      structures = await getStructuresAdmin(dept.code);
+    } finally {
+      loading = false;
+    }
   }
 
   async function handleStructuresRefresh() {
-    structures = await getStructuresAdmin(selectedDepartment?.code);
+    structures = await getStructuresAdmin(selectedDepartment.code);
   }
 
   // Exporte la liste entière des structures du territoire, sans tenir compte
   // des filtres actifs.
   function handleDownload() {
-    if (!selectedDepartment || !structures?.length) {
+    if (!structures.length) {
       return;
     }
 
@@ -123,117 +126,105 @@
   handleDepartmentChange(data.department);
 </script>
 
-{#if selectedDepartment}
-  <CenteredGrid>
-    <div class="mb-s32">
-      <Breadcrumb currentLocation="manager-dashboard" />
-    </div>
+<CenteredGrid>
+  <div class="mb-s32">
+    <Breadcrumb currentLocation="manager-dashboard" />
+  </div>
 
-    <div class="gap-s16 mb-s48 flex flex-col justify-between md:flex-row">
-      <div>
-        <h1 class="mb-s8 text-france-blue">Mes structures & services Dora</h1>
+  <div class="gap-s16 mb-s48 flex flex-col justify-between md:flex-row">
+    <div>
+      <h1 class="mb-s8 text-france-blue">Mes structures & services Dora</h1>
 
-        <div class="text-france-blue">
-          {#if data.departments?.length > 1}
-            <DepartmentSelector
-              departments={data.departments}
-              {selectedDepartment}
-              onChange={handleDepartmentChange}
-            />
-          {:else}
-            <span class="text-f23 font-bold">
-              {selectedDepartment.name} ({selectedDepartment.code})
-            </span>
-          {/if}
-        </div>
-      </div>
-
-      <div class="gap-s16 flex shrink-0 flex-wrap items-start">
-        <LinkButton
-          label="Notice"
-          to={URL_MANAGER_DASHBOARD_HELP_NOTICE}
-          otherTab
-          nofollow
-          secondary
-        />
-        <Button
-          onclick={handleDownload}
-          label="Télécharger la liste (xlsx)"
-          disabled={loading || !structures?.length}
+      <div class="text-france-blue">
+        <DepartmentSelector
+          departments={data.departments}
+          {selectedDepartment}
+          onChange={handleDepartmentChange}
         />
       </div>
     </div>
 
-    <Filters
-      {structures}
-      bind:filteredStructures
-      bind:searchStatus={() => searchStatus, setSearchStatus}
-      servicesOptions={data.servicesOptions}
-      structuresOptions={data.structuresOptions}
-    />
+    <div class="gap-s16 flex shrink-0 flex-wrap items-start">
+      <LinkButton
+        label="Notice"
+        to={URL_MANAGER_DASHBOARD_HELP_NOTICE}
+        otherTab
+        nofollow
+        secondary
+      />
+      <Button
+        onclick={handleDownload}
+        label="Télécharger la liste (xlsx)"
+        disabled={loading || !structures.length}
+      />
+    </div>
+  </div>
 
-    {#if searchStatus === "all"}
-      <aside class="border-info bg-info-light mb-s8 px-s20 py-s16 border-l-4">
-        <h3 class="text-f18 text-info mb-s8 leading-28">
-          Vous pouvez agir uniquement sur les structures et services créés via
-          Dora
-        </h3>
-        <p class="text-f14 text-gray-text mb-s0 leading-24">
-          Vous voyez dans ce tableau de bord uniquement les services créés dans
-          Dora. Les visiteurs voient également les services issus de
-          data·inclusion. N’hésitez pas à nous signaler tout problème dans les
-          données data·inclusion en suivant
-          <a
-            href={URL_MANAGER_DATA_INCLUSION_NOTICE}
-            target="_blank"
-            rel="noopener"
-            class="underline">cette notice</a
-          >.
-        </p>
-      </aside>
+  <Filters
+    {structures}
+    bind:filteredStructures
+    bind:searchStatus={() => searchStatus, setSearchStatus}
+    servicesOptions={data.servicesOptions}
+    structuresOptions={data.structuresOptions}
+  />
+
+  {#if searchStatus === "all"}
+    <aside class="border-info bg-info-light mb-s8 px-s20 py-s16 border-l-4">
+      <h3 class="text-f18 text-info mb-s8 leading-28">
+        Vous pouvez agir uniquement sur les structures et services créés via
+        Dora
+      </h3>
+      <p class="text-f14 text-gray-text mb-s0 leading-24">
+        Vous voyez dans ce tableau de bord uniquement les services créés dans
+        Dora. Les visiteurs voient également les services issus de
+        data·inclusion. N’hésitez pas à nous signaler tout problème dans les
+        données data·inclusion en suivant
+        <a
+          href={URL_MANAGER_DATA_INCLUSION_NOTICE}
+          target="_blank"
+          rel="noopener"
+          class="underline">cette notice</a
+        >.
+      </p>
+    </aside>
+  {/if}
+  <div class="mb-s8 text-gray-text">
+    {#if loading}
+      <strong>Chargement en cours…</strong>
+    {:else if structures.length !== filteredStructures.length}
+      {filteredStructures.length} structures affichées / {structures.length}
+    {:else}
+      {structures.length} structures
     {/if}
-    <div class="mb-s8 text-gray-text">
-      {#if loading}
-        <strong>Chargement en cours…</strong>
-      {:else if structures?.length !== filteredStructures?.length}
-        {filteredStructures.length} structures affichées / {structures.length}
-      {:else}
-        {structures.length} structures
-      {/if}
+  </div>
+  <div class="gap-s12 flex flex-col">
+    <div class="gap-s16 flex flex-col lg:flex-row">
+      <!-- Sur mobile, la carte reste au-dessus des résultats pour ne pas être cachée lorsque les résultats sont nombreux. -->
+      <div
+        class="h-s512 lg:w-s512 relative w-full shrink-0 lg:order-last lg:h-[800px]"
+      >
+        <StructuresMap {filteredStructures} bind:selectedStructureSlug />
+      </div>
+      <div class="gap-s24 flex w-full flex-col">
+        {#if searchStatus !== "all" && filterDefinition}
+          <Notice type="info" title={filterDefinition}>
+            <div>
+              <a
+                href={URL_MANAGER_DASHBOARD_HELP_NOTICE}
+                target="_blank"
+                class="text-magenta-cta underline"
+              >
+                Mode d’emploi détaillé
+              </a>
+            </div>
+          </Notice>
+        {/if}
+        <StructuresTable
+          {filteredStructures}
+          bind:selectedStructureSlug
+          onRefresh={handleStructuresRefresh}
+        />
+      </div>
     </div>
-    <div class="gap-s12 flex flex-col">
-      {#if structures}
-        <div class="gap-s16 flex flex-col lg:flex-row">
-          <!-- Sur mobile, la carte reste au-dessus des résultats pour ne pas être cachée lorsque les résultats sont nombreux. -->
-          <div
-            class="h-s512 lg:w-s512 relative w-full shrink-0 lg:order-last lg:h-[800px]"
-          >
-            <StructuresMap {filteredStructures} bind:selectedStructureSlug />
-          </div>
-          <div class="gap-s24 flex w-full flex-col">
-            {#if searchStatus !== "all" && filterDefinition}
-              <Notice type="info" title={filterDefinition}>
-                <div>
-                  <a
-                    href={URL_MANAGER_DASHBOARD_HELP_NOTICE}
-                    target="_blank"
-                    class="text-magenta-cta underline"
-                  >
-                    Mode d’emploi détaillé
-                  </a>
-                </div>
-              </Notice>
-            {/if}
-            <StructuresTable
-              {filteredStructures}
-              bind:selectedStructureSlug
-              onRefresh={handleStructuresRefresh}
-            />
-          </div>
-        </div>
-      {:else}
-        Chargement…
-      {/if}
-    </div>
-  </CenteredGrid>
-{/if}
+  </div>
+</CenteredGrid>
