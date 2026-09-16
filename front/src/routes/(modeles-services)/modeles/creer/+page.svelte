@@ -16,7 +16,7 @@
   <CenteredGrid>
     <h1>Création d’un modèle</h1>
 
-    {#if !data.structures.length}
+    {#if !data.managedStructureSearchMode && !data.structures.length}
       <Notice title="Impossible de créer un nouveau modèle" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
@@ -37,6 +37,7 @@
   <ModelEditionForm
     model={data.model}
     servicesOptions={data.servicesOptions}
+    managedStructureSearchMode={data.managedStructureSearchMode}
     structures={data.structures}
     structure={data.structure}
   />

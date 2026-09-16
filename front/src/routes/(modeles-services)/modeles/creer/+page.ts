@@ -2,7 +2,7 @@ import { createModelFromService, getNewModel } from "$lib/utils/forms";
 import { getService, getServicesOptions } from "$lib/requests/services";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getStructure, getManagedStructures } from "$lib/requests/structures";
+import { getStructure } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 import type { Model, ShortStructure } from "$lib/types";
 import { error } from "@sveltejs/kit";
@@ -17,6 +17,9 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   const structureSlug = url.searchParams.get("structure");
 
   const user = get(userInfo);
+
+  const managedStructureSearchMode = user.isStaff || user.isManager;
+
   let structures: ShortStructure[] = user.structures;
   let model: Model;
   let structure: ShortStructure | undefined;
@@ -42,8 +45,8 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
       error(404, "Page Not Found");
     }
   } else {
-    if (user.isStaff || user.isManager) {
-      structures = await getManagedStructures();
+    if (managedStructureSearchMode) {
+      structures = [];
     } else {
       structures = user.structures;
     }
@@ -59,6 +62,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     noIndex: true,
     model,
     servicesOptions: await getServicesOptions(fetch),
+    managedStructureSearchMode,
     structures,
     structure,
     serviceSlug,
