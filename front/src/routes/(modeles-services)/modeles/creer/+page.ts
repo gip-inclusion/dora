@@ -18,6 +18,9 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   const user = get(userInfo);
 
+  //Le staff et les managers peuvent accéder à beaucoup de structures.
+  //Il faut qu'ils recherchent les structures par nom pour ne pas charger
+  //trop d'objects à la fois.
   const managedStructureSearchMode = user.isStaff || user.isManager;
 
   let structures: ShortStructure[] = user.structures;
