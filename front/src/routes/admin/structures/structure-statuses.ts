@@ -1,5 +1,7 @@
 import type { AdminStructure } from "$lib/types";
 
+import { getStructureStatus } from "./structures-filters";
+
 export type StructureStatusColor = "green" | "orange" | "red" | "gray";
 
 export interface StructureStatusBadge {
@@ -17,10 +19,20 @@ function getServicesBadge(structure: AdminStructure): StructureStatusBadge {
   return { label: "Services publiés", color: "green" };
 }
 
+// On utilise les mêmes règles que pour les filtres de statut du tableau de bord.
 function getAdminsBadge(structure: AdminStructure): StructureStatusBadge {
-  return structure.admins.length > 0
-    ? { label: "Administrateur validé", color: "green" }
-    : { label: "Administrateur à valider", color: "orange" };
+  const status = getStructureStatus(structure);
+
+  if (status === "awaitingModeration") {
+    return { label: "Administrateur à valider", color: "orange" };
+  }
+  if (status === "waiting") {
+    return { label: "Administrateur invité", color: "orange" };
+  }
+  if (!structure.hasAdmin) {
+    return { label: "Sans administrateur", color: "red" };
+  }
+  return { label: "Administrateur validé", color: "green" };
 }
 
 export function getStructureStatusBadges(
