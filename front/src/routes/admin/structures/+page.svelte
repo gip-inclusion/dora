@@ -3,12 +3,12 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import { URL_MANAGER_DASHBOARD_HELP_NOTICE } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
+  import { saveLastDepartment } from "$lib/utils/manager-department";
 
   import DepartmentSelector from "$lib/components/specialized/department-selector.svelte";
 
@@ -39,6 +39,7 @@
     structures = [];
     loading = true;
     selectedDepartment = dept;
+    saveLastDepartment(dept);
     if (selectedDepartment.code) {
       structures = await getStructuresAdmin(selectedDepartment.code);
     } else {
@@ -100,24 +101,8 @@
     });
   }
 
-  if (data.isManager && data.department) {
-    handleDepartmentChange(data.department);
-  }
+  handleDepartmentChange(data.department);
 </script>
-
-{#if !data.isManager && !selectedDepartment}
-  <CenteredGrid>
-    <div class="mb-s16 flex flex-col">
-      <label for="department" class="font-bold">Département</label>
-      <AdminDivisionSearch
-        id="department"
-        searchType="department"
-        onChange={handleDepartmentChange}
-        placeholder="numéro ou nom"
-      />
-    </div>
-  </CenteredGrid>
-{/if}
 
 {#if selectedDepartment}
   <CenteredGrid>

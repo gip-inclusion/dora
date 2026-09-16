@@ -14,6 +14,7 @@
   } from "$lib/consts";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminStructure, GeoApiValue } from "$lib/types";
+  import { saveLastDepartment } from "$lib/utils/manager-department";
 
   import { getStructureStatus } from "../structures/structures-filters";
   import type { PageData } from "./$types";
@@ -62,6 +63,7 @@
     const requestId = ++currentRequestId;
 
     selectedDepartment = department;
+    saveLastDepartment(department);
     structures = null;
     loading = true;
 

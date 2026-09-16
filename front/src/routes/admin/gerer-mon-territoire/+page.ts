@@ -1,5 +1,6 @@
 import { getDepartments } from "$lib/requests/geo";
 import { userInfo } from "$lib/utils/auth";
+import { getInitialDepartment } from "$lib/utils/manager-department";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
@@ -20,7 +21,6 @@ export const load: PageLoad = async ({ fetch, parent }) => {
     title: "Gérer mon territoire | DORA",
     noIndex: true,
     departments,
-    // Le premier des départements couverts par le gestionnaire est affiché directement.
-    department: departments[0].value,
+    department: getInitialDepartment(departments),
   };
 };
