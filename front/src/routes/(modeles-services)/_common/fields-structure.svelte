@@ -54,15 +54,24 @@
       );
 
       if (isModel) {
-        // sur un modèle l'API retourne les champs spécifiques sous forme de string,
-        // on leur attribue l'id numérique
+        // sur un modèle l'API retourne les champs spécifiques sous forme de string ;
+        // on leur attribue l'id numérique quand on la retrouve
         service[propName].forEach((value, i) => {
           // si le type est une string, c'est un champ spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
               (opt) => opt.label === value
             );
-            service[propName][i] = option.value;
+
+            // même logique que pour les services issus d'un modèle expliqué en bas
+            if (option) {
+              service[propName][i] = option.value;
+            } else {
+              servicesOptions[propName] = [
+                ...servicesOptions[propName],
+                { value, label: value },
+              ];
+            }
           }
         });
       } else if (service.model && model) {
