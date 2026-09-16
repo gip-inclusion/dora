@@ -29,7 +29,7 @@ jobs:
 
     services:
       s3:
-        image: minio/minio:latest
+        image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
         env:
           MINIO_ROOT_USER: minio-access-key
           MINIO_ROOT_PASSWORD: $MINIO_SECRET_KEY
