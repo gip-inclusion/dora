@@ -14,6 +14,16 @@
 </script>
 
 <FieldSet title="Éligibilité au service">
+  {#snippet help()}
+    <div>
+      <p class="text-f14">
+        L'éligibilité définit qui peut bénéficier de ce service et comment y
+        accéder. Ces informations permettent aux prescripteurs d'orienter les
+        bonnes personnes vers votre service et d'éviter les orientations non
+        pertinentes.
+      </p>
+    </div>
+  {/snippet}
   <FieldGroupPublics bind:service {model} {servicesOptions} />
   <FieldGroupAccessConditions bind:service {model} {servicesOptions} />
   <FieldGroupModalities bind:service {model} {servicesOptions} />
