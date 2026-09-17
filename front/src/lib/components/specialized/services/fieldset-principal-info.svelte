@@ -18,19 +18,13 @@
   {#snippet help()}
     <div>
       <p class="text-f14">
-        Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
-        les résultats de recherche.
+        Les informations principales permettent d'identifier votre
+        service&nbsp;: c'est ce que verront en premier les bénéficiaires et
+        prescripteurs sur la page du service.
       </p>
       <p class="text-f14">
-        <strong>Exemple</strong> :
-        <i>
-          Faciliter vos déplacements en cas de reprise d’emploi ou de formation
-          (entretien d’embauche, concours public…)
-        </i>
-      </p>
-      <p class="text-f14">
-        Si besoin, détaillez dans la partie
-        <b>Description</b>.
+        Renseigner un titre clair et une description simple facilitera la
+        compréhension par les personnes qui en ont besoin.
       </p>
     </div>
   {/snippet}
