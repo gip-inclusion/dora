@@ -2,6 +2,7 @@
   import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
 
   import { getApiURL } from "$lib/utils/api";
+  import { getFileNameFromPath, toValidFileName } from "$lib/utils/file";
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
@@ -30,13 +31,18 @@
 
   let localFiles = $state<string[]>([]);
 
+  // Une clé de stockage identifie un document : deux fois la même clé désigne le même
+  // fichier, pas deux pièces jointes. Les doublons hérités (services issus d’un modèle,
+  // données antérieures au contrôle d’unicité) sont écartés à la lecture, et la liste
+  // repart dédoublonnée à la première modification.
   $effect(() => {
-    localFiles = [...fileKeys];
+    localFiles = [...new Set(fileKeys)];
   });
 
   function updateFiles(newFiles: string[]) {
-    localFiles = newFiles;
-    fileKeys = newFiles;
+    const uniqueFiles = [...new Set(newFiles)];
+    localFiles = uniqueFiles;
+    fileKeys = uniqueFiles;
   }
 
   async function handleRemove(fileKey: string) {
@@ -56,6 +62,15 @@
   function handleSubmit(event: Event) {
     event.preventDefault();
 
+    // Deux documents de même nom se recouvrent : le serveur range les fichiers d’une
+    // structure sous une clé dérivée de leur nom, et le second écraserait le premier.
+    // On les écarte avant l’envoi, en tenant compte des fichiers du même lot, et en
+    // comparant les noms nettoyés comme le fera le serveur.
+    const usedFileNames = new Set(
+      localFiles.map((key) => toValidFileName(getFileNameFromPath(key)))
+    );
+    const duplicateFileNames: string[] = [];
+
     function updateProgress(loaded: number, total: number) {
       progress = (loaded / total) * 100;
     }
@@ -64,7 +79,9 @@
       const jsonResponse = JSON.parse(request.response);
       updateFiles([jsonResponse.key, ...localFiles]);
       clearInput();
-      errorMessage = "";
+      if (!duplicateFileNames.length) {
+        errorMessage = "";
+      }
     }
 
     uploadInput.disabled = true;
@@ -80,6 +97,13 @@
       if (!file) {
         continue;
       }
+
+      const uploadedFileName = toValidFileName(file.name);
+      if (usedFileNames.has(uploadedFileName)) {
+        duplicateFileNames.push(file.name);
+        continue;
+      }
+      usedFileNames.add(uploadedFileName);
 
       // We can't use fetch if we want a progress indicator
       const url = structureSlug
@@ -146,16 +170,25 @@
       formData.append("file", file);
       request.send(formData);
     }
-  }
 
-  function urlStringPathRemove(path: string): string {
-    const pathElements = path.split("/");
-    return pathElements[pathElements.length - 1] ?? "";
+    if (duplicateFileNames.length) {
+      errorMessage =
+        duplicateFileNames.length > 1
+          ? `Des documents portant les noms ${duplicateFileNames.map((name) => `“${name}”`).join(", ")} sont déjà présents. Renommez-les avant de les ajouter.`
+          : `Un document nommé “${duplicateFileNames[0]}” est déjà présent. Renommez-le avant de l’ajouter.`;
+    }
+
+    if (duplicateFileNames.length === files.length) {
+      clearInput();
+    }
   }
 </script>
 
-<form onsubmit={handleSubmit} class="mb-s8 cursor-pointer">
-  <label>
+<form onsubmit={handleSubmit} class="mb-s8">
+  <label
+    class="gap-s8 group flex items-center"
+    class:cursor-pointer={!disabled}
+  >
     <input
       name={id}
       {id}
@@ -166,8 +199,16 @@
       type="file"
       accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
       multiple
-      class="file:border-magenta-cta file:px-s8 file:py-s6 file:text-f14 file:text-magenta-cta read-only:text-gray-text file:hover:border-magenta-hover file:hover:bg-magenta-hover file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:text-gray-text-alt2 lg:file:px-s10 file:rounded-sm file:border file:bg-white file:leading-normal file:hover:text-white!"
-    />{progress != null ? `${Math.round(progress)} %` : ""}
+      class="peer sr-only"
+    />
+    <span
+      class="border-magenta-cta px-s8 py-s6 text-f14 text-magenta-cta peer-enabled:group-hover:border-magenta-hover peer-enabled:group-hover:bg-magenta-hover peer-enabled:group-active:border-france-blue peer-enabled:group-active:text-france-blue peer-disabled:border-gray-01 peer-disabled:text-gray-text-alt2 peer-focus-visible:outline-france-blue lg:px-s10 rounded-sm border bg-white leading-normal peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-enabled:group-hover:text-white!"
+    >
+      Choisir un fichier
+    </span>
+    <span class="text-f14 text-gray-text">
+      {progress != null ? `${Math.round(progress)} %` : ""}
+    </span>
   </label>
 
   {#if errorMessage}
@@ -177,7 +218,7 @@
 <ul>
   {#each localFiles as uploaded (uploaded)}
     <li class="mb-s8 flex justify-between">
-      <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
+      <div class="text-f14">{shortenString(getFileNameFromPath(uploaded))}</div>
       <div class="h-s24 w-s24">
         <button
           type="button"
