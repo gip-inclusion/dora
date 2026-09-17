@@ -1,7 +1,6 @@
 import type {
   BeneficiaryAccessModes,
   CoachOrientationModes,
-  AdminDivisionType,
   FeeCondition,
   LocationKind,
   ServicesOptions,
@@ -419,34 +418,23 @@ export const draftSchema: v.Schema = {
 
 export const modelSchema: v.Schema = {
   structure: serviceSchema.structure,
+  name: serviceSchema.name,
+  description: serviceSchema.description,
   categories: serviceSchema.categories,
   subcategories: serviceSchema.subcategories,
   kind: serviceSchema.kind,
-  name: serviceSchema.name,
-  description: serviceSchema.description,
-  conditionsAcces: serviceSchema.conditionsAcces,
+  fundingLabels: serviceSchema.fundingLabels,
   publics: serviceSchema.publics,
   publicsPrecisions: serviceSchema.publicsPrecisions,
+  conditionsAcces: serviceSchema.conditionsAcces,
+  forms: serviceSchema.forms,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
-  coachOrientationModes: serviceSchema.coachOrientationModes,
-  coachOrientationModesExternalFormLinkText:
-    serviceSchema.coachOrientationModesExternalFormLinkText,
-  coachOrientationModesExternalFormLink:
-    serviceSchema.coachOrientationModesExternalFormLink,
-  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
-  credentials: serviceSchema.credentials,
+  mobilisableBy: serviceSchema.mobilisableBy,
+  mobilisationLink: serviceSchema.mobilisationLink,
+  mobilisationModes: serviceSchema.mobilisationModes,
+  mobilisationDetails: serviceSchema.mobilisationDetails,
   durationWeeklyHours: serviceSchema.durationWeeklyHours,
   durationWeeks: serviceSchema.durationWeeks,
-  forms: serviceSchema.forms,
-  onlineForm: serviceSchema.onlineForm,
   updateFrequency: serviceSchema.updateFrequency,
-  openingHours: serviceSchema.openingHours,
-  fundingLabels: serviceSchema.fundingLabels,
 };
