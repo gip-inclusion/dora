@@ -1,21 +1,13 @@
 <script lang="ts">
-  import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
-  import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
-  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
-
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import { modifyStructure } from "$lib/requests/structures";
+  import { URL_MANAGER_DATA_INCLUSION_NOTICE } from "$lib/consts";
   import type { AdminStructure } from "$lib/types";
-  import { capitalize, shortenString } from "$lib/utils/misc";
 
-  import StructureModal from "./structure-modal.svelte";
+  import StructureCard from "./structure-card.svelte";
 
   interface Props {
     filteredStructures: AdminStructure[];
     selectedStructureSlug: string | null;
-    onRefresh: any;
+    onRefresh: () => void;
   }
 
   let {
@@ -23,102 +15,33 @@
     selectedStructureSlug = $bindable(),
     onRefresh,
   }: Props = $props();
-
-  let isStructureModalOpen = $state(false);
-  let currentStructure: AdminStructure | null = $state(null);
-
-  async function updateStructureObsolete(
-    structure: AdminStructure,
-    isObsolete: boolean
-  ) {
-    structure.isObsolete = isObsolete;
-    await modifyStructure({ slug: structure.slug, isObsolete });
-    onRefresh();
-  }
 </script>
 
-{#if currentStructure}
-  <StructureModal
-    bind:isOpen={isStructureModalOpen}
-    structureSlug={currentStructure?.slug}
-    {onRefresh}
-  />
-{/if}
-
-<div class="gap-s8 flex flex-col">
-  {#each filteredStructures as structure}
-    <div
-      class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border shadow-xs"
-      class:highlight={selectedStructureSlug === structure.slug}
-      role="presentation"
-      onmouseenter={() => (selectedStructureSlug = structure.slug)}
-      onmouseleave={() => (selectedStructureSlug = null)}
-    >
-      <div class="flex grow flex-row items-center">
-        <div>
-          <div>
-            <strong
-              ><a href="/structures/{structure.slug}" target="_blank">
-                {shortenString(capitalize(structure.name))}
-              </a>
-            </strong>
-          </div>
-        </div>
-      </div>
-
-      <LinkButton
-        to="/admin/structures/{structure.slug}"
-        icon={EyeLineSystem}
-        noBackground
-        otherTab
-      />
-      <Button
-        onclick={() => {
-          currentStructure = structure;
-          isStructureModalOpen = true;
-        }}
-        icon={PhoneLineDevice}
-        noBackground
-      />
-
-      <ButtonMenu
-        icon={More2FillSystem}
-        small
-        hideLabel
-        label="Actions disponibles sur la structure"
-      >
-        {#snippet children({ onClose: onCloseParent })}
-          {#if !structure.isObsolete}
-            <Button
-              onclick={() => {
-                updateStructureObsolete(structure, true);
-                onCloseParent();
-              }}
-              label="Rendre&nbsp;obsolète"
-              small
-              noBackground
-            />
-          {:else}
-            <Button
-              onclick={() => {
-                updateStructureObsolete(structure, false);
-                onCloseParent();
-              }}
-              label="Ré&#8209;activer"
-              small
-              noBackground
-            />
-          {/if}
-        {/snippet}
-      </ButtonMenu>
-    </div>
+<div class="gap-s16 flex flex-col">
+  {#each filteredStructures as structure (structure.slug)}
+    <StructureCard
+      {structure}
+      highlighted={selectedStructureSlug === structure.slug}
+      onHover={(slug) => (selectedStructureSlug = slug)}
+      {onRefresh}
+    />
   {/each}
+
+  <aside class="border-info bg-info-light px-s20 py-s16 border-l-4">
+    <h3 class="text-f18 text-info mb-s8 leading-28">
+      Vous pouvez agir uniquement sur les structures et services créés via Dora
+    </h3>
+    <p class="text-f14 text-gray-text mb-s0 leading-24">
+      Vous voyez dans ce tableau de bord uniquement les services créés dans
+      Dora. Les visiteurs voient également les services issus de data·inclusion.
+      N’hésitez pas à nous signaler tout problème dans les données
+      data·inclusion en suivant
+      <a
+        href={URL_MANAGER_DATA_INCLUSION_NOTICE}
+        target="_blank"
+        rel="noopener"
+        class="underline">cette notice</a
+      >.
+    </p>
+  </aside>
 </div>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  .highlight {
-    @apply bg-gray-01 shadow-sm;
-  }
-</style>

@@ -1,31 +1,14 @@
+import { getDepartments } from "$lib/requests/geo";
 import { getServicesOptions } from "$lib/requests/services";
 import { getStructuresOptions } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getApiURL } from "$lib/utils/api";
-import type { GeoApiValue } from "$lib/types";
+import { getInitialDepartment } from "$lib/utils/manager-department";
 import { error } from "@sveltejs/kit";
+import { parseStatusFilter } from "./structures-filters";
 
-async function getDepartments(
-  departmentCodes: string[],
-  fetchFunction: typeof fetch
-) {
-  const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
-    departmentCodes.join(",")
-  )}`;
-  const response = await fetchFunction(url);
-  const jsonResponse = (await response.json()) as GeoApiValue[];
-  const results = jsonResponse.map((result) => ({
-    value: result,
-    label: `${result.name} (${result.code})`,
-  }));
-  return results;
-}
-
-type GetDepartmentsResults = Awaited<ReturnType<typeof getDepartments>>;
-
-export const load: PageLoad = async ({ fetch, parent }) => {
+export const load: PageLoad = async ({ fetch, parent, url }) => {
   await parent();
 
   const [servicesOptions, structuresOptions] = await Promise.all([
@@ -35,26 +18,25 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
   const user = get(userInfo);
 
-  let departments: GetDepartmentsResults = [];
-  let department: GeoApiValue | undefined;
-  let title = "Structures | Administration | DORA";
+  // Sans département renseigné (cas du staff), tous les départements sont retournés.
+  const departments = await getDepartments(user?.departments ?? [], fetch);
 
-  if (user.isManager) {
-    departments = await getDepartments(user.departments, fetch);
-    if (departments.length === 0) {
-      error(403, "Accès réservé");
-    }
-    department = departments[0].value;
-    title = `Tableau de bord ${user.departments} | DORA`;
+  if (!departments.length) {
+    error(403, "Accès réservé");
   }
+
+  const title = user?.isManager
+    ? `Tableau de bord ${user.departments} | DORA`
+    : "Structures | Administration | DORA";
 
   return {
     title,
     noIndex: true,
+    // Permet de pointer directement sur un onglet depuis « Gérer mon territoire »
+    initialStatus: parseStatusFilter(url.searchParams.get("statut")),
     servicesOptions,
     structuresOptions,
-    isManager: Boolean(user.isManager && department),
-    department,
+    department: getInitialDepartment(departments),
     departments,
   };
 };
