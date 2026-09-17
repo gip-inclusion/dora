@@ -6,10 +6,8 @@
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
   import FieldsetContact from "$lib/components/specialized/services/fieldset-contact.svelte";
-  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
-  import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
@@ -128,17 +126,6 @@
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
-
-  const modalitiesServicesOptions = $derived(
-    structure?.noDoraForm
-      ? {
-          ...servicesOptions,
-          coachOrientationModes: servicesOptions.coachOrientationModes.filter(
-            (mode) => mode.value !== "formulaire-dora"
-          ),
-        }
-      : servicesOptions
-  );
 </script>
 
 <FormErrors />
