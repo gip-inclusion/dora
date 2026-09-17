@@ -20,14 +20,14 @@
     <div>
       <p class="text-f14">
         Coordonnées de la personne responsable de la réception et du traitement
-        des demandes d’orientation. À défaut, renseignez le courriel et le
-        numéro de téléphone de votre structure.
+        des demandes d’orientation. À défaut, vous pouvez renseigner le courriel
+        et le numéro de téléphone de votre structure.
       </p>
       <p class="text-f14">
         Par défaut, ces informations sont disponibles uniquement aux
-        accompagnateurs qui ont un compte DORA. En cochant la case « Rendre
-        public », les informations seront rendues disponibles à tous les
-        visiteurs du site.
+        accompagnateurs qui ont un compte DORA. En cochant la case «&nbsp;Rendre
+        les informations de contact publiques&nbsp;», les informations seront
+        rendues disponibles à tous les visiteurs du site.
       </p>
     </div>
   {/snippet}

@@ -38,8 +38,10 @@
   {#snippet help()}
     <div>
       <p class="text-f14">
-        La durée limitée permet de supendre automatiquement la visibilité du
-        service dans les résultat de recherche.
+        Choisissez la fréquence des notifications pour recevoir un rappel
+        lorsque vous souhaitez que cette page de service soit mise à jour. Des
+        informations à jour vous assure la réception de toutes les demandes
+        d’orientation.
       </p>
     </div>
   {/snippet}
