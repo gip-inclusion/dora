@@ -22,6 +22,7 @@
     service = $bindable(),
     model = $bindable(),
     structure,
+    isModel,
   }: Props = $props();
 
   let showOpeningHoursField = $state(false);
@@ -39,18 +40,24 @@
     </div>
   {/snippet}
 
-  <CheckboxesField
-    id="locationKinds"
-    bind:value={service.locationKinds}
-    choices={moveToTheEnd(servicesOptions.locationKinds, "value", "a-distance")}
-    description="Lieu de déroulement du service."
-  />
-  <hr />
-  {#if service.locationKinds.includes("en-presentiel")}
-    <FieldGroupAddress bind:entity={service} parent={structure} />
+  {#if !isModel}
+    <CheckboxesField
+      id="locationKinds"
+      bind:value={service.locationKinds}
+      choices={moveToTheEnd(
+        servicesOptions.locationKinds,
+        "value",
+        "a-distance"
+      )}
+      description="Lieu de déroulement du service."
+    />
+    <hr />
+    {#if service.locationKinds.includes("en-presentiel")}
+      <FieldGroupAddress bind:entity={service} parent={structure} />
+    {/if}
   {/if}
-  <FieldGroupDuration bind:service {model} {servicesOptions} />
-  <FieldModel {...fieldModelProps.openingHours ?? {}}>
+  <FieldGroupDuration bind:service {model} {servicesOptions} isModel />
+  {#if !isModel}
     {#if showOpeningHoursField}
       <OpeningHoursField
         id="openingHours"
@@ -87,5 +94,5 @@
         </div>
       </FieldWrapper>
     {/if}
-  </FieldModel>
+  {/if}
 </FieldSet>

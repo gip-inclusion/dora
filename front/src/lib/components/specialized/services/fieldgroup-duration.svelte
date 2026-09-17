@@ -11,6 +11,7 @@
     servicesOptions,
     service = $bindable(),
     model = $bindable(),
+    isModel,
   }: FieldSetProps = $props();
 
   let showModel = $derived(!!service.model);
@@ -52,7 +53,11 @@
   </p>
 {/snippet}
 
-<FieldGroup title="Durée de la prestation" {tooltipContent}>
+<FieldGroup
+  title="Durée de la prestation"
+  {tooltipContent}
+  showSeparator={!isModel}
+>
   <FieldModel {...fieldModelProps.durationWeeklyHours ?? {}}>
     <BasicInputField
       type="number"
