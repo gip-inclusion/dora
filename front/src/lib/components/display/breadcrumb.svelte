@@ -29,6 +29,7 @@
     | "orientation"
     | "orientation-export"
     | "service"
+    | "manager-homepage"
     | "manager-dashboard";
 
   interface Props {
@@ -59,6 +60,7 @@
     "saved-searches": "Mes alertes",
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
+    "manager-homepage": "Gérer mon territoire",
     "manager-dashboard": "Gestion du territoire",
   };
 
