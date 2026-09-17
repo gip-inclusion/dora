@@ -19,7 +19,7 @@
     ShortStructure,
   } from "$lib/types";
   import { log } from "$lib/utils/logger";
-  import { draftSchema, serviceSchema } from "$lib/validation/schemas/service";
+  import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
   import { goto } from "$app/navigation";
@@ -108,8 +108,7 @@
   }
 
   function handleValidate(data, kind?: string) {
-    const schema = kind === "draft" ? draftSchema : serviceSchema;
-    return validate(data, schema, {
+    return validate(data, serviceSchema, {
       servicesOptions,
       checkRequired: kind !== "draft",
     });
