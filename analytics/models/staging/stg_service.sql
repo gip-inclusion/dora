@@ -34,7 +34,7 @@ services AS (
 final AS (
     SELECT
         services.*,
-        CONCAT('https://dora.inclusion.beta.gouv.fr/services/', services.slug) AS dora_url
+        CONCAT('https://dora.inclusion.gouv.fr/services/', services.slug) AS dora_url
     FROM services
 )
 
