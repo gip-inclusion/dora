@@ -10,6 +10,7 @@
     service = $bindable(),
     model,
     servicesOptions,
+    isModel = false,
   }: FieldSetProps = $props();
 </script>
 
@@ -26,6 +27,8 @@
   {/snippet}
   <FieldGroupPublics bind:service {model} {servicesOptions} />
   <FieldGroupAccessConditions bind:service {model} {servicesOptions} />
-  <FieldGroupModalities bind:service {model} {servicesOptions} />
-  <FieldGroupPerimeter bind:service {servicesOptions} />
+  <FieldGroupModalities bind:service {model} {servicesOptions} isModel />
+  {#if !isModel}
+    <FieldGroupPerimeter bind:service {servicesOptions} />
+  {/if}
 </FieldSet>
