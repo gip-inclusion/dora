@@ -8,7 +8,6 @@
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
-  import FieldsDocuments from "../_common/fields-documents.svelte";
   import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
