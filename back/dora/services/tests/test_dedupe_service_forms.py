@@ -1,4 +1,5 @@
 from io import StringIO
+from unittest.mock import patch
 
 import pytest
 from django.core.management import call_command
@@ -86,3 +87,37 @@ def test_wet_run_covers_models_and_services():
 
     assert ["prod/42/a.pdf"] == Service._base_manager.get(pk=model.pk).forms
     assert ["prod/42/b.pdf"] == Service._base_manager.get(pk=service.pk).forms
+
+
+@pytest.mark.django_db
+def test_wet_run_writes_nothing_when_a_write_fails():
+    model = make_model(forms=["prod/42/dossier.pdf", "prod/42/dossier.pdf"])
+    synced = make_service(
+        model=model,
+        forms=["prod/42/dossier.pdf"],
+        last_sync_checksum=model.sync_checksum,
+    )
+    initial_checksum = model.sync_checksum
+
+    # La seconde écriture (les empreintes des modèles) échoue : la première doit être
+    # défaite avec elle, sinon `forms` perdrait ses doublons sans que l'empreinte suive.
+    bulk_update = Service._base_manager.bulk_update
+    calls = []
+
+    def failing_bulk_update(*args, **kwargs):
+        calls.append(args)
+        if len(calls) > 1:
+            raise RuntimeError("échec simulé")
+        return bulk_update(*args, **kwargs)
+
+    with patch.object(
+        Service._base_manager, "bulk_update", side_effect=failing_bulk_update
+    ):
+        with pytest.raises(RuntimeError):
+            call_cmd(wet_run=True)
+
+    model.refresh_from_db()
+    synced.refresh_from_db()
+    assert ["prod/42/dossier.pdf", "prod/42/dossier.pdf"] == model.forms
+    assert initial_checksum == model.sync_checksum
+    assert initial_checksum == synced.last_sync_checksum

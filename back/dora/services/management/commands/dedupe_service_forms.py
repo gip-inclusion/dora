@@ -16,6 +16,8 @@ Sans `--wet-run`, rien n'est écrit : la commande se contente de journaliser ce 
 ferait.
 """
 
+from django.db import transaction
+
 from dora.core.commands import BaseCommand
 from dora.services.models import Service
 from dora.services.utils import update_sync_checksum
@@ -114,9 +116,14 @@ class Command(BaseCommand):
         enregistrement ferait basculer d'un coup toutes ses copies en « modèle modifié ».
         Les copies encore à jour suivent la nouvelle empreinte ; celles qui divergeaient
         déjà gardent la leur, pour ne pas masquer des modifications en attente.
+
+        Les écritures forment un tout : une liste dédoublonnée sans son empreinte, ou une
+        empreinte de copie sans celle de son modèle, laisserait justement l'affichage
+        « modèle modifié » que ce recalcul existe pour éviter. Seules elles sont dans la
+        transaction — le parcours qui les précède ne prend aucun verrou, et l'y inclure
+        immobiliserait un instantané le temps de lire toute la table.
         """
-        checksums_updated = 0
-        models = []
+        checksums_updated = []
 
         for service in deduplicated:
             if not service.is_model:
@@ -127,24 +134,25 @@ class Command(BaseCommand):
             if service.sync_checksum == previous:
                 continue
 
-            checksums_updated += 1
-            models.append(service)
-
-            if not wet_run:
-                continue
-
-            Service._base_manager.filter(
-                model_id=service.pk, last_sync_checksum=previous
-            ).update(last_sync_checksum=service.sync_checksum)
+            checksums_updated.append((service, previous))
 
         if wet_run:
-            for start in range(0, len(deduplicated), BATCH):
-                Service._base_manager.bulk_update(
-                    deduplicated[start : start + BATCH], ["forms"]
-                )
-            for start in range(0, len(models), BATCH):
-                Service._base_manager.bulk_update(
-                    models[start : start + BATCH], ["sync_checksum"]
-                )
+            with transaction.atomic():
+                for start in range(0, len(deduplicated), BATCH):
+                    Service._base_manager.bulk_update(
+                        deduplicated[start : start + BATCH], ["forms"]
+                    )
 
-        return checksums_updated
+                for start in range(0, len(checksums_updated), BATCH):
+                    batch = checksums_updated[start : start + BATCH]
+                    Service._base_manager.bulk_update(
+                        [model for model, _ in batch], ["sync_checksum"]
+                    )
+                    # Les copies suivent l'empreinte de leur modèle : seules celles qui
+                    # étaient à jour, les autres ont de vraies modifications en attente.
+                    for model, previous in batch:
+                        Service._base_manager.filter(
+                            model_id=model.pk, last_sync_checksum=previous
+                        ).update(last_sync_checksum=model.sync_checksum)
+
+        return len(checksums_updated)
