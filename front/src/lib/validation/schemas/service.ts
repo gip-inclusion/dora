@@ -1,10 +1,4 @@
-import type {
-  BeneficiaryAccessModes,
-  CoachOrientationModes,
-  FeeCondition,
-  LocationKind,
-  ServicesOptions,
-} from "$lib/types";
+import type { FeeCondition, LocationKind, ServicesOptions } from "$lib/types";
 import * as v from "../schema-utils";
 
 export function allCategoriesHaveSubcategories() {
@@ -34,37 +28,10 @@ export function allCategoriesHaveSubcategories() {
 }
 
 export const serviceSchema: v.Schema = {
-  siret: {
-    label: "SIRET",
-    default: "",
-    rules: [v.isSiret()],
-    maxLength: 14,
-  },
   structure: {
     label: "Structure",
     default: "",
     rules: [v.isString(), v.maxStrLength(50)],
-    required: true,
-  },
-  categories: {
-    label: "Thématiques",
-    default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: true,
-  },
-  subcategories: {
-    label: "Besoins",
-    default: [],
-    rules: [
-      v.isArray([v.isString(), v.maxStrLength(255)]),
-      allCategoriesHaveSubcategories(),
-    ],
-    required: true,
-  },
-  kind: {
-    label: "Type",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
     required: true,
   },
   name: {
@@ -88,10 +55,31 @@ export const serviceSchema: v.Schema = {
     post: [v.trim],
     required: true,
   },
-  conditionsAcces: {
-    label: "Conditions d'accès",
+  categories: {
+    label: "Thématiques",
+    default: [],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    required: true,
+  },
+  subcategories: {
+    label: "Besoins",
+    default: [],
+    rules: [
+      v.isArray([v.isString(), v.maxStrLength(255)]),
+      allCategoriesHaveSubcategories(),
+    ],
+    required: true,
+  },
+  kind: {
+    label: "Type",
     default: "",
-    rules: [v.isString()],
+    rules: [v.isString(), v.maxStrLength(255)],
+    required: true,
+  },
+  fundingLabels: {
+    label: "Financeur(s)",
+    default: [],
+    rules: [v.isArray([])],
   },
   publics: {
     label: "Choix du public",
@@ -102,6 +90,17 @@ export const serviceSchema: v.Schema = {
     label: "Précisions concernant les publics",
     default: "",
     rules: [v.isString()],
+  },
+  conditionsAcces: {
+    label: "Conditions d'accès",
+    default: "",
+    rules: [v.isString()],
+  },
+  forms: {
+    label: "Documents à fournir",
+    default: [],
+    rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
+    required: false,
   },
   feeCondition: {
     label: "Frais à charge",
@@ -122,16 +121,16 @@ export const serviceSchema: v.Schema = {
     default: [],
     rules: [v.isArray([v.isString()])],
   },
-  mobilisationLink: {
-    label: "Configuration du formulaire",
-    default: null,
-    rules: [v.isURL()],
-  },
   mobilisationModes: {
     label: "Mode de mobilisation du service",
     default: [],
     rules: [v.isArray([v.isString()])],
     required: true,
+  },
+  mobilisationLink: {
+    label: "Configuration du formulaire",
+    default: null,
+    rules: [v.isURL()],
   },
   mobilisationDetails: {
     label: "Précisions sur les modalités",
@@ -139,88 +138,51 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString()],
     post: [v.trim],
   },
-  beneficiariesAccessModes: {
-    label: "Pour les bénéficiaires",
+  zoneEligibilite: {
+    label: "Secteurs éligibles",
+    default: [],
+    rules: [v.isArray([])],
+  },
+  locationKinds: {
+    label: "Mode d’accueil",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return !data.coachOrientationModes?.length;
-    },
+    required: true,
   },
-  beneficiariesAccessModesExternalFormLinkText: {
-    label: "L’intitulé du lien",
-    default: "Faire une demande",
-    rules: [v.isString(), v.maxStrLength(27)],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 27,
-  },
-  beneficiariesAccessModesExternalFormLink: {
-    label: "Lien",
+  address1: {
+    label: "Adresse",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 280,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+    maxLength: 255,
+    required: false,
   },
-  beneficiariesAccessModesOther: {
-    label: "",
+  address2: {
+    label: "Complément d’adresse",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    maxLength: 280,
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return data.beneficiariesAccessModes.includes("autre");
-    },
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+    maxLength: 255,
+    required: false,
   },
-  coachOrientationModes: {
-    label: "Pour les accompagnateurs",
-    default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
-      return !data.beneficiariesAccessModes.length;
-    },
-  },
-  coachOrientationModesExternalFormLinkText: {
-    label: "L’intitulé du lien",
-    default: "Orienter votre bénéficiaire",
-    rules: [v.isString(), v.maxStrLength(27)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
-    },
-    maxLength: 27,
-  },
-  coachOrientationModesExternalFormLink: {
-    label: "Lien",
+  postalCode: {
+    label: "Code postal",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes(
-        "completer-le-formulaire-dadhesion"
-      );
+    rules: [v.isPostalCode()],
+    maxLength: 5,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes("en-presentiel");
     },
-    maxLength: 280,
   },
-  coachOrientationModesOther: {
-    label: "",
+  city: {
+    label: "Ville",
     default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return data.coachOrientationModes.includes("autre");
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+    maxLength: 255,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes("en-presentiel");
     },
-    maxLength: 280,
-  },
-  credentials: {
-    label: "Justificatifs à fournir",
-    default: [],
-    rules: [v.isArray([v.isCustomizablePK()])],
   },
   durationWeeklyHours: {
     label: "Nombre d'heures par semaine",
@@ -236,17 +198,10 @@ export const serviceSchema: v.Schema = {
     rules: [v.isPositiveInteger(), v.minNum(1)],
     minNumber: 1,
   },
-  forms: {
-    label: "Documents à fournir",
-    default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
-    required: false,
-  },
-  onlineForm: {
-    label: "Lien",
+  openingHours: {
+    label: "Horaires du service",
     default: "",
-    rules: [v.isURL(), v.maxStrLength(200)],
-    post: [v.trim],
+    rules: [v.isString()],
   },
   contactName: {
     label: "Prénom et nom",
@@ -261,15 +216,7 @@ export const serviceSchema: v.Schema = {
     pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
     maxLength: 10,
-    required: (data: {
-      coachOrientationModes: CoachOrientationModes;
-      beneficiariesAccessModes: BeneficiaryAccessModes;
-    }) => {
-      return (
-        data.coachOrientationModes.includes("telephoner") ||
-        data.beneficiariesAccessModes.includes("telephoner")
-      );
-    },
+    required: true,
   },
   contactEmail: {
     label: "Courriel",
@@ -277,19 +224,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
     maxLength: 254,
-    required: (data: {
-      coachOrientationModes: CoachOrientationModes;
-      beneficiariesAccessModes: BeneficiaryAccessModes;
-    }) => {
-      return (
-        data.coachOrientationModes.includes("formulaire-dora") ||
-        data.coachOrientationModes.includes("envoyer-un-mail") ||
-        data.coachOrientationModes.includes(
-          "envoyer-un-mail-avec-une-fiche-de-prescription"
-        ) ||
-        data.beneficiariesAccessModes.includes("envoyer-un-mail")
-      );
-    },
+    required: true,
   },
   isContactInfoPublic: {
     label: "Rendre les informations de contact publiques",
@@ -297,123 +232,12 @@ export const serviceSchema: v.Schema = {
     rules: [v.isBool()],
     required: true,
   },
-  locationKinds: {
-    label: "Mode d’accueil",
-    default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    required: true,
-  },
-  remoteUrl: {
-    label: "Lien visioconférence",
-    default: "",
-    rules: [v.isURL(), v.maxStrLength(200)],
-    post: [v.trim],
-    maxLength: 200,
-  },
-  city: {
-    label: "Ville",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
-    post: [v.trim],
-    maxLength: 255,
-    required: (data: { locationKinds: LocationKind[] }) => {
-      return data.locationKinds.includes("en-presentiel");
-    },
-  },
-  address1: {
-    label: "Adresse",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
-    post: [v.trim],
-    maxLength: 255,
-    required: (data: { locationKinds: LocationKind[] }) => {
-      return data.locationKinds.includes("en-presentiel");
-    },
-  },
-  address2: {
-    label: "Complément d’adresse",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
-    post: [v.trim],
-    maxLength: 255,
-  },
-  postalCode: {
-    label: "Code postal",
-    default: "",
-    rules: [v.isPostalCode()],
-    maxLength: 5,
-    required: (data: { locationKinds: LocationKind[] }) => {
-      return data.locationKinds.includes("en-presentiel");
-    },
-  },
-  zoneEligibilite: {
-    label: "Secteurs éligibles",
-    default: [],
-    rules: [v.isArray([])],
-  },
-  openingHours: {
-    label: "Horaires du service",
-    default: "",
-    rules: [v.isString()],
-  },
   updateFrequency: {
     label: "Périodicité de mise à jour",
     default: "tous-les-6-mois",
     rules: [v.isString()],
     required: true,
   },
-  fundingLabels: {
-    label: "Financeur(s)",
-    default: [],
-    rules: [v.isArray([])],
-  },
-};
-
-export const draftSchema: v.Schema = {
-  structure: serviceSchema.structure,
-  categories: serviceSchema.categories,
-  subcategories: serviceSchema.subcategories,
-  kind: serviceSchema.kind,
-  name: serviceSchema.name,
-  description: serviceSchema.description,
-  conditionsAcces: serviceSchema.conditionsAcces,
-  publics: serviceSchema.publics,
-  publicsPrecisions: serviceSchema.publicsPrecisions,
-  feeCondition: serviceSchema.feeCondition,
-  feeDetails: serviceSchema.feeDetails,
-  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
-  beneficiariesAccessModesExternalFormLinkText:
-    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
-  beneficiariesAccessModesExternalFormLink:
-    serviceSchema.beneficiariesAccessModesExternalFormLink,
-  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
-  coachOrientationModes: serviceSchema.coachOrientationModes,
-  coachOrientationModesExternalFormLinkText:
-    serviceSchema.coachOrientationModesExternalFormLinkText,
-  coachOrientationModesExternalFormLink:
-    serviceSchema.coachOrientationModesExternalFormLink,
-  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
-  credentials: serviceSchema.credentials,
-  durationWeeklyHours: serviceSchema.durationWeeklyHours,
-  durationWeeks: serviceSchema.durationWeeks,
-  forms: serviceSchema.forms,
-  onlineForm: serviceSchema.onlineForm,
-  contactName: serviceSchema.contactName,
-  contactPhone: serviceSchema.contactPhone,
-  contactEmail: serviceSchema.contactEmail,
-  isContactInfoPublic: serviceSchema.isContactInfoPublic,
-  locationKinds: serviceSchema.locationKinds,
-  remoteUrl: serviceSchema.remoteUrl,
-  city: serviceSchema.city,
-  address1: serviceSchema.address1,
-  address2: serviceSchema.address2,
-  postalCode: serviceSchema.postalCode,
-  diffusionZoneType: serviceSchema.diffusionZoneType,
-  diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
-  qpvOrZrr: serviceSchema.qpvOrZrr,
-  updateFrequency: serviceSchema.updateFrequency,
-  openingHours: serviceSchema.openingHours,
-  fundingLabels: serviceSchema.fundingLabels,
 };
 
 export const modelSchema: v.Schema = {

@@ -5,7 +5,6 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
   import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
