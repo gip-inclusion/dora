@@ -16,6 +16,7 @@
     servicesOptions,
     service = $bindable(),
     model,
+    isModel,
   }: FieldGroupProps = $props();
 
   function handleUseModelValue(fieldName) {
@@ -58,7 +59,7 @@
   );
 </script>
 
-<FieldGroup title="Modalités d’orientation">
+<FieldGroup title="Modalités d’orientation" showSeparator={!isModel}>
   <div class="gap-s24 flex flex-col">
     <FieldModel {...fieldModelProps.mobilisableBy ?? {}} type="array">
       <CheckboxesField

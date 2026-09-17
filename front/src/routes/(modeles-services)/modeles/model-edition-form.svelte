@@ -119,13 +119,19 @@
       {#if model?.structure}
         <FieldsetPrincipalInfo bind:service={model} {servicesOptions} {model} />
 
-        <FieldsetEligibility bind:service={model} {servicesOptions} {model} />
+        <FieldsetEligibility
+          bind:service={model}
+          {servicesOptions}
+          {model}
+          isModel
+        />
 
         <FieldsetReceptionConditions
           bind:service={model}
           {servicesOptions}
           {model}
           {structure}
+          isModel
         />
 
         <FieldsetNotifications bind:service={model} {servicesOptions} {model} />
