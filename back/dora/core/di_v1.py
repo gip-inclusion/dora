@@ -69,7 +69,7 @@ def sync_v1_service_fields(service, *, save=True):
                 service.coach_orientation_modes_external_form_link or None,
                 service.beneficiaries_access_modes_external_form_link or None,
             )
-            if link
+            if link and not link.endswith(f"/services/{service.slug}/orienter")
         )
     )
     primary_link, *extra_links = links or [None]
@@ -84,13 +84,6 @@ def sync_v1_service_fields(service, *, save=True):
             modes.add(ModeMobilisation.SE_PRESENTER.value)
         elif value == "telephoner":
             modes.add(ModeMobilisation.TELEPHONER.value)
-        elif (
-            value == "completer-le-formulaire-dadhesion"
-            and service.coach_orientation_modes_external_form_link
-        ):
-            modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
-        elif value == "formulaire-dora":
-            modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
 
     for value in beneficiary_values:
         if value == "envoyer-un-mail":
@@ -99,11 +92,6 @@ def sync_v1_service_fields(service, *, save=True):
             modes.add(ModeMobilisation.SE_PRESENTER.value)
         elif value == "telephoner":
             modes.add(ModeMobilisation.TELEPHONER.value)
-        elif (
-            value == "completer-le-formulaire-dadhesion"
-            and service.beneficiaries_access_modes_external_form_link
-        ):
-            modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
 
     if primary_link:
         modes.add(ModeMobilisation.UTILISER_LIEN_MOBILISATION.value)
