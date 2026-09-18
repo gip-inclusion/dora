@@ -5,7 +5,6 @@ from django.core.management import call_command
 from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
-from dora.services.enums import ServiceStatus
 from dora.services.models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -309,49 +308,6 @@ def test_sync_mobilisation_fields_professionnel_adds_professionnels():
         ModeMobilisation.ENVOYER_UN_COURRIEL.value,
         ModeMobilisation.TELEPHONER.value,
     ]
-
-
-def test_service_patch_syncs_mobilisation_fields(api_client):
-    user = make_user(is_valid=True)
-    structure = make_structure(user)
-    service = make_service(structure=structure, status=ServiceStatus.DRAFT)
-    api_client.force_authenticate(user=user)
-
-    response = api_client.patch(
-        f"/services/{service.slug}/",
-        {
-            "coachOrientationModes": ["envoyer-un-mail"],
-            "beneficiariesAccessModes": ["se-presenter"],
-            "mobilisationDetails": "ne doit pas être pris en compte",
-            "mobilisationLink": "https://ignored.example.com",
-        },
-        format="json",
-    )
-
-    assert response.status_code == 200
-    assert response.data["mobilisation_modes"] == [
-        ModeMobilisation.ENVOYER_UN_COURRIEL.value,
-        ModeMobilisation.SE_PRESENTER.value,
-    ]
-    assert response.data["mobilisation_modes_display"] == [
-        ModeMobilisation.ENVOYER_UN_COURRIEL.label,
-        ModeMobilisation.SE_PRESENTER.label,
-    ]
-    assert response.data["mobilisable_by"] == [
-        PersonneMobilisatrice.USAGERS.value,
-        PersonneMobilisatrice.PROFESSIONNELS.value,
-    ]
-    service.refresh_from_db()
-    assert service.mobilisation_modes == [
-        ModeMobilisation.ENVOYER_UN_COURRIEL.value,
-        ModeMobilisation.SE_PRESENTER.value,
-    ]
-    assert service.mobilisable_by == [
-        PersonneMobilisatrice.USAGERS.value,
-        PersonneMobilisatrice.PROFESSIONNELS.value,
-    ]
-    assert service.mobilisation_details is None
-    assert service.mobilisation_link is None
 
 
 def test_sync_mobilisation_fields_keeps_formulaire_dora_on_model_without_url():

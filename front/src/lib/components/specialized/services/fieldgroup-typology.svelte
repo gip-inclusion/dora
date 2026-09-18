@@ -1,6 +1,5 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -9,20 +8,15 @@
   import FieldSubcategory from "./field-subcategory.svelte";
   import { currentSchema } from "$lib/validation/validation";
   import { URL_HELP_SITE } from "$lib/consts";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
 
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service | Model;
     model?: Model;
-    noTopPadding?: boolean;
   }
 
-  let {
-    servicesOptions,
-    service = $bindable(),
-    model,
-    noTopPadding = false,
-  }: Props = $props();
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -44,7 +38,7 @@
   );
 </script>
 
-<FieldSet title="Typologie" {showModel} {noTopPadding}>
+<FieldGroup title="Typologie du service" showSeparator={false}>
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
     <FieldCategory
       bind:service
@@ -127,11 +121,33 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps.isCumulative ?? {}} type="boolean">
-    <BooleanRadioButtonsField
-      id="isCumulative"
-      bind:value={service.isCumulative}
-      description="Cochez « Non » si le service n’est pas cumulable avec d’autres dispositifs."
+  <hr />
+  {#snippet fundingLabelsDescription()}
+    <small>
+      Choisissez un ou plusieurs financeurs. S’il ne figure pas dans la liste,
+      demandez son ajout au
+      <a
+        href="mailto:support.dora@inclusion.gouv.fr"
+        class="accent-gray-02 underline"
+        target="_blank"
+        title="Ouverture dans une nouvelle fenêtre"
+        rel="noopener"
+      >
+        support Dora
+      </a>.
+    </small>
+  {/snippet}
+
+  <FieldModel
+    {...fieldModelProps.fundingLabels ?? {}}
+    type="array"
+    options="{servicesOptions.fundingLabels}}"
+  >
+    <MultiSelectField
+      id="fundingLabels"
+      choices={servicesOptions.fundingLabels}
+      bind:value={service.fundingLabels}
+      descriptionSnippet={fundingLabelsDescription}
     />
   </FieldModel>
-</FieldSet>
+</FieldGroup>
