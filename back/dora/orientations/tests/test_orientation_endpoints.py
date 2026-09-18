@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest.mock import patch
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -15,6 +16,7 @@ from dora.core.test_utils import (
     make_structure,
     make_user,
 )
+from dora.emplois.api_client import EmploisAPIException
 from dora.structures.models import ModerationStatus, StructureMember
 
 from ..models import Orientation, OrientationStatus
@@ -769,6 +771,143 @@ class OrientationsExportTestCase(APITestCase):
             response.data[0]["detail_page_url"], orientation.get_magic_link()
         )
         self.assertEqual(response.data[0]["source"], "Plateforme de l’inclusion")
+
+    def _emplois_orientation(self, **overrides):
+        """Orientation telle que renvoyée par l'API des Emplois de l'inclusion."""
+        return {
+            "created_at": "2020-01-15T10:00:00+01:00",
+            "status": OrientationStatus.ACCEPTED.value,
+            "beneficiary_name": "Maël MALANT",
+            "france_travail_id": "12345678901",
+            "service_uid": f"dora--{self.service.id}",
+            "sender_organization_name": "France Travail - ARLES",
+            "sender_name": "Salma ABOUDI",
+            "process_link": "https://emplois.example.com/process/?token=abc",
+            **overrides,
+        }
+
+    def test_get_export_of_received_orientations_from_emplois_api(self):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            return_value=[self._emplois_orientation()],
+        ) as mocked_fetch:
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        mocked_fetch.assert_called_once_with(structure_slug=self.structure.slug)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            [
+                {
+                    "creation_date": "2020-01-15",
+                    "status": "Validée",
+                    "beneficiary_name": "Maël MALANT",
+                    "prescriber_name": "Salma ABOUDI",
+                    "prescriber_structure_name": "France Travail - ARLES",
+                    "service_name": self.service.name,
+                    "detail_page_url": "https://emplois.example.com/process/?token=abc",
+                    "source": "Plateforme de l’inclusion",
+                    "beneficiary_france_travail_number": "12345678901",
+                }
+            ],
+        )
+
+    def test_export_hides_france_travail_number_of_unaccepted_emplois_orientations(
+        self,
+    ):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            return_value=[
+                self._emplois_orientation(status=OrientationStatus.EXPIRED.value)
+            ],
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[0]["status"], "Expirée")
+        self.assertEqual(response.data[0]["beneficiary_france_travail_number"], "")
+
+    def test_export_leaves_service_name_empty_for_unknown_emplois_service(self):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            return_value=[
+                self._emplois_orientation(service_uid="di--some-external-service")
+            ],
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[0]["service_name"], "")
+
+    def test_export_merges_dora_and_emplois_orientations_by_date(self):
+        dora_orientation = baker.make(
+            Orientation,
+            creation_date=timezone.now(),
+            service=self.service,
+            status=OrientationStatus.PENDING,
+            prescriber_structure=self.structure,
+            prescriber=make_user(),
+        )
+
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            return_value=[self._emplois_orientation()],
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+        # L'orientation Dora est la plus récente, elle arrive en premier.
+        self.assertEqual(
+            [row["source"] for row in response.data],
+            ["DORA", "Plateforme de l’inclusion"],
+        )
+        self.assertEqual(
+            response.data[0]["creation_date"],
+            dora_orientation.creation_date.strftime("%Y-%m-%d"),
+        )
+
+    def test_export_still_returns_dora_orientations_if_emplois_api_fails(self):
+        baker.make(
+            Orientation,
+            creation_date=timezone.now(),
+            service=self.service,
+            status=OrientationStatus.PENDING,
+            prescriber_structure=self.structure,
+            prescriber=make_user(),
+        )
+
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            side_effect=EmploisAPIException("indisponible"),
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["source"], "DORA")
+
+    def test_export_of_sent_orientations_does_not_call_emplois_api(self):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations"
+        ) as mocked_fetch:
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        mocked_fetch.assert_not_called()
 
     def test_raise_403_if_user_not_structure_member(self):
         self.client.force_authenticate(user=make_user())
