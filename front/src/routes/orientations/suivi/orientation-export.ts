@@ -56,13 +56,13 @@ function formatReceivedOrientationExportData(
 ) {
   return exportData.map((orientation) => ({
     "Reçue le": orientation.creationDate,
+    Source: orientation.source,
     Statut: orientation.status,
     Bénéficiaire: orientation.beneficiaryName,
     "Identifiant FT": orientation.beneficiaryFranceTravailNumber,
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
     "Contact émetteur": orientation.prescriberName,
-    Source: orientation.source,
     Lien: orientation.detailPageUrl,
   }));
 }

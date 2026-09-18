@@ -28,6 +28,9 @@ class ContactPreference(models.TextChoices):
     OTHER = "AUTRE", "Autre"
 
 
+EMPLOIS_SOURCE_LABEL = "Plateforme de l’inclusion"
+
+
 class OrientationStatus(models.TextChoices):
     MODERATION_PENDING = "MODÉRATION_EN_COURS", "En cours de modération"
     MODERATION_REJECTED = "MODÉRATION_REJETÉE", "Rejetée par la modération"
@@ -371,7 +374,7 @@ class Orientation(models.Model):
         return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
     def source(self):
-        return "Plateforme de l’inclusion" if self.is_emplois() else "DORA"
+        return EMPLOIS_SOURCE_LABEL if self.is_emplois() else "DORA"
 
     def email_backend(self):
         from dora.orientations.emails.dora import backend as dora_backend
