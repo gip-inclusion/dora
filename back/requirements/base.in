@@ -9,7 +9,7 @@ django-storages[s3]
 django-datadog-logger
 djangorestframework-camel-case
 djangorestframework-gis
-djangorestframework>=3.18
+djangorestframework>=3.18.1
 django-sesame
 itoutils[django]
 mozilla-django-oidc
