@@ -1,6 +1,6 @@
 """Add Service mobilisation DI v1 fields from orientation modes and links.
 
-Columns are created empty; run backfill_di_v1 --services --wet-run after deploy.
+Columns are created empty; run backfill_di_v1 --wet-run after deploy.
 """
 
 import django.contrib.postgres.fields
