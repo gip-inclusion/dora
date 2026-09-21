@@ -3,6 +3,7 @@ import logging
 from pprint import pformat
 from typing import Dict, List, Union
 
+from data_inclusion.schema.v1 import ReseauPorteur
 from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework import serializers
@@ -19,7 +20,6 @@ from dora.structures.emails import send_invitation_email
 from dora.structures.models import (
     Structure,
     StructureMember,
-    StructureNationalLabel,
     StructurePutativeMember,
     StructureSource,
 )
@@ -82,7 +82,7 @@ class ImportStructuresHelper:
                     "siret": line["siret"],
                     "parent_siret": line["siret_parent"],
                     "admins": self._to_string_array(line["courriels_administrateurs"]),
-                    "labels": self._to_string_array(line["labels"]),
+                    "reseaux_porteurs": self._to_string_array(line["reseaux_porteurs"]),
                     "models": self._to_string_array(line["modeles"]),
                     # champs optionnels correspondant directement
                     # à un champ du modèle structure
@@ -119,7 +119,7 @@ class ImportStructuresHelper:
                     )
                     logger.info(structure.get_frontend_url())
                     self.invite_users(structure, data["admins"])
-                    self.add_labels(structure, data["labels"])
+                    self.add_reseaux_porteurs(structure, data["reseaux_porteurs"])
                     self.create_services(structure, data["models"], importing_user)
             else:
                 self.map_line_to_errors[idx] = [
@@ -198,13 +198,12 @@ class ImportStructuresHelper:
                         "L’équipe DORA",
                     )
 
-    def add_labels(
-        self, structure: Structure, labels: List[StructureNationalLabel]
-    ) -> None:
-        for label in labels:
-            if label not in structure.national_labels.all():
-                logger.info("Ajout du label %s", label.value)
-                structure.national_labels.add(label)
+    def add_reseaux_porteurs(self, structure: Structure, reseaux: List[str]) -> None:
+        existing = set(structure.reseaux_porteurs or [])
+        if new := set(reseaux) - existing:
+            logger.info("Ajout des réseaux porteurs %s", ", ".join(sorted(new)))
+            structure.reseaux_porteurs = sorted(existing | new)
+            structure.save(update_fields=["reseaux_porteurs"])
 
     def create_services(
         self, structure: Structure, models: List[ServiceModel], importing_user: User
@@ -330,7 +329,7 @@ class ImportStructuresHelper:
         "siret",
         "siret_parent",
         "courriels_administrateurs",
-        "labels",
+        "reseaux_porteurs",
         "modeles",
         "telephone",
         "courriel_structure",
@@ -354,7 +353,9 @@ class ImportSerializer(serializers.Serializer):
     siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
     parent_siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
     admins = serializers.ListField(child=serializers.EmailField(), allow_empty=True)
-    labels = serializers.ListField(child=serializers.CharField(), allow_empty=True)
+    reseaux_porteurs = serializers.ListField(
+        child=serializers.CharField(), allow_empty=True
+    )
     models = serializers.ListField(child=serializers.CharField(), allow_empty=True)
     phone = serializers.CharField(allow_blank=True, validators=[validate_phone_number])
     email = serializers.EmailField(allow_blank=True)
@@ -411,15 +412,11 @@ class ImportSerializer(serializers.Serializer):
 
         return super().validate(data)
 
-    def validate_labels(self, label_slugs: List[str]) -> List[StructureNationalLabel]:
-        labels = []
-        for label in label_slugs:
-            try:
-                label_obj = StructureNationalLabel.objects.get(value=label)
-                labels.append(label_obj)
-            except StructureNationalLabel.DoesNotExist:
-                raise ValidationError(f"Label inconnu {label}")
-        return labels
+    def validate_reseaux_porteurs(self, reseaux: List[str]) -> List[str]:
+        known = {reseau.value for reseau in ReseauPorteur}
+        if unknown := [reseau for reseau in reseaux if reseau not in known]:
+            raise ValidationError(f"Réseaux porteurs inconnus : {', '.join(unknown)}")
+        return reseaux
 
     def validate_models(self, model_slugs: List[str]) -> List[ServiceModel]:
         models = []
