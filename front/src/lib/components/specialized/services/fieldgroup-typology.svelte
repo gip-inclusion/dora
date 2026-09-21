@@ -1,22 +1,19 @@
 <script lang="ts">
   import FieldGroup from "$lib/components/display/field-group.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
   import { currentSchema } from "$lib/validation/validation";
   import { URL_HELP_SITE } from "$lib/consts";
-  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
+  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
 
-  interface Props {
-    servicesOptions: ServicesOptions;
-    service: Service | Model;
-    model?: Model;
-  }
-
-  let { servicesOptions, service = $bindable(), model }: Props = $props();
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model,
+  }: FieldGroupProps = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -38,7 +35,7 @@
   );
 </script>
 
-<FieldGroup title="Typologie du service" showSeparator={false}>
+<FieldGroup title="Typologie du service">
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
     <FieldCategory
       bind:service
@@ -111,36 +108,6 @@
       bind:value={service.kind}
       choices={servicesOptions.kinds}
       description="Sélectionnez la typologie qui correspond le mieux au service."
-    />
-  </FieldModel>
-
-  <hr />
-  {#snippet fundingLabelsDescription()}
-    <small>
-      Choisissez un ou plusieurs financeurs. S’il ne figure pas dans la liste,
-      demandez son ajout au
-      <a
-        href="mailto:support.dora@inclusion.gouv.fr"
-        class="accent-gray-02 underline"
-        target="_blank"
-        title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener"
-      >
-        support Dora
-      </a>.
-    </small>
-  {/snippet}
-
-  <FieldModel
-    {...fieldModelProps.fundingLabels ?? {}}
-    type="array"
-    options="{servicesOptions.fundingLabels}}"
-  >
-    <MultiSelectField
-      id="fundingLabels"
-      choices={servicesOptions.fundingLabels}
-      bind:value={service.fundingLabels}
-      descriptionSnippet={fundingLabelsDescription}
     />
   </FieldModel>
 </FieldGroup>

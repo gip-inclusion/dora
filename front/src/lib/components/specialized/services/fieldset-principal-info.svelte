@@ -2,6 +2,7 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import FieldgroupTypology from "./fieldgroup-typology.svelte";
   import FieldgroupPresentation from "./fieldgroup-presentation.svelte";
+  import FieldgroupFundingLabels from "./fieldgroup-funding-labels.svelte";
   import type { FieldSetProps } from "$lib/components/specialized/services/types.ts";
 
   let {
@@ -32,4 +33,5 @@
   <FieldgroupPresentation bind:service {servicesOptions} {model} />
 
   <FieldgroupTypology bind:service {servicesOptions} {model} />
+  <FieldgroupFundingLabels bind:service {servicesOptions} {model} />
 </FieldSet>
