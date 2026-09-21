@@ -15,7 +15,7 @@
   let { service = $bindable() }: Props = $props();
 </script>
 
-<FieldSet title="Contact du référent">
+<FieldSet title="Contact du service">
   {#snippet help()}
     <div>
       <p class="text-f14">
@@ -34,7 +34,7 @@
   <BasicInputField
     id="contactName"
     bind:value={service.contactName}
-    descriptionText="Personne (prénom et nom) ou département/service interne (nom) en charge de la réception et du traitement des orientations, pour ce service."
+    descriptionText="Personne ou service en charge des orientations."
   />
   <div class="flex flex-col">
     <div class="pl-s4 lg:w-2/3 lg:self-end">
@@ -74,7 +74,7 @@
       id="isContactInfoPublic"
       bind:value={service.isContactInfoPublic}
       yesLabel="OUI – visibles publiquement"
-      noLabel="NON – visibles par les acteurs de l’insertion"
+      noLabel="NON – visibles par les professionnels de l’insertion"
     />
   {/if}
 </FieldSet>

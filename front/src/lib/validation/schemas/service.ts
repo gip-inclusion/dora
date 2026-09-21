@@ -35,7 +35,7 @@ export const serviceSchema: v.Schema = {
     required: true,
   },
   name: {
-    label: "Titre",
+    label: "Titre du service",
     default: "",
     rules: [
       v.isString(),
@@ -92,7 +92,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString()],
   },
   conditionsAcces: {
-    label: "Conditions d'accès",
+    label: "Conditions d’accès",
     default: "",
     rules: [v.isString()],
   },
@@ -204,7 +204,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString()],
   },
   contactName: {
-    label: "Prénom et nom",
+    label: "Nom de l’interlocuteur",
     default: "",
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],

@@ -33,7 +33,7 @@
   );
 </script>
 
-<FieldGroup title="Publics">
+<FieldGroup title="Publics concernés">
   {#if servicesOptions.publics.length}
     <FieldModel {...fieldModelProps.publics ?? {}} type="array">
       <MultiSelectField
@@ -41,7 +41,7 @@
         bind:value={service.publics}
         choices={servicesOptions.publics}
         sort
-        description="Tous publics par défaut. Un ou plusieurs publics possibles. Vous pouvez apporter des précisions sur les publics concernés."
+        description="Tous publics par défaut. Un ou plusieurs publics possibles."
         placeholder="Tous publics"
       />
     </FieldModel>

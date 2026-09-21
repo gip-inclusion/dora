@@ -35,7 +35,7 @@
   );
 </script>
 
-<FieldGroup title="Conditions d'accès">
+<FieldGroup title="Conditions d’accès">
   <FieldModel {...fieldModelProps.conditionsAcces ?? {}}>
     <TextareaField
       id="conditionsAcces"
@@ -43,8 +43,8 @@
         () => service.conditionsAcces ?? "",
         (v) => (service.conditionsAcces = v)
       }
-      description="Y a-t-il des pré-requis ou justificatifs à fournir pour accéder au service&nbsp;?"
-      placeholder="Exemple&nbsp;:&nbsp;Etre bénéficiaire du RSA…"
+      description="Y a-t-il des pré-requis ou justificatifs à fournir pour accéder au service&#8239;?"
+      placeholder="Exemple&#8239;: Être bénéficiaire du RSA…"
     />
   </FieldModel>
   <FieldModel {...fieldModelProps.forms ?? {}} type="files">
