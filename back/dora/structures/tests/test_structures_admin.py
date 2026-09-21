@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+import pytest
 from django.contrib.messages import get_messages
 from django.core import mail
 from django.urls import reverse
@@ -9,6 +10,7 @@ from freezegun import freeze_time
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_orientation, make_structure, make_user
 from dora.orientations.models import OrientationStatus
+from dora.structures.admin import StructureAdminForm
 from dora.structures.models import StructurePutativeMember
 
 
@@ -342,3 +344,55 @@ def test_moderation_reject(mock_delete, mock_exists, admin_client):
         f"{structure_list_url}?pending_moderation=pending_moderation"
     )
     assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
+
+
+def test_admin_filter_by_reseau_porteur(admin_client):
+    in_reseau = make_structure(reseaux_porteurs=["mission-locale", "mobin"])
+    other = make_structure(reseaux_porteurs=["france-travail"])
+
+    response = admin_client.get(
+        reverse("admin:structures_structure_changelist"),
+        {"reseau_porteur": "mobin"},
+    )
+
+    assert response.status_code == 200
+    results = list(response.context["cl"].result_list)
+    assert in_reseau in results
+    assert other not in results
+
+
+def test_admin_change_form_edits_reseaux_porteurs_only(admin_client):
+    structure = make_structure(typology="ASSO")
+    url = reverse("admin:structures_structure_change", args=[structure.pk])
+
+    response = admin_client.get(url)
+
+    assert response.status_code == 200
+    form = response.context["adminform"].form
+    assert "reseaux_porteurs" in form.fields
+    assert "typology" not in form.fields
+    assert "national_labels" not in form.fields
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        pytest.param(
+            ["mobin", "france-travail"], ["france-travail", "mobin"], id="sorted"
+        ),
+        pytest.param([], None, id="empty"),
+    ],
+)
+def test_admin_form_cleans_reseaux_porteurs(value, expected):
+    form = StructureAdminForm(data={"reseaux_porteurs": value})
+    form.is_valid()
+
+    assert "reseaux_porteurs" not in form.errors
+    assert form.cleaned_data["reseaux_porteurs"] == expected
+
+
+def test_admin_form_rejects_unknown_reseau_porteur():
+    form = StructureAdminForm(data={"reseaux_porteurs": ["pas-un-reseau"]})
+
+    assert not form.is_valid()
+    assert "reseaux_porteurs" in form.errors

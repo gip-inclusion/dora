@@ -1,5 +1,7 @@
 import logging
 
+from data_inclusion.schema.v1 import ReseauPorteur
+from django import forms
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
@@ -166,6 +168,40 @@ class IsBranchListFilter(admin.SimpleListFilter):
             return queryset.filter(parent__isnull=False)
 
 
+class ReseauPorteurListFilter(admin.SimpleListFilter):
+    title = "réseau porteur"
+    parameter_name = "reseau_porteur"
+
+    def lookups(self, request, model_admin):
+        return sorted(
+            ((r.value, r.label) for r in ReseauPorteur),
+            key=lambda choice: choice[1].casefold(),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(reseaux_porteurs__contains=[self.value()])
+
+
+class StructureAdminForm(forms.ModelForm):
+    reseaux_porteurs = forms.MultipleChoiceField(
+        label="Réseaux porteurs",
+        choices=sorted(
+            ((r.value, r.label) for r in ReseauPorteur),
+            key=lambda choice: choice[1].casefold(),
+        ),
+        required=False,
+        widget=forms.SelectMultiple(attrs={"size": 15}),
+    )
+
+    class Meta:
+        model = Structure
+        fields = "__all__"
+
+    def clean_reseaux_porteurs(self):
+        return sorted(set(self.cleaned_data["reseaux_porteurs"])) or None
+
+
 class ServiceInline(admin.TabularInline):
     model = Service
     show_change_link = True
@@ -212,6 +248,8 @@ class OrientationModerationPendingInline(admin.TabularInline):
 
 
 class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
+    form = StructureAdminForm
+
     def __init__(self, *args, **kwargs):
         self.import_structure_helper = ImportStructuresHelper()
         return super().__init__(*args, **kwargs)
@@ -221,7 +259,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         "slug",
         "parent",
         "department",
-        "typology",
+        "reseaux_porteurs",
         "city_code",
         "city",
         "creation_date",
@@ -236,8 +274,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         "creation_date",
         "modification_date",
         "source",
-        "typology",
-        "national_labels",
+        ReseauPorteurListFilter,
         "department",
     ]
     search_fields = (
@@ -262,18 +299,11 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         "modification_date",
         "data_inclusion_id",
         "data_inclusion_source",
-        "reseaux_porteurs",
+        # conservés pour audit : remplacés par reseaux_porteurs
+        "typology",
+        "national_labels",
     )
     raw_id_fields = ("parent", "creator", "last_editor")
-
-    def formfield_for_choice_field(self, db_field, request, **kwargs):
-        # La typologie est obligatoire mais a une valeur par défaut vide (cas des
-        # structures créées par SIRET) : Django n'ajoute alors pas d'option vide et
-        # le navigateur affiche la première typologie (ACI), qui serait attribuée
-        # silencieusement à l'enregistrement.
-        if db_field.name == "typology":
-            kwargs["choices"] = db_field.get_choices(include_blank=True)
-        return super().formfield_for_choice_field(db_field, request, **kwargs)
 
     # Ajout du contexte moderation_pending qui définit si oui ou non le bloc modération est affiché.
     def change_view(self, request, object_id, form_url="", extra_context=None):
