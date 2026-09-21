@@ -32,10 +32,10 @@
   {#snippet help()}
     <div>
       <p class="text-f14">
-        Les conditions d'accueil précise comment se déroule concrètement le
+        Les conditions d’accueil précise comment se déroule concrètement le
         service pour les bénéficiaires qui y seront orientés. Ces informations
         sont utilisées pour informer les prescripteurs et les bénéficiaires et
-        peuvent différer d'un service à l'autre au sein d'une même structure.
+        peuvent différer d’un service à l’autre au sein d’une même structure.
       </p>
     </div>
   {/snippet}
@@ -67,7 +67,7 @@
         }
       />
     {:else}
-      <FieldWrapper vertical id="openingHours" label="Horaires d'accueil">
+      <FieldWrapper vertical id="openingHours" label="Horaires du service">
         <div class="flex-start gap-y-s16 flex w-1/2 flex-col">
           <UseStructureInfoButton
             onclick={() => {
