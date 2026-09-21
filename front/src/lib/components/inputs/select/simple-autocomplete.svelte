@@ -165,6 +165,7 @@
 
   // UI state
   let opened = $state(false);
+  let skipOpenOnNextFocus = false;
   let loading = $state(false);
 
   let highlightIndex = $state(-1);
@@ -584,6 +585,8 @@
     if (disabled || readonly) return;
 
     updateValue(value.filter((i) => i !== tag));
+    // On redonne le focus à l'input sans rouvrir la liste déroulante
+    skipOpenOnNextFocus = document.activeElement !== input;
     input?.focus();
   }
 
@@ -612,6 +615,11 @@
 
   function onFocusInternal() {
     onFocus();
+
+    if (skipOpenOnNextFocus) {
+      skipOpenOnNextFocus = false;
+      return;
+    }
 
     resetListToAllItemsAndOpen();
   }
