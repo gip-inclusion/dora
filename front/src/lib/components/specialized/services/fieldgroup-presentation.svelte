@@ -37,7 +37,7 @@
   );
 </script>
 
-<FieldGroup title="Presentation">
+<FieldGroup title="Presentation du service">
   <FieldModel {...fieldModelProps.name ?? {}}>
     <BasicInputField
       id="name"
