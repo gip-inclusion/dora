@@ -19,6 +19,7 @@
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
   import {
+    getStatusDefinition,
     getStructureStatus,
     getStatusLabel,
     parseStatusFilter,
@@ -47,11 +48,12 @@
     }
     goto(url, { replaceState: true, keepFocus: true, noScroll: true });
   }
-  let filterDefinition: string | undefined = $state();
   let structures: AdminStructure[] = $state([]);
   let filteredStructures: AdminStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
+
+  const filterDefinition = $derived(getStatusDefinition(searchStatus));
 
   async function handleDepartmentChange(dept: GeoApiValue) {
     structures = [];
@@ -163,7 +165,6 @@
       {structures}
       bind:filteredStructures
       bind:searchStatus={() => searchStatus, setSearchStatus}
-      bind:filterDefinition
       servicesOptions={data.servicesOptions}
       structuresOptions={data.structuresOptions}
     />
