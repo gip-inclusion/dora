@@ -48,7 +48,6 @@
     goto(url, { replaceState: true, keepFocus: true, noScroll: true });
   }
   let filterDefinition: string | undefined = $state();
-  let filterActions: string | undefined = $state();
   let structures: AdminStructure[] = $state([]);
   let filteredStructures: AdminStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
@@ -165,7 +164,6 @@
       bind:filteredStructures
       bind:searchStatus={() => searchStatus, setSearchStatus}
       bind:filterDefinition
-      bind:filterActions
       servicesOptions={data.servicesOptions}
       structuresOptions={data.structuresOptions}
     />
@@ -189,9 +187,6 @@
             {#if searchStatus !== "all" && filterDefinition}
               <Notice type="info" title={filterDefinition}>
                 <div>
-                  {#if filterActions}
-                    Action(s)&#8239;: {filterActions}
-                  {/if}
                   <a
                     href={URL_MANAGER_DASHBOARD_HELP_NOTICE}
                     target="_blank"

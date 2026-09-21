@@ -18,7 +18,6 @@
   interface Props {
     searchStatus: StatusFilter;
     filterDefinition?: string;
-    filterActions?: string;
     servicesOptions: ServicesOptions;
     structuresOptions: StructuresOptions;
     structures?: AdminStructure[];
@@ -28,7 +27,6 @@
   let {
     searchStatus = $bindable(),
     filterDefinition = $bindable(),
-    filterActions = $bindable(),
     servicesOptions,
     structuresOptions,
     structures = [],
@@ -39,49 +37,41 @@
     status: StatusFilter;
     label: string;
     definition: string;
-    actions?: string;
   }[] = [
     {
       status: "all",
       label: getStatusLabel("all"),
-      definition: "Toutes les structures",
+      definition:
+        "Toutes les structures référencées par Dora sur le territoire",
     },
     {
       status: "expiredInvitation",
       label: getStatusLabel("expiredInvitation"),
-      definition:
-        "Structures où un administrateur a été invité mais supprimé au bout de 120 jours (RGPD) en l’absence de réponse à l’invitation",
-      actions: "Identifier un autre administrateur.",
+      definition: "Structures sans utilisateur",
     },
     {
       status: "awaitingModeration",
       label: getStatusLabel("awaitingModeration"),
       definition:
-        "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
-      actions:
-        "Vérifier la conformité de la structure et si les administrateurs font bien partie de ses effectifs. En cas de doute, contacter l’équipe DORA.",
+        "Structures avec un premier administrateur en attente de modération",
     },
     {
       status: "awaitingActivation",
       label: getStatusLabel("awaitingActivation"),
       definition:
-        "Structures avec un administrateur validé sans services publiés",
-      actions:
-        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à référencer leurs services sur DORA. Les SIAE sont à exclure car elles n’ont pas vocation à référencer des services supplémentaires.",
+        "Structures avec (au moins) un administrateur validé mais sans service publié",
     },
     {
       status: "awaitingUpdate",
       label: getStatusLabel("awaitingUpdate"),
       definition:
-        "Structures ayant un ou des services publiés qui nécessitent une actualisation",
-      actions:
-        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à actualiser leur services.",
+        "Structures avec (au moins) un service publié en attente d’actualisation",
     },
     {
       status: "obsolete",
       label: "Désactivées",
       definition:
-        "Structures désactivées - qui n’existent plus ou qui ne respectent pas la charte DORA",
+        "Structures désactivées par l’équipe DORA ou un gestionnaire de territoire",
     },
   ];
 
@@ -187,14 +177,12 @@
       });
   }
 
-  // La définition et les actions suivent le filtre courant, y compris quand
-  // celui-ci est défini via l'URL.
+  // La définition suit toujours le filtre courant, notamment lorsqu'il est défini via l'URL.
   $effect(() => {
     const setting = statusFilterSettings.find(
       ({ status }) => status === searchStatus
     );
     filterDefinition = setting?.definition;
-    filterActions = setting?.actions;
   });
 
   $effect(() => {
