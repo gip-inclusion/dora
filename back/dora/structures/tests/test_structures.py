@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+import pytest
+from data_inclusion.schema.v1 import ReseauPorteur
 from django.core import mail
 from model_bakery import baker
 from rest_framework.test import APITestCase
@@ -12,7 +14,6 @@ from dora.core.test_utils import (
     make_user,
 )
 from dora.services.enums import ServiceStatus
-from dora.structures.constants import RESTRICTED_NATIONAL_LABELS
 from dora.structures.models import (
     Structure,
     StructureMember,
@@ -202,23 +203,6 @@ class StructureTestCase(APITestCase):
         response = self.client.get(f"/structures/{slug}/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["opening_hours"], opening_hours)
-
-    def test_update_national_labels_accepted(self):
-        slug = self.my_struct.slug
-        national_labels = ["cnaf", "france-travail"]
-        response = self.client.patch(
-            f"/structures/{slug}/",
-            {"national_labels": national_labels},
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.my_struct.refresh_from_db()
-
-        response = self.client.get(f"/structures/{slug}/")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            sorted(response.data["national_labels"]), sorted(national_labels)
-        )
 
     # Models can_user_edit
 
@@ -1329,18 +1313,86 @@ class StructureMemberTestCase(APITestCase):
 # Tests au format pytest
 
 
-def test_restricted_national_labels(api_client, load_labels):
-    # On s'assure que la liste des options contient
-    # les label nationaux sélectionnables "restreints"
+def test_options_list_reseaux_porteurs(api_client):
     response = api_client.get("/structures-options", follow=True)
     data = response.json()
 
-    assert "restrictedNationalLabels" in data.keys(), (
-        "Les labels restreints ne sont pas dans les options"
+    assert set(data) == {"reseauxPorteurs", "sources"}
+    assert {option["value"] for option in data["reseauxPorteurs"]} == {
+        r.value for r in ReseauPorteur
+    }
+    assert {
+        "value": ReseauPorteur.MOBIN.value,
+        "label": ReseauPorteur.MOBIN.label,
+    } in data["reseauxPorteurs"]
+
+
+@pytest.fixture
+def structure_admin_client(api_client):
+    structure = make_structure()
+    user = make_user()
+    make_structure_member(user=user, structure=structure, is_admin=True)
+    api_client.force_authenticate(user=user)
+    return api_client, structure
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        pytest.param(
+            ["mission-locale", "france-travail", "mission-locale"],
+            ["france-travail", "mission-locale"],
+            id="sorted_and_deduplicated",
+        ),
+        pytest.param([], None, id="empty"),
+    ],
+)
+def test_update_reseaux_porteurs(structure_admin_client, value, expected):
+    client, structure = structure_admin_client
+
+    response = client.patch(
+        f"/structures/{structure.slug}/",
+        {"reseaux_porteurs": value},
+        format="json",
     )
 
-    values = [lbl.get("value") for lbl in data["restrictedNationalLabels"]]
+    assert response.status_code == 200
+    assert response.data["reseaux_porteurs"] == (expected or [])
+    structure.refresh_from_db()
+    assert structure.reseaux_porteurs == expected
 
-    assert tuple(values) == RESTRICTED_NATIONAL_LABELS, (
-        "la liste des labels restreints est incorrecte"
+
+def test_update_reseaux_porteurs_rejects_unknown_value(structure_admin_client):
+    client, structure = structure_admin_client
+
+    response = client.patch(
+        f"/structures/{structure.slug}/",
+        {"reseaux_porteurs": ["pas-un-reseau"]},
+        format="json",
     )
+
+    assert response.status_code == 400
+    assert "reseaux_porteurs" in response.data
+
+
+def test_legacy_label_fields_are_read_only(structure_admin_client):
+    client, structure = structure_admin_client
+    structure.typology = "ASSO"
+    structure.other_labels = ["Label local"]
+    structure.save()
+
+    response = client.patch(
+        f"/structures/{structure.slug}/",
+        {
+            "typology": "FT",
+            "national_labels": ["france-travail"],
+            "other_labels": ["Label régional"],
+        },
+        format="json",
+    )
+
+    assert response.status_code == 200
+    structure.refresh_from_db()
+    assert structure.typology == "ASSO"
+    assert not structure.national_labels.exists()
+    assert structure.other_labels == ["Label local"]
