@@ -2,7 +2,6 @@ import pytest
 from model_bakery import baker
 
 from dora.core.test_utils import make_published_service
-from dora.data_inclusion.enums import TypologieStructure
 from dora.services.models import FranceTravailOrientableService
 
 
@@ -30,7 +29,7 @@ def orientable_service_via_dora_form():
 @pytest.fixture
 def ft_orientable_service():
     service = make_published_service()
-    service.structure.typology = TypologieStructure.FT
+    service.structure.reseaux_porteurs = ["france-travail"]
     service.structure.save()
 
     FranceTravailOrientableService.objects.create(
