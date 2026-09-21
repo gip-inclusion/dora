@@ -78,7 +78,7 @@
     {/if}
 
     <div class="mb-s16">
-      <StructureEditLinks structureSlug={data.structure.slug} />
+      <StructureEditLinks structure={data.structure} />
     </div>
 
     <h4>Historique</h4>

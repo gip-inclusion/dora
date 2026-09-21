@@ -12,7 +12,7 @@
   import UserInfo from "../user-info.svelte";
   import {
     getStructureStatusBadges,
-    type StructureStatusColor,
+    STATUS_DOT_COLORS,
   } from "./structure-statuses";
   import StructureEditLinks from "./structure-edit-links.svelte";
   import StructureModerationMenu from "./structure-moderation-menu.svelte";
@@ -27,17 +27,10 @@
     structure: AdminStructure;
     highlighted: boolean;
     onHover: (slug: string | null) => void;
-    onRefresh: () => void;
+    onRefresh: () => void | Promise<void>;
   }
 
   let { structure, highlighted, onHover, onRefresh }: Props = $props();
-
-  const DOT_COLORS: Record<StructureStatusColor, string> = {
-    green: "bg-success",
-    orange: "bg-warning",
-    red: "bg-error",
-    gray: "bg-gray-text-alt",
-  };
 
   let expanded = $state(false);
   // Les informations supplémentaires sont chargées lors du premier dépliage de la carte.
@@ -69,8 +62,8 @@
   }
 
   async function handleModerationRefresh() {
-    await loadDetails();
-    onRefresh();
+    // La carte et son détail sont indépendants.
+    await Promise.all([loadDetails(), onRefresh()]);
   }
 </script>
 
@@ -98,7 +91,7 @@
         {#each badges as badge}
           <span class="gap-s4 inline-flex items-center">
             <span
-              class="h-s10 w-s10 inline-block shrink-0 rounded-full {DOT_COLORS[
+              class="h-s10 w-s10 inline-block shrink-0 rounded-full {STATUS_DOT_COLORS[
                 badge.color
               ]}"
               aria-hidden="true"
@@ -174,7 +167,7 @@
           </section>
         {/if}
       {/if}
-      <StructureEditLinks structureSlug={structure.slug} small />
+      <StructureEditLinks {structure} small />
     </div>
   {/if}
 </div>
