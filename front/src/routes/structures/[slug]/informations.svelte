@@ -44,13 +44,14 @@
 
   let fullDesc: string = $derived(markdownToHTML(structure.fullDesc, 4));
 
-  let nationalLabelsDisplay = $derived(
-    structure.nationalLabels
-      .map((nationalLabel: string) => {
-        return structuresOptions.nationalLabels.find(
-          (label) => label.value === nationalLabel
-        ).label;
-      })
+  let reseauxPorteursDisplay = $derived(
+    structure.reseauxPorteurs
+      .map(
+        (value: string) =>
+          structuresOptions.reseauxPorteurs.find(
+            (reseau) => reseau.value === value
+          )?.label ?? value
+      )
       .join(", ")
   );
   let sourceIsDataInclusion = $derived(
@@ -126,11 +127,11 @@
     <p class="mb-s32 text-f21 font-bold">{structure.shortDesc}</p>
 
     <div class="gap-s32 flex flex-col md:flex-row">
-      {#if nationalLabelsDisplay}
+      {#if reseauxPorteursDisplay}
         <div class="flex-1">
-          <h3 class="mb-s10 text-f17 text-france-blue">Labels nationaux</h3>
+          <h3 class="mb-s10 text-f17 text-france-blue">Réseaux porteurs</h3>
           <p class="m-s0 text-f14">
-            {nationalLabelsDisplay}
+            {reseauxPorteursDisplay}
           </p>
         </div>
       {/if}

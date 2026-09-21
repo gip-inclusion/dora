@@ -106,6 +106,10 @@
       <GoogleSearchLink searchString={data.structure.siret} />
     </InfoLine>
 
+    <InfoLine condition={data.structure.reseauxPorteurs.length > 0}>
+      réseaux porteurs: {data.structure.reseauxPorteurs.join(", ")}
+    </InfoLine>
+
     <InfoLine condition={data.structure.typologyDisplay}>
       typologie: {data.structure.typologyDisplay}
     </InfoLine>

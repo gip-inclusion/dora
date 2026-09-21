@@ -10,7 +10,6 @@
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
-    Typology,
   } from "$lib/types";
 
   import { getStructureStatus, getStatusLabel } from "./structures-filters";
@@ -90,18 +89,16 @@
   type SortingChoice = (typeof SORTING_CHOICES)[number]["value"];
 
   interface SearchParams {
-    nationalLabels: string[];
+    reseauxPorteurs: string[];
     searchString: string;
     selectedCategories: ServiceCategory[];
-    selectedTypologies: Typology[][number]["value"][];
     sortChoice: SortingChoice;
   }
 
   const emptySearchParams: SearchParams = {
     searchString: "",
-    nationalLabels: [],
+    reseauxPorteurs: [],
     selectedCategories: [],
-    selectedTypologies: [],
     sortChoice: "name",
   };
 
@@ -145,16 +142,10 @@
       })
       .filter((struct) => {
         return (
-          !params.nationalLabels.length ||
-          struct.nationalLabels.some((label: string) =>
-            params.nationalLabels.includes(label)
+          !params.reseauxPorteurs.length ||
+          struct.reseauxPorteurs.some((reseau: string) =>
+            params.reseauxPorteurs.includes(reseau)
           )
-        );
-      })
-      .filter((struct) => {
-        return (
-          !params.selectedTypologies.length ||
-          params.selectedTypologies.includes(struct.typology)
         );
       })
       .filter((struct) => {
@@ -260,13 +251,14 @@
     <div class="mb-s16 gap-s24 flex flex-col">
       <div class="gap-s16 flex justify-between">
         <div class="flex grow flex-col">
-          <label for="typologies">Typologies</label>
+          <label for="reseauxPorteurs">Réseaux porteurs</label>
           <Select
-            id="typologies"
+            id="reseauxPorteurs"
             multiple
-            bind:value={searchParams.selectedTypologies}
-            choices={structuresOptions.typologies}
-            sort
+            bind:value={searchParams.reseauxPorteurs}
+            choices={structuresOptions.reseauxPorteurs}
+            placeholder="Choisir…"
+            placeholderMulti="Choisir…"
           />
         </div>
         <div class="flex grow flex-col">
@@ -281,16 +273,6 @@
             sort
           />
         </div>
-      </div>
-
-      <div class="flex grow flex-col">
-        <label for="moderation">Labels nationaux…</label>
-        <Select
-          id="sort"
-          multiple
-          bind:value={searchParams.nationalLabels}
-          choices={structuresOptions.nationalLabels}
-        />
       </div>
 
       <div class="gap-s16 flex justify-between">

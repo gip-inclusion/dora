@@ -122,17 +122,16 @@ export interface AdminStructure {
   moderationStatus: ModerationStatus;
   modificationDate: string;
   name: string;
-  nationalLabels: string[];
   numDraftServices: number;
   numOutdatedServices: number;
   numPublishedServices: number;
   numServices: number;
   parent: string;
   phone: string;
+  reseauxPorteurs: string[];
   shortDesc: string;
   siret: string;
   slug: string;
-  typology: string;
   typologyDisplay: string;
   admins: string[];
   editors: string[];
@@ -175,7 +174,6 @@ export interface Structure {
   models: StructureModel[];
   modificationDate: string;
   name: string;
-  nationalLabels: string[];
   noDoraForm: boolean;
   numModels: number;
   numServices: number;
@@ -189,6 +187,7 @@ export interface Structure {
   phone: string;
   postalCode: string;
   quickStartDone: boolean;
+  reseauxPorteurs: string[];
   services: StructureService[];
   shortAdminNames: string[];
   shortDesc: string;
@@ -196,7 +195,6 @@ export interface Structure {
   slug: string;
   source: StructureSource;
   typologyDisplay: string;
-  typology: number;
   url: string;
 }
 
@@ -234,21 +232,14 @@ export interface Establishment {
   siret: "string";
 }
 
-export interface NationalLabel {
-  value: string;
-  label: string;
-}
-
-export interface Typology {
+export interface ReseauPorteur {
   value: string;
   label: string;
 }
 
 export interface StructuresOptions {
-  nationalLabels: NationalLabel[];
+  reseauxPorteurs: ReseauPorteur[];
   sources: StructureSource[];
-  typologies: Typology[];
-  restrictedNationalLabels: NationalLabel[];
 }
 
 // OSM hours format

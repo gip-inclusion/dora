@@ -9,18 +9,6 @@ import type {
 } from "../types";
 import { logException } from "../utils/logger";
 
-function structureToBack(structure: Structure) {
-  const result = { ...structure, otherLabels: [] };
-  if (structure.otherLabels) {
-    result.otherLabels = structure.otherLabels
-      .split(",")
-      .filter((label) => label !== "")
-      .map((label) => label.trim());
-  }
-
-  return result;
-}
-
 function structureToFront(structure: Structure): Structure {
   const result = { ...structure };
   if (Array.isArray(structure.otherLabels)) {
@@ -95,7 +83,7 @@ export function createStructure(structure) {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(structureToBack(structure)),
+    body: JSON.stringify(structure),
   });
 }
 
@@ -109,7 +97,7 @@ export function modifyStructure(structure) {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(structureToBack(structure)),
+    body: JSON.stringify(structure),
   });
 }
 

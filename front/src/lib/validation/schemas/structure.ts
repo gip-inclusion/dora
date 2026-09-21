@@ -16,13 +16,6 @@ export const structureSchema: v.Schema = {
     required: true,
     maxLength: 255,
   },
-  typology: {
-    label: "Typologie",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
-    required: true,
-    maxLength: 255,
-  },
   address1: {
     label: "Adresse",
     default: "",
@@ -94,18 +87,10 @@ export const structureSchema: v.Schema = {
     rules: [v.isString()],
     post: [v.trim],
   },
-  nationalLabels: {
-    label: "Labels nationaux",
+  reseauxPorteurs: {
+    label: "Réseaux porteurs",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    maxLength: 255,
-  },
-  otherLabels: {
-    label: "Autres labels",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
-    post: [v.trim],
-    maxLength: 255,
   },
   openingHours: {
     label: "Horaires de la structure",
