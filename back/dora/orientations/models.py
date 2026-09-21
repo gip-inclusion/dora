@@ -34,9 +34,9 @@ EMPLOIS_SOURCE_LABEL = "Plateforme de l’inclusion"
 class OrientationStatus(models.TextChoices):
     MODERATION_PENDING = "MODÉRATION_EN_COURS", "En cours de modération"
     MODERATION_REJECTED = "MODÉRATION_REJETÉE", "Rejetée par la modération"
-    PENDING = "OUVERTE", "Ouverte / En cours de traitement"
+    PENDING = "OUVERTE", "En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
-    REJECTED = "REFUSÉE", "Refusée"
+    REJECTED = "REFUSÉE", "Déclinée"
     EXPIRED = "EXPIRÉE", "Expirée"
 
 

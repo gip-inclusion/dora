@@ -720,7 +720,7 @@ class OrientationsExportTestCase(APITestCase):
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
-                    "status": "Refusée",
+                    "status": "Déclinée",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
                     "prescriber_name": "Utilisateur supprimé",
                     "prescriber_structure_name": "Pas de prescripteur",
@@ -731,7 +731,7 @@ class OrientationsExportTestCase(APITestCase):
                 },
                 {
                     "creation_date": orientation_3.creation_date.strftime("%Y-%m-%d"),
-                    "status": "Ouverte / En cours de traitement",
+                    "status": "En cours de traitement",
                     "beneficiary_name": orientation_3.get_beneficiary_full_name(),
                     "prescriber_name": prescriber.get_full_name(),
                     "prescriber_structure_name": orientation_3.prescriber_structure.name,
