@@ -1,8 +1,15 @@
 import type { AdminStructure } from "$lib/types";
 
-import { getStructureStatus } from "./structures-filters";
+import { getStatusLabel, getStructureStatus } from "./structures-filters";
 
 export type StructureStatusColor = "green" | "orange" | "red" | "gray";
+
+export const STATUS_DOT_COLORS: Record<StructureStatusColor, string> = {
+  green: "bg-success",
+  orange: "bg-warning",
+  red: "bg-error",
+  gray: "bg-gray-text-alt",
+};
 
 export interface StructureStatusBadge {
   label: string;
@@ -25,16 +32,18 @@ export function getAdminsBadge(
 ): StructureStatusBadge {
   const status = getStructureStatus(structure);
 
-  if (status === "awaitingModeration") {
-    return { label: "Administrateur à valider", color: "orange" };
-  }
-  if (status === "waiting") {
-    return { label: "Administrateur invité", color: "orange" };
+  if (status === "awaitingModeration" || status === "waiting") {
+    return { label: getStatusLabel(status), color: "orange" };
   }
   if (!structure.hasAdmin) {
-    return { label: "Sans administrateur", color: "red" };
+    return { label: getStatusLabel("orphan"), color: "red" };
   }
   return { label: "Administrateur validé", color: "green" };
+}
+
+// Indique que le statut mis en avant concerne les administrateurs de la structure.
+export function hasAdminStatus(structure: AdminStructure): boolean {
+  return !structure.isObsolete && getAdminsBadge(structure).color !== "green";
 }
 
 export function getStructureStatusBadges(

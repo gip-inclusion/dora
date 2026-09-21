@@ -1,34 +1,41 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import type { AdminStructure } from "$lib/types";
+
+  import { hasAdminStatus } from "./structure-statuses";
 
   interface Props {
-    structureSlug: string;
+    structure: AdminStructure;
     small?: boolean;
   }
 
-  let { structureSlug, small = false }: Props = $props();
+  let { structure, small = false }: Props = $props();
+
+  const highlightAdmins = $derived(hasAdminStatus(structure));
 </script>
 
 <div class="gap-s16 flex flex-row flex-wrap justify-end">
-  <LinkButton
-    label="Modifier les services"
-    to="/structures/{structureSlug}/services"
-    otherTab
-    secondary
-    {small}
-  />
-  <LinkButton
-    label="Modifier la structure"
-    to="/structures/{structureSlug}"
-    otherTab
-    secondary
-    {small}
-  />
+  {#if !structure.isObsolete}
+    <LinkButton
+      label="Modifier les services"
+      to="/structures/{structure.slug}/services"
+      otherTab
+      secondary
+      {small}
+    />
+    <LinkButton
+      label="Modifier la structure"
+      to="/structures/{structure.slug}"
+      otherTab
+      secondary
+      {small}
+    />
+  {/if}
   <LinkButton
     label="Gérer les administrateurs"
-    to="/structures/{structureSlug}/collaborateurs"
+    to="/structures/{structure.slug}/collaborateurs"
     otherTab
-    secondary
+    secondary={!highlightAdmins}
     {small}
   />
 </div>
