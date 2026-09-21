@@ -7,7 +7,7 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
+from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
@@ -204,8 +204,8 @@ def test_structures_serialization_exemple(
             value="mobilite--entretenir-reparer-son-vehicule"
         )
     )
+    struct.reseaux_porteurs = ["afpa"]
     struct.save()
-    sync_v1_structure_fields(struct)
     response = api_client.get(f"/api/v2/structures/{struct.id}/")
 
     assert 200 == response.status_code

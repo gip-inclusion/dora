@@ -11,7 +11,6 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
-from dora.core.di_v1 import sync_v1_structure_fields
 from dora.core.models import ModerationStatus
 from dora.orientations.emails import send_orientation_created_emails
 from dora.orientations.models import Orientation, OrientationStatus
@@ -266,10 +265,6 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         "reseaux_porteurs",
     )
     raw_id_fields = ("parent", "creator", "last_editor")
-
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-        sync_v1_structure_fields(form.instance)
 
     # Ajout du contexte moderation_pending qui définit si oui ou non le bloc modération est affiché.
     def change_view(self, request, object_id, form_url="", extra_context=None):
