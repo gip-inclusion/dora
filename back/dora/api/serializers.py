@@ -122,7 +122,7 @@ class StructureSerializer(serializers.ModelSerializer):
         return obj.other_labels
 
     def get_labels_nationaux(self, obj):
-        return [label.value for label in obj.national_labels.all()]
+        return obj.reseaux_porteurs or []
 
     def get_latitude(self, obj):
         return obj.latitude
