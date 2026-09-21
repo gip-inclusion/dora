@@ -59,7 +59,7 @@
     </div>
     <h3>
       {data.structure.name}
-      <SmallLink link="/structures/{data.structure.slug}" label="front" />
+      <SmallLink link="/structures/{data.structure.slug}" label="fiche" />
       <GoogleSearchLink searchString={data.structure.name} />
     </h3>
 
@@ -68,7 +68,7 @@
         Antenne de <strong>{data.structure.parent.name}</strong>
         <SmallLink
           link="/structures/{data.structure.parent.slug}"
-          label="front"
+          label="fiche"
         />
         <SmallLink
           link="/admin/structures/{data.structure.parent.slug}"
@@ -191,7 +191,7 @@
           <h5>
             {branch.name}
 
-            <SmallLink link="/structures/{branch.slug}" label="front" />
+            <SmallLink link="/structures/{branch.slug}" label="fiche" />
             <SmallLink link="/admin/structures/{branch.slug}" label="admin" />
           </h5>
 
@@ -210,7 +210,7 @@
           <h5>
             {model.name}
 
-            <SmallLink link="/models/{model.slug}" label="front" />
+            <SmallLink link="/models/{model.slug}" label="fiche" />
           </h5>
           <InfoLine condition={model.shortDesc}>
             <span class="italic">{model.shortDesc}</span>
@@ -227,7 +227,7 @@
           <h5>
             {service.name}
 
-            <SmallLink link="/services/{service.slug}" label="front" />
+            <SmallLink link="/services/{service.slug}" label="fiche" />
             <SmallLink link="/admin/services/{service.slug}" label="admin" />
           </h5>
           <InfoLine condition={service.shortDesc}>
