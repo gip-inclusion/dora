@@ -12,12 +12,11 @@
     StructuresOptions,
   } from "$lib/types";
 
-  import { getStructureStatus, getStatusLabel } from "./structures-filters";
+  import { getStructureStatus, STATUS_FILTER_TABS } from "./structures-filters";
   import type { StatusFilter } from "./types";
 
   interface Props {
     searchStatus: StatusFilter;
-    filterDefinition?: string;
     servicesOptions: ServicesOptions;
     structuresOptions: StructuresOptions;
     structures?: AdminStructure[];
@@ -26,54 +25,11 @@
 
   let {
     searchStatus = $bindable(),
-    filterDefinition = $bindable(),
     servicesOptions,
     structuresOptions,
     structures = [],
     filteredStructures = $bindable(),
   }: Props = $props();
-
-  const statusFilterSettings: {
-    status: StatusFilter;
-    label: string;
-    definition: string;
-  }[] = [
-    {
-      status: "all",
-      label: getStatusLabel("all"),
-      definition:
-        "Toutes les structures référencées par Dora sur le territoire",
-    },
-    {
-      status: "expiredInvitation",
-      label: getStatusLabel("expiredInvitation"),
-      definition: "Structures sans utilisateur",
-    },
-    {
-      status: "awaitingModeration",
-      label: getStatusLabel("awaitingModeration"),
-      definition:
-        "Structures avec un premier administrateur en attente de modération",
-    },
-    {
-      status: "awaitingActivation",
-      label: getStatusLabel("awaitingActivation"),
-      definition:
-        "Structures avec (au moins) un administrateur validé mais sans service publié",
-    },
-    {
-      status: "awaitingUpdate",
-      label: getStatusLabel("awaitingUpdate"),
-      definition:
-        "Structures avec (au moins) un service publié en attente d’actualisation",
-    },
-    {
-      status: "obsolete",
-      label: "Désactivées",
-      definition:
-        "Structures désactivées par l’équipe DORA ou un gestionnaire de territoire",
-    },
-  ];
 
   let showAdvancedFilters = $state(false);
 
@@ -119,11 +75,7 @@
     );
   }
 
-  function filterAndSortEntities(
-    structs: AdminStructure[],
-    params: SearchParams,
-    status: StatusFilter
-  ) {
+  function filterEntities(structs: AdminStructure[], params: SearchParams) {
     const query = normalizeString(params.searchString);
     return structs
       .filter(
@@ -147,10 +99,11 @@
             params.selectedReseauxPorteurs.includes(reseau)
           )
         );
-      })
-      .filter((struct) => {
-        return status === "all" || getStructureStatus(struct) === status;
-      })
+      });
+  }
+
+  function sortEntities(structs: AdminStructure[], sortChoice: SortingChoice) {
+    return [...structs]
       .sort((structure1, structure2) => {
         // Fait un premier tri par nom
         return normalizeString(structure1.name).localeCompare(
@@ -160,7 +113,7 @@
       })
       .sort((structure1, structure2) => {
         // Puis retrie par le critère principal
-        switch (params.sortChoice) {
+        switch (sortChoice) {
           case "numOutdatedServices":
             return (
               structure2.numOutdatedServices - structure1.numOutdatedServices
@@ -177,19 +130,30 @@
       });
   }
 
-  // La définition suit toujours le filtre courant, notamment lorsqu'il est défini via l'URL.
-  $effect(() => {
-    const setting = statusFilterSettings.find(
-      ({ status }) => status === searchStatus
-    );
-    filterDefinition = setting?.definition;
+  const matchingStructures = $derived(filterEntities(structures, searchParams));
+
+  // On compte les structures de chaque onglet/statut.
+  const statusCounts = $derived.by(() => {
+    const counts: Partial<Record<StatusFilter, number>> = {
+      all: matchingStructures.length,
+    };
+    for (const struct of matchingStructures) {
+      const status = getStructureStatus(struct);
+      if (status) {
+        counts[status] = (counts[status] ?? 0) + 1;
+      }
+    }
+    return counts;
   });
 
   $effect(() => {
-    filteredStructures = filterAndSortEntities(
-      structures,
-      searchParams,
-      searchStatus
+    filteredStructures = sortEntities(
+      searchStatus === "all"
+        ? matchingStructures
+        : matchingStructures.filter(
+            (struct) => getStructureStatus(struct) === searchStatus
+          ),
+      searchParams.sortChoice
     );
   });
 </script>
@@ -199,11 +163,11 @@
 </h2>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each statusFilterSettings as { status, label, definition }}
+  {#each STATUS_FILTER_TABS as { status, label, definition }}
     <Tooltip>
       <Button
         onclick={() => (searchStatus = status)}
-        label={`${label} (${filterAndSortEntities(structures, searchParams, status).length})`}
+        label={`${label} (${statusCounts[status] ?? 0})`}
         secondary={searchStatus !== status}
         small
       />
@@ -249,7 +213,7 @@
             id="reseaux-porteurs"
             multiple
             bind:value={searchParams.selectedReseauxPorteurs}
-            choices={structuresOptions.reseauxPorteurs ?? []}
+            choices={structuresOptions.reseauxPorteurs}
             placeholder="Choisir…"
             placeholderMulti="Choisir…"
             sort
