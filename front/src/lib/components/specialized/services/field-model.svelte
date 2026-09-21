@@ -4,11 +4,7 @@
   import Button from "$lib/components/display/button.svelte";
   import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
   import Tag from "$lib/components/display/tag.svelte";
-  import {
-    arraysCompare,
-    markdownToHTML,
-    htmlToMarkdown,
-  } from "$lib/utils/misc";
+  import { arraysCompare, markdownCompare } from "$lib/utils/misc";
 
   interface Props {
     value?: any;
@@ -51,13 +47,8 @@
       return arraysCompare(val1, val2);
     }
 
-    // tiptap insère des caractères en fin de chaine.
-    // on les supprime pour faire la comparaison
     if (type === "markdown") {
-      // la description du service est passée par l'éditeur, ce qui réécrit les liens.
-      // on le simule ainsi:
-      const rewrittenVal1 = htmlToMarkdown(markdownToHTML(val1));
-      return rewrittenVal1.trim() === val2.trim();
+      return markdownCompare(val1, val2);
     }
 
     return val1 === val2;
