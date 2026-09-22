@@ -69,18 +69,20 @@
     {:else}
       <FieldWrapper vertical id="openingHours" label="Horaires du service">
         <div class="flex-start gap-y-s16 flex w-1/2 flex-col">
-          <UseStructureInfoButton
-            onclick={() => {
-              showOpeningHoursField = true;
-              service = {
-                ...service,
-                horairesAccueil: service.structureInfo.openingHours,
-              };
-            }}
-            label="les horaires"
-            extraClass="mt-s8"
-          />
-          <span class="text-f14 font-bold">ou</span>
+          {#if service.structureInfo.openingHours}
+            <UseStructureInfoButton
+              onclick={() => {
+                showOpeningHoursField = true;
+                service = {
+                  ...service,
+                  horairesAccueil: service.structureInfo.openingHours,
+                };
+              }}
+              label="les horaires"
+              extraClass="mt-s8"
+            />
+            <span class="text-f14 font-bold">ou</span>
+          {/if}
           <Button
             small
             noBackground
@@ -89,7 +91,7 @@
             onclick={() => {
               showOpeningHoursField = true;
             }}
-            extraClass="flex align-start p-0"
+            extraClass={`${!service.structureInfo.openingHours ? "mt-s8 " : ""}flex align-start p-0`}
           />
         </div>
       </FieldWrapper>

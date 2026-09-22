@@ -37,16 +37,18 @@
     descriptionText="Personne ou service en charge des orientations."
   />
   <div class="flex flex-col">
-    <div class="pl-s4 lg:w-2/3 lg:self-end">
-      <UseStructureInfoButton
-        onclick={() =>
-          (service = {
-            ...service,
-            contactPhone: formatPhoneNumber(service.structureInfo.phone),
-          })}
-        label="le téléphone"
-      />
-    </div>
+    {#if service.structureInfo.phone}
+      <div class="pl-s4 lg:w-2/3 lg:self-end">
+        <UseStructureInfoButton
+          onclick={() =>
+            (service = {
+              ...service,
+              contactPhone: formatPhoneNumber(service.structureInfo.phone),
+            })}
+          label="le téléphone"
+        />
+      </div>
+    {/if}
     <BasicInputField
       id="contactPhone"
       type="tel"
@@ -55,12 +57,14 @@
     />
   </div>
   <div class="flex flex-col">
-    <div class="pl-s4 lg:w-2/3 lg:self-end">
-      <UseStructureInfoButton
-        onclick={() => (service.contactEmail = service.structureInfo.email)}
-        label="le courriel"
-      />
-    </div>
+    {#if service.structureInfo.email}
+      <div class="pl-s4 lg:w-2/3 lg:self-end">
+        <UseStructureInfoButton
+          onclick={() => (service.contactEmail = service.structureInfo.email)}
+          label="le courriel"
+        />
+      </div>
+    {/if}
     <BasicInputField
       id="contactEmail"
       type="email"
