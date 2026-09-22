@@ -125,6 +125,18 @@ def test_awaiting_moderation():
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
     )
 
+    # Structure sans administrateur dont la modération est en attente mais
+    # donc sans validation possible.
+    adminless_structure = make_structure(
+        is_obsolete=False,
+        moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
+    )
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=adminless_structure,
+        is_admin=False,
+    )
+
     # Structure obsolète (ne doit pas être dans le résultat)
     obsolete_structure = make_structure(
         is_obsolete=True,
@@ -141,6 +153,7 @@ def test_awaiting_moderation():
     assert awaiting_structure_2 in awaiting
     assert validated_structure not in awaiting
     assert orphan_structure not in awaiting
+    assert adminless_structure not in awaiting
     assert obsolete_structure not in awaiting
 
     # Test avec manager
@@ -153,6 +166,7 @@ def test_awaiting_moderation():
     assert awaiting_structure_2 not in awaiting_with_manager
     assert validated_structure not in awaiting_with_manager
     assert orphan_structure not in awaiting_with_manager
+    assert adminless_structure not in awaiting_with_manager
     assert obsolete_structure not in awaiting_with_manager
 
 
