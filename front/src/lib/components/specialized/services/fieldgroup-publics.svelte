@@ -35,7 +35,11 @@
 
 <FieldGroup title="Publics concernés">
   {#if servicesOptions.publics.length}
-    <FieldModel {...fieldModelProps.publics ?? {}} type="array">
+    <FieldModel
+      {...fieldModelProps.publics ?? {}}
+      type="array"
+      emptyArrayLabel="Tous publics"
+    >
       <MultiSelectField
         id="publics"
         bind:value={service.publics}
