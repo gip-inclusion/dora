@@ -1,4 +1,7 @@
+import importlib
+
 import pytest
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from model_bakery import baker
 
@@ -9,8 +12,10 @@ from dora.services.models import (
     ServiceCategory,
     ServiceModel,
     ServiceSubCategory,
+    UpdateFrequency,
     validate_unique_form_names,
 )
+from dora.services.utils import update_sync_checksum
 
 DUMMY_SERVICE = {"name": "Mon service"}
 
@@ -666,3 +671,32 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
     assert 400 == response.status_code
     assert "forms" in response.data
+
+
+recompute_migration = importlib.import_module(
+    "dora.services.migrations.0021_recompute_sync_checksums_update_frequency"
+)
+
+
+def test_recompute_sync_checksums_matches_application_checksum():
+    # ÉTANT DONNÉ un modèle dont l'empreinte a été calculée avec une ancienne formule
+    struct = make_structure()
+    model = make_model(structure=struct, update_frequency=UpdateFrequency.EVERY_MONTH)
+    # ET deux copies, l'une à jour et l'autre avec des modifications en attente
+    up_to_date = make_service(model=model, structure=struct)
+    outdated = make_service(model=model, structure=struct)
+    ServiceModel.objects.filter(pk=model.pk).update(sync_checksum="ancienne")
+    Service.objects.filter(pk=up_to_date.pk).update(last_sync_checksum="ancienne")
+    Service.objects.filter(pk=outdated.pk).update(last_sync_checksum="obsolete")
+
+    # QUAND la migration recalcule les empreintes
+    recompute_migration.recompute_sync_checksums(django_apps, None)
+
+    # ALORS l'empreinte du modèle est celle que l'application calcule
+    model.refresh_from_db()
+    assert model.sync_checksum == update_sync_checksum(model)
+    # ET seule la copie qui était à jour la suit
+    up_to_date.refresh_from_db()
+    outdated.refresh_from_db()
+    assert up_to_date.last_sync_checksum == model.sync_checksum
+    assert outdated.last_sync_checksum == "obsolete"

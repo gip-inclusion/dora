@@ -40,9 +40,9 @@ SYNC_FIELDS = [
     "online_form",
     "publics",
     "publics_precisions",
-    "qpv_or_zrr",
     "recurrence",
     "suspension_date",
+    "update_frequency",
 ]
 
 # Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
