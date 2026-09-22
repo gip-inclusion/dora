@@ -37,6 +37,20 @@ export function createModelFromService(service) {
   );
 }
 
+// Champs dont les choix sont exposés dans `servicesOptions` sous une clé au pluriel.
+// Sans cette correspondance, l'encart « Modèle » afficherait la valeur brute au lieu
+// du libellé.
+const SERVICES_OPTIONS_KEYS: Partial<Record<string, keyof ServicesOptions>> = {
+  kind: "kinds",
+  feeCondition: "feeConditions",
+  updateFrequency: "updateFrequencies",
+};
+
+function getFieldOptions(fieldName: string, servicesOptions: ServicesOptions) {
+  const optionsKey = SERVICES_OPTIONS_KEYS[fieldName] ?? fieldName;
+  return optionsKey in servicesOptions ? servicesOptions[optionsKey] : null;
+}
+
 export function getModelInputProps({
   service,
   servicesOptions,
@@ -60,8 +74,7 @@ export function getModelInputProps({
             showModel,
             value: model ? model[fieldName] : undefined,
             serviceValue: service[fieldName],
-            options:
-              fieldName in servicesOptions ? servicesOptions[fieldName] : null,
+            options: getFieldOptions(fieldName, servicesOptions),
             onUseValue: () => onUseModelValue(fieldName),
           },
         ])

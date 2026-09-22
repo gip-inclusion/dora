@@ -111,14 +111,7 @@
     />
   </FieldModel>
 
-  <!-- `options` est passé explicitement : `servicesOptions` expose les types sous la clé
-       `kinds`, que `getModelInputProps` ne sait pas rapprocher du champ `kind` — sans quoi
-       l'encart « Modèle » afficherait la valeur brute au lieu du libellé. -->
-  <FieldModel
-    {...fieldModelProps.kind ?? {}}
-    type="text"
-    options={servicesOptions.kinds}
-  >
+  <FieldModel {...fieldModelProps.kind ?? {}} type="text">
     <RadioButtonsField
       id="kind"
       bind:value={service.kind}
