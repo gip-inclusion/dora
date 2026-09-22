@@ -123,7 +123,7 @@
           />
         {:else if type === "number"}
           <input
-            type="text"
+            type="number"
             class={inputClasses}
             bind:value
             onblur={onBlur}
