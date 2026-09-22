@@ -624,6 +624,8 @@ export type ServicesOptions = {
   subcategories: { value: string; label: string }[];
   updateFrequencies: { value: string; label: string }[];
   fundingLabels: { value: string; label: string }[];
+  mobilisableBy: { value: string; label: string }[];
+  mobilisationModes: { value: string; label: string }[];
 };
 
 export type Partner = {

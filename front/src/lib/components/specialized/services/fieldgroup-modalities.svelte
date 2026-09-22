@@ -61,36 +61,33 @@
 
 <FieldGroup title="Modalités d’orientation" showSeparator={!isModel}>
   <div class="gap-s24 flex flex-col">
-    <FieldModel {...fieldModelProps.mobilisableBy ?? {}} type="array">
+    <FieldModel
+      {...fieldModelProps.mobilisableBy ?? {}}
+      options={servicesOptions.mobilisableBy}
+      type="array"
+    >
       <CheckboxesField
         id="mobilisableBy"
         bind:value={
           () => service.mobilisableBy ?? [],
           (value) => (service.mobilisableBy = value)
         }
-        choices={[
-          { label: "Usagers", value: "usagers" },
-          { label: "Professionnels", value: "professionnels" },
-        ]}
+        choices={servicesOptions.mobilisableBy}
         description="Plusieurs choix possibles."
       />
     </FieldModel>
-    <FieldModel {...fieldModelProps.mobilisationModes ?? {}} type="array">
+    <FieldModel
+      {...fieldModelProps.mobilisationModes ?? {}}
+      options={servicesOptions.mobilisationModes}
+      type="array"
+    >
       <CheckboxesField
         id="mobilisationModes"
         bind:value={
           () => service.mobilisationModes ?? [],
           (value) => (service.mobilisationModes = value)
         }
-        choices={[
-          { label: "Envoyer un courriel", value: "envoyer-un-courriel" },
-          { label: "Se présenter", value: "se-presenter" },
-          { label: "Téléphoner", value: "telephoner" },
-          {
-            label: "Utiliser un formulaire en ligne",
-            value: "utiliser-lien-mobilisation",
-          },
-        ]}
+        choices={servicesOptions.mobilisationModes}
         description="Au moins un mode de mobilisation requis. Plusieurs choix possibles."
       />
     </FieldModel>
