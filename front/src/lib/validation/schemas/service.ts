@@ -100,7 +100,6 @@ export const serviceSchema: v.Schema = {
     label: "Documents à fournir",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
-    required: false,
   },
   feeCondition: {
     label: "Frais à charge",
@@ -120,6 +119,7 @@ export const serviceSchema: v.Schema = {
     label: "Mobilisable par…",
     default: [],
     rules: [v.isArray([v.isString()])],
+    required: true,
   },
   mobilisationModes: {
     label: "Mode de mobilisation du service",
@@ -155,7 +155,6 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
-    required: false,
   },
   address2: {
     label: "Complément d’adresse",
@@ -163,7 +162,6 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
-    required: false,
   },
   postalCode: {
     label: "Code postal",

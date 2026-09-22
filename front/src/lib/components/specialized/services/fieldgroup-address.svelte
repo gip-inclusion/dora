@@ -69,19 +69,14 @@
           />
         </div>
       {/if}
-      <CitySearchField
-        id="city"
-        initialValue={entity.city}
-        onChange={handleCityChange}
+      <AddressSearchField
+        id="address1"
+        initialValue={entity.address1}
+        onChange={handleAddressChange}
+        cityCode={entity.cityCode}
+        disabled={!entity.cityCode}
       />
     </div>
-    <AddressSearchField
-      id="address1"
-      initialValue={entity.address1}
-      onChange={handleAddressChange}
-      cityCode={entity.cityCode}
-      disabled={!entity.cityCode}
-    />
 
     <BasicInputField
       id="address2"
@@ -93,6 +88,12 @@
       id="postalCode"
       descriptionText="Format attendu : 5 chiffres. Par exemple : 75000."
       bind:value={entity.postalCode}
+    />
+
+    <CitySearchField
+      id="city"
+      initialValue={entity.city}
+      onChange={handleCityChange}
     />
 
     <HiddenField id="cityCode" value={entity.cityCode} />

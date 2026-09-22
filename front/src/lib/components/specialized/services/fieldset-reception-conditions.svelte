@@ -56,7 +56,7 @@
       <FieldGroupAddress bind:entity={service} parent={structure} />
     {/if}
   {/if}
-  <FieldGroupDuration bind:service {model} {servicesOptions} isModel />
+  <FieldGroupDuration bind:service {model} {servicesOptions} {isModel} />
   {#if !isModel}
     {#if showOpeningHoursField}
       <OpeningHoursField
