@@ -4,7 +4,11 @@ from typing import Optional
 from urllib.parse import unquote
 
 import requests
-from data_inclusion.schema.v1 import TypeService
+from data_inclusion.schema.v1 import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    TypeService,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
@@ -43,6 +47,7 @@ from dora.services.models import (
     Bookmark,
     CoachOrientationMode,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -54,7 +59,6 @@ from dora.services.models import (
     ServiceStatusHistoryItem,
     ServiceSubCategory,
     UpdateFrequency,
-    FundingLabel,
 )
 from dora.services.search import (
     MAX_DISTANCE,
@@ -790,6 +794,12 @@ def options(request):
         "funding_labels": FundingLabelsSerializer(
             FundingLabel.objects.all(), many=True
         ).data,
+        "mobilisable_by": [
+            {"value": p.value, "label": p.label} for p in PersonneMobilisatrice
+        ],
+        "mobilisation_modes": [
+            {"value": m.value, "label": m.label} for m in ModeMobilisation
+        ],
     }
 
     cache.set(cache_key, result, timeout=3600)
