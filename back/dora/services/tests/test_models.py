@@ -285,6 +285,41 @@ def test_update_model_and_update_only_linked_services(api_client):
     assert service_2.name == service_name_2
 
 
+@pytest.mark.parametrize(
+    "update_all_services, expected_name",
+    [("true", "Nom du modèle"), ("false", "Nom du service")],
+)
+def test_update_model_without_changes_resyncs_linked_services_only_if_requested(
+    api_client, update_all_services, expected_name
+):
+    # ÉTANT DONNÉ un service lié à un modèle, en retard sur celui-ci
+    user = baker.make("users.User", is_valid=True)
+    struct = make_structure(user)
+    model = make_model(structure=struct, name="Nom du modèle")
+    service = make_service(
+        model=model,
+        structure=struct,
+        name="Nom du service",
+        status=ServiceStatus.PUBLISHED,
+    )
+
+    # QUAND j'enregistre le modèle sans le modifier
+    api_client.force_authenticate(user=user)
+    response = api_client.patch(
+        f"/models/{model.slug}/",
+        {"name": model.name, "update_all_services": update_all_services},
+    )
+
+    assert 200 == response.status_code
+
+    # ALORS le service n'est resynchronisé que si la mise à jour a été demandée
+    service.refresh_from_db()
+    model.refresh_from_db()
+    assert service.name == expected_name
+    if update_all_services == "true":
+        assert service.last_sync_checksum == model.sync_checksum
+
+
 def test_update_service_from_model(api_client):
     service_name = "Nom du service"
     service_slug = "nom-du-service"
