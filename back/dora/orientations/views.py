@@ -366,6 +366,17 @@ class StructureOrientationsView(APIView):
             total_received=Count("id", filter=received_q),
             total_received_pending=Count("id", filter=received_q & pending_q),
         )
+        try:
+            emplois_counts = EmploisApiClient().get_received_orientations_count(
+                structure_slug=structure.slug
+            )
+        except EmploisAPIException:
+            # Les compteurs restent affichés avec les seules données Dora si
+            # Les Emplois sont indisponibles (l'erreur est déjà loguée).
+            emplois_counts = {"total_count": 0, "pending_count": 0}
+
+        stats["total_received"] += emplois_counts["total_count"]
+        stats["total_received_pending"] += emplois_counts["pending_count"]
         stats["structure_has_services"] = structure.has_services
 
         return Response(stats)

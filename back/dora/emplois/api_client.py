@@ -81,6 +81,22 @@ class EmploisApiClient:
             f"Pagination des orientations non terminée après {MAX_PAGES} pages."
         )
 
+    def get_received_orientations_count(self, structure_slug: str) -> dict[str, int]:
+        url = "api/v1/insertion/orientations-count"
+        response = self.call("GET", url, params={"structure_uid": structure_slug})
+
+        try:
+            payload = response.json()
+            return {
+                "pending_count": int(payload["pending_count"]),
+                "total_count": int(payload["total_count"]),
+            }
+        except (ValueError, KeyError, TypeError) as exc:
+            logger.exception(
+                "get_received_orientations_count des Emplois: réponse inattendue"
+            )
+            raise EmploisAPIException("Réponse inattendue des Emplois") from exc
+
     @staticmethod
     def _payload(response: httpx.Response) -> dict:
         try:

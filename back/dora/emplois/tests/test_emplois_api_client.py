@@ -149,6 +149,40 @@ def test_fetch_received_orientations_raises_on_unusable_response(response):
 
 
 @respx.mock
+def test_get_received_orientations_count_passes_structure_uid_as_query_param():
+    route = respx.get(f"{BASE_URL}/api/v1/insertion/orientations-count").mock(
+        return_value=httpx.Response(200, json={"pending_count": 1, "total_count": 7})
+    )
+
+    counts = EmploisApiClient().get_received_orientations_count(structure_slug="slug")
+
+    assert counts == {"pending_count": 1, "total_count": 7}
+    assert route.calls.last.request.url.params["structure_uid"] == "slug"
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "response",
+    [
+        pytest.param(httpx.Response(500, json={"detail": "oups"}), id="http_500"),
+        pytest.param(httpx.Response(200, text="<html>pas du json</html>"), id="html"),
+        pytest.param(httpx.Response(200, json={"total_count": 7}), id="missing_key"),
+        pytest.param(
+            httpx.Response(200, json={"pending_count": None, "total_count": 7}),
+            id="null_count",
+        ),
+    ],
+)
+def test_get_received_orientations_count_raises_on_unusable_response(response):
+    respx.get(f"{BASE_URL}/api/v1/insertion/orientations-count").mock(
+        return_value=response
+    )
+
+    with pytest.raises(EmploisAPIException):
+        EmploisApiClient().get_received_orientations_count(structure_slug="slug")
+
+
+@respx.mock
 def test_fetch_received_orientations_raises_on_connection_error():
     respx.post(ORIENTATIONS_URL).mock(side_effect=httpx.ConnectError("injoignable"))
 

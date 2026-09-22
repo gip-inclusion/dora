@@ -540,10 +540,14 @@ class OrientationStatsTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_get_stats(self):
-        with self.assertNumQueries(3):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/stats/"
-            )
+        with patch(
+            "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
+            return_value={"total_count": 0, "pending_count": 0},
+        ):
+            with self.assertNumQueries(3):
+                response = self.client.get(
+                    f"/structures/{self.structure.slug}/orientations/stats/"
+                )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -556,6 +560,39 @@ class OrientationStatsTestCase(APITestCase):
                 "structure_has_services": True,
             },
         )
+
+    def test_get_stats_includes_emplois_received_orientations(self):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
+            return_value={"total_count": 7, "pending_count": 1},
+        ) as mocked_count:
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
+
+        mocked_count.assert_called_once_with(structure_slug=self.structure.slug)
+
+        self.assertEqual(response.status_code, 200)
+        # Les orientations Dora (2 dont 1 en attente) et celles des Emplois
+        # (7 dont 1 en attente) sont cumulées.
+        self.assertEqual(response.data["total_received"], 9)
+        self.assertEqual(response.data["total_received_pending"], 2)
+        # Les orientations envoyées ne sont pas concernées.
+        self.assertEqual(response.data["total_sent"], 4)
+        self.assertEqual(response.data["total_sent_pending"], 1)
+
+    def test_get_stats_when_emplois_api_unavailable(self):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
+            side_effect=EmploisAPIException("indisponible"),
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["total_received"], 2)
+        self.assertEqual(response.data["total_received_pending"], 1)
 
     def test_raise_403_when_user_not_structure_member(self):
         self.client.force_authenticate(user=make_user())
@@ -573,9 +610,13 @@ class OrientationStatsTestCase(APITestCase):
 
         self.client.force_authenticate(user=department_manager)
 
-        response = self.client.get(
-            f"/structures/{self.structure.slug}/orientations/stats/"
-        )
+        with patch(
+            "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
+            return_value={"total_count": 0, "pending_count": 0},
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
 
         self.assertEqual(response.status_code, 200)
 
