@@ -95,7 +95,7 @@
   @media (width >= 48rem) {
     .day-grid {
       display: grid;
-      grid-template-columns: 1fr 2fr 2fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr) minmax(0, 2.4fr);
       margin-bottom: var(--spacing-s24);
     }
     .day-grid.day > div:first-child {
