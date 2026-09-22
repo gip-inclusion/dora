@@ -38,6 +38,7 @@ from .emails import (
     send_orientation_rejected_emails,
 )
 from .models import (
+    EMPLOIS_ORIENTATION_Q,
     ContactRecipient,
     Orientation,
     OrientationStatus,
@@ -315,11 +316,17 @@ class StructureOrientationsView(APIView):
 
     @staticmethod
     def received_filter(structure: Structure) -> Q:
-        return Q(service__structure=structure) & ~Q(
-            status__in=[
-                OrientationStatus.MODERATION_PENDING,
-                OrientationStatus.MODERATION_REJECTED,
-            ]
+        return (
+            Q(service__structure=structure)
+            & ~Q(
+                status__in=[
+                    OrientationStatus.MODERATION_PENDING,
+                    OrientationStatus.MODERATION_REJECTED,
+                ]
+            )
+            # Les orientations émises par Les Emplois sont déjà servies par
+            # leur API : les compter ici aussi les doublonnerait.
+            & ~EMPLOIS_ORIENTATION_Q
         )
 
     @classmethod

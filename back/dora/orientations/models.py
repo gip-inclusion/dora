@@ -51,6 +51,15 @@ def _orientation_query_expiration_date():
     return timezone.now() + relativedelta(days=ORIENTATION_QUERY_LINK_TTL_DAY)
 
 
+# Orientations émises par Les Emplois : condition unique, partagée par
+# `OrientationQuerySet.emplois()`, `Orientation.is_emplois()` et les vues qui
+# doivent les écarter pour ne pas doublonner avec l'API des Emplois.
+EMPLOIS_ORIENTATION_Q = models.Q(
+    prescriber__isnull=True,
+    emplois_orientation_data__isnull=False,
+)
+
+
 class OrientationQuerySet(models.QuerySet):
     def answered(self):
         return self.filter(
@@ -61,10 +70,7 @@ class OrientationQuerySet(models.QuerySet):
     def emplois(self):
         # Orientations émises par Les Emplois — mêmes conditions
         # que `Orientation.is_emplois()`.
-        return self.filter(
-            prescriber__isnull=True,
-            emplois_orientation_data__isnull=False,
-        )
+        return self.filter(EMPLOIS_ORIENTATION_Q)
 
 
 @dataclass(frozen=True)

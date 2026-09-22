@@ -581,6 +581,25 @@ class OrientationStatsTestCase(APITestCase):
         self.assertEqual(response.data["total_sent"], 4)
         self.assertEqual(response.data["total_sent_pending"], 1)
 
+    def test_get_stats_excludes_emplois_orientations_stored_in_dora(self):
+        """Mêmes raisons que pour l'export : ces orientations sont comptées par
+        l'API des Emplois, les compter aussi côté Dora les doublonnerait.
+        """
+        make_emplois_orientation(service=self.service)
+
+        with patch(
+            "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
+            return_value={"total_count": 1, "pending_count": 0},
+        ):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
+
+        self.assertEqual(response.status_code, 200)
+        # 2 orientations Dora + 1 côté Emplois : celle stockée dans Dora n'est
+        # comptée qu'une fois, via l'API.
+        self.assertEqual(response.data["total_received"], 3)
+
     def test_get_stats_when_emplois_api_unavailable(self):
         with patch(
             "dora.orientations.views.EmploisApiClient.get_received_orientations_count",
@@ -784,8 +803,12 @@ class OrientationsExportTestCase(APITestCase):
             ],
         )
 
-    def test_get_export_of_received_orientations_from_emplois(self):
-        orientation = make_emplois_orientation(
+    def test_export_of_received_orientations_excludes_emplois_orientations(self):
+        """Les orientations émises par Les Emplois sont stockées dans Dora *et*
+        servies par l'API des Emplois : seule cette dernière fait foi, sinon
+        elles apparaîtraient deux fois dans l'export.
+        """
+        make_emplois_orientation(
             service=self.service,
             status=OrientationStatus.ACCEPTED,
             emplois_data={
@@ -794,8 +817,12 @@ class OrientationsExportTestCase(APITestCase):
                 "structure_name": "Structure des Emplois",
             },
         )
+        dora_orientation = make_orientation(service=self.service)
 
-        with self.assertNumQueries(3):
+        with patch(
+            "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
+            return_value=[],
+        ):
             response = self.client.get(
                 f"/structures/{self.structure.slug}/orientations/export/?type=received"
             )
@@ -803,15 +830,10 @@ class OrientationsExportTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
-            response.data[0]["prescriber_name"], "Jean-Prescripteur des Emplois"
+            response.data[0]["beneficiary_name"],
+            dora_orientation.get_beneficiary_full_name(),
         )
-        self.assertEqual(
-            response.data[0]["prescriber_structure_name"], "Structure des Emplois"
-        )
-        self.assertEqual(
-            response.data[0]["detail_page_url"], orientation.get_magic_link()
-        )
-        self.assertEqual(response.data[0]["source"], "Plateforme de l’inclusion")
+        self.assertEqual(response.data[0]["source"], "DORA")
 
     def _emplois_orientation(self, **overrides):
         """Orientation telle que renvoyée par l'API des Emplois de l'inclusion."""
