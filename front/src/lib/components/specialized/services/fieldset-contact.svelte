@@ -37,7 +37,7 @@
     descriptionText="Personne ou service en charge des orientations."
   />
   <div class="flex flex-col">
-    {#if service.structureInfo.phone}
+    {#if service?.structureInfo?.phone}
       <div class="pl-s4 lg:w-2/3 lg:self-end">
         <UseStructureInfoButton
           onclick={() =>
@@ -57,7 +57,7 @@
     />
   </div>
   <div class="flex flex-col">
-    {#if service.structureInfo.email}
+    {#if service?.structureInfo?.email}
       <div class="pl-s4 lg:w-2/3 lg:self-end">
         <UseStructureInfoButton
           onclick={() => (service.contactEmail = service.structureInfo.email)}
