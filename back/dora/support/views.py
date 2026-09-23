@@ -78,15 +78,19 @@ class StructureAdminViewSet(
                 "parent", "creator", "last_editor", "source"
             )
 
+        # Un membre de l'équipe (staff) a accès à tous les départements même
+        # s'il est aussi gestionnaire de territoire.
+        restricted_to_departments = user.is_manager and not user.is_staff
+
         if department:
-            if user.is_manager:
+            if restricted_to_departments:
                 # assuré par StructureAdminPermission
                 assert user.departments
                 if department not in user.departments:
                     raise PermissionDenied
             structures = structures.filter(department=department)
         else:
-            if user.is_manager:
+            if restricted_to_departments:
                 structures = structures.filter(department__in=user.departments)
 
         moderation = self.request.query_params.get("moderation") in TRUTHY_VALUES
