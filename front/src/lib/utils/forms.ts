@@ -42,6 +42,7 @@ export function toServiceStructure(structure: Structure): ServiceStructure {
     email: structure.email,
     hasAdmin: structure.hasAdmin,
     name: structure.name,
+    noDoraForm: structure.noDoraForm,
     numServices: structure.numServices,
     openingHours: structure.openingHours,
     phone: structure.phone,

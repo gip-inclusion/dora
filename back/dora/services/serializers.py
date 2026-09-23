@@ -130,6 +130,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "phone",
             "email",
             "opening_hours",
+            "no_dora_form",
         ]
         read_only_fields = [
             "city",
