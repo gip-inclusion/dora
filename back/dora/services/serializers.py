@@ -511,11 +511,6 @@ class ServiceSerializer(serializers.ModelSerializer):
 
         return data
 
-    def create(self, validated_data):
-        instance = super().create(validated_data)
-        sync_v1_service_fields(instance)
-        return instance
-
     def _validate_custom_choice(self, field, data, user, user_structures, structure):
         values = data[field]
         for val in values:
