@@ -11,6 +11,7 @@
     ShortStructure,
   } from "$lib/types";
   import { debounce } from "$lib/utils/misc";
+  import { toServiceStructure } from "$lib/utils/forms";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -34,9 +35,15 @@
 
   async function handleStructureChange(slug) {
     if (slug) {
-      structure = await getStructure(slug);
+      // variable locale : le prop `structure` est typé `ShortStructure`, trop pauvre
+      // pour `toServiceStructure` (ni téléphone, ni courriel, ni horaires).
+      const fullStructure = await getStructure(slug);
+      structure = fullStructure;
 
       service.structure = slug;
+      if (fullStructure) {
+        service.structureInfo = toServiceStructure(fullStructure);
+      }
       if (!isModel && service.model) {
         model = await getModel(model.slug);
       }
