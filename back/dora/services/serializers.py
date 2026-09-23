@@ -22,7 +22,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import get_zone_eligibilite_choices
