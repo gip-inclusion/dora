@@ -406,6 +406,7 @@ export interface ServiceStructure {
   email: string;
   hasAdmin: boolean;
   name: string;
+  noDoraForm: boolean;
   numServices: number;
   openingHours: string | null;
   phone: string;
