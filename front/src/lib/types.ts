@@ -441,8 +441,8 @@ export interface ServiceModelBase {
   coachOrientationModesOther: string; //  deprecated
   conditionsAcces: string | null;
   creationDate: string;
-  credentials: CustomizableFK[];
-  credentialsDisplay: string[];
+  credentials: CustomizableFK[]; // deprecated
+  credentialsDisplay: string[]; // deprecated
   department: string;
   description: string;
   durationWeeklyHours: number | null;
@@ -454,7 +454,7 @@ export interface ServiceModelBase {
   fullDesc: string; // deprecated
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
-  isCumulative: boolean;
+  isCumulative: boolean; // deprecated
   kind: ServiceKind | null;
   kindDisplay: string | null;
   mobilisableBy: string[] | null;
@@ -467,7 +467,7 @@ export interface ServiceModelBase {
   publics: Array<Public>;
   publicsDisplay: string[];
   publicsPrecisions: string;
-  qpvOrZrr: boolean;
+  qpvOrZrr: boolean; // deprecated
   recurrence: string;
   requirements: CustomizableFK[]; // deprecated
   requirementsDisplay: string[]; // deprecated
