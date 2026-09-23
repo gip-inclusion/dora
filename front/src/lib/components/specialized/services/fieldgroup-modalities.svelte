@@ -39,7 +39,7 @@
   $effect(() => {
     if (!service.mobilisationModes?.includes("utiliser-lien-mobilisation")) {
       untrack(() => {
-        mobilisationLinkSource = "dora";
+        mobilisationLinkSource = noDoraForm ? "custom" : "dora";
         service.mobilisationLink = null;
       });
     }
@@ -57,6 +57,28 @@
         })
       : {}
   );
+
+  let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
+
+  let mobilisationLinkChoices = $derived(
+    noDoraForm
+      ? [{ label: "Votre propre formulaire", value: "custom" }]
+      : [
+          {
+            label: "Formulaire Dora (par défaut)",
+            value: "dora",
+            link: `${URL_HELP_SITE}article/orienter-un-ou-une-beneficiaire-as9agp/`,
+            linkLabel: "En savoir plus sur le formulaire Dora",
+          },
+          { label: "Votre propre formulaire", value: "custom" },
+        ]
+  );
+
+  $effect(() => {
+    if (noDoraForm && mobilisationLinkSource === "dora") {
+      untrack(() => (mobilisationLinkSource = "custom"));
+    }
+  });
 </script>
 
 <FieldGroup title="Modalités d’orientation" showSeparator={!isModel}>
@@ -102,15 +124,7 @@
           <RadioButtons
             id="mobilisationLinkSource"
             bind:group={mobilisationLinkSource}
-            choices={[
-              {
-                label: "Formulaire Dora (par défaut)",
-                value: "dora",
-                link: `${URL_HELP_SITE}article/orienter-un-ou-une-beneficiaire-as9agp/`,
-                linkLabel: "En savoir plus sur le formulaire Dora",
-              },
-              { label: "Votre propre formulaire", value: "custom" },
-            ]}
+            choices={mobilisationLinkChoices}
           />
           <BasicInputField
             extraClass="bg-white"
