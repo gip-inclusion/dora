@@ -18,11 +18,11 @@ bandit==1.9.4 \
     --hash=sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628 \
     --hash=sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e
     # via -r requirements/dev.in
-boto3==1.43.96 \
-    --hash=sha256:30fb2b5467ef5175ed48f43c06c435eec5da841594a5d7653c4da679df0740fc \
-    --hash=sha256:30fb2b5467ef5175ed48f43c06c435eec5da841594a5d7653c4da679df0740fc \
-    --hash=sha256:73f0386fcc412ce5ad3ae4245e2a405e69e889988dd77e91b82e3b66404f3fee \
-    --hash=sha256:73f0386fcc412ce5ad3ae4245e2a405e69e889988dd77e91b82e3b66404f3fee
+boto3==1.43.97 \
+    --hash=sha256:420b45f566d3b49c6c1f021c50f47f66ea99ef05b1872d80b472c536542b321e \
+    --hash=sha256:420b45f566d3b49c6c1f021c50f47f66ea99ef05b1872d80b472c536542b321e \
+    --hash=sha256:ffe9a93a6b4b2c1b59f4f5e07c18d2acfe8f68c320a1a12251d4ea8570b9bdfe \
+    --hash=sha256:ffe9a93a6b4b2c1b59f4f5e07c18d2acfe8f68c320a1a12251d4ea8570b9bdfe
     # via django-storages
 botocore==1.43.98 \
     --hash=sha256:6135dd639ea6d1b3b49381bc253c8a139d61f7d44cb5f7dae8e7cd1791758572 \
@@ -841,9 +841,9 @@ identify==2.6.19 \
     --hash=sha256:20e6a87f786f768c092a721ad107fc9df0eb89347be9396cadf3f4abbd1fb78a \
     --hash=sha256:6be5020c38fcb07da56c53733538a3081ea5aa70d36a156f83044bfbf9173842
     # via pre-commit
-idna==3.19 \
-    --hash=sha256:5e0811a4383b21dc5838069f801c4fb62113b7447663d2530d2bd6e77b49bf15 \
-    --hash=sha256:815e7be7a7806d54abb586dc943addc79e8b2ee16915059658cbeff4b1b43bf4
+idna==3.20 \
+    --hash=sha256:a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44 \
+    --hash=sha256:ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c
     # via
     #   anyio
     #   email-validator
@@ -987,9 +987,9 @@ pendulum==3.2.0 \
     --hash=sha256:fd55c12560816d9122ca2142d9e428f32c0c083bf77719320b1767539c7a3a3b \
     --hash=sha256:ffc169ad7595228d4dfc44d4e016846ff1bb5873b9f7ec70b0b1b51da0c77b3f
     # via data-inclusion-schema
-platformdirs==4.11.9 \
-    --hash=sha256:0a3958f58a9e30321eaef0a424dd0b77cce242886b36b8aa992f9731ef2d59c1 \
-    --hash=sha256:e2c66a8d384596cd98e3c4aea2d761df7bac95d9d8a2cc3946daa8cdafdaebc1
+platformdirs==4.11.10 \
+    --hash=sha256:973c4c082b964958c71588448488d2b14fb253893dfbdb82325a14c84e540e8f \
+    --hash=sha256:9cd351c078ccf7dda1fdc5f8ccb9d8f5258984c63990e6df3627dde0b70b51d0
     # via virtualenv
 pluggy==1.6.0 \
     --hash=sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3 \
@@ -1381,11 +1381,11 @@ python-dateutil==2.9.0.post0 \
     #   freezegun
     #   pendulum
     #   sib-api-v3-sdk
-python-discovery==1.6.0 \
-    --hash=sha256:6393b4eae1be8b2182670635e7baff89ac21cb9f8e86fd1ff40c7b1144febb4c \
-    --hash=sha256:6393b4eae1be8b2182670635e7baff89ac21cb9f8e86fd1ff40c7b1144febb4c \
-    --hash=sha256:d4e244cf17b8b29819ed78003d55fbacf86eda23425b075454fff9271b79377a \
-    --hash=sha256:d4e244cf17b8b29819ed78003d55fbacf86eda23425b075454fff9271b79377a
+python-discovery==1.6.1 \
+    --hash=sha256:cf87d3627dfb4412437fdd5b13eae402607722998d21567993aedbc59b23c15e \
+    --hash=sha256:cf87d3627dfb4412437fdd5b13eae402607722998d21567993aedbc59b23c15e \
+    --hash=sha256:d43fcdef879fe795352bd13ccf8d185ba5a9f86f36cfcd00529f596e737442b3 \
+    --hash=sha256:d43fcdef879fe795352bd13ccf8d185ba5a9f86f36cfcd00529f596e737442b3
     # via virtualenv
 python-magic==0.4.27 \
     --hash=sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b \
@@ -1594,9 +1594,9 @@ urllib3==2.8.0 \
     #   requests
     #   sentry-sdk
     #   sib-api-v3-sdk
-virtualenv==21.7.10 \
-    --hash=sha256:a7bf10f37ecc36f1942d6e469d6b59f5fe308f60ac711f66f51ef3bd8cb2c9aa \
-    --hash=sha256:d7ac9669ba19e675ffadbb97fe8e887ef92fb1743fe9a0032be62b947657327a
+virtualenv==21.7.12 \
+    --hash=sha256:3572a2e13deac1c2727e48ec43dc962f698c453c5c90eb2bd737c81bcd2ac0b0 \
+    --hash=sha256:5b6576455f10637067cc20c3f9f7c677575eecaa8c95fc049db2f650652befd5
     # via pre-commit
 whitenoise==6.12.0 \
     --hash=sha256:f723ebb76a112e98816ff80fcea0a6c9b8ecde835f8ddda25df7a30a3c2db6ad \
