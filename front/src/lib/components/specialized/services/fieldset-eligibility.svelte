@@ -27,7 +27,7 @@
   {/snippet}
   <FieldGroupPublics bind:service {model} {servicesOptions} />
   <FieldGroupAccessConditions bind:service {model} {servicesOptions} />
-  <FieldGroupModalities bind:service {model} {servicesOptions} isModel />
+  <FieldGroupModalities bind:service {model} {servicesOptions} {isModel} />
   {#if !isModel}
     <FieldGroupPerimeter bind:service {servicesOptions} />
   {/if}
