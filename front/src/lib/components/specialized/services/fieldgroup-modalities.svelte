@@ -36,6 +36,8 @@
     }
   });
 
+  let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
+
   $effect(() => {
     if (!service.mobilisationModes?.includes("utiliser-lien-mobilisation")) {
       untrack(() => {
@@ -57,8 +59,6 @@
         })
       : {}
   );
-
-  let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
 
   let mobilisationLinkChoices = $derived(
     noDoraForm

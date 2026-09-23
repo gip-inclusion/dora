@@ -16,6 +16,7 @@ from dora.core.utils import (
     get_category_from_subcategory,
     strip_markdown,
 )
+from dora.decoupage_administratif.utils import get_zone_eligibilite_choices
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -399,4 +400,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "update_needed": update_needed,
         "is_orientable_ft_service": False,
         "zone_eligibilite": service_data["zone_eligibilite"],
+        "zone_eligibilite_display": get_zone_eligibilite_choices(
+            service_data["zone_eligibilite"]
+        ),
     }
