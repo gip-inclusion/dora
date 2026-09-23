@@ -231,6 +231,37 @@ class ManagerTestCase(APITestCase):
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 404)
 
+    def test_manager_cant_see_structures_of_other_dept(self):
+        make_structure(department="12")
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.get("/structures-admin/?department=12")
+        self.assertEqual(response.status_code, 403)
+
+    ## Gestionnaire également membre de l'équipe (staff)
+    def test_staff_manager_can_see_structures_of_other_dept(self):
+        staff_manager = make_user(
+            is_valid=True, is_staff=True, is_manager=True, departments=["31"]
+        )
+        structure = make_structure(department="12")
+        self.client.force_authenticate(user=staff_manager)
+        response = self.client.get("/structures-admin/?department=12")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["slug"], structure.slug)
+
+    def test_staff_manager_can_see_all_structures(self):
+        staff_manager = make_user(
+            is_valid=True, is_staff=True, is_manager=True, departments=["31"]
+        )
+        structure1 = make_structure(department="31")
+        structure2 = make_structure(department="12")
+        self.client.force_authenticate(user=staff_manager)
+        response = self.client.get("/structures-admin/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            {s["slug"] for s in response.data}, {structure1.slug, structure2.slug}
+        )
+
 
 class StructureAdminTestCase(APITestCase):
     def setUp(self):

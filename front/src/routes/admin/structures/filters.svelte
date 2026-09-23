@@ -191,6 +191,16 @@
     searchStatus = "all";
   }
 
+  // La définition et les actions suivent le filtre courant, y compris quand
+  // celui-ci est défini via l'URL.
+  $effect(() => {
+    const setting = statusFilterSettings.find(
+      ({ status }) => status === searchStatus
+    );
+    filterDefinition = setting?.definition;
+    filterActions = setting?.actions;
+  });
+
   $effect(() => {
     filteredStructures = filterAndSortEntities(
       structures,
@@ -203,14 +213,12 @@
 <div class="mb-s8 font-bold">Structures DORA sur mon territoire&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each statusFilterSettings as { status, definition, actions }}
+  {#each statusFilterSettings as { status, definition }}
     <Tooltip>
       <Button
         onclick={() => {
           resetSearchParams();
           searchStatus = status;
-          filterDefinition = definition;
-          filterActions = actions;
         }}
         label={`${getStatusLabel(status)} (${filterAndSortEntities(structures, searchParams, status).length})`}
         secondary={searchStatus !== status}
