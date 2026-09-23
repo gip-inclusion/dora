@@ -60,7 +60,7 @@
     "lint-staged": "^17.5.1",
     "maplibre-gl": "^6.10.0",
     "opening_hours": "^3.14.0",
-    "prettier": "^3.9.7",
+    "prettier": "^3.9.8",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "remixicon": "^4.9.1",
