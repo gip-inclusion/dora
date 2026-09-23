@@ -208,11 +208,27 @@
     return !!fixedItemValue;
   }
 
+  // En sélection multiple, la saisie est vidée après chaque choix. `filteredTextLength`
+  // et `items` gardaient sinon la requête précédente : au retour du focus, `open()` les
+  // relisait et rouvrait la liste sur des suggestions sans rapport avec un champ vide.
+  function resetSearchState() {
+    filteredTextLength = 0;
+    if (searchFunction) {
+      items = [];
+      filteredListItems = [];
+    } else {
+      filteredListItems = listItems;
+    }
+  }
+
   function updateValue(newValue) {
     if (newValue) {
       const newText = multiple ? "" : getLabelForValue(newValue);
       if (text !== newText) {
         text = newText;
+      }
+      if (multiple) {
+        resetSearchState();
       }
       value = newValue;
       onChange(newValue);
