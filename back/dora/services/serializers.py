@@ -591,6 +591,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "conditions_acces",
             "mobilisation_modes",
             "mobilisation_modes_display",
             "mobilisable_by",
