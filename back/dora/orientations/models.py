@@ -207,7 +207,7 @@ class Orientation(models.Model):
     )
 
     original_service_name = models.CharField(
-        verbose_name="Nom original", max_length=140, default="", editable=False
+        verbose_name="Nom original", max_length=150, default="", editable=False
     )
     orientation_reasons = models.TextField(
         verbose_name="Motif de l'orientation", blank=True

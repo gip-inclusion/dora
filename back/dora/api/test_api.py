@@ -151,8 +151,6 @@ def test_obsolete_structure_with_member_is_excluded(authenticated_user, api_clie
     assert str(structure.id) not in structure_ids
 
 
-# TODO: plus tard ...
-# @pytest.mark.loaddata("structure_typology", "service_subcategory")
 def test_structures_serialization_exemple(
     setup_structure_data, authenticated_user, api_client, settings
 ):
@@ -266,15 +264,6 @@ def test_unpublished_service_is_not_serialized(authenticated_user, api_client):
     assert 404 == response.status_code
 
 
-# TODO: plus tard ...
-# @pytest.mark.loaddata(
-#     "service_fee",
-#     "service_subcategory",
-#     "service_kind",
-#     "service_location_kind",
-#     "service_coach_orientation_mode",
-#     "service_beneficiary_access_mode",
-# )
 def test_service_serialization_exemple(authenticated_user, api_client, settings):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
@@ -295,8 +284,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         structure=structure,
         status=ServiceStatus.PUBLISHED,
         name="TISF",
-        short_desc="Accompagnement des familles à domicile",
-        full_desc="Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
+        description=(
+            "Accompagnement des familles à domicile\n\n"
+            "Service de proximité visant à soutenir les familles ayant la "
+            "responsabilité de jeunes enfants, en particulier les familles "
+            "monoparentales."
+        ),
         fee_condition=ServiceFee.objects.get(value="payant"),
         fee_details="10 €",
         diffusion_zone_type="department",
@@ -392,8 +385,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "modes_accueil": ["a-distance", "en-presentiel"],
         "nom": "TISF",
         "pre_requis": ["Bonne connaissance du français oral et écrit"],
-        "presentation_detail": "Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
-        "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
         "publics": ["etudiants", "familles", "femmes"],
         "publics_precisions": "Précision des publics",
@@ -645,8 +636,12 @@ def test_service_serialization_exemple_need_di_user(api_client):
         structure=structure,
         status=ServiceStatus.PUBLISHED,
         name="TISF",
-        short_desc="Accompagnement des familles à domicile",
-        full_desc="Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
+        description=(
+            "Accompagnement des familles à domicile\n\n"
+            "Service de proximité visant à soutenir les familles ayant la "
+            "responsabilité de jeunes enfants, en particulier les familles "
+            "monoparentales."
+        ),
         fee_condition=ServiceFee.objects.get(value="payant"),
         fee_details="10 €",
         diffusion_zone_type="department",

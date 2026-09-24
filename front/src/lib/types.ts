@@ -271,6 +271,7 @@ export type OsmOpeningHours = {
   friday: OsmDay;
   saturday: OsmDay;
   sunday: OsmDay;
+  phOff: boolean;
 };
 
 // SERVICES
@@ -405,7 +406,9 @@ export interface ServiceStructure {
   email: string;
   hasAdmin: boolean;
   name: string;
+  noDoraForm: boolean;
   numServices: number;
+  openingHours: string | null;
   phone: string;
   postalCode: string;
   shortDesc: string;
@@ -422,54 +425,66 @@ export interface Point {
 // Les champs partagés entre Service and Model. Les deux sont générés par le même serializer du back
 // (ServiceModelSerializer extends ServiceSerializer)
 export interface ServiceModelBase {
-  accessConditions: CustomizableFK[];
-  accessConditionsDisplay: string[];
+  accessConditions: CustomizableFK[]; //  deprecated
+  accessConditionsDisplay: string[]; //   deprecated
   beneficiariesAccessModes: BeneficiaryAccessModes[];
-  beneficiariesAccessModesDisplay: string[];
-  beneficiariesAccessModesExternalFormLink: string;
-  beneficiariesAccessModesExternalFormLinkText: string;
-  beneficiariesAccessModesOther: string;
+  beneficiariesAccessModesDisplay: string[]; //  deprecated
+  beneficiariesAccessModesExternalFormLink: string; //  deprecated
+  beneficiariesAccessModesExternalFormLinkText: string; //  deprecated
+  beneficiariesAccessModesOther: string; //  deprecated
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[];
-  coachOrientationModesDisplay: string[];
-  coachOrientationModesExternalFormLink: string;
-  coachOrientationModesExternalFormLinkText: string;
-  coachOrientationModesOther: string;
+  coachOrientationModes: CoachOrientationModes[]; //  deprecated
+  coachOrientationModesDisplay: string[]; //  deprecated
+  coachOrientationModesExternalFormLink: string; //  deprecated
+  coachOrientationModesExternalFormLinkText: string; //  deprecated
+  coachOrientationModesOther: string; //  deprecated
+  conditionsAcces: string | null;
   creationDate: string;
-  credentials: CustomizableFK[];
-  credentialsDisplay: string[];
+  credentials: CustomizableFK[]; // deprecated
+  credentialsDisplay: string[]; // deprecated
   department: string;
+  description: string;
   durationWeeklyHours: number | null;
   durationWeeks: number | null;
   feeCondition: FeeCondition | null;
   feeDetails: string;
   forms: string[];
   formsInfo: FileInfo[];
-  fullDesc: string;
+  fullDesc: string; // deprecated
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
-  isCumulative: boolean;
+  isCumulative: boolean; // deprecated
   kind: ServiceKind | null;
   kindDisplay: string | null;
+  mobilisableBy: string[] | null;
+  mobilisationDetails: string | null;
+  mobilisationLink: string | null;
+  mobilisationModes: string[] | null;
   modificationDate: string | null;
   name: string;
   onlineForm: string;
   publics: Array<Public>;
   publicsDisplay: string[];
   publicsPrecisions: string;
-  qpvOrZrr: boolean;
+  qpvOrZrr: boolean; // deprecated
   recurrence: string;
-  requirements: CustomizableFK[];
-  requirementsDisplay: string[];
-  shortDesc: string;
+  requirements: CustomizableFK[]; // deprecated
+  requirementsDisplay: string[]; // deprecated
+  shortDesc: string; // deprecated
   slug: string;
   structure: string;
   structureInfo: ServiceStructure;
   subcategories: string[];
   subcategoriesDisplay: string[];
   suspensionDate: string | null;
+  zoneEligibilite: string[] | null;
+  zoneEligibiliteDisplay: Array<{
+    label: string;
+    type: string;
+    codes: string[];
+  }> | null;
 }
 
 export interface Service extends ServiceModelBase {
@@ -491,6 +506,7 @@ export interface Service extends ServiceModelBase {
   fillingDuration?: number;
   geom: Point | null;
   hasAlreadyBeenUnpublished: boolean | null;
+  horairesAccueil: string | null;
   isAvailable: boolean;
   isContactInfoPublic: boolean | null;
   isOrientable: boolean;
@@ -608,6 +624,9 @@ export type ServicesOptions = {
   requirements: CustomChoice[];
   subcategories: { value: string; label: string }[];
   updateFrequencies: { value: string; label: string }[];
+  fundingLabels: { value: string; label: string }[];
+  mobilisableBy: { value: string; label: string }[];
+  mobilisationModes: { value: string; label: string }[];
 };
 
 export type Partner = {

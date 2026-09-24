@@ -31,6 +31,7 @@
       }>
     >;
     children?: Snippet;
+    emptyArrayLabel?: string;
   }
 
   let {
@@ -44,6 +45,7 @@
     serviceValue,
     subFields,
     children,
+    emptyArrayLabel = "Champs vide",
   }: Props = $props();
 
   function compare(val1, val2) {
@@ -106,7 +108,7 @@
       {:else}
         <div class="bg-info-light px-s12 py-s8 rounded-sm">
           {#if value === "" || value === undefined || value === null || (Array.isArray(value) && !value.length)}
-            <small class="mb-s8 lg:pt-s8">Champs vide</small>
+            <small class="mb-s8 lg:pt-s8">{emptyArrayLabel}</small>
           {:else if type === "array"}
             <div class="gap-s8 flex flex-wrap">
               <ul class="ml-s20 text-gray-text-alt2 list-disc font-semibold">

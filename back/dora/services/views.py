@@ -4,7 +4,11 @@ from typing import Optional
 from urllib.parse import unquote
 
 import requests
-from data_inclusion.schema.v1 import TypeService
+from data_inclusion.schema.v1 import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    TypeService,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
@@ -43,6 +47,7 @@ from dora.services.models import (
     Bookmark,
     CoachOrientationMode,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -687,6 +692,11 @@ def options(request):
             model = ServiceFee
             fields = ["value", "label"]
 
+    class FundingLabelsSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = FundingLabel
+            fields = ["value", "label"]
+
     def filter_custom_choices(choices):
         user = request.user
         if user.is_staff:
@@ -780,6 +790,15 @@ def options(request):
             for s in DeploymentState.objects.filter(
                 state__in=[DeploymentLevel.IN_PROGRESS, DeploymentLevel.FINALIZING]
             ).values()
+        ],
+        "funding_labels": FundingLabelsSerializer(
+            FundingLabel.objects.all(), many=True
+        ).data,
+        "mobilisable_by": [
+            {"value": p.value, "label": p.label} for p in PersonneMobilisatrice
+        ],
+        "mobilisation_modes": [
+            {"value": m.value, "label": m.label} for m in ModeMobilisation
         ],
     }
 

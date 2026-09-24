@@ -1,28 +1,19 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
   import { currentSchema } from "$lib/validation/validation";
   import { URL_HELP_SITE } from "$lib/consts";
-
-  interface Props {
-    servicesOptions: ServicesOptions;
-    service: Service | Model;
-    model?: Model;
-    noTopPadding?: boolean;
-  }
+  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
 
   let {
     servicesOptions,
     service = $bindable(),
     model,
-    noTopPadding = false,
-  }: Props = $props();
+  }: FieldGroupProps = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -44,7 +35,7 @@
   );
 </script>
 
-<FieldSet title="Typologie" {showModel} {noTopPadding}>
+<FieldGroup title="Typologie du service">
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
     <FieldCategory
       bind:service
@@ -119,12 +110,4 @@
       description="Sélectionnez la typologie qui correspond le mieux au service."
     />
   </FieldModel>
-
-  <FieldModel {...fieldModelProps.isCumulative ?? {}} type="boolean">
-    <BooleanRadioButtonsField
-      id="isCumulative"
-      bind:value={service.isCumulative}
-      description="Cochez « Non » si le service n’est pas cumulable avec d’autres dispositifs."
-    />
-  </FieldModel>
-</FieldSet>
+</FieldGroup>

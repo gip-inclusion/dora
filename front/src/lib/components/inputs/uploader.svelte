@@ -207,7 +207,11 @@
       Choisir un fichier
     </span>
     <span class="text-f14 text-gray-text">
-      {progress != null ? `${Math.round(progress)} %` : ""}
+      {#if progress != null}
+        {Math.round(progress)} %
+      {:else if !localFiles.length}
+        Aucun fichier sélectionné
+      {/if}
     </span>
   </label>
 

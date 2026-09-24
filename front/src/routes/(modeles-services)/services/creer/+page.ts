@@ -1,4 +1,4 @@
-import { getNewService } from "$lib/utils/forms";
+import { getNewService, toServiceStructure } from "$lib/utils/forms";
 import { getModel, getServicesOptions } from "$lib/requests/services";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
@@ -55,11 +55,19 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
       structures = user.structures;
     }
     if (structures.length === 1) {
-      structure = structures[0];
+      // `user.structures` ne contient que des `ShortStructure` : on recharge la structure
+      // complète, seule porteuse du téléphone, du courriel et des horaires.
+      structure = (await getStructure(structures[0].slug, fetch)) || undefined;
     }
   }
 
   service.structure = structure ? structure.slug : null;
+
+  // La structure est déjà connue ici : `handleStructureChange` ne sera jamais appelé,
+  // c'est donc à nous de renseigner `structureInfo`.
+  if (structure) {
+    service.structureInfo = toServiceStructure(structure);
+  }
 
   if (!model) {
     service.coachOrientationModes =
