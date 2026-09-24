@@ -25,6 +25,7 @@ from model_bakery import baker
 from rest_framework.test import APIRequestFactory, APITestCase
 
 from dora.core.constants import WGS84
+from dora.core.models import LogItem
 from dora.core.test_utils import make_model, make_service, make_structure
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
 from dora.decoupage_administratif.models import EPCI, AdminDivisionType, City
@@ -991,6 +992,33 @@ class ServiceTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertFalse(ServiceModificationHistoryItem.objects.exists())
+
+    def test_creating_published_service_logs_note(self):
+        response = self.client.post(
+            "/services/",
+            {
+                **DUMMY_SERVICE,
+                "structure": self.my_struct.slug,
+                "status": ServiceStatus.PUBLISHED,
+            },
+        )
+        self.assertEqual(response.status_code, 201)
+        service = Service.objects.get(slug=response.data["slug"])
+        self.assertEqual(
+            list(
+                LogItem.objects.filter(service=service).values_list("message", "user")
+            ),
+            [("Service publié", self.me.pk)],
+        )
+
+    def test_creating_draft_service_doesnt_log_note(self):
+        response = self.client.post(
+            "/services/",
+            {**DUMMY_SERVICE, "structure": self.my_struct.slug},
+        )
+        self.assertEqual(response.status_code, 201)
+        service = Service.objects.get(slug=response.data["slug"])
+        self.assertFalse(LogItem.objects.filter(service=service).exists())
 
     def test_editing_does_log_draft_changes(self):
         self.assertFalse(ServiceModificationHistoryItem.objects.exists())

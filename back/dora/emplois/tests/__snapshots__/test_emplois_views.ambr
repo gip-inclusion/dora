@@ -8,9 +8,7 @@
           'test_services_api_detail_queries_are_bounded[emplois/tests/test_emplois_views.py]',
         ]),
         'sql': '''
-          SELECT "services_service"."moderation_status",
-                 "services_service"."moderation_date",
-                 "services_service"."id",
+          SELECT "services_service"."id",
                  "services_service"."slug",
                  "services_service"."name",
                  "services_service"."short_desc",
@@ -281,9 +279,7 @@
           'test_services_api_list_queries_are_bounded[emplois/tests/test_emplois_views.py]',
         ]),
         'sql': '''
-          SELECT "services_service"."moderation_status",
-                 "services_service"."moderation_date",
-                 "services_service"."id",
+          SELECT "services_service"."id",
                  "services_service"."slug",
                  "services_service"."name",
                  "services_service"."short_desc",
