@@ -1,9 +1,4 @@
-import type {
-  AdminStructure,
-  ModerationStatus,
-  Service,
-  Structure,
-} from "$lib/types";
+import type { AdminStructure, ModerationStatus, Structure } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { fetchData } from "$lib/utils/misc";
 
@@ -26,24 +21,11 @@ export async function getStructureAdmin(
   return (await fetchData<Structure>(url, fetchFunction)).data;
 }
 
-export async function getServicesAdmin(fetchFunction = fetch) {
-  const url = `${getApiURL()}/services-admin/`;
-  return (await fetchData(url, fetchFunction)).data;
-}
-
-export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
-  const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData<Service>(url, fetchFunction)).data;
-}
-
 export async function setModerationState(
   entity: { slug: string },
-  status: ModerationStatus,
-  kind: "structure" | "service"
+  status: ModerationStatus
 ) {
-  const urlFragment =
-    kind === "structure" ? "structures-admin" : "services-admin";
-  const url = `${getApiURL()}/${urlFragment}/${entity.slug}/`;
+  const url = `${getApiURL()}/structures-admin/${entity.slug}/`;
   const method = "PATCH";
   const response = await fetch(url, {
     method,
