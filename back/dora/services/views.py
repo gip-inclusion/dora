@@ -604,32 +604,34 @@ class ModelViewSet(ServiceViewSet):
                 f"Modèle modifié ({' / '.join(changed_fields)})",
             )
 
-            if self.request.data.get("update_all_services", "") in TRUTHY_VALUES:
-                services = Service.objects.filter(model_id=model.id)
+        if self.request.data.get("update_all_services", "") in TRUTHY_VALUES:
+            if changed_fields:
+                note = f"Service modifié automatiquement suite à la mise à jour de son modèle ({' / '.join(changed_fields)})"
+            else:
+                note = "Service resynchronisé automatiquement avec son modèle"
 
-                for service in services:
-                    synchronize_service_from_model(service, model)
+            services = Service.objects.filter(model_id=model.id)
 
-                    service.log_note(
-                        self.request.user,
-                        f"Service modifié automatiquement suite à la mise à jour de son modèle ({' / '.join(changed_fields)})",
-                    )
+            for service in services:
+                synchronize_service_from_model(service, model)
 
-                    ServiceModificationHistoryItem.objects.create(
-                        service=service,
-                        user=self.request.user,
-                        fields=changed_fields,
-                        status=service.status,
-                    )
+                service.log_note(self.request.user, note)
 
-                    service.last_editor = self.request.user
-                    service.last_sync_checksum = model.sync_checksum
-                    service.modification_date = timezone.now()
+                ServiceModificationHistoryItem.objects.create(
+                    service=service,
+                    user=self.request.user,
+                    fields=changed_fields,
+                    status=service.status,
+                )
 
-                    # On ne vérifie pas les droits sur les services liés au modèle,
-                    # en partant du principe que s'il peut modifier le modèle
-                    # alors il peut modifier les services liés
-                    service.save()
+                service.last_editor = self.request.user
+                service.last_sync_checksum = model.sync_checksum
+                service.modification_date = timezone.now()
+
+                # On ne vérifie pas les droits sur les services liés au modèle,
+                # en partant du principe que s'il peut modifier le modèle
+                # alors il peut modifier les services liés
+                service.save()
 
 
 @api_view()

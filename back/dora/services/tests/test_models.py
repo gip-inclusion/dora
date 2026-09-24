@@ -1,4 +1,7 @@
+import importlib
+
 import pytest
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from model_bakery import baker
 
@@ -9,8 +12,10 @@ from dora.services.models import (
     ServiceCategory,
     ServiceModel,
     ServiceSubCategory,
+    UpdateFrequency,
     validate_unique_form_names,
 )
+from dora.services.utils import update_sync_checksum
 
 DUMMY_SERVICE = {"name": "Mon service"}
 
@@ -283,6 +288,41 @@ def test_update_model_and_update_only_linked_services(api_client):
     # ALORS seul le service associé au modèle est associé
     assert service_1.name == new_model_name
     assert service_2.name == service_name_2
+
+
+@pytest.mark.parametrize(
+    "update_all_services, expected_name",
+    [("true", "Nom du modèle"), ("false", "Nom du service")],
+)
+def test_update_model_without_changes_resyncs_linked_services_only_if_requested(
+    api_client, update_all_services, expected_name
+):
+    # ÉTANT DONNÉ un service lié à un modèle, en retard sur celui-ci
+    user = baker.make("users.User", is_valid=True)
+    struct = make_structure(user)
+    model = make_model(structure=struct, name="Nom du modèle")
+    service = make_service(
+        model=model,
+        structure=struct,
+        name="Nom du service",
+        status=ServiceStatus.PUBLISHED,
+    )
+
+    # QUAND j'enregistre le modèle sans le modifier
+    api_client.force_authenticate(user=user)
+    response = api_client.patch(
+        f"/models/{model.slug}/",
+        {"name": model.name, "update_all_services": update_all_services},
+    )
+
+    assert 200 == response.status_code
+
+    # ALORS le service n'est resynchronisé que si la mise à jour a été demandée
+    service.refresh_from_db()
+    model.refresh_from_db()
+    assert service.name == expected_name
+    if update_all_services == "true":
+        assert service.last_sync_checksum == model.sync_checksum
 
 
 def test_update_service_from_model(api_client):
@@ -631,3 +671,32 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
     assert 400 == response.status_code
     assert "forms" in response.data
+
+
+recompute_migration = importlib.import_module(
+    "dora.services.migrations.0021_recompute_sync_checksums_update_frequency"
+)
+
+
+def test_recompute_sync_checksums_matches_application_checksum():
+    # ÉTANT DONNÉ un modèle dont l'empreinte a été calculée avec une ancienne formule
+    struct = make_structure()
+    model = make_model(structure=struct, update_frequency=UpdateFrequency.EVERY_MONTH)
+    # ET deux copies, l'une à jour et l'autre avec des modifications en attente
+    up_to_date = make_service(model=model, structure=struct)
+    outdated = make_service(model=model, structure=struct)
+    ServiceModel.objects.filter(pk=model.pk).update(sync_checksum="ancienne")
+    Service.objects.filter(pk=up_to_date.pk).update(last_sync_checksum="ancienne")
+    Service.objects.filter(pk=outdated.pk).update(last_sync_checksum="obsolete")
+
+    # QUAND la migration recalcule les empreintes
+    recompute_migration.recompute_sync_checksums(django_apps, None)
+
+    # ALORS l'empreinte du modèle est celle que l'application calcule
+    model.refresh_from_db()
+    assert model.sync_checksum == update_sync_checksum(model)
+    # ET seule la copie qui était à jour la suit
+    up_to_date.refresh_from_db()
+    outdated.refresh_from_db()
+    assert up_to_date.last_sync_checksum == model.sync_checksum
+    assert outdated.last_sync_checksum == "obsolete"

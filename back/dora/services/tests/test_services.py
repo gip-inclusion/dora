@@ -2136,6 +2136,8 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = "payant"
             elif field == "kind":
                 new_val = TypeService.FORMATION.value
+            elif field == "update_frequency":
+                new_val = UpdateFrequency.EVERY_MONTH.value
             elif field == "geom":
                 continue
             else:

@@ -628,7 +628,6 @@ class ServiceModelSerializer(ServiceSerializer):
             "name",
             "num_services",
             "online_form",
-            "qpv_or_zrr",
             "recurrence",
             "horaires_accueil",
             "requirements",

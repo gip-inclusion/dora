@@ -1,4 +1,5 @@
 import hashlib
+from enum import Enum
 
 from data_inclusion.schema.v1 import TypeService
 from data_inclusion.schema.v1.publics import Public as DiPublic
@@ -39,9 +40,9 @@ SYNC_FIELDS = [
     "online_form",
     "publics",
     "publics_precisions",
-    "qpv_or_zrr",
     "recurrence",
     "suspension_date",
+    "update_frequency",
 ]
 
 # Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
@@ -154,6 +155,8 @@ def update_sync_checksum(service):
     for field in SYNC_FIELDS:
         attr = f"{field}_id" if field in SYNC_FK_FIELDS else field
         value = getattr(service, attr)
+        if isinstance(value, Enum):
+            value = value.value
         md5.update(repr(value).encode())
     for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
