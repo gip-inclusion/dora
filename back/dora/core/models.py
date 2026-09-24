@@ -21,7 +21,6 @@ class ModerationStatus(models.TextChoices):
         "Première modération nécessaire",
     )
     NEED_NEW_MODERATION = "NEED_NEW_MODERATION", "Nouvelle modération nécessaire"
-    IN_PROGRESS = "IN_PROGRESS", "En cours"
     VALIDATED = "VALIDATED", "Validé"
 
 

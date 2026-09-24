@@ -23,10 +23,7 @@ export type ServiceCategory =
   | "sante";
 
 export type ModerationStatus =
-  | "NEED_INITIAL_MODERATION"
-  | "NEED_NEW_MODERATION"
-  | "IN_PROGRESS"
-  | "VALIDATED";
+  "NEED_INITIAL_MODERATION" | "NEED_NEW_MODERATION" | "VALIDATED";
 
 export type GeoApiValue = {
   code: string;
