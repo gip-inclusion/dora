@@ -25,7 +25,7 @@
     isModel,
   }: Props = $props();
 
-  let showOpeningHoursField = $state(service.horairesAccueil);
+  let showOpeningHoursField = $state(!!service.horairesAccueil);
 </script>
 
 <FieldSet title="Conditions d’accueil">
