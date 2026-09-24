@@ -10,7 +10,6 @@ from django.utils import timezone
 
 from dora.core.constants import WGS84
 from dora.core.di_v1 import sync_v1_service_fields
-from dora.core.models import ModerationStatus
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -116,8 +115,6 @@ def instantiate_service_from_model(model, structure, user):
     service.model = model
     service.last_sync_checksum = model.sync_checksum
     service.modification_date = timezone.now()
-    service.moderation_status = ModerationStatus.VALIDATED
-    service.moderation_date = timezone.now()
     service.status = ServiceStatus.DRAFT
 
     # Restaure les champs M2M
