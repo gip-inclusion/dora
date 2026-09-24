@@ -119,12 +119,12 @@ def _add_user_to_adminless_structure(structure, user):
         send_moderation_notification(
             structure,
             user,
-            "Premier administrateur ajouté (par lui-même)",
+            "Premier administrateur ajouté",
             ModerationStatus.NEED_INITIAL_MODERATION,
         )
     else:
         # La structure reste sans administrateur.
-        structure.log_note(user, "Premier collaborateur ajouté (par lui-même)")
+        structure.log_note(user, "Premier collaborateur ajouté")
 
 
 def _add_user_to_structure_or_waitlist(structure, user):
