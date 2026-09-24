@@ -27,13 +27,13 @@ def test_fetch_received_orientations_single_page():
         )
     )
 
-    results = EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+    results = EmploisApiClient().fetch_received_orientations(structure_id="id")
 
     assert results == [orientation]
 
     request = route.calls.last.request
     assert request.url.params["page_size"] == str(api_client.PAGE_SIZE)
-    assert b"structure_uid=slug" in request.content
+    assert b"structure_uid=dora--id" in request.content
     assert request.headers["Authorization"] == "Token token"
 
 
@@ -77,7 +77,7 @@ def test_fetch_received_orientations_follows_next_pages():
         )
     )
 
-    results = EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+    results = EmploisApiClient().fetch_received_orientations(structure_id="id")
 
     assert [result["beneficiary_name"] for result in results] == [
         "Page 1",
@@ -104,9 +104,9 @@ def test_fetch_received_orientations_sends_body_on_every_page():
         )
     )
 
-    EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+    EmploisApiClient().fetch_received_orientations(structure_id="id")
 
-    assert b"structure_uid=slug" in page_2.calls.last.request.content
+    assert b"structure_uid=dora--id" in page_2.calls.last.request.content
 
 
 @respx.mock
@@ -125,7 +125,7 @@ def test_fetch_received_orientations_stops_after_max_pages(monkeypatch):
     )
 
     with pytest.raises(EmploisAPIException):
-        EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+        EmploisApiClient().fetch_received_orientations(structure_id="id")
 
     assert route.call_count == 2
 
@@ -145,7 +145,7 @@ def test_fetch_received_orientations_raises_on_unusable_response(response):
     respx.post(ORIENTATIONS_URL).mock(return_value=response)
 
     with pytest.raises(EmploisAPIException):
-        EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+        EmploisApiClient().fetch_received_orientations(structure_id="id")
 
 
 @respx.mock
@@ -154,10 +154,10 @@ def test_get_received_orientations_count_passes_structure_uid_as_query_param():
         return_value=httpx.Response(200, json={"pending_count": 1, "total_count": 7})
     )
 
-    counts = EmploisApiClient().get_received_orientations_count(structure_slug="slug")
+    counts = EmploisApiClient().get_received_orientations_count(structure_id="id")
 
     assert counts == {"pending_count": 1, "total_count": 7}
-    assert route.calls.last.request.url.params["structure_uid"] == "slug"
+    assert route.calls.last.request.url.params["structure_uid"] == "dora--id"
 
 
 @respx.mock
@@ -179,7 +179,7 @@ def test_get_received_orientations_count_raises_on_unusable_response(response):
     )
 
     with pytest.raises(EmploisAPIException):
-        EmploisApiClient().get_received_orientations_count(structure_slug="slug")
+        EmploisApiClient().get_received_orientations_count(structure_id="id")
 
 
 @respx.mock
@@ -187,4 +187,4 @@ def test_fetch_received_orientations_raises_on_connection_error():
     respx.post(ORIENTATIONS_URL).mock(side_effect=httpx.ConnectError("injoignable"))
 
     with pytest.raises(EmploisAPIException):
-        EmploisApiClient().fetch_received_orientations(structure_slug="slug")
+        EmploisApiClient().fetch_received_orientations(structure_id="id")

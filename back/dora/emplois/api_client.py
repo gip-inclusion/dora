@@ -45,7 +45,11 @@ class EmploisApiClient:
 
         return response
 
-    def fetch_received_orientations(self, structure_slug: str) -> list[dict]:
+    @staticmethod
+    def _get_structure_uid(structure_id: str) -> str:
+        return f"dora--{structure_id}"
+
+    def fetch_received_orientations(self, structure_id: str) -> list[dict]:
         """Toutes les orientations reçues, pagination comprise.
 
         La route est paginée : on suit le lien ``next`` renvoyé par l'API
@@ -58,12 +62,14 @@ class EmploisApiClient:
         # corps de la requête, même pour un POST.
         params = {"page_size": PAGE_SIZE}
 
+        structure_uid = self._get_structure_uid(structure_id)
+
         for _ in range(MAX_PAGES):
             payload = self._payload(
                 self.call(
                     "POST",
                     url,
-                    data={"structure_uid": structure_slug},
+                    data={"structure_uid": structure_uid},
                     params=params,
                 )
             )
@@ -81,9 +87,10 @@ class EmploisApiClient:
             f"Pagination des orientations non terminée après {MAX_PAGES} pages."
         )
 
-    def get_received_orientations_count(self, structure_slug: str) -> dict[str, int]:
+    def get_received_orientations_count(self, structure_id: str) -> dict[str, int]:
         url = "api/v1/insertion/orientations-count"
-        response = self.call("GET", url, params={"structure_uid": structure_slug})
+        structure_uid = self._get_structure_uid(structure_id)
+        response = self.call("GET", url, params={"structure_uid": structure_uid})
 
         try:
             payload = response.json()

@@ -570,7 +570,7 @@ class OrientationStatsTestCase(APITestCase):
                 f"/structures/{self.structure.slug}/orientations/stats/"
             )
 
-        mocked_count.assert_called_once_with(structure_slug=self.structure.slug)
+        mocked_count.assert_called_once_with(structure_id=self.structure.id)
 
         self.assertEqual(response.status_code, 200)
         # Les orientations Dora (2 dont 1 en attente) et celles des Emplois
@@ -858,7 +858,7 @@ class OrientationsExportTestCase(APITestCase):
                 f"/structures/{self.structure.slug}/orientations/export/?type=received"
             )
 
-        mocked_fetch.assert_called_once_with(structure_slug=self.structure.slug)
+        mocked_fetch.assert_called_once_with(structure_id=self.structure.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

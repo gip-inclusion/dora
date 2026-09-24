@@ -375,7 +375,7 @@ class StructureOrientationsView(APIView):
         )
         try:
             emplois_counts = EmploisApiClient().get_received_orientations_count(
-                structure_slug=structure.slug
+                structure_id=structure.id
             )
         except EmploisAPIException:
             # Les compteurs restent affichés avec les seules données Dora si
@@ -419,7 +419,7 @@ class StructureOrientationsView(APIView):
             )
             try:
                 emplois_orientations = EmploisApiClient().fetch_received_orientations(
-                    structure_slug=structure.slug
+                    structure_id=structure.id
                 )
             except EmploisAPIException:
                 # L'export reste disponible avec les seules données Dora si
