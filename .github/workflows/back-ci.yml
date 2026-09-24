@@ -17,10 +17,10 @@ jobs:
       DJANGO_SETTINGS_MODULE: config.settings.test
       DJANGO_SECRET_KEY: foo
       DATABASE_URL: postgresql://postgres@localhost:5432/dora
-      MINIO_SECRET_KEY: minio-secret-key
       REDIS_URL: redis://localhost:6379
       AWS_S3_ENDPOINT_URL: http://localhost:9000
-      AWS_SECRET_ACCESS_KEY: $MINIO_SECRET_KEY
+      AWS_ACCESS_KEY_ID: s3-access-key
+      AWS_SECRET_ACCESS_KEY: s3-secret-key
       REQUIREMENTS_PATH: requirements/test.txt  # Pas besoin de préciser 'back' ici, car le 'working-directory' sera 'back'
 
     concurrency:
@@ -29,12 +29,14 @@ jobs:
 
     services:
       s3:
-        image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+        # Commande par défaut de l'image : `weed mini`, S3 sur le port 8333
+        image: chrislusf/seaweedfs:4.47
         env:
-          MINIO_ROOT_USER: minio-access-key
-          MINIO_ROOT_PASSWORD: $MINIO_SECRET_KEY
+          AWS_ACCESS_KEY_ID: s3-access-key
+          AWS_SECRET_ACCESS_KEY: s3-secret-key
+          S3_BUCKET: dora
         ports:
-          - 9000:9000
+          - 9000:8333
       redis:
         image: redis:alpine
         ports:

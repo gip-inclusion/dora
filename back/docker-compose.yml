@@ -19,16 +19,21 @@ services:
     ports:
       - "127.0.0.1:8888:80"
   s3:
-    image: minio/minio:latest
+    # `weed mini` : SeaweedFS mono-processus pour le dev. Les identifiants sont
+    # lus depuis AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY et le bucket
+    # S3_BUCKET est créé au démarrage.
+    image: chrislusf/seaweedfs:4.47
     env_file:
       - envs/dev.env
       - envs/secrets.env
+    environment:
+      S3_BUCKET: dora
     volumes:
-      - miniodata:/data
+      - s3data:/data
     ports:
       - "127.0.0.1:9000:9000"
       - "127.0.0.1:9001:9001"
-    command: server /data --console-address ":9001"
+    command: mini -dir=/data -s3.port=9000 -admin.port=9001 -master.telemetry=false
   redis:
     image: redis:alpine
     ports:
@@ -41,5 +46,5 @@ services:
 volumes:
   pgdata:
   pgconf:
-  miniodata:
+  s3data:
   pgadmin-data:
