@@ -18,7 +18,7 @@ Sinon :
 
 ### Docker Compose
 
-PostgreSQL, PostGIS, Minio et Redis peuvent être installés simplement avec Docker Compose.
+PostgreSQL, PostGIS, SeaweedFS (stockage compatible S3) et Redis peuvent être installés simplement avec Docker Compose.
 
 Vous pouvez surcharger le `docker-compose.yml` fournis par défaut en créant un fichier `docker-compose.override.yml` : https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/.
 
@@ -130,16 +130,11 @@ L’URL de l’API est configurable via la variable d’environnement `GEO_API_G
 ```
 
 # Configurer le téléchargement de documents en local
-Vous devez créer un bucket dans Minio pour les téléchargements de documents.
+Le stockage S3 local est fourni par [SeaweedFS](https://github.com/seaweedfs/seaweedfs) (`weed mini`).
+Aucune configuration manuelle n'est nécessaire : au démarrage, le conteneur `s3` crée le bucket `dora`
+et un compte administrateur à partir de `AWS_ACCESS_KEY_ID` et `AWS_SECRET_ACCESS_KEY` (définis dans `envs/secrets.env`).
 
-1. Allez sur http://localhost:9001/ et connectez-vous avec les identifiants par défaut :
-  - Nom d'utilisateur : minio (configuré dans `envs/dev.env`)
-  - Mot de passe : miniosecret (configuré dans `envs/dev.env`)
-2. Créez un bucket nommé `dora`.
-3. Créez une clé d'accès et copiez la clé d'accès et la clé secrète.
-4. Dans `envs/secrets.env`, définissez les variables suivantes :
-    - AWS_ACCESS_KEY_ID=<votre_clé_d'accès>
-    - AWS_SECRET_ACCESS_KEY=<votre_clé_secrète>
+L'interface d'administration est disponible sur http://localhost:9001/.
 
 
 ## Problèmes avec GeoDjango
@@ -191,32 +186,6 @@ Vous pouvez corriger ce souci en ajoutant les variables d'environnement suivante
 ```
 export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/opt/homebrew/opt/openssl@3/lib/
-```
-
-### Erreur avec Minio
-Si vous rencontrez une erreur avec Minio où vous voyez des dizaines de logs comme celui-ci :
-
-```
-Adding local Minio host to 'mc' configuration...
-```
-Suivi par :
-```
-INFO  ==> MinIO is already stopped...
-```
-
-Supprimer le conteneur `s3` :
-
-```bash
-docker compose stop s3
-docker compose rm -v s3
-```
-
-Utilisez une version spécifique de l'image au lieu de `minio/minio:latest` comme par exemple : `minio/minio:RELEASE.2024-01-16T16-07-38Z`
-La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/minio/minio/tags).
-
-Pour recréer les conteneurs :
-```bash
-docker compose up --build
 ```
 
 ## Développement
