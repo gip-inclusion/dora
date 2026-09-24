@@ -1,3 +1,5 @@
+import pytest
+
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import (
     make_service,
@@ -168,6 +170,28 @@ def test_awaiting_moderation():
     assert orphan_structure not in awaiting_with_manager
     assert adminless_structure not in awaiting_with_manager
     assert obsolete_structure not in awaiting_with_manager
+
+
+@pytest.mark.parametrize("moderation_status", [ModerationStatus.IN_PROGRESS, None])
+def test_awaiting_moderation_includes_any_status_but_validated(moderation_status):
+    structure = make_structure(moderation_status=moderation_status)
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=structure,
+        is_admin=True,
+    )
+
+    # Sans administrateur, il n'y a rien à valider.
+    adminless_structure = make_structure(moderation_status=moderation_status)
+    make_structure_member(
+        user=make_user(is_valid=True, is_active=True),
+        structure=adminless_structure,
+        is_admin=False,
+    )
+
+    awaiting = Structure.objects.awaiting_moderation()
+    assert structure in awaiting
+    assert adminless_structure not in awaiting
 
 
 def test_requiring_action_from_department_managers():

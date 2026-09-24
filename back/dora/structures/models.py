@@ -247,15 +247,11 @@ class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
             # alors qu'aucun administrateur n'était (ou n'est resté) rattaché à
             # la structure : on est en attente de modération seulement s'il y a
             # effectivement un administrateur à valider.
+            # Tout statut autre que `VALIDATED` compte, y compris `IN_PROGRESS`
+            # (hérité de l'ancien écran de modération) et l'absence de statut.
             awaiting_moderation=Case(
                 When(
-                    Q(
-                        moderation_status__in=[
-                            ModerationStatus.NEED_NEW_MODERATION,
-                            ModerationStatus.NEED_INITIAL_MODERATION,
-                        ]
-                    )
-                    & has_valid_admin,
+                    ~Q(moderation_status=ModerationStatus.VALIDATED) & has_valid_admin,
                     then=Value(True),
                 ),
                 default=Value(False),
