@@ -24,7 +24,7 @@ export const load: PageLoad = async ({ parent }) => {
 
   return {
     title: `Collaborateurs | ${capitalize(struct.name)} | DORA`,
-    description: struct.shortDesc,
+    description: struct.shortDescription,
     members,
     putativeMembers,
   };

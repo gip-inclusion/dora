@@ -125,7 +125,7 @@ export interface AdminStructure {
   numServices: number;
   parent: string;
   phone: string;
-  shortDesc: string;
+  shortDescription: string;
   siret: string;
   slug: string;
   typologyDisplay: string;
@@ -158,8 +158,10 @@ export interface Structure {
   codeSafirPe: string;
   creationDate: string;
   department: string;
+  description: string;
+  // dérivée de `description` par l'API, pour les meta descriptions
+  shortDescription: string;
   email: string;
-  fullDesc: string;
   hasAdmin: boolean;
   numAdmins: number;
   hasBeenEdited: boolean;
@@ -175,7 +177,6 @@ export interface Structure {
   numModels: number;
   numServices: number;
   openingHours: string | null;
-  openingHoursDetails: string | null;
   parent: string;
   parentName: string;
   parentSiret: string;
@@ -186,7 +187,6 @@ export interface Structure {
   reseauxPorteurs: string[];
   services: StructureService[];
   shortAdminNames: string[];
-  shortDesc: string;
   siret: string | null;
   slug: string;
   source: StructureSource;
@@ -395,7 +395,6 @@ export interface ServiceStructure {
   numServices: number;
   phone: string;
   postalCode: string;
-  shortDesc: string;
   siret: string;
   slug: string;
   url: string;

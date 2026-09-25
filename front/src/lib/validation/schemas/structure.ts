@@ -74,7 +74,7 @@ export const structureSchema: v.Schema = {
     post: [v.trim],
     maxLength: 200,
   },
-  fullDesc: {
+  description: {
     label: "Présentation",
     default: "",
     rules: [v.isString()],

@@ -42,7 +42,7 @@
     onRefresh,
   }: Props = $props();
 
-  let fullDesc: string = $derived(markdownToHTML(structure.fullDesc, 4));
+  let description: string = $derived(markdownToHTML(structure.description, 4));
 
   let reseauxPorteursDisplay = $derived(
     structure.reseauxPorteurs
@@ -131,11 +131,11 @@
     </div>
   {/if}
 
-  {#if fullDesc}
+  {#if description}
     <hr class="separator" />
 
     <div class="presentation">
-      <TextClamp text={fullDesc} />
+      <TextClamp text={description} />
     </div>
   {/if}
 
