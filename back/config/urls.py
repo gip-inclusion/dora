@@ -47,11 +47,6 @@ router.register(
 )
 
 router.register(
-    r"services-admin",
-    dora.support.views.ServiceAdminViewSet,
-    basename="service-admin",
-)
-router.register(
     r"orientations",
     dora.orientations.views.OrientationViewSet,
     basename="orientation",

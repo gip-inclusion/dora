@@ -28,7 +28,7 @@
   const canValidateAdmins = $derived(structure.adminsToModerate.length > 0);
 
   async function handleModeration(status: ModerationStatus) {
-    await setModerationState(structure, status, "structure");
+    await setModerationState(structure, status);
     await onRefresh();
   }
 

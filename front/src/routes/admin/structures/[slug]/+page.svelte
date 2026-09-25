@@ -228,7 +228,6 @@
             {service.name}
 
             <SmallLink link="/services/{service.slug}" label="fiche" />
-            <SmallLink link="/admin/services/{service.slug}" label="admin" />
           </h5>
           <InfoLine condition={service.shortDesc}>
             <span class="italic">{service.shortDesc}</span>
