@@ -6,11 +6,12 @@
   import { markdownToHTML } from "$lib/utils/misc";
   import History from "../../history.svelte";
   import InfoLine from "../../info-line.svelte";
-  import ModerationButtonMenu from "../../moderation-button-menu.svelte";
   import SmallLink from "../../small-link.svelte";
   import StructureContacts from "../../structure-contacts.svelte";
   import UserInfo from "../../user-info.svelte";
   import GoogleSearchLink from "../../google-search-link.svelte";
+  import StructureEditLinks from "../structure-edit-links.svelte";
+  import StructureModerationMenu from "../structure-moderation-menu.svelte";
   import type { PageData } from "./$types";
 
   interface Props {
@@ -48,11 +49,17 @@
             >{/if}
         </span>
       </h2>
-      <ModerationButtonMenu entity={data.structure} onRefresh={handleRefresh} />
+      <div class="gap-s4 text-f16 flex flex-row items-center font-bold">
+        Modération :
+        <StructureModerationMenu
+          structure={data.structure}
+          onRefresh={handleRefresh}
+        />
+      </div>
     </div>
     <h3>
       {data.structure.name}
-      <SmallLink link="/structures/{data.structure.slug}" label="front" />
+      <SmallLink link="/structures/{data.structure.slug}" label="fiche" />
       <GoogleSearchLink searchString={data.structure.name} />
     </h3>
 
@@ -61,7 +68,7 @@
         Antenne de <strong>{data.structure.parent.name}</strong>
         <SmallLink
           link="/structures/{data.structure.parent.slug}"
-          label="front"
+          label="fiche"
         />
         <SmallLink
           link="/admin/structures/{data.structure.parent.slug}"
@@ -69,6 +76,10 @@
         />
       </InfoLine>
     {/if}
+
+    <div class="mb-s16">
+      <StructureEditLinks structure={data.structure} />
+    </div>
 
     <h4>Historique</h4>
     <History notes={data.structure.notes} />
@@ -180,7 +191,7 @@
           <h5>
             {branch.name}
 
-            <SmallLink link="/structures/{branch.slug}" label="front" />
+            <SmallLink link="/structures/{branch.slug}" label="fiche" />
             <SmallLink link="/admin/structures/{branch.slug}" label="admin" />
           </h5>
 
@@ -199,7 +210,7 @@
           <h5>
             {model.name}
 
-            <SmallLink link="/models/{model.slug}" label="front" />
+            <SmallLink link="/models/{model.slug}" label="fiche" />
           </h5>
           <InfoLine condition={model.shortDesc}>
             <span class="italic">{model.shortDesc}</span>
@@ -216,7 +227,7 @@
           <h5>
             {service.name}
 
-            <SmallLink link="/services/{service.slug}" label="front" />
+            <SmallLink link="/services/{service.slug}" label="fiche" />
             <SmallLink link="/admin/services/{service.slug}" label="admin" />
           </h5>
           <InfoLine condition={service.shortDesc}>

@@ -93,10 +93,6 @@ class StructureAdminViewSet(
             if restricted_to_departments:
                 structures = structures.filter(department__in=user.departments)
 
-        moderation = self.request.query_params.get("moderation") in TRUTHY_VALUES
-        if moderation:
-            return structures.exclude(moderation_status=ModerationStatus.VALIDATED)
-
         return structures
 
     def get_serializer_class(self):

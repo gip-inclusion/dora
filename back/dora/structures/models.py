@@ -192,6 +192,15 @@ class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
         from dora.services.enums import ServiceStatus
         from dora.services.models import Service
 
+        has_valid_admin = Exists(
+            StructureMember.objects.filter(
+                structure=OuterRef("pk"),
+                is_admin=True,
+                user__is_valid=True,
+                user__is_active=True,
+            )
+        )
+
         return self.prefetch_related(
             "national_labels",
             Prefetch(
@@ -222,14 +231,7 @@ class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
             .values("structure")
             .annotate(count=Count("*"))
             .values("count")[:1],
-            has_valid_admin=Exists(
-                StructureMember.objects.filter(
-                    structure=OuterRef("pk"),
-                    is_admin=True,
-                    user__is_valid=True,
-                    user__is_active=True,
-                )
-            ),
+            has_valid_admin=has_valid_admin,
             is_orphan=Case(
                 When(
                     Exists(StructureMember.objects.filter(structure=OuterRef("pk")))
@@ -241,12 +243,15 @@ class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
                 default=Value(True),
                 output_field=BooleanField(),
             ),
+            # Le statut de modération seul est insuffisant, il a pu être défini
+            # alors qu'aucun administrateur n'était (ou n'est resté) rattaché à
+            # la structure : on est en attente de modération seulement s'il y a
+            # effectivement un administrateur à valider.
+            # Tout statut autre que `VALIDATED` compte, y compris `IN_PROGRESS`
+            # (hérité de l'ancien écran de modération) et l'absence de statut.
             awaiting_moderation=Case(
                 When(
-                    moderation_status__in=[
-                        ModerationStatus.NEED_NEW_MODERATION,
-                        ModerationStatus.NEED_INITIAL_MODERATION,
-                    ],
+                    ~Q(moderation_status=ModerationStatus.VALIDATED) & has_valid_admin,
                     then=Value(True),
                 ),
                 default=Value(False),
@@ -254,14 +259,7 @@ class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
             ),
             is_waiting=Case(
                 When(
-                    ~Exists(
-                        StructureMember.objects.filter(
-                            structure=OuterRef("pk"),
-                            is_admin=True,
-                            user__is_valid=True,
-                            user__is_active=True,
-                        )
-                    )
+                    ~has_valid_admin
                     & Exists(
                         StructurePutativeMember.objects.filter(
                             structure=OuterRef("pk"),

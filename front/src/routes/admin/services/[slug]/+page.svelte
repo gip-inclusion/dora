@@ -39,7 +39,11 @@
           <a href="#infos">Informations</a>
         </span>
       </h2>
-      <ModerationButtonMenu entity={data.service} onRefresh={handleRefresh} />
+      <ModerationButtonMenu
+        entity={data.service}
+        kind="service"
+        onRefresh={handleRefresh}
+      />
     </div>
     <h3>
       {data.service.name}
