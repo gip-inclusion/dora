@@ -4,9 +4,8 @@
   import ServiceFeedbackButton from "../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDiIdentification from "./service-di-identification.svelte";
   import ServiceTypology from "./service-typology.svelte";
-  import ServiceDocuments from "./service-documents.svelte";
-  import ServiceKeyInformations from "./service-key-informations/service-key-informations.svelte";
-  import ServiceSteps from "./service-steps.svelte";
+  import ServiceEligibility from "./service-eligibility.svelte";
+  import ServiceConditions from "./service-conditions.svelte";
 
   interface Props {
     service: Service | Model;
@@ -15,22 +14,15 @@
     onTrackMobilisation: (url?: string) => void;
   }
 
-  let {
-    service,
-    servicesOptions,
-    onFeedbackButtonClick,
-    onTrackMobilisation,
-  }: Props = $props();
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
 </script>
 
 <div class="gap-s36 flex flex-col">
   <ServiceTypology {service} {servicesOptions} />
 
-  <ServiceKeyInformations {service} {servicesOptions} {onFeedbackButtonClick} />
+  <ServiceEligibility {service} {servicesOptions} />
 
-  <ServiceSteps {service} {onTrackMobilisation} />
-
-  <ServiceDocuments {service} />
+  <ServiceConditions {service} />
 
   <ServiceDiIdentification {service} />
 
