@@ -459,9 +459,11 @@ export interface ServiceModelBase {
   kind: ServiceKind | null;
   kindDisplay: string | null;
   mobilisableBy: string[] | null;
+  mobilisableByDisplay: string[] | null;
   mobilisationDetails: string | null;
   mobilisationLink: string | null;
   mobilisationModes: string[] | null;
+  mobilisationModesDisplay: string[] | null;
   modificationDate: string | null;
   name: string;
   onlineForm: string;

@@ -15,6 +15,8 @@ export const SITEMAP_PAGE_SIZE = 1000;
 
 export const MON_RECAP_DEPARTMENTS = ["59", "69", "93"];
 
+export const NATIONAL_ELIGIBLITITY_ZONE = "France entière";
+
 export const MONTHS_BEFORE_OUTDATED = 6;
 
 export const SEARCH_RADIUS_KM = 50;
