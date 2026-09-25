@@ -95,6 +95,18 @@ export function shortenString(str, length = 50) {
   return str;
 }
 
+// Utilisé pour les meta descriptions, qui repartent de la présentation détaillée :
+// on retire le balisage markdown le plus courant avant de tronquer.
+export function markdownExcerpt(markdown: string, length = 200) {
+  const plainText = (markdown ?? "")
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`>#]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return shortenString(plainText, length);
+}
+
 export function capitalize(text: string) {
   if (text.toUpperCase() !== text) {
     // Si le texte n'est pas en capitales

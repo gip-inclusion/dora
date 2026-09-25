@@ -1,5 +1,5 @@
 import { getStructuresOptions } from "$lib/requests/structures";
-import { capitalize } from "$lib/utils/misc";
+import { capitalize, markdownExcerpt } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, parent }) => {
@@ -7,7 +7,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
   return {
     title: `${capitalize(structure.name)} | DORA`,
-    description: structure.shortDesc,
+    description: markdownExcerpt(structure.fullDesc),
     structuresOptions: await getStructuresOptions(fetch),
     members,
     putativeMembers,

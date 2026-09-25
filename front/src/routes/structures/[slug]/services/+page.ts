@@ -1,6 +1,6 @@
 import { getServicesOptions } from "$lib/requests/services";
 import type { ServiceStatus } from "$lib/types";
-import { capitalize } from "$lib/utils/misc";
+import { capitalize, markdownExcerpt } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, url, parent }) => {
@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   return {
     title: `Services | ${capitalize(structure.name)} | DORA`,
-    description: structure.shortDesc,
+    description: markdownExcerpt(structure.fullDesc),
     serviceStatus,
     updateNeeded,
     servicesOptions,

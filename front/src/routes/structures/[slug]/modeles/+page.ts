@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { capitalize } from "$lib/utils/misc";
+import { capitalize, markdownExcerpt } from "$lib/utils/misc";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";
@@ -22,6 +22,6 @@ export const load: PageLoad = async ({ parent }) => {
 
   return {
     title: `Modèles | ${capitalize(struct.name)} | DORA`,
-    description: struct.shortDesc,
+    description: markdownExcerpt(struct.fullDesc),
   };
 };
