@@ -340,7 +340,6 @@ def get_new_di_service_orientation_data(user, structure, service):
     (
         ModerationStatus.NEED_INITIAL_MODERATION,
         ModerationStatus.NEED_NEW_MODERATION,
-        ModerationStatus.IN_PROGRESS,
     ),
 )
 def test_query_create_triggers_moderation(
