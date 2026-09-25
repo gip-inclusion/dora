@@ -179,7 +179,6 @@ export interface Structure {
   numServices: number;
   openingHours: string | null;
   openingHoursDetails: string | null;
-  otherLabels: string;
   parent: string;
   parentName: string;
   parentSiret: string;
