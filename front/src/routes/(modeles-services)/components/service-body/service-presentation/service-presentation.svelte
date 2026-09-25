@@ -27,8 +27,6 @@
 <div class="gap-s36 flex flex-col">
   <ServiceKeyInformations {service} {servicesOptions} {onFeedbackButtonClick} />
 
-  <ServiceDescription {service} />
-
   <ServiceSteps {service} {onTrackMobilisation} />
 
   <ServiceDocuments {service} />
