@@ -18,6 +18,7 @@ from .models import (
 
 class StructureSerializer(serializers.ModelSerializer):
     typology_display = serializers.SerializerMethodField()
+    name = serializers.CharField(min_length=3, max_length=150)
     parent = serializers.SlugRelatedField(slug_field="slug", read_only=True)
     can_edit_informations = serializers.SerializerMethodField()
     can_view_members = serializers.SerializerMethodField()
