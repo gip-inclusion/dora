@@ -74,13 +74,6 @@ export const structureSchema: v.Schema = {
     post: [v.trim],
     maxLength: 200,
   },
-  shortDesc: {
-    label: "Résumé",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(280)],
-    post: [v.trim],
-    maxLength: 280,
-  },
   fullDesc: {
     label: "Présentation",
     default: "",
@@ -96,13 +89,6 @@ export const structureSchema: v.Schema = {
     label: "Horaires de la structure",
     default: "",
     rules: [v.isString(), v.osmHoursNotContainsInvalid(), v.maxStrLength(255)],
-    post: [v.trim],
-    maxLength: 255,
-  },
-  openingHoursDetails: {
-    label: "Détail horaires",
-    default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
   },
