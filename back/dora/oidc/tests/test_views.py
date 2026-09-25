@@ -1,3 +1,4 @@
+import uuid
 from urllib.parse import parse_qs, urlparse
 
 import pytest
@@ -48,3 +49,28 @@ def test_oidc_authentication_views_have_no_cache_headers(client, url_name):
 
     cache_control = response.get("Cache-Control", "")
     assert "no-store" in cache_control or "no-cache" in cache_control
+
+
+def test_oidc_login_creates_drf_token_with_existing_session(client, mocker):
+    # Avec une session Django déjà ouverte (ici via l'admin), `mozilla-django-oidc`
+    # ne rappelle pas `auth.login()` : le token doit être créé à l'authentification.
+    user = make_user(sub_pc=uuid.uuid4())
+    client.force_login(user, backend="django.contrib.auth.backends.ModelBackend")
+    backend = "dora.oidc.backends.OIDCAuthenticationBackend"
+    mocker.patch(f"{backend}.get_token", return_value={})
+    mocker.patch(f"{backend}.verify_token", return_value={"sub": str(user.sub_pc)})
+    mocker.patch(
+        f"{backend}.get_userinfo",
+        return_value={"email": user.email, "sub": str(user.sub_pc)},
+    )
+    session = client.session
+    session["oidc_states"] = {"a-state": {"nonce": "a-nonce", "code_verifier": None}}
+    session.save()
+
+    client.get(
+        reverse("oidc_authentication_callback"), {"code": "a-code", "state": "a-state"}
+    )
+    response = client.get(reverse("oidc_logged_in"))
+
+    assert response.status_code == 302
+    assert Token.objects.filter(user=user).exists()
