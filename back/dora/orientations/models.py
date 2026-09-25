@@ -28,12 +28,15 @@ class ContactPreference(models.TextChoices):
     OTHER = "AUTRE", "Autre"
 
 
+EMPLOIS_SOURCE_LABEL = "Plateforme de l’inclusion"
+
+
 class OrientationStatus(models.TextChoices):
     MODERATION_PENDING = "MODÉRATION_EN_COURS", "En cours de modération"
     MODERATION_REJECTED = "MODÉRATION_REJETÉE", "Rejetée par la modération"
-    PENDING = "OUVERTE", "Ouverte / En cours de traitement"
+    PENDING = "OUVERTE", "En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
-    REJECTED = "REFUSÉE", "Refusée"
+    REJECTED = "REFUSÉE", "Déclinée"
     EXPIRED = "EXPIRÉE", "Expirée"
 
 
@@ -48,6 +51,15 @@ def _orientation_query_expiration_date():
     return timezone.now() + relativedelta(days=ORIENTATION_QUERY_LINK_TTL_DAY)
 
 
+# Orientations émises par Les Emplois : condition unique, partagée par
+# `OrientationQuerySet.emplois()`, `Orientation.is_emplois()` et les vues qui
+# doivent les écarter pour ne pas doublonner avec l'API des Emplois.
+EMPLOIS_ORIENTATION_Q = models.Q(
+    prescriber__isnull=True,
+    emplois_orientation_data__isnull=False,
+)
+
+
 class OrientationQuerySet(models.QuerySet):
     def answered(self):
         return self.filter(
@@ -58,10 +70,7 @@ class OrientationQuerySet(models.QuerySet):
     def emplois(self):
         # Orientations émises par Les Emplois — mêmes conditions
         # que `Orientation.is_emplois()`.
-        return self.filter(
-            prescriber__isnull=True,
-            emplois_orientation_data__isnull=False,
-        )
+        return self.filter(EMPLOIS_ORIENTATION_Q)
 
 
 @dataclass(frozen=True)
@@ -371,7 +380,7 @@ class Orientation(models.Model):
         return self.prescriber_id is None and hasattr(self, "emplois_orientation_data")
 
     def source(self):
-        return "Plateforme de l’inclusion" if self.is_emplois() else "DORA"
+        return EMPLOIS_SOURCE_LABEL if self.is_emplois() else "DORA"
 
     def email_backend(self):
         from dora.orientations.emails.dora import backend as dora_backend
