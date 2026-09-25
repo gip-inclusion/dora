@@ -207,6 +207,15 @@ export function arraysCompare(a, b) {
   return sortedA.every((val, i) => val === sortedB[i]);
 }
 
+// Compare deux textes en markdown en ignorant les fins de ligne (`\r\n`), la forme des
+// liens et les espaces en bord de texte, que l'éditeur réécrit à la première modification.
+export function markdownCompare(a?: string | null, b?: string | null) {
+  const rewrite = (value?: string | null) =>
+    htmlToMarkdown(markdownToHTML(value ?? "")).trim();
+
+  return rewrite(a) === rewrite(b);
+}
+
 export function formatPhoneNumber(phoneNumber: string): string {
   // Supprime tous les espaces et caractères non numériques sauf le +
   let cleanedNumber = phoneNumber.replace(/[^\d+]/g, "");
