@@ -345,10 +345,11 @@ class ImportStructuresHelper:
 
 class ImportSerializer(serializers.Serializer):
     name = serializers.CharField(
+        max_length=150,
         error_messages={
             "blank": 'La colonne "nom" est obligatoire',
             "required": 'La colonne "nom" est obligatoire',
-        }
+        },
     )
     siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
     parent_siret = serializers.CharField(allow_blank=True, validators=[validate_siret])

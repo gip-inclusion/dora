@@ -11,10 +11,10 @@ export const structureSchema: v.Schema = {
   name: {
     label: "Nom de la structure",
     default: "",
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [v.isString(), v.minStrLength(3), v.maxStrLength(150)],
     post: [v.trim],
     required: true,
-    maxLength: 255,
+    maxLength: 150,
   },
   address1: {
     label: "Adresse",
