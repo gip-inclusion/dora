@@ -19,7 +19,7 @@
 
   let { data = $bindable() }: Props = $props();
 
-  const description = markdownToHTML(data.structure.fullDesc, 2);
+  const description = markdownToHTML(data.structure.description, 2);
 
   async function handleRefresh() {
     data.structure = await getStructureAdmin(data.structure.slug);
@@ -78,11 +78,6 @@
     <StructureContacts structure={data.structure} />
 
     <h4 id="infos">Informations</h4>
-    <InfoLine condition={data.structure.shortDesc}>
-      <div class="italic">
-        {data.structure.shortDesc}
-      </div>
-    </InfoLine>
     <InfoLine condition={data.structure.url}>
       <a
         href={data.structure.url}
@@ -114,8 +109,8 @@
       typologie: {data.structure.typologyDisplay}
     </InfoLine>
 
-    <InfoLine condition={data.structure.fullDesc}>
-      description longue:
+    <InfoLine condition={data.structure.description}>
+      description :
       <div class="prose-sm border-gray-02 p-s16 rounded-lg border-2">
         <TextClamp text={description} />
       </div>

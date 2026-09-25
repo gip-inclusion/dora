@@ -22,6 +22,6 @@ export const load: PageLoad = async ({ parent }) => {
 
   return {
     title: `Modèles | ${capitalize(struct.name)} | DORA`,
-    description: struct.shortDesc,
+    description: struct.shortDescription,
   };
 };
