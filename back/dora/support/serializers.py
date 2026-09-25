@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from dora.core.models import LogItem, ModerationStatus
+from dora.core.utils import clean_and_shorten_description
 from dora.services.models import Service, ServiceModel
 from dora.structures.constants import RESEAUX_PORTEURS_EXCLUDED_FROM_AWAITING_ACTIVATION
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
@@ -90,9 +91,9 @@ class StructureAdminSerializer(StructureSerializer):
             "creation_date",
             "creator",
             "department",
+            "description",
             "editors",
             "email",
-            "full_desc",
             "has_admin",
             "is_obsolete",
             "is_orphan",
@@ -119,7 +120,6 @@ class StructureAdminSerializer(StructureSerializer):
             "postal_code",
             "reseaux_porteurs",
             "services",
-            "short_desc",
             "siret",
             "slug",
             "source",
@@ -143,9 +143,9 @@ class StructureAdminSerializer(StructureSerializer):
             "creation_date",
             "creator",
             "department",
+            "description",
             "editors",
             "email",
-            "full_desc",
             "has_admin",
             "is_obsolete",
             "is_orphan",
@@ -171,7 +171,6 @@ class StructureAdminSerializer(StructureSerializer):
             "postal_code",
             "reseaux_porteurs",
             "services",
-            "short_desc",
             "siret",
             "slug",
             "source",
@@ -214,10 +213,15 @@ class StructureAdminSerializer(StructureSerializer):
 
     def get_branches(self, obj):
         class BranchSerializer(serializers.ModelSerializer):
+            short_description = serializers.SerializerMethodField()
+
             class Meta:
                 model = Structure
-                fields = ["slug", "name", "short_desc"]
+                fields = ["slug", "name", "short_description"]
                 lookup_field = "slug"
+
+            def get_short_description(self, obj):
+                return clean_and_shorten_description(obj.description)
 
         return BranchSerializer(obj.branches.all(), many=True).data
 
@@ -358,7 +362,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_services",
             "phone",
             "reseaux_porteurs",
-            "short_desc",
+            "short_description",
             "siret",
             "slug",
             "typology",
@@ -394,7 +398,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_services",
             "phone",
             "reseaux_porteurs",
-            "short_desc",
+            "short_description",
             "siret",
             "slug",
             "typology",
