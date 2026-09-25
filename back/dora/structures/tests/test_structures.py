@@ -1396,3 +1396,36 @@ def test_legacy_label_fields_are_read_only(structure_admin_client):
     assert structure.typology == "ASSO"
     assert not structure.national_labels.exists()
     assert structure.other_labels == ["Label local"]
+
+
+@pytest.mark.parametrize(
+    ("name", "expected_status"),
+    [
+        pytest.param("ab", 400, id="too_short"),
+        pytest.param("a" * 3, 200, id="min_length"),
+        pytest.param("a" * 150, 200, id="max_length"),
+        pytest.param("a" * 151, 400, id="too_long"),
+    ],
+)
+def test_update_name_length(structure_admin_client, name, expected_status):
+    client, structure = structure_admin_client
+
+    response = client.patch(
+        f"/structures/{structure.slug}/", {"name": name}, format="json"
+    )
+
+    assert response.status_code == expected_status
+
+
+def test_update_opening_hours_rejects_incomplete_input(structure_admin_client):
+    # marqueur posé par le formulaire tant que la saisie n'est pas terminée
+    client, structure = structure_admin_client
+
+    response = client.patch(
+        f"/structures/{structure.slug}/",
+        {"opening_hours": "Mo-Fr ##INVALID##"},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "opening_hours" in response.data

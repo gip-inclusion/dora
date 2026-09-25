@@ -4,7 +4,6 @@
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import OpeningHoursField from "$lib/components/forms/fields/opening-hours-field.svelte";
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
@@ -34,6 +33,15 @@
   id="name"
   bind:value={structure.name}
   placeholder="Plateforme de l’inclusion"
+/>
+
+<MultiSelectField
+  id="reseauxPorteurs"
+  bind:value={structure.reseauxPorteurs}
+  choices={structuresOptions.reseauxPorteurs}
+  description="Indiquez le ou les réseaux dont fait partie la structure"
+  placeholder="Choisissez…"
+  placeholderMulti="Choisissez…"
 />
 
 <FieldsAddress bind:entity={structure} />
@@ -86,12 +94,6 @@
   placeholder="https://mastructure.fr"
 />
 
-<TextareaField
-  id="shortDesc"
-  bind:value={structure.shortDesc}
-  placeholder="Décrivez brièvement votre structure"
-/>
-
 <RichTextField
   id="fullDesc"
   bind:value={structure.fullDesc}
@@ -99,26 +101,9 @@
   vertical
 />
 
-<MultiSelectField
-  id="reseauxPorteurs"
-  bind:value={structure.reseauxPorteurs}
-  choices={structuresOptions.reseauxPorteurs}
-  description="Indiquez le ou les réseaux dont fait partie la structure"
-  placeholder="Choisissez…"
-  placeholderMulti="Choisissez…"
-  vertical
-/>
-
 <OpeningHoursField
   id="openingHours"
   bind:value={structure.openingHours}
-  vertical
-/>
-
-<BasicInputField
-  id="openingHoursDetails"
-  bind:value={structure.openingHoursDetails}
-  descriptionText="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
   vertical
 />
 

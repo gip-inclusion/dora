@@ -62,7 +62,6 @@
       structure.email ||
       structure.url ||
       structure.openingHours ||
-      structure.openingHoursDetails ||
       structure.accesslibreUrl
   );
 
@@ -123,26 +122,14 @@
     {/if}
   </div>
 
-  <div class="data">
-    <p class="mb-s32 text-f21 font-bold">{structure.shortDesc}</p>
-
-    <div class="gap-s32 flex flex-col md:flex-row">
-      {#if reseauxPorteursDisplay}
-        <div class="flex-1">
-          <h3 class="mb-s10 text-f17 text-france-blue">Réseaux porteurs</h3>
-          <p class="m-s0 text-f14">
-            {reseauxPorteursDisplay}
-          </p>
-        </div>
-      {/if}
-      {#if structure.otherLabels}
-        <div class="flex-1">
-          <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
-          <p class="m-s0 text-f14 break-all">{structure.otherLabels}</p>
-        </div>
-      {/if}
+  {#if reseauxPorteursDisplay}
+    <div class="data">
+      <h3 class="mb-s10 text-f17 text-france-blue">Réseaux porteurs</h3>
+      <p class="m-s0 text-f14">
+        {reseauxPorteursDisplay}
+      </p>
     </div>
-  </div>
+  {/if}
 
   {#if fullDesc}
     <hr class="separator" />
@@ -213,26 +200,6 @@
             </div>
           {/if}
 
-          {#if structure.openingHours}
-            <div>
-              <h4 class="mb-s8 flex items-center">
-                <span class="mr-s8 h-s24 w-s24 fill-current">
-                  <TimeLineSystem />
-                </span>
-                Horaires
-              </h4>
-
-              <OsmHours osmHours={structure.openingHours} />
-
-              {#if structure.openingHoursDetails}
-                <p class="mb-s0 mt-s16 text-gray-text italic">
-                  <up>*</up>
-                  {structure.openingHoursDetails}
-                </p>
-              {/if}
-            </div>
-          {/if}
-
           {#if structure.accesslibreUrl}
             <div>
               <h4 class="mb-s8 flex items-center">
@@ -254,6 +221,18 @@
                   <ExternalLinkLineSystem size="16" />
                 </span>
               </a>
+            </div>
+          {/if}
+          {#if structure.openingHours}
+            <div>
+              <h4 class="mb-s8 flex items-center">
+                <span class="mr-s8 h-s24 w-s24 fill-current">
+                  <TimeLineSystem />
+                </span>
+                Horaires
+              </h4>
+
+              <OsmHours osmHours={structure.openingHours} />
             </div>
           {/if}
         {/if}
@@ -301,6 +280,7 @@
   @media (width >= 48rem) {
     .structure-body {
       grid-template-columns: 1fr 300px;
+      grid-template-rows: auto auto auto 1fr;
       column-gap: 4rem;
       row-gap: 1rem;
       grid-template-areas:

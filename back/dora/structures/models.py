@@ -324,7 +324,8 @@ class StructureManager(models.Manager):
         structure = self.model(
             siret=siret if not parent or parent.siret != siret else None,
             parent=parent,
-            name=name if name else data["name"],
+            # les noms issus de SIRENE peuvent dépasser la taille du champ
+            name=(name if name else data["name"])[:150],
             address1=data["address1"],
             address2=data["address2"],
             postal_code=data["postal_code"],
@@ -370,7 +371,7 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
         db_index=True,
     )
 
-    name = models.CharField(verbose_name="Nom", max_length=255, db_index=True)
+    name = models.CharField(verbose_name="Nom", max_length=150, db_index=True)
 
     typology = models.CharField(
         choices=zip(
