@@ -383,8 +383,10 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
     )
     slug = models.SlugField(blank=True, null=True, unique=True)
     url = models.URLField(blank=True)
+    description = models.TextField(verbose_name="Description", blank=True)
+    # Fusionnée dans `description` par la migration 0006 et plus lue nulle part :
+    # conservée le temps de vérifier la fusion, supprimée par une migration dédiée.
     short_desc = models.CharField(max_length=280, blank=True)
-    full_desc = models.TextField(blank=True)
     phone = models.CharField(
         max_length=10, blank=True, validators=[validate_phone_number]
     )
@@ -414,6 +416,7 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
     opening_hours = models.CharField(
         max_length=255, blank=True, null=True, validators=[validate_opening_hours_str]
     )
+    # Plus saisi ni affiché : supprimé par la même migration que `short_desc`.
     opening_hours_details = models.CharField(max_length=255, blank=True, null=True)
     national_labels = models.ManyToManyField(StructureNationalLabel, blank=True)
     other_labels = ArrayField(

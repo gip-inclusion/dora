@@ -105,15 +105,7 @@ class StructureSerializer(serializers.ModelSerializer):
         return obj.modification_date or None
 
     def get_horaires_ouverture(self, obj) -> str:
-        oh = obj.opening_hours
-        dets = obj.opening_hours_details
-        if oh:
-            if dets:
-                return f'{oh}; "{dets}"'
-            return oh
-        elif dets:
-            return f'"{dets}"'
-        return None
+        return obj.opening_hours or None
 
     def get_id(self, obj):
         return str(obj.id)
@@ -137,10 +129,11 @@ class StructureSerializer(serializers.ModelSerializer):
         return obj.name or None
 
     def get_presentation_detail(self, obj):
-        return obj.full_desc or None
+        return obj.description or None
 
     def get_presentation_resume(self, obj):
-        return obj.short_desc or None
+        # les structures n'ont plus de résumé distinct de leur description
+        return None
 
     def get_rna(self, obj):
         return None

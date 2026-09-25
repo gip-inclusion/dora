@@ -91,9 +91,9 @@ class StructureAdminSerializer(StructureSerializer):
             "creation_date",
             "creator",
             "department",
+            "description",
             "editors",
             "email",
-            "full_desc",
             "has_admin",
             "is_orphan",
             "is_waiting",
@@ -119,7 +119,6 @@ class StructureAdminSerializer(StructureSerializer):
             "postal_code",
             "reseaux_porteurs",
             "services",
-            "short_desc",
             "siret",
             "slug",
             "source",
@@ -143,9 +142,9 @@ class StructureAdminSerializer(StructureSerializer):
             "creation_date",
             "creator",
             "department",
+            "description",
             "editors",
             "email",
-            "full_desc",
             "has_admin",
             "is_orphan",
             "is_waiting",
@@ -170,7 +169,6 @@ class StructureAdminSerializer(StructureSerializer):
             "postal_code",
             "reseaux_porteurs",
             "services",
-            "short_desc",
             "siret",
             "slug",
             "source",
@@ -215,7 +213,7 @@ class StructureAdminSerializer(StructureSerializer):
         class BranchSerializer(serializers.ModelSerializer):
             class Meta:
                 model = Structure
-                fields = ["slug", "name", "short_desc"]
+                fields = ["slug", "name", "description"]
                 lookup_field = "slug"
 
         return BranchSerializer(obj.branches.all(), many=True).data
@@ -337,6 +335,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "categories",
             "city",
             "department",
+            "description",
             "editors",
             "email",
             "has_admin",
@@ -357,7 +356,6 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_services",
             "phone",
             "reseaux_porteurs",
-            "short_desc",
             "siret",
             "slug",
             "typology",
@@ -374,6 +372,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "categories",
             "city",
             "department",
+            "description",
             "editors",
             "email",
             "has_admin",
@@ -393,7 +392,6 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_services",
             "phone",
             "reseaux_porteurs",
-            "short_desc",
             "siret",
             "slug",
             "typology",

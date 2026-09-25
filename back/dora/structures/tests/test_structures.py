@@ -25,7 +25,7 @@ DUMMY_STRUCTURE = {
     "siret": "12345678901234",
     "typology": "FT",
     "name": "Ma structure",
-    "short_desc": "Description courte",
+    "description": "Description de la structure",
     "postal_code": "75001",
     "city": "Paris",
     "address1": "5, avenue de la République",
@@ -1429,3 +1429,32 @@ def test_update_opening_hours_rejects_incomplete_input(structure_admin_client):
 
     assert response.status_code == 400
     assert "opening_hours" in response.data
+
+
+def test_update_description(structure_admin_client):
+    client, structure = structure_admin_client
+
+    response = client.patch(
+        f"/structures/{structure.slug}/",
+        {"description": "Notre accompagnement à la mobilité."},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    assert response.data["description"] == "Notre accompagnement à la mobilité."
+    structure.refresh_from_db()
+    assert structure.description == "Notre accompagnement à la mobilité."
+
+
+def test_short_description_is_derived_from_description(structure_admin_client):
+    client, structure = structure_admin_client
+    structure.description = "## Notre offre\n\nUn **accompagnement** à la mobilité."
+    structure.save()
+
+    response = client.get(f"/structures/{structure.slug}/")
+
+    assert response.status_code == 200
+    assert (
+        response.data["short_description"]
+        == "Notre offre Un accompagnement à la mobilité."
+    )
