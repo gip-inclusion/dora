@@ -17,7 +17,7 @@ from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
 from dora.core.constants import WGS84
-from dora.core.models import EnumModel, LogItem, ModerationMixin
+from dora.core.models import EnumModel, LogItem
 from dora.core.utils import address_to_one_line
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import (
@@ -327,7 +327,7 @@ def get_update_needed(
     return timezone.now() >= threshold_date
 
 
-class Service(ModerationMixin, models.Model):
+class Service(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
 
