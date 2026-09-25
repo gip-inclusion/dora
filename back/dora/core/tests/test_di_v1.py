@@ -32,11 +32,22 @@ def test_backfill_di_v1_description():
 
 def test_backfill_di_v1_mobilisation_link():
     service = make_service(appointment_link="https://example.com/appt")
+    internal_service = make_service()
+    internal_link = internal_service.get_dora_form_url()
     Service.objects.filter(pk=service.pk).update(mobilisation_link=None)
+    Service.objects.filter(pk=internal_service.pk).update(
+        online_form=internal_link,
+        mobilisation_link=internal_link,
+        mobilisation_modes=[ModeMobilisation.UTILISER_LIEN_MOBILISATION.value],
+    )
 
     call_command("backfill_di_v1", "--services", "--wet-run")
     service.refresh_from_db()
+    internal_service.refresh_from_db()
+
     assert service.mobilisation_link == "https://example.com/appt"
+    assert internal_service.mobilisation_link is None
+    assert internal_service.mobilisation_modes is None
 
 
 @pytest.mark.parametrize(
@@ -205,7 +216,7 @@ def test_sync_mobilisation_fields_maps_adhesion_form_with_beneficiary_link():
     assert service.mobilisation_link == "https://example.com/beneficiary-form"
 
 
-def test_sync_mobilisation_fields_maps_formulaire_dora_without_storing_url():
+def test_sync_mobilisation_fields_excludes_formulaire_dora():
     service = make_service()
     service.coach_orientation_modes.set(
         CoachOrientationMode.objects.filter(value="formulaire-dora")
@@ -214,9 +225,7 @@ def test_sync_mobilisation_fields_maps_formulaire_dora_without_storing_url():
     sync_v1_service_fields(service)
     service.refresh_from_db()
 
-    assert service.mobilisation_modes == [
-        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
-    ]
+    assert service.mobilisation_modes is None
     assert service.mobilisation_link is None
 
 
@@ -354,7 +363,7 @@ def test_service_patch_syncs_mobilisation_fields(api_client):
     assert service.mobilisation_link is None
 
 
-def test_sync_mobilisation_fields_keeps_formulaire_dora_on_model_without_url():
+def test_sync_mobilisation_fields_excludes_formulaire_dora_on_model():
     model = make_model()
     model.coach_orientation_modes.set(
         CoachOrientationMode.objects.filter(value="formulaire-dora")
@@ -363,9 +372,7 @@ def test_sync_mobilisation_fields_keeps_formulaire_dora_on_model_without_url():
     sync_v1_service_fields(model)
     model.refresh_from_db()
 
-    assert model.mobilisation_modes == [
-        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
-    ]
+    assert model.mobilisation_modes is None
     assert model.mobilisable_by == [PersonneMobilisatrice.PROFESSIONNELS.value]
     assert model.mobilisation_link is None
 
@@ -415,9 +422,7 @@ def test_instantiate_service_from_model_keeps_empty_dora_form_link():
     service.refresh_from_db()
 
     assert model.mobilisation_link is None
-    assert service.mobilisation_modes == [
-        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
-    ]
+    assert service.mobilisation_modes is None
     assert service.mobilisation_link is None
 
 

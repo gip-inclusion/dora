@@ -1,5 +1,4 @@
 # from django.core.files.storage import default_storage
-from data_inclusion.schema.v1 import ModeMobilisation
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from rest_framework import serializers
 
@@ -216,7 +215,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     modes_mobilisation = serializers.ReadOnlyField(source="mobilisation_modes")
     mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
-    lien_mobilisation = serializers.SerializerMethodField()
+    lien_mobilisation = serializers.ReadOnlyField(source="mobilisation_link")
     zone_eligibilite = serializers.ReadOnlyField()
     conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
@@ -357,16 +356,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         elif "formulaire-dora" in coach_orientation_mode_values:
             return obj.get_dora_form_url()
         return obj.online_form if obj.online_form else None
-
-    def get_lien_mobilisation(self, obj):
-        if ModeMobilisation.UTILISER_LIEN_MOBILISATION.value not in (
-            obj.mobilisation_modes or []
-        ):
-            return None
-        link = obj.mobilisation_link
-        if link and link.endswith(f"/services/{obj.slug}/orienter"):
-            link = None
-        return link or obj.get_dora_form_url()
 
     def get_commune(self, obj):
         return obj.city if obj.city else None
