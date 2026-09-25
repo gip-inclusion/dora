@@ -8,6 +8,7 @@ from model_bakery import baker
 from dora.core.test_utils import make_model, make_service, make_structure
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
+    FranceTravailOrientableService,
     Service,
     ServiceCategory,
     ServiceModel,
@@ -700,3 +701,28 @@ def test_recompute_sync_checksums_matches_application_checksum():
     outdated.refresh_from_db()
     assert up_to_date.last_sync_checksum == model.sync_checksum
     assert outdated.last_sync_checksum == "obsolete"
+
+
+@pytest.mark.parametrize(
+    ("reseaux_porteurs", "is_valid"),
+    [
+        pytest.param(["france-travail"], True, id="france_travail"),
+        pytest.param(["mission-locale"], False, id="other_reseau"),
+        pytest.param(None, False, id="no_reseau"),
+    ],
+)
+def test_orientable_ft_service_requires_france_travail_structure(
+    reseaux_porteurs, is_valid
+):
+    structure = make_structure(reseaux_porteurs=reseaux_porteurs)
+    orientable = FranceTravailOrientableService(
+        structure=structure, service=make_service()
+    )
+
+    if is_valid:
+        orientable.save()
+    else:
+        with pytest.raises(
+            ValidationError, match="n'est pas une agence France Travail"
+        ):
+            orientable.save()

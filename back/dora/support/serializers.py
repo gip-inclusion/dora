@@ -3,7 +3,7 @@ from rest_framework import serializers
 from dora.core.models import LogItem, ModerationStatus
 from dora.services.models import Service, ServiceModel
 from dora.services.serializers import ServiceSerializer
-from dora.structures.constants import TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION
+from dora.structures.constants import RESEAUX_PORTEURS_EXCLUDED_FROM_AWAITING_ACTIVATION
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.structures.serializers import StructureSerializer
 from dora.users.models import User
@@ -117,6 +117,7 @@ class StructureAdminSerializer(StructureSerializer):
             "pending_members",
             "phone",
             "postal_code",
+            "reseaux_porteurs",
             "services",
             "short_desc",
             "siret",
@@ -167,6 +168,7 @@ class StructureAdminSerializer(StructureSerializer):
             "pending_members",
             "phone",
             "postal_code",
+            "reseaux_porteurs",
             "services",
             "short_desc",
             "siret",
@@ -311,7 +313,9 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "awaiting_moderation", False)
 
     def get_awaiting_activation(self, obj):
-        if obj.typology in TYPOLOGIES_EXCLUDED_FROM_AWAITING_ACTIVATION:
+        if RESEAUX_PORTEURS_EXCLUDED_FROM_AWAITING_ACTIVATION.intersection(
+            obj.reseaux_porteurs or []
+        ):
             return False
         return self.get_num_published_services(obj) == 0
 
@@ -352,6 +356,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_published_services",
             "num_services",
             "phone",
+            "reseaux_porteurs",
             "short_desc",
             "siret",
             "slug",
@@ -387,6 +392,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "num_published_services",
             "num_services",
             "phone",
+            "reseaux_porteurs",
             "short_desc",
             "siret",
             "slug",

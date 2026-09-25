@@ -7,7 +7,7 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields, sync_v1_structure_fields
+from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
@@ -23,7 +23,7 @@ from dora.services.models import (
     ServiceStatus,
     ServiceSubCategory,
 )
-from dora.structures.models import StructureNationalLabel, StructureSource
+from dora.structures.models import StructureSource
 
 
 @pytest.fixture
@@ -188,10 +188,6 @@ def test_structures_serialization_exemple(
         ],
     )
     struct.modification_date = "2022-04-28T16:53:11Z"
-    struct.national_labels.add(
-        StructureNationalLabel.objects.get(value="cnaf"),
-        StructureNationalLabel.objects.get(value="afpa"),
-    )
     s1 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s1.subcategories.add(
         ServiceSubCategory.objects.get(
@@ -204,13 +200,12 @@ def test_structures_serialization_exemple(
             value="mobilite--entretenir-reparer-son-vehicule"
         )
     )
+    struct.reseaux_porteurs = ["afpa", "caf"]
     struct.save()
-    sync_v1_structure_fields(struct)
     response = api_client.get(f"/api/v2/structures/{struct.id}/")
 
     assert 200 == response.status_code
     data = response.json()
-    assert sorted(data["labels_nationaux"]) == ["afpa", "cnaf"]
     assert data == {
         "accessibilite": "https://acceslibre.beta.gouv.fr/app/29-lampaul-plouarzel/a/bibliotheque-mediatheque/erp/mediatheque-13/",
         "adresse": "RUE DE LECLERCQ",
@@ -224,14 +219,14 @@ def test_structures_serialization_exemple(
         "horaires_ouverture": 'Mo-Fr 10:00-20:00 "sur rendez-vous"; PH off',
         "id": str(struct.id),
         "labels_autres": ["Nièvre médiation numérique"],
-        "labels_nationaux": sorted(data["labels_nationaux"]),
+        "labels_nationaux": ["afpa", "caf"],
         "latitude": 48.7703,
         "lien_source": f"{settings.FRONTEND_URL}/structures/{struct.slug}",
         "longitude": 7.848133,
         "nom": "MOBILETTE",
         "presentation_detail": None,
         "presentation_resume": "L’association Mobilette propose des solutions de déplacement aux personnes pour qui la non mobilité est un frein à l’insertion professionnelle : - connaissance de l'offre de transport du territoire - accès à un véhicule 2 ou 4 roues - transport solidaire - accès au permis",
-        "reseaux_porteurs": ["afpa"],
+        "reseaux_porteurs": ["afpa", "caf"],
         "rna": None,
         "siret": "60487647500499",
         "parent_siret": parent.siret,

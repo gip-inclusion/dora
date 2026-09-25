@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1 import ReseauPorteur
 from django.db.models import BooleanField, Case, Count, Q, Value, When
 from rest_framework import exceptions, serializers
 
@@ -11,7 +12,6 @@ from dora.users.models import User
 from .models import (
     Structure,
     StructureMember,
-    StructureNationalLabel,
     StructurePutativeMember,
 )
 
@@ -40,11 +40,16 @@ class StructureSerializer(serializers.ModelSerializer):
     num_models = serializers.SerializerMethodField()
     models = serializers.SerializerMethodField()
 
+    # typology, national_labels et other_labels ne sont conservés qu'en lecture, pour
+    # audit : le rattachement à un réseau passe désormais par reseaux_porteurs.
     national_labels = serializers.SlugRelatedField(
-        slug_field="value",
-        queryset=StructureNationalLabel.objects.all(),
-        many=True,
+        slug_field="value", many=True, read_only=True
+    )
+    reseaux_porteurs = serializers.ListField(
+        child=serializers.ChoiceField(choices=[r.value for r in ReseauPorteur]),
         required=False,
+        allow_empty=True,
+        allow_null=True,
     )
 
     short_admin_names = serializers.SerializerMethodField()
@@ -117,11 +122,21 @@ class StructureSerializer(serializers.ModelSerializer):
             "has_been_edited",
             "city",
             "department",
+            "other_labels",
             "parent_name",
             "parent_slug",
             "parent_siret",
-            "reseaux_porteurs",
+            "typology",
         ]
+
+    def validate_reseaux_porteurs(self, value):
+        return sorted(set(value or [])) or None
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if "reseaux_porteurs" in data:
+            data["reseaux_porteurs"] = data["reseaux_porteurs"] or []
+        return data
 
     def get_parent_name(self, obj):
         return obj.parent.name if obj.parent else None

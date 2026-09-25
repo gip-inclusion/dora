@@ -5,7 +5,6 @@ from rest_framework.test import APITestCase
 
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_service, make_structure, make_user
-from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.services.models import UpdateFrequency
 from dora.structures.models import StructureMember, StructurePutativeMember
@@ -313,6 +312,7 @@ class StructureAdminTestCase(APITestCase):
             "longitude",
             "categories",
             "national_labels",
+            "reseaux_porteurs",
         ]
         for field in basic_fields:
             self.assertIn(field, data, f"Basic field '{field}' missing from response")
@@ -438,9 +438,9 @@ class StructureAdminTestCase(APITestCase):
         activated_structure = make_structure(department="31")
         make_service(structure=activated_structure, status=ServiceStatus.PUBLISHED)
 
-        # Certaines typologies sont exclues du statut « en attente d'activation »
-        excluded_typology_structure = make_structure(
-            department="31", typology=TypologieStructure.CCAS
+        # Certains réseaux porteurs sont exclus du statut « en attente d'activation »
+        excluded_reseau_porteur_structure = make_structure(
+            department="31", reseaux_porteurs=["ccas-cias"]
         )
 
         self.client.force_authenticate(user=make_user(is_staff=True))
@@ -458,14 +458,16 @@ class StructureAdminTestCase(APITestCase):
         activated_data = next(
             s for s in response.data if s["slug"] == activated_structure.slug
         )
-        excluded_typology_data = next(
-            s for s in response.data if s["slug"] == excluded_typology_structure.slug
+        excluded_reseau_porteur_data = next(
+            s
+            for s in response.data
+            if s["slug"] == excluded_reseau_porteur_structure.slug
         )
 
         self.assertTrue(structure_without_services_data["awaiting_activation"])
         self.assertTrue(draft_only_data["awaiting_activation"])
         self.assertFalse(activated_data["awaiting_activation"])
-        self.assertFalse(excluded_typology_data["awaiting_activation"])
+        self.assertFalse(excluded_reseau_porteur_data["awaiting_activation"])
 
     def test_structures_admin_list_update_status(self):
         structure_needing_update = make_structure(department="31")
@@ -547,6 +549,7 @@ class StructureAdminTestCase(APITestCase):
             "num_outdated_services",
             "num_published_services",
             "num_services",
+            "reseaux_porteurs",
             "siret",
             "slug",
             "typology",

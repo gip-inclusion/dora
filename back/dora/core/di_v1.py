@@ -2,7 +2,7 @@
 
 For every new field or set of fields:
 1. Add the necessary schema migration (AddField only, no data migration)
-2. Extend sync_v1_service_fields() or sync_v1_structure_fields() below
+2. Extend sync_v1_service_fields() below
 3. Expose the field in dora/api/serializers.py (DI v1 name, mapped from the model)
 4. Add tests (core/tests/test_di_v1.py and dora/api/test_api.py)
 5. Backfill existing rows after deploy with backfill_di_v1 --wet-run
@@ -19,10 +19,6 @@ from dora.core.validators import validate_opening_hours_str
 from dora.data_inclusion.diffusion_zone_info import (
     get_zone_eligibilite_from_diffusion_zone,
 )
-from dora.structures.reseaux_porteurs_mappings import (
-    LABEL_NATIONAL_TO_RESEAU,
-    TYPOLOGY_TO_RESEAU,
-)
 
 SERVICE_DI_V1_FIELDS = [
     "mobilisation_modes",
@@ -35,8 +31,6 @@ SERVICE_DI_V1_FIELDS = [
     "horaires_accueil",
 ]
 
-STRUCTURE_DI_V1_FIELDS = ["reseaux_porteurs"]
-
 # M2M lues par `sync_v1_service_fields`. Le `prefetch_related_objects` en tête de la
 # fonction ne coûte rien quand l'appelant a déjà préchargé (cas du backfill, qui itère
 # sur des milliers de lignes) et évite les requêtes une-par-relation sur les appels
@@ -48,8 +42,6 @@ SERVICE_SYNC_PREFETCHES = [
     "requirements",
     "credentials",
 ]
-
-STRUCTURE_SYNC_PREFETCHES = ["national_labels"]
 
 
 def sync_v1_service_fields(service, *, save=True):
@@ -148,21 +140,6 @@ def sync_v1_service_fields(service, *, save=True):
 
     if save:
         service.save(update_fields=SERVICE_DI_V1_FIELDS)
-
-
-def sync_v1_structure_fields(structure, *, save=True):
-    prefetch_related_objects([structure], *STRUCTURE_SYNC_PREFETCHES)
-
-    reseaux = set()
-    if structure.typology:
-        if reseau := TYPOLOGY_TO_RESEAU.get(structure.typology):
-            reseaux.add(reseau)
-    for label in structure.national_labels.all():
-        if reseau := LABEL_NATIONAL_TO_RESEAU.get(label.value):
-            reseaux.add(reseau)
-    structure.reseaux_porteurs = sorted(reseaux) or None
-    if save:
-        structure.save(update_fields=STRUCTURE_DI_V1_FIELDS)
 
 
 KEYWORDS_TO_PUBLICS_MAP = {

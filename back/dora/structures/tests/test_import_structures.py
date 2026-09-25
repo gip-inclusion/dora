@@ -32,7 +32,7 @@ def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
     csv_file.write_text(
         "\n".join(
             [
-                "nom,siret,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure",
+                "nom,siret,siret_parent,courriels_administrateurs,reseaux_porteurs,modeles,telephone,courriel_structure",
                 "Foo,12345678901234,,foo@buzz.com,,,,email@structure.com",
             ]
         )
@@ -58,7 +58,7 @@ class StructuresImportTestCase(APITestCase):
         self.importing_user = baker.make(
             "users.User", first_name="Test", last_name="User"
         )
-        self.csv_headers = "nom,siret,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure"
+        self.csv_headers = "nom,siret,siret_parent,courriels_administrateurs,reseaux_porteurs,modeles,telephone,courriel_structure"
         self.source_info = {
             "value": "invitations-masse",
             "label": "Invitations en masse",
@@ -157,7 +157,7 @@ class StructuresImportTestCase(APITestCase):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_check_missing_headers(self):
-        csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
+        csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,reseaux_porteurs,modeles,telephone,courriel_structure\n"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
@@ -670,18 +670,18 @@ class StructuresImportTestCase(APITestCase):
             mail.outbox[0].subject, "[LOCAL] [DORA] Votre antenne a été créée"
         )
 
-    def test_add_labels(self):
-        structure = make_structure()
-        baker.make("StructureNationalLabel", value="l1")
-        baker.make("StructureNationalLabel", value="l2")
-        csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,"l1, l2",,,'
+    def test_add_reseaux_porteurs(self):
+        structure = make_structure(reseaux_porteurs=["mobin"])
+        csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,"mission-locale, france-travail",,,'
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
-        self.assertTrue(structure.national_labels.filter(value="l1").exists())
-        self.assertTrue(structure.national_labels.filter(value="l2").exists())
+        structure.refresh_from_db()
+        self.assertEqual(
+            structure.reseaux_porteurs, ["france-travail", "mission-locale", "mobin"]
+        )
 
     def test_add_services(self):
         model = make_model()
@@ -697,7 +697,7 @@ class StructuresImportTestCase(APITestCase):
         self.assertEqual(result["created_services_count"], 1)
         self.assertTrue(structure.services.filter(model=model).exists())
 
-    def test_labels_must_exist(self):
+    def test_reseaux_porteurs_must_exist(self):
         structure = make_structure()
         csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,"l1, l2",,,'
         reader = csv.reader(io.StringIO(csv_content))
@@ -705,7 +705,7 @@ class StructuresImportTestCase(APITestCase):
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
-        self.assertIn("Label inconnu l1", result["errors_map"][2][0])
+        self.assertIn("Réseaux porteurs inconnus : l1, l2", result["errors_map"][2][0])
 
     def test_models_must_exist(self):
         structure = make_structure()
@@ -717,21 +717,18 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertIn("Modèle inconnu mod1", result["errors_map"][2][0])
 
-    def test_wont_duplicate_labels(self):
-        l1 = baker.make("StructureNationalLabel", value="l1")
-        model = make_model()
-        structure = make_structure()
-        structure.national_labels.add(l1)
-        self.assertEqual(structure.national_labels.filter(value="l1").count(), 1)
+    def test_wont_duplicate_reseaux_porteurs(self):
+        structure = make_structure(reseaux_porteurs=["mobin"])
         csv_content = (
-            f"{self.csv_headers}\n{structure.name},{structure.siret},,,{model.slug},"
+            f"{self.csv_headers}\n{structure.name},{structure.siret},,,mobin,,,"
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
-        self.assertEqual(structure.national_labels.filter(value="l1").count(), 1)
+        structure.refresh_from_db()
+        self.assertEqual(structure.reseaux_porteurs, ["mobin"])
 
     def test_wont_duplicate_services(self):
         model = make_model()

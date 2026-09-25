@@ -47,10 +47,8 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
-        structures = (
-            Structure.objects.select_related("source", "parent")
-            .prefetch_related("national_labels")
-            .filter(is_obsolete=False)
+        structures = Structure.objects.select_related("source", "parent").filter(
+            is_obsolete=False
         )
 
         has_published_service = Exists(
