@@ -9,14 +9,6 @@ import type {
 } from "../types";
 import { logException } from "../utils/logger";
 
-function structureToFront(structure: Structure): Structure {
-  const result = { ...structure };
-  if (Array.isArray(structure.otherLabels)) {
-    result.otherLabels = structure.otherLabels.join(", ");
-  }
-  return result;
-}
-
 export async function siretWasAlreadyClaimed(siret: string) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
   const result = await fetchData<Structure>(url);
@@ -70,8 +62,7 @@ export async function getStructure(
   fetchFunction = fetch
 ): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const structure = (await fetchData<Structure>(url, fetchFunction)).data;
-  return structure ? structureToFront(structure) : null;
+  return (await fetchData<Structure>(url, fetchFunction)).data ?? null;
 }
 
 export function createStructure(structure) {
