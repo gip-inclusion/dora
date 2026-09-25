@@ -87,7 +87,7 @@
         "SIRET": structure.siret,
         "Département": structure.department,
         "Ville": structure.city,
-        "Description": structure.shortDesc,
+        "Description": structure.description,
         "Thématiques": structure.categories
           .map(
             (val) =>

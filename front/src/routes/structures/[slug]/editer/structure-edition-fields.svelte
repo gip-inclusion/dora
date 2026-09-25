@@ -95,8 +95,8 @@
 />
 
 <RichTextField
-  id="fullDesc"
-  bind:value={structure.fullDesc}
+  id="description"
+  bind:value={structure.description}
   placeholder="Présentation détaillée de la structure"
   vertical
 />
