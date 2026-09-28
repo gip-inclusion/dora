@@ -10,11 +10,7 @@
   let { current, totalPages, onPageChange }: Props = $props();
 
   function makePageRange(start: number, end: number): number[] {
-    return Array.from(
-      Array(end - start + 1)
-        .keys()
-        .map((i) => i + start)
-    );
+    return Array.from({ length: end - start + 1 }, (_item, i) => i + start);
   }
   function pageRanges(): [number[], number[], number[]] {
     if (totalPages <= 10) {
