@@ -181,6 +181,17 @@ export function validate(
 function parseServerError(error) {
   // https://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
   // We need to differenciate ValidationErrors from the rest of them
+  if (!error) {
+    // Réponse sans corps JSON (429 ou 5xx renvoyés hors de DRF, par exemple)
+    return {
+      nonFieldErrors: [
+        {
+          code: "server-error",
+          message: "Une erreur est survenue, veuillez réessayer plus tard.",
+        },
+      ],
+    };
+  }
   if (error.detail) {
     // Other error
     return { nonFieldErrors: [{ ...error.detail }] };
