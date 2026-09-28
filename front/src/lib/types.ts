@@ -441,6 +441,7 @@ export interface ServiceModelBase {
   fullDesc: string; // deprecated
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
+  horairesAccueil: string | null;
   isCumulative: boolean; // deprecated
   kind: ServiceKind | null;
   kindDisplay: string | null;
