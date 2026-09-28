@@ -6,7 +6,7 @@
   import ModerationLabel from "./moderation-label.svelte";
   import ModerationMenu from "./moderation-menu.svelte";
 
-  let { entity, onRefresh } = $props();
+  let { entity, onRefresh, kind } = $props();
 </script>
 
 <div class="gap-s4 flex flex-row items-center font-bold">
@@ -24,6 +24,7 @@
         <div class="w-max">
           <ModerationMenu
             {entity}
+            {kind}
             onRefresh={async () => {
               await onCloseParent();
               await onRefresh();

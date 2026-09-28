@@ -26,11 +26,6 @@ export async function getStructureAdmin(
   return (await fetchData<Structure>(url, fetchFunction)).data;
 }
 
-export async function getStructuresToModerate(fetchFunction = fetch) {
-  const url = `${getApiURL()}/structures-admin/?moderation=1`;
-  return (await fetchData(url, fetchFunction)).data;
-}
-
 export async function getServicesAdmin(fetchFunction = fetch) {
   const url = `${getApiURL()}/services-admin/`;
   return (await fetchData(url, fetchFunction)).data;
@@ -41,8 +36,13 @@ export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
   return (await fetchData<Service>(url, fetchFunction)).data;
 }
 
-export async function setModerationState(entity, status: ModerationStatus) {
-  const urlFragment = entity.services ? "structures-admin" : "services-admin";
+export async function setModerationState(
+  entity: { slug: string },
+  status: ModerationStatus,
+  kind: "structure" | "service"
+) {
+  const urlFragment =
+    kind === "structure" ? "structures-admin" : "services-admin";
   const url = `${getApiURL()}/${urlFragment}/${entity.slug}/`;
   const method = "PATCH";
   const response = await fetch(url, {

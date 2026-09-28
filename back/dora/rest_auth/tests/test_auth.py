@@ -156,6 +156,34 @@ class AuthenticationTestCase(APITestCase):
             structure.moderation_status, ModerationStatus.NEED_INITIAL_MODERATION
         )
 
+    def test_first_user_invited_as_collaborator_doesnt_change_moderation_status(self):
+        # Un utilisateur invité en tant que simple collaborateur ne doit pas
+        # déclencher de nouvelle modération.
+        baker.make("Establishment", siret=DUMMY_SIRET)
+        struct = make_structure(
+            siret=DUMMY_SIRET, moderation_status=ModerationStatus.VALIDATED
+        )
+        user = baker.make("users.User", is_valid=True)
+        baker.make(
+            "StructurePutativeMember",
+            user=user,
+            structure=struct,
+            is_admin=False,
+            invited_by_admin=True,
+        )
+        self.client.force_authenticate(user=user)
+        response = self.client.post(
+            "/auth/join-structure/",
+            {"siret": DUMMY_SIRET, "cguVersion": "20230805"},
+        )
+        self.assertEqual(response.status_code, 200)
+
+        member = StructureMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
+        self.assertFalse(member.is_admin)
+
+        struct.refresh_from_db()
+        self.assertEqual(struct.moderation_status, ModerationStatus.VALIDATED)
+
     def test_following_users_in_structure_dont_changes_moderation_status(self):
         baker.make("Establishment", siret=DUMMY_SIRET)
         struct = make_structure(

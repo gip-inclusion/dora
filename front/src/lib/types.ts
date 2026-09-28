@@ -140,6 +140,8 @@ export interface AdminStructure {
   adminsToRemind: string[];
   numPotentialMembersToValidate: number;
   numPotentialMembersToRemind: number;
+  // `null` tant que le champ n'a pas été déterminé pour la structure.
+  reseauxPorteurs: string[] | null;
 }
 
 export interface StructureSource {
@@ -249,6 +251,7 @@ export interface StructuresOptions {
   sources: StructureSource[];
   typologies: Typology[];
   restrictedNationalLabels: NationalLabel[];
+  reseauxPorteurs: { value: string; label: string }[];
 }
 
 // OSM hours format

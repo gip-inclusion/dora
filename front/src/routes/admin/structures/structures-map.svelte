@@ -16,6 +16,8 @@
 
   let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;
+  // Le premier cadrage est instantané, les suivants (i.e. lors d'un changement de filtre) sont animés.
+  let hasZoomedToStructures = false;
 
   function getPopupContent(feature: mlgl.MapGeoJSONFeature): string {
     return insane(
@@ -27,6 +29,12 @@
     if (!map) {
       return;
     }
+    // Les structures sans coordonnées sont ignorées car MapLibre convertit `null` en 0 : le cadrage serait faussé
+    // s'il englobait l'origine du repère.
+    features = features.filter(
+      (feature) =>
+        Number.isFinite(feature.longitude) && Number.isFinite(feature.latitude)
+    );
     if (features.length) {
       const firstCoordinates: mlgl.LngLatLike = [
         features[0].longitude,
@@ -42,7 +50,9 @@
       if (bounds) {
         map.fitBounds(bounds, {
           padding: 60,
+          animate: hasZoomedToStructures,
         });
+        hasZoomedToStructures = true;
       }
     }
   }

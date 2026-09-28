@@ -186,10 +186,25 @@ class ManagerTestCase(APITestCase):
         structure = make_structure(
             department=31, moderation_status=ModerationStatus.NEED_NEW_MODERATION
         )
+        make_user(structure=structure, is_admin=True)
         self.client.force_authenticate(user=manager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.data["awaiting_moderation"])
+
+    def test_structure_without_admin_is_not_awaiting_moderation(self):
+        manager = make_user(
+            is_valid=True, is_staff=False, is_manager=True, departments=[31]
+        )
+        structure = make_structure(
+            department=31,
+            moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
+        )
+        make_user(structure=structure, is_admin=False)
+        self.client.force_authenticate(user=manager)
+        response = self.client.get(f"/structures-admin/{structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.data["awaiting_moderation"])
 
     ## Plusieurs départements
     def test_manager_can_see_structures_in_his_depts(self):
@@ -407,10 +422,12 @@ class StructureAdminTestCase(APITestCase):
         moderation_structure = make_structure(
             department="31", moderation_status=ModerationStatus.NEED_NEW_MODERATION
         )
+        make_user(structure=moderation_structure, is_admin=True)
 
         validated_structure = make_structure(
             department="31", moderation_status=ModerationStatus.VALIDATED
         )
+        make_user(structure=validated_structure, is_admin=True)
 
         self.client.force_authenticate(user=make_user(is_staff=True))
 
@@ -520,6 +537,20 @@ class StructureAdminTestCase(APITestCase):
         self.assertTrue(obsolete_data["is_obsolete"])
         self.assertFalse(normal_data["is_obsolete"])
 
+    def test_structures_admin_detail_obsolete_status(self):
+        obsolete_structure = make_structure(department="31", is_obsolete=True)
+        normal_structure = make_structure(department="31", is_obsolete=False)
+
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        response = self.client.get(f"/structures-admin/{obsolete_structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_obsolete"])
+
+        response = self.client.get(f"/structures-admin/{normal_structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.data["is_obsolete"])
+
     def test_structures_admin_list_required_fields_present(self):
         make_structure(department="31")
 
@@ -547,6 +578,7 @@ class StructureAdminTestCase(APITestCase):
             "num_outdated_services",
             "num_published_services",
             "num_services",
+            "reseaux_porteurs",
             "siret",
             "slug",
             "typology",

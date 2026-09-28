@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1 import ReseauPorteur
 from django.db import transaction
 from django.db.models.query_utils import Q
 from django.shortcuts import get_object_or_404
@@ -382,6 +383,10 @@ def options(request):
             {"value": c.value, "label": c.label}
             for c in labels
             if c.value in RESTRICTED_NATIONAL_LABELS
+        ],
+        "reseaux_porteurs": [
+            {"value": r["value"], "label": r["label"]}
+            for r in sorted(ReseauPorteur.as_dict_list(), key=lambda r: r["label"])
         ],
     }
     return Response(result)

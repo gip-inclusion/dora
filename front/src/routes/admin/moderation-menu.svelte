@@ -3,25 +3,25 @@
   import { setModerationState } from "$lib/requests/admin";
   import type { ModerationStatus } from "$lib/types";
 
-  let { entity, onRefresh } = $props();
+  let { entity, onRefresh, kind } = $props();
   let moderationStatus: ModerationStatus = $derived(entity.moderationStatus);
 
   async function handleInProgress() {
-    await setModerationState(entity, "IN_PROGRESS");
+    await setModerationState(entity, "IN_PROGRESS", kind);
     if (onRefresh) {
       await onRefresh();
     }
   }
 
   async function handleValidate() {
-    await setModerationState(entity, "VALIDATED");
+    await setModerationState(entity, "VALIDATED", kind);
     if (onRefresh) {
       await onRefresh();
     }
   }
 
   async function handleRemoderate() {
-    await setModerationState(entity, "NEED_NEW_MODERATION");
+    await setModerationState(entity, "NEED_NEW_MODERATION", kind);
     if (onRefresh) {
       await onRefresh();
     }

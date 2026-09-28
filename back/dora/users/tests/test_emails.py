@@ -88,8 +88,8 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
         structure_awaiting_moderation = make_structure(
             department=self.department,
             moderation_status=ModerationStatus.NEED_NEW_MODERATION,
-            user=make_user(),
         )
+        make_user(structure=structure_awaiting_moderation, is_admin=True)
 
         send_weekly_email_to_department_managers(self.manager)
 
@@ -130,11 +130,24 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
         self.assertIn("1 structure(s) en attente", mail.outbox[0].body)
 
     def test_do_not_send_email_with_no_structures(self):
-        make_structure(
+        structure = make_structure(
             department=self.department,
             moderation_status=ModerationStatus.VALIDATED,
-            user=make_user(),
         )
+        make_user(structure=structure, is_admin=True)
+
+        send_weekly_email_to_department_managers(self.manager)
+
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_do_not_send_email_for_structures_without_admin(self):
+        # Une structure sans administrateur n'a personne à valider, quoiqu'en
+        # dise son statut de modération.
+        structure = make_structure(
+            department=self.department,
+            moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
+        )
+        make_user(structure=structure, is_admin=False)
 
         send_weekly_email_to_department_managers(self.manager)
 
@@ -149,12 +162,12 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
             name="Alpha",
         )
 
-        make_structure(
+        beta = make_structure(
             department=self.department,
-            user=make_user(),
             moderation_status=ModerationStatus.NEED_NEW_MODERATION,
             name="Beta",
         )
+        make_user(structure=beta, is_admin=True)
 
         make_structure(
             department=self.department,
@@ -164,12 +177,12 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
             name="Gamma",
         )
 
-        make_structure(
+        delta = make_structure(
             department=self.department,
-            putative_member=make_user(),
             moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
             name="Delta",
         )
+        make_user(structure=delta, is_admin=True)
 
         send_weekly_email_to_department_managers(self.manager)
 
