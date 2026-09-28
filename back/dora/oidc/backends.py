@@ -46,6 +46,17 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
 
     def authenticate(self, request, **kwargs):
         result = super().authenticate(request, **kwargs)
+        if result and result.is_active:
+            self.get_or_create_drf_token(result)
+            core_logger.info(
+                "Connexion utilisateur via ProConnect",
+                {
+                    "legal": True,
+                    "userId": result.pk,
+                    "isManager": result.is_manager,
+                    "isAdmin": result.membership.filter(is_admin=True).exists(),
+                },
+            )
         # à ce point, il est encore possible d'accéder à la session
         # et d'y stocker des informations complémentaires concernant l'utilisateur
         # ici : SIRET et/ou SAFIR
@@ -98,11 +109,6 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         if custom := claims.get("custom"):
             code_safir = custom.get("structureTravail")  # noqa F481
             # TODO: une fois le code SAFIR récupéré, voir quoi en faire (redirection vers un rattachement)
-
-        # compatibilité :
-        # durant la phase de migration vers ProConnect on ne replace *que* le fournisseur d'identité,
-        # et on ne touche pas aux mécanismes d'identification entre back et front.
-        self.get_or_create_drf_token(new_user)
 
         return new_user
 
@@ -157,24 +163,6 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         user.save()
 
         return user
-
-    def get_user(self, user_id):
-        # simplement surchargé pour ajout du token DRF
-        # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
-        if user := super().get_user(user_id):
-            # un élément du script sync-analytics.sh dépend de ce log, notamment du message et de la clé userId du payload.
-            core_logger.info(
-                "Connexion utilisateur via ProConnect",
-                {
-                    "legal": True,
-                    "userId": user.pk,
-                    "isManager": user.is_manager,
-                    "isAdmin": user.membership.filter(is_admin=True).exists(),
-                },
-            )
-            self.get_or_create_drf_token(user)
-            return user
-        return None
 
     def get_or_create_drf_token(self, user):
         # Pour être temporairement compatible, on crée un token d'identification DRF lié au nouvel utilisateur.
