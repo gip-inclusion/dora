@@ -1,6 +1,8 @@
 import requests
 from django.core.files.storage import default_storage
 from django.db import transaction
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -8,6 +10,7 @@ from rest_framework.exceptions import ValidationError
 import dora.data_inclusion.client
 from dora.data_inclusion.mappings import map_service
 from dora.orientations.models import (
+    EMPLOIS_SOURCE_LABEL,
     EmploisOrientationData,
     Orientation,
     OrientationStatus,
@@ -308,6 +311,71 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     def get_beneficiary_france_travail_number(obj: Orientation) -> str:
         if obj.status == OrientationStatus.ACCEPTED:
             return obj.beneficiary_france_travail_number
+        return ""
+
+
+class EmploisReceivedOrientationExportSerializer(serializers.Serializer):
+    """La sortie des orientations reçues depuis l'API des Emplois de l'inclusion
+    est la même que ReceivedOrientationExportSerializer afin que les deux jeux de données
+    puissent être concaténés dans un même export.
+    """
+
+    creation_date = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+    beneficiary_name = serializers.SerializerMethodField()
+    prescriber_name = serializers.SerializerMethodField()
+    service_name = serializers.SerializerMethodField()
+    prescriber_structure_name = serializers.SerializerMethodField()
+    detail_page_url = serializers.SerializerMethodField()
+    source = serializers.SerializerMethodField()
+    beneficiary_france_travail_number = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_creation_date(obj: dict) -> str:
+        created_at = parse_datetime(obj.get("created_at") or "")
+        if created_at is None:
+            return ""
+        if timezone.is_aware(created_at):
+            created_at = timezone.localtime(created_at)
+        return created_at.strftime("%Y-%m-%d")
+
+    @staticmethod
+    def get_status(obj: dict) -> str:
+        try:
+            return OrientationStatus(obj.get("status")).label
+        except ValueError:
+            return obj.get("status") or ""
+
+    @staticmethod
+    def get_beneficiary_name(obj: dict) -> str:
+        return obj.get("beneficiary_name") or ""
+
+    @staticmethod
+    def get_prescriber_name(obj: dict) -> str:
+        return obj.get("sender_name") or ""
+
+    def get_service_name(self, obj: dict) -> str:
+        service_names = self.context.get("service_names", {})
+        return service_names.get(obj.get("service_uid"), "")
+
+    @staticmethod
+    def get_prescriber_structure_name(obj: dict) -> str:
+        return obj.get("sender_organization_name") or ""
+
+    @staticmethod
+    def get_detail_page_url(obj: dict) -> str:
+        return obj.get("process_link") or ""
+
+    @staticmethod
+    def get_source(obj: dict) -> str:
+        return EMPLOIS_SOURCE_LABEL
+
+    @staticmethod
+    def get_beneficiary_france_travail_number(obj: dict) -> str:
+        # Même règle que pour les orientations Dora : le numéro n'est exposé
+        # que sur les orientations validées.
+        if obj.get("status") == OrientationStatus.ACCEPTED:
+            return obj.get("france_travail_id") or ""
         return ""
 
 

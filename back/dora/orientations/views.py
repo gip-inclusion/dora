@@ -22,6 +22,7 @@ from rest_framework.views import APIView
 
 from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
+from dora.emplois.api_client import EmploisApiClient, EmploisAPIException
 
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..services.models import Service
@@ -37,6 +38,7 @@ from .emails import (
     send_orientation_rejected_emails,
 )
 from .models import (
+    EMPLOIS_ORIENTATION_Q,
     ContactRecipient,
     Orientation,
     OrientationStatus,
@@ -44,6 +46,7 @@ from .models import (
     SentContactEmail,
 )
 from .serializers import (
+    EmploisReceivedOrientationExportSerializer,
     OrientationBeneficiaryInfoInputSerializer,
     OrientationBeneficiaryInfoOutputSerializer,
     OrientationSerializer,
@@ -274,6 +277,28 @@ class OrientationViewSet(
         return Response(status=204)
 
 
+def _emplois_service_names(emplois_orientations: list[dict]) -> dict[str, str]:
+    """Résout le nom des services Dora référencés par Les Emplois.
+
+    L'API renvoie un identifiant (``dora--<uuid>``) là où l'export attend un
+    nom de service. Les identifiants d'autres sources sont ignorés.
+    """
+    service_ids = {
+        uid.removeprefix("dora--")
+        for orientation in emplois_orientations
+        if (uid := orientation.get("service_uid") or "").startswith("dora--")
+    }
+    if not service_ids:
+        return {}
+
+    return {
+        f"dora--{service_id}": name
+        for service_id, name in Service.objects.filter(id__in=service_ids).values_list(
+            "id", "name"
+        )
+    }
+
+
 class StructureOrientationsView(APIView):
     """Vue partagée pour les statistiques et l'export des orientations
     d'une structure.
@@ -291,11 +316,17 @@ class StructureOrientationsView(APIView):
 
     @staticmethod
     def received_filter(structure: Structure) -> Q:
-        return Q(service__structure=structure) & ~Q(
-            status__in=[
-                OrientationStatus.MODERATION_PENDING,
-                OrientationStatus.MODERATION_REJECTED,
-            ]
+        return (
+            Q(service__structure=structure)
+            & ~Q(
+                status__in=[
+                    OrientationStatus.MODERATION_PENDING,
+                    OrientationStatus.MODERATION_REJECTED,
+                ]
+            )
+            # Les orientations émises par Les Emplois sont déjà servies par
+            # leur API : les compter ici aussi les doublonnerait.
+            & ~EMPLOIS_ORIENTATION_Q
         )
 
     @classmethod
@@ -342,6 +373,17 @@ class StructureOrientationsView(APIView):
             total_received=Count("id", filter=received_q),
             total_received_pending=Count("id", filter=received_q & pending_q),
         )
+        try:
+            emplois_counts = EmploisApiClient().get_received_orientations_count(
+                structure_id=structure.id
+            )
+        except EmploisAPIException:
+            # Les compteurs restent affichés avec les seules données Dora si
+            # Les Emplois sont indisponibles (l'erreur est déjà loguée).
+            emplois_counts = {"total_count": 0, "pending_count": 0}
+
+        stats["total_received"] += emplois_counts["total_count"]
+        stats["total_received_pending"] += emplois_counts["pending_count"]
         stats["structure_has_services"] = structure.has_services
 
         return Response(stats)
@@ -375,9 +417,25 @@ class StructureOrientationsView(APIView):
                     "emplois_orientation_data",
                 )
             )
-            return Response(
-                ReceivedOrientationExportSerializer(orientations, many=True).data
-            )
+            try:
+                emplois_orientations = EmploisApiClient().fetch_received_orientations(
+                    structure_id=structure.id
+                )
+            except EmploisAPIException:
+                # L'export reste disponible avec les seules données Dora si
+                # Les Emplois sont indisponibles (l'erreur est déjà loguée).
+                emplois_orientations = []
+
+            rows = ReceivedOrientationExportSerializer(orientations, many=True).data
+            rows += EmploisReceivedOrientationExportSerializer(
+                emplois_orientations,
+                many=True,
+                context={"service_names": _emplois_service_names(emplois_orientations)},
+            ).data
+            # ``creation_date`` est au format ``AAAA-MM-JJ`` : l'ordre
+            # lexicographique correspond à l'ordre chronologique.
+            rows.sort(key=lambda row: row["creation_date"], reverse=True)
+            return Response(rows)
 
         raise ValidationError(
             {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}

@@ -64,7 +64,4 @@ def test_set_status_creates_log_item_without_user():
     log_item = LogItem.objects.filter(orientation=orientation).latest("date")
     assert log_item.orientation == orientation
     assert log_item.user is None
-    assert (
-        log_item.message
-        == "Orientation passée de Ouverte / En cours de traitement à Refusée"
-    )
+    assert log_item.message == "Orientation passée de En cours de traitement à Déclinée"
