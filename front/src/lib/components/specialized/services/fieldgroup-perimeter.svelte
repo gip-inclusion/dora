@@ -114,6 +114,7 @@
         ),
       ];
     } else {
+      service.zoneEligibilite = [];
       addressFieldValue = "";
     }
   }
