@@ -67,7 +67,7 @@ from ..utils import (
     normalize_publics,
     update_sync_checksum,
 )
-from ..views import search_services_view, service_di
+from ..views import OPTIONS_CACHE_VERSION, search_services_view, service_di
 
 DUMMY_SERVICE = {"name": "Mon service"}
 
@@ -129,10 +129,10 @@ class ServiceTestCase(APITestCase):
             "AccessCondition", structure=self.struct_31
         )
 
-        cache.delete("options:anon")
-        cache.delete(f"options:user:{self.me.pk}")
-        cache.delete(f"options:user:{self.superuser.pk}")
-        cache.delete(f"options:user:{self.manager.pk}")
+        cache.delete("options:anon", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.me.pk}", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.superuser.pk}", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.manager.pk}", version=OPTIONS_CACHE_VERSION)
 
         self.struct_44 = make_structure(department="44")
         self.service_44 = make_service(
@@ -572,7 +572,7 @@ class ServiceTestCase(APITestCase):
     # CustomizableChoices
     def test_anonymous_user_see_global_choices(self):
         self.client.force_authenticate(user=None)
-        cache.delete("options:anon")
+        cache.delete("options:anon", version=OPTIONS_CACHE_VERSION)
         response = self.client.get(
             "/services-options/",
         )
