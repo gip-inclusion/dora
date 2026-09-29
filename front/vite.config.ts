@@ -1,6 +1,6 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, loadEnv } from "vite";
-import { sentrySvelteKit } from "@sentry/sveltekit";
+import { sentrySvelteKit } from "@sentry/sveltekit/vite";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ mode }) => {
@@ -9,9 +9,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       sentrySvelteKit({
-        sourceMapsUploadOptions: {
-          telemetry: false,
-        },
+        telemetry: false,
       }),
       sveltekit(),
       tailwindcss(),
