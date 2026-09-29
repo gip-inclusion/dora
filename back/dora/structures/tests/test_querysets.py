@@ -172,7 +172,14 @@ def test_awaiting_moderation():
     assert obsolete_structure not in awaiting_with_manager
 
 
-@pytest.mark.parametrize("moderation_status", [ModerationStatus.IN_PROGRESS, None])
+@pytest.mark.parametrize(
+    "moderation_status",
+    [
+        ModerationStatus.NEED_INITIAL_MODERATION,
+        ModerationStatus.NEED_NEW_MODERATION,
+        None,
+    ],
+)
 def test_awaiting_moderation_includes_any_status_but_validated(moderation_status):
     structure = make_structure(moderation_status=moderation_status)
     make_structure_member(
