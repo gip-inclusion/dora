@@ -79,6 +79,8 @@ from .serializers import (
 )
 from .utils import update_sync_checksum
 
+OPTIONS_CACHE_VERSION = 2
+
 
 class ServicePermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -698,8 +700,9 @@ def options(request):
     if user.is_authenticated:
         cache_key = f"options:user:{user.pk}"
 
-    # Try to serve from cache
-    cached_data = cache.get(cache_key)
+    # Si les options sont modifiées, il faut incrémenter OPTIONS_CACHE_VERSION pour que les changements
+    # soient pris en compte immédiatement
+    cached_data = cache.get(cache_key, version=OPTIONS_CACHE_VERSION)
     if cached_data is not None:
         return Response(cached_data)
 
@@ -775,7 +778,7 @@ def options(request):
         ],
     }
 
-    cache.set(cache_key, result, timeout=3600)
+    cache.set(cache_key, result, timeout=3600, version=OPTIONS_CACHE_VERSION)
     return Response(result)
 
 
