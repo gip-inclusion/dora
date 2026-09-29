@@ -196,10 +196,10 @@ export const serviceSchema: v.Schema = {
     rules: [v.isPositiveInteger(), v.minNum(1)],
     minNumber: 1,
   },
-  openingHours: {
+  horairesAccueil: {
     label: "Horaires du service",
     default: "",
-    rules: [v.isString()],
+    rules: [v.isString(), v.osmHoursNotContainsInvalid()],
   },
   contactName: {
     label: "Nom de l’interlocuteur",
