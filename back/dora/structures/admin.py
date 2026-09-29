@@ -267,6 +267,15 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
     )
     raw_id_fields = ("parent", "creator", "last_editor")
 
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        # La typologie est obligatoire mais a une valeur par défaut vide (cas des
+        # structures créées par SIRET) : Django n'ajoute alors pas d'option vide et
+        # le navigateur affiche la première typologie (ACI), qui serait attribuée
+        # silencieusement à l'enregistrement.
+        if db_field.name == "typology":
+            kwargs["choices"] = db_field.get_choices(include_blank=True)
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
         sync_v1_structure_fields(form.instance)
