@@ -7,6 +7,7 @@ import * as Sentry from "@sentry/sveltekit";
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
 import { UNEXPECTED_ERROR_MESSAGE } from "$lib/consts";
 import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
 
@@ -23,6 +24,7 @@ if (ENVIRONMENT !== "local") {
     environment: ENVIRONMENT,
     tracesSampleRate: 0,
     tracePropagationTargets: [],
+    dataCollection: SENTRY_DATA_COLLECTION,
   });
 }
 

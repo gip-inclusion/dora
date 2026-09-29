@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/sveltekit";
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
 import type { HandleClientError } from "@sveltejs/kit";
 
 import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
@@ -18,6 +19,7 @@ if (ENVIRONMENT !== "local") {
     tracesSampleRate: 0,
     tracePropagationTargets: [],
     ignoreErrors: STALE_CHUNK_ERROR_MESSAGES,
+    dataCollection: SENTRY_DATA_COLLECTION,
   });
 }
 
