@@ -326,8 +326,6 @@ class ServiceViewSet(
             self._update_status(
                 service, service.status, status_before_update, self.request.user
             )
-            if service.status == ServiceStatus.PUBLISHED:
-                service.log_note(self.request.user, "Service publié")
 
     @action(
         detail=False,
