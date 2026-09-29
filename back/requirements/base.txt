@@ -16,11 +16,11 @@ asgiref==3.12.1 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.100 \
-    --hash=sha256:49785c310057c2c650d62ca3ba28e88ad87c3827b490312711e81968a9d21fd8 \
-    --hash=sha256:49785c310057c2c650d62ca3ba28e88ad87c3827b490312711e81968a9d21fd8 \
-    --hash=sha256:ae8d81e1f14699959eb38757c2e0044f4e3a303a57a0335d0be4cd3c07529763 \
-    --hash=sha256:ae8d81e1f14699959eb38757c2e0044f4e3a303a57a0335d0be4cd3c07529763
+boto3==1.43.101 \
+    --hash=sha256:49f3eb750f70e050df9929a7e9392e67896c97d7d0a448f13ed3354c634268bd \
+    --hash=sha256:49f3eb750f70e050df9929a7e9392e67896c97d7d0a448f13ed3354c634268bd \
+    --hash=sha256:8a899b0ea94df3f2fab6d0c69caf2791f2971449696834374d8e88ced01c7ef3 \
+    --hash=sha256:8a899b0ea94df3f2fab6d0c69caf2791f2971449696834374d8e88ced01c7ef3
     # via django-storages
 botocore==1.43.103 \
     --hash=sha256:6a6a561a6de43845ae42bc7ff7e2c798742bfa277f5215398f9c15ed9b1bd67c \
@@ -1249,9 +1249,9 @@ pydantic-core==2.46.5 \
     --hash=sha256:ff218293c9c806138dca139765e3b067621be52bcd93cdc14c7711be7ddc90a9 \
     --hash=sha256:ff218293c9c806138dca139765e3b067621be52bcd93cdc14c7711be7ddc90a9
     # via pydantic
-pyjwt==2.14.0 \
-    --hash=sha256:77283c83fb56ecf566a886c757a714bc83668e38156de2cce8263302f42e0b86 \
-    --hash=sha256:ad0cef71c756a56e74863c2919cf0985f72decbcfcb550ee2f422e7c62b5eedc
+pyjwt==2.15.0 \
+    --hash=sha256:7a3742debf6b879e912dbb9819ceec1594be812452b78c5f2e2dfc56564954f8 \
+    --hash=sha256:b11c5f9791d7bf51c2b39a81ed669f6b2dbbd669df2942f6c60167e9e3d1abe4
     # via
     #   -r requirements/base.in
     #   mozilla-django-oidc
