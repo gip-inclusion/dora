@@ -636,7 +636,6 @@ class ServiceModelSerializer(ServiceSerializer):
             "update_frequency",
         ]
         read_only_fields = [
-            "horaires_accueil",
             "is_model",
         ]
         lookup_field = "slug"
