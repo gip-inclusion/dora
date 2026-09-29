@@ -236,7 +236,9 @@ export function maxStrLength(max, msg = "") {
 
 export function osmHoursNotContainsInvalid(msg = "") {
   return (name, value, _data) => ({
-    valid: !value.toLowerCase().includes(INVALID_OPENING_HOURS_MARKER),
+    valid: !value
+      .toLowerCase()
+      .includes(INVALID_OPENING_HOURS_MARKER.toLowerCase()),
     msg:
       msg ||
       "Horaires incomplets. Veuillez finaliser la saisie de vos horaires, corriger les champs manquants ou incorrects.",
