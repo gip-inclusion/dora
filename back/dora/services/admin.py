@@ -126,7 +126,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "status",
         "kind",
         "creation_date",
-        "moderation_status",
         "source",
         "structure__department",
     ]

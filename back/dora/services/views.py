@@ -28,8 +28,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 import dora.data_inclusion as data_inclusion
-from dora.core.models import ModerationStatus
-from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.data_inclusion.mappings import map_service
@@ -263,12 +261,7 @@ class ServiceViewSet(
         )
 
         if service.status == ServiceStatus.PUBLISHED:
-            send_moderation_notification(
-                service,
-                self.request.user,
-                "Service publié",
-                ModerationStatus.NEED_INITIAL_MODERATION,
-            )
+            service.log_note(self.request.user, "Service publié")
         if service.model:
             service.last_sync_checksum = service.model.sync_checksum
             service.save()
@@ -314,7 +307,7 @@ class ServiceViewSet(
         )
 
         # Historique de modifications
-        changed_fields = self._log_history(serializer, status_after_update)
+        self._log_history(serializer, status_after_update)
 
         # Synchronisation avec les modèles
         last_sync_checksum = serializer.instance.last_sync_checksum
@@ -332,26 +325,6 @@ class ServiceViewSet(
         if status_before_update != service.status:
             self._update_status(
                 service, service.status, status_before_update, self.request.user
-            )
-
-        # Notifications
-        newly_published = (
-            status_before_update != service.status
-            and service.status == ServiceStatus.PUBLISHED
-        )
-        if newly_published:
-            send_moderation_notification(
-                service,
-                self.request.user,
-                "Service publié",
-                ModerationStatus.NEED_INITIAL_MODERATION,
-            )
-        elif changed_fields and service.status == ServiceStatus.PUBLISHED:
-            send_moderation_notification(
-                service,
-                self.request.user,
-                f"Service modifié ({' / '.join(changed_fields)})",
-                ModerationStatus.NEED_NEW_MODERATION,
             )
 
     @action(
