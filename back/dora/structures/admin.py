@@ -11,6 +11,7 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
+from unidecode import unidecode
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -175,7 +176,7 @@ class ReseauPorteurListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return sorted(
             ((r.value, r.label) for r in ReseauPorteur),
-            key=lambda choice: choice[1].casefold(),
+            key=lambda choice: unidecode(choice[1]).casefold(),
         )
 
     def queryset(self, request, queryset):
@@ -188,7 +189,7 @@ class StructureAdminForm(forms.ModelForm):
         label="Réseaux porteurs",
         choices=sorted(
             ((r.value, r.label) for r in ReseauPorteur),
-            key=lambda choice: choice[1].casefold(),
+            key=lambda choice: unidecode(choice[1]).casefold(),
         ),
         required=False,
         widget=forms.SelectMultiple(attrs={"size": 15}),

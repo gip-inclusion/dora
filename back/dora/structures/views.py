@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_framework import exceptions, mixins, permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
+from unidecode import unidecode
 
 from dora import onboarding
 from dora.core.models import ModerationStatus
@@ -367,7 +368,7 @@ def options(request):
     result = {
         "reseaux_porteurs": [
             {"value": r.value, "label": r.label}
-            for r in sorted(ReseauPorteur, key=lambda r: r.label.casefold())
+            for r in sorted(ReseauPorteur, key=lambda r: unidecode(r.label).casefold())
         ],
         "sources": [
             {"value": c.value, "label": c.label}

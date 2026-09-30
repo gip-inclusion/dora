@@ -5,6 +5,7 @@ from data_inclusion.schema.v1 import ReseauPorteur
 from django.core import mail
 from model_bakery import baker
 from rest_framework.test import APITestCase
+from unidecode import unidecode
 
 from dora.core.test_utils import (
     make_model,
@@ -1325,6 +1326,16 @@ def test_options_list_reseaux_porteurs(api_client):
         "value": ReseauPorteur.MOBIN.value,
         "label": ReseauPorteur.MOBIN.label,
     } in data["reseauxPorteurs"]
+
+
+def test_options_sort_reseaux_porteurs_ignoring_accents(api_client):
+    response = api_client.get("/structures-options", follow=True)
+    labels = [option["label"] for option in response.json()["reseauxPorteurs"]]
+
+    assert labels == sorted(labels, key=lambda label: unidecode(label).casefold())
+    assert labels.index(
+        ReseauPorteur.ECOLES_DE_LA_DEUXIEME_CHANCE.label
+    ) < labels.index(ReseauPorteur.MOBIN.label)
 
 
 @pytest.fixture
