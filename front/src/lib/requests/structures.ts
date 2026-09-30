@@ -62,7 +62,7 @@ export async function getStructure(
   fetchFunction = fetch
 ): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  return (await fetchData<Structure>(url, fetchFunction)).data ?? null;
+  return (await fetchData<Structure>(url, fetchFunction)).data;
 }
 
 export function createStructure(structure) {
