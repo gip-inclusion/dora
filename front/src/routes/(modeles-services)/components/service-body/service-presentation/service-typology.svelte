@@ -3,6 +3,9 @@
 
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
+  import ServiceCard from "./components/service-card.svelte";
+  import ServiceCardBlock from "./components/service-card-block.svelte";
+
   interface Props {
     service: Service | Model;
     servicesOptions: ServicesOptions;
@@ -24,13 +27,8 @@
   );
 </script>
 
-<section
-  class="border-gray-02 p-s32 gap-s24 text-f16 text-gray-text [&_p]:mb-s0 [&_p]:text-f16 flex flex-col rounded-2xl border leading-24 [&_p]:leading-24"
->
-  <div>
-    <h3 class="text-f17 text-france-blue mb-s16 leading-24">
-      Thématiques et besoins associés
-    </h3>
+<ServiceCard>
+  <ServiceCardBlock title="Thématiques et besoins associés">
     <div class="gap-s4 flex flex-col">
       {#each Object.entries(categories) as [categorySlug, subCategorySlugs]}
         <p>
@@ -43,25 +41,19 @@
         </p>
       {/each}
     </div>
-  </div>
+  </ServiceCardBlock>
 
   {#if service.kind}
-    <div>
-      <h3 class="text-f17 text-france-blue mb-s16 leading-24">
-        Type de service
-      </h3>
+    <ServiceCardBlock title="Type de service">
       <p>{service.kindDisplay}</p>
-    </div>
+    </ServiceCardBlock>
   {/if}
 
   {#if service.fundingLabelsDisplay?.length}
     <hr class="border-gray-02 my-s8" />
 
-    <div>
-      <h3 class="text-f17 text-france-blue mb-s16 leading-24">
-        Service financé par
-      </h3>
+    <ServiceCardBlock title="Service financé par">
       <p>{service.fundingLabelsDisplay.join(" · ")}</p>
-    </div>
+    </ServiceCardBlock>
   {/if}
-</section>
+</ServiceCard>
