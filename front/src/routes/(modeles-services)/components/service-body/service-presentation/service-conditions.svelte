@@ -6,6 +6,8 @@
   import type { Model, Service } from "$lib/types";
   import { isDurationValid } from "$lib/utils/service";
 
+  import ServiceCard from "./components/service-card.svelte";
+  import ServiceField from "./components/service-field.svelte";
   import ServiceKeyInformationSection from "./service-key-informations/service-key-information-section.svelte";
   import OsmHours from "$lib/components/specialized/osm-hours.svelte";
 
@@ -30,67 +32,43 @@
 </script>
 
 {#if locationKinds || duration || hasLocation}
-  <section>
-    <h2 class="text-f23 text-france-blue mb-s16 leading-32 font-bold">
-      Conditions d’accueil
-    </h2>
+  <ServiceCard title="Conditions d’accueil" divided>
+    {#if locationKinds}
+      <ServiceKeyInformationSection
+        icon={ChatCheckFillCommunication}
+        title="Modes d’accueil"
+      >
+        <p>{locationKinds}</p>
+      </ServiceKeyInformationSection>
+    {/if}
 
-    <div
-      class="border-gray-02 p-s32 gap-s32 divide-gray-01 text-f16 text-gray-text [&_p]:mb-s0 [&_p]:text-f16 flex flex-col divide-y rounded-2xl border leading-24 [&_p]:leading-24"
-    >
-      {#if locationKinds}
-        <div class:pb-s32={duration || hasLocation}>
-          <ServiceKeyInformationSection
-            icon={ChatCheckFillCommunication}
-            title="Modes d’accueil"
-          >
-            <p>{locationKinds}</p>
-          </ServiceKeyInformationSection>
-        </div>
-      {/if}
+    {#if duration}
+      <ServiceKeyInformationSection
+        icon={Calendar2LineBusiness}
+        title="Durée de la prestation"
+      >
+        <p>{duration}</p>
+      </ServiceKeyInformationSection>
+    {/if}
 
-      {#if duration}
-        <div class:pb-s32={hasLocation}>
-          <ServiceKeyInformationSection
-            icon={Calendar2LineBusiness}
-            title="Durée de la prestation"
-          >
-            <p>{duration}</p>
-          </ServiceKeyInformationSection>
+    {#if hasLocation}
+      <ServiceKeyInformationSection
+        icon={MapPin2FillMap}
+        title="Lieu d’accueil"
+      >
+        <div class="gap-s16 flex flex-col">
+          {#if addressLine}
+            <ServiceField title="Adresse du lieu">
+              <p>{addressLine}</p>
+            </ServiceField>
+          {/if}
+          {#if service.horairesAccueil}
+            <ServiceField title="Horaires d’ouverture du service">
+              <OsmHours osmHours={service.horairesAccueil} />
+            </ServiceField>
+          {/if}
         </div>
-      {/if}
-
-      {#if hasLocation}
-        <div>
-          <ServiceKeyInformationSection
-            icon={MapPin2FillMap}
-            title="Lieu d’accueil"
-          >
-            <div class="gap-s16 flex flex-col">
-              {#if addressLine}
-                <div>
-                  <h4
-                    class="text-f16 text-gray-dark mb-s4 leading-24 font-bold"
-                  >
-                    Adresse du lieu
-                  </h4>
-                  <p>{addressLine}</p>
-                </div>
-              {/if}
-              {#if service.horairesAccueil}
-                <div>
-                  <h4
-                    class="text-f16 text-gray-dark mb-s4 leading-24 font-bold"
-                  >
-                    Horaires d’ouverture du service
-                  </h4>
-                  <OsmHours osmHours={service.horairesAccueil} />
-                </div>
-              {/if}
-            </div>
-          </ServiceKeyInformationSection>
-        </div>
-      {/if}
-    </div>
-  </section>
+      </ServiceKeyInformationSection>
+    {/if}
+  </ServiceCard>
 {/if}
