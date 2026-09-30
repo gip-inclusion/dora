@@ -219,7 +219,6 @@ def test_structures_serialization_exemple(
         "horaires_ouverture": 'Mo-Fr 10:00-20:00 "sur rendez-vous"; PH off',
         "id": str(struct.id),
         "labels_autres": ["Nièvre médiation numérique"],
-        "labels_nationaux": ["afpa", "caf"],
         "latitude": 48.7703,
         "lien_source": f"{settings.FRONTEND_URL}/structures/{struct.slug}",
         "longitude": 7.848133,
