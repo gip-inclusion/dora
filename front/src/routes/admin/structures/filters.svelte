@@ -95,7 +95,7 @@
       .filter((struct) => {
         return (
           !params.selectedReseauxPorteurs.length ||
-          (struct.reseauxPorteurs ?? []).some((reseau) =>
+          struct.reseauxPorteurs.some((reseau) =>
             params.selectedReseauxPorteurs.includes(reseau)
           )
         );

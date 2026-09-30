@@ -135,8 +135,7 @@ export interface AdminStructure {
   adminsToRemind: string[];
   numPotentialMembersToValidate: number;
   numPotentialMembersToRemind: number;
-  // `null` tant que le champ n'a pas été déterminé pour la structure.
-  reseauxPorteurs: string[] | null;
+  reseauxPorteurs: string[];
 }
 
 export interface StructureSource {

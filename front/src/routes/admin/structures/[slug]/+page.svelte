@@ -117,8 +117,8 @@
       <GoogleSearchLink searchString={data.structure.siret} />
     </InfoLine>
 
-    <InfoLine condition={!!data.structure.reseauxPorteurs?.length}>
-      réseaux porteurs: {data.structure.reseauxPorteurs?.join(", ")}
+    <InfoLine condition={!!data.structure.reseauxPorteurs.length}>
+      réseaux porteurs: {data.structure.reseauxPorteurs.join(", ")}
     </InfoLine>
 
     <InfoLine condition={data.structure.typologyDisplay}>
