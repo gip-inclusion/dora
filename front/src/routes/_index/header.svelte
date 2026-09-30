@@ -4,6 +4,7 @@
   import LogoDORA from "$lib/assets/logos/logo-dora.svg";
   import LogoRepublique from "$lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
 
   import HeaderActions from "./menu.svelte";
   import SubMenu from "./sub-menu.svelte";
@@ -50,8 +51,10 @@
   </CenteredGrid>
 
   {#if WARNING_BANNER}
-    <div class="bg-service-orange p-s8 text-center font-bold">
-      {WARNING_BANNER}
+    <div
+      class="bg-service-orange p-s8 [&_p]:m-s0 text-center [&_a]:underline [&_p]:text-[length:inherit] [&_p]:leading-[inherit] [&_p]:text-inherit"
+    >
+      <MarkdownRenderer content={WARNING_BANNER} />
     </div>
   {/if}
 </header>
