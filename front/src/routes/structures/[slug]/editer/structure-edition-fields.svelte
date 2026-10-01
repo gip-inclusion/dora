@@ -63,7 +63,7 @@
           href={accesslibreUrl}
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noopener ugc">acceslibre</a
+          rel="noopener ugc">Acceslibre</a
         >
         et copiez l’url dans le champ ci-dessous.
       </small>
