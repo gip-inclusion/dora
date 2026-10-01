@@ -435,12 +435,22 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_mobilisation_modes_display(self, obj):
         if not obj.mobilisation_modes:
             return None
-        return [ModeMobilisation(mode).label for mode in obj.mobilisation_modes]
+        return [
+            ModeMobilisation(mode).label
+            for mode in sorted(
+                obj.mobilisation_modes, key=lambda value: ModeMobilisation(value).label
+            )
+        ]
 
     def get_mobilisable_by_display(self, obj):
         if not obj.mobilisable_by:
             return None
-        return [PersonneMobilisatrice(value).label for value in obj.mobilisable_by]
+        return [
+            PersonneMobilisatrice(value).label
+            for value in sorted(
+                obj.mobilisable_by, key=lambda value: PersonneMobilisatrice(value).label
+            )
+        ]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
