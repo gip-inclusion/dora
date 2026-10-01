@@ -61,7 +61,6 @@ from ..models import (
     ServiceSubCategory,
 )
 from ..utils import (
-    SYNC_CUSTOM_M2M_FIELDS,
     SYNC_FIELDS,
     SYNC_M2M_FIELDS,
     normalize_publics,
@@ -2103,12 +2102,11 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = "précision"
             elif isinstance(getattr(model, field), bool):
                 new_val = not getattr(model, field)
-            elif field in (
-                "online_form",
-                "remote_url",
-                "beneficiaries_access_modes_external_form_link",
-                "coach_orientation_modes_external_form_link",
-            ):
+            elif field == "mobilisable_by":
+                new_val = ["professionnels"]
+            elif field == "mobilisation_modes":
+                new_val = ["telephoner"]
+            elif field == "mobilisation_link":
                 new_val = "https://example.com"
             elif field in ("duration_weekly_hours", "duration_weeks"):
                 new_val = 4
@@ -2116,10 +2114,6 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = ["https://example.com"]
             elif field == "contact_email":
                 new_val = "test@example.com"
-            elif field == "diffusion_zone_type":
-                new_val = AdminDivisionType.REGION
-            elif field == "suspension_date":
-                new_val = "2022-10-10"
             elif field == "fee_condition":
                 new_val = "payant"
             elif field == "kind":
@@ -2203,17 +2197,6 @@ class ServiceSyncTestCase(APITestCase):
             new_value = baker.make(rel_model)
             response = self.client.patch(
                 f"/models/{model.slug}/", {field: [new_value.value]}
-            )
-            self.assertEqual(response.status_code, 200)
-            model.refresh_from_db()
-            self.assertNotEqual(model.sync_checksum, initial_checksum)
-
-        for field in SYNC_CUSTOM_M2M_FIELDS:
-            initial_checksum = model.sync_checksum
-            rel_model = getattr(model, field).target_field.related_model
-            new_value = baker.make(rel_model)
-            response = self.client.patch(
-                f"/models/{model.slug}/", {field: [new_value.id]}
             )
             self.assertEqual(response.status_code, 200)
             model.refresh_from_db()
