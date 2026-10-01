@@ -93,6 +93,26 @@
         <!-- Footer -->
         {% block footer %}{% endblock %}
 
+        <!-- Le saviez-vous ? -->
+        {% block did_you_know %}
+          <mj-spacer height="24px"/>
+          <mj-text>
+            <div style="color: white; background-color: #000091; border-radius: 12px; padding: 24px">
+              <p style="font-size: 20px; font-weight: bold; line-height: 28px">Le saviez-vous&#8239;?</p>
+              <p>
+                <strong>Le formulaire d’orientation DORA</strong> est maintenant intégré à la
+                <strong><a style="color: white"
+                           href="https://plateforme.inclusion.gouv.fr/search/employers">Plateforme de l’inclusion</a></strong>.
+                Cela permet aux prescripteurs et orienteurs de gérer au même endroit les candidatures en IAE, GEIQ,
+                OPCS, et les orientations vers des services d’insertion.
+              </p>
+              <p style="margin-bottom: 0">
+                <strong>DORA reste l’annuaire de référence</strong> pour toute offre de service d’insertion.
+              </p>
+            </div>
+          </mj-text>
+        {% endblock %}
+
         <mj-spacer height="24px"/>
 
         <mj-text>
