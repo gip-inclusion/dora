@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -21,26 +20,20 @@ from dora.services.enums import ServiceStatus
 
 SYNC_FIELDS = [
     "name",
-    "short_desc",
-    "full_desc",
-    "is_cumulative",
-    "fee_condition",
-    "fee_details",
-    "beneficiaries_access_modes_external_form_link",
-    "beneficiaries_access_modes_external_form_link_text",
-    "beneficiaries_access_modes_other",
-    "coach_orientation_modes_external_form_link",
-    "coach_orientation_modes_external_form_link_text",
-    "coach_orientation_modes_other",
-    "duration_weekly_hours",
-    "duration_weeks",
-    "forms",
+    "description",
     "kind",
-    "online_form",
     "publics",
     "publics_precisions",
-    "recurrence",
-    "suspension_date",
+    "conditions_acces",
+    "forms",
+    "fee_condition",
+    "fee_details",
+    "mobilisable_by",
+    "mobilisation_modes",
+    "mobilisation_details",
+    "mobilisation_link",
+    "duration_weekly_hours",
+    "duration_weeks",
     "update_frequency",
 ]
 
@@ -52,17 +45,9 @@ SYNC_FK_FIELDS = {"fee_condition"}
 
 # Many to many fields
 SYNC_M2M_FIELDS = [
+    "funding_labels",
     "categories",
     "subcategories",
-    "beneficiaries_access_modes",
-    "coach_orientation_modes",
-]
-
-# Custom Many to many fields
-SYNC_CUSTOM_M2M_FIELDS = [
-    "access_conditions",
-    "requirements",
-    "credentials",
 ]
 
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
@@ -121,13 +106,7 @@ def instantiate_service_from_model(model, structure, user):
     for field in SYNC_M2M_FIELDS:
         getattr(service, field).set(getattr(model, field).all())
 
-    for field in SYNC_CUSTOM_M2M_FIELDS:
-        _duplicate_customizable_choices(
-            getattr(service, field), getattr(model, field).all(), service.structure
-        )
-
     service.save()
-    sync_v1_service_fields(service)
     return service
 
 
@@ -138,12 +117,6 @@ def synchronize_service_from_model(service, model):
     for field in SYNC_M2M_FIELDS:
         getattr(service, field).set(getattr(model, field).all())
 
-    for field in SYNC_CUSTOM_M2M_FIELDS:
-        _duplicate_customizable_choices(
-            getattr(service, field), getattr(model, field).all(), service.structure
-        )
-
-    sync_v1_service_fields(service)
     return service
 
 
@@ -155,7 +128,7 @@ def update_sync_checksum(service):
         if isinstance(value, Enum):
             value = value.value
         md5.update(repr(value).encode())
-    for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
+    for m2m_field in [*SYNC_M2M_FIELDS]:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
         # `.values_list()` reclone le queryset et repart en base à chaque champ.
         pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
