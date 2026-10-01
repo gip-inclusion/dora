@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
+  import FieldGroup from "$lib/components/display/field-group.svelte";
   import AddressSearchField from "$lib/components/forms/fields/address-search-field.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
-  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
   import type { GeoApiValue, Service, Structure } from "$lib/types";
   import { randomId } from "$lib/utils/random";
+  import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
   interface Props {
     entity: Service | Structure;
@@ -58,49 +58,48 @@
   }
 </script>
 
-{#key key}
-  <div class="flex flex-col">
-    {#if parent}
-      <div class="mb-s8 lg:w-2/3 lg:self-end">
-        <Button
-          onclick={fillAddress}
-          icon={SyncIcon}
-          noBackground
-          small
-          noPadding
-          label="Utiliser les coordonnées de la structure"
-        />
-      </div>
-    {/if}
+<FieldGroup title="Lieu d’accueil">
+  {#key key}
+    <div class="flex flex-col">
+      {#if parent}
+        <div class="mb-s8 lg:w-2/3 lg:self-end">
+          <UseStructureInfoButton
+            onclick={fillAddress}
+            label="les coordonnées"
+          />
+        </div>
+      {/if}
+      <AddressSearchField
+        id="address1"
+        initialValue={entity.address1}
+        onChange={handleAddressChange}
+        cityCode={entity.cityCode}
+        disabled={!entity.cityCode}
+      />
+    </div>
+
+    <BasicInputField
+      id="address2"
+      bind:value={entity.address2}
+      descriptionText="Indication : bâtiment, immeuble, étage, numéro d’appartement, etc."
+    />
+
+    <BasicInputField
+      id="postalCode"
+      descriptionText="Format attendu : 5 chiffres. Par exemple : 75000."
+      bind:value={entity.postalCode}
+    />
+
     <CitySearchField
       id="city"
       initialValue={entity.city}
       onChange={handleCityChange}
     />
-  </div>
-  <AddressSearchField
-    id="address1"
-    initialValue={entity.address1}
-    onChange={handleAddressChange}
-    cityCode={entity.cityCode}
-    disabled={!entity.cityCode}
-  />
 
-  <BasicInputField
-    id="address2"
-    bind:value={entity.address2}
-    descriptionText="Indication : bâtiment, immeuble, étage, numéro d’appartement, etc."
-  />
+    <HiddenField id="cityCode" value={entity.cityCode} />
 
-  <BasicInputField
-    id="postalCode"
-    descriptionText="Format attendu : 5 chiffres. Par exemple : 75000."
-    bind:value={entity.postalCode}
-  />
+    <HiddenField id="longitude" value={entity.longitude} />
 
-  <HiddenField id="cityCode" value={entity.cityCode} />
-
-  <HiddenField id="longitude" value={entity.longitude} />
-
-  <HiddenField id="latitude" value={entity.latitude} />
-{/key}
+    <HiddenField id="latitude" value={entity.latitude} />
+  {/key}
+</FieldGroup>

@@ -1,4 +1,10 @@
-import type { Model, Service, ServicesOptions } from "$lib/types";
+import type {
+  Model,
+  Service,
+  ServiceStructure,
+  ServicesOptions,
+  Structure,
+} from "$lib/types";
 import type { Schema } from "$lib/validation/schema-utils";
 import { modelSchema, serviceSchema } from "$lib/validation/schemas/service";
 
@@ -22,6 +28,30 @@ const defaultModelCache = Object.fromEntries(
 
 export function getNewModel() {
   return JSON.parse(JSON.stringify(defaultModelCache));
+}
+
+// `structureInfo` est calculé par le back et n'appartient donc pas au schéma : un service
+// en cours de création ne l'a pas tant qu'on n'a pas chargé la structure choisie. Les boutons
+// « utiliser les infos de la structure » le lisent, d'où cette projection.
+export function toServiceStructure(structure: Structure): ServiceStructure {
+  return {
+    address1: structure.address1,
+    address2: structure.address2,
+    city: structure.city,
+    department: structure.department,
+    email: structure.email,
+    hasAdmin: structure.hasAdmin,
+    name: structure.name,
+    noDoraForm: structure.noDoraForm,
+    numServices: structure.numServices,
+    openingHours: structure.openingHours,
+    phone: structure.phone,
+    postalCode: structure.postalCode,
+    shortDesc: structure.shortDesc,
+    siret: structure.siret ?? "",
+    slug: structure.slug,
+    url: structure.url,
+  };
 }
 
 export function createModelFromService(service) {
