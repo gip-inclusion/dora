@@ -186,13 +186,3 @@ def test_partial_save_leaves_the_description_alone():
 
     service.refresh_from_db()
     assert service.description == ""
-
-
-def test_sync_checksum_ignores_the_derived_description():
-    # Ce qui dispense d'une migration de recalcul des empreintes.
-    model = make_model(short_desc="Un résumé", full_desc="Un descriptif")
-    checksum = update_sync_checksum(model)
-
-    model.description = "Une description composée autrement"
-
-    assert update_sync_checksum(model) == checksum

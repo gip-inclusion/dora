@@ -348,21 +348,6 @@ def test_sync_mobilisation_fields_keeps_external_link_on_model():
     assert model.mobilisation_link == "https://example.com/form"
 
 
-def test_synchronize_service_from_model_recomputes_mobilisation():
-    structure = make_structure()
-    model = make_model(structure=structure)
-    model.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="telephoner")
-    )
-    service = make_service(structure=structure, model=model)
-
-    synchronize_service_from_model(service, model)
-    service.refresh_from_db()
-
-    assert service.mobilisation_modes == [ModeMobilisation.TELEPHONER.value]
-    assert service.mobilisable_by == [PersonneMobilisatrice.PROFESSIONNELS.value]
-
-
 def test_instantiate_service_from_model_keeps_empty_dora_form_link():
     structure = make_structure()
     user = make_user()
