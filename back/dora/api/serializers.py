@@ -26,7 +26,6 @@ class StructureSerializer(serializers.ModelSerializer):
     horaires_ouverture = serializers.SerializerMethodField()
     id = serializers.SerializerMethodField()
     labels_autres = serializers.SerializerMethodField()
-    labels_nationaux = serializers.SerializerMethodField()
     latitude = serializers.SerializerMethodField()
     lien_source = serializers.SerializerMethodField()
     longitude = serializers.SerializerMethodField()
@@ -59,7 +58,6 @@ class StructureSerializer(serializers.ModelSerializer):
             "horaires_ouverture",
             "id",
             "labels_autres",
-            "labels_nationaux",
             "latitude",
             "lien_source",
             "longitude",
@@ -120,9 +118,6 @@ class StructureSerializer(serializers.ModelSerializer):
 
     def get_labels_autres(self, obj):
         return obj.other_labels
-
-    def get_labels_nationaux(self, obj):
-        return [label.value for label in obj.national_labels.all()]
 
     def get_latitude(self, obj):
         return obj.latitude

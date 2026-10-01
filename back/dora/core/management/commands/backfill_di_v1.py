@@ -1,7 +1,7 @@
-"""Backfill DI v1 fields on existing services and structures.
+"""Backfill DI v1 fields on existing services.
 
 Schema migrations only create empty columns; this command populates them
-from legacy Dora fields (orientation modes, typology, national labels, …).
+from legacy Dora fields (orientation modes, access conditions, …).
 """
 
 import logging
@@ -12,14 +12,10 @@ from dora.core.commands import BaseCommand
 from dora.core.di_v1 import (
     SERVICE_DI_V1_FIELDS,
     SERVICE_SYNC_PREFETCHES,
-    STRUCTURE_DI_V1_FIELDS,
-    STRUCTURE_SYNC_PREFETCHES,
     sync_v1_service_fields,
-    sync_v1_structure_fields,
 )
 from dora.services.descriptions import backfill_service_descriptions
 from dora.services.models import Service
-from dora.structures.models import Structure
 
 logger = logging.getLogger("dora.logs.core")
 BATCH = 500
@@ -32,33 +28,15 @@ class Command(AtomicHandleMixin, BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--wet-run", action="store_true")
-        scope = parser.add_mutually_exclusive_group()
-        scope.add_argument(
-            "--structures",
-            action="store_true",
-            help="Backfill structures only",
-        )
-        scope.add_argument(
-            "--services",
-            action="store_true",
-            help="Backfill services only",
-        )
 
     @dry_runnable
     def handle(self, *args, **options):
-        if not options["services"]:
-            self._backfill_queryset(
-                Structure._base_manager.prefetch_related(*STRUCTURE_SYNC_PREFETCHES),
-                sync_v1_structure_fields,
-                STRUCTURE_DI_V1_FIELDS,
-            )
-        if not options["structures"]:
-            self._backfill_queryset(
-                Service._base_manager.prefetch_related(*SERVICE_SYNC_PREFETCHES),
-                sync_v1_service_fields,
-                SERVICE_DI_V1_FIELDS,
-            )
-            backfill_service_descriptions(batch=BATCH)
+        self._backfill_queryset(
+            Service._base_manager.prefetch_related(*SERVICE_SYNC_PREFETCHES),
+            sync_v1_service_fields,
+            SERVICE_DI_V1_FIELDS,
+        )
+        backfill_service_descriptions(batch=BATCH)
 
     def _backfill_queryset(self, queryset, sync_fn, fields):
         updated = []

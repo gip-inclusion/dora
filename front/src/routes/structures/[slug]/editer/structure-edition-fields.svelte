@@ -4,12 +4,10 @@
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import OpeningHoursField from "$lib/components/forms/fields/opening-hours-field.svelte";
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
-  import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
-  import type { NationalLabel } from "$lib/types";
 
   interface Props {
     structure: Structure;
@@ -17,11 +15,6 @@
   }
 
   let { structure = $bindable(), structuresOptions }: Props = $props();
-
-  const fixedNationalLabelValues: string[] =
-    structuresOptions.restrictedNationalLabels.map(
-      (restricted: NationalLabel) => restricted.value
-    );
 
   function getAccessLibreUrl(struct: Structure) {
     const department = getDepartmentFromCityCode(struct.cityCode);
@@ -41,14 +34,6 @@
   id="name"
   bind:value={structure.name}
   placeholder="Plateforme de l’inclusion"
-/>
-
-<SelectField
-  id="typology"
-  bind:value={structure.typology}
-  choices={structuresOptions.typologies}
-  placeholder="Choisissez…"
-  sort
 />
 
 <FieldsAddress bind:entity={structure} />
@@ -115,20 +100,12 @@
 />
 
 <MultiSelectField
-  id="nationalLabels"
-  bind:value={structure.nationalLabels}
-  choices={structuresOptions.nationalLabels}
-  fixedItemsValues={fixedNationalLabelValues}
-  description="Indiquez si la structure fait partie d’un ou plusieurs réseaux nationaux"
+  id="reseauxPorteurs"
+  bind:value={structure.reseauxPorteurs}
+  choices={structuresOptions.reseauxPorteurs}
+  description="Indiquez le ou les réseaux dont fait partie la structure"
   placeholder="Choisissez…"
   placeholderMulti="Choisissez…"
-  vertical
-/>
-
-<BasicInputField
-  id="otherLabels"
-  bind:value={structure.otherLabels}
-  descriptionText="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
   vertical
 />
 
