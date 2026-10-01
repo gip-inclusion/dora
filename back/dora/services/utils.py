@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -127,7 +126,6 @@ def instantiate_service_from_model(model, structure, user):
         )
 
     service.save()
-    sync_v1_service_fields(service)
     return service
 
 
@@ -143,7 +141,6 @@ def synchronize_service_from_model(service, model):
             getattr(service, field), getattr(model, field).all(), service.structure
         )
 
-    sync_v1_service_fields(service)
     return service
 
 

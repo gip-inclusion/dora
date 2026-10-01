@@ -13,10 +13,7 @@ from dora.services.models import (
     Requirement,
     Service,
 )
-from dora.services.utils import (
-    instantiate_service_from_model,
-    synchronize_service_from_model,
-)
+from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure, StructureNationalLabel
 
 
@@ -331,38 +328,6 @@ def test_sync_mobilisation_fields_keeps_formulaire_dora_on_model():
     assert model.mobilisation_modes is None
     assert model.mobilisable_by == [PersonneMobilisatrice.PROFESSIONNELS.value]
     assert model.mobilisation_link is None
-
-
-def test_sync_mobilisation_fields_keeps_external_link_on_model():
-    model = make_model(
-        coach_orientation_modes_external_form_link="https://example.com/form",
-    )
-    model.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="completer-le-formulaire-dadhesion")
-    )
-
-    sync_v1_service_fields(model)
-    model.refresh_from_db()
-
-    assert model.mobilisation_modes == [
-        ModeMobilisation.UTILISER_LIEN_MOBILISATION.value,
-    ]
-    assert model.mobilisation_link == "https://example.com/form"
-
-
-def test_synchronize_service_from_model_recomputes_mobilisation():
-    structure = make_structure()
-    model = make_model(structure=structure)
-    model.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="telephoner")
-    )
-    service = make_service(structure=structure, model=model)
-
-    synchronize_service_from_model(service, model)
-    service.refresh_from_db()
-
-    assert service.mobilisation_modes == [ModeMobilisation.TELEPHONER.value]
-    assert service.mobilisable_by == [PersonneMobilisatrice.PROFESSIONNELS.value]
 
 
 def test_instantiate_service_from_model_keeps_empty_dora_form_link():
