@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   return {
     title: `Services | ${capitalize(structure.name)} | DORA`,
-    description: structure.shortDesc,
+    description: structure.shortDescription,
     serviceStatus,
     updateNeeded,
     servicesOptions,

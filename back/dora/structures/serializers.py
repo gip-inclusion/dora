@@ -2,6 +2,7 @@ from data_inclusion.schema.v1 import ReseauPorteur
 from django.db.models import BooleanField, Case, Count, Q, Value, When
 from rest_framework import exceptions, serializers
 
+from dora.core.utils import clean_and_shorten_description
 from dora.data_inclusion.enums import TypologieStructure
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceModel
@@ -18,6 +19,8 @@ from .models import (
 
 class StructureSerializer(serializers.ModelSerializer):
     typology_display = serializers.SerializerMethodField()
+    # description raccourcie en texte brut, pour les meta descriptions du front
+    short_description = serializers.SerializerMethodField()
     name = serializers.CharField(min_length=3, max_length=150)
     parent = serializers.SlugRelatedField(slug_field="slug", read_only=True)
     can_edit_informations = serializers.SerializerMethodField()
@@ -79,8 +82,8 @@ class StructureSerializer(serializers.ModelSerializer):
             "code_safir_ft",
             "creation_date",
             "department",
+            "description",
             "email",
-            "full_desc",
             "has_admin",
             "has_been_edited",
             "is_admin",
@@ -98,7 +101,6 @@ class StructureSerializer(serializers.ModelSerializer):
             "num_models",
             "num_services",
             "opening_hours",
-            "opening_hours_details",
             "other_labels",
             "parent",
             "parent_name",
@@ -110,7 +112,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "reseaux_porteurs",
             "services",
             "short_admin_names",
-            "short_desc",
+            "short_description",
             "siret",
             "slug",
             "source",
@@ -138,6 +140,9 @@ class StructureSerializer(serializers.ModelSerializer):
         if "reseaux_porteurs" in data:
             data["reseaux_porteurs"] = data["reseaux_porteurs"] or []
         return data
+
+    def get_short_description(self, obj):
+        return clean_and_shorten_description(obj.description)
 
     def get_parent_name(self, obj):
         return obj.parent.name if obj.parent else None

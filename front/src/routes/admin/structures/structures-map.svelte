@@ -21,7 +21,7 @@
 
   function getPopupContent(feature: mlgl.MapGeoJSONFeature): string {
     return insane(
-      `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDesc}`
+      `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDescription}`
     );
   }
 
