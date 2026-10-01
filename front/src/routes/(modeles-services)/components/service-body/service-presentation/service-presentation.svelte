@@ -14,13 +14,18 @@
     onTrackMobilisation: (url?: string) => void;
   }
 
-  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
+  let {
+    service,
+    servicesOptions,
+    onFeedbackButtonClick,
+    onTrackMobilisation,
+  }: Props = $props();
 </script>
 
 <div class="gap-s36 flex flex-col">
   <ServiceTypology {service} {servicesOptions} />
 
-  <ServiceEligibility {service} {servicesOptions} />
+  <ServiceEligibility {service} {servicesOptions} {onTrackMobilisation} />
 
   <ServiceConditions {service} />
 

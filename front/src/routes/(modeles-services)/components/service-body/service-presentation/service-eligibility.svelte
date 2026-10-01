@@ -6,6 +6,7 @@
   import SendPlane2FillBusiness from "svelte-remix/SendPlane2FillBusiness.svelte";
   import File2FillDocument from "svelte-remix/File2FillDocument.svelte";
 
+  import Linkify from "$lib/components/display/linkify.svelte";
   import TextClamp from "$lib/components/display/text-clamp.svelte";
   import ServiceCard from "./components/service-card.svelte";
   import ServiceExternalLink from "./components/service-external-link.svelte";
@@ -23,9 +24,10 @@
   interface Props {
     service: Service | Model;
     servicesOptions: ServicesOptions;
+    onTrackMobilisation: (url?: string) => void;
   }
 
-  let { service, servicesOptions }: Props = $props();
+  let { service, servicesOptions, onTrackMobilisation }: Props = $props();
 
   const eligibilityZones = service.zoneEligibiliteDisplay
     ?.map((zone) => zone.label)
@@ -161,7 +163,10 @@
       {/if}
       {#if service.mobilisationDetails}
         <div class="whitespace-pre-line">
-          {service.mobilisationDetails}
+          <Linkify
+            text={service.mobilisationDetails}
+            onLinkClick={onTrackMobilisation}
+          />
         </div>
       {/if}
     </div>
