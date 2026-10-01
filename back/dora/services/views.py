@@ -771,10 +771,12 @@ def options(request):
             FundingLabel.objects.all(), many=True
         ).data,
         "mobilisable_by": [
-            {"value": p.value, "label": p.label} for p in PersonneMobilisatrice
+            {"value": p.value, "label": p.label}
+            for p in sorted(PersonneMobilisatrice, key=lambda p: p.label)
         ],
         "mobilisation_modes": [
-            {"value": m.value, "label": m.label} for m in ModeMobilisation
+            {"value": m.value, "label": m.label}
+            for m in sorted(ModeMobilisation, key=lambda m: m.label)
         ],
     }
 
