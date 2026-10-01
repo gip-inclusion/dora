@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from unittest.mock import patch
 
@@ -6,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from django.core import mail
 from django.utils import timezone
 from freezegun import freeze_time
+from furl import furl
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -19,6 +21,7 @@ from dora.core.test_utils import (
 from dora.emplois.api_client import EmploisAPIException
 from dora.structures.models import ModerationStatus, StructureMember
 
+from ..export_link import make_export_token, read_export_token
 from ..models import Orientation, OrientationStatus
 
 
@@ -648,6 +651,10 @@ class OrientationsExportTestCase(APITestCase):
 
         self.client.force_authenticate(user=self.user)
 
+    def _export_url(self, export_type, user=None):
+        token = make_export_token(user or self.user, self.structure, export_type)
+        return f"/structures/{self.structure.slug}/orientations/export/?token={token}"
+
     def test_get_export_of_sent_orientations(self):
         prescriber = make_user()
 
@@ -676,9 +683,7 @@ class OrientationsExportTestCase(APITestCase):
         )
 
         with self.assertNumQueries(3):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=sent"
-            )
+            response = self.client.get(self._export_url("sent"))
 
         self.assertEqual(response.status_code, 200)
 
@@ -756,9 +761,7 @@ class OrientationsExportTestCase(APITestCase):
         )
 
         with self.assertNumQueries(3):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
 
@@ -822,9 +825,7 @@ class OrientationsExportTestCase(APITestCase):
             "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
             return_value=[],
         ):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
@@ -853,9 +854,7 @@ class OrientationsExportTestCase(APITestCase):
             "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
             return_value=[self._emplois_orientation()],
         ) as mocked_fetch:
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         mocked_fetch.assert_called_once_with(structure_id=self.structure.id)
 
@@ -886,9 +885,7 @@ class OrientationsExportTestCase(APITestCase):
                 self._emplois_orientation(status=OrientationStatus.EXPIRED.value)
             ],
         ):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["status"], "Expirée")
@@ -901,9 +898,7 @@ class OrientationsExportTestCase(APITestCase):
                 self._emplois_orientation(service_uid="di--some-external-service")
             ],
         ):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["service_name"], "")
@@ -922,9 +917,7 @@ class OrientationsExportTestCase(APITestCase):
             "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
             return_value=[self._emplois_orientation()],
         ):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
@@ -952,9 +945,7 @@ class OrientationsExportTestCase(APITestCase):
             "dora.orientations.views.EmploisApiClient.fetch_received_orientations",
             side_effect=EmploisAPIException("indisponible"),
         ):
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=received"
-            )
+            response = self.client.get(self._export_url("received"))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
@@ -964,19 +955,16 @@ class OrientationsExportTestCase(APITestCase):
         with patch(
             "dora.orientations.views.EmploisApiClient.fetch_received_orientations"
         ) as mocked_fetch:
-            response = self.client.get(
-                f"/structures/{self.structure.slug}/orientations/export/?type=sent"
-            )
+            response = self.client.get(self._export_url("sent"))
 
         self.assertEqual(response.status_code, 200)
         mocked_fetch.assert_not_called()
 
     def test_raise_403_if_user_not_structure_member(self):
-        self.client.force_authenticate(user=make_user())
+        other_user = make_user()
+        self.client.force_authenticate(user=other_user)
 
-        response = self.client.get(
-            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
-        )
+        response = self.client.get(self._export_url("sent", user=other_user))
 
         self.assertEqual(response.status_code, 403)
 
@@ -987,18 +975,139 @@ class OrientationsExportTestCase(APITestCase):
 
         self.client.force_authenticate(user=department_manager)
 
+        response = self.client.get(self._export_url("sent", user=department_manager))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_raise_403_without_token(self):
         response = self.client.get(
             f"/structures/{self.structure.slug}/orientations/export/?type=sent"
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
-    def test_raise_400_when_invalid_orientation_type(self):
+    def test_raise_403_with_tampered_token(self):
+        response = self.client.get(self._export_url("sent") + "x")
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_raise_403_with_token_of_another_user(self):
+        other_member = make_user()
+        baker.make(StructureMember, structure=self.structure, user=other_member)
+
+        response = self.client.get(self._export_url("sent", user=other_member))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_raise_403_with_token_of_another_structure(self):
+        other_structure = make_structure()
+        baker.make(StructureMember, structure=other_structure, user=self.user)
+        token = make_export_token(self.user, other_structure, "sent")
+
         response = self.client.get(
-            f"/structures/{self.structure.slug}/orientations/export/?type=other"
+            f"/structures/{self.structure.slug}/orientations/export/?token={token}"
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
+
+    def test_raise_410_with_expired_token(self):
+        with freeze_time(timezone.now() - relativedelta(minutes=11)):
+            url = self._export_url("sent")
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 410)
+
+    def test_token_is_valid_for_10_minutes(self):
+        with freeze_time(timezone.now() - relativedelta(minutes=9)):
+            url = self._export_url("sent")
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+
+@pytest.fixture
+def export_member(api_client):
+    structure = make_structure()
+    user = make_user()
+    baker.make(StructureMember, structure=structure, user=user)
+    api_client.force_authenticate(user=user)
+    return structure, user
+
+
+@pytest.mark.parametrize(
+    "export_type,type_label", [("sent", "envoyées"), ("received", "reçues")]
+)
+def test_send_export_link(api_client, export_member, settings, export_type, type_label):
+    structure, user = export_member
+
+    response = api_client.post(
+        f"/structures/{structure.slug}/orientations/export-link/",
+        {"type": export_type},
+    )
+
+    assert response.status_code == 204
+    assert len(mail.outbox) == 1
+    email = mail.outbox[0]
+    assert email.to == [user.email]
+    assert f"fichier des orientations {type_label}" in email.body
+
+    link = furl(
+        re.search(
+            rf"{re.escape(settings.FRONTEND_URL)}/orientations/telechargement\?[^\"]+",
+            email.body,
+        )
+        .group(0)
+        .replace("&amp;", "&")
+    )
+    assert link.args["structure"] == structure.slug
+    assert link.args["type"] == export_type
+    assert read_export_token(link.args["token"]) == {
+        "user_id": str(user.pk),
+        "structure_slug": structure.slug,
+        "type": export_type,
+    }
+
+
+def test_send_export_link_raises_400_when_invalid_orientation_type(
+    api_client, export_member
+):
+    structure, _ = export_member
+
+    response = api_client.post(
+        f"/structures/{structure.slug}/orientations/export-link/", {"type": "other"}
+    )
+
+    assert response.status_code == 400
+
+
+def test_send_export_link_raises_403_if_user_not_structure_member(api_client):
+    api_client.force_authenticate(user=make_user())
+
+    response = api_client.post(
+        f"/structures/{make_structure().slug}/orientations/export-link/",
+        {"type": "sent"},
+    )
+
+    assert response.status_code == 403
+
+
+def test_send_export_link_raises_401_if_anonymous(api_client):
+    response = api_client.post(
+        f"/structures/{make_structure().slug}/orientations/export-link/",
+        {"type": "sent"},
+    )
+
+    assert response.status_code == 401
+
+
+def test_export_link_endpoint_rejects_get(api_client, export_member):
+    structure, _ = export_member
+
+    response = api_client.get(f"/structures/{structure.slug}/orientations/export-link/")
+
+    assert response.status_code == 405
 
 
 def test_source_is_dora_for_dora_orientation(api_client):
