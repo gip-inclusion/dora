@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
 
+import pytest
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -54,3 +55,21 @@ class ValidateUploadTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             validate_file_extension("test.exe")
         self.assertEqual(str(cm.exception.detail[0]), "INVALID_EXTENSION")
+
+
+# En-tête d’un conteneur OLE2 (.doc, .xls) : sur un buffer tronqué, libmagic
+# ne peut pas lire la structure interne et renvoie un type générique.
+OLE2_HEADER = bytes.fromhex("D0CF11E0A1B11AE1") + bytes(2040)
+
+
+@pytest.mark.parametrize("filename", ["test.doc", "test.xls"])
+def test_accepts_ole2_container_for_legacy_office_extensions(filename):
+    file_obj = SimpleUploadedFile(filename, OLE2_HEADER)
+    validate_file_content(filename, file_obj)  # ne doit pas lever d’exception
+
+
+def test_rejects_ole2_container_with_unrelated_extension():
+    file_obj = SimpleUploadedFile("test.pdf", OLE2_HEADER)
+    with pytest.raises(ValidationError) as exc_info:
+        validate_file_content("test.pdf", file_obj)
+    assert str(exc_info.value.detail[0]) == "INVALID_FILE_CONTENT"
