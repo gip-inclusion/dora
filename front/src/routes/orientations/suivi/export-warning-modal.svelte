@@ -8,9 +8,15 @@
     isOpen: boolean;
     handleClose: () => void;
     handleSubmit: () => void;
+    isSubmitting?: boolean;
   }
 
-  const { isOpen, handleClose, handleSubmit }: Props = $props();
+  const {
+    isOpen,
+    handleClose,
+    handleSubmit,
+    isSubmitting = false,
+  }: Props = $props();
 </script>
 
 <Modal {isOpen} width="small" hideCloseButton hideTitle>
@@ -53,8 +59,9 @@
     <div class="gap-s8 flex flex-col md:flex-row md:justify-end">
       <Button secondary label="Annuler" onclick={handleClose} />
       <Button
-        label="Confirmer et télécharger le fichier"
+        label="Confirmer et recevoir le lien par mail"
         onclick={handleSubmit}
+        disabled={isSubmitting}
         id={`download-export-${orientationState.selectedType}`}
       />
     </div>

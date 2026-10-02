@@ -6,6 +6,7 @@ from math import ceil
 from urllib.parse import urlencode
 
 from django.conf import settings
+from django.core import signing
 from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
@@ -14,13 +15,14 @@ from django.shortcuts import get_object_or_404
 from itoutils.django.nexus.token import decode_token, generate_token
 from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import APIException, MethodNotAllowed, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dora.core.models import ModerationStatus
+from dora.core.throttling import OrientationsExportLinkThrottle
 from dora.core.utils import TRUTHY_VALUES
 from dora.emplois.api_client import EmploisApiClient, EmploisAPIException
 
@@ -37,6 +39,7 @@ from .emails import (
     send_orientation_created_to_structure,
     send_orientation_rejected_emails,
 )
+from .export_link import EXPORT_TYPES, read_export_token, send_export_link
 from .models import (
     EMPLOIS_ORIENTATION_Q,
     ContactRecipient,
@@ -299,6 +302,12 @@ def _emplois_service_names(emplois_orientations: list[dict]) -> dict[str, str]:
     }
 
 
+class ExportLinkExpired(APIException):
+    status_code = 410
+    default_detail = "Le lien de téléchargement a expiré."
+    default_code = "export_link_expired"
+
+
 class StructureOrientationsView(APIView):
     """Vue partagée pour les statistiques et l'export des orientations
     d'une structure.
@@ -306,9 +315,15 @@ class StructureOrientationsView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    # Renseigné via ``as_view(mode=...)`` pour distinguer les deux endpoints
+    # Renseigné via ``as_view(mode=...)`` pour distinguer les endpoints
     # qui partagent cette vue.
     mode: str | None = None
+
+    def get_throttles(self):
+        throttles = super().get_throttles()
+        if self.mode == "export_link":
+            throttles.append(OrientationsExportLinkThrottle())
+        return throttles
 
     @staticmethod
     def sent_filter(structure: Structure) -> Q:
@@ -351,6 +366,9 @@ class StructureOrientationsView(APIView):
         return structure
 
     def get(self, request: Request, structure_slug: str) -> Response:
+        if self.mode == "export_link":
+            raise MethodNotAllowed(request.method)
+
         structure = self._get_structure(structure_slug)
 
         if self.mode == "stats":
@@ -361,6 +379,41 @@ class StructureOrientationsView(APIView):
         raise RuntimeError(
             f"StructureOrientationsView appelée avec un mode inconnu : {self.mode!r}."
         )
+
+    def post(self, request: Request, structure_slug: str) -> Response:
+        if self.mode != "export_link":
+            raise MethodNotAllowed(request.method)
+
+        structure = self._get_structure(structure_slug)
+
+        export_type = request.data.get("type")
+        if export_type not in EXPORT_TYPES:
+            raise ValidationError(
+                {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
+            )
+
+        send_export_link(request.user, structure, export_type)
+        return Response(status=204)
+
+    def _export_type_from_token(self, request: Request, structure: Structure) -> str:
+        """Le téléchargement n'est possible qu'avec le lien reçu par e-mail :
+        le jeton prouve que l'utilisateur a accès à sa boîte mail.
+        """
+        try:
+            payload = read_export_token(request.query_params.get("token", ""))
+        except signing.SignatureExpired:
+            raise ExportLinkExpired()
+        except signing.BadSignature:
+            raise PermissionDenied("Lien de téléchargement invalide.")
+
+        if (
+            payload.get("user_id") != str(request.user.pk)
+            or payload.get("structure_slug") != structure.slug
+            or payload.get("type") not in EXPORT_TYPES
+        ):
+            raise PermissionDenied("Lien de téléchargement invalide.")
+
+        return payload["type"]
 
     def _stats(self, structure: Structure) -> Response:
         sent_q = self.sent_filter(structure)
@@ -389,7 +442,7 @@ class StructureOrientationsView(APIView):
         return Response(stats)
 
     def _export(self, request: Request, structure: Structure) -> Response:
-        export_type = request.query_params.get("type")
+        export_type = self._export_type_from_token(request, structure)
 
         if export_type == "sent":
             orientations = (
@@ -437,9 +490,7 @@ class StructureOrientationsView(APIView):
             rows.sort(key=lambda row: row["creation_date"], reverse=True)
             return Response(rows)
 
-        raise ValidationError(
-            {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
-        )
+        raise RuntimeError(f"Type d'export inconnu : {export_type!r}.")
 
 
 def _resolve_emplois_orientation(

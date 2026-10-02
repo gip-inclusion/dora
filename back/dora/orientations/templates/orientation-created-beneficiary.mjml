@@ -53,3 +53,6 @@
   de la plateforme DORA pour obtenir de
   l’aide.
 {% endblock %}
+
+{# Le texte de l’encart s’adresse aux professionnels #}
+{% block did_you_know %}{% endblock %}
