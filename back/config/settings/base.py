@@ -688,8 +688,6 @@ NEXUS_SYNC_CHUNK_SIZE = int(os.getenv("NEXUS_SYNC_CHUNK_SIZE", 5000))
 NEXUS_API_BASE_URL = os.getenv("NEXUS_API_BASE_URL")
 NEXUS_API_TOKEN = os.getenv("NEXUS_API_TOKEN")
 
-NEXUS_MENU_ENABLED = os.getenv("NEXUS_MENU_ENABLED") == "true"
-
 pdi_jwt_key = os.getenv("PDI_JWT_KEY")
 PDI_JWT_KEY = json.loads(pdi_jwt_key) if pdi_jwt_key else None
 
