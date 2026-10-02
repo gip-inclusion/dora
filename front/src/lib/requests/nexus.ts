@@ -2,28 +2,6 @@ import { toast } from "@zerodevx/svelte-toast";
 import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
 import { getApiURL } from "$lib/utils/api";
 
-export type NexusServiceID =
-  "dora" | "les-emplois" | "le-marche" | "mon-recap" | "pilotage";
-
-export type NexusMenuStatus = {
-  proconnect: boolean;
-  activatedServices: NexusServiceID[];
-};
-
-export const getNexusMenuStatus = async () => {
-  const url = `${getApiURL()}/nexus/menu-status/`;
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.ok) {
-    return response.json() as Promise<NexusMenuStatus>;
-  }
-  return undefined;
-};
-
 type OrientationBeneficiaryInfoData = {
   firstName: string;
   lastName: string;
