@@ -7,3 +7,10 @@ export LD_LIBRARY_PATH=/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/lib/x86_64-l
 export PROJ_LIB=/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/share/proj
 
 python manage.py collectstatic --noinput
+
+# Les review apps n'ont pas besoin des tâches planifiées, et le Scalingo
+# Scheduler y est limité à 5 tâches (la dérogation ne vaut que pour la
+# production et le staging) : sans cron.json, aucune tâche n'est créée.
+if [ "${ENVIRONMENT:-}" = "review" ]; then
+  rm -f cron.json
+fi
