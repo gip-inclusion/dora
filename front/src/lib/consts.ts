@@ -22,14 +22,11 @@ export const SEARCH_RADIUS_KM = 50;
 // Endpoint de recherche de la Base Adresse Nationale (BAN)
 export const BAN_API_SEARCH_URL = "https://data.geopf.fr/geocodage/search/";
 
-// Lien vers l'article expliquant le rôle de gestionnaire de territoire, affichée sur la page d'accueil « Gérer mon territoire »
-export const URL_MANAGER_HELP_NOTICE = `${URL_HELP_SITE}article/quest-ce-quun-profil-gestionnaire-de-territoire-16sn5g2/`;
-
-// Lien vers l'article (encore à créer) expliquant comment signaler un problème dans les données de data·inclusion.
-export const URL_MANAGER_DATA_INCLUSION_NOTICE = URL_HELP_SITE;
+// Lien vers le formulaire permettant de signaler un problème dans les données de data·inclusion.
+export const URL_MANAGER_DATA_INCLUSION_REPORT = "https://tally.so/r/nWZBrv";
 
 // Lien vers le mode d'emploi du tableau de bord « Mes structures & services Dora » du gestionnaire de territoire
-export const URL_MANAGER_DASHBOARD_HELP_NOTICE = `${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`;
+export const URL_MANAGER_HELP_NOTICE = `${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`;
 
 // Tableau de bord Autometa du gestionnaire de territoire, par département.
 export const AUTOMETA_MANAGER_DASHBOARD_URLS = (departmentCode: string) => {

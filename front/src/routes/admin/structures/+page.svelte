@@ -7,8 +7,8 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import {
-    URL_MANAGER_DASHBOARD_HELP_NOTICE,
-    URL_MANAGER_DATA_INCLUSION_NOTICE,
+    URL_MANAGER_HELP_NOTICE,
+    URL_MANAGER_DATA_INCLUSION_REPORT,
   } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { getStructuresAdmin } from "$lib/requests/admin";
@@ -147,7 +147,7 @@
     <div class="gap-s16 flex shrink-0 flex-wrap items-start">
       <LinkButton
         label="Notice"
-        to={URL_MANAGER_DASHBOARD_HELP_NOTICE}
+        to={URL_MANAGER_HELP_NOTICE}
         otherTab
         nofollow
         secondary
@@ -178,12 +178,12 @@
         Vous voyez dans ce tableau de bord uniquement les services créés dans
         Dora. Les visiteurs voient également les services issus de
         data·inclusion. N’hésitez pas à nous signaler tout problème dans les
-        données data·inclusion en suivant
+        données data·inclusion via
         <a
-          href={URL_MANAGER_DATA_INCLUSION_NOTICE}
+          href={URL_MANAGER_DATA_INCLUSION_REPORT}
           target="_blank"
           rel="noopener"
-          class="underline">cette notice</a
+          class="underline">ce formulaire</a
         >.
       </p>
     </aside>
@@ -210,7 +210,7 @@
           <Notice type="info" title={filterDefinition}>
             <div>
               <a
-                href={URL_MANAGER_DASHBOARD_HELP_NOTICE}
+                href={URL_MANAGER_HELP_NOTICE}
                 target="_blank"
                 class="text-magenta-cta underline"
               >
