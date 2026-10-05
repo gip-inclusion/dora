@@ -215,6 +215,7 @@ def test_structures_serialization_exemple(
         "complement_adresse": "HOTEL DE VILLE",
         "courriel": "julie@example.net",
         "date_maj": "2022-04-28T16:53:11Z",
+        "description": "L’association Mobilette propose des solutions de déplacement aux personnes pour qui la non mobilité est un frein à l’insertion professionnelle : - connaissance de l'offre de transport du territoire - accès à un véhicule 2 ou 4 roues - transport solidaire - accès au permis",
         "horaires_ouverture": 'Mo-Fr 10:00-20:00 "sur rendez-vous"; PH off',
         "id": str(struct.id),
         "labels_autres": ["Nièvre médiation numérique"],
