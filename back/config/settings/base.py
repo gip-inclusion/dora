@@ -257,6 +257,11 @@ ALLOWED_MIME_TYPES = {
     "application/vnd.oasis.opendocument.spreadsheet": ["ods"],
     "application/vnd.ms-excel": ["xls"],
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"],
+    # Les .doc et .xls sont des conteneurs OLE2 : sur les premiers octets seulement,
+    # libmagic ne sait pas lire leur structure interne et renvoie un type générique
+    # (`CDFV2` selon les versions de libmagic).
+    "application/x-ole-storage": ["doc", "xls"],
+    "application/CDFV2": ["doc", "xls"],
     "image/png": ["png"],
     "image/jpeg": ["jpeg", "jpg"],
 }
