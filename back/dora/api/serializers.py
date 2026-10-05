@@ -55,6 +55,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "complement_adresse",
             "courriel",
             "date_maj",
+            "description",
             "horaires_ouverture",
             "id",
             "labels_autres",
