@@ -369,8 +369,6 @@ def test_update_service_from_model_m2m(api_client):
 
     # ÉTANT DONNÉ un service lié à un modèle avec des champs custom et M2M
     struct = make_structure(user)
-    global_condition1 = baker.make("AccessCondition", structure=None)
-    struct_condition1 = baker.make("AccessCondition", structure=struct)
 
     model = make_model(
         structure=struct,

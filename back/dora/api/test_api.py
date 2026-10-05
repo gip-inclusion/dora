@@ -7,7 +7,6 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
@@ -310,6 +309,14 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             DiPublic.FEMMES.value,
         ],
         publics_precisions="Précision des publics",
+        conditions_acces="Acceptation du Pass IAE\nBonne connaissance du français oral et écrit\nCarte d'identité, passeport ou permis de séjour",
+        mobilisation_modes=[
+            "envoyer-un-courriel",
+            "utiliser-lien-mobilisation",
+        ],
+        mobilisable_by=["professionnels", "usagers"],
+        zone_eligibilite=["29"],
+        mobilisation_link="https://example.com",
     )
 
     service.subcategories.add(
@@ -340,7 +347,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     service.beneficiaries_access_modes.add(
         BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
     )
-    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -383,7 +389,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "publics": ["etudiants", "familles", "femmes"],
         "publics_precisions": "Précision des publics",
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
-        "horaires_accueil": "Tu 09:00-12:00;We 14:00-17:00",
+        "horaires_accueil": "Mo-Fr 08:30-12:30; PH off",
         "source": None,
         "structure_id": str(structure.id),
         "telephone": "0278911262",
@@ -427,42 +433,11 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             assert data[key] == expected_val
 
 
-def test_service_serialization_mobilisation_v1_fields(authenticated_user, api_client):
-    service = make_service(
-        status=ServiceStatus.PUBLISHED,
-        coach_orientation_modes_other="Précision coach",
-        beneficiaries_access_modes_other="",
-        coach_orientation_modes_external_form_link="https://example.com/form",
-    )
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(
-            value__in=["completer-le-formulaire-dadhesion", "telephoner"]
-        )
-    )
-    service.beneficiaries_access_modes.set(
-        BeneficiaryAccessMode.objects.filter(value="professionnel")
-    )
-    sync_v1_service_fields(service)
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert response.status_code == 200
-    data = response.json()
-    assert sorted(data["modes_mobilisation"]) == [
-        "telephoner",
-        "utiliser-lien-mobilisation",
-    ]
-    assert data["mobilisable_par"] == ["professionnels"]
-    assert data["mobilisation_precisions"] is None
-    assert data["lien_mobilisation"] == "https://example.com/form"
-
-
 def test_lien_mobilisation_excludes_dora_form_url(authenticated_user, api_client):
     service = make_service(status=ServiceStatus.PUBLISHED)
     service.coach_orientation_modes.set(
         CoachOrientationMode.objects.filter(value="formulaire-dora")
     )
-    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -471,7 +446,6 @@ def test_lien_mobilisation_excludes_dora_form_url(authenticated_user, api_client
     assert response.json()["formulaire_en_ligne"] == service.get_dora_form_url()
 
     service.online_form = f"https://prod.example/services/{service.slug}/orienter"
-    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
     assert response.json()["lien_mobilisation"] is None
@@ -745,23 +719,3 @@ def test_service_includes_contact_info_even_when_not_public(
     assert response.data["telephone"] == "0123456789"
     assert response.data["contact_nom_prenom"] == "Test Person"
     assert response.data["contact_public"] is False
-
-
-def test_service_combines_all_publics_after_sync(authenticated_user, api_client):
-    service = make_service(
-        status=ServiceStatus.PUBLISHED,
-        publics=["familles", "personnes-en-situation-de-handicap"],
-    )
-    service.access_conditions.add(baker.make(AccessCondition, name="Résident QPV"))
-    service.credentials.add(baker.make(Credential, name="Carte d'invalidité"))
-
-    sync_v1_service_fields(service)
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert response.status_code == 200
-    assert response.data["publics"] == [
-        "familles",
-        "personnes-en-situation-de-handicap",
-        "residents-qpv-frr",
-    ]

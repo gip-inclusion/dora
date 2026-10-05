@@ -1,12 +1,8 @@
 import pytest
 
-from dora.core.test_utils import (
-    make_model,
-    make_service,
-)
+from dora.core.test_utils import make_service
 from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
-from dora.services.utils import update_sync_checksum
 
 DESCRIPTION = (
     "## Notre offre\n\nNous proposons :\n\n- la **location** de véhicules\n"
