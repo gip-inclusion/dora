@@ -271,7 +271,5 @@ export const modelSchema: v.Schema = {
   mobilisationDetails: serviceSchema.mobilisationDetails,
   durationWeeklyHours: serviceSchema.durationWeeklyHours,
   durationWeeks: serviceSchema.durationWeeks,
-  onlineForm: serviceSchema.onlineForm,
   updateFrequency: serviceSchema.updateFrequency,
-  openingHours: serviceSchema.openingHours,
 };
