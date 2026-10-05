@@ -54,21 +54,19 @@ if [[ "$RELEASE_TYPE" != "major" && "$RELEASE_TYPE" != "minor" && "$RELEASE_TYPE
 fi
 
 # ---
-# Check environment variables
+# Scalingo target (prod par défaut, surchargeable via l'environnement)
 # ---
 
-check_env_var() {
-  local var_name=$1
-  if [ -z "${!var_name}" ]; then
-    echo -e "${RED}⚠️  La variable d'environnement $var_name doit être définie.${NC}"
-    exit 1
-  fi
-}
+SCALINGO_REGION="${SCALINGO_REGION:-osc-secnum-fr1}"
+SCALINGO_BACK_APP="${SCALINGO_BACK_APP:-dora-back-prod}"
+SCALINGO_FRONT_APP="${SCALINGO_FRONT_APP:-dora-front-prod}"
 
-echo -e "Vérification des variables d'environnement"
-check_env_var "SCALINGO_REGION"
-check_env_var "SCALINGO_BACK_APP"
-check_env_var "SCALINGO_FRONT_APP"
+echo -e "Applications Scalingo ciblées : $SCALINGO_BACK_APP et $SCALINGO_FRONT_APP (région $SCALINGO_REGION)"
+read -r -p "Confirmer la livraison sur ces applications ? [o/N] " CONFIRMATION
+if [[ ! "$CONFIRMATION" =~ ^[oOyY]$ ]]; then
+  echo -e "${YELLOW}🙅 Livraison annulée.${NC}"
+  exit 1
+fi
 
 # ---
 # Check Scalingo concerns
