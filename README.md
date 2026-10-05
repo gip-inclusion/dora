@@ -23,9 +23,10 @@ tools/create-review-apps.sh <numéro de PR>
 La livraison crée un tag de version, puis déploie son archive sur les apps Scalingo back et front :
 
 ```bash
-export SCALINGO_REGION=osc-fr1 SCALINGO_BACK_APP=<app back> SCALINGO_FRONT_APP=<app front>
 tools/release.sh major|minor|patch      # depuis main
 tools/release.sh hotfix <branche>       # depuis une branche de correctif
 ```
+
+Par défaut, le script cible la prod (`dora-back-prod` et `dora-front-prod`, région `osc-secnum-fr1`). Les variables d'environnement `SCALINGO_REGION`, `SCALINGO_BACK_APP` et `SCALINGO_FRONT_APP` permettent de cibler d'autres apps. Le script affiche la cible et demande confirmation avant de continuer.
 
 Le script calcule la version à partir du dernier tag (`hotfix` incrémente le patch), et ne fait rien si le dernier commit de la branche source porte déjà ce tag. Il nécessite le CLI Scalingo et un accès collaborateur aux deux apps.
