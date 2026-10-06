@@ -48,6 +48,7 @@ def send_export_link(user, structure, export_type: str) -> None:
     context = {
         "type_label": "envoyées" if export_type == "sent" else "reçues",
         "download_link": build_export_url(user, structure, export_type),
+        "validity_minutes": EXPORT_LINK_MAX_AGE // 60,
     }
     send_mail(
         "Votre lien de téléchargement du fichier des orientations DORA",

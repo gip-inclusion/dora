@@ -1,6 +1,6 @@
 {% extends "email-base.mjml" %}
 
-{% block preview %}Votre lien de téléchargement sécurisé, valable 10 minutes{% endblock %}
+{% block preview %}Votre lien de téléchargement sécurisé, valable {{ validity_minutes }} minutes{% endblock %}
 
 {% block title %}Bonjour,{% endblock %}
 
@@ -11,7 +11,7 @@
 {% block content %}
   <p>
     Vous avez demandé à télécharger le fichier de suivi des orientations DORA.<br/>
-    Retrouvez le lien de téléchargement sécurisé ci-dessous, valable 10 minutes&#8239;:
+    Retrouvez le lien de téléchargement sécurisé ci-dessous, valable {{ validity_minutes }} minutes&#8239;:
   </p>
 {% endblock %}
 

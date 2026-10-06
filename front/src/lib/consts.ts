@@ -19,6 +19,10 @@ export const MONTHS_BEFORE_OUTDATED = 6;
 
 export const SEARCH_RADIUS_KM = 50;
 
+// Durée de validité du lien de téléchargement de l'export des orientations
+// (doit correspondre à `EXPORT_LINK_MAX_AGE` côté back)
+export const ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES = 10;
+
 // Endpoint de recherche de la Base Adresse Nationale (BAN)
 export const BAN_API_SEARCH_URL = "https://data.geopf.fr/geocodage/search/";
 

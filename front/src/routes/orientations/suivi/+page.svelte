@@ -15,6 +15,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { requestOrientationExportLink } from "$lib/requests/orientations";
   import { userInfo } from "$lib/utils/auth";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -73,7 +74,8 @@
         <Notice type="success" title="Envoi validé">
           <p class="text-f14 mb-s0">
             Le lien de téléchargement sécurisé a été envoyé à votre adresse mail
-            {$userInfo?.email}. Il est valable 10 minutes.
+            {$userInfo?.email}. Il est valable
+            {ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES} minutes.
           </p>
         </Notice>
       </div>

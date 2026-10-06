@@ -11,6 +11,7 @@
     type OrientationExportType,
   } from "$lib/requests/orientations";
   import { userInfo } from "$lib/utils/auth";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
 
   import { generateOrientationExport } from "../suivi/orientation-export";
 
@@ -82,7 +83,8 @@
     <Notice type="success" title="Envoi validé">
       <p class="text-f14 mb-s0">
         Le lien de téléchargement sécurisé a été envoyé à votre adresse mail
-        {$userInfo?.email}. Il est valable 10 minutes.
+        {$userInfo?.email}. Il est valable
+        {ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES} minutes.
       </p>
     </Notice>
   {:else}
@@ -91,7 +93,10 @@
     >
       <div class="gap-s12 flex flex-2 flex-col items-center justify-center">
         <h2 class="text-gray-text">Lien expiré</h2>
-        <p>Le lien de téléchargement a une durée de validité de 10 minutes</p>
+        <p>
+          Le lien de téléchargement a une durée de validité de
+          {ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES} minutes
+        </p>
         <Button
           label="Recevoir un nouveau lien"
           onclick={sendNewLink}
