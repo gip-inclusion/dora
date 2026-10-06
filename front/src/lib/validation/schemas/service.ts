@@ -131,6 +131,14 @@ export const serviceSchema: v.Schema = {
     label: "Configuration du formulaire",
     default: null,
     rules: [v.isURL()],
+    // Requis uniquement pour « Votre propre formulaire » : le formulaire Dora
+    // est marqué par `formulaire-dora` et n'attend aucune saisie.
+    required: (data) => {
+      return (
+        !!data.mobilisationModes?.includes("utiliser-lien-mobilisation") &&
+        !data.coachOrientationModes?.includes("formulaire-dora")
+      );
+    },
   },
   mobilisationDetails: {
     label: "Précisions sur les modalités",
