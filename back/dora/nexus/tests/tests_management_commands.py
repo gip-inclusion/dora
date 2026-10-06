@@ -6,7 +6,18 @@ from freezegun import freeze_time
 from itoutils.django.testing import assertSnapshotQueries
 
 from dora.core.test_utils import make_structure, make_user
-from dora.nexus.tests.test_sync import assert_call_content, make_syncable_user
+
+
+def assert_call_content(call, expected_data):
+    # the order doesn't matter
+    data = json.loads(call.request.content.decode())
+    assert sorted(data, key=lambda d: d["id"]) == sorted(
+        expected_data, key=lambda d: d["id"]
+    )
+
+
+def make_syncable_user(**kwargs):
+    return make_user(first_name="John", last_name="Doe", **kwargs)
 
 
 @freeze_time()

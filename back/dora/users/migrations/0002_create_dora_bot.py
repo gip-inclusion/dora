@@ -7,12 +7,6 @@ def create_dora_bot_user(apps, schema_editor):
     """Crée l'utilisateur dora bot."""
     User = apps.get_model("users", "User")
 
-    # Le modèle historique n'a pas les méthodes Nexus.
-    # On les patche pour que save() ne lève pas d'exception.
-    User.should_sync_to_nexus = lambda self: False
-    User.nexus_delete = lambda *args, **kwargs: None
-    User.nexus_sync = lambda *args, **kwargs: None
-
     User.objects.get_or_create(
         email=settings.DORA_BOT_USER.lower(),
         defaults={

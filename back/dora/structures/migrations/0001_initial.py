@@ -4,7 +4,6 @@ import uuid
 
 import django.contrib.postgres.fields
 import django.db.models.deletion
-import itoutils.django.nexus.models
 from django.conf import settings
 from django.db import migrations, models
 
@@ -401,7 +400,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(itoutils.django.nexus.models.NexusModelMixin, models.Model),
         ),
         migrations.CreateModel(
             name="StructureMember",
@@ -437,7 +435,6 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Membre",
             },
-            bases=(itoutils.django.nexus.models.NexusModelMixin, models.Model),
         ),
         migrations.AddField(
             model_name="structure",
