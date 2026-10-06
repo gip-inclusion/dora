@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ parent, url }) => {
   const token = url.searchParams.get("token");
 
   if (!structureSlug || !token || (type !== "sent" && type !== "received")) {
-    error(401, "Accès refusé");
+    error(404, "Page Not Found");
   }
 
   return {
