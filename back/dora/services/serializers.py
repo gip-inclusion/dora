@@ -107,6 +107,11 @@ class ModelCreatablePrimaryKeyRelatedField(CreatablePrimaryKeyRelatedField):
         return value.name if value.structure else value.id
 
 
+# Marqueur v1 du formulaire Dora, et mode v2 qu'il remplace (cf. `_validate_dora_form`).
+DORA_FORM = "formulaire-dora"
+MOBILISATION_LINK_MODE = ModeMobilisation.UTILISER_LIEN_MOBILISATION.value
+
+
 class StructureSerializer(serializers.ModelSerializer):
     has_admin = serializers.SerializerMethodField()
     num_services = serializers.SerializerMethodField()
@@ -475,8 +480,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             data["coach_orientation_modes"] = [
                 mode
                 for mode in data["coach_orientation_modes"]
-                if mode.value != "formulaire-dora"
+                if mode.value != DORA_FORM
             ]
+
+        self._validate_dora_form(data)
 
         user_structures = StructureMember.objects.filter(user_id=user.id).values_list(
             "structure_id", flat=True
@@ -507,6 +514,78 @@ class ServiceSerializer(serializers.ModelSerializer):
         # et le diff « modèle modifié » côté front.
         if "publics" in data:
             data["publics"] = normalize_publics(data["publics"])
+
+        return data
+
+    # Le formulaire Dora n'a pas d'équivalent en v2 : `utiliser-lien-mobilisation`
+    # suppose un lien publiable, et data·inclusion rejette ce mode sans
+    # `lien_mobilisation`. La préférence de l'utilisateur est donc portée par
+    # `formulaire-dora` (v1), tandis que `mobilisation_modes` et `mobilisation_link`
+    # restent toujours valides pour data·inclusion.
+    def _validate_dora_form(self, data):
+        if (
+            not {
+                "coach_orientation_modes",
+                "mobilisation_modes",
+                "mobilisation_link",
+            }
+            & data.keys()
+        ):
+            return
+
+        if "coach_orientation_modes" in data:
+            coach_modes = data["coach_orientation_modes"]
+        elif self.instance:
+            coach_modes = self.instance.coach_orientation_modes.all()
+        else:
+            coach_modes = []
+        uses_dora_form = any(mode.value == DORA_FORM for mode in coach_modes)
+
+        if "mobilisation_modes" in data:
+            mobilisation_modes = data["mobilisation_modes"] or []
+        else:
+            mobilisation_modes = (
+                self.instance.mobilisation_modes if self.instance else None
+            ) or []
+
+        if "mobilisation_link" in data:
+            mobilisation_link = data["mobilisation_link"]
+        else:
+            mobilisation_link = (
+                self.instance.mobilisation_link if self.instance else None
+            )
+
+        if uses_dora_form:
+            data["mobilisation_modes"] = [
+                mode for mode in mobilisation_modes if mode != MOBILISATION_LINK_MODE
+            ]
+            data["mobilisation_link"] = None
+        elif MOBILISATION_LINK_MODE in mobilisation_modes and not mobilisation_link:
+            # Sans formulaire Dora, le mode n'a de sens qu'avec un lien personnalisé :
+            # c'est le seul choix proposé aux structures sans formulaire Dora.
+            raise ValidationError(
+                {"mobilisation_link": "Information requise"},
+                "missing_mobilisation_link",
+            )
+
+    # Pendant de `_validate_dora_form` : le mode est réinjecté à la lecture pour que
+    # le formulaire d'édition affiche la case cochée, sans jamais être stocké.
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if "mobilisation_modes" not in data or "coach_orientation_modes" not in data:
+            return data
+        if DORA_FORM not in (data["coach_orientation_modes"] or []):
+            return data
+
+        modes = data["mobilisation_modes"] or []
+        if MOBILISATION_LINK_MODE not in modes:
+            data["mobilisation_modes"] = [*modes, MOBILISATION_LINK_MODE]
+            labels = data.get("mobilisation_modes_display") or []
+            data["mobilisation_modes_display"] = [
+                *labels,
+                ModeMobilisation(MOBILISATION_LINK_MODE).label,
+            ]
 
         return data
 

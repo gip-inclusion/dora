@@ -36,6 +36,11 @@
     !!service.mobilisationModes?.includes("utiliser-lien-mobilisation")
   );
 
+  // Le formulaire Dora n'a pas d'équivalent en v2 : la préférence est enregistrée
+  // via `formulaire-dora` (v1). Le back retire `utiliser-lien-mobilisation` de
+  // `mobilisationModes` à l'écriture et le réinjecte à la lecture, pour que
+  // `mobilisationModes`/`mobilisationLink` restent valides pour data·inclusion
+  // (cf. `_validate_dora_form`).
   function setDoraForm(enabled: boolean) {
     const otherModes = (service.coachOrientationModes ?? []).filter(
       (mode) => mode !== "formulaire-dora"
@@ -43,24 +48,6 @@
     service.coachOrientationModes = enabled
       ? [...otherModes, "formulaire-dora"]
       : otherModes;
-  }
-
-  // Le formulaire Dora n'est pas représentable en v2 : un service existant qui
-  // l'utilise porte `formulaire-dora` (champ v1) mais pas
-  // `utiliser-lien-mobilisation`, qui est réservé aux liens personnalisés.
-  // On réhydrate le mode côté client pour que la case soit cochée ; il est
-  // retiré de la charge utile à l'enregistrement (`service-edition-form`).
-  // Ponctuel et non réactif : sinon décocher la case la recocherait aussitôt.
-  if (
-    service.slug &&
-    !noDoraForm &&
-    !usesMobilisationLink &&
-    service.coachOrientationModes?.includes("formulaire-dora")
-  ) {
-    service.mobilisationModes = [
-      ...(service.mobilisationModes ?? []),
-      "utiliser-lien-mobilisation",
-    ];
   }
 
   $effect(() => {
@@ -73,7 +60,7 @@
     if (usesMobilisationLink && mobilisationLinkSource === "dora") {
       untrack(() => {
         service.mobilisationLink = null;
-        setDoraForm(!noDoraForm);
+        setDoraForm(true);
       });
     }
   });
