@@ -15,6 +15,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { requestOrientationExportLink } from "$lib/requests/orientations";
   import { userInfo } from "$lib/utils/auth";
+  import { logException } from "$lib/utils/logger";
   import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
 
   interface Props {
@@ -50,14 +51,19 @@
   const handleModalSubmit = async () => {
     isSendingLink = true;
     linkSent = false;
-    const result = await requestOrientationExportLink(
-      data.structure.slug,
-      orientationState.selectedType
-    );
+    let ok = false;
+    try {
+      ({ ok } = await requestOrientationExportLink(
+        data.structure.slug,
+        orientationState.selectedType
+      ));
+    } catch (err) {
+      logException(err);
+    }
     isSendingLink = false;
     toggleModal();
 
-    if (result.ok) {
+    if (ok) {
       linkSent = true;
     } else {
       toast.push(

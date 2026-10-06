@@ -11,6 +11,7 @@
     type OrientationExportType,
   } from "$lib/requests/orientations";
   import { userInfo } from "$lib/utils/auth";
+  import { logException } from "$lib/utils/logger";
   import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
 
   import { generateOrientationExport } from "../suivi/orientation-export";
@@ -31,26 +32,36 @@
   const typeLabel = $derived(type === "sent" ? "envoyées" : "reçues");
 
   onMount(async () => {
-    const result = await getOrientationExport(structureSlug, token);
+    try {
+      const result = await getOrientationExport(structureSlug, token);
 
-    if (result.status === 410) {
-      status = "expired";
-    } else if (!result.data) {
+      if (result.status === 410) {
+        status = "expired";
+      } else if (!result.data) {
+        status = "error";
+      } else if (result.data.length === 0) {
+        status = "empty";
+      } else {
+        await generateOrientationExport(structureSlug, type, result.data);
+        status = "downloaded";
+      }
+    } catch (err) {
+      logException(err);
       status = "error";
-    } else if (result.data.length === 0) {
-      status = "empty";
-    } else {
-      await generateOrientationExport(structureSlug, type, result.data);
-      status = "downloaded";
     }
   });
 
   async function sendNewLink() {
     isSendingLink = true;
-    const result = await requestOrientationExportLink(structureSlug, type);
+    let ok = false;
+    try {
+      ({ ok } = await requestOrientationExportLink(structureSlug, type));
+    } catch (err) {
+      logException(err);
+    }
     isSendingLink = false;
 
-    if (result.ok) {
+    if (ok) {
       linkSent = true;
     } else {
       toast.push(
