@@ -30,19 +30,66 @@
     service.mobilisationLink ? "custom" : "dora"
   );
 
+  let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
+
+  let usesMobilisationLink = $derived(
+    !!service.mobilisationModes?.includes("utiliser-lien-mobilisation")
+  );
+
+  function setDoraForm(enabled: boolean) {
+    const otherModes = (service.coachOrientationModes ?? []).filter(
+      (mode) => mode !== "formulaire-dora"
+    );
+    service.coachOrientationModes = enabled
+      ? [...otherModes, "formulaire-dora"]
+      : otherModes;
+  }
+
+  // Le formulaire Dora n'est pas représentable en v2 : un service existant qui
+  // l'utilise porte `formulaire-dora` (champ v1) mais pas
+  // `utiliser-lien-mobilisation`, qui est réservé aux liens personnalisés.
+  // On réhydrate le mode côté client pour que la case soit cochée ; il est
+  // retiré de la charge utile à l'enregistrement (`service-edition-form`).
+  // Ponctuel et non réactif : sinon décocher la case la recocherait aussitôt.
+  if (
+    service.slug &&
+    !noDoraForm &&
+    !usesMobilisationLink &&
+    service.coachOrientationModes?.includes("formulaire-dora")
+  ) {
+    service.mobilisationModes = [
+      ...(service.mobilisationModes ?? []),
+      "utiliser-lien-mobilisation",
+    ];
+  }
+
   $effect(() => {
-    if (mobilisationLinkSource === "dora") {
-      untrack(() => (service.mobilisationLink = null));
+    if (noDoraForm && mobilisationLinkSource === "dora") {
+      untrack(() => (mobilisationLinkSource = "custom"));
     }
   });
 
-  let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
+  $effect(() => {
+    if (usesMobilisationLink && mobilisationLinkSource === "dora") {
+      untrack(() => {
+        service.mobilisationLink = null;
+        setDoraForm(!noDoraForm);
+      });
+    }
+  });
 
   $effect(() => {
-    if (!service.mobilisationModes?.includes("utiliser-lien-mobilisation")) {
+    if (usesMobilisationLink && mobilisationLinkSource === "custom") {
+      untrack(() => setDoraForm(false));
+    }
+  });
+
+  $effect(() => {
+    if (!usesMobilisationLink) {
       untrack(() => {
         mobilisationLinkSource = noDoraForm ? "custom" : "dora";
         service.mobilisationLink = null;
+        setDoraForm(false);
       });
     }
   });
@@ -73,12 +120,6 @@
           { label: "Votre propre formulaire", value: "custom" },
         ]
   );
-
-  $effect(() => {
-    if (noDoraForm && mobilisationLinkSource === "dora") {
-      untrack(() => (mobilisationLinkSource = "custom"));
-    }
-  });
 </script>
 
 <FieldGroup title="Modalités d’orientation" showSeparator={!isModel}>

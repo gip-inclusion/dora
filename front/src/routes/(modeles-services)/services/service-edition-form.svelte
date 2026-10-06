@@ -61,17 +61,33 @@
     service = { ...service, ...validatedData };
   }
 
+  // `utiliser-lien-mobilisation` ne vaut que pour un lien personnalisé : le
+  // formulaire Dora est porté par `formulaire-dora` (champ v1). Le mode n'existe
+  // côté client que pour cocher la case et satisfaire la validation ; on le
+  // retire de la charge utile. Voir `fieldgroup-modalities.svelte`.
+  function toPayload(validatedData) {
+    if (!validatedData.coachOrientationModes?.includes("formulaire-dora")) {
+      return validatedData;
+    }
+    return {
+      ...validatedData,
+      mobilisationModes: (validatedData.mobilisationModes ?? []).filter(
+        (mode) => mode !== "utiliser-lien-mobilisation"
+      ),
+    };
+  }
+
   function handleSubmit(validatedData, kind: RequestKind) {
     requestKind = kind;
     if (requestKind === "publish") {
       return createOrModifyService({
-        ...validatedData,
+        ...toPayload(validatedData),
         status: "PUBLISHED",
         markSynced: true,
       });
     } else if (requestKind === "draft") {
       return createOrModifyService({
-        ...validatedData,
+        ...toPayload(validatedData),
         status: "DRAFT",
         markSynced: true,
       });

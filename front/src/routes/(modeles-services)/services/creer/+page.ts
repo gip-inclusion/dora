@@ -70,11 +70,6 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     service.structureInfo = toServiceStructure(structure);
   }
 
-  if (!model) {
-    service.coachOrientationModes =
-      structure && structure.noDoraForm ? [] : ["formulaire-dora"];
-  }
-
   return {
     noIndex: true,
     title: "Création d’un service | DORA",
