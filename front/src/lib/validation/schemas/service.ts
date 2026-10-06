@@ -138,7 +138,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString()],
     post: [v.trim],
   },
-  zoneEligibilite: {
+  eligibilityZones: {
     label: "Secteurs éligibles",
     default: [],
     rules: [v.isArray([])],
@@ -196,7 +196,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isPositiveInteger(), v.minNum(1)],
     minNumber: 1,
   },
-  horairesAccueil: {
+  openingHours: {
     label: "Horaires du service",
     default: "",
     rules: [v.isString(), v.osmHoursNotContainsInvalid()],

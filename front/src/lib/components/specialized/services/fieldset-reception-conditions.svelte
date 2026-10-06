@@ -60,14 +60,14 @@
   {#if !isModel}
     {#if showOpeningHoursField}
       <OpeningHoursField
-        id="horairesAccueil"
+        id="openingHours"
         bind:value={
           () => service.horairesAccueil ?? "",
           (v) => (service.horairesAccueil = v)
         }
       />
     {:else}
-      <FieldWrapper vertical id="horairesAccueil" label="Horaires du service">
+      <FieldWrapper vertical id="openingHours" label="Horaires du service">
         <div class="flex-start gap-y-s16 flex w-1/2 flex-col">
           {#if service?.structureInfo?.openingHours}
             <UseStructureInfoButton
