@@ -27,7 +27,7 @@
 
     let joinedZones = eligibilityZones.map((zone) => zone.label).join(", ");
 
-    if (eligibilityZones.length > MAX_ZONES_TO_DISPLAY) {
+    if (service.zoneEligibiliteDisplay.length > MAX_ZONES_TO_DISPLAY) {
       joinedZones += " ...";
     }
 
