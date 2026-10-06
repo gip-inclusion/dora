@@ -92,6 +92,12 @@ echo -e "${CYAN}🗑️ Suppression de la table spatial_ref_sys de la liste…${
 sed -i '/spatial_ref_sys/d' restore.list
 echo ""
 
+# La table SIRENE représente l’essentiel du volume et dépasse le disque
+# des bases des review apps : on garde la table, mais vide.
+echo -e "${CYAN}🗑️ Suppression des données de la table sirene_establishment de la liste…${NC}"
+sed -i '/TABLE DATA public sirene_establishment /d' restore.list
+echo ""
+
 echo -e "${CYAN}🔄 Restauration des données…${NC}"
 pg_restore --clean --if-exists --no-owner --no-privileges --no-comments --use-list=restore.list --dbname "$DATABASE_URL" "$decompressed_filename"
 echo ""
