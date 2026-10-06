@@ -23,7 +23,8 @@
   }
   const { structureSlug, type, token }: Props = $props();
 
-  type Status = "loading" | "downloaded" | "empty" | "expired" | "error";
+  type Status =
+    "loading" | "downloaded" | "empty" | "expired" | "invalid" | "error";
 
   let status = $state<Status>("loading");
   let isSendingLink = $state(false);
@@ -37,6 +38,8 @@
 
       if (result.status === 410) {
         status = "expired";
+      } else if (result.status === 403) {
+        status = "invalid";
       } else if (!result.data) {
         status = "error";
       } else if (result.data.length === 0) {
@@ -82,12 +85,19 @@
     </Notice>
   {:else if status === "empty"}
     <Notice type="info" title="Aucune orientation à télécharger" />
-  {:else if status === "error"}
+  {:else if status === "invalid"}
     <Notice type="error" title="Lien de téléchargement invalide">
       <p class="text-f14 mb-s0">
         Ce lien ne peut être utilisé que par la personne qui l’a demandé. Vous
         pouvez demander un nouveau lien depuis la page de suivi des
         orientations.
+      </p>
+    </Notice>
+  {:else if status === "error"}
+    <Notice type="error" title="Une erreur est survenue">
+      <p class="text-f14 mb-s0">
+        Le fichier des orientations {typeLabel} n’a pas pu être téléchargé. Vous pouvez
+        réessayer en ouvrant à nouveau le lien reçu par e-mail.
       </p>
     </Notice>
   {:else if linkSent}
