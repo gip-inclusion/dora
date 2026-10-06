@@ -481,9 +481,6 @@ class ServiceModelAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-
 
 class CustomizableChoiceAdmin(admin.ModelAdmin):
     list_display = ("name", "structure")

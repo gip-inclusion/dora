@@ -128,7 +128,7 @@ def update_sync_checksum(service):
         if isinstance(value, Enum):
             value = value.value
         md5.update(repr(value).encode())
-    for m2m_field in [*SYNC_M2M_FIELDS]:
+    for m2m_field in SYNC_M2M_FIELDS:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
         # `.values_list()` reclone le queryset et repart en base à chaque champ.
         pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
