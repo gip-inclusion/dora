@@ -59,7 +59,7 @@
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
 <div class="mt-s16 gap-s16 flex w-full flex-col sm:w-auto print:hidden">
-  {#if service.isOrientable && !(isDI && service.mobilisationLink)}
+  {#if service.isOrientable && service.coachOrientationModes.includes("formulaire-dora") && !(isDI && service.mobilisationLink)}
     <LinkButton
       label="Orienter votre bénéficiaire"
       to={orientationFormUrl}
