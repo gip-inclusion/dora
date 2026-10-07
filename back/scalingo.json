@@ -6,7 +6,7 @@
       "generator": "template",
       "template": "dora-back-review-apps-pr%PR_NUMBER%.osc-fr1.scalingo.io"
     },
-    "DJANGO_CORS_ALLOWED_ORIGINS_REGEXES": {
+    "DJANGO_CORS_ALLOWED_ORIGIN_REGEXES": {
       "generator": "template",
       "template": "(^https://dora-front-review-apps-pr%PR_NUMBER%\\.osc-fr1\\.scalingo\\.io$)|(^http://localhost:3000$)"
     },
