@@ -156,6 +156,7 @@ export const serviceSchema: v.Schema = {
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
     required: true,
+    maxLength: 255,
   },
   address1: {
     label: "Adresse",
@@ -174,7 +175,7 @@ export const serviceSchema: v.Schema = {
   postalCode: {
     label: "Code postal",
     default: "",
-    rules: [v.isPostalCode()],
+    rules: [v.isPostalCode(), v.maxStrLength(5)],
     maxLength: 5,
     required: (data: { locationKinds: LocationKind[] }) => {
       return data.locationKinds.includes("en-presentiel");
@@ -195,6 +196,8 @@ export const serviceSchema: v.Schema = {
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
+    required: (data: { durationWeeklyHours: number; durationWeeks: number }) =>
+      !!data.durationWeeklyHours || !!data.durationWeeks,
     minNumber: 1,
   },
   durationWeeks: {
@@ -202,6 +205,8 @@ export const serviceSchema: v.Schema = {
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
+    required: (data: { durationWeeklyHours: number; durationWeeks: number }) =>
+      !!data.durationWeeklyHours || !!data.durationWeeks,
     minNumber: 1,
   },
   openingHours: {
