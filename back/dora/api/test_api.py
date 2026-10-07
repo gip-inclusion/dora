@@ -719,3 +719,15 @@ def test_service_includes_contact_info_even_when_not_public(
     assert response.data["telephone"] == "0123456789"
     assert response.data["contact_nom_prenom"] == "Test Person"
     assert response.data["contact_public"] is False
+
+
+def test_service_transforms_empty_eligibility_zone_list_to_national_code(
+    authenticated_user, api_client
+):
+    service = make_service(status=ServiceStatus.PUBLISHED, zone_eligibilite=[])
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+
+    assert response.data["zone_eligibilite"] == ["france"]
