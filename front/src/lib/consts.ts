@@ -42,9 +42,6 @@ export const AUTOMETA_MANAGER_DASHBOARD_URLS = (departmentCode: string) => {
 export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
 
-export const EMPLOIS_MORE_INFO_URL =
-  "https://aide.emplois.inclusion.beta.gouv.fr/hc/fr/articles/14738715340177--M-inscrire-sur-les-emplois-de-l-inclusion-en-tant-que-SIAE";
-
 export const PROCONNECT_MORE_INFO_URL = "https://www.proconnect.gouv.fr/";
 
 export const ORIENTATION_JWT_QUERY_PARAM = "op";

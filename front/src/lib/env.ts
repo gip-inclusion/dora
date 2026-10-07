@@ -7,9 +7,3 @@ export const WARNING_BANNER = import.meta.env.VITE_WARNING_BANNER;
 export const OIDC_AUTH_BACKEND =
   import.meta.env.VITE_OIDC_AUTH_BACKEND || "proconnect";
 export const GOOGLE_CSE_ID = import.meta.env.VITE_GOOGLE_CSE_ID;
-export const EMPLOIS_SIGNUP_PAGE_URL = import.meta.env
-  .VITE_EMPLOIS_SIGNUP_PAGE_URL;
-export const EMPLOIS_PORTAL_PAGE_URL = import.meta.env
-  .VITE_EMPLOIS_PORTAL_PAGE_URL;
-export const NEXUS_MENU_ENABLED =
-  import.meta.env.VITE_NEXUS_MENU_ENABLED === "true";
