@@ -58,6 +58,10 @@
   {tooltipContent}
   showSeparator={!isModel}
 >
+  <small class="my-s8"
+    >Si vous indiquez une durée, renseignez à la fois le nombre d’heures par
+    semaine et le nombre de semaines. Vous pouvez laisser ces deux champs vides.
+  </small>
   <FieldModel {...fieldModelProps.durationWeeklyHours ?? {}}>
     <BasicInputField
       type="number"
