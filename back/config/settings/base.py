@@ -312,6 +312,9 @@ USER_UPLOAD_THROTTLE_RATE_PER_MINUTE = os.getenv(
 STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR = os.getenv(
     "STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR", "20"
 )
+ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE = os.getenv(
+    "ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE", "5"
+)
 
 REST_FRAMEWORK = {
     # Let's lock down access by default
@@ -346,6 +349,7 @@ REST_FRAMEWORK = {
         "user": f"{USER_THROTTLE_RATE_PER_MINUTE}/minute",
         "upload": f"{USER_UPLOAD_THROTTLE_RATE_PER_MINUTE}/minute",
         "structure_upload": f"{STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR}/hour",
+        "orientations_export_link": f"{ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE}/minute",
     },
 }
 

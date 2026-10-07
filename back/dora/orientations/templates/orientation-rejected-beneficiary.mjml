@@ -39,3 +39,6 @@
       {% endif %}</li>
   </ul>
 {% endblock %}
+
+{# Le texte de l’encart s’adresse aux professionnels #}
+{% block did_you_know %}{% endblock %}

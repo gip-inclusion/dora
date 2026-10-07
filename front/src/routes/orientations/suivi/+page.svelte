@@ -11,7 +11,12 @@
   import { CANONICAL_URL } from "$lib/env";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
-  import { generateOrientationExport } from "./orientation-export";
+  import { toast } from "@zerodevx/svelte-toast";
+  import Notice from "$lib/components/display/notice.svelte";
+  import { requestOrientationExportLink } from "$lib/requests/orientations";
+  import { userInfo } from "$lib/utils/auth";
+  import { logException } from "$lib/utils/logger";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -40,14 +45,47 @@
     isModalOpen = !isModalOpen;
   };
 
-  const handleModalSubmit = () => {
-    generateOrientationExport(data.structure.slug);
+  let isSendingLink = $state(false);
+  let linkSent = $state(false);
+
+  const handleModalSubmit = async () => {
+    isSendingLink = true;
+    linkSent = false;
+    let ok = false;
+    try {
+      ({ ok } = await requestOrientationExportLink(
+        data.structure.slug,
+        orientationState.selectedType
+      ));
+    } catch (err) {
+      logException(err);
+    }
+    isSendingLink = false;
     toggleModal();
+
+    if (ok) {
+      linkSent = true;
+    } else {
+      toast.push(
+        "Une erreur est survenue lors de l’envoi du lien de téléchargement."
+      );
+    }
   };
 </script>
 
 <EnsureLoggedIn>
   <div>
+    {#if linkSent}
+      <div class="mb-s24">
+        <Notice type="success" title="Envoi validé">
+          <p class="text-f14 mb-s0">
+            Le lien de téléchargement sécurisé a été envoyé à votre adresse mail
+            {$userInfo?.email}. Il est valable
+            {ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES} minutes.
+          </p>
+        </Notice>
+      </div>
+    {/if}
     <h2>
       {`Orientations ${orientationState.selectedType === "sent" ? "envoyées" : "reçues"}`}
     </h2>
@@ -106,5 +144,6 @@
     isOpen={isModalOpen}
     handleClose={toggleModal}
     handleSubmit={handleModalSubmit}
+    isSubmitting={isSendingLink}
   />
 </EnsureLoggedIn>
