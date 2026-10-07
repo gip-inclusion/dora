@@ -16,8 +16,7 @@
 
   let displayModal = $state(false);
 
-  function handleOpenModal(event: MouseEvent) {
-    event.preventDefault();
+  function handleOpenModal() {
     displayModal = true;
   }
 </script>
@@ -57,16 +56,15 @@
           </div>
           <PcButton {nextPage}>
             {#snippet pcHelpLink()}
-              <a
+              <button
+                type="button"
                 class="text-magenta-cta underline"
-                target="_blank"
                 title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
-                rel="noopener noreferrer"
-                href="#"
+                aria-haspopup="dialog"
                 onclick={handleOpenModal}
               >
                 Des difficultés à vous connecter&#8239;?
-              </a>
+              </button>
             {/snippet}
           </PcButton>
         </div>
