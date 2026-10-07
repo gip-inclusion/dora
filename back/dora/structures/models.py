@@ -24,7 +24,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
-from itoutils.django.nexus.models import NexusModelMixin, NexusQuerySetMixin
 
 from dora.core.models import EnumModel, LogItem, ModerationMixin, ModerationStatus
 from dora.core.utils import code_insee_to_code_dept
@@ -37,7 +36,6 @@ from dora.core.validators import (
 )
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.utils import get_clean_city_name
-from dora.nexus import sync
 from dora.sirene.models import Establishment
 from dora.sirene.serializers import EstablishmentSerializer
 from dora.structures.emails import (
@@ -118,12 +116,7 @@ class StructurePutativeMember(models.Model):
         send_access_rejected_notification(self)
 
 
-class StructureMemberQuerySet(NexusQuerySetMixin, models.QuerySet):
-    def _get_nexus_queryset(self):
-        return super()._get_nexus_queryset().select_related("structure", "user")
-
-
-class StructureMember(NexusModelMixin, models.Model):
+class StructureMember(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     user = models.ForeignKey(
@@ -136,8 +129,6 @@ class StructureMember(NexusModelMixin, models.Model):
 
     creation_date = models.DateTimeField(auto_now_add=True)
 
-    objects = models.Manager.from_queryset(StructureMemberQuerySet)()
-
     class Meta:
         verbose_name = "Membre"
         constraints = [
@@ -146,15 +137,6 @@ class StructureMember(NexusModelMixin, models.Model):
                 name="%(app_label)s_unique_user_by_structure",
             )
         ]
-
-    nexus_tracked_fields = sync.MEMBERSHIP_TRACKED_FIELDS
-    nexus_sync = staticmethod(sync.sync_memberships)
-    nexus_delete = staticmethod(sync.delete_memberships)
-
-    def should_sync_to_nexus(self):
-        return (
-            self.user.should_sync_to_nexus() and self.structure.should_sync_to_nexus()
-        )
 
     def __str__(self):
         return self.user.get_full_name()
@@ -184,7 +166,7 @@ class StructureNationalLabel(EnumModel):
         verbose_name_plural = "Labels nationaux"
 
 
-class StructureQuerySet(NexusQuerySetMixin, models.QuerySet):
+class StructureQuerySet(models.QuerySet):
     def orphans(self):
         return self.filter(membership=None, putative_membership=None)
 
@@ -344,7 +326,7 @@ class StructureManager(models.Manager):
 StructureManager = StructureManager.from_queryset(StructureQuerySet)
 
 
-class Structure(NexusModelMixin, ModerationMixin, models.Model):
+class Structure(ModerationMixin, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Les antennes peuvent avoir un Siret null
     siret = models.CharField(
@@ -479,10 +461,6 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
             ),
         ]
 
-    nexus_tracked_fields = sync.STRUCTURE_TRACKED_FIELDS
-    nexus_sync = staticmethod(sync.sync_structues)
-    nexus_delete = staticmethod(sync.delete_structures)
-
     def clean(self):
         if not (self.siret is not None or self.parent is not None):
             raise ValidationError("Seules les antennes peuvent avoir un siret vide")
@@ -509,9 +487,6 @@ class Structure(NexusModelMixin, ModerationMixin, models.Model):
             self.department = code_insee_to_code_dept(self.city_code)
             self.city = get_clean_city_name(self.city_code)
         return super().save(*args, **kwargs)
-
-    def should_sync_to_nexus(self):
-        return not self.is_obsolete and "[ND]" not in self.name
 
     def can_edit_informations(self, user: User):
         return user.is_authenticated and (

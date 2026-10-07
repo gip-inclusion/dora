@@ -5,7 +5,6 @@ import uuid
 import django.contrib.postgres.fields
 import django.db.models.deletion
 import django.utils.timezone
-import itoutils.django.nexus.models
 from django.conf import settings
 from django.db import migrations, models
 
@@ -177,7 +176,6 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "utilisateurs",
                 "abstract": False,
             },
-            bases=(itoutils.django.nexus.models.NexusModelMixin, models.Model),
         ),
         migrations.CreateModel(
             name="ConsentRecord",

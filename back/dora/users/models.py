@@ -7,9 +7,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils import timezone
-from itoutils.django.nexus.models import NexusModelMixin, NexusQuerySetMixin
-
-from dora.nexus import sync
 
 from ..core.validators import validate_version
 from .enums import DiscoveryMethod, MainActivity
@@ -17,10 +14,6 @@ from .enums import DiscoveryMethod, MainActivity
 logger = logging.getLogger(__name__)
 
 IC_PRODUCTION_DATE = timezone.make_aware(timezone.datetime(2022, 10, 3))
-
-
-class UserQuerySet(NexusQuerySetMixin, models.QuerySet):
-    pass
 
 
 class UserManager(BaseUserManager):
@@ -84,7 +77,7 @@ class UserManager(BaseUserManager):
         return self.filter(is_manager=True)
 
 
-class User(NexusModelMixin, AbstractBaseUser):
+class User(AbstractBaseUser):
     # null possible en base ... pour l'instant
     sub_pc = models.UUIDField(verbose_name="Identifiant ProConnect", null=True)
 
@@ -156,7 +149,7 @@ class User(NexusModelMixin, AbstractBaseUser):
 
     cgu_versions_accepted = models.JSONField(default=dict)
 
-    objects = UserManager.from_queryset(UserQuerySet)()
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -166,10 +159,6 @@ class User(NexusModelMixin, AbstractBaseUser):
         verbose_name_plural = "utilisateurs"
         abstract = False
 
-    nexus_tracked_fields = sync.USER_TRACKED_FIELDS
-    nexus_sync = staticmethod(sync.sync_users)
-    nexus_delete = staticmethod(sync.delete_users)
-
     def __str__(self):
         return self.email
 
@@ -177,15 +166,6 @@ class User(NexusModelMixin, AbstractBaseUser):
         if self.email:
             self.email = self.__class__.objects.normalize_email(self.email)
         super().save(*args, **kwargs)
-
-    def should_sync_to_nexus(self):
-        return (
-            self.is_active
-            and not self.is_staff
-            and self.email != settings.DORA_BOT_USER
-            and self.first_name != ""
-            and self.last_name != ""
-        )
 
     def clean(self):
         super().clean()
