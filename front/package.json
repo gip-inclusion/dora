@@ -31,7 +31,7 @@
     "@eslint/js": "^10.0.1",
     "@iframe-resizer/parent": "^5.5.9",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
-    "@sveltejs/adapter-node": "^5.5.7",
+    "@sveltejs/adapter-node": "^6.0.0",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/typography": "^0.5.20",
