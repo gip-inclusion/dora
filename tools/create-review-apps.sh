@@ -8,8 +8,8 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color (reset)
 
 REGION=osc-fr1
-BACK_REVIEW_APP_TEMPLATE=dora-back-review
-FRONT_REVIEW_APP_TEMPLATE=dora-front-review
+BACK_REVIEW_APP_TEMPLATE=dora-back-review-apps
+FRONT_REVIEW_APP_TEMPLATE=dora-front-review-apps
 
 
 create_review_app() {

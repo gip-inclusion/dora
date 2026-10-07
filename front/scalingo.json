@@ -5,7 +5,7 @@
     },
     "VITE_API_URL": {
       "generator": "template",
-      "template": "https://dora-back-review-pr%PR_NUMBER%.osc-fr1.scalingo.io"
+      "template": "https://dora-back-review-apps-pr%PR_NUMBER%.osc-fr1.scalingo.io"
     },
     "VITE_WARNING_BANNER": {
       "generator": "template",

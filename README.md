@@ -7,14 +7,14 @@
 
 ## Review apps
 
-Chaque PR peut avoir sa paire de review apps Scalingo (région `osc-fr1`), créées à la demande à partir des apps parentes `dora-back-review` et `dora-front-review` :
+Chaque PR peut avoir sa paire de review apps Scalingo (région `osc-fr1`), créées à la demande à partir des apps parentes `dora-back-review-apps` et `dora-front-review-apps` (projet Scalingo `dora-staging`) :
 
 ```bash
 tools/create-review-apps.sh <numéro de PR>
 ```
 
-- `dora-front-review-pr<N>` appelle l'API de `dora-back-review-pr<N>` (voir `front/scalingo.json` et `back/scalingo.json`).
-- Les review apps back partagent la base de données de `dora-back-review`. Le process `clock` de cette app parente (`tools/clock.sh`) la restaure chaque nuit à 2 h UTC depuis la dernière sauvegarde du staging (`tools/reset-database.sh`).
+- `dora-front-review-apps-pr<N>` appelle l'API de `dora-back-review-apps-pr<N>` (voir `front/scalingo.json` et `back/scalingo.json`).
+- Les review apps back partagent la base de données de `dora-back-review-apps`. Le process `clock` de cette app parente (`tools/clock.sh`) la restaure chaque nuit à 2 h UTC depuis la dernière sauvegarde du staging (`tools/reset-database.sh`).
 - Les review apps n'ont pas de tâches planifiées : `back/bin/post_compile` supprime `cron.json` quand `ENVIRONMENT=review` (Scalingo limite le nombre de tâches cron par app).
 - Les review apps sont supprimées automatiquement au merge de la PR.
 
