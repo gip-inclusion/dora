@@ -421,7 +421,7 @@ export interface ServiceModelBase {
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[]; //  deprecated
+  coachOrientationModes: CoachOrientationModes[] | null;
   coachOrientationModesDisplay: string[]; //  deprecated
   coachOrientationModesExternalFormLink: string; //  deprecated
   coachOrientationModesExternalFormLinkText: string; //  deprecated
@@ -441,13 +441,16 @@ export interface ServiceModelBase {
   fullDesc: string; // deprecated
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
+  horairesAccueil: string | null;
   isCumulative: boolean; // deprecated
   kind: ServiceKind | null;
   kindDisplay: string | null;
   mobilisableBy: string[] | null;
+  mobilisableByDisplay: string[] | null;
   mobilisationDetails: string | null;
   mobilisationLink: string | null;
   mobilisationModes: string[] | null;
+  mobilisationModesDisplay: string[] | null;
   modificationDate: string | null;
   name: string;
   onlineForm: string;

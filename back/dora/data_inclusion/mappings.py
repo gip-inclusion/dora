@@ -302,7 +302,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_external_form_link": coach_orientation_modes_external_form_link,
         "coach_orientation_modes_external_form_link_text": "",
         "coach_orientation_modes_other": coach_orientation_modes_other,
-        "conditions_acces": requirements,
+        "conditions_acces": service_data["conditions_acces"],
         "mobilisation_modes": mobilisation_modes,
         "mobilisation_modes_display": mobilisation_modes_display,
         "mobilisable_by": mobilisable_by,
