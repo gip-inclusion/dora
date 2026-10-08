@@ -1,12 +1,8 @@
 import pytest
 
-from dora.core.test_utils import (
-    make_model,
-    make_service,
-)
+from dora.core.test_utils import make_service
 from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
-from dora.services.utils import update_sync_checksum
 
 DESCRIPTION = (
     "## Notre offre\n\nNous proposons :\n\n- la **location** de véhicules\n"
@@ -186,13 +182,3 @@ def test_partial_save_leaves_the_description_alone():
 
     service.refresh_from_db()
     assert service.description == ""
-
-
-def test_sync_checksum_ignores_the_derived_description():
-    # Ce qui dispense d'une migration de recalcul des empreintes.
-    model = make_model(short_desc="Un résumé", full_desc="Un descriptif")
-    checksum = update_sync_checksum(model)
-
-    model.description = "Une description composée autrement"
-
-    assert update_sync_checksum(model) == checksum

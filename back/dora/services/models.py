@@ -486,7 +486,7 @@ class Service(models.Model):
         verbose_name="Zone d’éligibilité",
         blank=True,
         null=True,
-        default=None,
+        default=list,
     )
 
     requirements = models.ManyToManyField(

@@ -205,7 +205,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
     lien_mobilisation = serializers.ReadOnlyField(source="mobilisation_link")
-    zone_eligibilite = serializers.ReadOnlyField()
+    zone_eligibilite = serializers.SerializerMethodField()
     conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
@@ -453,3 +453,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_formulaire_en_ligne_a_completer(self, obj):
         return obj.online_form or None
+
+    def get_zone_eligibilite(self, obj):
+        if obj.zone_eligibilite == []:
+            return ["france"]
+        return obj.zone_eligibilite
