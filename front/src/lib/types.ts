@@ -421,7 +421,7 @@ export interface ServiceModelBase {
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  coachOrientationModes: CoachOrientationModes[]; //  deprecated
+  coachOrientationModes: CoachOrientationModes[] | null;
   coachOrientationModesDisplay: string[]; //  deprecated
   coachOrientationModesExternalFormLink: string; //  deprecated
   coachOrientationModesExternalFormLinkText: string; //  deprecated
