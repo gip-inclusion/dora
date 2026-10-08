@@ -4,15 +4,15 @@
   "env": {
     "DJANGO_ALLOWED_HOSTS": {
       "generator": "template",
-      "template": "dora-back-review-apps-pr%PR_NUMBER%.osc-fr1.scalingo.io"
+      "template": "dora-back-review-pr%PR_NUMBER%.osc-fr1.scalingo.io"
     },
     "DJANGO_CORS_ALLOWED_ORIGIN_REGEXES": {
       "generator": "template",
-      "template": "(^https://dora-front-review-apps-pr%PR_NUMBER%\\.osc-fr1\\.scalingo\\.io$)|(^http://localhost:3000$)"
+      "template": "(^https://dora-front-review-pr%PR_NUMBER%\\.osc-fr1\\.scalingo\\.io$)|(^http://localhost:3000$)"
     },
     "FRONTEND_URL": {
       "generator": "template",
-      "template": "https://dora-front-review-apps-pr%PR_NUMBER%.osc-fr1.scalingo.io"
+      "template": "https://dora-front-review-pr%PR_NUMBER%.osc-fr1.scalingo.io"
     }
   }
 }
