@@ -14,6 +14,7 @@
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
+  import ServiceDescription from "./service-presentation/service-description.svelte";
 
   interface Props {
     service: Service | Model;
@@ -95,8 +96,8 @@
 </script>
 
 <CenteredGrid>
-  <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
-    <div class="gap-s32 flex basis-2/3 flex-col">
+  <div class="md:gap-s48 gap-s32 mb-s32 grid grid-cols-1 md:grid-cols-3">
+    <div class="min-w-0 md:col-span-2">
       {#if showServiceWillBeVisibleSoonNotice}
         <Notice
           title="Votre service est publié et sera bientôt visible partout"
@@ -109,26 +110,11 @@
           </p>
         </Notice>
       {/if}
-      <div class="text-f18 leading-s32 text-gray-text">
-        <p>
-          {service.shortDesc || ""}
-        </p>
+      <div class="text-f18 leading-s32">
+        <ServiceDescription {service} />
       </div>
     </div>
-    <div class="basis-1/3"></div>
-  </div>
-
-  <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
-    <div class="md:col-span-2">
-      <ServicePresentation
-        {service}
-        {servicesOptions}
-        {onFeedbackButtonClick}
-        onTrackMobilisation={handleTrackMobilisation}
-      />
-    </div>
-
-    <div class="gap-y-s24 flex flex-col">
+    <div class="gap-y-s24 flex flex-col md:col-span-1">
       {#if !service.isModel}
         <div class="top-s32 sticky">
           <div
@@ -150,6 +136,17 @@
           {/if}
         </div>
       {/if}
+    </div>
+  </div>
+
+  <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
+    <div class="md:col-span-2">
+      <ServicePresentation
+        {service}
+        {servicesOptions}
+        {onFeedbackButtonClick}
+        onTrackMobilisation={handleTrackMobilisation}
+      />
     </div>
   </div>
 </CenteredGrid>

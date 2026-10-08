@@ -16,19 +16,16 @@
   function linkify(string: string) {
     const urlRegex = /(https?:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)/g;
     return string.split(urlRegex).map((part, index) => {
-      if (urlRegex.test(part)) {
-        const matches = part.match(urlRegex);
-        if (matches) {
-          const match = matches[0];
-          if (match.startsWith("mailto:")) {
-            const email = match.replace("mailto:", "");
-            return { type: "link", value: match, display: email, key: index };
-          } else if (match.startsWith("tel:")) {
-            const phone = match.replace("tel:", "");
-            return { type: "link", value: match, display: phone, key: index };
-          }
-          return { type: "link", value: match, display: match, key: index };
-        }
+      if (part.startsWith("mailto:")) {
+        const email = part.replace("mailto:", "");
+        return { type: "link", value: part, display: email, key: index };
+      }
+      if (part.startsWith("tel:")) {
+        const phone = part.replace("tel:", "");
+        return { type: "link", value: part, display: phone, key: index };
+      }
+      if (part.startsWith("http://") || part.startsWith("https://")) {
+        return { type: "link", value: part, display: part, key: index };
       }
       return { type: "text", value: part, key: index };
     }) as Parts;
@@ -37,7 +34,7 @@
   let parts = $derived(linkify(text));
 </script>
 
-{#each parts as part}
+{#each parts as part (part.key)}
   {#if part.type === "link"}
     <a
       href={part.value}

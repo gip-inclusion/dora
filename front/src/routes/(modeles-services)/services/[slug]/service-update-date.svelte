@@ -2,14 +2,11 @@
   import type { Service } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
-  import ServiceFeedbackButton from "./service-feedback-button.svelte";
-
   interface Props {
     service: Service;
-    onFeedbackButtonClick: () => void;
   }
 
-  let { service, onFeedbackButtonClick }: Props = $props();
+  let { service }: Props = $props();
 </script>
 
 <div class="text-f16">
@@ -25,5 +22,4 @@
       />
     {/if}
   </div>
-  <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
 </div>

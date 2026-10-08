@@ -7,7 +7,6 @@ from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.data_inclusion.enums import TypologieStructure
 from dora.decoupage_administratif.models import City, Department
@@ -151,8 +150,6 @@ def test_obsolete_structure_with_member_is_excluded(authenticated_user, api_clie
     assert str(structure.id) not in structure_ids
 
 
-# TODO: plus tard ...
-# @pytest.mark.loaddata("structure_typology", "service_subcategory")
 def test_structures_serialization_exemple(
     setup_structure_data, authenticated_user, api_client, settings
 ):
@@ -260,15 +257,6 @@ def test_unpublished_service_is_not_serialized(authenticated_user, api_client):
     assert 404 == response.status_code
 
 
-# TODO: plus tard ...
-# @pytest.mark.loaddata(
-#     "service_fee",
-#     "service_subcategory",
-#     "service_kind",
-#     "service_location_kind",
-#     "service_coach_orientation_mode",
-#     "service_beneficiary_access_mode",
-# )
 def test_service_serialization_exemple(authenticated_user, api_client, settings):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
@@ -289,8 +277,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         structure=structure,
         status=ServiceStatus.PUBLISHED,
         name="TISF",
-        short_desc="Accompagnement des familles à domicile",
-        full_desc="Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
+        description=(
+            "Accompagnement des familles à domicile\n\n"
+            "Service de proximité visant à soutenir les familles ayant la "
+            "responsabilité de jeunes enfants, en particulier les familles "
+            "monoparentales."
+        ),
         fee_condition=ServiceFee.objects.get(value="payant"),
         fee_details="10 €",
         diffusion_zone_type="department",
@@ -317,6 +309,14 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             DiPublic.FEMMES.value,
         ],
         publics_precisions="Précision des publics",
+        conditions_acces="Acceptation du Pass IAE\nBonne connaissance du français oral et écrit\nCarte d'identité, passeport ou permis de séjour",
+        mobilisation_modes=[
+            "envoyer-un-courriel",
+            "utiliser-lien-mobilisation",
+        ],
+        mobilisable_by=["professionnels", "usagers"],
+        zone_eligibilite=["29"],
+        mobilisation_link="https://example.com",
     )
 
     service.subcategories.add(
@@ -347,7 +347,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     service.beneficiaries_access_modes.add(
         BeneficiaryAccessMode.objects.get(value="envoyer-un-mail")
     )
-    sync_v1_service_fields(service)
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
@@ -386,13 +385,11 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "modes_accueil": ["a-distance", "en-presentiel"],
         "nom": "TISF",
         "pre_requis": ["Bonne connaissance du français oral et écrit"],
-        "presentation_detail": "Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
-        "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
         "publics": ["etudiants", "familles", "femmes"],
         "publics_precisions": "Précision des publics",
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
-        "horaires_accueil": "Tu 09:00-12:00;We 14:00-17:00",
+        "horaires_accueil": "Mo-Fr 08:30-12:30; PH off",
         "source": None,
         "structure_id": str(structure.id),
         "telephone": "0278911262",
@@ -434,56 +431,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             "mobilisable_par",
         ):
             assert data[key] == expected_val
-
-
-def test_service_serialization_mobilisation_v1_fields(authenticated_user, api_client):
-    service = make_service(
-        status=ServiceStatus.PUBLISHED,
-        coach_orientation_modes_other="Précision coach",
-        beneficiaries_access_modes_other="",
-        coach_orientation_modes_external_form_link="https://example.com/form",
-    )
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(
-            value__in=["completer-le-formulaire-dadhesion", "telephoner"]
-        )
-    )
-    service.beneficiaries_access_modes.set(
-        BeneficiaryAccessMode.objects.filter(value="professionnel")
-    )
-    sync_v1_service_fields(service)
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert response.status_code == 200
-    data = response.json()
-    assert sorted(data["modes_mobilisation"]) == [
-        "telephoner",
-        "utiliser-lien-mobilisation",
-    ]
-    assert data["mobilisable_par"] == ["professionnels"]
-    assert data["mobilisation_precisions"] is None
-    assert data["lien_mobilisation"] == "https://example.com/form"
-
-
-def test_lien_mobilisation_excludes_dora_form_url(authenticated_user, api_client):
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="formulaire-dora")
-    )
-    sync_v1_service_fields(service)
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert response.status_code == 200
-    assert response.json()["lien_mobilisation"] is None
-    assert response.json()["formulaire_en_ligne"] == service.get_dora_form_url()
-
-    service.online_form = f"https://prod.example/services/{service.slug}/orienter"
-    sync_v1_service_fields(service)
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-    assert response.json()["lien_mobilisation"] is None
 
 
 def test_service_publics_export_empty_maps_to_tous_publics(
@@ -637,8 +584,12 @@ def test_service_serialization_exemple_need_di_user(api_client):
         structure=structure,
         status=ServiceStatus.PUBLISHED,
         name="TISF",
-        short_desc="Accompagnement des familles à domicile",
-        full_desc="Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
+        description=(
+            "Accompagnement des familles à domicile\n\n"
+            "Service de proximité visant à soutenir les familles ayant la "
+            "responsabilité de jeunes enfants, en particulier les familles "
+            "monoparentales."
+        ),
         fee_condition=ServiceFee.objects.get(value="payant"),
         fee_details="10 €",
         diffusion_zone_type="department",
@@ -752,21 +703,13 @@ def test_service_includes_contact_info_even_when_not_public(
     assert response.data["contact_public"] is False
 
 
-def test_service_combines_all_publics_after_sync(authenticated_user, api_client):
-    service = make_service(
-        status=ServiceStatus.PUBLISHED,
-        publics=["familles", "personnes-en-situation-de-handicap"],
-    )
-    service.access_conditions.add(baker.make(AccessCondition, name="Résident QPV"))
-    service.credentials.add(baker.make(Credential, name="Carte d'invalidité"))
-
-    sync_v1_service_fields(service)
+def test_service_transforms_empty_eligibility_zone_list_to_national_code(
+    authenticated_user, api_client
+):
+    service = make_service(status=ServiceStatus.PUBLISHED, zone_eligibilite=[])
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert response.status_code == 200
-    assert response.data["publics"] == [
-        "familles",
-        "personnes-en-situation-de-handicap",
-        "residents-qpv-frr",
-    ]
+
+    assert response.data["zone_eligibilite"] == ["france"]

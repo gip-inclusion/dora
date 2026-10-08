@@ -22,9 +22,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.core.utils import code_insee_to_code_dept
 from dora.decoupage_administratif.models import AdminDivisionType
+from dora.decoupage_administratif.utils import get_zone_eligibilite_choices
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
     get_kinds_labels,
@@ -107,6 +107,11 @@ class ModelCreatablePrimaryKeyRelatedField(CreatablePrimaryKeyRelatedField):
         return value.name if value.structure else value.id
 
 
+# Marqueur v1 du formulaire Dora, et mode v2 qu'il remplace (cf. `_validate_dora_form`).
+DORA_FORM = "formulaire-dora"
+MOBILISATION_LINK_MODE = ModeMobilisation.UTILISER_LIEN_MOBILISATION.value
+
+
 class StructureSerializer(serializers.ModelSerializer):
     has_admin = serializers.SerializerMethodField()
     num_services = serializers.SerializerMethodField()
@@ -127,6 +132,8 @@ class StructureSerializer(serializers.ModelSerializer):
             "url",
             "phone",
             "email",
+            "opening_hours",
+            "no_dora_form",
         ]
         read_only_fields = [
             "city",
@@ -283,6 +290,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     is_orientable_ft_service = serializers.SerializerMethodField()
 
+    zone_eligibilite_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
 
@@ -307,6 +316,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "conditions_acces",
             "mobilisation_modes",
             "mobilisation_modes_display",
             "mobilisable_by",
@@ -376,16 +386,12 @@ class ServiceSerializer(serializers.ModelSerializer):
             "update_frequency_display",
             "update_needed",
             "is_orientable_ft_service",
+            "zone_eligibilite",
+            "zone_eligibilite_display",
         ]
         read_only_fields = [
             "city",
-            "description",
-            "horaires_accueil",
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
         ]
         lookup_field = "slug"
 
@@ -433,12 +439,22 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_mobilisation_modes_display(self, obj):
         if not obj.mobilisation_modes:
             return None
-        return [ModeMobilisation(mode).label for mode in obj.mobilisation_modes]
+        return [
+            ModeMobilisation(mode).label
+            for mode in sorted(
+                obj.mobilisation_modes, key=lambda value: ModeMobilisation(value).label
+            )
+        ]
 
     def get_mobilisable_by_display(self, obj):
         if not obj.mobilisable_by:
             return None
-        return [PersonneMobilisatrice(value).label for value in obj.mobilisable_by]
+        return [
+            PersonneMobilisatrice(value).label
+            for value in sorted(
+                obj.mobilisable_by, key=lambda value: PersonneMobilisatrice(value).label
+            )
+        ]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
@@ -453,6 +469,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_can_write(self, obj):
         user = self.context.get("request").user
         return obj.can_write(user)
+
+    def get_zone_eligibilite_display(self, obj):
+        return get_zone_eligibilite_choices(obj.zone_eligibilite)
 
     def validate(self, data):
         user = self.context.get("request").user
@@ -471,8 +490,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             data["coach_orientation_modes"] = [
                 mode
                 for mode in data["coach_orientation_modes"]
-                if mode.value != "formulaire-dora"
+                if mode.value != DORA_FORM
             ]
+
+        self._validate_dora_form(data)
 
         user_structures = StructureMember.objects.filter(user_id=user.id).values_list(
             "structure_id", flat=True
@@ -506,15 +527,77 @@ class ServiceSerializer(serializers.ModelSerializer):
 
         return data
 
-    def create(self, validated_data):
-        instance = super().create(validated_data)
-        sync_v1_service_fields(instance)
-        return instance
+    # Le formulaire Dora n'a pas d'équivalent en v2 : `utiliser-lien-mobilisation`
+    # suppose un lien publiable, et data·inclusion rejette ce mode sans
+    # `lien_mobilisation`. La préférence de l'utilisateur est donc portée par
+    # `formulaire-dora` (v1), tandis que `mobilisation_modes` et `mobilisation_link`
+    # restent toujours valides pour data·inclusion.
+    def _validate_dora_form(self, data):
+        if (
+            not {
+                "coach_orientation_modes",
+                "mobilisation_modes",
+                "mobilisation_link",
+            }
+            & data.keys()
+        ):
+            return
 
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
-        sync_v1_service_fields(instance)
-        return instance
+        if "coach_orientation_modes" in data:
+            coach_modes = data["coach_orientation_modes"]
+        elif self.instance:
+            coach_modes = self.instance.coach_orientation_modes.all()
+        else:
+            coach_modes = []
+        uses_dora_form = any(mode.value == DORA_FORM for mode in coach_modes)
+
+        if "mobilisation_modes" in data:
+            mobilisation_modes = data["mobilisation_modes"] or []
+        else:
+            mobilisation_modes = (
+                self.instance.mobilisation_modes if self.instance else None
+            ) or []
+
+        if "mobilisation_link" in data:
+            mobilisation_link = data["mobilisation_link"]
+        else:
+            mobilisation_link = (
+                self.instance.mobilisation_link if self.instance else None
+            )
+
+        if uses_dora_form:
+            data["mobilisation_modes"] = [
+                mode for mode in mobilisation_modes if mode != MOBILISATION_LINK_MODE
+            ]
+            data["mobilisation_link"] = None
+        elif MOBILISATION_LINK_MODE in mobilisation_modes and not mobilisation_link:
+            # Sans formulaire Dora, le mode n'a de sens qu'avec un lien personnalisé :
+            # c'est le seul choix proposé aux structures sans formulaire Dora.
+            raise ValidationError(
+                {"mobilisation_link": "Information requise"},
+                "missing_mobilisation_link",
+            )
+
+    # Pendant de `_validate_dora_form` : le mode est réinjecté à la lecture pour que
+    # le formulaire d'édition affiche la case cochée, sans jamais être stocké.
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if "mobilisation_modes" not in data or "coach_orientation_modes" not in data:
+            return data
+        if DORA_FORM not in (data["coach_orientation_modes"] or []):
+            return data
+
+        modes = data["mobilisation_modes"] or []
+        if MOBILISATION_LINK_MODE not in modes:
+            data["mobilisation_modes"] = [*modes, MOBILISATION_LINK_MODE]
+            labels = data.get("mobilisation_modes_display") or []
+            data["mobilisation_modes_display"] = [
+                *labels,
+                ModeMobilisation(MOBILISATION_LINK_MODE).label,
+            ]
+
+        return data
 
     def _validate_custom_choice(self, field, data, user, user_structures, structure):
         values = data[field]
@@ -596,6 +679,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
+            "conditions_acces",
             "mobilisation_modes",
             "mobilisation_modes_display",
             "mobilisable_by",
@@ -641,13 +725,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "update_frequency",
         ]
         read_only_fields = [
-            "description",
-            "horaires_accueil",
             "is_model",
-            "mobilisable_by",
-            "mobilisation_details",
-            "mobilisation_link",
-            "mobilisation_modes",
         ]
         lookup_field = "slug"
 

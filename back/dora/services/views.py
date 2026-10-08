@@ -4,7 +4,11 @@ from typing import Optional
 from urllib.parse import unquote
 
 import requests
-from data_inclusion.schema.v1 import TypeService
+from data_inclusion.schema.v1 import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+    TypeService,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
@@ -41,6 +45,7 @@ from dora.services.models import (
     Bookmark,
     CoachOrientationMode,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -73,6 +78,8 @@ from .serializers import (
     ServiceSerializer,
 )
 from .utils import update_sync_checksum
+
+OPTIONS_CACHE_VERSION = 2
 
 
 class ServicePermission(permissions.BasePermission):
@@ -660,6 +667,11 @@ def options(request):
             model = ServiceFee
             fields = ["value", "label"]
 
+    class FundingLabelsSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = FundingLabel
+            fields = ["value", "label"]
+
     def filter_custom_choices(choices):
         user = request.user
         if user.is_staff:
@@ -688,8 +700,9 @@ def options(request):
     if user.is_authenticated:
         cache_key = f"options:user:{user.pk}"
 
-    # Try to serve from cache
-    cached_data = cache.get(cache_key)
+    # Si les options sont modifiées, il faut incrémenter OPTIONS_CACHE_VERSION pour que les changements
+    # soient pris en compte immédiatement
+    cached_data = cache.get(cache_key, version=OPTIONS_CACHE_VERSION)
     if cached_data is not None:
         return Response(cached_data)
 
@@ -754,9 +767,20 @@ def options(request):
                 state__in=[DeploymentLevel.IN_PROGRESS, DeploymentLevel.FINALIZING]
             ).values()
         ],
+        "funding_labels": FundingLabelsSerializer(
+            FundingLabel.objects.all(), many=True
+        ).data,
+        "mobilisable_by": [
+            {"value": p.value, "label": p.label}
+            for p in sorted(PersonneMobilisatrice, key=lambda p: p.label)
+        ],
+        "mobilisation_modes": [
+            {"value": m.value, "label": m.label}
+            for m in sorted(ModeMobilisation, key=lambda m: m.label)
+        ],
     }
 
-    cache.set(cache_key, result, timeout=3600)
+    cache.set(cache_key, result, timeout=3600, version=OPTIONS_CACHE_VERSION)
     return Response(result)
 
 

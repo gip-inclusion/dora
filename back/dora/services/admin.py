@@ -8,7 +8,6 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
-from dora.core.di_v1 import sync_v1_service_fields
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
@@ -155,7 +154,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
-        sync_v1_service_fields(form.instance)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -482,10 +480,6 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "horaires_accueil",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
-
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-        sync_v1_service_fields(form.instance)
 
 
 class CustomizableChoiceAdmin(admin.ModelAdmin):

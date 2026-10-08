@@ -1,15 +1,8 @@
 import pytest
-from model_bakery import baker
 
-from dora.core.test_utils import (
-    make_model,
-    make_published_service,
-    make_service,
-    make_structure,
-)
+from dora.core.test_utils import make_service
 from dora.services.descriptions import build_idf, merge_description
 from dora.services.models import Service
-from dora.services.utils import update_sync_checksum
 
 DESCRIPTION = (
     "## Notre offre\n\nNous proposons :\n\n- la **location** de véhicules\n"
@@ -178,42 +171,6 @@ def empty_the_description(service):
     Service._base_manager.filter(pk=service.pk).update(description="")
 
 
-@pytest.mark.parametrize(
-    "short_desc,full_desc,expected",
-    [
-        (
-            "Un résumé",
-            "Un tout autre descriptif",
-            "Un résumé\n\nUn tout autre descriptif",
-        ),
-        ("Un résumé", "**Un résumé** mis en forme", "**Un résumé** mis en forme"),
-        ("Un résumé", "", "Un résumé"),
-    ],
-)
-def test_description_is_derived_from_the_pair(short_desc, full_desc, expected):
-    service = make_service(short_desc=short_desc, full_desc=full_desc)
-
-    assert service.description == expected
-
-
-def test_description_is_read_only(api_client):
-    user = baker.make("users.User", is_valid=True)
-    structure = make_structure(user)
-    service = make_published_service(
-        structure=structure, short_desc="Un résumé", full_desc="Un descriptif"
-    )
-    api_client.force_authenticate(user=user)
-
-    response = api_client.patch(
-        f"/services/{service.slug}/",
-        {"description": "Saisie directe", "full_desc": "Location de scooters"},
-    )
-
-    assert response.status_code == 200
-    service.refresh_from_db()
-    assert service.description == "Un résumé\n\nLocation de scooters"
-
-
 def test_partial_save_leaves_the_description_alone():
     # L'instance vient souvent d'un `only()` qui n'a chargé ni résumé ni descriptif.
     service = make_service(short_desc="Un résumé", full_desc="Un descriptif")
@@ -225,13 +182,3 @@ def test_partial_save_leaves_the_description_alone():
 
     service.refresh_from_db()
     assert service.description == ""
-
-
-def test_sync_checksum_ignores_the_derived_description():
-    # Ce qui dispense d'une migration de recalcul des empreintes.
-    model = make_model(short_desc="Un résumé", full_desc="Un descriptif")
-    checksum = update_sync_checksum(model)
-
-    model.description = "Une description composée autrement"
-
-    assert update_sync_checksum(model) == checksum

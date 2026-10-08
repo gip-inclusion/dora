@@ -4,7 +4,7 @@
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import OpeningHoursField from "$lib/components/forms/fields/opening-hours-field.svelte";
   import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
-  import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
+  import FieldgroupAddress from "$lib/components/specialized/services/fieldgroup-address.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
 
@@ -44,7 +44,7 @@
   placeholderMulti="Choisissez…"
 />
 
-<FieldsAddress bind:entity={structure} />
+<FieldgroupAddress bind:entity={structure} />
 
 <BasicInputField
   type="url"

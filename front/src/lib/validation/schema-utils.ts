@@ -236,11 +236,35 @@ export function maxStrLength(max, msg = "") {
 
 export function osmHoursNotContainsInvalid(msg = "") {
   return (name, value, _data) => ({
-    valid: !value.toLowerCase().includes(INVALID_OPENING_HOURS_MARKER),
+    valid: !value
+      .toLowerCase()
+      .includes(INVALID_OPENING_HOURS_MARKER.toLowerCase()),
     msg:
       msg ||
       "Horaires incomplets. Veuillez finaliser la saisie de vos horaires, corriger les champs manquants ou incorrects.",
   });
+}
+
+export function isNotAllUpperCase(msg = "") {
+  return (name, value, _data) => {
+    const text = value ?? "";
+    const valid = !/\p{Lu}/u.test(text) || /\p{Ll}/u.test(text);
+    return {
+      valid,
+      msg: msg || "Le texte ne doit pas être entièrement en majuscules.",
+    };
+  };
+}
+
+export function doesNotEndWithAPeriod(msg = "") {
+  return (name, value, _data) => {
+    const text = value ?? "";
+    const valid = text[text.length - 1] !== ".";
+    return {
+      valid,
+      msg: msg || "Le texte ne doit pas terimer par un point.",
+    };
+  };
 }
 
 // ----- Preprocessing
