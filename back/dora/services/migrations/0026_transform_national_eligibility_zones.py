@@ -3,24 +3,12 @@ from django.db import migrations
 BATCH = 500
 
 
-def transform_national_eligiblity_zones(apps, schema_editor):
+def transform_national_eligibility_zones(apps, schema_editor):
     Service = apps.get_model("services", "Service")
 
-    national_services = Service._base_manager.filter(
-        zone_eligibilite__contains=["france"]
-    ).iterator(chunk_size=BATCH)
-    updated_services = []
-
-    for national_service in national_services:
-        national_service.zone_eligibilite = []
-        updated_services.append(national_service)
-
-        if len(updated_services) >= BATCH:
-            Service._base_manager.bulk_update(updated_services, ["zone_eligibilite"])
-            updated_services = []
-
-    if updated_services:
-        Service._base_manager.bulk_update(updated_services, ["zone_eligibilite"])
+    Service._base_manager.filter(zone_eligibilite__contains=["france"]).update(
+        zone_eligibilite=[]
+    )
 
 
 class Migration(migrations.Migration):
@@ -30,6 +18,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            transform_national_eligiblity_zones, migrations.RunPython.noop
+            transform_national_eligibility_zones, migrations.RunPython.noop
         ),
     ]

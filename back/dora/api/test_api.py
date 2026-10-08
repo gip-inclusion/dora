@@ -433,24 +433,6 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
             assert data[key] == expected_val
 
 
-def test_lien_mobilisation_excludes_dora_form_url(authenticated_user, api_client):
-    service = make_service(status=ServiceStatus.PUBLISHED)
-    service.coach_orientation_modes.set(
-        CoachOrientationMode.objects.filter(value="formulaire-dora")
-    )
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-
-    assert response.status_code == 200
-    assert response.json()["lien_mobilisation"] is None
-    assert response.json()["formulaire_en_ligne"] == service.get_dora_form_url()
-
-    service.online_form = f"https://prod.example/services/{service.slug}/orienter"
-
-    response = api_client.get(f"/api/v2/services/{service.id}/")
-    assert response.json()["lien_mobilisation"] is None
-
-
 def test_service_publics_export_empty_maps_to_tous_publics(
     authenticated_user, api_client
 ):

@@ -48,6 +48,7 @@ SYNC_M2M_FIELDS = [
     "funding_labels",
     "categories",
     "subcategories",
+    "coach_orientation_modes",
 ]
 
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
