@@ -59,9 +59,6 @@ export function buildServiceShareMailto(
     "Comment mobiliser ce service :",
     "",
     buildMobilizationModes(service),
-    ...(service.mobilisationDetails?.trim()
-      ? ["", service.mobilisationDetails.trim()]
-      : []),
     "",
     `Consulter le service : ${serviceUrl}`,
     "",
