@@ -455,6 +455,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.online_form or None
 
     def get_zone_eligibilite(self, obj):
-        if not obj.zone_eligibilite:
+        if obj.zone_eligibilite == []:
             return ["france"]
         return obj.zone_eligibilite
