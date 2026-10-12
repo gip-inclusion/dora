@@ -51,7 +51,6 @@
     <UploadField
       id="forms"
       structureSlug={service.structure}
-      {onblur}
       descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
       bind:fileKeys={service.forms}
     />
