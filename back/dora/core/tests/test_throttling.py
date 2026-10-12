@@ -9,7 +9,11 @@ from rest_framework.test import APITestCase
 from rest_framework.throttling import AnonRateThrottle
 
 from dora.core.test_utils import make_structure
-from dora.core.throttling import StructureUploadThrottle
+from dora.core.throttling import (
+    ClientIpAnonRateThrottle,
+    StructureUploadThrottle,
+    get_front_client_ip,
+)
 
 
 class StructureUploadThrottleTestCase(APITestCase):
@@ -73,3 +77,43 @@ def test_anon_throttle_cannot_be_bypassed_by_spoofing_x_forwarded_for():
     assert allow("192.0.2.1")
     assert allow("192.0.2.2")
     assert not allow("192.0.2.3")
+
+
+@pytest.mark.no_django_db
+@pytest.mark.parametrize(
+    "configured_secret,meta,expected",
+    [
+        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "s3cret"}, "192.0.2.1"),
+        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "faux"}, None),
+        ("s3cret", {}, None),
+        # Sans secret configuré, l'en-tête n'est jamais accepté
+        ("", {"HTTP_X_DORA_PROXY_SECRET": ""}, None),
+    ],
+)
+def test_get_front_client_ip(settings, configured_secret, meta, expected):
+    settings.FRONT_PROXY_SECRET = configured_secret
+    request = RequestFactory().get("/", HTTP_X_DORA_CLIENT_IP="192.0.2.1", **meta)
+    assert get_front_client_ip(request) == expected
+
+
+@pytest.mark.no_django_db
+@pytest.mark.parametrize(
+    "meta,expected",
+    [
+        (
+            {
+                "HTTP_X_DORA_PROXY_SECRET": "s3cret",
+                "HTTP_X_DORA_CLIENT_IP": "192.0.2.1",
+            },
+            "192.0.2.1",
+        ),
+        # IP du front non authentifiée : dernière adresse de X-Forwarded-For
+        ({"HTTP_X_DORA_CLIENT_IP": "192.0.2.1"}, "203.0.113.7"),
+    ],
+)
+def test_client_ip_throttle_ident(settings, meta, expected):
+    settings.FRONT_PROXY_SECRET = "s3cret"
+    request = anonymous_request(
+        HTTP_X_FORWARDED_FOR="198.51.100.1, 203.0.113.7", **meta
+    )
+    assert ClientIpAnonRateThrottle().get_ident(request) == expected

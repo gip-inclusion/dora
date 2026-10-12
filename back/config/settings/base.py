@@ -315,6 +315,9 @@ STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR = os.getenv(
 ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE = os.getenv(
     "ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE", "5"
 )
+# Secret partagé avec le front, qui authentifie l'IP du client transmise dans
+# `X-Dora-Client-Ip` (cf. `dora.core.throttling.get_front_client_ip`).
+FRONT_PROXY_SECRET = os.getenv("FRONT_PROXY_SECRET", "")
 
 REST_FRAMEWORK = {
     # Let's lock down access by default
@@ -344,8 +347,8 @@ REST_FRAMEWORK = {
     # les adresses précédentes sont fournies par le client et donc falsifiables.
     "NUM_PROXIES": 1,
     "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.UserRateThrottle",
+        "dora.core.throttling.ClientIpAnonRateThrottle",
+        "dora.core.throttling.ClientIpUserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon": f"{ANON_THROTTLE_RATE_PER_MINUTE}/minute",
