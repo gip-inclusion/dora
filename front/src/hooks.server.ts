@@ -10,6 +10,7 @@ import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
 import { UNEXPECTED_ERROR_MESSAGE } from "$lib/consts";
 import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
+import { isApiRequest, setClientIpHeaders } from "$lib/server/client-ip";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
 import { TOKEN_KEY } from "$lib/utils/auth";
@@ -70,14 +71,14 @@ export const handle: Handle = sequence(
 );
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
-  const headers = new Headers(request.headers);
-  headers.set("X-Forwarded-For", event.getClientAddress());
+  // Le secret partagé ne doit être envoyé qu'au back
+  if (isApiRequest(request.url)) {
+    const headers = new Headers(request.headers);
+    setClientIpHeaders(headers, event.getClientAddress());
+    request = new Request(request, { headers });
+  }
 
-  const modifiedRequest = new Request(request, {
-    headers,
-  });
-
-  const response = await fetch(modifiedRequest);
+  const response = await fetch(request);
 
   if (response.status === 429) {
     Sentry.captureMessage(response.statusText);

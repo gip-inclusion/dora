@@ -1,6 +1,7 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { API_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
+import { setClientIpHeaders } from "$lib/server/client-ip";
 
 export const trailingSlash = "ignore";
 
@@ -16,6 +17,7 @@ async function proxyRequest(event: Parameters<RequestHandler>[0]) {
   const headers = new Headers(request.headers);
   headers.delete("host");
   headers.delete("cookie");
+  setClientIpHeaders(headers, event.getClientAddress());
   if (token) {
     headers.set("Authorization", `Token ${token}`);
   }
