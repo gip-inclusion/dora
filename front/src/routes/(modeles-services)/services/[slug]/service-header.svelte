@@ -2,7 +2,7 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import type { Service } from "$lib/types";
   import ServiceStructureLabel from "./components/service-structure-label.svelte";
-  import { NATIONAL_ELIGIBLITITY_ZONE } from "$lib/consts";
+  import { formatEligibilityZones } from "$lib/utils/service";
 
   interface Props {
     service: Service;
@@ -10,31 +10,9 @@
 
   let { service }: Props = $props();
 
-  const MAX_ZONES_TO_DISPLAY = 4;
-
-  function formatEligiblityZones() {
-    if (
-      !service.zoneEligibiliteDisplay ||
-      service.zoneEligibiliteDisplay.length === 0
-    ) {
-      return NATIONAL_ELIGIBLITITY_ZONE;
-    }
-
-    let eligibilityZones = service.zoneEligibiliteDisplay.slice(
-      0,
-      MAX_ZONES_TO_DISPLAY
-    );
-
-    let joinedZones = eligibilityZones.map((zone) => zone.label).join(", ");
-
-    if (service.zoneEligibiliteDisplay.length > MAX_ZONES_TO_DISPLAY) {
-      joinedZones += " ...";
-    }
-
-    return joinedZones;
-  }
-
-  const eligibilityZones = formatEligiblityZones();
+  const eligibilityZones = formatEligibilityZones(
+    service.zoneEligibiliteDisplay
+  );
 </script>
 
 <div class="gap-s48 text-gray-text flex flex-col">

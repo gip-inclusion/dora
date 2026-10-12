@@ -6,6 +6,7 @@
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import type { ServicesOptions, ShortService } from "$lib/types";
+  import { formatEligibilityZones } from "$lib/utils/service";
   import ServiceButtonMenu from "./service-button-menu.svelte";
 
   interface Props {
@@ -21,6 +22,10 @@
     readOnly = true,
     onRefresh,
   }: Props = $props();
+
+  const eligibilityZones = $derived(
+    formatEligibilityZones(service.zoneEligibiliteDisplay, 1)
+  );
 </script>
 
 <Bookmarkable slug={service.slug}>
@@ -62,13 +67,9 @@
           {/if}
         </div>
 
-        {#if service.diffusionZoneDetailsDisplay}
-          <div class="mb-s8 text-france-blue flex items-center">
-            Périmètre&nbsp;:&nbsp;<strong
-              >{service.diffusionZoneDetailsDisplay}</strong
-            >
-          </div>
-        {/if}
+        <div class="mb-s8 text-france-blue flex items-center">
+          Périmètre&nbsp;:&nbsp;<strong>{eligibilityZones}</strong>
+        </div>
         {#if !readOnly && service.city && service.locationKinds.includes("en-presentiel")}
           <div class="mb-s8 text-france-blue flex items-center">
             Lieu d’accueil&nbsp;:&nbsp;<strong>{service.city}</strong>

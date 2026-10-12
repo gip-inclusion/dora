@@ -20,8 +20,10 @@ import type {
   Service,
   ServicesOptions,
   ServiceStatus,
+  ZoneEligibiliteDisplay,
 } from "$lib/types";
 
+import { NATIONAL_ELIGIBLITITY_ZONE } from "$lib/consts";
 import { isLessThanOneHourAgo } from "./date";
 import { log } from "./logger";
 
@@ -136,4 +138,20 @@ export function isServiceRecentlyPublished(service: Service): boolean {
   return (
     !!service.publicationDate && isLessThanOneHourAgo(service.publicationDate)
   );
+}
+
+export function formatEligibilityZones(
+  zones: ZoneEligibiliteDisplay[] | null,
+  maxZonesToDisplay = 4
+): string {
+  if (!zones || zones.length === 0) {
+    return NATIONAL_ELIGIBLITITY_ZONE;
+  }
+
+  const joinedZones = zones
+    .slice(0, maxZonesToDisplay)
+    .map((zone) => zone.label)
+    .join(", ");
+
+  return zones.length > maxZonesToDisplay ? `${joinedZones} ...` : joinedZones;
 }

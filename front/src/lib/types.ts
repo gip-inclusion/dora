@@ -408,6 +408,12 @@ export interface Point {
   coordinates: Coordinates;
 }
 
+export type ZoneEligibiliteDisplay = {
+  label: string;
+  type: string;
+  codes: string[];
+};
+
 // Les champs partagés entre Service and Model. Les deux sont générés par le même serializer du back
 // (ServiceModelSerializer extends ServiceSerializer)
 export interface ServiceModelBase {
@@ -469,11 +475,7 @@ export interface ServiceModelBase {
   subcategoriesDisplay: string[];
   suspensionDate: string | null;
   zoneEligibilite: string[] | null;
-  zoneEligibiliteDisplay: Array<{
-    label: string;
-    type: string;
-    codes: string[];
-  }> | null;
+  zoneEligibiliteDisplay: ZoneEligibiliteDisplay[] | null;
 }
 
 export interface Service extends ServiceModelBase {
@@ -544,6 +546,7 @@ export interface ShortService {
   structureInfo: ServiceStructure;
   locationKinds: LocationKind[];
   updateNeeded: boolean;
+  zoneEligibiliteDisplay: ZoneEligibiliteDisplay[] | null;
 }
 
 export interface ShortBookmark {
