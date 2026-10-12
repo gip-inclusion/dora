@@ -340,6 +340,9 @@ REST_FRAMEWORK = {
     },
     "EXCEPTION_HANDLER": "dora.core.exceptions_handler.custom_exception_handler",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    # Le routeur Scalingo ajoute l'IP du client à la fin de `X-Forwarded-For` :
+    # les adresses précédentes sont fournies par le client et donc falsifiables.
+    "NUM_PROXIES": 1,
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",

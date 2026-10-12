@@ -1,6 +1,12 @@
 from unittest.mock import Mock
 
+import pytest
+from django.contrib.auth.models import AnonymousUser
+from django.core.cache.backends.locmem import LocMemCache
+from django.test import RequestFactory
+from rest_framework.request import Request
 from rest_framework.test import APITestCase
+from rest_framework.throttling import AnonRateThrottle
 
 from dora.core.test_utils import make_structure
 from dora.core.throttling import StructureUploadThrottle
@@ -40,3 +46,30 @@ class StructureUploadThrottleTestCase(APITestCase):
 
         allowed = self.throttle.allow_request(request, view)
         self.assertFalse(allowed)
+
+
+def make_throttle(throttle_class, rate="2/min"):
+    throttle = throttle_class()
+    throttle.rate = rate
+    throttle.num_requests, throttle.duration = throttle.parse_rate(rate)
+    throttle.cache = LocMemCache("throttling-tests", {})
+    return throttle
+
+
+def anonymous_request(**meta):
+    request = Request(RequestFactory().get("/", **meta))
+    request.user = AnonymousUser()
+    return request
+
+
+@pytest.mark.no_django_db
+def test_anon_throttle_cannot_be_bypassed_by_spoofing_x_forwarded_for():
+    throttle = make_throttle(AnonRateThrottle)
+
+    def allow(spoofed_ip):
+        request = anonymous_request(HTTP_X_FORWARDED_FOR=f"{spoofed_ip}, 203.0.113.7")
+        return throttle.allow_request(request, view=None)
+
+    assert allow("192.0.2.1")
+    assert allow("192.0.2.2")
+    assert not allow("192.0.2.3")
