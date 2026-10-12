@@ -144,13 +144,13 @@
 <FieldGroup title="Périmètre d'éligibilité" showSeparator={false}>
   <FieldModel>
     <FieldWrapper
-      id="eligibilityZones"
+      id="zoneEligibilite"
       label="Secteurs éligibles"
       descriptionText="Par défaut au national. Précisez le ou les territoires concernés : départements, communes,…"
     >
       <div class="relative w-full">
         <Select
-          id="eligibilityZones"
+          id="zoneEligibilite"
           multiple
           bind:searchText={addressFieldValue}
           bind:value={selectedValues}
