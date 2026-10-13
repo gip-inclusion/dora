@@ -16,6 +16,9 @@ figure pas : les valeurs relues en base sont toujours des chaînes nues.
 
 L'ordre des champs, et notamment celui des champs Many to many, fait partie de la formule :
 il doit suivre celui de `dora.services.utils` à l'identique.
+
+Ce recalcul suit la fusion des colonnes de publics (cf. 0024) : `publics` fait partie de
+`SYNC_FIELDS`, les empreintes doivent donc être calculées sur les valeurs fusionnées.
 """
 
 import hashlib
@@ -97,7 +100,7 @@ def recompute_sync_checksums(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0024_alter_service_name"),
+        ("services", "0024_alter_service_name_and_more"),
     ]
 
     operations = [
