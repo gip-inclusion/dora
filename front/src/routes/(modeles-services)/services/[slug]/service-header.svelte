@@ -11,7 +11,8 @@
   let { service }: Props = $props();
 
   const eligibilityZones = formatEligibilityZones(
-    service.zoneEligibiliteDisplay
+    service.zoneEligibiliteDisplay,
+    4
   );
 </script>
 

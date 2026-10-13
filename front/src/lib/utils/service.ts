@@ -142,16 +142,18 @@ export function isServiceRecentlyPublished(service: Service): boolean {
 
 export function formatEligibilityZones(
   zones: ZoneEligibiliteDisplay[] | null,
-  maxZonesToDisplay = 4
+  maxZonesToDisplay?: number
 ): string {
   if (!zones || zones.length === 0) {
     return NATIONAL_ELIGIBLITITY_ZONE;
   }
 
+  const zonesToDisplay = maxZonesToDisplay ? maxZonesToDisplay : zones.length;
+
   const joinedZones = zones
-    .slice(0, maxZonesToDisplay)
+    .slice(0, zonesToDisplay)
     .map((zone) => zone.label)
     .join(", ");
 
-  return zones.length > maxZonesToDisplay ? `${joinedZones} ...` : joinedZones;
+  return zones.length > zonesToDisplay ? `${joinedZones} ...` : joinedZones;
 }

@@ -8,6 +8,7 @@
   import type { ServicesOptions, ShortService } from "$lib/types";
   import { formatEligibilityZones } from "$lib/utils/service";
   import ServiceButtonMenu from "./service-button-menu.svelte";
+  import Tooltip from "$lib/components/ui/tooltip.svelte";
 
   interface Props {
     service: ShortService;
@@ -23,8 +24,12 @@
     onRefresh,
   }: Props = $props();
 
-  const eligibilityZones = $derived(
+  const firstEligibilityZone = $derived(
     formatEligibilityZones(service.zoneEligibiliteDisplay, 1)
+  );
+
+  const allEligibilityZones = $derived(
+    formatEligibilityZones(service.zoneEligibiliteDisplay)
   );
 </script>
 
@@ -67,9 +72,16 @@
           {/if}
         </div>
 
-        <div class="mb-s8 text-france-blue flex items-center">
-          Périmètre&nbsp;:&nbsp;<strong>{eligibilityZones}</strong>
-        </div>
+        <Tooltip>
+          {#snippet content()}
+            <div class="max-w-s256 text-center">
+              {allEligibilityZones}
+            </div>
+          {/snippet}
+          <div class="mb-s8">
+            Périmètre&nbsp;:&nbsp;<strong>{firstEligibilityZone}</strong>
+          </div>
+        </Tooltip>
         {#if !readOnly && service.city && service.locationKinds.includes("en-presentiel")}
           <div class="mb-s8 text-france-blue flex items-center">
             Lieu d’accueil&nbsp;:&nbsp;<strong>{service.city}</strong>
