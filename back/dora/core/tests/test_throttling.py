@@ -65,13 +65,13 @@ def test_anon_throttle_cannot_be_bypassed_by_spoofing_x_forwarded_for():
     throttle.num_requests, throttle.duration = throttle.parse_rate(throttle.rate)
     throttle.cache = LocMemCache("throttling-tests", {})
 
-    def allow(spoofed_ip):
+    def is_allowed(spoofed_ip):
         request = anonymous_request(HTTP_X_FORWARDED_FOR=f"{spoofed_ip}, 203.0.113.7")
         return throttle.allow_request(request, view=None)
 
-    assert allow("192.0.2.1")
-    assert allow("192.0.2.2")
-    assert not allow("192.0.2.3")
+    assert is_allowed("192.0.2.1")
+    assert is_allowed("192.0.2.2")
+    assert not is_allowed("192.0.2.3")
 
 
 @pytest.mark.no_django_db
