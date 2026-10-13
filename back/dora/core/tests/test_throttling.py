@@ -98,7 +98,7 @@ def test_get_front_client_ip(
 
 @pytest.mark.no_django_db
 @pytest.mark.parametrize(
-    "meta,expected",
+    "headers,expected_ident",
     [
         (
             {
@@ -111,9 +111,9 @@ def test_get_front_client_ip(
         ({"HTTP_X_DORA_CLIENT_IP": "192.0.2.1"}, "203.0.113.7"),
     ],
 )
-def test_client_ip_throttle_ident(settings, meta, expected):
+def test_client_ip_throttle_ident(settings, headers, expected_ident):
     settings.FRONT_PROXY_SECRET = "s3cret"
     request = anonymous_request(
-        HTTP_X_FORWARDED_FOR="198.51.100.1, 203.0.113.7", **meta
+        HTTP_X_FORWARDED_FOR="198.51.100.1, 203.0.113.7", **headers
     )
-    assert ClientIpAnonRateThrottle().get_ident(request) == expected
+    assert ClientIpAnonRateThrottle().get_ident(request) == expected_ident
