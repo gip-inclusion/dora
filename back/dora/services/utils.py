@@ -66,17 +66,6 @@ def normalize_publics(publics):
     return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
 
 
-def _duplicate_customizable_choices(field, choices, structure):
-    for choice in choices:
-        if choice.structure:
-            new_choice, _created = choice._meta.model.objects.get_or_create(
-                name=choice.name, structure=structure
-            )
-            field.add(new_choice)
-        else:
-            field.add(choice)
-
-
 def instantiate_service_from_model(model, structure, user):
     service = model.__class__.objects.create(structure=structure)
 
