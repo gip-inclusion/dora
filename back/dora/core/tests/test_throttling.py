@@ -76,19 +76,24 @@ def test_anon_throttle_cannot_be_bypassed_by_spoofing_x_forwarded_for():
 
 @pytest.mark.no_django_db
 @pytest.mark.parametrize(
-    "configured_secret,meta,expected",
+    "shared_secret,request_headers,is_ip_transmitted",
     [
-        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "s3cret"}, "192.0.2.1"),
-        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "faux"}, None),
-        ("s3cret", {}, None),
+        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "s3cret"}, True),
+        ("s3cret", {"HTTP_X_DORA_PROXY_SECRET": "faux"}, False),
+        ("s3cret", {}, False),
         # Sans secret configuré, l'en-tête n'est jamais accepté
-        ("", {"HTTP_X_DORA_PROXY_SECRET": ""}, None),
+        ("", {"HTTP_X_DORA_PROXY_SECRET": ""}, False),
     ],
 )
-def test_get_front_client_ip(settings, configured_secret, meta, expected):
-    settings.FRONT_PROXY_SECRET = configured_secret
-    request = RequestFactory().get("/", HTTP_X_DORA_CLIENT_IP="192.0.2.1", **meta)
-    assert get_front_client_ip(request) == expected
+def test_get_front_client_ip(
+    settings, shared_secret, request_headers, is_ip_transmitted
+):
+    settings.FRONT_PROXY_SECRET = shared_secret
+    request = RequestFactory().get(
+        "/", HTTP_X_DORA_CLIENT_IP="192.0.2.1", **request_headers
+    )
+    expected_ip = "192.0.2.1" if is_ip_transmitted else None
+    assert get_front_client_ip(request) == expected_ip
 
 
 @pytest.mark.no_django_db
