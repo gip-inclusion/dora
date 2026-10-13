@@ -27,7 +27,9 @@
   let showModel = $derived(!!service.model);
 
   let mobilisationLinkSource: "dora" | "custom" = $state(
-    service.mobilisationLink ? "custom" : "dora"
+    service.coachOrientationModes?.includes("formulaire-dora")
+      ? "dora"
+      : "custom"
   );
 
   let noDoraForm = $derived(!!service.structureInfo?.noDoraForm);
