@@ -52,14 +52,6 @@ class StructureUploadThrottleTestCase(APITestCase):
         self.assertFalse(allowed)
 
 
-def make_throttle(throttle_class, rate="2/min"):
-    throttle = throttle_class()
-    throttle.rate = rate
-    throttle.num_requests, throttle.duration = throttle.parse_rate(rate)
-    throttle.cache = LocMemCache("throttling-tests", {})
-    return throttle
-
-
 def anonymous_request(**meta):
     request = Request(RequestFactory().get("/", **meta))
     request.user = AnonymousUser()
@@ -68,7 +60,10 @@ def anonymous_request(**meta):
 
 @pytest.mark.no_django_db
 def test_anon_throttle_cannot_be_bypassed_by_spoofing_x_forwarded_for():
-    throttle = make_throttle(AnonRateThrottle)
+    throttle = AnonRateThrottle()
+    throttle.rate = "2/min"
+    throttle.num_requests, throttle.duration = throttle.parse_rate(throttle.rate)
+    throttle.cache = LocMemCache("throttling-tests", {})
 
     def allow(spoofed_ip):
         request = anonymous_request(HTTP_X_FORWARDED_FOR=f"{spoofed_ip}, 203.0.113.7")
