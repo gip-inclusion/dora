@@ -4,6 +4,8 @@ import django.contrib.postgres.fields
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.db import migrations, models
 
+import dora.core.validators
+
 DI_PUBLICS_ORDER = {p.value: index for index, p in enumerate(DiPublic)}
 
 
@@ -82,6 +84,17 @@ class Migration(migrations.Migration):
                 default=None,
                 null=True,
                 verbose_name="Modes de mobilisation",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="service",
+            name="horaires_accueil",
+            field=models.CharField(
+                blank=True,
+                max_length=255,
+                null=True,
+                validators=[dora.core.validators.validate_opening_hours_str],
+                verbose_name="Horaires d'accueil du public",
             ),
         ),
     ]

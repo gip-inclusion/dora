@@ -23,6 +23,7 @@ from django.utils.text import slugify
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem
 from dora.core.utils import address_to_one_line
+from dora.core.validators import validate_opening_hours_str
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -575,6 +576,7 @@ class Service(models.Model):
         max_length=255,
         blank=True,
         null=True,
+        validators=[validate_opening_hours_str],
     )
 
     suspension_date = models.DateField(
