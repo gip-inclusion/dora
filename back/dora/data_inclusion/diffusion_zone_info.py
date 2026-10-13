@@ -109,13 +109,13 @@ def get_zone_eligibilite_from_diffusion_zone(
     diffusion_zone_type, diffusion_zone_details
 ):
     if not diffusion_zone_type:
-        return None
+        return []
 
     if diffusion_zone_type == AdminDivisionType.COUNTRY.value:
         return ["france"]
 
     if not diffusion_zone_details:
-        return None
+        return []
 
     if (
         diffusion_zone_type == AdminDivisionType.CITY.value
@@ -130,9 +130,9 @@ def get_zone_eligibilite_from_diffusion_zone(
             .order_by("code")
             .values_list("code", flat=True)
         )
-        return department_codes or None
+        return department_codes or []
 
-    return None
+    return []
 
 
 def get_diffusion_zone_info(zone_codes: list[str] | None) -> list[str]:
