@@ -594,10 +594,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         if MOBILISATION_LINK_MODE not in modes:
             data["mobilisation_modes"] = [*modes, MOBILISATION_LINK_MODE]
             labels = data.get("mobilisation_modes_display") or []
-            data["mobilisation_modes_display"] = [
-                *labels,
-                ModeMobilisation(MOBILISATION_LINK_MODE).label,
-            ]
+            # même tri que `get_mobilisation_modes_display`, par libellé
+            data["mobilisation_modes_display"] = sorted(
+                [*labels, ModeMobilisation(MOBILISATION_LINK_MODE).label]
+            )
 
         return data
 
