@@ -61,12 +61,6 @@ EMPLOIS_ORIENTATION_Q = models.Q(
 
 
 class OrientationQuerySet(models.QuerySet):
-    def answered(self):
-        return self.filter(
-            status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
-            processing_date__isnull=False,
-        )
-
     def emplois(self):
         # Orientations émises par Les Emplois — mêmes conditions
         # que `Orientation.is_emplois()`.
