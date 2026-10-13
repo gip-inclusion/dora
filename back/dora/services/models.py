@@ -18,11 +18,12 @@ from django.db.models import CharField, Q, URLField
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 from django.utils.text import slugify
 
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem
-from dora.core.utils import address_to_one_line
+from dora.core.utils import address_to_one_line, clean_and_shorten_description
 from dora.core.validators import validate_opening_hours_str
 from dora.decoupage_administratif.models import (
     EPCI,
@@ -337,6 +338,7 @@ class Service(models.Model):
     ##############
     # Presentation
     name = models.CharField(verbose_name="Nom de l’offre", max_length=150)
+    # Ne pas utiliser short_desc et utiliser la propriété `short_description`
     short_desc = models.TextField(verbose_name="Résumé", max_length=280, blank=True)
     full_desc = models.TextField(
         verbose_name="Descriptif complet de l’offre", blank=True
@@ -770,6 +772,12 @@ class Service(models.Model):
         # L'e-mail et le téléphone peuvent être obfusqués
         # en mode anonyme / non-connecté (voir AnonymousServiceSerializer).
         return bool(self.contact_email or self.contact_phone)
+
+    @cached_property
+    def short_description(self):
+        # Résumé dérivé de la description, pour les usages hors mise en forme.
+        # Remplace l'ancienne colonne `short_desc`, qui n'est plus saisie.
+        return clean_and_shorten_description(self.description)
 
     def address_line(self):
         return address_to_one_line(

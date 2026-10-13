@@ -292,6 +292,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     zone_eligibilite_display = serializers.SerializerMethodField()
 
+    short_desc = serializers.CharField(source="short_description", read_only=True)
+
     class Meta:
         model = Service
 
@@ -957,7 +959,7 @@ class BookmarkSerializer(BookmarkListSerializer):
                 "postal_code": obj.service.postal_code,
                 "city": obj.service.city,
                 "name": obj.service.name,
-                "shortDesc": obj.service.short_desc,
+                "shortDesc": obj.service.short_description,
                 # ServiceSource n'est pas sérialisable en JSON
                 "source": str(obj.service.source),
             }
