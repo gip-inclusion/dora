@@ -3,6 +3,10 @@ import uuid
 from datetime import datetime, timedelta
 
 from data_inclusion.schema.v1 import ModeAccueil, ReseauPorteur, TypeService
+from data_inclusion.schema.v1.modes_mobilisation import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -456,14 +460,20 @@ class Service(models.Model):
     )
 
     mobilisation_modes = ArrayField(
-        models.CharField(max_length=255),
+        models.CharField(
+            max_length=255,
+            choices=[(m.value, m.label) for m in ModeMobilisation],
+        ),
         verbose_name="Modes de mobilisation",
         blank=True,
         null=True,
         default=None,
     )
     mobilisable_by = ArrayField(
-        models.CharField(max_length=255),
+        models.CharField(
+            max_length=255,
+            choices=[(p.value, p.label) for p in PersonneMobilisatrice],
+        ),
         verbose_name="Mobilisable par",
         blank=True,
         null=True,

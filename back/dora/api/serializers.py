@@ -312,9 +312,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         # totalité du référentiel se traduisent en « tous-publics ». Seul endroit où Dora
         # réintroduit `tous-publics` ; partout ailleurs l'absence de restriction reste [].
         specific_publics = {p.value for p in DiPublic} - {DiPublic.TOUS_PUBLICS.value}
-        all_publics = normalize_publics(
-            obj.publics + obj.publics_derived_from_conditions
-        )
+        all_publics = normalize_publics(obj.publics)
         if not all_publics or set(all_publics) >= specific_publics:
             return [DiPublic.TOUS_PUBLICS.value]
         return all_publics
