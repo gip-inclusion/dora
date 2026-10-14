@@ -3,18 +3,11 @@
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { getModel } from "$lib/requests/services";
   import { getManagedStructures, getStructure } from "$lib/requests/structures";
-  import type {
-    Choice,
-    Model,
-    Service,
-    ServicesOptions,
-    ShortStructure,
-  } from "$lib/types";
+  import type { Choice, Model, Service, ShortStructure } from "$lib/types";
   import { debounce } from "$lib/utils/misc";
   import { toServiceStructure } from "$lib/utils/forms";
 
   interface Props {
-    servicesOptions: ServicesOptions;
     service: Service;
     managedStructureSearchMode?: boolean;
     structures: ShortStructure[];
@@ -24,7 +17,6 @@
   }
 
   let {
-    servicesOptions = $bindable(),
     service = $bindable(),
     managedStructureSearchMode = false,
     structures,
