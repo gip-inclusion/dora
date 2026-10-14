@@ -14,14 +14,18 @@ function formatBulletList(
 }
 
 function buildMobilizationModes(service: Service): string {
-  const mobilisationModes = [
-    ...(service.mobilisationModesDisplay
-      ? service.mobilisationModesDisplay
-      : []),
-  ];
-  if (service.coachOrientationModes?.includes("formulaire-dora")) {
-    mobilisationModes.push("Via le formulaire Dora");
-  }
+  const baseModes = service.mobilisationModesDisplay ?? [];
+  const usesDoraForm =
+    service.coachOrientationModes?.includes("formulaire-dora");
+
+  const mobilisationModes = usesDoraForm
+    ? [
+        ...baseModes.filter(
+          (mode) => mode !== "Utiliser le lien de mobilisation"
+        ),
+        "Via le formulaire Dora",
+      ]
+    : baseModes;
 
   return formatBulletList(mobilisationModes);
 }
