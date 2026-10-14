@@ -157,3 +157,21 @@ export function formatEligibilityZones(
 
   return zones.length > zonesToDisplay ? `${joinedZones} ...` : joinedZones;
 }
+
+// L'option formulaire-dora n'est pas un mode de mobilisation de DI donc il faut
+// le réinsérer dans la liste des modes à afficher quand c'est applicable.
+export function getMobilisationModesDisplay(service: Service): string[] {
+  const modes = service.mobilisationModesDisplay ?? [];
+
+  if (
+    !service.coachOrientationModes?.includes("formulaire-dora") &&
+    service.isOrientable
+  ) {
+    return modes;
+  }
+
+  return [
+    ...modes.filter((mode) => mode !== "Utiliser le lien de mobilisation"),
+    "Via le formulaire Dora",
+  ];
+}

@@ -1,6 +1,7 @@
 import { URL_HELP_SITE } from "$lib/consts";
 import { CANONICAL_URL } from "$lib/env";
 import type { Service } from "$lib/types";
+import { getMobilisationModesDisplay } from "$lib/utils/service";
 
 function formatBulletList(
   items: ReadonlyArray<string> | null | undefined,
@@ -14,20 +15,7 @@ function formatBulletList(
 }
 
 function buildMobilizationModes(service: Service): string {
-  const baseModes = service.mobilisationModesDisplay ?? [];
-  const usesDoraForm =
-    service.coachOrientationModes?.includes("formulaire-dora");
-
-  const mobilisationModes = usesDoraForm
-    ? [
-        ...baseModes.filter(
-          (mode) => mode !== "Utiliser le lien de mobilisation"
-        ),
-        "Via le formulaire Dora",
-      ]
-    : baseModes;
-
-  return formatBulletList(mobilisationModes);
+  return formatBulletList(getMobilisationModesDisplay(service));
 }
 
 export function buildServiceShareMailto(
