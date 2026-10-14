@@ -4,6 +4,7 @@
   import { page } from "$app/state";
 
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
+  import { INCLUSION_PLATFORM_LOGIN_URL } from "$lib/consts";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -47,7 +48,7 @@
               Les orientations Dora sont dorénavant intégrées à <a
                 class="underline"
                 title="La plateforme de l’inclusion - ouverture dans une nouvelle fenêtre"
-                href="https://plateforme.inclusion.gouv.fr/accounts/login?mtm_campaign=DORA&mtm_kwd=connexion"
+                href={INCLUSION_PLATFORM_LOGIN_URL}
                 target="_blank"
                 rel="noopener noreferrer">La plateforme de l’inclusion</a
               >. Retrouvez votre portefeuille de bénéficiaires ainsi que toutes

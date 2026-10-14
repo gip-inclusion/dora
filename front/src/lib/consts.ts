@@ -1,3 +1,5 @@
+import { INCLUSION_PLATFORM_URL } from "$lib/env";
+
 export const SIREN_FRANCE_TRAVAIL = "130005481";
 
 export const enum TallyFormId {
@@ -49,6 +51,10 @@ export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
 
 export const PROCONNECT_MORE_INFO_URL = "https://www.proconnect.gouv.fr/";
+
+// Page de connexion de la plateforme de l'inclusion, vers laquelle sont
+// redirigés les professionnels de l'accompagnement.
+export const INCLUSION_PLATFORM_LOGIN_URL = `${INCLUSION_PLATFORM_URL}/accounts/login?mtm_campaign=DORA&mtm_kwd=connexion`;
 
 export const ORIENTATION_JWT_QUERY_PARAM = "op";
 
