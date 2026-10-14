@@ -1,6 +1,5 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -35,32 +34,17 @@
   );
 </script>
 
-<FieldSet title="Périodicité" {showModel}>
+<FieldSet title="Notifications" {showModel}>
   {#snippet help()}
     <div>
       <p class="text-f14">
-        La durée limitée permet de supendre automatiquement la visibilité du
-        service dans les résultat de recherche.
+        Choisissez la fréquence des notifications pour recevoir un rappel
+        lorsque vous souhaitez que cette page de service soit mise à jour. Des
+        informations à jour vous assure la réception de toutes les demandes
+        d’orientation.
       </p>
     </div>
   {/snippet}
-  <FieldModel {...fieldModelProps.recurrence ?? {}}>
-    <BasicInputField
-      id="recurrence"
-      descriptionText="Par exemple : tous les jours à 14h, une fois par mois, etc."
-      bind:value={service.recurrence}
-    />
-  </FieldModel>
-
-  <FieldModel {...fieldModelProps.suspensionDate ?? {}}>
-    <BasicInputField
-      id="suspensionDate"
-      type="date"
-      bind:value={service.suspensionDate}
-      descriptionText="Date à partir de laquelle le service ne sera plus visible dans la recherche."
-    />
-  </FieldModel>
-
   <FieldModel
     {...fieldModelProps.updateFrequency ?? {}}
     serviceValue={service.updateFrequency}

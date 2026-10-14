@@ -47,7 +47,7 @@
     class="border-gray-03 text-gray-text flex w-full justify-around rounded-tl rounded-tr border text-center"
     class:error={inError}
   >
-    <span class="border-gray-03 py-s10 text-f18 flex-1 border-r">
+    <span class="border-gray-03 py-s10 text-f18 w-1/2 min-w-0 border-r">
       {#if !isOpen}
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
@@ -56,6 +56,7 @@
           <input
             {onchange}
             bind:value={openAt}
+            class="time-input"
             type="time"
             aria-describedby={ariaDescribedBy}
           />
@@ -63,7 +64,7 @@
       {/if}
     </span>
 
-    <span class="border-gray-03 py-s10 text-f18 flex-1">
+    <span class="border-gray-03 py-s10 text-f18 w-1/2 min-w-0">
       {#if !isOpen}
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
@@ -74,6 +75,7 @@
             {onchange}
             bind:value={closeAt}
             disabled={!isOpen}
+            class="time-input"
             class:disabled-bg={!isOpen}
             type="time"
             max="24"
@@ -124,5 +126,9 @@
   }
   .disabled-bg {
     @apply bg-gray-bg;
+  }
+  /* Padding interne pour que l'icône d'horloge ne touche pas la bordure */
+  .time-input {
+    @apply pl-s4 pr-s2 w-full text-center;
   }
 </style>

@@ -3,6 +3,10 @@ import uuid
 from datetime import datetime, timedelta
 
 from data_inclusion.schema.v1 import ModeAccueil, ReseauPorteur, TypeService
+from data_inclusion.schema.v1.modes_mobilisation import (
+    ModeMobilisation,
+    PersonneMobilisatrice,
+)
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -14,11 +18,13 @@ from django.db.models import CharField, Q, URLField
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 from django.utils.text import slugify
 
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem
-from dora.core.utils import address_to_one_line
+from dora.core.utils import address_to_one_line, clean_and_shorten_description
+from dora.core.validators import validate_opening_hours_str
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -31,7 +37,6 @@ from dora.decoupage_administratif.utils import (
 )
 from dora.structures.models import Structure
 
-from .descriptions import merged_description
 from .enums import ServiceStatus
 
 logger = logging.getLogger(__name__)
@@ -332,7 +337,8 @@ class Service(models.Model):
 
     ##############
     # Presentation
-    name = models.CharField(verbose_name="Nom de l’offre", max_length=140)
+    name = models.CharField(verbose_name="Nom de l’offre", max_length=150)
+    # Ne pas utiliser short_desc et utiliser la propriété `short_description`
     short_desc = models.TextField(verbose_name="Résumé", max_length=280, blank=True)
     full_desc = models.TextField(
         verbose_name="Descriptif complet de l’offre", blank=True
@@ -457,14 +463,20 @@ class Service(models.Model):
     )
 
     mobilisation_modes = ArrayField(
-        models.CharField(max_length=255),
+        models.CharField(
+            max_length=255,
+            choices=[(m.value, m.label) for m in ModeMobilisation],
+        ),
         verbose_name="Modes de mobilisation",
         blank=True,
         null=True,
         default=None,
     )
     mobilisable_by = ArrayField(
-        models.CharField(max_length=255),
+        models.CharField(
+            max_length=255,
+            choices=[(p.value, p.label) for p in PersonneMobilisatrice],
+        ),
         verbose_name="Mobilisable par",
         blank=True,
         null=True,
@@ -487,7 +499,7 @@ class Service(models.Model):
         verbose_name="Zone d’éligibilité",
         blank=True,
         null=True,
-        default=None,
+        default=list,
     )
 
     requirements = models.ManyToManyField(
@@ -566,6 +578,7 @@ class Service(models.Model):
         max_length=255,
         blank=True,
         null=True,
+        validators=[validate_opening_hours_str],
     )
 
     suspension_date = models.DateField(
@@ -693,25 +706,7 @@ class Service(models.Model):
         if not self.slug:
             self.slug = make_unique_slug(self, self.structure.slug, self.name)
         self.city = get_clean_city_name(self.city_code)
-        self._derive_description(kwargs)
         return super().save(*args, **kwargs)
-
-    def _derive_description(self, kwargs):
-        """Recompose `description` quand `short_desc` ou `full_desc` est mis à jour.
-
-        Pondération neutre : l'IDF que sait tirer `build_idf` suppose un parcours de toutes
-        les descriptions, hors de portée d'un enregistrement — il ne sert qu'au remplissage
-        initial.
-        """
-        update_fields = kwargs.get("update_fields")
-        if update_fields is not None and not {"short_desc", "full_desc"} & set(
-            update_fields
-        ):
-            return
-
-        self.description = merged_description(self.short_desc, self.full_desc)
-        if update_fields is not None:
-            kwargs["update_fields"] = [*update_fields, "description"]
 
     def can_read(self, user):
         return self.status == ServiceStatus.PUBLISHED or (
@@ -777,6 +772,12 @@ class Service(models.Model):
         # L'e-mail et le téléphone peuvent être obfusqués
         # en mode anonyme / non-connecté (voir AnonymousServiceSerializer).
         return bool(self.contact_email or self.contact_phone)
+
+    @cached_property
+    def short_description(self):
+        # Résumé dérivé de la description, pour les usages hors mise en forme.
+        # Remplace l'ancienne colonne `short_desc`, qui n'est plus saisie.
+        return clean_and_shorten_description(self.description)
 
     def address_line(self):
         return address_to_one_line(

@@ -12,13 +12,18 @@
   let { service }: Props = $props();
 </script>
 
-{#if service.fullDesc}
-  <ServiceSection title="Description du service">
-    <div class="markdown-wrapper prose w-full">
-      <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
-    </div>
-  </ServiceSection>
-{/if}
+<ServiceSection title="Présentation">
+  <div class="markdown-wrapper prose w-full">
+    {#if service.description}
+      <TextClamp
+        text={markdownToHTML(service.description, 4)}
+        clampedHeight={220}
+      />
+    {:else}
+      <span>Description non renseignée</span>
+    {/if}
+  </div>
+</ServiceSection>
 
 <style lang="postcss">
   @reference "../../../../../app.css";
@@ -37,7 +42,8 @@
     line-height: 24px !important;
   }
 
-  .prose {
+  .prose,
+  .markdown-wrapper :global(.prose) {
     max-width: 100%;
   }
 </style>

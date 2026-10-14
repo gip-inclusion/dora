@@ -6,7 +6,9 @@
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import type { ServicesOptions, ShortService } from "$lib/types";
+  import { formatEligibilityZones } from "$lib/utils/service";
   import ServiceButtonMenu from "./service-button-menu.svelte";
+  import Tooltip from "$lib/components/ui/tooltip.svelte";
 
   interface Props {
     service: ShortService;
@@ -21,6 +23,14 @@
     readOnly = true,
     onRefresh,
   }: Props = $props();
+
+  const firstEligibilityZone = $derived(
+    formatEligibilityZones(service.zoneEligibiliteDisplay, 1)
+  );
+
+  const allEligibilityZones = $derived(
+    formatEligibilityZones(service.zoneEligibiliteDisplay)
+  );
 </script>
 
 <Bookmarkable slug={service.slug}>
@@ -62,13 +72,16 @@
           {/if}
         </div>
 
-        {#if service.diffusionZoneDetailsDisplay}
-          <div class="mb-s8 text-france-blue flex items-center">
-            Périmètre&nbsp;:&nbsp;<strong
-              >{service.diffusionZoneDetailsDisplay}</strong
-            >
+        <Tooltip>
+          {#snippet content()}
+            <div class="max-w-s256 text-center">
+              {allEligibilityZones}
+            </div>
+          {/snippet}
+          <div class="mb-s8">
+            Périmètre&nbsp;:&nbsp;<strong>{firstEligibilityZone}</strong>
           </div>
-        {/if}
+        </Tooltip>
         {#if !readOnly && service.city && service.locationKinds.includes("en-presentiel")}
           <div class="mb-s8 text-france-blue flex items-center">
             Lieu d’accueil&nbsp;:&nbsp;<strong>{service.city}</strong>

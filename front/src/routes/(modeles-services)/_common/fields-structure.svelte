@@ -1,7 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
-  import { getModel, getServicesOptions } from "$lib/requests/services";
+  import { getModel } from "$lib/requests/services";
   import { getManagedStructures, getStructure } from "$lib/requests/structures";
   import type {
     Choice,
@@ -11,7 +11,7 @@
     ShortStructure,
   } from "$lib/types";
   import { debounce } from "$lib/utils/misc";
-  import { onMount } from "svelte";
+  import { toServiceStructure } from "$lib/utils/forms";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -33,94 +33,20 @@
     model = $bindable(),
   }: Props = $props();
 
-  const propsWithSpecificFields = [
-    "accessConditions",
-    "requirements",
-    "credentials",
-  ];
-
-  // met à jour les options de service et le modèle en fonction des champs spécifiques
-  // cette fonction est compliquée car sur les champs spécifiques,
-  // la `value` peut ĕtre soit une id numérique
-  // soit une string sur les modèles.
-  // on devrait pourvoir simplifier ici si l'API devient plus cohérente
-  function updateServiceOptions() {
-    propsWithSpecificFields.forEach((propName) => {
-      // options de services qui appartiennent à la structure courante
-      const structureServicesOptions = servicesOptions[propName].filter(
-        (option) =>
-          !option.structure ||
-          (structure?.slug && option.structure === structure.slug)
-      );
-
-      if (isModel) {
-        // sur un modèle l'API retourne les champs spécifiques sous forme de string ;
-        // on leur attribue l'id numérique quand on la retrouve
-        service[propName].forEach((value, i) => {
-          // si le type est une string, c'est un champ spécifique
-          if (typeof value === "string") {
-            const option = structureServicesOptions.find(
-              (opt) => opt.label === value
-            );
-
-            // même logique que pour les services issus d'un modèle expliqué en bas
-            if (option) {
-              service[propName][i] = option.value;
-            } else {
-              servicesOptions[propName] = [
-                ...servicesOptions[propName],
-                { value, label: value },
-              ];
-            }
-          }
-        });
-      } else if (service.model && model) {
-        model[propName].forEach((value, i) => {
-          // si le type est une string, c'est un champ spécifique
-          if (typeof value === "string") {
-            const option = structureServicesOptions.find(
-              (opt) => opt.label === value
-            );
-
-            // si ce champ spécifique existe dans les options de service
-            // -> on modifie le modèle avec l'id du champ spécifique
-            // sinon (le champ spécifique n'existe pas dans les options de service)
-            // -> on l'ajoute dans les options de service
-
-            if (option) {
-              model[propName][i] = option.value;
-            } else {
-              servicesOptions[propName] = [
-                ...servicesOptions[propName],
-                { value, label: value },
-              ];
-            }
-
-            // si on est sur une création de service,
-            // le service a été copié depuis le modèle
-            // on modifie donc les champs spécifique du service
-            if (typeof service[propName][i] === "string") {
-              service[propName][i] = option ? option.value : value;
-            }
-          }
-        });
-      }
-    });
-  }
-
   async function handleStructureChange(slug) {
     if (slug) {
-      structure = await getStructure(slug);
+      // variable locale : le prop `structure` est typé `ShortStructure`, trop pauvre
+      // pour `toServiceStructure` (ni téléphone, ni courriel, ni horaires).
+      const fullStructure = await getStructure(slug);
+      structure = fullStructure;
 
       service.structure = slug;
+      if (fullStructure) {
+        service.structureInfo = toServiceStructure(fullStructure);
+      }
       if (!isModel && service.model) {
         model = await getModel(model.slug);
       }
-
-      // On rafraîchit les servicesOptions avant qu'elles ne soient modifiées par updateServiceOptions()
-      servicesOptions = await getServicesOptions(fetch, false);
-
-      updateServiceOptions();
     }
   }
 
@@ -138,12 +64,6 @@
   const showStructures = service.structure
     ? false
     : structures.length > 1 || managedStructureSearchMode;
-
-  onMount(() => {
-    if (structure && service.structure) {
-      updateServiceOptions();
-    }
-  });
 </script>
 
 <FieldSet noTopPadding>

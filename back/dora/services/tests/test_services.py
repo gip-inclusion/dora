@@ -3,7 +3,6 @@ import random
 from datetime import timedelta
 from unittest import mock
 
-import pytest
 import requests
 from data_inclusion.schema.v1 import (
     ModeAccueil,
@@ -62,54 +61,14 @@ from ..models import (
     ServiceSubCategory,
 )
 from ..utils import (
-    SYNC_CUSTOM_M2M_FIELDS,
     SYNC_FIELDS,
     SYNC_M2M_FIELDS,
     normalize_publics,
     update_sync_checksum,
 )
-from ..views import search_services_view, service_di
+from ..views import OPTIONS_CACHE_VERSION, search_services_view, service_di
 
 DUMMY_SERVICE = {"name": "Mon service"}
-
-
-@pytest.mark.parametrize(
-    "recurrence,initial_horaires_accueil,expected_horaires_accueil",
-    [
-        pytest.param(
-            "Mo-Fr 08:30-12:30",
-            None,
-            "Mo-Fr 08:30-12:30",
-            id="osm_valid",
-        ),
-        pytest.param(
-            "Tous les jours de 8h à 12h",
-            "Mo-Fr 09:00-12:00",
-            "Mo-Fr 09:00-12:00",
-            id="osm_invalid",
-        ),
-    ],
-)
-def test_update_recurrence_syncs_horaires_accueil_when_osm_valid(
-    api_client, recurrence, initial_horaires_accueil, expected_horaires_accueil
-):
-    me = baker.make("users.User", is_valid=True)
-    my_struct = make_structure(me)
-    my_service = make_service(
-        structure=my_struct, status=ServiceStatus.PUBLISHED, creator=me
-    )
-    Service.objects.filter(pk=my_service.pk).update(
-        horaires_accueil=initial_horaires_accueil
-    )
-    api_client.force_authenticate(user=me)
-    response = api_client.patch(
-        f"/services/{my_service.slug}/",
-        {"recurrence": recurrence},
-    )
-    assert response.status_code == 200
-    my_service.refresh_from_db()
-    assert my_service.recurrence == recurrence
-    assert my_service.horaires_accueil == expected_horaires_accueil
 
 
 class ServiceTestCase(APITestCase):
@@ -169,10 +128,10 @@ class ServiceTestCase(APITestCase):
             "AccessCondition", structure=self.struct_31
         )
 
-        cache.delete("options:anon")
-        cache.delete(f"options:user:{self.me.pk}")
-        cache.delete(f"options:user:{self.superuser.pk}")
-        cache.delete(f"options:user:{self.manager.pk}")
+        cache.delete("options:anon", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.me.pk}", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.superuser.pk}", version=OPTIONS_CACHE_VERSION)
+        cache.delete(f"options:user:{self.manager.pk}", version=OPTIONS_CACHE_VERSION)
 
         self.struct_44 = make_structure(department="44")
         self.service_44 = make_service(
@@ -612,7 +571,7 @@ class ServiceTestCase(APITestCase):
     # CustomizableChoices
     def test_anonymous_user_see_global_choices(self):
         self.client.force_authenticate(user=None)
-        cache.delete("options:anon")
+        cache.delete("options:anon", version=OPTIONS_CACHE_VERSION)
         response = self.client.get(
             "/services-options/",
         )
@@ -2143,12 +2102,11 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = "précision"
             elif isinstance(getattr(model, field), bool):
                 new_val = not getattr(model, field)
-            elif field in (
-                "online_form",
-                "remote_url",
-                "beneficiaries_access_modes_external_form_link",
-                "coach_orientation_modes_external_form_link",
-            ):
+            elif field == "mobilisable_by":
+                new_val = ["professionnels"]
+            elif field == "mobilisation_modes":
+                new_val = ["telephoner"]
+            elif field == "mobilisation_link":
                 new_val = "https://example.com"
             elif field in ("duration_weekly_hours", "duration_weeks"):
                 new_val = 4
@@ -2156,10 +2114,6 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = ["https://example.com"]
             elif field == "contact_email":
                 new_val = "test@example.com"
-            elif field == "diffusion_zone_type":
-                new_val = AdminDivisionType.REGION
-            elif field == "suspension_date":
-                new_val = "2022-10-10"
             elif field == "fee_condition":
                 new_val = "payant"
             elif field == "kind":
@@ -2243,17 +2197,6 @@ class ServiceSyncTestCase(APITestCase):
             new_value = baker.make(rel_model)
             response = self.client.patch(
                 f"/models/{model.slug}/", {field: [new_value.value]}
-            )
-            self.assertEqual(response.status_code, 200)
-            model.refresh_from_db()
-            self.assertNotEqual(model.sync_checksum, initial_checksum)
-
-        for field in SYNC_CUSTOM_M2M_FIELDS:
-            initial_checksum = model.sync_checksum
-            rel_model = getattr(model, field).target_field.related_model
-            new_value = baker.make(rel_model)
-            response = self.client.patch(
-                f"/models/{model.slug}/", {field: [new_value.id]}
             )
             self.assertEqual(response.status_code, 200)
             model.refresh_from_db()

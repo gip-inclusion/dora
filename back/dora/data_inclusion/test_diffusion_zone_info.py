@@ -328,9 +328,9 @@ def test_get_diffusion_zone_info_corse():
     ("zone_type", "zone_details", "expected"),
     [
         (AdminDivisionType.COUNTRY.value, None, ["france"]),
-        (None, None, None),
-        ("", "75", None),
-        (AdminDivisionType.CITY.value, "", None),
+        (None, None, []),
+        ("", "75", []),
+        (AdminDivisionType.CITY.value, "", []),
         (AdminDivisionType.CITY.value, "75056", ["75056"]),
         (AdminDivisionType.DEPARTMENT.value, "75", ["75"]),
         (AdminDivisionType.EPCI.value, "200054781", ["200054781"]),

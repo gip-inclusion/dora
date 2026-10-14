@@ -229,6 +229,10 @@ class StructureAdminSerializer(StructureSerializer):
         models = ServiceModel.objects.filter(structure=obj)
 
         class ModelSerializer(serializers.ModelSerializer):
+            short_desc = serializers.CharField(
+                source="short_description", read_only=True
+            )
+
             class Meta:
                 model = ServiceModel
                 fields = ["slug", "name", "short_desc"]
@@ -238,6 +242,10 @@ class StructureAdminSerializer(StructureSerializer):
 
     def get_services(self, obj):
         class ServiceSerializer(serializers.ModelSerializer):
+            short_desc = serializers.CharField(
+                source="short_description", read_only=True
+            )
+
             class Meta:
                 model = Service
                 fields = ["slug", "name", "short_desc"]

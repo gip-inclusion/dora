@@ -2,6 +2,8 @@ import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
 
 import { INVALID_OPENING_HOURS_MARKER } from "./constants";
 
+export const PUBLIC_HOLIDAYS_OFF = "PH off";
+
 export function returnEmptyHoursData(): OsmOpeningHours {
   return {
     monday: {
@@ -32,6 +34,7 @@ export function returnEmptyHoursData(): OsmOpeningHours {
       timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
       timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
+    phOff: false,
   };
 }
 
@@ -114,6 +117,11 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
   baseObject.sunday.timeSlot2.isOpen = false;
 
   const hoursByDay = value.split(";");
+
+  if (hoursByDay[hoursByDay.length - 1].includes(PUBLIC_HOLIDAYS_OFF)) {
+    baseObject.phOff = true;
+    hoursByDay.pop();
+  }
 
   hoursByDay.forEach((hoursForDay) => {
     const [dayPrefix, hours] = hoursForDay.split(" ");

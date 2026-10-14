@@ -8,6 +8,7 @@
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import ServiceContact from "./display/service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
+  import { formatEligibilityZones } from "$lib/utils/service";
 
   interface Props {
     isOpen?: boolean;
@@ -28,6 +29,10 @@
     isOpen = false;
     await onRefresh();
   }
+
+  const eligibilityZones = $derived(
+    formatEligibilityZones(service.zoneEligibiliteDisplay)
+  );
 </script>
 
 <Modal
@@ -38,7 +43,7 @@
   width="small"
 >
   <div class="pt-s16 text-f18 text-france-blue">
-    Périmètre&#8239;: <strong>{service.diffusionZoneDetailsDisplay}</strong>
+    Périmètre&#8239;: <strong>{eligibilityZones}</strong>
   </div>
 
   <hr class="my-s24" />
