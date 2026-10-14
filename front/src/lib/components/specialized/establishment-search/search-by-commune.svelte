@@ -14,6 +14,7 @@
   }
 
   let {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- prop $bindable() : écrite ici, lue par le parent via le binding (faux positif, cf. @typescript-eslint 8.71.1)
     establishment = $bindable(),
     onCityChange,
     onEstablishmentChange,
