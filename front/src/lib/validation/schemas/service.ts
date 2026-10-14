@@ -1,6 +1,8 @@
 import type { FeeCondition, LocationKind, ServicesOptions } from "$lib/types";
 import * as v from "../schema-utils";
 
+const IN_PERSON_LOCATION_KIND = "en-presentiel";
+
 export function allCategoriesHaveSubcategories() {
   return (name, value, data, servicesOptions: ServicesOptions) => {
     const subcatRoots = new Set(
@@ -164,6 +166,9 @@ export const serviceSchema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes(IN_PERSON_LOCATION_KIND);
+    },
   },
   address2: {
     label: "Complément d’adresse",
@@ -178,7 +183,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isPostalCode(), v.maxStrLength(5)],
     maxLength: 5,
     required: (data: { locationKinds: LocationKind[] }) => {
-      return data.locationKinds.includes("en-presentiel");
+      return data.locationKinds.includes(IN_PERSON_LOCATION_KIND);
     },
   },
   city: {
@@ -188,7 +193,7 @@ export const serviceSchema: v.Schema = {
     post: [v.trim],
     maxLength: 255,
     required: (data: { locationKinds: LocationKind[] }) => {
-      return data.locationKinds.includes("en-presentiel");
+      return data.locationKinds.includes(IN_PERSON_LOCATION_KIND);
     },
   },
   durationWeeklyHours: {
