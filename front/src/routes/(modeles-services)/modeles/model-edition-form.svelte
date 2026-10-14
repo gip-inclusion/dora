@@ -101,7 +101,6 @@
         <FieldsStructure
           bind:structure
           bind:service={model}
-          bind:servicesOptions
           {structures}
           {managedStructureSearchMode}
           isModel

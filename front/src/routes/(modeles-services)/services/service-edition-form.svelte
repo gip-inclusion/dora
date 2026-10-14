@@ -148,7 +148,6 @@
         <FieldsStructure
           bind:structure
           bind:service
-          bind:servicesOptions
           bind:model
           {managedStructureSearchMode}
           {structures}
