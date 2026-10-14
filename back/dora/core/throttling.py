@@ -16,6 +16,7 @@ def get_front_client_ip(request) -> str | None:
     """
     secret = settings.FRONT_PROXY_SECRET
     received = request.META.get("HTTP_X_DORA_PROXY_SECRET", "")
+    # Utilisation de `hmac.compare_digest` pour éviter les attaques temporelles.
     if secret and hmac.compare_digest(received.encode(), secret.encode()):
         return request.META.get("HTTP_X_DORA_CLIENT_IP", "").strip() or None
     return None
