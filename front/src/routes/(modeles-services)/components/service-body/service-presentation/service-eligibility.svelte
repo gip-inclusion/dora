@@ -15,7 +15,10 @@
 
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
-  import { isNotFreeService } from "$lib/utils/service";
+  import {
+    getMobilisationModesDisplay,
+    isNotFreeService,
+  } from "$lib/utils/service";
   import { formatFilePath } from "$lib/utils/file";
 
   import ServiceKeyInformationSection from "./service-key-informations/service-key-information-section.svelte";
@@ -158,7 +161,7 @@
       {/if}
       {#if service.mobilisationModesDisplay}
         <ServiceField title="Modes de mobilisation">
-          {service.mobilisationModesDisplay.join(" · ")}
+          {getMobilisationModesDisplay(service).join(" · ")}
         </ServiceField>
       {/if}
       {#if service.mobilisationDetails}
