@@ -18,6 +18,14 @@ from dora.decoupage_administratif.models import (
 )
 from dora.services.enums import ServiceStatus
 
+# Source des services Dora dans data·inclusion et sur Les Emplois
+DORA_UID_PREFIX = "dora--"
+
+
+def get_emplois_service_uid(service_id) -> str:
+    return f"{DORA_UID_PREFIX}{service_id}"
+
+
 SYNC_FIELDS = [
     "name",
     "description",

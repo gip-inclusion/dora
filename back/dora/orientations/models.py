@@ -13,6 +13,7 @@ from django.utils import timezone
 from dora.core.models import EnumModel, LogItem
 from dora.core.validators import validate_siret
 from dora.services.models import Service
+from dora.services.utils import get_emplois_service_uid
 from dora.structures.models import Structure
 from dora.users.models import User
 
@@ -523,7 +524,7 @@ class EmploisOrientationData(models.Model):
     def service_detail_url(self):
         orientation = self.orientation
         if orientation.service_id:
-            service_uid = f"dora--{orientation.service.id}"
+            service_uid = get_emplois_service_uid(orientation.service_id)
         else:
             service_uid = orientation.di_service_id
         return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"
