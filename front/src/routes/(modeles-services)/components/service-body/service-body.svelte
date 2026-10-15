@@ -7,6 +7,7 @@
   import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { isAuthenticated, userInfo } from "$lib/utils/auth";
+  import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
   import { isServiceRecentlyPublished } from "$lib/utils/service";
   import { trackMobilisation } from "$lib/utils/stats";
 
@@ -52,6 +53,12 @@
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
 
+  // la page d'orientation redirige vers le formulaire de La plateforme de
+  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
+  let plateformeOrientationUrl = $derived(
+    service.isModel ? null : getPlateformeOrientationUrl(service)
+  );
+
   let isServiceFromOwnStructure = $derived(
     $userInfo
       ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
@@ -90,7 +97,7 @@
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
     } else if (isAuthenticated()) {
-      handleTrackMobilisation();
+      handleTrackMobilisation(plateformeOrientationUrl ?? undefined);
     }
   }
 </script>
@@ -154,7 +161,8 @@
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
   onShowVideo={handleShowVideoModal}
-  onTrackMobilisation={handleTrackMobilisation}
+  onTrackMobilisation={() =>
+    handleTrackMobilisation(plateformeOrientationUrl ?? undefined)}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />
