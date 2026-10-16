@@ -30,12 +30,14 @@
 
   let { data }: Props = $props();
 
-  const homeTabs = [
+  type HomeTabId = "accompagnement" | "porteurs" | "particuliers";
+
+  const homeTabs: { id: HomeTabId; name: string }[] = [
     { id: "accompagnement", name: "Professionnels de l’accompagnement" },
     { id: "porteurs", name: "Porteurs de services" },
     { id: "particuliers", name: "Particuliers" },
   ];
-  let selectedTabId = $state("accompagnement");
+  let selectedTabId = $state<HomeTabId>("accompagnement");
 
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)

@@ -1,8 +1,8 @@
-<script lang="ts">
+<script lang="ts" generics="T extends string">
   interface Props {
-    onSelectedChange: (id: string) => void;
-    items?: { id: string; name: string }[];
-    itemId?: string;
+    onSelectedChange: (id: T) => void;
+    items?: { id: T; name: string }[];
+    itemId?: T;
   }
 
   let { onSelectedChange, items = [], itemId }: Props = $props();
