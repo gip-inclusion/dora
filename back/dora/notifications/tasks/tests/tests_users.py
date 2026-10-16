@@ -79,6 +79,23 @@ def test_user_account_deletation_should_trigger(user_account_deletion_task):
         n.refresh_from_db()
 
 
+def test_staff_and_technical_accounts_excluded_from_deletion(
+    settings, user_account_deletion_task
+):
+    settings.EMPLOIS_EMAIL = "emplois@example.com"
+    long_ago = timezone.now() - relativedelta(years=2)
+
+    di_user = make_user(last_login=long_ago, email=settings.DATA_INCLUSION_EMAIL)
+    emplois_user = make_user(last_login=long_ago, email=settings.EMPLOIS_EMAIL)
+    regular_user = make_user(last_login=long_ago)
+
+    candidates = user_account_deletion_task.candidates()
+
+    assert di_user not in candidates
+    assert emplois_user not in candidates
+    assert regular_user in candidates
+
+
 def test_inactive_user_becomes_active(user_account_deletion_task):
     # on vérifie qu'un utilisateur inactif notifié
     # qui se connecte ne sera plus notifié (maj de la notification)
