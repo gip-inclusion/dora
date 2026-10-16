@@ -60,12 +60,11 @@
     formControls = $bindable({}),
   }: Props = $props();
 
-  $effect(() => {
+  $effect.pre(() => {
+    if ($currentSchema !== schema) {
+      $currentSchema = schema;
+    }
     $currentFormData = data;
-  });
-
-  $effect(() => {
-    $currentSchema = schema;
   });
 
   onMount(() => {
@@ -88,6 +87,10 @@
 
   onDestroy(() => {
     $formErrors = {};
+    if ($currentSchema === schema && $currentFormData === data) {
+      $currentSchema = undefined;
+      $currentFormData = undefined;
+    }
   });
 
   async function handleEltChange(evt) {
