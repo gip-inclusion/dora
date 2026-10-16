@@ -424,6 +424,9 @@ class Orientation(models.Model):
             return attachment, True
         else:
             logger.warning("deleteOrientationAttachment", {"pathNotFound": attachment})
+            if attachment in self.beneficiary_attachments:
+                self.beneficiary_attachments.remove(attachment)
+                self.save()
             return attachment, False
 
     def delete_attachments(self) -> dict[str, bool]:
