@@ -173,7 +173,7 @@
         <p class="text-f16">
           <strong>Gardez une trace écrite de vos demandes reçues.</strong>
           Téléchargez la liste des orientations reçues par votre structure. Vous pourrez
-          ainsi consulter et trier ces orientations. Fichier proposé au format .xls
+          ainsi consulter et trier ces orientations. Fichier proposé au format .xls.
         </p>
       </div>
       <div class="md:basis-1/3">
