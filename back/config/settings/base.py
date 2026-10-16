@@ -519,8 +519,7 @@ SECURE_CSP = {
     ],
 }
 
-# Envoi d'e-mails transactionnels :
-# https://app.tipimail.com/#/app/settings/smtp_and_apis
+# Envoi d'e-mails transactionnels via le relais SMTP Brevo.
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 NO_REPLY_EMAIL = os.getenv("NO_REPLY_EMAIL", DEFAULT_FROM_EMAIL)
 EMAIL_HOST = os.getenv("EMAIL_HOST")
