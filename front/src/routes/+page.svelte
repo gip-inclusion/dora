@@ -35,7 +35,7 @@
     { id: "porteurs", name: "Porteurs de services" },
     { id: "particuliers", name: "Particuliers" },
   ];
-  let selectedTab = $state("accompagnement");
+  let selectedTabId = $state("accompagnement");
 
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)
@@ -101,8 +101,8 @@
   <div class="mt-s32">
     <Tabs
       items={homeTabs}
-      itemId={selectedTab}
-      onSelectedChange={(id) => (selectedTab = id)}
+      itemId={selectedTabId}
+      onSelectedChange={(id) => (selectedTabId = id)}
     />
   </div>
 </CenteredGrid>
@@ -111,9 +111,9 @@
   <div
     class="mb-s32 gap-s24 flex flex-col md:flex-row md:justify-center"
     role="tabpanel"
-    aria-labelledby={`tab-${selectedTab}`}
+    aria-labelledby={`tab-${selectedTabId}`}
   >
-    {#if selectedTab === "accompagnement"}
+    {#if selectedTabId === "accompagnement"}
       <div class="md:basis-1/3">
         <img src={illuRecenser} alt="" class="mb-s16 w-full" />
         <h3 class="text-france-blue">Identifiez des services</h3>
@@ -160,7 +160,7 @@
           Suivez vos demandes envoyées<ExternalLinkIcon />
         </a>
       </div>
-    {:else if selectedTab === "porteurs"}
+    {:else if selectedTabId === "porteurs"}
       <div class="md:basis-1/3">
         <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
         <h3 class="text-france-blue">Suivez vos demandes reçues</h3>
@@ -194,7 +194,7 @@
           >
         </p>
       </div>
-    {:else if selectedTab === "particuliers"}
+    {:else if selectedTabId === "particuliers"}
       <div class="md:basis-1/3">
         <img src={illuRecenser} alt="" class="mb-s16 w-full" />
         <h3 class="text-france-blue">Trouvez des services adaptés</h3>
