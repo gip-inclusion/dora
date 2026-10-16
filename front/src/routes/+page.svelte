@@ -12,7 +12,7 @@
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
   import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
-  import { GOOGLE_CSE_ID, INCLUSION_PLATFORM_URL } from "$lib/env";
+  import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
   import { userPreferences } from "$lib/utils/preferences";
@@ -22,7 +22,11 @@
 
   import { page } from "$app/state";
   import type { PageData } from "./$types";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import {
+    INCLUSION_PLATFORM_ORIENTATIONS_URL,
+    INCLUSION_PLATFORM_SEARCH_URL,
+    URL_HELP_SITE,
+  } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -137,7 +141,7 @@
           Plateforme de l’inclusion.
         </p>
         <a
-          href={`${INCLUSION_PLATFORM_URL}/search/services?mtm_campaign=DORA&mtm_kwd=homeorienter`}
+          href={INCLUSION_PLATFORM_SEARCH_URL}
           target="_blank"
           rel="noopener"
           class="text-f14 text-magenta-cta font-bold"
@@ -154,7 +158,7 @@
           directement à la Plateforme de l’inclusion.
         </p>
         <a
-          href={`${INCLUSION_PLATFORM_URL}/insertion/orientations/?mtm_campaign=DORA&mtm_kwd=homesuivi`}
+          href={INCLUSION_PLATFORM_ORIENTATIONS_URL}
           target="_blank"
           rel="noopener"
           class="text-f14 text-magenta-cta font-bold"
