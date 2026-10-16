@@ -65,6 +65,15 @@ def test_access_refused_when_query_id_hash_invalid(api_client, orientation):
     assert response.status_code == 401
 
 
+def test_orientations_list_not_exposed(api_client, orientation):
+    response = api_client.get("/orientations/")
+    assert response.status_code == 405
+
+    api_client.force_authenticate(user=make_user())
+    response = api_client.get("/orientations/")
+    assert response.status_code == 405
+
+
 @freeze_time("2022-01-01")
 def test_query_validate(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/validate/"
