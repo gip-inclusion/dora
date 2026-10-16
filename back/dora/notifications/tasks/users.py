@@ -105,10 +105,16 @@ class UserAccountDeletionTask(Task):
     @classmethod
     def candidates(cls):
         # CAT 5 :
-        # les utilisateurs "actifs" qui ne se sont pas connecté depuis plus de 2 ans
+        # les utilisateurs "actifs" qui ne se sont pas connecté depuis plus de 2 ans.
+        # On exclut les comptes techniques (DI, Les Emplois).
+        technical_emails = [
+            email
+            for email in (settings.DATA_INCLUSION_EMAIL, settings.EMPLOIS_EMAIL)
+            if email
+        ]
         return User.objects.filter(
             is_active=True, last_login__lte=timezone.now() - relativedelta(years=2)
-        )
+        ).exclude(email__in=technical_emails)
 
     @classmethod
     def should_trigger(cls, notification: Notification) -> bool:
