@@ -56,6 +56,11 @@ export const PROCONNECT_MORE_INFO_URL = "https://www.proconnect.gouv.fr/";
 // redirigés les professionnels de l'accompagnement.
 export const INCLUSION_PLATFORM_LOGIN_URL = `${INCLUSION_PLATFORM_URL}/accounts/login?mtm_campaign=DORA&mtm_kwd=connexion`;
 
+// Liens de la page d'accueil vers la recherche et le suivi des orientations
+// de la plateforme de l'inclusion.
+export const INCLUSION_PLATFORM_SEARCH_URL = `${INCLUSION_PLATFORM_URL}/search/services?mtm_campaign=DORA&mtm_kwd=homeorienter`;
+export const INCLUSION_PLATFORM_ORIENTATIONS_URL = `${INCLUSION_PLATFORM_URL}/insertion/orientations/?mtm_campaign=DORA&mtm_kwd=homesuivi`;
+
 export const ORIENTATION_JWT_QUERY_PARAM = "op";
 
 export const TOAST_DURATION_MS = 30000;

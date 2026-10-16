@@ -1,22 +1,21 @@
 <script lang="ts">
-  import VideoFillMedia from "svelte-remix/VideoFillMedia.svelte";
+  import PlayCircleFillMedia from "svelte-remix/PlayCircleFillMedia.svelte";
 
-  import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
-  import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
-  import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
   import logoDataInclusion from "$lib/assets/logos/logo-data-inclusion.svg";
-  import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
+  import Tabs from "$lib/components/display/tabs.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
   import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
-  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
   import { userPreferences } from "$lib/utils/preferences";
+  import HomeTabPanel, {
+    homeTabs,
+    type HomeTabId,
+  } from "./_index/home-tab-panel.svelte";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
@@ -31,7 +30,7 @@
 
   let { data }: Props = $props();
 
-  let isVideoModalOpen = $state(false);
+  let selectedTabId = $state<HomeTabId>("accompagnement");
 
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)
@@ -56,18 +55,10 @@
   const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
 
-<OrientationVideo bind:isVideoModalOpen></OrientationVideo>
-
-<CenteredGrid extraClass="mb-s32" bgColor="bg-magenta-10">
-  <h1 class="mb-s16 text-france-blue m-auto text-center text-balance">
-    Orientez vos bénéficiaires vers des solutions adaptées à leurs besoins
+<CenteredGrid extraClass="pt-s32" bgColor="bg-magenta-10" noPadding>
+  <h1 class="mb-s32 text-france-blue m-auto text-center text-balance">
+    Trouvez le service adapté<br />pour lever les freins à l’insertion
   </h1>
-  <div class="mb-s32">
-    <p class="text-f16 text-gray-text m-auto text-center text-balance">
-      DORA est un outil d’aide à la prescription qui vous accompagne dans la
-      levée des freins périphériques.
-    </p>
-  </div>
 
   {#if searchByText}
     <div class="mb-s16">
@@ -82,7 +73,7 @@
       initialSearch
     />
     {#if GOOGLE_CSE_ID}
-      <div class="mt-s32 mb-s32 flex items-center justify-center">
+      <div class="mt-s32 flex items-center justify-center">
         <div class="mr-s16">ou</div>
         <LinkButton
           label="Faire une recherche par mots-clés"
@@ -91,11 +82,9 @@
       </div>
     {/if}
   {/if}
-</CenteredGrid>
 
-<CenteredGrid>
   {#if lastVisitedStructure?.canEditInformations}
-    <div class="mb-s44">
+    <div class="mt-s32">
       <ServicesToUpdateNotice
         structureSlug={lastVisitedStructure.slug}
         servicesToUpdate={lastVisitedStructure.servicesToUpdate}
@@ -103,63 +92,27 @@
       />
     </div>
   {/if}
-  <h2 class="mb-s32 text-france-blue text-center">
-    Comment DORA peut vous aider
-  </h2>
-  <div class="mb-s24 gap-s24 flex flex-col md:flex-row">
-    <div class="md:flex-1">
-      <img src={illuRecenser} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-[#003895]">Recherche simplifiée</div>
-      <h3>Identifier des services</h3>
-      <p class="text-f16">
-        DORA vous permet d’<strong
-          >identifier les services d’insertion les plus adaptés</strong
-        >
-        aux besoins spécifiques de vos bénéficiaires.
-      </p>
-    </div>
-    <div class="md:flex-1">
-      <img src={illuAccompagner} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-info">Orientation facilitée</div>
-      <h3>Orienter vos bénéficiaires</h3>
-      <p class="text-f16">
-        Le formulaire DORA <strong
-          >facilite l’orientation de vos bénéficiaires</strong
-        >
-        vers la solution identifiée, le tout en
-        <strong>moins de 5 minutes</strong>.
 
-        <Button
-          label="Voir la vidéo de démonstration"
-          onclick={() => (isVideoModalOpen = true)}
-          noBackground
-          noPadding
-        />
-      </p>
-    </div>
-    <div class="md:flex-1">
-      <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-blue-information text-gray-text!">Nouveauté !</div>
-      <h3>Suivre vos demandes</h3>
-      <p class="text-f16">
-        DORA vous permet de <strong
-          >suivre l’ensemble de vos demandes d’orientation</strong
-        >
-        depuis votre espace DORA et de voir rapidement la réponse de la structure
-        partenaire.
-      </p>
-    </div>
+  <div class="mt-s32">
+    <Tabs
+      items={homeTabs}
+      itemId={selectedTabId}
+      onSelectedChange={(id) => (selectedTabId = id)}
+    />
   </div>
+</CenteredGrid>
+
+<CenteredGrid roundedColor="bg-magenta-10">
+  <HomeTabPanel tabId={selectedTabId} />
 
   <div
-    class="border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between rounded-2xl border text-center md:flex-row md:items-baseline"
+    class="mt-s32 gap-s16 bg-blue-light p-s16 md:px-s24 flex flex-col items-center justify-between rounded-2xl md:flex-row"
   >
-    <p class="m-s0 p-s0">
-      <span
-        class="h-s24 w-s24 text-france-blue inline-block flex-none fill-current align-bottom"
-      >
-        <VideoFillMedia />
-      </span>
+    <p class="m-s0 p-s0 gap-s8 flex items-center font-bold">
+      <PlayCircleFillMedia
+        class="text-magenta-cta flex-none fill-current"
+        aria-hidden="true"
+      />
       Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes par
       DORA.
     </p>
@@ -168,47 +121,30 @@
       to={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
       otherTab
       nofollow
-      noBackground
-      label="En savoir plus"
+      small
+      label="Je m’inscris"
     ></LinkButton>
   </div>
 </CenteredGrid>
 
 <CenteredGrid>
-  <div class="gap-s24 flex flex-col">
-    <div class="text-center">
-      <h2 class="text-france-blue">
-        Donnez de la visibilité à votre offre de services
-      </h2>
-      <p class="mb-s0 m-auto w-3/4">
-        Saisissez ou importez vos services et mettez-les à jour, en un seul
-        endroit ! DORA se charge de présenter vos données là où elles sont
-        utiles, en les diffusant automatiquement sur plusieurs sites.
-      </p>
-    </div>
-    <div class="gap-s16 flex flex-wrap justify-center">
-      <LinkButton label="Référencer vos services" to={`/services/creer`} />
-      <InviteStructureLink />
-    </div>
+  <div>
+    <p class="text-f12 text-center">
+      Plus de 23 000 structures ont déjà commencé à référencer leurs services
+      sur DORA
+    </p>
 
-    <div class="mt-s16">
-      <p class="text-f12 text-center">
-        Plus de 23 000 structures ont déjà commencé à référencer leurs services
-        sur DORA
-      </p>
+    <ul class="mt-s24 flex w-full flex-wrap justify-center grayscale">
+      <PartnerList partnersToShow={data.partnersToShow} imgHeight="small" />
+    </ul>
 
-      <ul class="mt-s24 flex w-full flex-wrap justify-center grayscale">
-        <PartnerList partnersToShow={data.partnersToShow} imgHeight="small" />
-      </ul>
-
-      <div class="mt-s10 text-center">
-        <a
-          href="/nos-partenaires"
-          class="text-f18 text-magenta-cta text-center underline"
-        >
-          Découvrez tous nos partenaires
-        </a>
-      </div>
+    <div class="mt-s10 text-center">
+      <a
+        href="/nos-partenaires"
+        class="text-f18 text-magenta-cta text-center underline"
+      >
+        Découvrez tous nos partenaires
+      </a>
     </div>
   </div>
 
@@ -238,15 +174,3 @@
 </CenteredGrid>
 
 <MonRecapPopup />
-
-<style lang="postcss">
-  @reference "../app.css";
-
-  h3 {
-    @apply text-france-blue;
-  }
-
-  .tag {
-    @apply px-s8 py-s2 text-f12 w-fit rounded-sm font-bold text-white uppercase;
-  }
-</style>
