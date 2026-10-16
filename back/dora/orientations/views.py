@@ -95,7 +95,6 @@ class OrientationViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer
