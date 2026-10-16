@@ -82,8 +82,13 @@ def log_event(request):
 
     user = request.user
 
+    # Le front génère un hash de 32 caractères : toute autre valeur est ignorée
+    user_hash = request.data.get("user_hash", "")
+    if not isinstance(user_hash, str) or len(user_hash) != 32:
+        user_hash = ""
+
     common_analytics_data = {
-        "path": request.data.get("path"),
+        "path": (request.data.get("path") or "")[:255],
         "user": user if user.is_authenticated else None,
         "is_logged": user.is_authenticated,
         "is_staff": user.is_staff,
@@ -92,7 +97,7 @@ def log_event(request):
         if user.is_authenticated
         else False,
         "user_kind": user.main_activity if user.is_authenticated else "",
-        "anonymous_user_hash": request.data.get("user_hash", ""),
+        "anonymous_user_hash": user_hash,
     }
 
     structure_membership = (
@@ -138,7 +143,9 @@ def log_event(request):
         case Tag.PAGEVIEW:
             event = PageView.objects.create(
                 **common_analytics_data,
-                title=request.data.get("title", ""),
+                # Le titre des pages de service (nom du service et de la
+                # structure) peut dépasser la taille du champ
+                title=(request.data.get("title") or "")[:255],
             )
 
         case Tag.SEARCH:
