@@ -56,22 +56,6 @@ export function registerMatomoExperiment(experiment: MatomoExperiment) {
     window.matomoAbTestingAsyncInit = createExperiment;
   }
 }
-export function registerRechercheTextuelleExperiment(onActivate: () => void) {
-  registerMatomoExperiment({
-    name: "rechercheTextuelle",
-    includedTargets: [
-      { attribute: "url", type: "any", inverted: "0", value: "/" },
-    ],
-    excludedTargets: [],
-    variations: [
-      {
-        name: "recherche-mot-cle",
-        activate: onActivate,
-      },
-    ],
-  });
-}
-
 export function trackMatomoEvent({
   category,
   action,
