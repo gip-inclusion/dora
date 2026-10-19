@@ -219,6 +219,12 @@ export const serviceSchema: v.Schema = {
     default: "",
     rules: [v.isString(), v.osmHoursNotContainsInvalid()],
   },
+  suspensionDate: {
+    label: "Date de fin",
+    default: null,
+    rules: [v.isDate()],
+    post: [v.nullEmpty],
+  },
   contactName: {
     label: "Nom de l’interlocuteur",
     default: "",
@@ -270,6 +276,7 @@ export const modelSchema: v.Schema = {
   forms: serviceSchema.forms,
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
+  suspensionDate: serviceSchema.suspensionDate,
   mobilisableBy: serviceSchema.mobilisableBy,
   mobilisationLink: serviceSchema.mobilisationLink,
   mobilisationModes: serviceSchema.mobilisationModes,

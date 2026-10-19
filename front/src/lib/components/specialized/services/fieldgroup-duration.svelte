@@ -17,6 +17,7 @@
   let showModel = $derived(!!service.model);
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
+    service = { ...service }; // Force le re-rendu
   }
   let fieldModelProps = $derived(
     model
@@ -84,4 +85,12 @@
     Ce qui correspond à un volume horaire total de {totalHours} heure(s), répartie(s)
     sur {service.durationWeeks || 0} semaine(s).
   </div>
+  <FieldModel {...fieldModelProps.suspensionDate ?? {}}>
+    <BasicInputField
+      id="suspensionDate"
+      type="date"
+      bind:value={service.suspensionDate}
+      descriptionText="Date à partir de laquelle le service ne sera plus visible dans la recherche."
+    />
+  </FieldModel>
 </FieldGroup>
