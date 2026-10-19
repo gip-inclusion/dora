@@ -97,6 +97,15 @@
       : {}
   );
 
+  // Libellé propre au formulaire d'édition
+  let mobilisationModesChoices = $derived(
+    servicesOptions.mobilisationModes.map((choice) =>
+      choice.value === "utiliser-lien-mobilisation"
+        ? { ...choice, label: "Utiliser le formulaire" }
+        : choice
+    )
+  );
+
   let mobilisationLinkChoices = $derived(
     noDoraForm
       ? [{ label: "Votre propre formulaire", value: "custom" }]
@@ -131,7 +140,7 @@
     </FieldModel>
     <FieldModel
       {...fieldModelProps.mobilisationModes ?? {}}
-      options={servicesOptions.mobilisationModes}
+      options={mobilisationModesChoices}
       type="array"
     >
       <CheckboxesField
@@ -140,7 +149,7 @@
           () => service.mobilisationModes ?? [],
           (value) => (service.mobilisationModes = value)
         }
-        choices={servicesOptions.mobilisationModes}
+        choices={mobilisationModesChoices}
         description="Au moins un mode de mobilisation requis. Plusieurs choix possibles."
       />
     </FieldModel>
