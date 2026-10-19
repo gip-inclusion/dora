@@ -15,7 +15,7 @@ import { URL_HELP_SITE } from "$lib/consts";
 export const CONSENT_VERSION = "1.0";
 const CONSENT_EXPIRY_MONTHS = 13;
 
-const CONSENT_KEYS = ["matomo", "googleCSE", "crisp"] as const;
+const CONSENT_KEYS = ["matomo", "crisp"] as const;
 
 type ConsentConfigKey = ConsentKey | "required";
 
@@ -61,20 +61,6 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
       },
     ],
   },
-  search: {
-    consentKey: "googleCSE",
-    title: "Fonctionnalité de recherche",
-    description:
-      "Nous utilisons Google Programmable Search Engine (CSE) pour la recherche sur notre site. Important : Les cookies Google sont stockés sur le domaine google.com. Le refus de consentement empêche le chargement de nouveaux cookies, mais ne peut pas supprimer les cookies Google existants. Pour les supprimer, utilisez les paramètres de votre navigateur. La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
-    cookies: [
-      {
-        title: "Google CSE",
-        description:
-          "Google Programmable Search Engine permet d’effectuer des recherches sur notre site. Limitation technique : Les cookies Google sont déposés sur le domaine google.com et ne peuvent pas être supprimés automatiquement par notre site. Le refus de consentement empêchera le chargement de la fonctionnalité de recherche et donc de nouveaux cookies Google.",
-        link: "https://policies.google.com/technologies/cookies?hl=fr-fr",
-      },
-    ],
-  },
 } as const;
 
 export type ConsentKey = (typeof CONSENT_KEYS)[number];
@@ -91,7 +77,6 @@ const defaultConsent: Consent = {
   version: CONSENT_VERSION,
   consentChoices: {
     matomo: false,
-    googleCSE: false,
     crisp: false,
   },
   timestamp: "",
