@@ -35,6 +35,7 @@ SYNC_FIELDS = [
     "duration_weekly_hours",
     "duration_weeks",
     "update_frequency",
+    "suspension_date",
 ]
 
 # Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
