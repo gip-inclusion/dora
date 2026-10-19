@@ -8,6 +8,13 @@ vi.mock("$lib/utils/auth", () => ({
   isAuthenticated: vi.fn(),
 }));
 
+// la redirection est derrière un feature flag, alimenté par un `.env` non
+// versionné : on le force pour que les tests ne dépendent pas de l'environnement
+vi.mock("$lib/env", () => ({
+  INCLUSION_PLATFORM_URL: "https://plateforme.inclusion.gouv.fr",
+  ORIENTATION_REDIRECTION_FEATURE_FLAG: true,
+}));
+
 vi.mock("$lib/requests/nexus", () => ({
   getOrientationBeneficiaryInfo: vi.fn(),
 }));

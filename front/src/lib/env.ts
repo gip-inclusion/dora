@@ -10,3 +10,5 @@ export const GOOGLE_CSE_ID = import.meta.env.VITE_GOOGLE_CSE_ID;
 export const INCLUSION_PLATFORM_URL =
   import.meta.env.VITE_INCLUSION_PLATFORM_URL ||
   "https://plateforme.inclusion.gouv.fr";
+export const ORIENTATION_REDIRECTION_FEATURE_FLAG =
+  import.meta.env.VITE_ORIENTATION_REDIRECTION_FEATURE_FLAG === "true";

@@ -8,6 +8,7 @@ import { isAuthenticated } from "$lib/utils/auth";
 import { transferUrlParams } from "$lib/utils/misc";
 import { generateOutboundNexusAutoLoginUrl } from "$lib/utils/nexus";
 import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
+import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "$lib/env";
 
 export const load = async ({ parent, url, params, fetch }) => {
   const data = await parent();
@@ -45,7 +46,7 @@ export const load = async ({ parent, url, params, fetch }) => {
         })
       );
     }
-  } else {
+  } else if (ORIENTATION_REDIRECTION_FEATURE_FLAG) {
     // l'orientation se fait désormais sur La plateforme de l'inclusion ;
     // le formulaire Dora n'est conservé que pour les orientations initiées
     // depuis Les Emplois (`op`), en cours de retrait, et en dernier recours

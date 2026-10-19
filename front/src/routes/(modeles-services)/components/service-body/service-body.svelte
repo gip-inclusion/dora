@@ -5,6 +5,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { isAuthenticated, userInfo } from "$lib/utils/auth";
   import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
@@ -53,10 +54,13 @@
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
 
-  // la page d'orientation redirige vers le formulaire de La plateforme de
-  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
+  // quand la redirection est active, la page d'orientation envoie vers le
+  // formulaire de La plateforme de l'inclusion : la mobilisation est donc
+  // comptabilisée comme sortante
   let plateformeOrientationUrl = $derived(
-    service.isModel ? null : getPlateformeOrientationUrl(service)
+    ORIENTATION_REDIRECTION_FEATURE_FLAG && !service.isModel
+      ? getPlateformeOrientationUrl(service)
+      : null
   );
 
   let isServiceFromOwnStructure = $derived(
