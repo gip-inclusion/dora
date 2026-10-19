@@ -2114,6 +2114,8 @@ class ServiceSyncTestCase(APITestCase):
                 new_val = ["https://example.com"]
             elif field == "contact_email":
                 new_val = "test@example.com"
+            elif field == "suspension_date":
+                new_val = "2022-10-10"
             elif field == "fee_condition":
                 new_val = "payant"
             elif field == "kind":

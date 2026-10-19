@@ -664,7 +664,7 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
 
 recompute_migration = importlib.import_module(
-    "dora.services.migrations.0025_recompute_sync_checksums_model_editable_fields"
+    "dora.services.migrations.0026_recompute_sync_checksums_with_suspension_date"
 )
 
 
