@@ -58,7 +58,7 @@
   // formulaire de La plateforme de l'inclusion : la mobilisation est donc
   // comptabilisée comme sortante
   let plateformeOrientationUrl = $derived(
-    ORIENTATION_REDIRECTION_FEATURE_FLAG && !service.isModel
+    ORIENTATION_REDIRECTION_FEATURE_FLAG && !opParam && !service.isModel
       ? getPlateformeOrientationUrl(service)
       : null
   );
