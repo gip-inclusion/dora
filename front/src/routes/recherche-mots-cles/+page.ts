@@ -15,6 +15,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   if (!hasCriteria) {
     return {
       title: "Recherche par mots-clés | DORA",
+      noIndex: true,
       hasCriteria: false as const,
     };
   }
