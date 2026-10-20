@@ -60,11 +60,16 @@
     formControls = $bindable({}),
   }: Props = $props();
 
+  // `currentSchema` et `currentFormData` sont des stores globaux : un seul
+  // `Form` peut être monté à la fois.
+  let appliedSchema: Schema | undefined;
+
   $effect.pre(() => {
-    if ($currentSchema !== schema) {
-      $currentSchema = schema;
+    if (appliedSchema !== schema) {
+      appliedSchema = schema;
+      currentSchema.set(schema);
     }
-    $currentFormData = data;
+    currentFormData.set(data);
   });
 
   onMount(() => {
