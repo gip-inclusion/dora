@@ -60,6 +60,27 @@ describe("auto-connexion Nexus sortante", () => {
     expect(await capture(PLATEFORME_URL)).toEqual({ location: PLATEFORME_URL });
   });
 
+  test("redirige quand même vers La plateforme si l’API est injoignable", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new TypeError("fetch failed"))
+    );
+
+    expect(await capture(PLATEFORME_URL)).toEqual({ location: PLATEFORME_URL });
+  });
+
+  test("redirige vers La plateforme si la réponse de l’API est illisible", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.reject(new SyntaxError("Unexpected token")),
+      })
+    );
+
+    expect(await capture(PLATEFORME_URL)).toEqual({ location: PLATEFORME_URL });
+  });
+
   test("redirige vers La plateforme si l’utilisateur n’a pas de session Dora", async () => {
     expect(await capture(PLATEFORME_URL, null)).toEqual({
       location: PLATEFORME_URL,

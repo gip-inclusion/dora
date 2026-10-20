@@ -1,8 +1,8 @@
-import { getApiURL } from "$lib/utils/api";
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 import { INCLUSION_PLATFORM_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
+import { fetchNexusAutoLoginUrl } from "$lib/utils/nexus";
 
 // Seule destination vers laquelle on accepte de rediriger sans auto-connexion.
 // Le contrôle est indispensable : sur ce chemin, l'URL demandée n'est jamais
@@ -42,25 +42,10 @@ export const load = async ({ cookies, url }: RequestEvent) => {
     error(404, "Page Not Found");
   }
 
-  const autoLoginUrl = new URL("/nexus/auto-login-out/", getApiURL());
+  const autoLoginRedirectUrl = await fetchNexusAutoLoginUrl(nextUrl, token);
 
-  const response = await fetch(autoLoginUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      nextUrl,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json; version=1.0",
-      Authorization: `Token ${token}`,
-    },
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    if (data.redirectUrl) {
-      redirect(302, data.redirectUrl);
-    }
+  if (autoLoginRedirectUrl) {
+    redirect(302, autoLoginRedirectUrl);
   }
 
   if (fallback) {
