@@ -79,7 +79,7 @@ def test_user_account_deletation_should_trigger(user_account_deletion_task):
         n.refresh_from_db()
 
 
-def test_and_technical_accounts_excluded_from_deletion(
+def test_technical_accounts_excluded_from_deletion(
     settings, user_account_deletion_task
 ):
     settings.EMPLOIS_EMAIL = "emplois@example.com"
