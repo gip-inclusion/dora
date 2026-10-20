@@ -74,6 +74,28 @@ describe("auto-connexion Nexus sortante", () => {
     });
   });
 
+  // ces deux URL commencent par l'URL de La plateforme : un contrôle par préfixe
+  // de chaîne les accepterait, d'où la comparaison des origins
+  test("ne redirige pas vers un domaine suffixé", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
+
+    expect(
+      await capture(
+        "https://plateforme.inclusion.gouv.fr.exemple-malveillant.fr/phishing"
+      )
+    ).toEqual({ status: 404 });
+  });
+
+  test("ne redirige pas vers un hôte masqué par des identifiants", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false }));
+
+    expect(
+      await capture(
+        "https://plateforme.inclusion.gouv.fr@exemple-malveillant.fr/phishing"
+      )
+    ).toEqual({ status: 404 });
+  });
+
   test("renvoie une 404 sans paramètre `next`", async () => {
     expect(await capture(null)).toEqual({ status: 404 });
   });

@@ -4,12 +4,14 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { INCLUSION_PLATFORM_URL } from "$lib/env";
 import { TOKEN_KEY } from "$lib/utils/auth";
 
-// Destinations vers lesquelles on accepte de rediriger sans auto-connexion
-// quand celle-ci échoue. Volontairement restreint : sans cette vérification,
-// la route serait une redirection ouverte.
-const FALLBACK_ALLOWED_ORIGINS = [INCLUSION_PLATFORM_URL];
+// Seule destination vers laquelle on accepte de rediriger sans auto-connexion.
+// Le contrôle est indispensable : sur ce chemin, l'URL demandée n'est jamais
+// soumise au back (qui la valide contre `NEXUS_ALLOWED_REDIRECT_HOSTS`), donc
+// sans autorisation explicite la route serait une redirection ouverte.
+const FALLBACK_ALLOWED_ORIGIN = new URL(INCLUSION_PLATFORM_URL).origin;
 
-function fallbackUrl(nextUrl: string) {
+// Renvoie `nextUrl` si on a le droit de s'y rendre sans auto-connexion, sinon `null`
+function getAllowedFallbackUrl(nextUrl: string) {
   let origin: string;
   try {
     origin = new URL(nextUrl).origin;
@@ -17,11 +19,7 @@ function fallbackUrl(nextUrl: string) {
     return null;
   }
 
-  return FALLBACK_ALLOWED_ORIGINS.some(
-    (allowedUrl) => new URL(allowedUrl).origin === origin
-  )
-    ? nextUrl
-    : null;
+  return origin === FALLBACK_ALLOWED_ORIGIN ? nextUrl : null;
 }
 
 export const load = async ({ cookies, url }: RequestEvent) => {
@@ -35,7 +33,7 @@ export const load = async ({ cookies, url }: RequestEvent) => {
 
   // l'auto-connexion est un confort : si elle n'aboutit pas, on envoie tout de
   // même l'utilisateur à destination, qui l'invitera à se connecter
-  const fallback = fallbackUrl(nextUrl);
+  const fallback = getAllowedFallbackUrl(nextUrl);
 
   if (!token) {
     if (fallback) {
