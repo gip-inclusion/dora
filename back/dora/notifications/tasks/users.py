@@ -105,7 +105,7 @@ class UserAccountDeletionTask(Task):
     @classmethod
     def candidates(cls):
         # CAT 5 :
-        # les utilisateurs "actifs" qui ne se sont pas connecté depuis plus de 2 ans.
+        # les utilisateurs "actifs" qui ne se sont pas connectés depuis plus de 2 ans.
         # On exclut les comptes techniques (DI, Les Emplois).
         technical_emails = [
             email
