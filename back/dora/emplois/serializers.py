@@ -132,6 +132,8 @@ class EmploisOrientationCreateSerializer(OrientationSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if instance.service_id:
+            # un service Dora n'a pas de `di_service_id` en base : on renvoie son
+            # identifiant data·inclusion, celui par lequel Les Emplois l'ont ciblé
             data["di_service_id"] = get_emplois_service_uid(instance.service_id)
         return data
 

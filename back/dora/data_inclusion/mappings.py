@@ -102,7 +102,6 @@ def map_search_result(result: dict) -> dict:
         "type": "di",
         "di_source": service_data["source"],
         "di_source_display": service_data["source"].title(),  # TODO
-        "emplois_uid": service_data["id"],
         "id": service_data["id"],
         "coordinates": (result["service"]["longitude"], result["service"]["latitude"])
         if result["service"]["longitude"] and result["service"]["latitude"]
@@ -374,7 +373,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "requirements_display": requirements_display,
         "short_desc": clean_and_shorten_description(service_data["description"]),
         "slug": service_data["id"],
-        # identifiant « <source>--<id> », identique pour les services Dora et d·i
+        # identifiant « <source>--<id> »
         "emplois_uid": service_data["id"],
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,

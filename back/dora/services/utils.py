@@ -18,11 +18,14 @@ from dora.decoupage_administratif.models import (
 )
 from dora.services.enums import ServiceStatus
 
-# Source des services Dora dans data·inclusion et sur Les Emplois
+# Préfixe des identifiants de services Dora dans data·inclusion et sur Les Emplois
 DORA_UID_PREFIX = "dora--"
 
 
 def get_emplois_service_uid(service_id) -> str:
+    # Identifiant « dora--<uuid> » : c'est à la fois l'identifiant data·inclusion
+    # du service (cf. `dora.api.serializers`, source « dora ») et l'identifiant
+    # par lequel Les Emplois le désignent. Les deux sont la même chaîne.
     return f"{DORA_UID_PREFIX}{service_id}"
 
 
