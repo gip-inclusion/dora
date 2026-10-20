@@ -83,11 +83,11 @@ def test_and_technical_accounts_excluded_from_deletion(
     settings, user_account_deletion_task
 ):
     settings.EMPLOIS_EMAIL = "emplois@example.com"
-    long_ago = timezone.now() - relativedelta(years=2)
+    two_years_ago = timezone.now() - relativedelta(years=2)
 
-    di_user = make_user(last_login=long_ago, email=settings.DATA_INCLUSION_EMAIL)
-    emplois_user = make_user(last_login=long_ago, email=settings.EMPLOIS_EMAIL)
-    regular_user = make_user(last_login=long_ago)
+    di_user = make_user(last_login=two_years_ago, email=settings.DATA_INCLUSION_EMAIL)
+    emplois_user = make_user(last_login=two_years_ago, email=settings.EMPLOIS_EMAIL)
+    regular_user = make_user(last_login=two_years_ago)
 
     candidates = user_account_deletion_task.candidates()
 
