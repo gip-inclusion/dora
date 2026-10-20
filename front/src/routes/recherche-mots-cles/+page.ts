@@ -4,6 +4,8 @@ import type { ServiceSearchResult } from "$lib/types";
 
 import type { PageLoad } from "./$types";
 
+export const ssr = false;
+
 export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
   const keywords = url.searchParams.get("q") || "";
