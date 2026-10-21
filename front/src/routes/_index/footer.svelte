@@ -81,7 +81,7 @@
       <NavItem label="Gestion des cookies" onclick={showCookieBanner} />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
-      <NavItem label="Statistiques" href={AUTOMETA_PUBLIC_STATS_URL} />
+      <NavItem label="Statistiques" href={AUTOMETA_PUBLIC_STATS_URL} otherTab />
     </nav>
   </CenteredGrid>
 </footer>
