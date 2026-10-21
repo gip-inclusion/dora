@@ -125,7 +125,8 @@ export const serviceSchema: v.Schema = {
   },
   mobilisationModes: {
     label: "Mode de mobilisation du service",
-    default: [],
+    // Formulaire Dora présélectionné via `fieldgroup-modalities`
+    default: ["utiliser-lien-mobilisation"],
     rules: [v.isArray([v.isString()])],
     required: true,
   },
