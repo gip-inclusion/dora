@@ -7,10 +7,7 @@
   import Tabs from "$lib/components/display/tabs.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
-  import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
-  import { registerRechercheTextuelleExperiment } from "$lib/utils/matomo";
   import { userPreferences } from "$lib/utils/preferences";
   import HomeTabPanel, {
     homeTabs,
@@ -20,7 +17,6 @@
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
-  import { page } from "$app/state";
   import type { PageData } from "./$types";
   import { URL_HELP_SITE } from "$lib/consts";
 
@@ -35,24 +31,6 @@
   let lastVisitedStructure = $derived(
     getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
-
-  // Afin de faciliter certaines démonstrations, il est possible d'activer la
-  // recherche par mots-clés / texte libre via le paramètre d'URL `searchByText`.
-  const searchByTextParam = $derived.by(() => {
-    const v = page.url.searchParams.get("searchByText");
-    if (v === "1") {
-      return true;
-    }
-    if (v === "0") {
-      return false;
-    }
-    return null;
-  });
-  let searchByTextMatomo = $state(false);
-  registerRechercheTextuelleExperiment(() => {
-    searchByTextMatomo = true;
-  });
-  const searchByText = $derived(searchByTextParam ?? searchByTextMatomo);
 </script>
 
 <CenteredGrid extraClass="pt-s32" bgColor="bg-magenta-10" noPadding>
@@ -60,28 +38,20 @@
     Trouvez le service adapté<br />pour lever les freins à l’insertion
   </h1>
 
-  {#if searchByText}
-    <div class="mb-s16">
-      <SearchFormByKeyword />
-    </div>
-  {:else}
-    <SearchForm
-      servicesOptions={data.servicesOptions}
-      cityCode={data.cityCode}
-      cityLabel={data.cityLabel}
-      label={data.cityLabel}
-      initialSearch
+  <SearchForm
+    servicesOptions={data.servicesOptions}
+    cityCode={data.cityCode}
+    cityLabel={data.cityLabel}
+    label={data.cityLabel}
+    initialSearch
+  />
+  <div class="mt-s32 flex items-center justify-center">
+    <div class="mr-s16">ou</div>
+    <LinkButton
+      label="Faire une recherche par mots-clés"
+      to={`/recherche-mots-cles`}
     />
-    {#if GOOGLE_CSE_ID}
-      <div class="mt-s32 flex items-center justify-center">
-        <div class="mr-s16">ou</div>
-        <LinkButton
-          label="Faire une recherche par mots-clés"
-          to={`/recherche-textuelle`}
-        />
-      </div>
-    {/if}
-  {/if}
+  </div>
 
   {#if lastVisitedStructure?.canEditInformations}
     <div class="mt-s32">

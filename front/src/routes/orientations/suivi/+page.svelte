@@ -131,7 +131,7 @@
       {:else}
         <a
           id="text-search-link"
-          href="/recherche-textuelle"
+          href="/recherche-mots-cles"
           class="text-magenta-cta font-bold">Rechercher par mots-clé</a
         >
         <a id="keyword-search-link" href="/" class="text-magenta-cta font-bold"
