@@ -80,7 +80,7 @@
       <NavItem label="Gestion des cookies" onclick={showCookieBanner} />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
-      <NavItem label="Statistiques" href="/stats" />
+      <NavItem label="Statistiques" href="https://statistiques.inclusion.gouv.fr/dashboards/actes-metier-stats-publiques/" />
     </nav>
   </CenteredGrid>
 </footer>
