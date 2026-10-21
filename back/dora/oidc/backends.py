@@ -14,6 +14,9 @@ logger = getLogger(__name__)
 
 
 class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
+    # claims d'identité attendus de ProConnect : prénom et nom d'usage
+    NAME_CLAIMS = ("given_name", "usual_name")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -38,11 +41,48 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
 
         try:
             # cas où le type du token JWT est `application/json`
-            return user_response.json()
+            userinfo = user_response.json()
         except requests.exceptions.JSONDecodeError:
             # sinon, on présume qu'il s'agit d'un token JWT au format `application/jwt` (+...)
             # comme c'est le cas pour ProConnect.
-            return self.verify_token(user_response.text)
+            userinfo = self.verify_token(user_response.text)
+
+        return self.complete_name_claims(userinfo, payload)
+
+    def complete_name_claims(self, userinfo: dict, payload: dict | None) -> dict:
+        # Seul le contenu de `/userinfo` est transmis à `create_user` / `update_user`
+        # par `mozilla-django-oidc`, alors que l'`id_token` (déjà décodé et vérifié
+        # en amont, cf. `OIDCAuthenticationBackend.authenticate`) est un second
+        # porteur possible des mêmes claims.
+        # Par précaution, on complète donc les claims d'identité manquants à partir
+        # de l'`id_token` : il n'est pas établi que ProConnect les y fournisse,
+        # d'où la liste des claims de chaque source dans le log ci-dessous.
+        payload = payload or {}
+
+        # relevé *avant* complétion : c'est bien ce que `/userinfo` a fourni
+        # de lui-même qui est intéressant pour le diagnostic.
+        userinfo_claims = sorted(userinfo)
+
+        for claim in self.NAME_CLAIMS:
+            if not userinfo.get(claim) and payload.get(claim):
+                userinfo[claim] = payload[claim]
+
+        if missing := [claim for claim in self.NAME_CLAIMS if not userinfo.get(claim)]:
+            # sans ces claims, le compte DORA restera sans prénom ni nom :
+            # on le trace pour pouvoir identifier les fournisseurs d'identité concernés.
+            core_logger.warning(
+                "Claims d'identité manquants dans la réponse ProConnect",
+                {
+                    "legal": True,
+                    "pcSub": userinfo.get("sub"),
+                    "siret": userinfo.get("siret"),
+                    "missingClaims": missing,
+                    "userinfoClaims": userinfo_claims,
+                    "idTokenClaims": sorted(payload),
+                },
+            )
+
+        return userinfo
 
     def authenticate(self, request, **kwargs):
         result = super().authenticate(request, **kwargs)
@@ -95,11 +135,15 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
 
         # L'utilisateur est créé sans mot de passe (aucune connexion à l'admin),
         # et comme venant de ProConnect, on considère l'e-mail vérifié.
+        # note : les prénom et nom sont laissés vides si ProConnect ne les fournit pas
+        # (ils seront remplis à une connexion ultérieure, cf. `update_user`).
+        # Surtout pas de valeur de remplissage ici : elle serait transmise telle quelle
+        # aux consommateurs des données utilisateur (cf. `nexus_full_sync`).
         new_user = self.UserModel.objects.create_user(
             email,
             sub_pc=sub,
-            first_name=claims.get("given_name", "N/D"),
-            last_name=claims.get("usual_name", "N/D"),
+            first_name=claims.get("given_name") or "",
+            last_name=claims.get("usual_name") or "",
             is_valid=True,
         )
 
