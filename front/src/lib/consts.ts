@@ -36,9 +36,15 @@ export const URL_MANAGER_DATA_INCLUSION_REPORT = "https://tally.so/r/nWZBrv";
 // Lien vers le mode d'emploi du tableau de bord « Mes structures & services Dora » du gestionnaire de territoire
 export const URL_MANAGER_HELP_NOTICE = `${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`;
 
+const AUTOMETA_DASHBOARDS_URL =
+  "https://statistiques.inclusion.gouv.fr/dashboards";
+
+// Tableau de bord Autometa public (lien « Statistiques » du footer)
+export const AUTOMETA_PUBLIC_STATS_URL = `${AUTOMETA_DASHBOARDS_URL}/actes-metier-stats-publiques/`;
+
 // Tableau de bord Autometa du gestionnaire de territoire, par département.
 export const AUTOMETA_MANAGER_DASHBOARD_URLS = (departmentCode: string) => {
-  const url = `https://statistiques.inclusion.gouv.fr/dashboards/tdb-gestionnaires-territoires/?dept=${departmentCode}`;
+  const url = `${AUTOMETA_DASHBOARDS_URL}/tdb-gestionnaires-territoires/?dept=${departmentCode}`;
 
   return {
     accompagnements: `${url}&tab=accomp`,
