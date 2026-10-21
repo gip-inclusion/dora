@@ -10,16 +10,15 @@ import { fetchNexusAutoLoginUrl } from "$lib/utils/nexus";
 // sans autorisation explicite la route serait une redirection ouverte.
 const FALLBACK_ALLOWED_ORIGIN = new URL(INCLUSION_PLATFORM_URL).origin;
 
-// Renvoie `nextUrl` si on a le droit de s'y rendre sans auto-connexion, sinon `null`
-function getAllowedFallbackUrl(nextUrl: string) {
+function hasAllowedOrigin(nextUrl: string) {
   let origin: string;
   try {
     origin = new URL(nextUrl).origin;
   } catch {
-    return null;
+    return false;
   }
 
-  return origin === FALLBACK_ALLOWED_ORIGIN ? nextUrl : null;
+  return origin === FALLBACK_ALLOWED_ORIGIN;
 }
 
 export const load = async ({ cookies, url }: RequestEvent) => {
@@ -33,7 +32,7 @@ export const load = async ({ cookies, url }: RequestEvent) => {
 
   // l'auto-connexion est un confort : si elle n'aboutit pas, on envoie tout de
   // même l'utilisateur à destination, qui l'invitera à se connecter
-  const fallback = getAllowedFallbackUrl(nextUrl);
+  const fallback = hasAllowedOrigin(nextUrl) ? nextUrl : null;
 
   if (!token) {
     if (fallback) {
