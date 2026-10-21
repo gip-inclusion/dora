@@ -100,7 +100,7 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (isAuthenticated()) {
+    } else if (isAuthenticated() || plateformeOrientationUrl) {
       handleTrackMobilisation(plateformeOrientationUrl ?? undefined);
     }
   }
