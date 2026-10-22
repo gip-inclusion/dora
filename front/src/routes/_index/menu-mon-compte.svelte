@@ -4,7 +4,7 @@
   import LogoutBoxLineSystem from "svelte-remix/LogoutBoxLineSystem.svelte";
   import Notification3LineMedia from "svelte-remix/Notification3LineMedia.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import RoadMapIcon from "#lib/assets/icons/ico-road-map.svelte";
   import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
   import { OIDC_AUTH_BACKEND } from "#lib/env.js";
@@ -25,7 +25,7 @@
     <a href="/admin/gerer-mon-territoire" class={aClass}>
       <span
         class="mr-s10 h-s24 w-s24 inline-block fill-current"
-        class:text-magenta-cta={$page.url.pathname ===
+        class:text-magenta-cta={page.url.pathname ===
           "/admin/gerer-mon-territoire"}
         aria-hidden="true"
       >
@@ -38,7 +38,7 @@
   <a href="/mon-compte" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
-      class:text-magenta-cta={$page.url.pathname === "/mon-compte"}
+      class:text-magenta-cta={page.url.pathname === "/mon-compte"}
       aria-hidden="true"
     >
       <AccountCircleLineUserFaces />
@@ -49,7 +49,7 @@
   <a href="/favoris" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
-      class:text-magenta-cta={$page.url.pathname === "/favoris"}
+      class:text-magenta-cta={page.url.pathname === "/favoris"}
       aria-hidden="true"
     >
       <BookmarkLineBusiness />
@@ -60,7 +60,7 @@
   <a href="/mes-alertes" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
-      class:text-magenta-cta={$page.url.pathname === "/mes-alertes"}
+      class:text-magenta-cta={page.url.pathname === "/mes-alertes"}
       aria-hidden="true"
     >
       <Notification3LineMedia />

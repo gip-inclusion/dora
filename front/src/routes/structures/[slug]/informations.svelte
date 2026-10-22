@@ -6,7 +6,7 @@
   import TimeLineSystem from "svelte-remix/TimeLineSystem.svelte";
   import WheelchairLineOthers from "svelte-remix/WheelchairLineOthers.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import Button from "#lib/components/display/button.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
@@ -73,7 +73,7 @@
 
   async function showInformations() {
     displayInformations = true;
-    await trackStructureInfos(structure, $page.url);
+    await trackStructureInfos(structure, page.url);
   }
 </script>
 

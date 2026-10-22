@@ -2,7 +2,7 @@
   import type { Snippet } from "svelte";
   import { browser } from "$app/env";
   import { SvelteToast, toast } from "@zerodevx/svelte-toast";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { ENVIRONMENT } from "#lib/env.js";
   import "../app.css";
   import Footer from "./_index/footer.svelte";
@@ -25,22 +25,22 @@
   let { children, data }: Props = $props();
 
   $effect(() => {
-    trackPageView($page.url.pathname, $page.data.title);
+    trackPageView(page.url.pathname, page.data.title);
   });
 
   $effect(() => {
-    $page.url;
+    page.url;
     enforceCrispConsent();
   });
 
   $effect(() => {
-    if (browser && $page.url.searchParams.get("link_invalid") === "true") {
+    if (browser && page.url.searchParams.get("link_invalid") === "true") {
       toast.push("Lien expiré ou invalide");
     }
   });
 
   $effect(() => {
-    const userStructureSlug = $page.url.searchParams.get("user_structure_slug");
+    const userStructureSlug = page.url.searchParams.get("user_structure_slug");
     if (userStructureSlug && $userInfo) {
       const userStructure = [
         ...$userInfo.pendingStructures,
@@ -58,18 +58,18 @@
 </script>
 
 <svelte:head>
-  {#key $page.data}
-    {#if ENVIRONMENT !== "production" || $page.data.noIndex}
+  {#key page.data}
+    {#if ENVIRONMENT !== "production" || page.data.noIndex}
       <meta name="robots" content="noindex" />
     {/if}
-    {#if $page.data.title}
-      <title>{$page.data.title}</title>
+    {#if page.data.title}
+      <title>{page.data.title}</title>
     {:else}
       <title>DORA : recensement et mise à jour de l’offre d’insertion</title>
     {/if}
-    {#if $page.data.description}
-      <meta name="description" content={$page.data.description} />
-    {:else if !$page.data.noIndex}
+    {#if page.data.description}
+      <meta name="description" content={page.data.description} />
+    {:else if !page.data.noIndex}
       <meta
         name="description"
         content="Le service public numérique de recensement et mise à jour de l’offre d’insertion."

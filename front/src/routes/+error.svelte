@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import { RATE_LIMIT_MESSAGE } from "#lib/consts.js";
 
-  const notFound = $page.status === 404;
-  const forbidden = $page.status === 403;
-  const rateLimit = $page.status === 429;
+  const notFound = page.status === 404;
+  const forbidden = page.status === 403;
+  const rateLimit = page.status === 429;
 </script>
 
 <svelte:head>

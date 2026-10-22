@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import HamburgerMenu from "#lib/components/display/hamburger.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
@@ -28,11 +28,11 @@
     </div>
 
     {#if !$userInfo}
-      {#if $page.url.pathname !== "/auth/connexion"}
+      {#if page.url.pathname !== "/auth/connexion"}
         <LinkButton
           label="Se connecter"
           to={`/auth/connexion?next=${encodeURIComponent(
-            $page.url.pathname + $page.url.search
+            page.url.pathname + page.url.search
           )}`}
         />
       {/if}

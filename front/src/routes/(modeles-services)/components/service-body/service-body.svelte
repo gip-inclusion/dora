@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import Notice from "#lib/components/display/notice.svelte";
@@ -26,12 +26,12 @@
 
   let isDI = $derived("source" in service);
 
-  let searchIdParam = $derived($page.url.searchParams.get("searchId"));
+  let searchIdParam = $derived(page.url.searchParams.get("searchId"));
   let searchIdNumber = $derived(
     searchIdParam ? parseInt(searchIdParam) : undefined
   );
   let opParam = $derived(
-    $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
+    page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
   );
   let orientationQueryString = $derived.by(() => {
     const params = new URLSearchParams();
@@ -80,7 +80,7 @@
 
   function handleTrackMobilisation(externalUrl?: string) {
     if (!mobilisationTracked) {
-      trackMobilisation(service, $page.url, isDI, searchIdNumber, externalUrl);
+      trackMobilisation(service, page.url, isDI, searchIdNumber, externalUrl);
       mobilisationTracked = true;
     }
   }

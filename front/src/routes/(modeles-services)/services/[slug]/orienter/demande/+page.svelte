@@ -12,7 +12,7 @@
   import { orientationStep2Schema } from "../schema";
   import Form from "#lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
@@ -28,7 +28,7 @@
 
   let requesting = $state(false);
 
-  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
+  let opJwt = $derived(page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
   let previsousStepUrl = $derived(
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${

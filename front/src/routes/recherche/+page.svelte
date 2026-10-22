@@ -2,7 +2,7 @@
   import { onMount, tick, untrack } from "svelte";
   import { browser } from "$app/env";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
@@ -47,7 +47,7 @@
     Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
       (acc, [filterKey, queryParam]) => ({
         ...acc,
-        [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
+        [filterKey]: page.url.searchParams.get(queryParam)?.split(",") || [],
       }),
       {} as Filters
     )
@@ -170,16 +170,16 @@
     Object.keys(filters).forEach((filterKey) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
       if (filters[filterKey].length > 0) {
-        $page.url.searchParams.set(queryParam, filters[filterKey]);
+        page.url.searchParams.set(queryParam, filters[filterKey]);
       } else {
-        $page.url.searchParams.delete(queryParam);
+        page.url.searchParams.delete(queryParam);
       }
     });
     // Utilisation de l'API History pour mettre à jour les paramètres d'URL sans recharger la page
     window.history.replaceState(
       history.state,
       "",
-      `?${$page.url.searchParams.toString()}`
+      `?${page.url.searchParams.toString()}`
     );
   });
 

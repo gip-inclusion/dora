@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { isAuthenticated, userInfo } from "#lib/utils/auth.js";
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
@@ -22,9 +22,9 @@
   let currentLocation = $state(
     isAuthenticated() ? "service-orientation-step1" : "service-orientation"
   );
-  if ($page.url.pathname.endsWith("/orienter/demande")) {
+  if (page.url.pathname.endsWith("/orienter/demande")) {
     currentLocation = "service-orientation-step2";
-  } else if ($page.url.pathname.endsWith("/orienter/merci")) {
+  } else if (page.url.pathname.endsWith("/orienter/merci")) {
     currentLocation = "service-orientation-confirmation";
   }
 </script>

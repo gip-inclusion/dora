@@ -15,7 +15,7 @@
   import User6LineUserFaces from "svelte-remix/User6LineUserFaces.svelte";
   import UserShared2LineUserFaces from "svelte-remix/UserShared2LineUserFaces.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
@@ -48,7 +48,7 @@
 
   onMount(() => {
     if (orientation) {
-      trackOrientation(orientation, $page.url);
+      trackOrientation(orientation, page.url);
     }
   });
 </script>

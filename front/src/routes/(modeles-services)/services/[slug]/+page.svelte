@@ -3,7 +3,7 @@
 
   import { browser } from "$app/env";
   import { beforeNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
@@ -50,8 +50,8 @@
   );
 
   onMount(() => {
-    const searchId = $page.url.searchParams.get("searchId");
-    trackService(service, $page.url, searchId, isDI);
+    const searchId = page.url.searchParams.get("searchId");
+    trackService(service, page.url, searchId, isDI);
   });
 
   beforeNavigate(({ from, to }) => {

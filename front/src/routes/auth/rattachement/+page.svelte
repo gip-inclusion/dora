@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import Button from "#lib/components/display/button.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "#lib/components/specialized/establishment-search/search.svelte";
@@ -44,8 +44,8 @@
   let loading = $state(false);
 
   onMount(() => {
-    if ($page.url.searchParams.has("unknown_siret")) {
-      const newUrl = new URL($page.url);
+    if (page.url.searchParams.has("unknown_siret")) {
+      const newUrl = new URL(page.url);
       newUrl.searchParams.delete("unknown_siret");
       history.replaceState({}, "", newUrl);
     }
@@ -86,7 +86,7 @@
       const redirectUrl = opJwt
         ? transferUrlParams({
             targetUrl: `/services/${serviceSlug}${directToOrientationPage ? "/orienter" : ""}`,
-            sourceUrl: $page.url,
+            sourceUrl: page.url,
           })
         : `/structures/${result.data.slug}`;
       await goto(redirectUrl);

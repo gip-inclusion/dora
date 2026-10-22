@@ -11,7 +11,7 @@
 
   import { browser } from "$app/env";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import LinkButton from "#lib/components/display/link-button.svelte";
   import SelectField from "#lib/components/inputs/obsolete/select-field.svelte";
@@ -58,7 +58,7 @@
       return;
     }
 
-    const searchParams = $page.url.searchParams;
+    const searchParams = page.url.searchParams;
 
     if (serviceStatus) {
       searchParams.set("service-status", encodeURIComponent(serviceStatus));
@@ -72,7 +72,7 @@
       searchParams.delete("update-needed");
     }
 
-    let newUrl = $page.url.pathname;
+    let newUrl = page.url.pathname;
     if (searchParams.toString()) {
       newUrl += `?${searchParams.toString()}`;
     }

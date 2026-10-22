@@ -16,7 +16,7 @@
   import { isAuthenticated } from "#lib/utils/auth.js";
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "#lib/utils/stats.js";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import {
     ORIENTATION_JWT_QUERY_PARAM,
     URL_DOCUMENTATION_ORIENTATION,
@@ -46,9 +46,9 @@
   let requesting = $state(false);
 
   // tracking activé sur la page courante :
-  const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));
+  const shouldTrack = Boolean(page.url.searchParams.get("newlogin"));
 
-  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
+  let opJwt = $derived(page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
   let previousStepUrl = $derived(
     `/services/${isDI ? "di--" : ""}${service.slug}${
@@ -83,15 +83,15 @@
       $orientation.beneficiaryFranceTravailNumber =
         data.beneficiaryInfo.franceTravailId;
       if (data.beneficiaryInfo.userStructureSlug) {
-        $page.url.searchParams.set(
+        page.url.searchParams.set(
           "user_structure_slug",
           data.beneficiaryInfo.userStructureSlug
         );
-        history.replaceState(null, "", $page.url.pathname + $page.url.search);
+        history.replaceState(null, "", page.url.pathname + page.url.search);
       }
     } else {
-      $page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
-      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+      page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
+      history.replaceState(null, "", page.url.pathname + page.url.search);
     }
   });
 
@@ -110,9 +110,9 @@
 
   onMount(async () => {
     if (isAuthenticated() && shouldTrack) {
-      await trackMobilisation(service, $page.url, isDI);
-      $page.url.searchParams.delete("newlogin");
-      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+      await trackMobilisation(service, page.url, isDI);
+      page.url.searchParams.delete("newlogin");
+      history.replaceState(null, "", page.url.pathname + page.url.search);
     }
   });
 </script>
