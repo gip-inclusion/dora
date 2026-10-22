@@ -12,11 +12,11 @@ import { UNEXPECTED_ERROR_MESSAGE } from "#lib/consts.js";
 import { handleInboundNexusAutoLogin } from "#lib/utils/nexus.js";
 import { isApiRequest, setClientIpHeaders } from "#lib/server/client-ip.js";
 
-import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
+import { MAX_REQUESTS_PER_MINUTE } from "$app/env/private";
 import { TOKEN_KEY } from "#lib/utils/auth.js";
 
 const rateLimiter = new RetryAfterRateLimiter({
-  IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
+  IPUA: [MAX_REQUESTS_PER_MINUTE, "m"],
 });
 
 if (ENVIRONMENT !== "local") {

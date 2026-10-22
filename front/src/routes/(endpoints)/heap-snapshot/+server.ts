@@ -1,12 +1,12 @@
 import fileSystem from "fs";
 import v8Engine from "v8";
 
-import { env } from "$env/dynamic/private";
+import { SNAPSHOT_SECRET } from "$app/env/private";
 
 export function GET({ request }: { request: Request }) {
   if (
-    !env.SNAPSHOT_SECRET ||
-    request.headers.get("x-snapshot-secret") !== env.SNAPSHOT_SECRET
+    !SNAPSHOT_SECRET ||
+    request.headers.get("x-snapshot-secret") !== SNAPSHOT_SECRET
   ) {
     return new Response("forbidden", { status: 403 });
   }

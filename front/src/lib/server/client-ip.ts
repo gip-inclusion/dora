@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/private";
+import { FRONT_PROXY_SECRET } from "$app/env/private";
 import { API_URL } from "#lib/env.js";
 
 // En-têtes relatifs à l'IP du client reçus du navigateur : ils ne doivent pas
@@ -18,9 +18,9 @@ const CLIENT_IP_HEADERS = [
 export function setClientIpHeaders(headers: Headers, clientAddress: string) {
   CLIENT_IP_HEADERS.forEach((header) => headers.delete(header));
   headers.set("X-Forwarded-For", clientAddress);
-  if (env.FRONT_PROXY_SECRET) {
+  if (FRONT_PROXY_SECRET) {
     headers.set("X-Dora-Client-Ip", clientAddress);
-    headers.set("X-Dora-Proxy-Secret", env.FRONT_PROXY_SECRET);
+    headers.set("X-Dora-Proxy-Secret", FRONT_PROXY_SECRET);
   }
 }
 

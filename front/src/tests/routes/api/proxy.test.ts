@@ -9,7 +9,11 @@ vi.mock("#lib/utils/auth.js", () => ({
 }));
 
 const privateEnv: Record<string, string | undefined> = {};
-vi.mock("$env/dynamic/private", () => ({ env: privateEnv }));
+vi.mock("$app/env/private", () => ({
+  get FRONT_PROXY_SECRET() {
+    return privateEnv.FRONT_PROXY_SECRET;
+  },
+}));
 
 // Import after mocks are set up
 const { GET, POST, PUT, PATCH, DELETE } =
