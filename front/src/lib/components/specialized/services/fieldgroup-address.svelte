@@ -1,11 +1,11 @@
 <script lang="ts">
-  import FieldGroup from "$lib/components/display/field-group.svelte";
-  import AddressSearchField from "$lib/components/forms/fields/address-search-field.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
-  import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
-  import type { GeoApiValue, Service, Structure } from "$lib/types";
-  import { randomId } from "$lib/utils/random";
+  import FieldGroup from "#lib/components/display/field-group.svelte";
+  import AddressSearchField from "#lib/components/forms/fields/address-search-field.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import CitySearchField from "#lib/components/forms/fields/city-search-field.svelte";
+  import HiddenField from "#lib/components/forms/fields/hidden-field.svelte";
+  import type { GeoApiValue, Service, Structure } from "#lib/types.js";
+  import { randomId } from "#lib/utils/random.js";
   import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
   interface Props {

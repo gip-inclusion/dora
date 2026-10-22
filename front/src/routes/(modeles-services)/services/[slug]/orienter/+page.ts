@@ -1,10 +1,10 @@
 import { error, redirect } from "@sveltejs/kit";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
 import {
   getOrientationBeneficiaryInfo,
   type OrientationBeneficiaryInfo,
-} from "$lib/requests/nexus";
-import { transferUrlParams } from "$lib/utils/misc";
+} from "#lib/requests/nexus.js";
+import { transferUrlParams } from "#lib/utils/misc.js";
 
 export const load = async ({ parent, url, params, fetch }) => {
   const data = await parent();

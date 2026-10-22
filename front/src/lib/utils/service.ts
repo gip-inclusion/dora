@@ -21,9 +21,9 @@ import type {
   ServicesOptions,
   ServiceStatus,
   ZoneEligibiliteDisplay,
-} from "$lib/types";
+} from "#lib/types.js";
 
-import { NATIONAL_ELIGIBLITITY_ZONE } from "$lib/consts";
+import { NATIONAL_ELIGIBLITITY_ZONE } from "#lib/consts.js";
 import { isLessThanOneHourAgo } from "./date";
 import { log } from "./logger";
 

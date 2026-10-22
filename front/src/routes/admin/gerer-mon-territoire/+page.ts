@@ -1,4 +1,4 @@
-import { loadManagerDepartments } from "$lib/utils/manager-department";
+import { loadManagerDepartments } from "#lib/utils/manager-department.js";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, parent }) => {

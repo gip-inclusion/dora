@@ -1,11 +1,11 @@
-import { fetchData } from "$lib/utils/misc";
-import { getApiURL } from "$lib/utils/api";
-import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+import { fetchData } from "#lib/utils/misc.js";
+import { getApiURL } from "#lib/utils/api.js";
+import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
 import { get } from "svelte/store";
 
-import { userInfo } from "$lib/utils/auth";
-import { userPreferences } from "$lib/utils/preferences";
-import type { OrientationStats } from "$lib/types";
+import { userInfo } from "#lib/utils/auth.js";
+import { userPreferences } from "#lib/utils/preferences.js";
+import type { OrientationStats } from "#lib/types.js";
 
 export const ssr = false;
 

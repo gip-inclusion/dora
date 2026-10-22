@@ -4,9 +4,9 @@ import type {
   ServiceStructure,
   ServicesOptions,
   Structure,
-} from "$lib/types";
-import type { Schema } from "$lib/validation/schema-utils";
-import { modelSchema, serviceSchema } from "$lib/validation/schemas/service";
+} from "#lib/types.js";
+import type { Schema } from "#lib/validation/schema-utils.js";
+import { modelSchema, serviceSchema } from "#lib/validation/schemas/service.js";
 
 const defaultServiceCache = Object.fromEntries(
   Object.entries(serviceSchema).map(([fieldName, props]) => [

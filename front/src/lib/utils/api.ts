@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { API_URL } from "$lib/env";
+import { API_URL } from "#lib/env.js";
 
 export function getApiURL() {
   if (browser) {

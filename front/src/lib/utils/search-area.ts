@@ -1,5 +1,5 @@
-import DEPARTMENTS_DATA from "$lib/data/departments.json";
-import REGIONS_DATA from "$lib/data/regions.json";
+import DEPARTMENTS_DATA from "#lib/data/departments.json";
+import REGIONS_DATA from "#lib/data/regions.json";
 
 interface GeoSearchData {
   code: string;

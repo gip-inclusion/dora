@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import * as v from "$lib/validation/schema-utils";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import { contactPrescriber } from "$lib/utils/orientation";
-  import type { Orientation } from "$lib/types";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import Form from "#lib/components/forms/form.svelte";
+  import * as v from "#lib/validation/schema-utils.js";
+  import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
+  import { contactPrescriber } from "#lib/utils/orientation.js";
+  import type { Orientation } from "#lib/types.js";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
 
   interface Props {

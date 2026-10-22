@@ -1,4 +1,8 @@
-import type { FeeCondition, LocationKind, ServicesOptions } from "$lib/types";
+import type {
+  FeeCondition,
+  LocationKind,
+  ServicesOptions,
+} from "#lib/types.js";
 import * as v from "../schema-utils";
 
 const IN_PERSON_LOCATION_KIND = "en-presentiel";

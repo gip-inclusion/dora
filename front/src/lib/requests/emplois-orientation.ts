@@ -1,5 +1,5 @@
-import { getApiURL } from "$lib/utils/api";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { getApiURL } from "#lib/utils/api.js";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
 
 interface EmploisOrientationParams {
   serviceSlug: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
-  import Spinner from "$lib/components/display/spinner.svelte";
+  import ExternalLinkIcon from "#lib/components/display/external-link-icon.svelte";
+  import Spinner from "#lib/components/display/spinner.svelte";
 
   interface Props {
     label: string;

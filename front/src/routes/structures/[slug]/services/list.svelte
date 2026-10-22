@@ -13,9 +13,9 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import type { Choice, ServiceStatus, ShortService } from "$lib/types";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import SelectField from "#lib/components/inputs/obsolete/select-field.svelte";
+  import type { Choice, ServiceStatus, ShortService } from "#lib/types.js";
 
   import Count from "../count.svelte";
   import {

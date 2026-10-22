@@ -1,5 +1,5 @@
-import { API_URL } from "$lib/env";
-import { disconnect } from "$lib/utils/auth";
+import { API_URL } from "#lib/env.js";
+import { disconnect } from "#lib/utils/auth.js";
 import { redirect } from "@sveltejs/kit";
 
 export const load = async () => {

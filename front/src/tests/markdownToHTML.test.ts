@@ -1,4 +1,4 @@
-import { markdownToHTML } from "$lib/utils/misc";
+import { markdownToHTML } from "#lib/utils/misc.js";
 import { describe, expect, test } from "vitest";
 
 describe("markdownToHTML", () => {

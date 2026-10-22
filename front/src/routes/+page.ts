@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
-import { getCityLabel } from "$lib/requests/geo";
-import { getServicesOptions } from "$lib/requests/services";
-import { getLastSearchCity } from "$lib/utils/service-search";
+import { getCityLabel } from "#lib/requests/geo.js";
+import { getServicesOptions } from "#lib/requests/services.js";
+import { getLastSearchCity } from "#lib/utils/service-search.js";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, parent, url, data }) => {

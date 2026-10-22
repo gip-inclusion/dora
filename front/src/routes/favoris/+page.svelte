@@ -1,13 +1,13 @@
 <script lang="ts">
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
 
-  import illustration from "$lib/assets/illustrations/illu-favs.svg";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { userInfo } from "$lib/utils/auth";
+  import illustration from "#lib/assets/illustrations/illu-favs.svg";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import { userInfo } from "#lib/utils/auth.js";
   import type { PageData } from "./$types";
   import BookmarkCard from "./bookmark-card.svelte";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
 
   interface Props {
     data: PageData;

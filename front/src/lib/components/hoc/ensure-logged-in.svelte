@@ -3,7 +3,7 @@
 
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { isAuthenticated, userInfo } from "$lib/utils/auth";
+  import { isAuthenticated, userInfo } from "#lib/utils/auth.js";
   import { onMount } from "svelte";
 
   interface Props {

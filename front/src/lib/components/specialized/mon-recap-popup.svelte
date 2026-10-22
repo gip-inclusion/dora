@@ -2,11 +2,11 @@
   import dayjs from "dayjs";
 
   import { browser } from "$app/environment";
-  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { TallyFormId, MON_RECAP_DEPARTMENTS } from "$lib/consts";
-  import { userInfo } from "$lib/utils/auth";
-  import { userPreferences } from "$lib/utils/preferences";
-  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+  import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
+  import { TallyFormId, MON_RECAP_DEPARTMENTS } from "#lib/consts.js";
+  import { userInfo } from "#lib/utils/auth.js";
+  import { userPreferences } from "#lib/utils/preferences.js";
+  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
 
   const monRecapTallyFormCompletedKey = `tallyForm-${TallyFormId.NOTEBOOK_ORDER_FORM_ID}-completed`;
 

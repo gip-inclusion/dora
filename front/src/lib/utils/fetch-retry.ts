@@ -1,4 +1,4 @@
-import { sleep } from "$lib/utils/misc";
+import { sleep } from "#lib/utils/misc.js";
 
 export type FetchRetryOptions = {
   maxAttempts?: number;

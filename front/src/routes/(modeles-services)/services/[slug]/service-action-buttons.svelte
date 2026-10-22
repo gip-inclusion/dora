@@ -10,14 +10,14 @@
 
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { isAuthenticated } from "$lib/utils/auth";
-  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
-  import type { Service } from "$lib/types";
+  import Bookmarkable from "#lib/components/hoc/bookmarkable.svelte";
+  import Tooltip from "#lib/components/ui/tooltip.svelte";
+  import { isAuthenticated } from "#lib/utils/auth.js";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.js";
+  import type { Service } from "#lib/types.js";
 
   import ServiceActionButton from "./service-action-button.svelte";
-  import { trackMatomoEvent } from "$lib/utils/matomo";
+  import { trackMatomoEvent } from "#lib/utils/matomo.js";
 
   interface Props {
     service: Service;

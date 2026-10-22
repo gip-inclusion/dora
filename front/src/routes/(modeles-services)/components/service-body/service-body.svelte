@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { isAuthenticated, userInfo } from "$lib/utils/auth";
-  import { isServiceRecentlyPublished } from "$lib/utils/service";
-  import { trackMobilisation } from "$lib/utils/stats";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
+  import type { Model, Service, ServicesOptions } from "#lib/types.js";
+  import { isAuthenticated, userInfo } from "#lib/utils/auth.js";
+  import { isServiceRecentlyPublished } from "#lib/utils/service.js";
+  import { trackMobilisation } from "#lib/utils/stats.js";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";

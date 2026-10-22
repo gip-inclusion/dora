@@ -1,4 +1,4 @@
-import { getApiURL } from "$lib/utils/api";
+import { getApiURL } from "#lib/utils/api.js";
 
 export async function deleteFile(fileName: string) {
   const encodedFileName = encodeURIComponent(fileName);

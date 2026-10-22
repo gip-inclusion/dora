@@ -1,4 +1,4 @@
-import type { OsmOpeningHours } from "$lib/types";
+import type { OsmOpeningHours } from "#lib/types.js";
 
 import { formatDay, PUBLIC_HOLIDAYS_OFF } from "./parse";
 

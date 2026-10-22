@@ -3,11 +3,11 @@
   import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
   import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
 
-  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import type { Choice } from "$lib/types";
-  import { getChoiceFromValue } from "$lib/utils/choice";
-  import { clickOutside } from "$lib/utils/misc";
-  import { randomId } from "$lib/utils/random";
+  import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
+  import type { Choice } from "#lib/types.js";
+  import { getChoiceFromValue } from "#lib/utils/choice.js";
+  import { clickOutside } from "#lib/utils/misc.js";
+  import { randomId } from "#lib/utils/random.js";
 
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";

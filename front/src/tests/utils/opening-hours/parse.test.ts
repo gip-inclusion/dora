@@ -3,10 +3,10 @@ import {
   formatDay,
   getHoursFromStr,
   returnEmptyHoursData,
-} from "$lib/utils/opening-hours/parse";
-import type { OsmDay } from "$lib/types";
+} from "#lib/utils/opening-hours/parse.js";
+import type { OsmDay } from "#lib/types.js";
 
-import { INVALID_OPENING_HOURS_MARKER } from "$lib/utils/opening-hours";
+import { INVALID_OPENING_HOURS_MARKER } from "#lib/utils/opening-hours/index.js";
 
 describe("returnEmptyHoursData", () => {
   test("devrait retourner une structure complète avec tous les jours", () => {

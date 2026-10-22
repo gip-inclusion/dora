@@ -1,7 +1,7 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/fil-d-ariane
-  import type { Model, Service, Structure } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
+  import type { Model, Service, Structure } from "#lib/types.js";
+  import { userInfo } from "#lib/utils/auth.js";
 
   type BreadcrumbLocation =
     | "home"

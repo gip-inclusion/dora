@@ -1,9 +1,9 @@
 import { browser } from "$app/environment";
-import { userInfo, validateCredsAndFillUserInfo } from "$lib/utils/auth";
+import { userInfo, validateCredsAndFillUserInfo } from "#lib/utils/auth.js";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
-import { needToAcceptCgu } from "$lib/utils/cgu";
+import { needToAcceptCgu } from "#lib/utils/cgu.js";
 import { doesUrlHaveOrientationJwt } from "./auth/utils";
 
 export const prerender = false;

@@ -1,4 +1,4 @@
-import type { Model, Service, ServicesOptions } from "$lib/types";
+import type { Model, Service, ServicesOptions } from "#lib/types.js";
 
 export interface FieldGroupProps {
   servicesOptions: ServicesOptions;

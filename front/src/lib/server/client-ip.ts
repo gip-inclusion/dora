@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import { API_URL } from "$lib/env";
+import { API_URL } from "#lib/env.js";
 
 // En-têtes relatifs à l'IP du client reçus du navigateur : ils ne doivent pas
 // être relayés au back, qui ne ferait pas la différence avec ceux du front.

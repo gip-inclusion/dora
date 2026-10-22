@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { fetchWithRetry } from "$lib/utils/fetch-retry";
-import { sleep } from "$lib/utils/misc";
+import { fetchWithRetry } from "#lib/utils/fetch-retry.js";
+import { sleep } from "#lib/utils/misc.js";
 
-vi.mock("$lib/utils/misc", () => ({
+vi.mock("#lib/utils/misc.js", () => ({
   // on mocke la fonction sleep pour ne pas attendre réellement durant les tests
   sleep: vi.fn().mockResolvedValue(undefined),
 }));

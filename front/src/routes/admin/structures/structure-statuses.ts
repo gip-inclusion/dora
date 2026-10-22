@@ -1,4 +1,4 @@
-import type { AdminStructure } from "$lib/types";
+import type { AdminStructure } from "#lib/types.js";
 
 import { getStatusLabel, getStructureStatus } from "./structures-filters";
 

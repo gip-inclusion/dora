@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Model, Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "#lib/types.js";
 
   import ServiceFeedbackButton from "../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDiIdentification from "./service-di-identification.svelte";

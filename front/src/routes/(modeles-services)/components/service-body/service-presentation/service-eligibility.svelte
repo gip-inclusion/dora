@@ -6,23 +6,23 @@
   import SendPlane2FillBusiness from "svelte-remix/SendPlane2FillBusiness.svelte";
   import File2FillDocument from "svelte-remix/File2FillDocument.svelte";
 
-  import Linkify from "$lib/components/display/linkify.svelte";
-  import TextClamp from "$lib/components/display/text-clamp.svelte";
+  import Linkify from "#lib/components/display/linkify.svelte";
+  import TextClamp from "#lib/components/display/text-clamp.svelte";
   import ServiceCard from "./components/service-card.svelte";
   import ServiceExternalLink from "./components/service-external-link.svelte";
   import ServiceField from "./components/service-field.svelte";
   import ServiceList from "./components/service-list.svelte";
 
-  import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { getLabelFromValue } from "$lib/utils/choice";
+  import type { Model, Service, ServicesOptions } from "#lib/types.js";
+  import { getLabelFromValue } from "#lib/utils/choice.js";
   import {
     getMobilisationModesDisplay,
     isNotFreeService,
-  } from "$lib/utils/service";
-  import { formatFilePath } from "$lib/utils/file";
+  } from "#lib/utils/service.js";
+  import { formatFilePath } from "#lib/utils/file.js";
 
   import ServiceKeyInformationSection from "./service-key-informations/service-key-information-section.svelte";
-  import { NATIONAL_ELIGIBLITITY_ZONE } from "$lib/consts";
+  import { NATIONAL_ELIGIBLITITY_ZONE } from "#lib/consts.js";
 
   interface Props {
     service: Service | Model;

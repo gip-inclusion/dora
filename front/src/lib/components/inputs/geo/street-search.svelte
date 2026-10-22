@@ -3,15 +3,15 @@
 
   import * as Sentry from "@sentry/sveltekit";
 
-  import Select from "$lib/components/inputs/select/select.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
 
-  import { BAN_API_SEARCH_URL } from "$lib/consts";
-  import { fetchWithRetry } from "$lib/utils/fetch-retry";
+  import { BAN_API_SEARCH_URL } from "#lib/consts.js";
+  import { fetchWithRetry } from "#lib/utils/fetch-retry.js";
 
   import {
     contextValidationKey,
     type ValidationContext,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
 
   interface Props {
     id: string;

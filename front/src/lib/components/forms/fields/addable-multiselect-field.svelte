@@ -5,8 +5,8 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
-  import type { CustomChoice, CustomizableFK } from "$lib/types";
+  } from "#lib/validation/validation.js";
+  import type { CustomChoice, CustomizableFK } from "#lib/types.js";
 
   import FieldWrapper from "../field-wrapper.svelte";
   import Button from "../../display/button.svelte";

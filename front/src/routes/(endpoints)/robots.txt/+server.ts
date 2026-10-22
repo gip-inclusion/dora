@@ -1,4 +1,4 @@
-import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
+import { CANONICAL_URL, ENVIRONMENT } from "#lib/env.js";
 
 const productionContent = `
 User-agent: *

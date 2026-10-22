@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import ServiceContact from "#lib/components/specialized/services/display/service-contact.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
-  import type { Service } from "$lib/types";
-  import { isAuthenticated } from "$lib/utils/auth";
-  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
-  import { trackMatomoEvent } from "$lib/utils/matomo";
+  import type { Service } from "#lib/types.js";
+  import { isAuthenticated } from "#lib/utils/auth.js";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.js";
+  import { trackMatomoEvent } from "#lib/utils/matomo.js";
 
   interface Props {
     service: Service;

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import { URL_HELP_SITE } from "#lib/consts.js";
 </script>
 
 <CenteredGrid>

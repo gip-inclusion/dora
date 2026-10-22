@@ -8,19 +8,19 @@
 
   import { page } from "$app/stores";
 
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import DateLabel from "$lib/components/display/date-label.svelte";
-  import TextClamp from "$lib/components/display/text-clamp.svelte";
-  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import DateLabel from "#lib/components/display/date-label.svelte";
+  import TextClamp from "#lib/components/display/text-clamp.svelte";
+  import OsmHours from "#lib/components/specialized/osm-hours.svelte";
   import type {
     StructureMember,
     Structure,
     StructuresOptions,
     PutativeStructureMember,
-  } from "$lib/types";
-  import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
-  import { trackStructureInfos } from "$lib/utils/stats";
+  } from "#lib/types.js";
+  import { formatPhoneNumber, markdownToHTML } from "#lib/utils/misc.js";
+  import { trackStructureInfos } from "#lib/utils/stats.js";
 
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
   import QuickStart from "./quick-start.svelte";

@@ -1,6 +1,9 @@
-import { ADDRESS_QUERY_PARAMS } from "$lib/components/specialized/service-search-keyword.svelte";
-import { getKeywordResults, getServicesOptions } from "$lib/requests/services";
-import type { ServiceSearchResult } from "$lib/types";
+import { ADDRESS_QUERY_PARAMS } from "#lib/components/specialized/service-search-keyword.svelte";
+import {
+  getKeywordResults,
+  getServicesOptions,
+} from "#lib/requests/services.js";
+import type { ServiceSearchResult } from "#lib/types.js";
 
 import type { PageLoad } from "./$types";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Info from "$lib/components/display/info.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Info from "#lib/components/display/info.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   interface Props {
     email: any;

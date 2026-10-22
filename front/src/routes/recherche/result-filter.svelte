@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import Checkboxes from "$lib/components/inputs/checkboxes.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import type { Choice } from "$lib/types";
+  import Button from "#lib/components/display/button.svelte";
+  import Checkboxes from "#lib/components/inputs/checkboxes.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import type { Choice } from "#lib/types.js";
 
   interface Props {
     id: string;

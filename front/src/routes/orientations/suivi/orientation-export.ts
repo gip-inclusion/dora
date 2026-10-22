@@ -1,10 +1,10 @@
-import { generateSpreadsheet } from "$lib/utils/spreadsheet";
+import { generateSpreadsheet } from "#lib/utils/spreadsheet.js";
 import type {
   OrientationExportData,
   OrientationExportType,
   ReceivedOrientationExportData,
   SentOrientationExportData,
-} from "$lib/requests/orientations";
+} from "#lib/requests/orientations.js";
 
 function formatSentOrientationExportData(
   exportData: Array<SentOrientationExportData>

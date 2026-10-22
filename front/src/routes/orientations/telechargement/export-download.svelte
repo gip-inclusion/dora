@@ -2,17 +2,17 @@
   import { onMount } from "svelte";
   import { toast } from "@zerodevx/svelte-toast";
 
-  import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
-  import Button from "$lib/components/display/button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import illuAccompagner from "#lib/assets/illustrations/illu-accompagner.svg";
+  import Button from "#lib/components/display/button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
   import {
     getOrientationExport,
     requestOrientationExportLink,
     type OrientationExportType,
-  } from "$lib/requests/orientations";
-  import { userInfo } from "$lib/utils/auth";
-  import { logException } from "$lib/utils/logger";
-  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
+  } from "#lib/requests/orientations.js";
+  import { userInfo } from "#lib/utils/auth.js";
+  import { logException } from "#lib/utils/logger.js";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.js";
 
   import { generateOrientationExport } from "../suivi/orientation-export";
 

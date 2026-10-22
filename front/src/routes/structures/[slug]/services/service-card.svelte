@@ -1,14 +1,14 @@
 <script lang="ts">
-  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
-  import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
-  import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
-  import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
-  import type { ServicesOptions, ShortService } from "$lib/types";
-  import { formatEligibilityZones } from "$lib/utils/service";
+  import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
+  import Bookmarkable from "#lib/components/hoc/bookmarkable.svelte";
+  import FavoriteIcon from "#lib/components/specialized/favorite-icon.svelte";
+  import ServiceStateUpdateSelect from "#lib/components/specialized/services/service-state-update-select.svelte";
+  import SynchronizedIcon from "#lib/components/specialized/services/synchronized-icon.svelte";
+  import UpdateNeededIcon from "#lib/components/specialized/services/update-needed-icon.svelte";
+  import type { ServicesOptions, ShortService } from "#lib/types.js";
+  import { formatEligibilityZones } from "#lib/utils/service.js";
   import ServiceButtonMenu from "./service-button-menu.svelte";
-  import Tooltip from "$lib/components/ui/tooltip.svelte";
+  import Tooltip from "#lib/components/ui/tooltip.svelte";
 
   interface Props {
     service: ShortService;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import AlertFillSystem from "svelte-remix/AlertFillSystem.svelte";
 
-  import type { Day, DayPeriod } from "$lib/types";
+  import type { Day, DayPeriod } from "#lib/types.js";
   import Toggle from "./toggle.svelte";
 
   interface Props {

@@ -3,9 +3,9 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
   import FieldWrapper from "../field-wrapper.svelte";
-  import RichText from "$lib/components/inputs/rich-text/editor.svelte";
+  import RichText from "#lib/components/inputs/rich-text/editor.svelte";
 
   interface Props {
     id: string;

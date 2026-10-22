@@ -1,4 +1,9 @@
-import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
+import type {
+  DayPeriod,
+  DayPrefix,
+  OsmDay,
+  OsmOpeningHours,
+} from "#lib/types.js";
 
 import { INVALID_OPENING_HOURS_MARKER } from "./constants";
 

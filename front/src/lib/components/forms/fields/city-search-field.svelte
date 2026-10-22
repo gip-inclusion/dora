@@ -3,10 +3,10 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
   import FieldWrapper from "../field-wrapper.svelte";
   import CitySearch from "../../inputs/geo/city-search.svelte";
-  import type { GeoApiValue } from "$lib/types";
+  import type { GeoApiValue } from "#lib/types.js";
 
   interface Props {
     id: string;

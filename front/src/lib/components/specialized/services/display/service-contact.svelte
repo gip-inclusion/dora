@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { userInfo } from "$lib/utils/auth";
+  import { userInfo } from "#lib/utils/auth.js";
 
-  import type { Service, ShortService } from "$lib/types";
+  import type { Service, ShortService } from "#lib/types.js";
   import ContactEmail from "../contact-email.svelte";
   import ContactPhone from "../contact-phone.svelte";
-  import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
+  import MembershipPendingWarning from "#lib/components/specialized/membership-pending-warning.svelte";
 
   interface Props {
     service: Service | ShortService;

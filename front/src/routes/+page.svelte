@@ -1,24 +1,24 @@
 <script lang="ts">
   import PlayCircleFillMedia from "svelte-remix/PlayCircleFillMedia.svelte";
 
-  import logoDataInclusion from "$lib/assets/logos/logo-data-inclusion.svg";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Tabs from "$lib/components/display/tabs.svelte";
-  import PartnerList from "$lib/components/specialized/partner-list.svelte";
-  import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
-  import { userPreferences } from "$lib/utils/preferences";
+  import logoDataInclusion from "#lib/assets/logos/logo-data-inclusion.svg";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Tabs from "#lib/components/display/tabs.svelte";
+  import PartnerList from "#lib/components/specialized/partner-list.svelte";
+  import SearchForm from "#lib/components/specialized/service-search.svelte";
+  import { refreshUserInfo, userInfo } from "#lib/utils/auth.js";
+  import { userPreferences } from "#lib/utils/preferences.js";
   import HomeTabPanel, {
     homeTabs,
     type HomeTabId,
   } from "./_index/home-tab-panel.svelte";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
-  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
-  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+  import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
+  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
 
   import type { PageData } from "./$types";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import { URL_HELP_SITE } from "#lib/consts.js";
 
   interface Props {
     data: PageData;

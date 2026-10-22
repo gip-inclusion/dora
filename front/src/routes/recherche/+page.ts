@@ -1,12 +1,15 @@
 import { toast } from "@zerodevx/svelte-toast";
 import { redirect } from "@sveltejs/kit";
-import { getServicesOptions } from "$lib/requests/services";
-import type { SearchQuery, ServiceSearchResult } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
-import { trackSearch } from "$lib/utils/stats";
-import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
+import { getServicesOptions } from "#lib/requests/services.js";
+import type { SearchQuery, ServiceSearchResult } from "#lib/types.js";
+import { getApiURL } from "#lib/utils/api.js";
+import { trackSearch } from "#lib/utils/stats.js";
+import {
+  getQueryString,
+  storeLastSearchCity,
+} from "#lib/utils/service-search.js";
 import type { PageLoad } from "./$types";
-import { SEARCH_RADIUS_KM } from "$lib/consts";
+import { SEARCH_RADIUS_KM } from "#lib/consts.js";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { getStructure } from "$lib/requests/structures";
-  import { refreshUserInfo } from "$lib/utils/auth";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import { getStructure } from "#lib/requests/structures.js";
+  import { refreshUserInfo } from "#lib/utils/auth.js";
   import StructureEditionForm from "./structure-edition-form.svelte";
   import { structure } from "../store";
   import type { PageData } from "./$types";

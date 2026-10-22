@@ -4,13 +4,13 @@
 
   import { page } from "$app/stores";
 
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
-  import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import { SEARCH_RADIUS_KM } from "$lib/consts";
-  import { userInfo } from "$lib/utils/auth";
-  import { isInDeploymentDepartments } from "$lib/utils/misc";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
+  import SearchForm from "#lib/components/specialized/service-search.svelte";
+  import { SEARCH_RADIUS_KM } from "#lib/consts.js";
+  import { userInfo } from "#lib/utils/auth.js";
+  import { isInDeploymentDepartments } from "#lib/utils/misc.js";
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";

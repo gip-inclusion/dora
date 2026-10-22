@@ -8,10 +8,10 @@
 
   import { goto } from "$app/navigation";
 
-  import Button from "$lib/components/display/button.svelte";
-  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import { BAN_API_SEARCH_URL } from "$lib/consts";
+  import Button from "#lib/components/display/button.svelte";
+  import SelectField from "#lib/components/inputs/obsolete/select-field.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import { BAN_API_SEARCH_URL } from "#lib/consts.js";
   import type {
     Choice,
     FeeCondition,
@@ -19,14 +19,14 @@
     LocationKind,
     ServiceKind,
     ServicesOptions,
-  } from "$lib/types";
-  import { getDepartmentFromCityCode } from "$lib/utils/misc";
+  } from "#lib/types.js";
+  import { getDepartmentFromCityCode } from "#lib/utils/misc.js";
   import {
     associateIconToCategory,
     sortCategory,
     sortSubcategory,
-  } from "$lib/utils/service";
-  import { getQueryString } from "$lib/utils/service-search";
+  } from "#lib/utils/service.js";
+  import { getQueryString } from "#lib/utils/service-search.js";
 
   interface Props {
     servicesOptions: ServicesOptions;

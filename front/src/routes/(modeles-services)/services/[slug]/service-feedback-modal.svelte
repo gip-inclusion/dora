@@ -1,19 +1,19 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
 
-  import illustration from "$lib/assets/illustrations/Validation_Orientation_Envoyee.webp";
+  import illustration from "#lib/assets/illustrations/Validation_Orientation_Envoyee.webp";
 
-  import Button from "$lib/components/display/button.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
+  import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
+  import Form from "#lib/components/forms/form.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
-  import type { Service } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
-  import * as v from "$lib/validation/schema-utils";
-  import { validate } from "$lib/validation/validation";
+  import type { Service } from "#lib/types.js";
+  import { getApiURL } from "#lib/utils/api.js";
+  import * as v from "#lib/validation/schema-utils.js";
+  import { validate } from "#lib/validation/validation.js";
 
   interface Props {
     isOpen?: boolean;

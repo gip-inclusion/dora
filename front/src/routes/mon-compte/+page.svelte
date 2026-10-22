@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { userInfo } from "$lib/utils/auth";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import { userInfo } from "#lib/utils/auth.js";
   import ImproveDoraNotif from "./notif-improve.svelte";
 </script>
 

@@ -1,5 +1,5 @@
-import { getApiURL } from "$lib/utils/api";
-import { fetchData } from "$lib/utils/misc";
+import { getApiURL } from "#lib/utils/api.js";
+import { fetchData } from "#lib/utils/misc.js";
 import type {
   PutativeStructureMember,
   ShortStructure,

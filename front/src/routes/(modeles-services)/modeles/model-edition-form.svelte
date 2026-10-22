@@ -1,20 +1,20 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Button from "$lib/components/display/button.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import FormErrors from "$lib/components/forms/form-errors.svelte";
-  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
-  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
-  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
-  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import FormErrors from "#lib/components/forms/form-errors.svelte";
+  import StickyFormSubmissionRow from "#lib/components/forms/sticky-form-submission-row.svelte";
+  import Form, { type FormControls } from "#lib/components/forms/form.svelte";
+  import FieldsetPrincipalInfo from "#lib/components/specialized/services/fieldset-principal-info.svelte";
+  import FieldsetEligibility from "#lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldsetReceptionConditions from "#lib/components/specialized/services/fieldset-reception-conditions.svelte";
+  import FieldsetNotifications from "#lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import { createOrModifyModel } from "$lib/requests/services";
-  import type { Model, ServicesOptions, ShortStructure } from "$lib/types";
-  import { modelSchema } from "$lib/validation/schemas/service";
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import { showNotice } from "$lib/utils/service-update-notices";
+  import { createOrModifyModel } from "#lib/requests/services.js";
+  import type { Model, ServicesOptions, ShortStructure } from "#lib/types.js";
+  import { modelSchema } from "#lib/validation/schemas/service.js";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import { showNotice } from "#lib/utils/service-update-notices.js";
   import DocumentUploadNoticeModal from "../services/document-upload-notice-modal.svelte";
 
   interface Props {

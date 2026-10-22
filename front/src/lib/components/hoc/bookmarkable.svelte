@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { clearBookmark, setBookmark } from "$lib/requests/services";
-  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import { clearBookmark, setBookmark } from "#lib/requests/services.js";
+  import { refreshUserInfo, userInfo } from "#lib/utils/auth.js";
 
   interface Props {
     slug: string;

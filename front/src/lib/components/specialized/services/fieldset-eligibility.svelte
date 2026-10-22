@@ -1,10 +1,10 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
+  import FieldSet from "#lib/components/display/fieldset.svelte";
   import FieldGroupPublics from "./fieldgroup-publics.svelte";
   import FieldGroupAccessConditions from "./fieldgroup-access-conditions.svelte";
   import FieldGroupModalities from "./fieldgroup-modalities.svelte";
   import FieldGroupPerimeter from "./fieldgroup-perimeter.svelte";
-  import type { FieldSetProps } from "$lib/components/specialized/services/types";
+  import type { FieldSetProps } from "#lib/components/specialized/services/types.js";
 
   let {
     service = $bindable(),

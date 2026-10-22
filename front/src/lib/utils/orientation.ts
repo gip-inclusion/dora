@@ -1,5 +1,5 @@
-import { TEST_WORDS } from "$lib/consts";
-import type { Choice, Orientation, Service } from "$lib/types";
+import { TEST_WORDS } from "#lib/consts.js";
+import type { Choice, Orientation, Service } from "#lib/types.js";
 
 import { getApiURL } from "./api";
 import { fetchData } from "./misc";

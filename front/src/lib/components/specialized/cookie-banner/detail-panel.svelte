@@ -6,11 +6,11 @@
     type ConsentKey,
     cookieBannerState,
     handleBackClick,
-  } from "$lib/utils/consent.svelte";
+  } from "#lib/utils/consent.svelte.js";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import DetailCard from "$lib/components/specialized/cookie-banner/detail-card.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import DetailCard from "#lib/components/specialized/cookie-banner/detail-card.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   interface Props {
     handleSavePreferences: (consentChoices: ConsentChoices) => void;

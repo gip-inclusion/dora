@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import Button from "$lib/components/display/button.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import Button from "#lib/components/display/button.svelte";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
   import { orientationState } from "./state.svelte";
 

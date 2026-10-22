@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
+  import MultiSelectField from "#lib/components/forms/fields/multi-select-field.svelte";
+  import type { Model, Service, ServicesOptions } from "#lib/types.js";
 
   interface Props {
     servicesOptions: ServicesOptions;

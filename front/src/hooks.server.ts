@@ -6,14 +6,14 @@ import * as Sentry from "@sentry/sveltekit";
 
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
-import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
-import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
-import { UNEXPECTED_ERROR_MESSAGE } from "$lib/consts";
-import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
-import { isApiRequest, setClientIpHeaders } from "$lib/server/client-ip";
+import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.js";
+import { SENTRY_DATA_COLLECTION } from "#lib/sentry.js";
+import { UNEXPECTED_ERROR_MESSAGE } from "#lib/consts.js";
+import { handleInboundNexusAutoLogin } from "#lib/utils/nexus.js";
+import { isApiRequest, setClientIpHeaders } from "#lib/server/client-ip.js";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
-import { TOKEN_KEY } from "$lib/utils/auth";
+import { TOKEN_KEY } from "#lib/utils/auth.js";
 
 const rateLimiter = new RetryAfterRateLimiter({
   IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],

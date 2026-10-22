@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import PartnerList from "$lib/components/specialized/partner-list.svelte";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import PartnerList from "#lib/components/specialized/partner-list.svelte";
   import type { PageData } from "./$types";
 
   interface Props {

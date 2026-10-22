@@ -1,8 +1,8 @@
 <script lang="ts">
   import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
 
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import type { Service, ServicesOptions, ShortService } from "$lib/types";
+  import ButtonMenu from "#lib/components/display/button-menu.svelte";
+  import type { Service, ServicesOptions, ShortService } from "#lib/types.js";
   import ServiceMenu from "./service-menu.svelte";
 
   interface Props {

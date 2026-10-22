@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import { URL_HELP_SITE } from "#lib/consts.js";
 
   interface Props {
     isOpen?: boolean;

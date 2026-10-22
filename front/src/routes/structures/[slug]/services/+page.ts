@@ -1,6 +1,6 @@
-import { getServicesOptions } from "$lib/requests/services";
-import type { ServiceStatus } from "$lib/types";
-import { capitalize } from "$lib/utils/misc";
+import { getServicesOptions } from "#lib/requests/services.js";
+import type { ServiceStatus } from "#lib/types.js";
+import { capitalize } from "#lib/utils/misc.js";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, url, parent }) => {

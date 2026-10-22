@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { page } from "$app/stores";
-  import { isAuthenticated, userInfo } from "$lib/utils/auth";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import { isAuthenticated, userInfo } from "#lib/utils/auth.js";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import MembershipPendingWarning from "#lib/components/specialized/membership-pending-warning.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
   import ServiceStructureLabel from "../components/service-structure-label.svelte";
-  import type { Service } from "$lib/types";
+  import type { Service } from "#lib/types.js";
 
   interface Props {
     data: { service: Service };

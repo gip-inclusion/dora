@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   interface Props {
     isVideoModalOpen?: boolean;

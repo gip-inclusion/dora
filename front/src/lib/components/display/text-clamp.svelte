@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { randomId } from "$lib/utils/random";
+  import { randomId } from "#lib/utils/random.js";
 
   import Button from "./button.svelte";
   import MarkdownRenderer from "./markdown-renderer.svelte";

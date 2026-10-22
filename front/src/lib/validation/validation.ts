@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
-import type { ServicesOptions } from "$lib/types";
-import type { Schema, Shape } from "$lib/validation/schema-utils";
+import type { ServicesOptions } from "#lib/types.js";
+import type { Schema, Shape } from "#lib/validation/schema-utils.js";
 import { tick } from "svelte";
 import { writable } from "svelte/store";
 

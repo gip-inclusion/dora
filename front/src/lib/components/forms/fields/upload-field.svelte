@@ -5,7 +5,7 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
 
   import FieldWrapper from "../field-wrapper.svelte";
   import Uploader from "../../inputs/uploader.svelte";

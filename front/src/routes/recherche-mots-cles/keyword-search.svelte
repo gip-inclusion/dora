@@ -1,16 +1,16 @@
 <script lang="ts">
   import { beforeNavigate, goto } from "$app/navigation";
   import { page } from "$app/state";
-  import Alert from "$lib/components/display/alert.svelte";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import Pagination from "$lib/components/display/pagination.svelte";
-  import Spinner from "$lib/components/display/spinner.svelte";
+  import Alert from "#lib/components/display/alert.svelte";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import Pagination from "#lib/components/display/pagination.svelte";
+  import Spinner from "#lib/components/display/spinner.svelte";
   import {
     default as SearchFormByKeyword,
     ADDRESS_QUERY_PARAMS,
-  } from "$lib/components/specialized/service-search-keyword.svelte";
+  } from "#lib/components/specialized/service-search-keyword.svelte";
   import { onMount } from "svelte";
 
   import type { PageData } from "./$types";
@@ -18,7 +18,7 @@
   import AddService from "./add-service.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import SearchResults from "./search-results.svelte";
-  import { trackKeywordSearch } from "$lib/utils/stats";
+  import { trackKeywordSearch } from "#lib/utils/stats.js";
 
   interface Props {
     data: Extract<PageData, { hasCriteria: true }>;

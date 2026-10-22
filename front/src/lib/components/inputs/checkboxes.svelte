@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatErrors } from "$lib/validation/validation";
+  import { formatErrors } from "#lib/validation/validation.js";
 
   import Checkbox from "./checkbox.svelte";
 

@@ -4,9 +4,9 @@
   import Forbid2LineSystem from "svelte-remix/Forbid2LineSystem.svelte";
   import RepeatLineMedia from "svelte-remix/RepeatLineMedia.svelte";
 
-  import Button from "$lib/components/display/button.svelte";
-  import Label from "$lib/components/display/label.svelte";
-  import { cancelInvite, resendInvite } from "$lib/requests/structures";
+  import Button from "#lib/components/display/button.svelte";
+  import Label from "#lib/components/display/label.svelte";
+  import { cancelInvite, resendInvite } from "#lib/requests/structures.js";
 
   import Member from "./member.svelte";
 

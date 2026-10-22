@@ -3,8 +3,8 @@
 
   import { page } from "$app/stores";
 
-  import type { Service } from "$lib/types";
-  import PcButton from "$lib/components/specialized/pc-button.svelte";
+  import type { Service } from "#lib/types.js";
+  import PcButton from "#lib/components/specialized/pc-button.svelte";
 
   import ContactInfo from "./contact-info.svelte";
 

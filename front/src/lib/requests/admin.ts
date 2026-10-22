@@ -1,6 +1,10 @@
-import type { AdminStructure, ModerationStatus, Structure } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
-import { fetchData } from "$lib/utils/misc";
+import type {
+  AdminStructure,
+  ModerationStatus,
+  Structure,
+} from "#lib/types.js";
+import { getApiURL } from "#lib/utils/api.js";
+import { fetchData } from "#lib/utils/misc.js";
 
 export async function getStructuresAdmin(
   departmentCode

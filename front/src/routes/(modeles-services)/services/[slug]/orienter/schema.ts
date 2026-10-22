@@ -1,5 +1,5 @@
-import type { Orientation } from "$lib/types";
-import * as v from "$lib/validation/schema-utils";
+import type { Orientation } from "#lib/types.js";
+import * as v from "#lib/validation/schema-utils.js";
 
 export const orientationStep1Schema: v.Schema = {
   situation: {

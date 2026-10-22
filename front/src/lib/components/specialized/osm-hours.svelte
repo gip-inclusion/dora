@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatOsmHours } from "$lib/utils/opening-hours/format";
+  import { formatOsmHours } from "#lib/utils/opening-hours/format.js";
 
   interface Props {
     osmHours: string;

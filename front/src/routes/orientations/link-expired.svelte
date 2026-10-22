@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import { refreshOrientationLink } from "$lib/utils/orientation";
+  import Button from "#lib/components/display/button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import { refreshOrientationLink } from "#lib/utils/orientation.js";
 
   interface Props {
     queryId: string;

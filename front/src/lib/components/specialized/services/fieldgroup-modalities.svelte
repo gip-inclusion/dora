@@ -1,16 +1,16 @@
 <script lang="ts">
   import { untrack } from "svelte";
 
-  import FieldGroup from "$lib/components/display/field-group.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
-  import { getModelInputProps } from "$lib/utils/forms";
-  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
-  import { currentSchema } from "$lib/validation/validation";
+  import FieldGroup from "#lib/components/display/field-group.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import RadioButtons from "#lib/components/inputs/radio-buttons.svelte";
+  import { URL_HELP_SITE } from "#lib/consts.js";
+  import { getModelInputProps } from "#lib/utils/forms.js";
+  import FieldModel from "#lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "#lib/validation/validation.js";
 
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
+  import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
 
   let {
     servicesOptions,

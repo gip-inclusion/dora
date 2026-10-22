@@ -1,9 +1,9 @@
 <script lang="ts">
   import BookReadLineDocument from "svelte-remix/BookReadLineDocument.svelte";
 
-  import illuModeles from "$lib/assets/illustrations/modeles.svg";
+  import illuModeles from "#lib/assets/illustrations/modeles.svg";
   import EmptyNotice from "../empty-notice.svelte";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import { URL_HELP_SITE } from "#lib/consts.js";
 </script>
 
 <EmptyNotice

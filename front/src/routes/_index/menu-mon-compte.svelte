@@ -5,10 +5,10 @@
   import Notification3LineMedia from "svelte-remix/Notification3LineMedia.svelte";
 
   import { page } from "$app/stores";
-  import RoadMapIcon from "$lib/assets/icons/ico-road-map.svelte";
-  import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
-  import { OIDC_AUTH_BACKEND } from "$lib/env";
-  import { userInfo } from "$lib/utils/auth";
+  import RoadMapIcon from "#lib/assets/icons/ico-road-map.svelte";
+  import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
+  import { OIDC_AUTH_BACKEND } from "#lib/env.js";
+  import { userInfo } from "#lib/utils/auth.js";
 
   interface Props {
     mobileDesign?: boolean;

@@ -3,11 +3,11 @@ import Cookies from "js-cookie";
 import { writable } from "svelte/store";
 
 import { browser } from "$app/environment";
-import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.js";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
-import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
+import { invalidateServicesOptionsCache } from "#lib/cache/services-options.js";
 
 export const TOKEN_KEY =
   import.meta.env.VITE_ENVIRONMENT === "production"

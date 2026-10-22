@@ -2,9 +2,9 @@ import type {
   PutativeStructureMember,
   Structure,
   StructureMember,
-} from "$lib/types";
-import { structureSchema } from "$lib/validation/schemas/structure";
-import { validate } from "$lib/validation/validation";
+} from "#lib/types.js";
+import { structureSchema } from "#lib/validation/schemas/structure.js";
+import { validate } from "#lib/validation/validation.js";
 
 export function isStructureInformationsComplete(structure) {
   return validate(structure, structureSchema, {

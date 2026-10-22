@@ -1,5 +1,5 @@
-import type { ServicesOptions } from "$lib/types";
-import type { UserInfo } from "$lib/utils/auth";
+import type { ServicesOptions } from "#lib/types.js";
+import type { UserInfo } from "#lib/utils/auth.js";
 
 // Les servicesOptions peuvent varier en fonction du statut d'authentification,
 // des structures rattachées, des départements et du rôle de l'utilisateur.

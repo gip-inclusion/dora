@@ -81,6 +81,9 @@
     "cookie": "0.7.2"
   },
   "type": "module",
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
   "lint-staged": {
     "*.{js,ts,svelte}": [
       "prettier --write",

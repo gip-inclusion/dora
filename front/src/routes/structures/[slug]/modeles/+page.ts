@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { capitalize } from "$lib/utils/misc";
+import { capitalize } from "#lib/utils/misc.js";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";

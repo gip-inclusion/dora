@@ -1,6 +1,6 @@
 <script lang="ts">
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
 
   let { structure } = $props();
 </script>

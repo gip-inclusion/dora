@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
-import { RATE_LIMIT_MESSAGE } from "$lib/consts";
-import { API_URL } from "$lib/env";
+import { RATE_LIMIT_MESSAGE } from "#lib/consts.js";
+import { API_URL } from "#lib/env.js";
 import * as Sentry from "@sentry/sveltekit";
 import { toast } from "@zerodevx/svelte-toast";
 

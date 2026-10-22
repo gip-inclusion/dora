@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import { markServicesAsUpToDate } from "$lib/requests/services";
+  import Button from "#lib/components/display/button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import { markServicesAsUpToDate } from "#lib/requests/services.js";
   import {
     hideNotice,
     isNoticeHidden,
-  } from "$lib/utils/service-update-notices";
+  } from "#lib/utils/service-update-notices.js";
 
   type ServiceToUpdate = { name: string; slug: string };
 

@@ -3,7 +3,7 @@
 
   import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
 
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
+  import ButtonMenu from "#lib/components/display/button-menu.svelte";
 
   interface Props {
     member: any;

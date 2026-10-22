@@ -1,6 +1,6 @@
 <script lang="ts">
   import { orientationState } from "./state.svelte";
-  import type { OrientationStats } from "$lib/types";
+  import type { OrientationStats } from "#lib/types.js";
 
   interface Props {
     stats: OrientationStats;

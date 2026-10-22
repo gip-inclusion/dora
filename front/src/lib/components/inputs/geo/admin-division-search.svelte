@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import type { AdminDivisionType, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
-  import { getDepartmentFromCityCode } from "$lib/utils/misc";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import type { AdminDivisionType, GeoApiValue } from "#lib/types.js";
+  import { getApiURL } from "#lib/utils/api.js";
+  import { getDepartmentFromCityCode } from "#lib/utils/misc.js";
   import {
     contextValidationKey,
     type ValidationContext,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
   import { getContext } from "svelte";
 
   interface Props {

@@ -17,13 +17,13 @@
 
   import { page } from "$app/stores";
 
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import { formatLongDate } from "$lib/utils/date";
-  import { formatFilePath } from "$lib/utils/file";
-  import { formatPhoneNumber } from "$lib/utils/misc";
-  import { getOrientation } from "$lib/utils/orientation";
-  import { trackOrientation } from "$lib/utils/stats";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import { formatLongDate } from "#lib/utils/date.js";
+  import { formatFilePath } from "#lib/utils/file.js";
+  import { formatPhoneNumber } from "#lib/utils/misc.js";
+  import { getOrientation } from "#lib/utils/orientation.js";
+  import { trackOrientation } from "#lib/utils/stats.js";
 
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";

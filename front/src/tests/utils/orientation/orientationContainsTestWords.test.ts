@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from "vitest";
-import type { Orientation } from "$lib/types";
-import { TEST_WORDS } from "$lib/consts";
-import { orientationContainsTestWords } from "$lib/utils/orientation";
+import type { Orientation } from "#lib/types.js";
+import { TEST_WORDS } from "#lib/consts.js";
+import { orientationContainsTestWords } from "#lib/utils/orientation.js";
 
 const ORIENTATION_TEMPLATE: Orientation = {
   firstStepDone: false,

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import CheckboxMark from "#lib/components/display/checkbox-mark.svelte";
 
   interface Props {
     cguAccepted: boolean;

@@ -1,4 +1,4 @@
-import { INCLUSION_PLATFORM_URL } from "$lib/env";
+import { INCLUSION_PLATFORM_URL } from "#lib/env.js";
 
 export const SIREN_FRANCE_TRAVAIL = "130005481";
 

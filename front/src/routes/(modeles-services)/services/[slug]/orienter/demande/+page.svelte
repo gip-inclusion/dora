@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import { getApiURL } from "$lib/utils/api";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import StickyFormSubmissionRow from "#lib/components/forms/sticky-form-submission-row.svelte";
+  import { getApiURL } from "#lib/utils/api.js";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { orientation } from "../store";
   import OrientationForm from "./orientation-form.svelte";
   import ContactBox from "../contact-box.svelte";
-  import FormErrors from "$lib/components/forms/form-errors.svelte";
+  import FormErrors from "#lib/components/forms/form-errors.svelte";
   import { orientationStep2Schema } from "../schema";
-  import Form from "$lib/components/forms/form.svelte";
+  import Form from "#lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
 
   interface Props {
     data: PageData;

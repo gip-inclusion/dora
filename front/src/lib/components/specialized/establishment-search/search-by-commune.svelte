@@ -1,11 +1,11 @@
 <script lang="ts">
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
-  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import type { Establishment, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import CitySearch from "#lib/components/inputs/geo/city-search.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
+  import type { Establishment, GeoApiValue } from "#lib/types.js";
+  import { getApiURL } from "#lib/utils/api.js";
 
   interface Props {
     establishment: Establishment | null;

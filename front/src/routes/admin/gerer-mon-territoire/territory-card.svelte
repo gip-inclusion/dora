@@ -3,7 +3,7 @@
 
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
-  import LinkButton from "$lib/components/display/link-button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
 
   interface Props {
     title: string;

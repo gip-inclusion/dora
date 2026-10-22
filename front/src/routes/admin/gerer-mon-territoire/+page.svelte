@@ -1,21 +1,21 @@
 <script lang="ts">
-  import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
-  import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
-  import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import DepartmentSelector from "$lib/components/specialized/department-selector.svelte";
+  import illuAccompagner from "#lib/assets/illustrations/illu-accompagner.svg";
+  import illuMobiliser from "#lib/assets/illustrations/illu-mobiliser.svg";
+  import illuRecenser from "#lib/assets/illustrations/illu-recenser.svg";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import DepartmentSelector from "#lib/components/specialized/department-selector.svelte";
 
   import {
     AUTOMETA_MANAGER_DASHBOARD_URLS,
     URL_MANAGER_HELP_NOTICE,
-  } from "$lib/consts";
-  import { getStructuresAdmin } from "$lib/requests/admin";
-  import type { AdminStructure, GeoApiValue } from "$lib/types";
-  import { logException } from "$lib/utils/logger";
-  import { saveLastDepartment } from "$lib/utils/manager-department";
+  } from "#lib/consts.js";
+  import { getStructuresAdmin } from "#lib/requests/admin.js";
+  import type { AdminStructure, GeoApiValue } from "#lib/types.js";
+  import { logException } from "#lib/utils/logger.js";
+  import { saveLastDepartment } from "#lib/utils/manager-department.js";
 
   import { getStructureStatus } from "../structures/structures-filters";
   import type { PageData } from "./$types";

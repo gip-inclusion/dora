@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
-  import { trackMobilisation } from "$lib/utils/stats";
-  import Button from "$lib/components/display/button.svelte";
-  import ContactEmail from "$lib/components/specialized/services/contact-email.svelte";
-  import ContactPhone from "$lib/components/specialized/services/contact-phone.svelte";
+  import type { Service } from "#lib/types.js";
+  import { trackMobilisation } from "#lib/utils/stats.js";
+  import Button from "#lib/components/display/button.svelte";
+  import ContactEmail from "#lib/components/specialized/services/contact-email.svelte";
+  import ContactPhone from "#lib/components/specialized/services/contact-phone.svelte";
   import { page } from "$app/stores";
   import { getContext } from "svelte";
 

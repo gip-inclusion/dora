@@ -5,15 +5,15 @@
   import { beforeNavigate } from "$app/navigation";
   import { page } from "$app/stores";
 
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
-  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "$lib/consts";
-  import { getService } from "$lib/requests/services";
-  import type { Service } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
-  import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
-  import { trackService } from "$lib/utils/stats";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
+  import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "#lib/consts.js";
+  import { getService } from "#lib/requests/services.js";
+  import type { Service } from "#lib/types.js";
+  import { userInfo } from "#lib/utils/auth.js";
+  import { isMemberOrPotentialMemberOfStructure } from "#lib/utils/current-structure.js";
+  import { trackService } from "#lib/utils/stats.js";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
   import ServiceFeedbackModal from "./service-feedback-modal.svelte";

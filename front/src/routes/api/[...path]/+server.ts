@@ -1,7 +1,7 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { API_URL } from "$lib/env";
-import { TOKEN_KEY } from "$lib/utils/auth";
-import { setClientIpHeaders } from "$lib/server/client-ip";
+import { API_URL } from "#lib/env.js";
+import { TOKEN_KEY } from "#lib/utils/auth.js";
+import { setClientIpHeaders } from "#lib/server/client-ip.js";
 
 export const trailingSlash = "ignore";
 

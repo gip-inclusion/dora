@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
-  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
+  import type { Service } from "#lib/types.js";
+  import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
 
   interface Props {
     service: Service;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
+  import Button from "#lib/components/display/button.svelte";
 
   interface Props {
     handleAcceptAll: () => void;

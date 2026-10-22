@@ -2,19 +2,19 @@ import {
   getMembers,
   getPutativeMembers,
   getStructure,
-} from "$lib/requests/structures";
-import { userInfo, type UserInfo } from "$lib/utils/auth";
-import { trackStructure } from "$lib/utils/stats";
+} from "#lib/requests/structures.js";
+import { userInfo, type UserInfo } from "#lib/utils/auth.js";
+import { trackStructure } from "#lib/utils/stats.js";
 import {
   setCurrentStructure,
   userPreferences,
   type UserPreferences,
-} from "$lib/utils/preferences";
+} from "#lib/utils/preferences.js";
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 import { structure } from "./store";
 import { browser } from "$app/environment";
-import type { PutativeStructureMember, StructureMember } from "$lib/types";
+import type { PutativeStructureMember, StructureMember } from "#lib/types.js";
 
 export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
   await parent();

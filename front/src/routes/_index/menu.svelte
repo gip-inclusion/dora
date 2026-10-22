@@ -1,12 +1,12 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  import HamburgerMenu from "$lib/components/display/hamburger.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import type { ShortStructure } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
-  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
-  import { userPreferences } from "$lib/utils/preferences";
+  import HamburgerMenu from "#lib/components/display/hamburger.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import type { ShortStructure } from "#lib/types.js";
+  import { userInfo } from "#lib/utils/auth.js";
+  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
+  import { userPreferences } from "#lib/utils/preferences.js";
 
   import MenuAide from "./menu-aide.svelte";
   import MenuMesStructures from "./menu-mes-structures.svelte";

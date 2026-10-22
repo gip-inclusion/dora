@@ -1,28 +1,28 @@
 <script lang="ts">
   import insane from "insane";
 
-  import FieldGroup from "$lib/components/display/field-group.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
-  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
+  import FieldGroup from "#lib/components/display/field-group.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import FieldModel from "#lib/components/specialized/services/field-model.svelte";
+  import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
   import {
     LOCATION_TYPE_BY_NAME,
     type LocationOption,
     LocationType,
     parseLocation,
     serializeLocation,
-  } from "$lib/utils/service-search-keyword";
+  } from "#lib/utils/service-search-keyword.js";
 
   import {
     getRegionDepartments,
     searchDepartment,
     searchRegion,
-  } from "$lib/utils/search-area";
+  } from "#lib/utils/search-area.js";
   import {
     type EpcisAndCitiesResults,
     searchEpcisAndCities,
-  } from "$lib/requests/geo";
-  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
+  } from "#lib/requests/geo.js";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
 
   let { service = $bindable() }: Omit<FieldGroupProps, "model"> = $props();
 

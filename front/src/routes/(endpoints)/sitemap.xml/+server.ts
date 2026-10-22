@@ -1,7 +1,7 @@
-import { SITEMAP_PAGE_SIZE } from "$lib/consts";
-import { CANONICAL_URL } from "$lib/env";
-import { getPublishedServices } from "$lib/requests/services";
-import { getActiveStructures } from "$lib/requests/structures";
+import { SITEMAP_PAGE_SIZE } from "#lib/consts.js";
+import { CANONICAL_URL } from "#lib/env.js";
+import { getPublishedServices } from "#lib/requests/services.js";
+import { getActiveStructures } from "#lib/requests/structures.js";
 
 async function getServiceSitemaps() {
   const services = await getPublishedServices({ page: 1, pageSize: 1 });

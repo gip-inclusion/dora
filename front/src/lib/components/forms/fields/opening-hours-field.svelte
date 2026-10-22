@@ -3,7 +3,7 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.js";
   import FieldWrapper from "../field-wrapper.svelte";
   import DaysGrid from "../../inputs/opening-hours/days-grid.svelte";
 

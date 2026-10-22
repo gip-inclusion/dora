@@ -2,20 +2,20 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import Button from "$lib/components/display/button.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { userInfo, refreshUserInfo } from "$lib/utils/auth";
+  import Button from "#lib/components/display/button.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import StructureSearch from "#lib/components/specialized/establishment-search/search.svelte";
+  import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.js";
+  import { userInfo, refreshUserInfo } from "#lib/utils/auth.js";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
-  import loopImg from "$lib/assets/icons/loop.svg";
-  import Notice from "$lib/components/display/notice.svelte";
+  import loopImg from "#lib/assets/icons/loop.svg";
+  import Notice from "#lib/components/display/notice.svelte";
   import CguCheckboxes from "../cgu-checkboxes.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "$lib/consts";
+  import { ORIENTATION_JWT_QUERY_PARAM, URL_HELP_SITE } from "#lib/consts.js";
   import { toast } from "@zerodevx/svelte-toast";
-  import { transferUrlParams } from "$lib/utils/misc";
+  import { transferUrlParams } from "#lib/utils/misc.js";
 
   interface Props {
     data: PageData;

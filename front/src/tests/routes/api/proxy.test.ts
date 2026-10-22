@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-vi.mock("$lib/env", () => ({
+vi.mock("#lib/env.js", () => ({
   API_URL: "http://backend",
 }));
 
-vi.mock("$lib/utils/auth", () => ({
+vi.mock("#lib/utils/auth.js", () => ({
   TOKEN_KEY: "token",
 }));
 

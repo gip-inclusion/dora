@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import FormErrors from "$lib/components/forms/form-errors.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
-  import { siretWasAlreadyClaimed } from "$lib/requests/structures";
-  import { getApiURL } from "$lib/utils/api";
-  import * as v from "$lib/validation/schema-utils";
-  import { structureSchema } from "$lib/validation/schemas/structure";
-  import { formErrors } from "$lib/validation/validation";
-  import type { Establishment, Structure } from "$lib/types";
-  import { logException } from "$lib/utils/logger";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Fieldset from "#lib/components/display/fieldset.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import FormErrors from "#lib/components/forms/form-errors.svelte";
+  import Form from "#lib/components/forms/form.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
+  import StructureSearch from "#lib/components/specialized/establishment-search/search.svelte";
+  import { siretWasAlreadyClaimed } from "#lib/requests/structures.js";
+  import { getApiURL } from "#lib/utils/api.js";
+  import * as v from "#lib/validation/schema-utils.js";
+  import { structureSchema } from "#lib/validation/schemas/structure.js";
+  import { formErrors } from "#lib/validation/validation.js";
+  import type { Establishment, Structure } from "#lib/types.js";
+  import { logException } from "#lib/utils/logger.js";
 
   const schema = {
     email: {
