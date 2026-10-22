@@ -1,6 +1,10 @@
-import type { Handle, HandleFetch, HandleServerError } from "@sveltejs/kit";
-import { sequence } from "@sveltejs/kit/hooks";
 import { error } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
+import type {
+  Handle,
+  HandleFetch,
+  HandleServerError,
+} from "@sveltejs/kit/hooks";
 
 import * as Sentry from "@sentry/sveltekit";
 

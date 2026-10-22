@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/sveltekit";
 import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.js";
 import { SENTRY_DATA_COLLECTION } from "#lib/sentry.js";
-import type { HandleClientError } from "@sveltejs/kit";
+import type { HandleClientError } from "@sveltejs/kit/hooks";
 
 import { setupFetchInterceptor } from "#lib/utils/fetch-interceptor.js";
 import {
