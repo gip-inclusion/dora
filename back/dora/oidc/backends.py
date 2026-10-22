@@ -70,15 +70,14 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         if missing := [claim for claim in self.NAME_CLAIMS if not userinfo.get(claim)]:
             # sans ces claims, le compte DORA restera sans prénom ni nom :
             # on le trace pour pouvoir identifier les fournisseurs d'identité concernés.
-            core_logger.warning(
-                "Claims d'identité manquants dans la réponse ProConnect",
-                {
-                    "legal": True,
-                    "pcSub": userinfo.get("sub"),
+            logger.warning(
+                "proconnect_missing_name_claims",
+                extra={
+                    "pc_sub": userinfo.get("sub"),
                     "siret": userinfo.get("siret"),
-                    "missingClaims": missing,
-                    "userinfoClaims": userinfo_claims,
-                    "idTokenClaims": sorted(payload),
+                    "missing_claims": missing,
+                    "userinfo_claims": userinfo_claims,
+                    "id_token_claims": sorted(payload),
                 },
             )
 

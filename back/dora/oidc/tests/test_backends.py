@@ -54,7 +54,7 @@ class TestCompleteNameClaims:
     def test_no_name_claims_at_all_is_logged(self, backend, mocker):
         # cas des comptes qui restent sans prénom ni nom :
         # il doit être tracé, faute de quoi il est invisible.
-        logger = mocker.patch("dora.oidc.backends.core_logger")
+        logger = mocker.patch("dora.oidc.backends.logger")
 
         userinfo = backend.complete_name_claims(
             {"sub": "a-sub", "siret": "12345678901234"}, {}
@@ -64,59 +64,60 @@ class TestCompleteNameClaims:
         assert "usual_name" not in userinfo
 
         logger.warning.assert_called_once()
-        message, payload = logger.warning.call_args.args
-        assert "Claims d'identité manquants" in message
-        assert payload["missingClaims"] == ["given_name", "usual_name"]
+        (message,) = logger.warning.call_args.args
+        payload = logger.warning.call_args.kwargs["extra"]
+        assert message == "proconnect_missing_name_claims"
+        assert payload["missing_claims"] == ["given_name", "usual_name"]
 
         # le compte et l'organisation concernés doivent être identifiables
-        assert payload["pcSub"] == "a-sub"
+        assert payload["pc_sub"] == "a-sub"
         assert payload["siret"] == "12345678901234"
 
     @pytest.mark.no_django_db
     def test_claim_names_of_both_sources_are_logged(self, backend, mocker):
         # permet de déterminer si ProConnect fournit les claims d'identité
         # via l'`id_token` quand ils sont absents de `/userinfo`.
-        logger = mocker.patch("dora.oidc.backends.core_logger")
+        logger = mocker.patch("dora.oidc.backends.logger")
 
         backend.complete_name_claims(
             {"sub": "a-sub", "email": "alan.turing@example.com", "siret": "123"},
             {"sub": "a-sub", "aud": "dora", "acr": "eidas1"},
         )
 
-        payload = logger.warning.call_args.args[1]
-        assert payload["userinfoClaims"] == ["email", "siret", "sub"]
-        assert payload["idTokenClaims"] == ["acr", "aud", "sub"]
+        payload = logger.warning.call_args.kwargs["extra"]
+        assert payload["userinfo_claims"] == ["email", "siret", "sub"]
+        assert payload["id_token_claims"] == ["acr", "aud", "sub"]
 
     @pytest.mark.no_django_db
     def test_userinfo_claims_are_logged_before_completion(self, backend, mocker):
         # un claim repris de l'`id_token` ne doit pas apparaître comme fourni
         # par `/userinfo` : c'est précisément la distinction que le log mesure.
-        logger = mocker.patch("dora.oidc.backends.core_logger")
+        logger = mocker.patch("dora.oidc.backends.logger")
 
         backend.complete_name_claims({"sub": "a-sub"}, {"given_name": "Alan"})
 
-        payload = logger.warning.call_args.args[1]
-        assert payload["userinfoClaims"] == ["sub"]
-        assert payload["idTokenClaims"] == ["given_name"]
-        assert payload["missingClaims"] == ["usual_name"]
+        payload = logger.warning.call_args.kwargs["extra"]
+        assert payload["userinfo_claims"] == ["sub"]
+        assert payload["id_token_claims"] == ["given_name"]
+        assert payload["missing_claims"] == ["usual_name"]
 
     @pytest.mark.no_django_db
     def test_claim_values_are_not_logged(self, backend, mocker):
         # seuls les noms des claims sont tracés : pas de données personnelles
-        # supplémentaires dans `ActionLog`.
-        logger = mocker.patch("dora.oidc.backends.core_logger")
+        # supplémentaires dans les logs.
+        logger = mocker.patch("dora.oidc.backends.logger")
 
         backend.complete_name_claims(
             {"sub": "a-sub", "siret": "123"}, {"given_name": "Alan"}
         )
 
-        payload = logger.warning.call_args.args[1]
-        assert "123" not in str(payload["userinfoClaims"])
-        assert "Alan" not in str(payload["idTokenClaims"])
+        payload = logger.warning.call_args.kwargs["extra"]
+        assert "123" not in str(payload["userinfo_claims"])
+        assert "Alan" not in str(payload["id_token_claims"])
 
     @pytest.mark.no_django_db
     def test_complete_claims_are_not_logged(self, backend, mocker):
-        logger = mocker.patch("dora.oidc.backends.core_logger")
+        logger = mocker.patch("dora.oidc.backends.logger")
 
         backend.complete_name_claims({"given_name": "Alan", "usual_name": "Turing"}, {})
 
