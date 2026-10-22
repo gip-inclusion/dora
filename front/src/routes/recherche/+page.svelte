@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, tick, untrack } from "svelte";
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
 
   import { page } from "$app/stores";
 

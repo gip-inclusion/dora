@@ -4,7 +4,7 @@
   n'expose pas `cityLabel`).
 -->
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
 
   import mapViewImage from "#lib/assets/illustrations/map-view.jpg";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import type { PageData } from "./$types";
   import ModelHeader from "./model-header.svelte";

@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { capitalize } from "#lib/utils/misc.js";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";

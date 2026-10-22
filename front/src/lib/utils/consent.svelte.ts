@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { log } from "#lib/utils/logger.js";
 import {
   clearConsentCookie,

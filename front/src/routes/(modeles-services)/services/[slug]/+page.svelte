@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, setContext } from "svelte";
 
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import { beforeNavigate } from "$app/navigation";
   import { page } from "$app/stores";
 

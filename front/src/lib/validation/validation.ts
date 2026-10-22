@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import type { ServicesOptions } from "#lib/types.js";
 import type { Schema, Shape } from "#lib/validation/schema-utils.js";
 import { tick } from "svelte";

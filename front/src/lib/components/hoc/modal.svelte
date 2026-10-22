@@ -8,7 +8,7 @@
 
   import "wicg-inert";
 
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
 
   import Button from "../display/button.svelte";
 

@@ -2,7 +2,7 @@
   // Documentation : https://tally.so/help/popup-forms
   import dayjs from "dayjs";
 
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import type { TallyFormId } from "#lib/consts.js";
   import { onDestroy, onMount } from "svelte";
 

@@ -13,7 +13,7 @@ import {
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 import { structure } from "./store";
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import type { PutativeStructureMember, StructureMember } from "#lib/types.js";
 
 export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import Modal from "#lib/components/hoc/modal.svelte";
 
   interface Props {

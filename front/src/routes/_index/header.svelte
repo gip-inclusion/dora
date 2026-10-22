@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import { ENVIRONMENT, WARNING_BANNER } from "#lib/env.js";
   import LogoDORA from "#lib/assets/logos/logo-dora.svg";
   import LogoRepublique from "#lib/assets/logos/logo-rf.svg";

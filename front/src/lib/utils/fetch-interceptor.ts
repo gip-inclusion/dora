@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { RATE_LIMIT_MESSAGE } from "#lib/consts.js";
 import { API_URL } from "#lib/env.js";
 import * as Sentry from "@sentry/sveltekit";

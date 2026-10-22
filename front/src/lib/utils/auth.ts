@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 
 import { writable } from "svelte/store";
 
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.js";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";

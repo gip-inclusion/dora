@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { userInfo, validateCredsAndFillUserInfo } from "#lib/utils/auth.js";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";

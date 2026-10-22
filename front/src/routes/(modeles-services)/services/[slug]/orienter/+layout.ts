@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import type { Service } from "#lib/types.js";
 import { error } from "@sveltejs/kit";
 import {

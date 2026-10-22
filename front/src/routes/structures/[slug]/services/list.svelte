@@ -9,7 +9,7 @@
   import FileEditFillDocument from "svelte-remix/FileEditFillDocument.svelte";
   import Folder5FillDocument from "svelte-remix/Folder5FillDocument.svelte";
 
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 

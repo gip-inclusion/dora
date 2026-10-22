@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { getApiURL } from "#lib/utils/api.js";
 import { hexoid } from "hexoid";
 import type { Service, ServiceSearchResult, Structure } from "#lib/types.js";

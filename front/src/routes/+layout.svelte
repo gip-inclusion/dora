@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "#lib/env.js";

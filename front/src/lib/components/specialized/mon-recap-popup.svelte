@@ -1,7 +1,7 @@
 <script lang="ts">
   import dayjs from "dayjs";
 
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
   import { TallyFormId, MON_RECAP_DEPARTMENTS } from "#lib/consts.js";
   import { userInfo } from "#lib/utils/auth.js";
