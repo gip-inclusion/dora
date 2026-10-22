@@ -26,10 +26,10 @@
     formatMunicipality,
     search as searchBAN,
   } from "$lib/requests/ban";
+  import { storeLastKeywordSearchLocation } from "$lib/utils/service-search";
   import {
     LocationType,
     loadLastLocation,
-    saveLastLocation,
     type AddressResult,
   } from "$lib/utils/service-search-keyword";
   import { searchDepartment, searchRegion } from "$lib/utils/search-area";
@@ -133,6 +133,7 @@
             }),
             kind: LocationType.Address,
             label: feature.properties.label,
+            cityLabel: formatMunicipality(feature),
           },
           label: feature.properties.label,
         });
@@ -180,11 +181,11 @@
     if (newAddress) {
       addressFieldValue = newAddress.label;
       addressSelected = newAddress;
-      saveLastLocation(newAddress);
+      storeLastKeywordSearchLocation(newAddress);
     } else {
       addressFieldValue = "";
       addressSelected = null;
-      saveLastLocation(null);
+      storeLastKeywordSearchLocation(null);
     }
   }
 

@@ -45,6 +45,8 @@ export function parseLocation(key: string): LocationValue {
 export interface AddressResult {
   kind: LocationType;
   label: string;
+  // pour une adresse, commune au format « Ville (dépt) »
+  cityLabel?: string;
   searchParams: URLSearchParams;
 }
 
@@ -60,6 +62,7 @@ export function loadLastLocation(): AddressResult | null {
     return {
       kind: parsed.kind,
       label: parsed.label,
+      cityLabel: parsed.cityLabel,
       searchParams: new URLSearchParams(parsed.searchParams),
     };
   } catch {
@@ -83,6 +86,7 @@ export function saveLastLocation(newAddress: AddressResult | null) {
       JSON.stringify({
         kind: newAddress.kind,
         label: newAddress.label,
+        cityLabel: newAddress.cityLabel,
         searchParams: newAddress.searchParams.toString(),
       })
     );

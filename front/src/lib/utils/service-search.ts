@@ -1,5 +1,10 @@
 import type { SearchQuery } from "$lib/types";
 import { logException } from "./logger";
+import {
+  LocationType,
+  saveLastLocation,
+  type AddressResult,
+} from "./service-search-keyword";
 
 const LAST_SEARCH_CITY_KEY = "lastSearch";
 
@@ -38,25 +43,102 @@ export function getQueryString({
   return query;
 }
 
-export function storeLastSearchCity(cityCode, cityLabel) {
-  localStorage.setItem(
-    LAST_SEARCH_CITY_KEY,
-    JSON.stringify({
-      cityCode,
-      cityLabel,
-    })
-  );
+interface LastSearchLocation {
+  cityCode: string;
+  cityLabel: string;
+  // adresse précise : libellé complet et coordonnées
+  label?: string;
+  lon?: string;
+  lat?: string;
 }
 
-export function getLastSearchCity() {
-  let cityCode, cityLabel;
-  const lastSearch = localStorage.getItem(LAST_SEARCH_CITY_KEY);
+function writeLastSearchLocation(location: LastSearchLocation) {
+  try {
+    localStorage.setItem(LAST_SEARCH_CITY_KEY, JSON.stringify(location));
+  } catch {
+    // Le localStorage peut être inaccessible.
+  }
+}
+
+// Le dernier lieu (commune ou adresse) est partagé entre la recherche
+// thématique et la recherche par mots-clés : chaque enregistrement met à jour
+// la mémoire des deux recherches.
+export function storeLastSearchLocation(location: LastSearchLocation) {
+  writeLastSearchLocation(location);
+  const { cityCode, cityLabel, label, lon, lat } = location;
+  if (lon && lat) {
+    saveLastLocation({
+      kind: LocationType.Address,
+      label: label || cityLabel,
+      cityLabel,
+      // eslint-disable-next-line camelcase
+      searchParams: new URLSearchParams({ lon, lat, code_insee: cityCode }),
+    });
+  } else {
+    saveLastLocation({
+      kind: LocationType.City,
+      label: cityLabel,
+      // eslint-disable-next-line camelcase
+      searchParams: new URLSearchParams({ code_commune: cityCode }),
+    });
+  }
+}
+
+function toThematicSearchLocation(
+  location: AddressResult
+): LastSearchLocation | null {
+  const { kind, label, searchParams } = location;
+  if (kind === LocationType.City) {
+    const cityCode = searchParams.get("code_commune");
+    return cityCode ? { cityCode, cityLabel: label } : null;
+  }
+  if (kind === LocationType.Address) {
+    const cityCode = searchParams.get("code_insee");
+    const lon = searchParams.get("lon");
+    const lat = searchParams.get("lat");
+    // `cityLabel` absent des adresses mémorisées avant le partage du lieu
+    if (cityCode && location.cityLabel && lon && lat) {
+      return { cityCode, cityLabel: location.cityLabel, label, lon, lat };
+    }
+  }
+  return null;
+}
+
+// La recherche thématique ne gère que les communes et les adresses : après le
+// choix d'un département ou d'une région, son lieu est vidé plutôt que de
+// laisser un lieu plus ancien.
+export function storeLastKeywordSearchLocation(location: AddressResult | null) {
+  saveLastLocation(location);
+  if (!location) {
+    return;
+  }
+  const thematicLocation = toThematicSearchLocation(location);
+  if (thematicLocation) {
+    writeLastSearchLocation(thematicLocation);
+  } else {
+    try {
+      localStorage.removeItem(LAST_SEARCH_CITY_KEY);
+    } catch {
+      // Le localStorage peut être inaccessible.
+    }
+  }
+}
+
+export function getLastSearchLocation(): Partial<LastSearchLocation> {
+  let location: Partial<LastSearchLocation> = {};
+  let lastSearch: string | null = null;
+  try {
+    lastSearch = localStorage.getItem(LAST_SEARCH_CITY_KEY);
+  } catch {
+    // Le localStorage peut être inaccessible.
+  }
   if (lastSearch) {
     try {
-      ({ cityCode, cityLabel } = JSON.parse(lastSearch));
+      const { cityCode, cityLabel, label, lon, lat } = JSON.parse(lastSearch);
+      location = { cityCode, cityLabel, label, lon, lat };
     } catch (err) {
       logException(err, "Impossible de lire la dernière ville de recherche");
     }
   }
-  return { cityCode, cityLabel };
+  return location;
 }
