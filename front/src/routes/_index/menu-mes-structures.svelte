@@ -6,7 +6,7 @@
 
   import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
 
-  import type { ShortStructure } from "#lib/types.js";
+  import type { ShortStructure } from "#lib/types.ts";
 
   interface Props {
     structures?: ShortStructure[];

@@ -18,7 +18,7 @@
   import AddService from "./add-service.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import SearchResults from "./search-results.svelte";
-  import { trackKeywordSearch } from "#lib/utils/stats.js";
+  import { trackKeywordSearch } from "#lib/utils/stats.ts";
 
   interface Props {
     data: Extract<PageData, { hasCriteria: true }>;

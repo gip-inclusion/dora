@@ -13,8 +13,8 @@
   import insane from "insane";
 
   import CheckboxMark from "#lib/components/display/checkbox-mark.svelte";
-  import { clickOutside } from "#lib/utils/misc.js";
-  import { formatErrors } from "#lib/validation/validation.js";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { formatErrors } from "#lib/validation/validation.ts";
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;

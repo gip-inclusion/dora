@@ -3,7 +3,7 @@
   import dayjs from "dayjs";
 
   import { browser } from "$app/env";
-  import type { TallyFormId } from "#lib/consts.js";
+  import type { TallyFormId } from "#lib/consts.ts";
   import { onDestroy, onMount } from "svelte";
 
   interface TallyFormLocalStorageItem {

@@ -3,10 +3,10 @@
 
   import { browser } from "$app/env";
   import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
-  import { TallyFormId, MON_RECAP_DEPARTMENTS } from "#lib/consts.js";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { userPreferences } from "#lib/utils/preferences.js";
-  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
+  import { TallyFormId, MON_RECAP_DEPARTMENTS } from "#lib/consts.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { userPreferences } from "#lib/utils/preferences.ts";
+  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.ts";
 
   const monRecapTallyFormCompletedKey = `tallyForm-${TallyFormId.NOTEBOOK_ORDER_FORM_ID}-completed`;
 

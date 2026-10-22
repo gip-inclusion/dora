@@ -3,7 +3,7 @@
 
   import { page } from "$app/state";
 
-  import type { Service } from "#lib/types.js";
+  import type { Service } from "#lib/types.ts";
   import PcButton from "#lib/components/specialized/pc-button.svelte";
 
   import ContactInfo from "./contact-info.svelte";

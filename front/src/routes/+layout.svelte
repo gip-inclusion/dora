@@ -3,19 +3,19 @@
   import { browser } from "$app/env";
   import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import { page } from "$app/state";
-  import { ENVIRONMENT } from "#lib/env.js";
+  import { ENVIRONMENT } from "#lib/env.ts";
   import "../app.css";
   import Footer from "./_index/footer.svelte";
   import Header from "./_index/header.svelte";
   import SkipLink from "./_index/skip-link.svelte";
   import UserOnboardingModal from "#lib/components/user/user-onboarding-modal.svelte";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { trackPageView } from "#lib/utils/stats.js";
-  import { enforceCrispConsent } from "#lib/utils/consent.svelte.js";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { trackPageView } from "#lib/utils/stats.ts";
+  import { enforceCrispConsent } from "#lib/utils/consent.svelte.ts";
   import CookieBanner from "#lib/components/specialized/cookie-banner/cookie-banner.svelte";
-  import { TOAST_DURATION_MS } from "#lib/consts.js";
+  import { TOAST_DURATION_MS } from "#lib/consts.ts";
   import type { PageData } from "./$types";
-  import { setCurrentStructure } from "#lib/utils/preferences.js";
+  import { setCurrentStructure } from "#lib/utils/preferences.ts";
 
   interface Props {
     children?: Snippet;

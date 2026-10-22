@@ -1,8 +1,8 @@
 <script lang="ts">
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
-  import type { Service } from "#lib/types.js";
+  import type { Service } from "#lib/types.ts";
   import ServiceStructureLabel from "./components/service-structure-label.svelte";
-  import { formatEligibilityZones } from "#lib/utils/service.js";
+  import { formatEligibilityZones } from "#lib/utils/service.ts";
 
   interface Props {
     service: Service;

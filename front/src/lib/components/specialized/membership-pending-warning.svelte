@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { userInfo } from "#lib/utils/auth.js";
+  import { userInfo } from "#lib/utils/auth.ts";
 </script>
 
 {#if $userInfo.pendingStructures.length === 1}

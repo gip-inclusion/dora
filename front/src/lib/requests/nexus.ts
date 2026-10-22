@@ -1,6 +1,6 @@
 import { toast } from "@zerodevx/svelte-toast";
-import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
-import { getApiURL } from "#lib/utils/api.js";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
+import { getApiURL } from "#lib/utils/api.ts";
 
 type OrientationBeneficiaryInfoData = {
   firstName: string;

@@ -6,7 +6,7 @@
   import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
   import UpdateNeededIcon from "#lib/components/specialized/services/update-needed-icon.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
-  import { userInfo } from "#lib/utils/auth.js";
+  import { userInfo } from "#lib/utils/auth.ts";
   import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
   import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
   import ServiceBody from "../../components/service-body/service-body.svelte";

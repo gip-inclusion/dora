@@ -10,14 +10,14 @@ import * as Sentry from "@sentry/sveltekit";
 
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
-import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.js";
-import { SENTRY_DATA_COLLECTION } from "#lib/sentry.js";
-import { UNEXPECTED_ERROR_MESSAGE } from "#lib/consts.js";
-import { handleInboundNexusAutoLogin } from "#lib/utils/nexus.js";
-import { isApiRequest, setClientIpHeaders } from "#lib/server/client-ip.js";
+import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.ts";
+import { SENTRY_DATA_COLLECTION } from "#lib/sentry.ts";
+import { UNEXPECTED_ERROR_MESSAGE } from "#lib/consts.ts";
+import { handleInboundNexusAutoLogin } from "#lib/utils/nexus.ts";
+import { isApiRequest, setClientIpHeaders } from "#lib/server/client-ip.ts";
 
 import { MAX_REQUESTS_PER_MINUTE } from "$app/env/private";
-import { TOKEN_KEY } from "#lib/utils/auth.js";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
 
 const rateLimiter = new RetryAfterRateLimiter({
   IPUA: [MAX_REQUESTS_PER_MINUTE, "m"],

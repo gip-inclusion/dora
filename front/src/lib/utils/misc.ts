@@ -1,6 +1,6 @@
 import { browser } from "$app/env";
-import type { ServicesOptions } from "#lib/types.js";
-import { defaultAcceptHeader } from "#lib/utils/api.js";
+import type { ServicesOptions } from "#lib/types.ts";
+import { defaultAcceptHeader } from "#lib/utils/api.ts";
 import insane from "insane";
 import showdown from "showdown";
 

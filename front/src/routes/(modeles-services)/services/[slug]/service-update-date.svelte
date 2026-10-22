@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Service } from "#lib/types.js";
+  import type { Service } from "#lib/types.ts";
   import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
 
   interface Props {

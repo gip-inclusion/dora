@@ -9,10 +9,10 @@
     getOrientationExport,
     requestOrientationExportLink,
     type OrientationExportType,
-  } from "#lib/requests/orientations.js";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { logException } from "#lib/utils/logger.js";
-  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.js";
+  } from "#lib/requests/orientations.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { logException } from "#lib/utils/logger.ts";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.ts";
 
   import { generateOrientationExport } from "../suivi/orientation-export";
 

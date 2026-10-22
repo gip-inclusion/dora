@@ -5,10 +5,10 @@
   import LinkButton from "#lib/components/display/link-button.svelte";
   import ServiceContact from "#lib/components/specialized/services/display/service-contact.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
-  import type { Service } from "#lib/types.js";
-  import { isAuthenticated } from "#lib/utils/auth.js";
-  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.js";
-  import { trackMatomoEvent } from "#lib/utils/matomo.js";
+  import type { Service } from "#lib/types.ts";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.ts";
+  import { trackMatomoEvent } from "#lib/utils/matomo.ts";
 
   interface Props {
     service: Service;

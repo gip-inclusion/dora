@@ -6,7 +6,7 @@
 
   import Button from "#lib/components/display/button.svelte";
   import Label from "#lib/components/display/label.svelte";
-  import { cancelInvite, resendInvite } from "#lib/requests/structures.js";
+  import { cancelInvite, resendInvite } from "#lib/requests/structures.ts";
 
   import Member from "./member.svelte";
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { formatOsmHours } from "#lib/utils/opening-hours/format.js";
+import { formatOsmHours } from "#lib/utils/opening-hours/format.ts";
 
 describe("formatOsmHours", () => {
   test("devrait formater des horaires simples", () => {

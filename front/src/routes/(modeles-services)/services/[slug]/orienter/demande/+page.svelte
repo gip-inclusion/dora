@@ -2,7 +2,7 @@
   import Button from "#lib/components/display/button.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
   import StickyFormSubmissionRow from "#lib/components/forms/sticky-form-submission-row.svelte";
-  import { getApiURL } from "#lib/utils/api.js";
+  import { getApiURL } from "#lib/utils/api.ts";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { orientation } from "../store";
@@ -15,7 +15,7 @@
   import { page } from "$app/state";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
 
   interface Props {
     data: PageData;

@@ -3,8 +3,8 @@
 
   import ButtonMenu from "#lib/components/display/button-menu.svelte";
   import Button from "#lib/components/display/button.svelte";
-  import type { DepartmentChoice } from "#lib/requests/geo.js";
-  import type { GeoApiValue } from "#lib/types.js";
+  import type { DepartmentChoice } from "#lib/requests/geo.ts";
+  import type { GeoApiValue } from "#lib/types.ts";
 
   interface Props {
     departments: DepartmentChoice[];

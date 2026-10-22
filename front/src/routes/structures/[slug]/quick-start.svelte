@@ -4,12 +4,12 @@
   import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
 
   import Button from "#lib/components/display/button.svelte";
-  import { modifyStructure } from "#lib/requests/structures.js";
+  import { modifyStructure } from "#lib/requests/structures.ts";
   import type {
     Structure,
     StructureMember,
     PutativeStructureMember,
-  } from "#lib/types.js";
+  } from "#lib/types.ts";
 
   import {
     isStructureInformationsComplete,

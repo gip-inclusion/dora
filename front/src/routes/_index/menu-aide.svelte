@@ -1,6 +1,6 @@
 <script lang="ts">
   import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
-  import { URL_HELP_SITE } from "#lib/consts.js";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 
   const aClass =
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:text-magenta-cta hover:bg-magenta-10 rounded-sm";

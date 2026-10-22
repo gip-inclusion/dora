@@ -4,9 +4,9 @@
   import BooleanRadioButtonsField from "#lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
-  import type { Service } from "#lib/types.js";
-  import { currentSchema } from "#lib/validation/validation.js";
-  import { formatPhoneNumber } from "#lib/utils/misc.js";
+  import type { Service } from "#lib/types.ts";
+  import { currentSchema } from "#lib/validation/validation.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
   interface Props {
     service: Service;

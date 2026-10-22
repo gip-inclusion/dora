@@ -3,7 +3,7 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "#lib/validation/validation.js";
+  } from "#lib/validation/validation.ts";
   import FieldWrapper from "../field-wrapper.svelte";
   import StreetSearch from "../../inputs/geo/street-search.svelte";
 

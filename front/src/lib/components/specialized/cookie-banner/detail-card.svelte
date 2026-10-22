@@ -3,7 +3,7 @@
   import RadioButtons from "#lib/components/inputs/radio-buttons.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
-  import type { ConsentConfig } from "#lib/utils/consent.svelte.js";
+  import type { ConsentConfig } from "#lib/utils/consent.svelte.ts";
 
   const TRANSITION_DURATION = 300;
 

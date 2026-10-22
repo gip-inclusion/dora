@@ -1,10 +1,10 @@
 import type {
   SavedSearch,
   SavedSearchNotificationFrequency,
-} from "#lib/types.js";
-import { fetchData } from "#lib/utils/misc.js";
-import { getApiURL } from "#lib/utils/api.js";
-import { getQueryString } from "#lib/utils/service-search.js";
+} from "#lib/types.ts";
+import { fetchData } from "#lib/utils/misc.ts";
+import { getApiURL } from "#lib/utils/api.ts";
+import { getQueryString } from "#lib/utils/service-search.ts";
 
 export async function saveSearch(
   savedSearch: Pick<

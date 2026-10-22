@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as v from "#lib/validation/schema-utils.js";
+  import * as v from "#lib/validation/schema-utils.ts";
   import Button from "#lib/components/display/button.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import Form from "#lib/components/forms/form.svelte";
@@ -8,7 +8,7 @@
   import Notice from "#lib/components/display/notice.svelte";
   import FormErrors from "#lib/components/forms/form-errors.svelte";
   import Modal from "#lib/components/hoc/modal.svelte";
-  import { getApiURL } from "#lib/utils/api.js";
+  import { getApiURL } from "#lib/utils/api.ts";
 
   const schema: v.Schema = {
     email: {

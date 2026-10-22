@@ -1,5 +1,5 @@
 import { FRONT_PROXY_SECRET } from "$app/env/private";
-import { API_URL } from "#lib/env.js";
+import { API_URL } from "#lib/env.ts";
 
 // En-têtes relatifs à l'IP du client reçus du navigateur : ils ne doivent pas
 // être relayés au back, qui ne ferait pas la différence avec ceux du front.

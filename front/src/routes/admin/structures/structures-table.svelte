@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AdminStructure } from "#lib/types.js";
+  import type { AdminStructure } from "#lib/types.ts";
 
   import StructureCard from "./structure-card.svelte";
 

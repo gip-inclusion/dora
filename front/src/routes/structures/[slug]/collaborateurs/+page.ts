@@ -1,6 +1,6 @@
 import { browser } from "$app/env";
-import { userInfo } from "#lib/utils/auth.js";
-import { capitalize } from "#lib/utils/misc.js";
+import { userInfo } from "#lib/utils/auth.ts";
+import { capitalize } from "#lib/utils/misc.ts";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";

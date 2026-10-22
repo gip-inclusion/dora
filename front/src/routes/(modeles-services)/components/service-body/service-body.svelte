@@ -4,11 +4,11 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import Notice from "#lib/components/display/notice.svelte";
   import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.js";
-  import type { Model, Service, ServicesOptions } from "#lib/types.js";
-  import { isAuthenticated, userInfo } from "#lib/utils/auth.js";
-  import { isServiceRecentlyPublished } from "#lib/utils/service.js";
-  import { trackMobilisation } from "#lib/utils/stats.js";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
+  import { isServiceRecentlyPublished } from "#lib/utils/service.ts";
+  import { trackMobilisation } from "#lib/utils/stats.ts";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";

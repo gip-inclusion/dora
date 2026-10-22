@@ -4,9 +4,9 @@
   import ButtonMenu from "#lib/components/display/button-menu.svelte";
   import Button from "#lib/components/display/button.svelte";
   import Label from "#lib/components/display/label.svelte";
-  import { setModerationState } from "#lib/requests/admin.js";
-  import { modifyStructure } from "#lib/requests/structures.js";
-  import type { AdminStructure, ModerationStatus } from "#lib/types.js";
+  import { setModerationState } from "#lib/requests/admin.ts";
+  import { modifyStructure } from "#lib/requests/structures.ts";
+  import type { AdminStructure, ModerationStatus } from "#lib/types.ts";
 
   import { getAdminsBadge } from "./structure-statuses";
 

@@ -9,7 +9,7 @@
   import illustration from "#lib/assets/illustrations/illu-favs-moderation.svg";
   import Notice from "#lib/components/display/notice.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.js";
+  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.ts";
 
   interface Props {
     data: PageData;

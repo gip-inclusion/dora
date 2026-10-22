@@ -4,8 +4,8 @@
   import CitySearch from "#lib/components/inputs/geo/city-search.svelte";
   import Select from "#lib/components/inputs/select/select.svelte";
   import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
-  import type { Establishment, GeoApiValue } from "#lib/types.js";
-  import { getApiURL } from "#lib/utils/api.js";
+  import type { Establishment, GeoApiValue } from "#lib/types.ts";
+  import { getApiURL } from "#lib/utils/api.ts";
 
   interface Props {
     establishment: Establishment | null;

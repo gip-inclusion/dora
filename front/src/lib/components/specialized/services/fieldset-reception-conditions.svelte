@@ -3,7 +3,7 @@
   import FieldGroupDuration from "#lib/components/specialized/services/fieldgroup-duration.svelte";
   import FieldGroupAddress from "#lib/components/specialized/services/fieldgroup-address.svelte";
   import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
-  import { moveToTheEnd } from "#lib/utils/misc.js";
+  import { moveToTheEnd } from "#lib/utils/misc.ts";
   import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
   import Button from "#lib/components/display/button.svelte";
   import UseStructureInfoButton from "./use-structure-info-button.svelte";
@@ -11,7 +11,7 @@
   import OpeningHoursField from "#lib/components/forms/fields/opening-hours-field.svelte";
 
   import type { FieldSetProps } from "#lib/components/specialized/services/types.ts";
-  import type { ShortStructure } from "#lib/types.js";
+  import type { ShortStructure } from "#lib/types.ts";
 
   interface Props extends FieldSetProps {
     structure?: ShortStructure;

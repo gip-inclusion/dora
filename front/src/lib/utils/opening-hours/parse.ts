@@ -3,7 +3,7 @@ import type {
   DayPrefix,
   OsmDay,
   OsmOpeningHours,
-} from "#lib/types.js";
+} from "#lib/types.ts";
 
 import { INVALID_OPENING_HOURS_MARKER } from "./constants";
 

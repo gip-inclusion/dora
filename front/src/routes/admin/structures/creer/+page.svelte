@@ -9,13 +9,13 @@
   import Form from "#lib/components/forms/form.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "#lib/components/specialized/establishment-search/search.svelte";
-  import { siretWasAlreadyClaimed } from "#lib/requests/structures.js";
-  import { getApiURL } from "#lib/utils/api.js";
-  import * as v from "#lib/validation/schema-utils.js";
-  import { structureSchema } from "#lib/validation/schemas/structure.js";
-  import { formErrors } from "#lib/validation/validation.js";
-  import type { Establishment, Structure } from "#lib/types.js";
-  import { logException } from "#lib/utils/logger.js";
+  import { siretWasAlreadyClaimed } from "#lib/requests/structures.ts";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import * as v from "#lib/validation/schema-utils.ts";
+  import { structureSchema } from "#lib/validation/schemas/structure.ts";
+  import { formErrors } from "#lib/validation/validation.ts";
+  import type { Establishment, Structure } from "#lib/types.ts";
+  import { logException } from "#lib/utils/logger.ts";
 
   const schema = {
     email: {

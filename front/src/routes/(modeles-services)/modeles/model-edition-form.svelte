@@ -10,11 +10,11 @@
   import FieldsetReceptionConditions from "#lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsetNotifications from "#lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import { createOrModifyModel } from "#lib/requests/services.js";
-  import type { Model, ServicesOptions, ShortStructure } from "#lib/types.js";
-  import { modelSchema } from "#lib/validation/schemas/service.js";
+  import { createOrModifyModel } from "#lib/requests/services.ts";
+  import type { Model, ServicesOptions, ShortStructure } from "#lib/types.ts";
+  import { modelSchema } from "#lib/validation/schemas/service.ts";
   import Modal from "#lib/components/hoc/modal.svelte";
-  import { showNotice } from "#lib/utils/service-update-notices.js";
+  import { showNotice } from "#lib/utils/service-update-notices.ts";
   import DocumentUploadNoticeModal from "../services/document-upload-notice-modal.svelte";
 
   interface Props {

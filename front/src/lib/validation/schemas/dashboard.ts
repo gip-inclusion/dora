@@ -1,5 +1,5 @@
 import * as v from "../schema-utils";
-import { SIREN_FRANCE_TRAVAIL } from "#lib/consts.js";
+import { SIREN_FRANCE_TRAVAIL } from "#lib/consts.ts";
 
 function checkFranceTravailRestrictions(msg = "") {
   return (_name, value, data) => ({

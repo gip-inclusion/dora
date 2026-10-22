@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { getRandomIntBetween } from "#lib/utils/random.js";
+import { getRandomIntBetween } from "#lib/utils/random.ts";
 
 function toPercent(value: number, total: number): number {
   return Math.floor((value / total) * 100);

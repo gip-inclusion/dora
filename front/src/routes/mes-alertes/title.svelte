@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { getSavedSearchQueryString } from "#lib/requests/saved-search.js";
-  import type { SavedSearch } from "#lib/types.js";
+  import { getSavedSearchQueryString } from "#lib/requests/saved-search.ts";
+  import type { SavedSearch } from "#lib/types.ts";
 
   interface Props {
     search: SavedSearch;

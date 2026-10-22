@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Service } from "#lib/types.js";
-  import { trackMobilisation } from "#lib/utils/stats.js";
+  import type { Service } from "#lib/types.ts";
+  import { trackMobilisation } from "#lib/utils/stats.ts";
   import Button from "#lib/components/display/button.svelte";
   import ContactEmail from "#lib/components/specialized/services/contact-email.svelte";
   import ContactPhone from "#lib/components/specialized/services/contact-phone.svelte";

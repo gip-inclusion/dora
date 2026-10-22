@@ -3,7 +3,7 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import StaticMarkdown from "#lib/components/display/static-markdown.svelte";
   import type { PageData } from "./$types";
-  import { showCookieBanner } from "#lib/utils/consent.svelte.js";
+  import { showCookieBanner } from "#lib/utils/consent.svelte.ts";
 
   interface Props {
     data: PageData;

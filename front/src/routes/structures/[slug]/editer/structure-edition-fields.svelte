@@ -5,8 +5,8 @@
   import OpeningHoursField from "#lib/components/forms/fields/opening-hours-field.svelte";
   import RichTextField from "#lib/components/forms/fields/rich-text-field.svelte";
   import FieldgroupAddress from "#lib/components/specialized/services/fieldgroup-address.svelte";
-  import type { Structure, StructuresOptions } from "#lib/types.js";
-  import { getDepartmentFromCityCode } from "#lib/utils/misc.js";
+  import type { Structure, StructuresOptions } from "#lib/types.ts";
+  import { getDepartmentFromCityCode } from "#lib/utils/misc.ts";
 
   interface Props {
     structure: Structure;

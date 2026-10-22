@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import type { OrientationExportType } from "#lib/requests/orientations.js";
+import type { OrientationExportType } from "#lib/requests/orientations.ts";
 import type { PageLoad } from "./$types";
 
 export const ssr = false;

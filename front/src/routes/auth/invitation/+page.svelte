@@ -4,8 +4,8 @@
   import Fieldset from "#lib/components/display/fieldset.svelte";
   import Notice from "#lib/components/display/notice.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.js";
-  import { validateCredsAndFillUserInfo } from "#lib/utils/auth.js";
+  import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.ts";
+  import { validateCredsAndFillUserInfo } from "#lib/utils/auth.ts";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";

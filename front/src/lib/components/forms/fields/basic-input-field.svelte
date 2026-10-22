@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { formatPhoneNumber } from "#lib/utils/misc.js";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
   import {
     currentFormData,
     currentSchema,
     formatErrors,
     isRequired,
-  } from "#lib/validation/validation.js";
+  } from "#lib/validation/validation.ts";
 
   import FieldWrapper from "../field-wrapper.svelte";
 

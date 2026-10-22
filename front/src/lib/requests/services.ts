@@ -1,5 +1,5 @@
-import { getApiURL } from "#lib/utils/api.js";
-import { fetchData } from "#lib/utils/misc.js";
+import { getApiURL } from "#lib/utils/api.ts";
+import { fetchData } from "#lib/utils/misc.ts";
 import { get } from "svelte/store";
 import type {
   Model,
@@ -9,14 +9,14 @@ import type {
   ServiceStatus,
   ShortService,
   StructureService,
-} from "#lib/types.js";
+} from "#lib/types.ts";
 import {
   getCachedServicesOptions,
   setCachedServicesOptions,
-} from "#lib/cache/services-options.js";
-import { userInfo } from "#lib/utils/auth.js";
-import { getAnalyticsId } from "#lib/utils/stats.js";
-import { logException } from "#lib/utils/logger.js";
+} from "#lib/cache/services-options.ts";
+import { userInfo } from "#lib/utils/auth.ts";
+import { getAnalyticsId } from "#lib/utils/stats.ts";
+import { logException } from "#lib/utils/logger.ts";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {

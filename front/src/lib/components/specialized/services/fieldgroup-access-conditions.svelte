@@ -1,11 +1,11 @@
 <script lang="ts">
   import FieldGroup from "#lib/components/display/field-group.svelte";
-  import { getModelInputProps } from "#lib/utils/forms.js";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
   import FieldModel from "#lib/components/specialized/services/field-model.svelte";
   import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
-  import { currentSchema } from "#lib/validation/validation.js";
-  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
-  import { isNotFreeService } from "#lib/utils/service.js";
+  import { currentSchema } from "#lib/validation/validation.ts";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.ts";
+  import { isNotFreeService } from "#lib/utils/service.ts";
   import UploadField from "#lib/components/forms/fields/upload-field.svelte";
   import RadioButtonsField from "#lib/components/forms/fields/radio-buttons-field.svelte";
 

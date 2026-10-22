@@ -5,8 +5,8 @@
   import ServiceStateUpdateSelect from "#lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "#lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateNeededIcon from "#lib/components/specialized/services/update-needed-icon.svelte";
-  import type { ServicesOptions, ShortService } from "#lib/types.js";
-  import { formatEligibilityZones } from "#lib/utils/service.js";
+  import type { ServicesOptions, ShortService } from "#lib/types.ts";
+  import { formatEligibilityZones } from "#lib/utils/service.ts";
   import ServiceButtonMenu from "./service-button-menu.svelte";
   import Tooltip from "#lib/components/ui/tooltip.svelte";
 

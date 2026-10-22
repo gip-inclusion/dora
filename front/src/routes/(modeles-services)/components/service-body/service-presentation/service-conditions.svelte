@@ -3,8 +3,8 @@
   import ChatCheckFillCommunication from "svelte-remix/ChatCheckFillCommunication.svelte";
   import MapPin2FillMap from "svelte-remix/MapPin2FillMap.svelte";
 
-  import type { Model, Service } from "#lib/types.js";
-  import { isDurationValid } from "#lib/utils/service.js";
+  import type { Model, Service } from "#lib/types.ts";
+  import { isDurationValid } from "#lib/utils/service.ts";
 
   import ServiceCard from "./components/service-card.svelte";
   import ServiceField from "./components/service-field.svelte";

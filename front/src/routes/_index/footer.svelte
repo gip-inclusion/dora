@@ -5,8 +5,8 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
   import NavItem from "#lib/components/display/nav-item.svelte";
-  import { AUTOMETA_PUBLIC_STATS_URL } from "#lib/consts.js";
-  import { showCookieBanner } from "#lib/utils/consent.svelte.js";
+  import { AUTOMETA_PUBLIC_STATS_URL } from "#lib/consts.ts";
+  import { showCookieBanner } from "#lib/utils/consent.svelte.ts";
 </script>
 
 <hr class="border-t-gray-01 print:hidden" />

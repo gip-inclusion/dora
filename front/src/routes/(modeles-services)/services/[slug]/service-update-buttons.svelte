@@ -5,7 +5,7 @@
   import Button from "#lib/components/display/button.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "#lib/components/specialized/services/set-as-updated-modal.svelte";
-  import type { Service, ServicesOptions } from "#lib/types.js";
+  import type { Service, ServicesOptions } from "#lib/types.ts";
 
   interface Props {
     service: Service;

@@ -1,4 +1,4 @@
-import { capitalize } from "#lib/utils/misc.js";
+import { capitalize } from "#lib/utils/misc.ts";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ parent }) => {

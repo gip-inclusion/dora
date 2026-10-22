@@ -8,9 +8,9 @@
   import {
     createStructure,
     modifyStructure,
-  } from "#lib/requests/structures.js";
-  import type { Structure, StructuresOptions } from "#lib/types.js";
-  import { structureSchema } from "#lib/validation/schemas/structure.js";
+  } from "#lib/requests/structures.ts";
+  import type { Structure, StructuresOptions } from "#lib/types.ts";
+  import { structureSchema } from "#lib/validation/schemas/structure.ts";
   import StructureEditionFields from "./structure-edition-fields.svelte";
 
   interface Props {

@@ -4,8 +4,8 @@
   import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "#lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "#lib/components/forms/fields/hidden-field.svelte";
-  import type { GeoApiValue, Service, Structure } from "#lib/types.js";
-  import { randomId } from "#lib/utils/random.js";
+  import type { GeoApiValue, Service, Structure } from "#lib/types.ts";
+  import { randomId } from "#lib/utils/random.ts";
   import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
   interface Props {

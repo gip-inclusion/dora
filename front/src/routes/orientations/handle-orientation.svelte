@@ -5,9 +5,9 @@
   import ContactBeneficiaryModal from "./contact-beneficiary-modal.svelte";
   import ContactPrescriberModal from "./contact-prescriber-modal.svelte";
   import { browser } from "$app/env";
-  import type { Orientation } from "#lib/types.js";
+  import type { Orientation } from "#lib/types.ts";
   import Notice from "#lib/components/display/notice.svelte";
-  import { formatNumericDate } from "#lib/utils/date.js";
+  import { formatNumericDate } from "#lib/utils/date.ts";
 
   const statusMap = {
     VALIDÉE: { label: "Validée", cssClass: "text-success" },

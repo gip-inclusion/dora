@@ -1,6 +1,6 @@
 /* eslint-disable */
-import type { ServicesOptions } from "#lib/types.js";
-import { INVALID_OPENING_HOURS_MARKER } from "#lib/utils/opening-hours/constants.js";
+import type { ServicesOptions } from "#lib/types.ts";
+import { INVALID_OPENING_HOURS_MARKER } from "#lib/utils/opening-hours/constants.ts";
 
 const urlRegexp = /^(https?|ftp):\/\/[^\s]{1,2000}$/;
 

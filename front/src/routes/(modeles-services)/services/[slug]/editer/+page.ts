@@ -3,8 +3,8 @@ import {
   getModel,
   getService,
   getServicesOptions,
-} from "#lib/requests/services.js";
-import { getStructure } from "#lib/requests/structures.js";
+} from "#lib/requests/services.ts";
+import { getStructure } from "#lib/requests/structures.ts";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

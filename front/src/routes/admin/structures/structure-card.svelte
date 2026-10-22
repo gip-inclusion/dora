@@ -4,8 +4,8 @@
 
   import LinkButton from "#lib/components/display/link-button.svelte";
   import Spinner from "#lib/components/display/spinner.svelte";
-  import { getStructureAdmin } from "#lib/requests/admin.js";
-  import type { AdminStructure, StructureMember } from "#lib/types.js";
+  import { getStructureAdmin } from "#lib/requests/admin.ts";
+  import type { AdminStructure, StructureMember } from "#lib/types.ts";
 
   import EmailLine from "../email-line.svelte";
   import History from "../history.svelte";

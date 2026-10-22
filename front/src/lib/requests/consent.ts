@@ -1,7 +1,7 @@
-import { getApiURL } from "#lib/utils/api.js";
-import { getAnalyticsId } from "#lib/utils/stats.js";
-import { log } from "#lib/utils/logger.js";
-import { type Consent, CONSENT_VERSION } from "#lib/utils/consent.svelte.js";
+import { getApiURL } from "#lib/utils/api.ts";
+import { getAnalyticsId } from "#lib/utils/stats.ts";
+import { log } from "#lib/utils/logger.ts";
+import { type Consent, CONSENT_VERSION } from "#lib/utils/consent.svelte.ts";
 
 export async function sendConsentToAPI(
   consentChoices: Consent["consentChoices"]

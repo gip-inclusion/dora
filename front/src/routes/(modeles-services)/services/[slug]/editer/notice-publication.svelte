@@ -1,7 +1,7 @@
 <script lang="ts">
   import Notice from "#lib/components/display/notice.svelte";
-  import { validate } from "#lib/validation/validation.js";
-  import { serviceSchema } from "#lib/validation/schemas/service.js";
+  import { validate } from "#lib/validation/validation.ts";
+  import { serviceSchema } from "#lib/validation/schemas/service.ts";
   import { onMount } from "svelte";
 
   let { service, servicesOptions } = $props();

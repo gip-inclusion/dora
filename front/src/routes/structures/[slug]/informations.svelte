@@ -18,9 +18,9 @@
     Structure,
     StructuresOptions,
     PutativeStructureMember,
-  } from "#lib/types.js";
-  import { formatPhoneNumber, markdownToHTML } from "#lib/utils/misc.js";
-  import { trackStructureInfos } from "#lib/utils/stats.js";
+  } from "#lib/types.ts";
+  import { formatPhoneNumber, markdownToHTML } from "#lib/utils/misc.ts";
+  import { trackStructureInfos } from "#lib/utils/stats.ts";
 
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
   import QuickStart from "./quick-start.svelte";

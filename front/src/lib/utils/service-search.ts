@@ -1,4 +1,4 @@
-import type { SearchQuery } from "#lib/types.js";
+import type { SearchQuery } from "#lib/types.ts";
 import { logException } from "./logger";
 
 const LAST_SEARCH_CITY_KEY = "lastSearch";

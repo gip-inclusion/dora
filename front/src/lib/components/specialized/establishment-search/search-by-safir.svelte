@@ -3,9 +3,9 @@
 
   import Button from "#lib/components/display/button.svelte";
   import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
-  import type { Establishment } from "#lib/types.js";
+  import type { Establishment } from "#lib/types.ts";
 
-  import { getApiURL } from "#lib/utils/api.js";
+  import { getApiURL } from "#lib/utils/api.ts";
 
   const safirRegexp = /^\d{5}$/u;
 

@@ -6,8 +6,8 @@
   import LinkButton from "#lib/components/display/link-button.svelte";
   import StaticMarkdown from "#lib/components/display/static-markdown.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import { refreshUserInfo } from "#lib/utils/auth.js";
-  import { acceptCgu } from "#lib/utils/cgu.js";
+  import { refreshUserInfo } from "#lib/utils/auth.ts";
+  import { acceptCgu } from "#lib/utils/cgu.ts";
   import type { PageData } from "./$types";
 
   interface Props {

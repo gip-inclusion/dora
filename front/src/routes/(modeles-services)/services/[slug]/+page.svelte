@@ -8,12 +8,12 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
   import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "#lib/consts.js";
-  import { getService } from "#lib/requests/services.js";
-  import type { Service } from "#lib/types.js";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { isMemberOrPotentialMemberOfStructure } from "#lib/utils/current-structure.js";
-  import { trackService } from "#lib/utils/stats.js";
+  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "#lib/consts.ts";
+  import { getService } from "#lib/requests/services.ts";
+  import type { Service } from "#lib/types.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { isMemberOrPotentialMemberOfStructure } from "#lib/utils/current-structure.ts";
+  import { trackService } from "#lib/utils/stats.ts";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
   import ServiceFeedbackModal from "./service-feedback-modal.svelte";

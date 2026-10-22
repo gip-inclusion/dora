@@ -2,8 +2,8 @@
   import type { Component, Snippet } from "svelte";
 
   import Button from "#lib/components/display/button.svelte";
-  import { clickOutside } from "#lib/utils/misc.js";
-  import { randomId } from "#lib/utils/random.js";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
 
   interface Props {
     icon?: Component;

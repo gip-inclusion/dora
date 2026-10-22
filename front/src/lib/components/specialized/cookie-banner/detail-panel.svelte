@@ -6,7 +6,7 @@
     type ConsentKey,
     cookieBannerState,
     handleBackClick,
-  } from "#lib/utils/consent.svelte.js";
+  } from "#lib/utils/consent.svelte.ts";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
   import Button from "#lib/components/display/button.svelte";
   import DetailCard from "#lib/components/specialized/cookie-banner/detail-card.svelte";

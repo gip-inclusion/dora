@@ -8,9 +8,9 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
   import SearchForm from "#lib/components/specialized/service-search.svelte";
-  import { SEARCH_RADIUS_KM } from "#lib/consts.js";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { isInDeploymentDepartments } from "#lib/utils/misc.js";
+  import { SEARCH_RADIUS_KM } from "#lib/consts.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { isInDeploymentDepartments } from "#lib/utils/misc.ts";
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";

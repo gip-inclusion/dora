@@ -6,10 +6,10 @@
 
   import circleIcon from "#lib/assets/icons/circle.png";
   import Map from "#lib/components/display/map.svelte";
-  import type { ServiceSearchResult } from "#lib/types.js";
+  import type { ServiceSearchResult } from "#lib/types.ts";
 
   import type { PageData } from "./$types";
-  import { SEARCH_RADIUS_KM } from "#lib/consts.js";
+  import { SEARCH_RADIUS_KM } from "#lib/consts.ts";
 
   interface ServiceWithCoords extends ServiceSearchResult {
     coordinates: [number, number];

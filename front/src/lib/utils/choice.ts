@@ -1,4 +1,4 @@
-import type { Choice } from "#lib/types.js";
+import type { Choice } from "#lib/types.ts";
 
 export function getChoiceFromValue(
   value: string,

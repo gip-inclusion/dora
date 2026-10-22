@@ -7,18 +7,18 @@
   import Tabs from "#lib/components/display/tabs.svelte";
   import PartnerList from "#lib/components/specialized/partner-list.svelte";
   import SearchForm from "#lib/components/specialized/service-search.svelte";
-  import { refreshUserInfo, userInfo } from "#lib/utils/auth.js";
-  import { userPreferences } from "#lib/utils/preferences.js";
+  import { refreshUserInfo, userInfo } from "#lib/utils/auth.ts";
+  import { userPreferences } from "#lib/utils/preferences.ts";
   import HomeTabPanel, {
     homeTabs,
     type HomeTabId,
   } from "./_index/home-tab-panel.svelte";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
-  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.js";
+  import { getCurrentlySelectedStructure } from "#lib/utils/current-structure.ts";
 
   import type { PageData } from "./$types";
-  import { URL_HELP_SITE } from "#lib/consts.js";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 
   interface Props {
     data: PageData;

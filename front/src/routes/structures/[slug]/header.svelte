@@ -22,8 +22,8 @@
 
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import Label from "#lib/components/display/label.svelte";
-  import type { Structure } from "#lib/types.js";
-  import { capitalize } from "#lib/utils/misc.js";
+  import type { Structure } from "#lib/types.ts";
+  import { capitalize } from "#lib/utils/misc.ts";
 
   import TabsLink from "./tabs-links.svelte";
 

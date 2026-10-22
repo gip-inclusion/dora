@@ -1,14 +1,14 @@
 <script lang="ts">
   import FieldSet from "#lib/components/display/fieldset.svelte";
   import SelectField from "#lib/components/forms/fields/select-field.svelte";
-  import { getModel } from "#lib/requests/services.js";
+  import { getModel } from "#lib/requests/services.ts";
   import {
     getManagedStructures,
     getStructure,
-  } from "#lib/requests/structures.js";
-  import type { Choice, Model, Service, ShortStructure } from "#lib/types.js";
-  import { debounce } from "#lib/utils/misc.js";
-  import { toServiceStructure } from "#lib/utils/forms.js";
+  } from "#lib/requests/structures.ts";
+  import type { Choice, Model, Service, ShortStructure } from "#lib/types.ts";
+  import { debounce } from "#lib/utils/misc.ts";
+  import { toServiceStructure } from "#lib/utils/forms.ts";
 
   interface Props {
     service: Service;

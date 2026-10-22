@@ -4,8 +4,8 @@
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
 
-  import type { Model, Service } from "#lib/types.js";
-  import { userInfo } from "#lib/utils/auth.js";
+  import type { Model, Service } from "#lib/types.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   import ServiceSection from "./components/service-section.svelte";
 

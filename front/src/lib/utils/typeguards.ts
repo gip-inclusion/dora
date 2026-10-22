@@ -1,4 +1,4 @@
-import type { Model, Service } from "#lib/types.js";
+import type { Model, Service } from "#lib/types.ts";
 
 export function isModel(
   serviceOrModel: Service | Model

@@ -1,12 +1,12 @@
 <script lang="ts">
   import { getContext, type Snippet } from "svelte";
 
-  import { randomId } from "#lib/utils/random.js";
+  import { randomId } from "#lib/utils/random.ts";
   import {
     contextValidationKey,
     formErrors,
     type ValidationContext,
-  } from "#lib/validation/validation.js";
+  } from "#lib/validation/validation.ts";
 
   import Alert from "../display/alert.svelte";
 

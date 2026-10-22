@@ -4,12 +4,12 @@
   import {
     addIgnoredServicesToUpdate,
     updateServicesFromModel,
-  } from "#lib/requests/services.js";
-  import type { StructureService } from "#lib/types.js";
+  } from "#lib/requests/services.ts";
+  import type { StructureService } from "#lib/types.ts";
   import {
     hideNotice,
     isNoticeHidden,
-  } from "#lib/utils/service-update-notices.js";
+  } from "#lib/utils/service-update-notices.ts";
 
   interface Props {
     structureSlug: string;

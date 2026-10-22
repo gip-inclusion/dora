@@ -1,7 +1,7 @@
-import { URL_HELP_SITE } from "#lib/consts.js";
-import { CANONICAL_URL } from "#lib/env.js";
-import type { Service } from "#lib/types.js";
-import { getMobilisationModesDisplay } from "#lib/utils/service.js";
+import { URL_HELP_SITE } from "#lib/consts.ts";
+import { CANONICAL_URL } from "#lib/env.ts";
+import type { Service } from "#lib/types.ts";
+import { getMobilisationModesDisplay } from "#lib/utils/service.ts";
 
 function formatBulletList(
   items: ReadonlyArray<string> | null | undefined,

@@ -3,8 +3,8 @@
   import Fieldset from "#lib/components/display/fieldset.svelte";
   import Form from "#lib/components/forms/form.svelte";
   import Modal from "#lib/components/hoc/modal.svelte";
-  import { getApiURL } from "#lib/utils/api.js";
-  import { modifyUserSchema } from "#lib/validation/schemas/dashboard.js";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import { modifyUserSchema } from "#lib/validation/schemas/dashboard.ts";
   import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
   import SelectField from "#lib/components/forms/fields/select-field.svelte";
 

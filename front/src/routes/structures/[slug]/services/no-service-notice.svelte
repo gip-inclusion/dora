@@ -3,7 +3,7 @@
 
   import illuServices from "#lib/assets/illustrations/services.svg";
   import EmptyNotice from "../empty-notice.svelte";
-  import { URL_HELP_SITE } from "#lib/consts.js";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 </script>
 
 <EmptyNotice

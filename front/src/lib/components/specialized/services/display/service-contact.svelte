@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { userInfo } from "#lib/utils/auth.js";
+  import { userInfo } from "#lib/utils/auth.ts";
 
-  import type { Service, ShortService } from "#lib/types.js";
+  import type { Service, ShortService } from "#lib/types.ts";
   import ContactEmail from "../contact-email.svelte";
   import ContactPhone from "../contact-phone.svelte";
   import MembershipPendingWarning from "#lib/components/specialized/membership-pending-warning.svelte";

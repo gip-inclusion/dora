@@ -20,13 +20,13 @@
     publishService,
     unarchiveService,
     unPublishService,
-  } from "#lib/requests/services.js";
-  import type { Service, ServiceStatus, ShortService } from "#lib/types.js";
-  import { clickOutside } from "#lib/utils/misc.js";
-  import { randomId } from "#lib/utils/random.js";
-  import { getAvailableOptionsForStatus } from "#lib/utils/service.js";
-  import { serviceSchema } from "#lib/validation/schemas/service.js";
-  import { validate } from "#lib/validation/validation.js";
+  } from "#lib/requests/services.ts";
+  import type { Service, ServiceStatus, ShortService } from "#lib/types.ts";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
+  import { getAvailableOptionsForStatus } from "#lib/utils/service.ts";
+  import { serviceSchema } from "#lib/validation/schemas/service.ts";
+  import { validate } from "#lib/validation/validation.ts";
 
   type ServiceStatusPresentation = {
     bgClass: string;

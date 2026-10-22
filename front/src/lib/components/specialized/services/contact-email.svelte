@@ -1,9 +1,9 @@
 <script lang="ts">
   import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
 
-  import { CANONICAL_URL } from "#lib/env.js";
-  import type { Service, ShortService } from "#lib/types.js";
-  import { userInfo } from "#lib/utils/auth.js";
+  import { CANONICAL_URL } from "#lib/env.ts";
+  import type { Service, ShortService } from "#lib/types.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   interface Props {
     service: Service | ShortService;

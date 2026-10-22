@@ -1,6 +1,6 @@
 <script lang="ts">
   import LinkButton from "#lib/components/display/link-button.svelte";
-  import type { AdminStructure } from "#lib/types.js";
+  import type { AdminStructure } from "#lib/types.ts";
 
   import { hasAdminStatus } from "./structure-statuses";
 

@@ -15,7 +15,7 @@
 
   import LinkButton from "#lib/components/display/link-button.svelte";
   import SelectField from "#lib/components/inputs/obsolete/select-field.svelte";
-  import type { Choice, ServiceStatus, ShortService } from "#lib/types.js";
+  import type { Choice, ServiceStatus, ShortService } from "#lib/types.ts";
 
   import Count from "../count.svelte";
   import {

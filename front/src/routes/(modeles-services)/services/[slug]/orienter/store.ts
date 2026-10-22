@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { Orientation } from "#lib/types.js";
+import type { Orientation } from "#lib/types.ts";
 
 export function initEmptyOrientation(): Orientation {
   return {

@@ -5,20 +5,20 @@
   import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
   import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
   import UploadField from "#lib/components/forms/fields/upload-field.svelte";
-  import { formatFilePath } from "#lib/utils/file.js";
+  import { formatFilePath } from "#lib/utils/file.ts";
   import { orientation } from "../store";
-  import { userInfo } from "#lib/utils/auth.js";
+  import { userInfo } from "#lib/utils/auth.ts";
   import { onMount } from "svelte";
   import Alert from "#lib/components/display/alert.svelte";
   import Accordion from "#lib/components/display/accordion.svelte";
   import BooleanCheckboxField from "#lib/components/forms/fields/boolean-checkbox-field.svelte";
   import SelectField from "#lib/components/forms/fields/select-field.svelte";
-  import { orientationContainsTestWords } from "#lib/utils/orientation.js";
-  import { userPreferences } from "#lib/utils/preferences.js";
-  import type { Choice } from "#lib/types.js";
-  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.js";
-  import { formErrors } from "#lib/validation/validation.js";
-  import type { Service } from "#lib/types.js";
+  import { orientationContainsTestWords } from "#lib/utils/orientation.ts";
+  import { userPreferences } from "#lib/utils/preferences.ts";
+  import type { Choice } from "#lib/types.ts";
+  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.ts";
+  import { formErrors } from "#lib/validation/validation.ts";
+  import type { Service } from "#lib/types.ts";
   import { orientationStep2Schema } from "../schema";
 
   interface Props {

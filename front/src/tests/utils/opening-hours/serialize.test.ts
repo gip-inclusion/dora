@@ -3,8 +3,8 @@ import {
   fromJsonToOsmString,
   INVALID_OPENING_HOURS_MARKER,
   returnEmptyHoursData,
-} from "#lib/utils/opening-hours/index.js";
-import type { OsmOpeningHours } from "#lib/types.js";
+} from "#lib/utils/opening-hours/index.ts";
+import type { OsmOpeningHours } from "#lib/types.ts";
 
 describe("fromJsonToOsmString", () => {
   test("devrait sérialiser un jour simple", () => {

@@ -4,11 +4,11 @@
   import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
 
   import DateLabel from "#lib/components/display/date-label.svelte";
-  import type { SavedSearch } from "#lib/types.js";
+  import type { SavedSearch } from "#lib/types.ts";
   import {
     updateSavedSearchFrequency,
     deleteSavedSearch,
-  } from "#lib/requests/saved-search.js";
+  } from "#lib/requests/saved-search.ts";
   import Button from "#lib/components/display/button.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
 

@@ -11,7 +11,7 @@
   import Button from "#lib/components/display/button.svelte";
   import SelectField from "#lib/components/inputs/obsolete/select-field.svelte";
   import Select from "#lib/components/inputs/select/select.svelte";
-  import { BAN_API_SEARCH_URL } from "#lib/consts.js";
+  import { BAN_API_SEARCH_URL } from "#lib/consts.ts";
   import type {
     Choice,
     FeeCondition,
@@ -19,14 +19,14 @@
     LocationKind,
     ServiceKind,
     ServicesOptions,
-  } from "#lib/types.js";
-  import { getDepartmentFromCityCode } from "#lib/utils/misc.js";
+  } from "#lib/types.ts";
+  import { getDepartmentFromCityCode } from "#lib/utils/misc.ts";
   import {
     associateIconToCategory,
     sortCategory,
     sortSubcategory,
-  } from "#lib/utils/service.js";
-  import { getQueryString } from "#lib/utils/service-search.js";
+  } from "#lib/utils/service.ts";
+  import { getQueryString } from "#lib/utils/service-search.ts";
 
   interface Props {
     servicesOptions: ServicesOptions;

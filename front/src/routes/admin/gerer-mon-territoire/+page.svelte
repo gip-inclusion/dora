@@ -11,11 +11,11 @@
   import {
     AUTOMETA_MANAGER_DASHBOARD_URLS,
     URL_MANAGER_HELP_NOTICE,
-  } from "#lib/consts.js";
-  import { getStructuresAdmin } from "#lib/requests/admin.js";
-  import type { AdminStructure, GeoApiValue } from "#lib/types.js";
-  import { logException } from "#lib/utils/logger.js";
-  import { saveLastDepartment } from "#lib/utils/manager-department.js";
+  } from "#lib/consts.ts";
+  import { getStructuresAdmin } from "#lib/requests/admin.ts";
+  import type { AdminStructure, GeoApiValue } from "#lib/types.ts";
+  import { logException } from "#lib/utils/logger.ts";
+  import { saveLastDepartment } from "#lib/utils/manager-department.ts";
 
   import { getStructureStatus } from "../structures/structures-filters";
   import type { PageData } from "./$types";

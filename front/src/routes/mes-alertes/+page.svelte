@@ -6,10 +6,10 @@
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import type { SavedSearch } from "#lib/types.js";
-  import { refreshUserInfo, userInfo } from "#lib/utils/auth.js";
+  import type { SavedSearch } from "#lib/types.ts";
+  import { refreshUserInfo, userInfo } from "#lib/utils/auth.ts";
   import SavedSearchCard from "./saved-search-card.svelte";
-  import { URL_HELP_SITE } from "#lib/consts.js";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 
   let { data } = $props();
 

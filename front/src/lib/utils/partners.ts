@@ -40,7 +40,7 @@ import logoCAF from "#lib/assets/logos/partners/logo_caf.png";
 import logoLaReunion from "#lib/assets/logos/partners/logo_lareunion.png";
 import logoFranceTravail from "#lib/assets/logos/partners/logo_francetravail.png";
 
-import type { Partner } from "#lib/types.js";
+import type { Partner } from "#lib/types.ts";
 
 export const PARTNERS: Partner[] = [
   { name: "AFPA", img: logoAfpa },

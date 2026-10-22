@@ -11,18 +11,18 @@
     LocationType,
     parseLocation,
     serializeLocation,
-  } from "#lib/utils/service-search-keyword.js";
+  } from "#lib/utils/service-search-keyword.ts";
 
   import {
     getRegionDepartments,
     searchDepartment,
     searchRegion,
-  } from "#lib/utils/search-area.js";
+  } from "#lib/utils/search-area.ts";
   import {
     type EpcisAndCitiesResults,
     searchEpcisAndCities,
-  } from "#lib/requests/geo.js";
-  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
+  } from "#lib/requests/geo.ts";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.ts";
 
   let { service = $bindable() }: Omit<FieldGroupProps, "model"> = $props();
 

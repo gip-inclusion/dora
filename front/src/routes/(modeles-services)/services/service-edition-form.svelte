@@ -11,16 +11,16 @@
   import FieldsetEligibility from "#lib/components/specialized/services/fieldset-eligibility.svelte";
   import FieldsetReceptionConditions from "#lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import { createOrModifyService } from "#lib/requests/services.js";
+  import { createOrModifyService } from "#lib/requests/services.ts";
   import type {
     Model,
     Service,
     ServicesOptions,
     ShortStructure,
-  } from "#lib/types.js";
-  import { log } from "#lib/utils/logger.js";
-  import { serviceSchema } from "#lib/validation/schemas/service.js";
-  import { validate } from "#lib/validation/validation.js";
+  } from "#lib/types.ts";
+  import { log } from "#lib/utils/logger.ts";
+  import { serviceSchema } from "#lib/validation/schemas/service.ts";
+  import { validate } from "#lib/validation/validation.ts";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
   import { goto } from "$app/navigation";
 

@@ -3,8 +3,8 @@
 
   import Button from "#lib/components/display/button.svelte";
   import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
-  import { getMembers, getPutativeMembers } from "#lib/requests/structures.js";
-  import { userInfo } from "#lib/utils/auth.js";
+  import { getMembers, getPutativeMembers } from "#lib/requests/structures.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   import { structure } from "../store";
   import MemberInvited from "./member-invited.svelte";

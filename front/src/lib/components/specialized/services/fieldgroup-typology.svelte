@@ -1,13 +1,13 @@
 <script lang="ts">
   import FieldGroup from "#lib/components/display/field-group.svelte";
   import RadioButtonsField from "#lib/components/forms/fields/radio-buttons-field.svelte";
-  import { getModelInputProps } from "#lib/utils/forms.js";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "#lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
-  import { currentSchema } from "#lib/validation/validation.js";
-  import { URL_HELP_SITE } from "#lib/consts.js";
-  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
+  import { currentSchema } from "#lib/validation/validation.ts";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.ts";
 
   let {
     servicesOptions,

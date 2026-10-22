@@ -4,7 +4,7 @@
   import FieldGroupAccessConditions from "./fieldgroup-access-conditions.svelte";
   import FieldGroupModalities from "./fieldgroup-modalities.svelte";
   import FieldGroupPerimeter from "./fieldgroup-perimeter.svelte";
-  import type { FieldSetProps } from "#lib/components/specialized/services/types.js";
+  import type { FieldSetProps } from "#lib/components/specialized/services/types.ts";
 
   let {
     service = $bindable(),

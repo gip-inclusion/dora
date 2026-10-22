@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/env";
-  import { ENVIRONMENT, WARNING_BANNER } from "#lib/env.js";
+  import { ENVIRONMENT, WARNING_BANNER } from "#lib/env.ts";
   import LogoDORA from "#lib/assets/logos/logo-dora.svg";
   import LogoRepublique from "#lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";

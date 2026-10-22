@@ -1,8 +1,8 @@
 import { redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
-import { API_URL, CANONICAL_URL } from "#lib/env.js";
-import { TOKEN_KEY, AUTH_STATE_KEY } from "#lib/utils/auth.js";
-import { log, logException } from "#lib/utils/logger.js";
+import { API_URL, CANONICAL_URL } from "#lib/env.ts";
+import { TOKEN_KEY, AUTH_STATE_KEY } from "#lib/utils/auth.ts";
+import { log, logException } from "#lib/utils/logger.ts";
 import { getNextPage } from "../utils";
 
 export const GET: RequestHandler = async ({ url, cookies }) => {

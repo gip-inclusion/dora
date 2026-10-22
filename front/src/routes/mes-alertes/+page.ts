@@ -1,5 +1,5 @@
 import type { PageLoad } from "./$types";
-import { getSavedSearches } from "#lib/requests/saved-search.js";
+import { getSavedSearches } from "#lib/requests/saved-search.ts";
 
 export const ssr = false;
 

@@ -2,7 +2,7 @@ import type {
   FeeCondition,
   LocationKind,
   ServicesOptions,
-} from "#lib/types.js";
+} from "#lib/types.ts";
 import * as v from "../schema-utils";
 
 const IN_PERSON_LOCATION_KIND = "en-presentiel";

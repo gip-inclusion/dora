@@ -10,7 +10,7 @@
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
-  } from "#lib/types.js";
+  } from "#lib/types.ts";
 
   import { getStructureStatus, STATUS_FILTER_TABS } from "./structures-filters";
   import type { StatusFilter } from "./types";

@@ -8,7 +8,7 @@
 
   import mapViewImage from "#lib/assets/illustrations/map-view.jpg";
 
-  import type { ServiceSearchResult } from "#lib/types.js";
+  import type { ServiceSearchResult } from "#lib/types.ts";
   import Button from "#lib/components/display/button.svelte";
   import Pagination from "#lib/components/display/pagination.svelte";
   import Modal from "#lib/components/hoc/modal.svelte";

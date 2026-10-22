@@ -10,10 +10,10 @@
   import Form from "#lib/components/forms/form.svelte";
   import Modal from "#lib/components/hoc/modal.svelte";
 
-  import type { Service } from "#lib/types.js";
-  import { getApiURL } from "#lib/utils/api.js";
-  import * as v from "#lib/validation/schema-utils.js";
-  import { validate } from "#lib/validation/validation.js";
+  import type { Service } from "#lib/types.ts";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import * as v from "#lib/validation/schema-utils.ts";
+  import { validate } from "#lib/validation/validation.ts";
 
   interface Props {
     isOpen?: boolean;

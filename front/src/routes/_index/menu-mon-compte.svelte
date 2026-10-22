@@ -7,8 +7,8 @@
   import { page } from "$app/state";
   import RoadMapIcon from "#lib/assets/icons/ico-road-map.svelte";
   import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
-  import { OIDC_AUTH_BACKEND } from "#lib/env.js";
-  import { userInfo } from "#lib/utils/auth.js";
+  import { OIDC_AUTH_BACKEND } from "#lib/env.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   interface Props {
     mobileDesign?: boolean;

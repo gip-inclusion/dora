@@ -12,12 +12,12 @@
   import { page } from "$app/state";
   import Bookmarkable from "#lib/components/hoc/bookmarkable.svelte";
   import Tooltip from "#lib/components/ui/tooltip.svelte";
-  import { isAuthenticated } from "#lib/utils/auth.js";
-  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.js";
-  import type { Service } from "#lib/types.js";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.ts";
+  import type { Service } from "#lib/types.ts";
 
   import ServiceActionButton from "./service-action-button.svelte";
-  import { trackMatomoEvent } from "#lib/utils/matomo.js";
+  import { trackMatomoEvent } from "#lib/utils/matomo.ts";
 
   interface Props {
     service: Service;

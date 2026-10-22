@@ -25,14 +25,14 @@
     type BANFeature,
     formatMunicipality,
     search as searchBAN,
-  } from "#lib/requests/ban.js";
+  } from "#lib/requests/ban.ts";
   import {
     LocationType,
     loadLastLocation,
     saveLastLocation,
     type AddressResult,
-  } from "#lib/utils/service-search-keyword.js";
-  import { searchDepartment, searchRegion } from "#lib/utils/search-area.js";
+  } from "#lib/utils/service-search-keyword.ts";
+  import { searchDepartment, searchRegion } from "#lib/utils/search-area.ts";
 
   interface SelectOption {
     value: AddressResult;

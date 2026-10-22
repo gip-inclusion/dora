@@ -16,7 +16,7 @@
   import {
     INCLUSION_PLATFORM_ORIENTATIONS_URL,
     INCLUSION_PLATFORM_SEARCH_URL,
-  } from "#lib/consts.js";
+  } from "#lib/consts.ts";
 
   interface Props {
     tabId: HomeTabId;

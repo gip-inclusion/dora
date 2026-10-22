@@ -4,11 +4,11 @@
   import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
   import MoneyEuroCircleLineFinance from "svelte-remix/MoneyEuroCircleLineFinance.svelte";
 
-  import { MONTHS_BEFORE_OUTDATED } from "#lib/consts.js";
+  import { MONTHS_BEFORE_OUTDATED } from "#lib/consts.ts";
   import LinkButton from "#lib/components/display/link-button.svelte";
   import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
-  import type { ServiceSearchResult } from "#lib/types.js";
-  import { isNotFreeService } from "#lib/utils/service.js";
+  import type { ServiceSearchResult } from "#lib/types.ts";
+  import { isNotFreeService } from "#lib/utils/service.ts";
 
   interface Props {
     result: ServiceSearchResult;

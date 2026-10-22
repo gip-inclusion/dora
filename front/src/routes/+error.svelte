@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
-  import { RATE_LIMIT_MESSAGE } from "#lib/consts.js";
+  import { RATE_LIMIT_MESSAGE } from "#lib/consts.ts";
 
   const notFound = page.status === 404;
   const forbidden = page.status === 403;

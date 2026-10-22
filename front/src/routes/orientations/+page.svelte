@@ -19,11 +19,11 @@
 
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
-  import { formatLongDate } from "#lib/utils/date.js";
-  import { formatFilePath } from "#lib/utils/file.js";
-  import { formatPhoneNumber } from "#lib/utils/misc.js";
-  import { getOrientation } from "#lib/utils/orientation.js";
-  import { trackOrientation } from "#lib/utils/stats.js";
+  import { formatLongDate } from "#lib/utils/date.ts";
+  import { formatFilePath } from "#lib/utils/file.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
+  import { getOrientation } from "#lib/utils/orientation.ts";
+  import { trackOrientation } from "#lib/utils/stats.ts";
 
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";

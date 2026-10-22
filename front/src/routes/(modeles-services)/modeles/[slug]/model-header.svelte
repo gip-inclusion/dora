@@ -1,8 +1,8 @@
 <script lang="ts">
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
-  import { capitalize } from "#lib/utils/misc.js";
-  import type { Model } from "#lib/types.js";
+  import { capitalize } from "#lib/utils/misc.ts";
+  import type { Model } from "#lib/types.ts";
 
   interface Props {
     model: Model;

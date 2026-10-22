@@ -8,15 +8,15 @@
   import OrientationsStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
-  import { CANONICAL_URL } from "#lib/env.js";
+  import { CANONICAL_URL } from "#lib/env.ts";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
   import { toast } from "@zerodevx/svelte-toast";
   import Notice from "#lib/components/display/notice.svelte";
-  import { requestOrientationExportLink } from "#lib/requests/orientations.js";
-  import { userInfo } from "#lib/utils/auth.js";
-  import { logException } from "#lib/utils/logger.js";
-  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.js";
+  import { requestOrientationExportLink } from "#lib/requests/orientations.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { logException } from "#lib/utils/logger.ts";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.ts";
 
   interface Props {
     data: PageData;

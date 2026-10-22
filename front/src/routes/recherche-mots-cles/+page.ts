@@ -2,8 +2,8 @@ import { ADDRESS_QUERY_PARAMS } from "#lib/components/specialized/service-search
 import {
   getKeywordResults,
   getServicesOptions,
-} from "#lib/requests/services.js";
-import type { ServiceSearchResult } from "#lib/types.js";
+} from "#lib/requests/services.ts";
+import type { ServiceSearchResult } from "#lib/types.ts";
 
 import type { PageLoad } from "./$types";
 

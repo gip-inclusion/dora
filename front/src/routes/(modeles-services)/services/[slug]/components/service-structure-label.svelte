@@ -3,8 +3,8 @@
 
   import { page } from "$app/state";
 
-  import type { Service } from "#lib/types.js";
-  import { capitalize } from "#lib/utils/misc.js";
+  import type { Service } from "#lib/types.ts";
+  import { capitalize } from "#lib/utils/misc.ts";
 
   interface Props {
     service: Service;

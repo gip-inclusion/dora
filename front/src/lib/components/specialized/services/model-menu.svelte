@@ -1,7 +1,7 @@
 <script lang="ts">
   import LinkButton from "#lib/components/display/link-button.svelte";
-  import type { Model } from "#lib/types.js";
-  import { userInfo } from "#lib/utils/auth.js";
+  import type { Model } from "#lib/types.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   interface Props {
     model: Model;

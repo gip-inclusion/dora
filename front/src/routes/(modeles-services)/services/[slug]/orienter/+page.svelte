@@ -13,15 +13,15 @@
   import { goto } from "$app/navigation";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import { onMount, setContext } from "svelte";
-  import { isAuthenticated } from "#lib/utils/auth.js";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
   import Teaser from "./teaser.svelte";
-  import { trackMobilisation } from "#lib/utils/stats.js";
+  import { trackMobilisation } from "#lib/utils/stats.ts";
   import { page } from "$app/state";
   import {
     ORIENTATION_JWT_QUERY_PARAM,
     URL_DOCUMENTATION_ORIENTATION,
-  } from "#lib/consts.js";
-  import type { Service } from "#lib/types.js";
+  } from "#lib/consts.ts";
+  import type { Service } from "#lib/types.ts";
 
   interface Props {
     data: {

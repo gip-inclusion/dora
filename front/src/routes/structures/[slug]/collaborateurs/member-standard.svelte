@@ -7,8 +7,8 @@
   import { goto } from "$app/navigation";
   import Button from "#lib/components/display/button.svelte";
   import Label from "#lib/components/display/label.svelte";
-  import { deleteMember } from "#lib/requests/structures.js";
-  import { refreshUserInfo } from "#lib/utils/auth.js";
+  import { deleteMember } from "#lib/requests/structures.ts";
+  import { refreshUserInfo } from "#lib/utils/auth.ts";
 
   import Member from "./member.svelte";
   import ModalChangeUser from "./modal-change-user.svelte";

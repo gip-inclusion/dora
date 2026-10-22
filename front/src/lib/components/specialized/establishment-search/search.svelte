@@ -6,8 +6,8 @@
   import SearchByCommune from "./search-by-commune.svelte";
   import SearchBySafir from "./search-by-safir.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
-  import type { Establishment, GeoApiValue } from "#lib/types.js";
-  import { URL_HELP_SITE } from "#lib/consts.js";
+  import type { Establishment, GeoApiValue } from "#lib/types.ts";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 
   type Tab = "nom" | "siret" | "safir";
 

@@ -3,9 +3,9 @@
   import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
 
   import type { FieldSetProps } from "#lib/components/specialized/services/types.ts";
-  import { getModelInputProps } from "#lib/utils/forms.js";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
   import FieldModel from "#lib/components/specialized/services/field-model.svelte";
-  import { currentSchema } from "#lib/validation/validation.js";
+  import { currentSchema } from "#lib/validation/validation.ts";
 
   let {
     servicesOptions,

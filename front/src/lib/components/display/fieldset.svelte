@@ -4,7 +4,7 @@
 
   import { onMount, type Snippet } from "svelte";
   import Button from "./button.svelte";
-  import { randomId } from "#lib/utils/random.js";
+  import { randomId } from "#lib/utils/random.ts";
 
   interface Props {
     title?: string;

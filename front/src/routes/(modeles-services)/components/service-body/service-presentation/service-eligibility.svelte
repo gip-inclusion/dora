@@ -13,16 +13,16 @@
   import ServiceField from "./components/service-field.svelte";
   import ServiceList from "./components/service-list.svelte";
 
-  import type { Model, Service, ServicesOptions } from "#lib/types.js";
-  import { getLabelFromValue } from "#lib/utils/choice.js";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { getLabelFromValue } from "#lib/utils/choice.ts";
   import {
     getMobilisationModesDisplay,
     isNotFreeService,
-  } from "#lib/utils/service.js";
-  import { formatFilePath } from "#lib/utils/file.js";
+  } from "#lib/utils/service.ts";
+  import { formatFilePath } from "#lib/utils/file.ts";
 
   import ServiceKeyInformationSection from "./service-key-informations/service-key-information-section.svelte";
-  import { NATIONAL_ELIGIBLITITY_ZONE } from "#lib/consts.js";
+  import { NATIONAL_ELIGIBLITITY_ZONE } from "#lib/consts.ts";
 
   interface Props {
     service: Service | Model;

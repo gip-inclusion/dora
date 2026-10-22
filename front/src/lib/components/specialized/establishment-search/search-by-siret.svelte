@@ -3,10 +3,10 @@
 
   import Button from "#lib/components/display/button.svelte";
   import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
-  import type { Establishment } from "#lib/types.js";
+  import type { Establishment } from "#lib/types.ts";
 
-  import { getApiURL } from "#lib/utils/api.js";
-  import { siretRegexp } from "#lib/validation/schema-utils.js";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import { siretRegexp } from "#lib/validation/schema-utils.ts";
 
   interface Props {
     onEstablishmentChange: (establishment: Establishment | null) => void;

@@ -4,10 +4,10 @@
   import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
 
   import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
-  import type { Choice } from "#lib/types.js";
-  import { getChoiceFromValue } from "#lib/utils/choice.js";
-  import { clickOutside } from "#lib/utils/misc.js";
-  import { randomId } from "#lib/utils/random.js";
+  import type { Choice } from "#lib/types.ts";
+  import { getChoiceFromValue } from "#lib/utils/choice.ts";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
 
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";

@@ -9,7 +9,7 @@
   import {
     acceptMember,
     rejectMembershipRequest,
-  } from "#lib/requests/structures.js";
+  } from "#lib/requests/structures.ts";
 
   import Member from "./member.svelte";
 

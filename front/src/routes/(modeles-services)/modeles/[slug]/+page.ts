@@ -1,4 +1,4 @@
-import { getModel, getServicesOptions } from "#lib/requests/services.js";
+import { getModel, getServicesOptions } from "#lib/requests/services.ts";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

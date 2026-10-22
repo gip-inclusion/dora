@@ -1,15 +1,15 @@
 <script lang="ts">
   import Modal from "#lib/components/hoc/modal.svelte";
   import Form from "#lib/components/forms/form.svelte";
-  import * as v from "#lib/validation/schema-utils.js";
+  import * as v from "#lib/validation/schema-utils.ts";
   import Button from "#lib/components/display/button.svelte";
   import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
-  import { denyOrientation } from "#lib/utils/orientation.js";
+  import { denyOrientation } from "#lib/utils/orientation.ts";
   import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
-  import type { Orientation } from "#lib/types.js";
+  import type { Orientation } from "#lib/types.ts";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
-  import { renderRejectMessage } from "#lib/utils/orientation-templates.js";
-  import { formatPhoneNumber } from "#lib/utils/misc.js";
+  import { renderRejectMessage } from "#lib/utils/orientation-templates.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
   interface Props {
     isOpen?: boolean;

@@ -1,6 +1,6 @@
-import { getDepartments, type DepartmentChoice } from "#lib/requests/geo.js";
-import type { GeoApiValue } from "#lib/types.js";
-import { userInfo } from "#lib/utils/auth.js";
+import { getDepartments, type DepartmentChoice } from "#lib/requests/geo.ts";
+import type { GeoApiValue } from "#lib/types.ts";
+import { userInfo } from "#lib/utils/auth.ts";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 

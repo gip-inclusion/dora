@@ -2,9 +2,9 @@
   import FieldGroup from "#lib/components/display/field-group.svelte";
   import FieldModel from "#lib/components/specialized/services/field-model.svelte";
   import MultiSelectField from "#lib/components/forms/fields/multi-select-field.svelte";
-  import type { FieldGroupProps } from "#lib/components/specialized/services/types.js";
-  import { getModelInputProps } from "#lib/utils/forms.js";
-  import { currentSchema } from "#lib/validation/validation.js";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.ts";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
+  import { currentSchema } from "#lib/validation/validation.ts";
 
   let {
     servicesOptions,

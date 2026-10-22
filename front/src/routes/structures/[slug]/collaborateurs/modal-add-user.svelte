@@ -2,8 +2,8 @@
   import Button from "#lib/components/display/button.svelte";
   import Form from "#lib/components/forms/form.svelte";
   import Modal from "#lib/components/hoc/modal.svelte";
-  import { getApiURL } from "#lib/utils/api.js";
-  import { addUserSchema } from "#lib/validation/schemas/dashboard.js";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import { addUserSchema } from "#lib/validation/schemas/dashboard.ts";
   import ConfirmationModal from "./modal-confirmation.svelte";
   import FormErrors from "#lib/components/forms/form-errors.svelte";
   import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";

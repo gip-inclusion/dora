@@ -4,7 +4,7 @@
     LocationKind,
     ServiceCategory,
     ServiceKind,
-  } from "#lib/types.js";
+  } from "#lib/types.ts";
 
   // Variante mots-clés : mêmes filtres que la recherche par catégorie,
   // PLUS un filtre « Thématiques et besoins » (cf. `categories` ci-dessous),
@@ -21,7 +21,7 @@
 </script>
 
 <script lang="ts">
-  import type { ServicesOptions } from "#lib/types.js";
+  import type { ServicesOptions } from "#lib/types.ts";
 
   // Atome de filtre réutilisé tel quel depuis le contrôle (non couplé à PageData).
   import ResultFilter from "../recherche/result-filter.svelte";

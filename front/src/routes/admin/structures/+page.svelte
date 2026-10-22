@@ -9,11 +9,11 @@
   import {
     URL_MANAGER_HELP_NOTICE,
     URL_MANAGER_DATA_INCLUSION_REPORT,
-  } from "#lib/consts.js";
-  import { CANONICAL_URL } from "#lib/env.js";
-  import { getStructuresAdmin } from "#lib/requests/admin.js";
-  import type { AdminStructure, GeoApiValue } from "#lib/types.js";
-  import { saveLastDepartment } from "#lib/utils/manager-department.js";
+  } from "#lib/consts.ts";
+  import { CANONICAL_URL } from "#lib/env.ts";
+  import { getStructuresAdmin } from "#lib/requests/admin.ts";
+  import type { AdminStructure, GeoApiValue } from "#lib/types.ts";
+  import { saveLastDepartment } from "#lib/utils/manager-department.ts";
 
   import DepartmentSelector from "#lib/components/specialized/department-selector.svelte";
 
@@ -28,7 +28,7 @@
     parseStatusFilter,
   } from "./structures-filters";
   import type { StatusFilter } from "./types";
-  import { generateSpreadsheet } from "#lib/utils/spreadsheet.js";
+  import { generateSpreadsheet } from "#lib/utils/spreadsheet.ts";
 
   interface Props {
     data: PageData;

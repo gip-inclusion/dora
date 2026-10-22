@@ -1,12 +1,12 @@
 <script lang="ts">
   import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
 
-  import { getApiURL } from "#lib/utils/api.js";
-  import { getFileNameFromPath, toValidFileName } from "#lib/utils/file.js";
-  import { shortenString } from "#lib/utils/misc.js";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import { getFileNameFromPath, toValidFileName } from "#lib/utils/file.ts";
+  import { shortenString } from "#lib/utils/misc.ts";
 
   import Alert from "../display/alert.svelte";
-  import { deleteFile } from "#lib/requests/upload.js";
+  import { deleteFile } from "#lib/requests/upload.ts";
 
   interface Props {
     id: string;

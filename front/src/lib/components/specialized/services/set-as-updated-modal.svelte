@@ -4,11 +4,11 @@
   import Modal from "#lib/components/hoc/modal.svelte";
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
   import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
-  import { markServiceAsSynced } from "#lib/requests/services.js";
-  import type { Service, ServicesOptions, ShortService } from "#lib/types.js";
+  import { markServiceAsSynced } from "#lib/requests/services.ts";
+  import type { Service, ServicesOptions, ShortService } from "#lib/types.ts";
   import ServiceContact from "./display/service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
-  import { formatEligibilityZones } from "#lib/utils/service.js";
+  import { formatEligibilityZones } from "#lib/utils/service.ts";
 
   interface Props {
     isOpen?: boolean;

@@ -5,13 +5,13 @@
 
   import Select from "#lib/components/inputs/select/select.svelte";
 
-  import { BAN_API_SEARCH_URL } from "#lib/consts.js";
-  import { fetchWithRetry } from "#lib/utils/fetch-retry.js";
+  import { BAN_API_SEARCH_URL } from "#lib/consts.ts";
+  import { fetchWithRetry } from "#lib/utils/fetch-retry.ts";
 
   import {
     contextValidationKey,
     type ValidationContext,
-  } from "#lib/validation/validation.js";
+  } from "#lib/validation/validation.ts";
 
   interface Props {
     id: string;

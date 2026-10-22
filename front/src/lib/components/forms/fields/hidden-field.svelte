@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentSchema } from "#lib/validation/validation.js";
+  import { currentSchema } from "#lib/validation/validation.ts";
   import FieldWrapper from "../field-wrapper.svelte";
 
   interface Props {

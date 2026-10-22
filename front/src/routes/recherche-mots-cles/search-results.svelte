@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ServiceSearchResult } from "#lib/types.js";
+  import type { ServiceSearchResult } from "#lib/types.ts";
 
   import SearchResultCard from "./search-result-card.svelte";
 

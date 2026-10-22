@@ -1,4 +1,4 @@
-import type { AdminStructure } from "#lib/types.js";
+import type { AdminStructure } from "#lib/types.ts";
 import type { StatusFilter } from "./types";
 
 const STATUS_LABELS: Record<StatusFilter, string> = {

@@ -4,7 +4,7 @@
   import Button from "#lib/components/display/button.svelte";
   import MarkdownRenderer from "#lib/components/display/markdown-renderer.svelte";
   import Tag from "#lib/components/display/tag.svelte";
-  import { arraysCompare, markdownCompare } from "#lib/utils/misc.js";
+  import { arraysCompare, markdownCompare } from "#lib/utils/misc.ts";
 
   interface Props {
     value?: any;
