@@ -9,14 +9,14 @@
 </script>
 
 <script lang="ts">
-  import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
-  import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
-  import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
-  import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
+  import illuAccompagner from "#lib/assets/illustrations/illu-accompagner.svg";
+  import illuMobiliser from "#lib/assets/illustrations/illu-mobiliser.svg";
+  import illuRecenser from "#lib/assets/illustrations/illu-recenser.svg";
+  import ExternalLinkIcon from "#lib/components/display/external-link-icon.svelte";
   import {
     INCLUSION_PLATFORM_ORIENTATIONS_URL,
     INCLUSION_PLATFORM_SEARCH_URL,
-  } from "$lib/consts";
+  } from "#lib/consts.ts";
 
   interface Props {
     tabId: HomeTabId;

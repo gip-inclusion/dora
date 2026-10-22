@@ -2,7 +2,7 @@
   import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
 
-  import { userInfo } from "$lib/utils/auth";
+  import { userInfo } from "#lib/utils/auth.ts";
 
   import Tooltip from "../ui/tooltip.svelte";
 

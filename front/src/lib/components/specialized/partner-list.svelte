@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Partner } from "$lib/types";
+  import type { Partner } from "#lib/types.ts";
 
   interface Props {
     imgHeight?: "small" | "medium";

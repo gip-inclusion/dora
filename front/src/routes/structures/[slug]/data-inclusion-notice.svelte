@@ -1,7 +1,7 @@
 <script lang="ts">
-  import orphanStructuresImg from "$lib/assets/illustrations/illu-structures-orphelines.svg";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import type { Structure } from "$lib/types";
+  import orphanStructuresImg from "#lib/assets/illustrations/illu-structures-orphelines.svg";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import type { Structure } from "#lib/types.ts";
 
   interface Props {
     structure: Structure;

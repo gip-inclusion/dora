@@ -3,13 +3,13 @@
   import CheckboxBlankCircleLineSystem from "svelte-remix/CheckboxBlankCircleLineSystem.svelte";
   import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
 
-  import Button from "$lib/components/display/button.svelte";
-  import { modifyStructure } from "$lib/requests/structures";
+  import Button from "#lib/components/display/button.svelte";
+  import { modifyStructure } from "#lib/requests/structures.ts";
   import type {
     Structure,
     StructureMember,
     PutativeStructureMember,
-  } from "$lib/types";
+  } from "#lib/types.ts";
 
   import {
     isStructureInformationsComplete,

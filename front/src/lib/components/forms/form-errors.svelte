@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Alert from "$lib/components/display/alert.svelte";
-  import { formErrors } from "$lib/validation/validation";
+  import Alert from "#lib/components/display/alert.svelte";
+  import { formErrors } from "#lib/validation/validation.ts";
   import CenteredGrid from "../display/centered-grid.svelte";
 </script>
 

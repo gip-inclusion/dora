@@ -1,7 +1,7 @@
 <script lang="ts">
   import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
 
-  import LinkButton from "$lib/components/display/link-button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
 
   import ModelCard from "./model-card.svelte";
   import Count from "../count.svelte";

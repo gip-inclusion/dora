@@ -1,12 +1,12 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
+  import FieldSet from "#lib/components/display/fieldset.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import BooleanRadioButtonsField from "#lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import UseStructureInfoButton from "./use-structure-info-button.svelte";
 
-  import type { Service } from "$lib/types";
-  import { currentSchema } from "$lib/validation/validation";
-  import { formatPhoneNumber } from "$lib/utils/misc";
+  import type { Service } from "#lib/types.ts";
+  import { currentSchema } from "#lib/validation/validation.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
   interface Props {
     service: Service;

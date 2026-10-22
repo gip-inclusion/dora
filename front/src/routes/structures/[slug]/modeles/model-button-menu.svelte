@@ -1,8 +1,8 @@
 <script lang="ts">
   import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
 
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import ModelMenu from "$lib/components/specialized/services/model-menu.svelte";
+  import ButtonMenu from "#lib/components/display/button-menu.svelte";
+  import ModelMenu from "#lib/components/specialized/services/model-menu.svelte";
 
   let { model, readOnly } = $props();
 </script>

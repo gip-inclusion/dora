@@ -1,4 +1,4 @@
-import { isAuthenticated, userInfo } from "$lib/utils/auth";
+import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";

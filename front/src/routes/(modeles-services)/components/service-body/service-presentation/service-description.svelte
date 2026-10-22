@@ -1,7 +1,7 @@
 <script lang="ts">
-  import TextClamp from "$lib/components/display/text-clamp.svelte";
-  import type { Service } from "$lib/types";
-  import { markdownToHTML } from "$lib/utils/misc";
+  import TextClamp from "#lib/components/display/text-clamp.svelte";
+  import type { Service } from "#lib/types.ts";
+  import { markdownToHTML } from "#lib/utils/misc.ts";
 
   import ServiceSection from "./components/service-section.svelte";
 

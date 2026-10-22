@@ -1,9 +1,9 @@
-import { getServicesOptions } from "$lib/requests/services";
-import { getStructuresOptions } from "$lib/requests/structures";
+import { getServicesOptions } from "#lib/requests/services.ts";
+import { getStructuresOptions } from "#lib/requests/structures.ts";
 import type { PageLoad } from "./$types";
-import { userInfo } from "$lib/utils/auth";
+import { userInfo } from "#lib/utils/auth.ts";
 import { get } from "svelte/store";
-import { loadManagerDepartments } from "$lib/utils/manager-department";
+import { loadManagerDepartments } from "#lib/utils/manager-department.ts";
 
 export const load: PageLoad = async ({ fetch, parent }) => {
   await parent();

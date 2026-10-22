@@ -1,7 +1,7 @@
-import { SITEMAP_PAGE_SIZE } from "$lib/consts";
-import { CANONICAL_URL } from "$lib/env";
-import { getActiveStructures } from "$lib/requests/structures";
-import { toISODate } from "$lib/utils/date";
+import { SITEMAP_PAGE_SIZE } from "#lib/consts.ts";
+import { CANONICAL_URL } from "#lib/env.ts";
+import { getActiveStructures } from "#lib/requests/structures.ts";
+import { toISODate } from "#lib/utils/date.ts";
 
 import type { RequestHandler } from "./$types";
 

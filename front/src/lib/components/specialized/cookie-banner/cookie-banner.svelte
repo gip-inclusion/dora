@@ -3,9 +3,9 @@
     setConsentChoices,
     cookieBannerState,
     hideCookieBanner,
-  } from "$lib/utils/consent.svelte";
-  import GeneralPanel from "$lib/components/specialized/cookie-banner/general-panel.svelte";
-  import DetailPanel from "$lib/components/specialized/cookie-banner/detail-panel.svelte";
+  } from "#lib/utils/consent.svelte.ts";
+  import GeneralPanel from "#lib/components/specialized/cookie-banner/general-panel.svelte";
+  import DetailPanel from "#lib/components/specialized/cookie-banner/detail-panel.svelte";
 
   function handleAcceptAll() {
     setConsentChoices({

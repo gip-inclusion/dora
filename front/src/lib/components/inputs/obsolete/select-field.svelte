@@ -3,11 +3,11 @@
   import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
   import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
 
-  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import type { Choice } from "$lib/types";
-  import { getChoiceFromValue } from "$lib/utils/choice";
-  import { clickOutside } from "$lib/utils/misc";
-  import { randomId } from "$lib/utils/random";
+  import FieldWrapper from "#lib/components/forms/field-wrapper.svelte";
+  import type { Choice } from "#lib/types.ts";
+  import { getChoiceFromValue } from "#lib/utils/choice.ts";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
 
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";

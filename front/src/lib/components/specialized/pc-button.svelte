@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { API_URL } from "$lib/env";
-  import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
-  import { PROCONNECT_MORE_INFO_URL, URL_HELP_SITE } from "$lib/consts";
+  import { API_URL } from "#lib/env.ts";
+  import logoPC from "#lib/assets/proconnect/bouton_proconnect.svg";
+  import { PROCONNECT_MORE_INFO_URL, URL_HELP_SITE } from "#lib/consts.ts";
 
   interface Props {
     nextPage: string;

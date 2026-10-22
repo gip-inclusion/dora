@@ -5,7 +5,7 @@
     LocationKind,
     Public,
     ServiceKind,
-  } from "$lib/types";
+  } from "#lib/types.ts";
 
   export interface Filters {
     diPublics: Array<Public>;
@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-  import type { ServicesOptions } from "$lib/types";
+  import type { ServicesOptions } from "#lib/types.ts";
 
   import ResultFilter from "./result-filter.svelte";
 

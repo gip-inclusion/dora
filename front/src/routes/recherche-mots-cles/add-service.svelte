@@ -1,6 +1,6 @@
 <script lang="ts">
-  import illustration from "$lib/assets/illustrations/illu-structures-orphelines.svg";
-  import LinkButton from "$lib/components/display/link-button.svelte";
+  import illustration from "#lib/assets/illustrations/illu-structures-orphelines.svg";
+  import LinkButton from "#lib/components/display/link-button.svelte";
 </script>
 
 <div

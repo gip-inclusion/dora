@@ -18,12 +18,12 @@
   import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
   import TeamLineUserFaces from "svelte-remix/TeamLineUserFaces.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import Label from "$lib/components/display/label.svelte";
-  import type { Structure } from "$lib/types";
-  import { capitalize } from "$lib/utils/misc";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import Label from "#lib/components/display/label.svelte";
+  import type { Structure } from "#lib/types.ts";
+  import { capitalize } from "#lib/utils/misc.ts";
 
   import TabsLink from "./tabs-links.svelte";
 
@@ -83,13 +83,13 @@
   });
 
   let tabId = $derived.by(() => {
-    if ($page.url.pathname.includes("/services")) {
+    if (page.url.pathname.includes("/services")) {
       return "services";
-    } else if ($page.url.pathname.endsWith("/modeles")) {
+    } else if (page.url.pathname.endsWith("/modeles")) {
       return "modeles";
-    } else if ($page.url.pathname.endsWith("/antennes")) {
+    } else if (page.url.pathname.endsWith("/antennes")) {
       return "antennes";
-    } else if ($page.url.pathname.endsWith("/collaborateurs")) {
+    } else if (page.url.pathname.endsWith("/collaborateurs")) {
       return "collaborateurs";
     } else {
       return "informations";

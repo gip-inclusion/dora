@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
 
   import SearchResult from "../../recherche/search-result.svelte";
   import SavedSearchDescription from "../description.svelte";

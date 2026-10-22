@@ -1,10 +1,10 @@
 <script lang="ts">
   import PinDistanceFillMap from "svelte-remix/PinDistanceFillMap.svelte";
 
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import type { Choice, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
-  import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import type { Choice, GeoApiValue } from "#lib/types.ts";
+  import { getApiURL } from "#lib/utils/api.ts";
+  import { fetchData, getDepartmentFromCityCode } from "#lib/utils/misc.ts";
 
   interface Props {
     onblur?: (evt: FocusEvent) => void;

@@ -1,14 +1,14 @@
 import * as Sentry from "@sentry/sveltekit";
-import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
-import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
-import type { HandleClientError } from "@sveltejs/kit";
+import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.ts";
+import { SENTRY_DATA_COLLECTION } from "#lib/sentry.ts";
+import type { HandleClientError } from "@sveltejs/kit/hooks";
 
-import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
+import { setupFetchInterceptor } from "#lib/utils/fetch-interceptor.ts";
 import {
   STALE_CHUNK_ERROR_MESSAGES,
   STALE_CHUNK_RELOAD_MESSAGE,
   UNEXPECTED_ERROR_MESSAGE,
-} from "$lib/consts";
+} from "#lib/consts.ts";
 
 setupFetchInterceptor();
 

@@ -1,7 +1,7 @@
-import { getApiURL } from "$lib/utils/api";
+import { getApiURL } from "#lib/utils/api.ts";
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
-import { TOKEN_KEY } from "$lib/utils/auth";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
 
 export const load = async ({ cookies, url }: RequestEvent) => {
   const token = cookies.get(TOKEN_KEY) ?? null;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import Header from "./header.svelte";
 
   import { structure } from "./store";

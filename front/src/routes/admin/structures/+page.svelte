@@ -1,21 +1,21 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
   import {
     URL_MANAGER_HELP_NOTICE,
     URL_MANAGER_DATA_INCLUSION_REPORT,
-  } from "$lib/consts";
-  import { CANONICAL_URL } from "$lib/env";
-  import { getStructuresAdmin } from "$lib/requests/admin";
-  import type { AdminStructure, GeoApiValue } from "$lib/types";
-  import { saveLastDepartment } from "$lib/utils/manager-department";
+  } from "#lib/consts.ts";
+  import { CANONICAL_URL } from "#lib/env.ts";
+  import { getStructuresAdmin } from "#lib/requests/admin.ts";
+  import type { AdminStructure, GeoApiValue } from "#lib/types.ts";
+  import { saveLastDepartment } from "#lib/utils/manager-department.ts";
 
-  import DepartmentSelector from "$lib/components/specialized/department-selector.svelte";
+  import DepartmentSelector from "#lib/components/specialized/department-selector.svelte";
 
   import type { PageData } from "./$types";
   import Filters from "./filters.svelte";
@@ -28,7 +28,7 @@
     parseStatusFilter,
   } from "./structures-filters";
   import type { StatusFilter } from "./types";
-  import { generateSpreadsheet } from "$lib/utils/spreadsheet";
+  import { generateSpreadsheet } from "#lib/utils/spreadsheet.ts";
 
   interface Props {
     data: PageData;

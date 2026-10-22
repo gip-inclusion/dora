@@ -1,4 +1,4 @@
-import { computeRelativeDateLabel } from "$lib/components/display/relative-date-label.svelte";
+import { computeRelativeDateLabel } from "#lib/components/display/relative-date-label.svelte";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 describe("computeUpdateStatus et computeRelativeDateLabel", () => {

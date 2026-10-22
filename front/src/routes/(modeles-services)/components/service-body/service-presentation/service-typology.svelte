@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getCategoryLabel, getSubCategoryLabel } from "$lib/utils/service";
+  import { getCategoryLabel, getSubCategoryLabel } from "#lib/utils/service.ts";
 
-  import type { Model, Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
 
   import ServiceCard from "./components/service-card.svelte";
   import ServiceCardBlock from "./components/service-card-block.svelte";

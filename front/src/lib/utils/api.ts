@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import { API_URL } from "$lib/env";
+import { browser } from "$app/env";
+import { API_URL } from "#lib/env.ts";
 
 export function getApiURL() {
   if (browser) {

@@ -1,4 +1,4 @@
-import type { ShortStructure } from "$lib/types";
+import type { ShortStructure } from "#lib/types.ts";
 import type { UserInfo } from "./auth";
 import type { UserPreferences } from "./preferences";
 

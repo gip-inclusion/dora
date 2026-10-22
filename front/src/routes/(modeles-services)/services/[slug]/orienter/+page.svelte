@@ -1,27 +1,27 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import Form from "#lib/components/forms/form.svelte";
+  import StickyFormSubmissionRow from "#lib/components/forms/sticky-form-submission-row.svelte";
   import ContactBox from "./contact-box.svelte";
   import Layout from "./orientation-layout.svelte";
   import ValidationForm from "./validation-form.svelte";
   import { orientation } from "./store";
-  import FormErrors from "$lib/components/forms/form-errors.svelte";
+  import FormErrors from "#lib/components/forms/form-errors.svelte";
   import { orientationStep1Schema } from "./schema";
   import { goto } from "$app/navigation";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import { onMount, setContext } from "svelte";
-  import { isAuthenticated } from "$lib/utils/auth";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
   import Teaser from "./teaser.svelte";
-  import { trackMobilisation } from "$lib/utils/stats";
-  import { page } from "$app/stores";
+  import { trackMobilisation } from "#lib/utils/stats.ts";
+  import { page } from "$app/state";
   import {
     ORIENTATION_JWT_QUERY_PARAM,
     URL_DOCUMENTATION_ORIENTATION,
-  } from "$lib/consts";
-  import type { Service } from "$lib/types";
+  } from "#lib/consts.ts";
+  import type { Service } from "#lib/types.ts";
 
   interface Props {
     data: {
@@ -46,9 +46,9 @@
   let requesting = $state(false);
 
   // tracking activé sur la page courante :
-  const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));
+  const shouldTrack = Boolean(page.url.searchParams.get("newlogin"));
 
-  let opJwt = $derived($page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
+  let opJwt = $derived(page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM));
 
   let previousStepUrl = $derived(
     `/services/${isDI ? "di--" : ""}${service.slug}${
@@ -83,15 +83,15 @@
       $orientation.beneficiaryFranceTravailNumber =
         data.beneficiaryInfo.franceTravailId;
       if (data.beneficiaryInfo.userStructureSlug) {
-        $page.url.searchParams.set(
+        page.url.searchParams.set(
           "user_structure_slug",
           data.beneficiaryInfo.userStructureSlug
         );
-        history.replaceState(null, "", $page.url.pathname + $page.url.search);
+        history.replaceState(null, "", page.url.pathname + page.url.search);
       }
     } else {
-      $page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
-      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+      page.url.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
+      history.replaceState(null, "", page.url.pathname + page.url.search);
     }
   });
 
@@ -110,9 +110,9 @@
 
   onMount(async () => {
     if (isAuthenticated() && shouldTrack) {
-      await trackMobilisation(service, $page.url, isDI);
-      $page.url.searchParams.delete("newlogin");
-      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+      await trackMobilisation(service, page.url, isDI);
+      page.url.searchParams.delete("newlogin");
+      history.replaceState(null, "", page.url.pathname + page.url.search);
     }
   });
 </script>

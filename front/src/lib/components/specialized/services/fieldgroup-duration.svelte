@@ -1,11 +1,11 @@
 <script lang="ts">
-  import FieldGroup from "$lib/components/display/field-group.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import FieldGroup from "#lib/components/display/field-group.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
 
-  import type { FieldSetProps } from "$lib/components/specialized/services/types.ts";
-  import { getModelInputProps } from "$lib/utils/forms";
-  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
-  import { currentSchema } from "$lib/validation/validation";
+  import type { FieldSetProps } from "#lib/components/specialized/services/types.ts";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
+  import FieldModel from "#lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "#lib/validation/validation.ts";
 
   let {
     servicesOptions,

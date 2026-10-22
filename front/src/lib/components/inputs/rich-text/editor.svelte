@@ -14,7 +14,7 @@
   import Placeholder from "@tiptap/extension-placeholder";
   import StarterKit from "@tiptap/starter-kit";
 
-  import { htmlToMarkdown, markdownToHTML } from "$lib/utils/misc";
+  import { htmlToMarkdown, markdownToHTML } from "#lib/utils/misc.ts";
 
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";

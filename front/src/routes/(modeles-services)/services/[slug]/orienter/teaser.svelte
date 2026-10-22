@@ -1,10 +1,10 @@
 <script lang="ts">
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import type { Service } from "$lib/types";
-  import PcButton from "$lib/components/specialized/pc-button.svelte";
+  import type { Service } from "#lib/types.ts";
+  import PcButton from "#lib/components/specialized/pc-button.svelte";
 
   import ContactInfo from "./contact-info.svelte";
 
@@ -15,7 +15,7 @@
 
   let { service, isDI }: Props = $props();
 
-  const nextURL = new URL($page.url);
+  const nextURL = new URL(page.url);
   nextURL.searchParams.set("newlogin", "1");
 </script>
 

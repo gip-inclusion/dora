@@ -1,26 +1,26 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import FormErrors from "$lib/components/forms/form-errors.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsetContact from "$lib/components/specialized/services/fieldset-contact.svelte";
-  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
-  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
-  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
-  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import FormErrors from "#lib/components/forms/form-errors.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import StickyFormSubmissionRow from "#lib/components/forms/sticky-form-submission-row.svelte";
+  import Form, { type FormControls } from "#lib/components/forms/form.svelte";
+  import FieldsetContact from "#lib/components/specialized/services/fieldset-contact.svelte";
+  import FieldsetPrincipalInfo from "#lib/components/specialized/services/fieldset-principal-info.svelte";
+  import FieldsetNotifications from "#lib/components/specialized/services/fieldset-notifications.svelte";
+  import FieldsetEligibility from "#lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldsetReceptionConditions from "#lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import { createOrModifyService } from "$lib/requests/services";
+  import { createOrModifyService } from "#lib/requests/services.ts";
   import type {
     Model,
     Service,
     ServicesOptions,
     ShortStructure,
-  } from "$lib/types";
-  import { log } from "$lib/utils/logger";
-  import { serviceSchema } from "$lib/validation/schemas/service";
-  import { validate } from "$lib/validation/validation";
+  } from "#lib/types.ts";
+  import { log } from "#lib/utils/logger.ts";
+  import { serviceSchema } from "#lib/validation/schemas/service.ts";
+  import { validate } from "#lib/validation/validation.ts";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
   import { goto } from "$app/navigation";
 

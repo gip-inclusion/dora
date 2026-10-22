@@ -1,9 +1,9 @@
 <script lang="ts">
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
 
-  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
-  import type { Choice } from "$lib/types";
-  import { getChoiceFromValue } from "$lib/utils/choice";
+  import CheckboxMark from "#lib/components/display/checkbox-mark.svelte";
+  import type { Choice } from "#lib/types.ts";
+  import { getChoiceFromValue } from "#lib/utils/choice.ts";
 
   import SelectLabel from "./select-label.svelte";
 

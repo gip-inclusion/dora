@@ -1,8 +1,8 @@
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 
-import { getRecentSearchResults } from "$lib/requests/saved-search";
-import { isAuthenticated, userInfo } from "$lib/utils/auth";
+import { getRecentSearchResults } from "#lib/requests/saved-search.ts";
+import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
 
 import type { PageLoad } from "./$types";
 

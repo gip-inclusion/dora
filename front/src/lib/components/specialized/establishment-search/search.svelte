@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import Tabs from "$lib/components/display/tabs.svelte";
+  import FieldSet from "#lib/components/display/fieldset.svelte";
+  import Tabs from "#lib/components/display/tabs.svelte";
   import SearchByCommune from "./search-by-commune.svelte";
   import SearchBySafir from "./search-by-safir.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
-  import type { Establishment, GeoApiValue } from "$lib/types";
-  import { URL_HELP_SITE } from "$lib/consts";
+  import type { Establishment, GeoApiValue } from "#lib/types.ts";
+  import { URL_HELP_SITE } from "#lib/consts.ts";
 
   type Tab = "nom" | "siret" | "safir";
 

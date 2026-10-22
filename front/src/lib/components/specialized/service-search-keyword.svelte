@@ -19,20 +19,20 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
 
-  import Button from "$lib/components/display/button.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
   import {
     type BANFeature,
     formatMunicipality,
     search as searchBAN,
-  } from "$lib/requests/ban";
+  } from "#lib/requests/ban.ts";
   import {
     LocationType,
     loadLastLocation,
     saveLastLocation,
     type AddressResult,
-  } from "$lib/utils/service-search-keyword";
-  import { searchDepartment, searchRegion } from "$lib/utils/search-area";
+  } from "#lib/utils/service-search-keyword.ts";
+  import { searchDepartment, searchRegion } from "#lib/utils/search-area.ts";
 
   interface SelectOption {
     value: AddressResult;

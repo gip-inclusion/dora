@@ -5,7 +5,7 @@
    * en utilisant @html dans ce fichier.
    * On utilise markdownToHTML() qui fait appel à insane() pour sécuriser le HTML.
    */
-  import { markdownToHTML } from "$lib/utils/misc";
+  import { markdownToHTML } from "#lib/utils/misc.ts";
 
   interface Props {
     content: string;

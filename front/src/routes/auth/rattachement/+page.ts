@@ -1,9 +1,9 @@
-import type { Establishment } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
+import type { Establishment } from "#lib/types.ts";
+import { getApiURL } from "#lib/utils/api.ts";
 import type { PageLoad } from "./$types";
-import { userInfo } from "$lib/utils/auth";
+import { userInfo } from "#lib/utils/auth.ts";
 import { get } from "svelte/store";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
 
 function siretSearch(siret: string, fetchFunction: typeof fetch) {
   const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;

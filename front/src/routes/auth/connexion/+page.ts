@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
-import { isAuthenticated } from "$lib/utils/auth";
+import { isAuthenticated } from "#lib/utils/auth.ts";
 
 import { getNextPage } from "../utils";
 import type { PageLoad } from "./$types";

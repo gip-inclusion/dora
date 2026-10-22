@@ -1,7 +1,7 @@
 <script lang="ts">
-  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { orderAndReformatSubcategories } from "$lib/utils/misc";
+  import MultiSelectField from "#lib/components/forms/fields/multi-select-field.svelte";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { orderAndReformatSubcategories } from "#lib/utils/misc.ts";
 
   interface Props {
     service: Service | Model;

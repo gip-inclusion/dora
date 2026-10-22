@@ -1,7 +1,7 @@
-import { browser } from "$app/environment";
-import { getApiURL } from "$lib/utils/api";
+import { browser } from "$app/env";
+import { getApiURL } from "#lib/utils/api.ts";
 import { hexoid } from "hexoid";
-import type { Service, ServiceSearchResult, Structure } from "$lib/types";
+import type { Service, ServiceSearchResult, Structure } from "#lib/types.ts";
 
 const analyticsIdKey = "userHash";
 

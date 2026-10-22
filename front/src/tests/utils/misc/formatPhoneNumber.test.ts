@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { formatPhoneNumber } from "$lib/utils/misc";
+import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
 describe("formatPhoneNumber", () => {
   test("formate correctement un numéro de téléphone avec des espaces", () => {

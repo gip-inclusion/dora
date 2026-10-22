@@ -1,5 +1,5 @@
-import { BAN_API_SEARCH_URL } from "$lib/consts";
-import { getDepartmentFromCityCode } from "$lib/utils/misc";
+import { BAN_API_SEARCH_URL } from "#lib/consts.ts";
+import { getDepartmentFromCityCode } from "#lib/utils/misc.ts";
 
 interface BANProperties {
   label: string;

@@ -1,10 +1,10 @@
-import { createModelFromService, getNewModel } from "$lib/utils/forms";
-import { getService, getServicesOptions } from "$lib/requests/services";
-import { userInfo } from "$lib/utils/auth";
+import { createModelFromService, getNewModel } from "#lib/utils/forms.ts";
+import { getService, getServicesOptions } from "#lib/requests/services.ts";
+import { userInfo } from "#lib/utils/auth.ts";
 import { get } from "svelte/store";
-import { getStructure } from "$lib/requests/structures";
+import { getStructure } from "#lib/requests/structures.ts";
 import type { PageLoad } from "./$types";
-import type { Model, ShortStructure } from "$lib/types";
+import type { Model, ShortStructure } from "#lib/types.ts";
 import { error } from "@sveltejs/kit";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens

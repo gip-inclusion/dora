@@ -1,10 +1,10 @@
 <script lang="ts">
-  import FieldSet from "$lib/components/display/fieldset.svelte";
-  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { getModelInputProps } from "$lib/utils/forms";
-  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
-  import { currentSchema } from "$lib/validation/validation";
+  import FieldSet from "#lib/components/display/fieldset.svelte";
+  import RadioButtonsField from "#lib/components/forms/fields/radio-buttons-field.svelte";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
+  import FieldModel from "#lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "#lib/validation/validation.ts";
 
   interface Props {
     servicesOptions: ServicesOptions;

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
-  import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { isAuthenticated, userInfo } from "$lib/utils/auth";
-  import { isServiceRecentlyPublished } from "$lib/utils/service";
-  import { trackMobilisation } from "$lib/utils/stats";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
+  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
+  import { isServiceRecentlyPublished } from "#lib/utils/service.ts";
+  import { trackMobilisation } from "#lib/utils/stats.ts";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
@@ -26,12 +26,12 @@
 
   let isDI = $derived("source" in service);
 
-  let searchIdParam = $derived($page.url.searchParams.get("searchId"));
+  let searchIdParam = $derived(page.url.searchParams.get("searchId"));
   let searchIdNumber = $derived(
     searchIdParam ? parseInt(searchIdParam) : undefined
   );
   let opParam = $derived(
-    $page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
+    page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
   );
   let orientationQueryString = $derived.by(() => {
     const params = new URLSearchParams();
@@ -80,7 +80,7 @@
 
   function handleTrackMobilisation(externalUrl?: string) {
     if (!mobilisationTracked) {
-      trackMobilisation(service, $page.url, isDI, searchIdNumber, externalUrl);
+      trackMobilisation(service, page.url, isDI, searchIdNumber, externalUrl);
       mobilisationTracked = true;
     }
   }

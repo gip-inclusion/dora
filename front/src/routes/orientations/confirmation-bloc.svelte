@@ -1,7 +1,7 @@
 <script lang="ts">
   import FlashlightLineWeather from "svelte-remix/FlashlightLineWeather.svelte";
 
-  import illustration from "$lib/assets/illustrations/illu-favs.svg";
+  import illustration from "#lib/assets/illustrations/illu-favs.svg";
 
   interface Props {
     title: any;

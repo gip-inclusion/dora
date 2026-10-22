@@ -4,7 +4,7 @@
     currentSchema,
     formatErrors,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.ts";
   import FieldWrapper from "../field-wrapper.svelte";
 
   interface Props {

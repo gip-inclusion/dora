@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import SyncIcon from "#lib/assets/icons/ico-sync.svelte";
 
   interface Props {
     onclick: () => void;

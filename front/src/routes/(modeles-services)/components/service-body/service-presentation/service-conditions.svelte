@@ -3,13 +3,13 @@
   import ChatCheckFillCommunication from "svelte-remix/ChatCheckFillCommunication.svelte";
   import MapPin2FillMap from "svelte-remix/MapPin2FillMap.svelte";
 
-  import type { Model, Service } from "$lib/types";
-  import { isDurationValid } from "$lib/utils/service";
+  import type { Model, Service } from "#lib/types.ts";
+  import { isDurationValid } from "#lib/utils/service.ts";
 
   import ServiceCard from "./components/service-card.svelte";
   import ServiceField from "./components/service-field.svelte";
   import ServiceKeyInformationSection from "./service-key-informations/service-key-information-section.svelte";
-  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
+  import OsmHours from "#lib/components/specialized/osm-hours.svelte";
 
   interface Props {
     service: Service | Model;
