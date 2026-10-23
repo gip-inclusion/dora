@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.utils import timezone
 
 from dora.core.management.commands.delete_orphaned_uploads import _iter_objects
-from dora.core.test_utils import make_orientation, make_service
+from dora.core.test_utils import make_model, make_orientation, make_service
 
 BUCKET_OBJECTS = "dora.core.management.commands.delete_orphaned_uploads._iter_objects"
 STORAGE_DELETE = (
@@ -70,6 +70,20 @@ def test_skips_orientation_attachment(mock_iter, mock_delete):
 def test_skips_service_form(mock_iter, mock_delete):
     make_service(forms=["referenced_form.pdf"])
     mock_iter.return_value = [s3_object("referenced_form.pdf")]
+
+    call_cmd(wet_run=True)
+
+    mock_delete.assert_not_called()
+
+
+@pytest.mark.django_db
+@patch(STORAGE_DELETE)
+@patch(BUCKET_OBJECTS)
+def test_skips_service_model_form(mock_iter, mock_delete):
+    make_orientation(beneficiary_attachments=["orientation.pdf"])
+    make_service(forms=["service.pdf"])
+    make_model(forms=["model_form.pdf"])
+    mock_iter.return_value = [s3_object("service.pdf"), s3_object("model_form.pdf")]
 
     call_cmd(wet_run=True)
 

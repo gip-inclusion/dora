@@ -60,8 +60,10 @@ class Command(BaseCommand):
             )
             return
 
+        # `Service.objects` masque les modèles (`is_model=True`), qui portent eux aussi des
+        # documents : le gestionnaire de base les inclut.
         service_form_paths = set(
-            chain.from_iterable(Service.objects.values_list("forms", flat=True))
+            chain.from_iterable(Service._base_manager.values_list("forms", flat=True))
         )
 
         if not service_form_paths:
