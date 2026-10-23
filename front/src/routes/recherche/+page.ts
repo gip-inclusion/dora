@@ -6,7 +6,7 @@ import { getApiURL } from "#lib/utils/api.ts";
 import { trackSearch } from "#lib/utils/stats.ts";
 import {
   getQueryString,
-  storeLastSearchCity,
+  storeLastSearchLocation,
 } from "#lib/utils/service-search.ts";
 import type { PageLoad } from "./$types";
 import { SEARCH_RADIUS_KM } from "#lib/consts.ts";
@@ -155,7 +155,13 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   );
 
   if (cityCode && cityLabel) {
-    storeLastSearchCity(cityCode, cityLabel);
+    storeLastSearchLocation({
+      cityCode,
+      cityLabel,
+      label,
+      lon: lon ?? undefined,
+      lat: lat ?? undefined,
+    });
   }
 
   // Pour le formulaire de recherche, on veut afficher la catégorie sélectionnée

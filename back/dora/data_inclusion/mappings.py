@@ -373,6 +373,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "requirements_display": requirements_display,
         "short_desc": clean_and_shorten_description(service_data["description"]),
         "slug": service_data["id"],
+        # identifiant « <source>--<id> »
+        "emplois_uid": service_data["id"],
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],

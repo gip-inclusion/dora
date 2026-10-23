@@ -315,6 +315,12 @@ STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR = os.getenv(
 ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE = os.getenv(
     "ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE", "5"
 )
+AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE = os.getenv(
+    "AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE", "5"
+)
+AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR = os.getenv(
+    "AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR", "5"
+)
 # Secret partagé avec le front, qui authentifie l'IP du client transmise dans
 # `X-Dora-Client-Ip` (cf. `dora.core.throttling.get_front_client_ip`).
 FRONT_PROXY_SECRET = os.getenv("FRONT_PROXY_SECRET", "")
@@ -356,6 +362,8 @@ REST_FRAMEWORK = {
         "upload": f"{USER_UPLOAD_THROTTLE_RATE_PER_MINUTE}/minute",
         "structure_upload": f"{STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR}/hour",
         "orientations_export_link": f"{ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE}/minute",
+        "auth_link_ip": f"{AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE}/minute",
+        "auth_link_email": f"{AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR}/hour",
     },
 }
 

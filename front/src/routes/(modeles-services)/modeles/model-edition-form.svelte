@@ -43,11 +43,9 @@
     submit: undefined,
     validateForm: undefined,
   });
-  const shouldShowModal = $derived(
-    (model?.credentials?.length ?? 0) > 0 ||
-      (model.forms?.length ?? 0) > 0 ||
-      !!model.onlineForm
-  );
+
+  //on montre le modal soit s'il y a des pièces jointes soit si l'utilisateur crée le modèle
+  const shouldShowModal = $derived(model.forms.length > 0 || !model.slug);
 
   function handleModalConfirm() {
     isModalOpen = false;

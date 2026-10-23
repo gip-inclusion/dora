@@ -42,7 +42,9 @@
     servicesOptions={data.servicesOptions}
     cityCode={data.cityCode}
     cityLabel={data.cityLabel}
-    label={data.cityLabel}
+    label={data.label}
+    lon={data.lon}
+    lat={data.lat}
     initialSearch
   />
   <div class="mt-s32 flex items-center justify-center">

@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { page } from "$app/state";
+  import { page } from "$app/stores";
 
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
-  import Notice from "#lib/components/display/notice.svelte";
-  import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
+  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
-  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
+  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "#lib/env";
+  import type { Model, Service, ServicesOptions } from "#lib/types";
   import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
+  import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
   import { isServiceRecentlyPublished } from "#lib/utils/service.ts";
   import { trackMobilisation } from "#lib/utils/stats.ts";
 
@@ -52,6 +54,15 @@
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
   );
 
+  // quand la redirection est active, la page d'orientation envoie vers le
+  // formulaire de La plateforme de l'inclusion : la mobilisation est donc
+  // comptabilisée comme sortante
+  let plateformeOrientationUrl = $derived(
+    ORIENTATION_REDIRECTION_FEATURE_FLAG && !opParam && !service.isModel
+      ? getPlateformeOrientationUrl(service)
+      : null
+  );
+
   let isServiceFromOwnStructure = $derived(
     $userInfo
       ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
@@ -89,8 +100,8 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (isAuthenticated()) {
-      handleTrackMobilisation();
+    } else if (isAuthenticated() || plateformeOrientationUrl) {
+      handleTrackMobilisation(plateformeOrientationUrl ?? undefined);
     }
   }
 </script>
@@ -154,7 +165,8 @@
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
   onShowVideo={handleShowVideoModal}
-  onTrackMobilisation={handleTrackMobilisation}
+  onTrackMobilisation={() =>
+    handleTrackMobilisation(plateformeOrientationUrl ?? undefined)}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />

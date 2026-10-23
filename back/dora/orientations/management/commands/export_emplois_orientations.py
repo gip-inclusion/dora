@@ -5,11 +5,12 @@ from django.utils import timezone
 
 from dora.core.commands import BaseCommand
 from dora.orientations.models import Orientation
+from dora.services.utils import get_emplois_service_uid
 
 
 def _di_service_id(orientation: Orientation) -> str:
     if orientation.service_id:
-        return f"dora--{orientation.service_id}"
+        return get_emplois_service_uid(orientation.service_id)
     return orientation.di_service_id
 
 
