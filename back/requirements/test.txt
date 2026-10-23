@@ -634,9 +634,9 @@ django-cors-headers==4.9.0 \
     --hash=sha256:15c7f20727f90044dcee2216a9fd7303741a864865f0c3657e28b7056f61b449 \
     --hash=sha256:fe5d7cb59fdc2c8c646ce84b727ac2bca8912a247e6e68e1fb507372178e59e8
     # via -r requirements/base.in
-django-datadog-logger==0.9.1 \
-    --hash=sha256:76061776560ebd06b748d46b936e6678d0af457e8e41acd7c1bb43bf60a0a508 \
-    --hash=sha256:ac97a03a673f2e56d032368080111a131624bc7ff9196eb6884fc28264e6a4e7
+django-datadog-logger==0.9.2 \
+    --hash=sha256:07ac5a339f922ac6f9ab4b91c99a3ebc943f0703efe7d1c1c278d25117522d1f \
+    --hash=sha256:398962a15ad49715979508d7a4b222b9c2c8999c16f7f119e81dce9015b58caa
     # via
     #   -r requirements/base.in
     #   itoutils
@@ -1387,9 +1387,9 @@ pytest-django==4.14.0 \
     --hash=sha256:26787dd3f422cfbab8f55b80a776e2edea7a11092cb74e960bef1312515708ef \
     --hash=sha256:c533b08d89cc675efcd5398eea270b34547e35f9a3608e2c9748dd88428ea187
     # via -r requirements/test.in
-pytest-mock==3.16.0 \
-    --hash=sha256:007cfeb257801d88d9c0b2a7b5a15a15e73b71968dfd72e7bf8c4a2f8393aec8 \
-    --hash=sha256:5a8395528b8f498205f3718f575228d0edaed7425fff638f87d1a6c3e0383636
+pytest-mock==3.17.0 \
+    --hash=sha256:1b82aa4b37137248bd687055e109723debeb07b489de1565297dc9589c5f2d6b \
+    --hash=sha256:e36576e0985e01027e999891e7a966c67822d40c89ef1b4c8b6e22737e3590b4
     # via -r requirements/test.in
 python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
