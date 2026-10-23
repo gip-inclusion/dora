@@ -44,6 +44,27 @@ class OrientationsExportLinkThrottle(ClientIpUserRateThrottle):
     scope = "orientations_export_link"
 
 
+class AuthLinkIpThrottle(ClientIpAnonRateThrottle):
+    """Throttle par IP pour la demande de lien de connexion (énumération de comptes)."""
+
+    scope = "auth_link_ip"
+
+
+class AuthLinkEmailThrottle(SimpleRateThrottle):
+    """Throttle par adresse e-mail pour la demande de lien de connexion.
+
+    Limite l'envoi répété de liens à une même adresse, y compris depuis plusieurs IP.
+    """
+
+    scope = "auth_link_email"
+
+    def get_cache_key(self, request, view):
+        email = str(request.data.get("email", "")).strip().lower()
+        if not email:
+            return None
+        return self.cache_format % {"scope": self.scope, "ident": email}
+
+
 class StructureUploadThrottle(SimpleRateThrottle):
     """Throttle par structure pour éviter l'abus d'une structure compromise."""
 
