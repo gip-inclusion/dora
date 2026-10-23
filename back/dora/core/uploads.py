@@ -14,3 +14,12 @@ def save_orientation_attachment(filename: str, file_obj: UploadedFile) -> str:
         f"{get_random_string(32)}/{get_valid_filename(filename)}"
     )
     return default_storage.save(path, file_obj)
+
+
+def save_structure_document(filename: str, file_obj: UploadedFile, structure) -> str:
+    validate_upload(filename, file_obj, structure.id)
+    path = (
+        f"{settings.ENVIRONMENT}/{structure.pk}/"
+        f"{get_random_string(32)}/{get_valid_filename(filename)}"
+    )
+    return default_storage.save(path, file_obj)
