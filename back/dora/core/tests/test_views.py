@@ -41,6 +41,34 @@ class StructureFileUploadTestCase(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["key"], "upload_key")
 
+    @patch(
+        "dora.core.uploads.get_random_string",
+        side_effect=["random_string_1", "random_string_2"],
+    )
+    @patch("dora.core.uploads.default_storage.save", return_value="upload_key")
+    def test_two_files_with_the_same_structure_and_name_have_different_paths(
+        self, mock_save, mock_random_string, mock_validate
+    ):
+        file_with_duplicate_name = SimpleUploadedFile("test.pdf", b"new_content")
+
+        response_file_1 = self.client.post(
+            self.url, {"file": self.file_mock}, format="multipart"
+        )
+        response_file_2 = self.client.post(
+            self.url, {"file": file_with_duplicate_name}, format="multipart"
+        )
+
+        self.assertEqual(response_file_1.status_code, 201)
+        self.assertEqual(response_file_2.status_code, 201)
+
+        path_file_1, path_file_2 = (call[0][0] for call in mock_save.call_args_list)
+        self.assertEqual(
+            path_file_1, f"local/{self.structure.pk}/random_string_1/test.pdf"
+        )
+        self.assertEqual(
+            path_file_2, f"local/{self.structure.pk}/random_string_2/test.pdf"
+        )
+
     def test_non_structure_members_cannot_upload_documents(self, mock_validate):
         non_member_user = make_user(is_active=True)
 
