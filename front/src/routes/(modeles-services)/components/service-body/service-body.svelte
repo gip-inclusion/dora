@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
-  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "#lib/env";
-  import type { Model, Service, ServicesOptions } from "#lib/types";
+  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "#lib/env.ts";
+  import type { Model, Service, ServicesOptions } from "#lib/types.ts";
   import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
   import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
   import { isServiceRecentlyPublished } from "#lib/utils/service.ts";

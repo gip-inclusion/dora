@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { getCityLabel } from "#lib/requests/geo.ts";
 import { getServicesOptions } from "#lib/requests/services.ts";
 import { getLastSearchLocation } from "#lib/utils/service-search.ts";

@@ -6,8 +6,8 @@ import {
   loadLastLocation,
   storeLastKeywordSearchLocation,
   storeLastSearchLocation,
-} from "$lib/utils/service-search";
-import { LocationType } from "$lib/utils/service-search-keyword";
+} from "#lib/utils/service-search.ts";
+import { LocationType } from "#lib/utils/service-search-keyword.ts";
 
 beforeEach(() => {
   const store = new Map<string, string>();

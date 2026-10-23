@@ -1,5 +1,5 @@
-import { INCLUSION_PLATFORM_URL } from "$lib/env";
-import type { Service } from "$lib/types";
+import { INCLUSION_PLATFORM_URL } from "#lib/env.ts";
+import type { Service } from "#lib/types.ts";
 
 const MATOMO_PARAMS = "mtm_campaign=DORA&mtm_kwd=orientation";
 

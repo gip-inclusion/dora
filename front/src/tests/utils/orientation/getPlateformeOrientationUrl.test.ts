@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import type { Service } from "$lib/types";
-import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
+import type { Service } from "#lib/types.ts";
+import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
 
 function makeService(emploisUid: string | undefined): Service {
   return { emploisUid } as Service;

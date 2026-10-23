@@ -29,7 +29,7 @@
   import {
     loadLastLocation,
     storeLastKeywordSearchLocation,
-  } from "$lib/utils/service-search";
+  } from "#lib/utils/service-search.ts";
   import {
     LocationType,
     type AddressResult,
