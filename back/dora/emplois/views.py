@@ -19,6 +19,7 @@ from dora.core.throttling import UploadRateThrottle
 from dora.core.uploads import save_orientation_attachment
 from dora.orientations.emails import send_orientation_created_emails
 from dora.orientations.models import Orientation
+from dora.services.utils import get_emplois_service_uid
 
 from .serializers import (
     DoraServiceMobilisationSerializer,
@@ -115,7 +116,7 @@ class OrientationViewSet(
                         "prescriber_id": str(emplois_data.prescriber_id)
                         if emplois_data.prescriber_id
                         else None,
-                        "service_id": f"dora--{orientation.service_id}"
+                        "service_id": get_emplois_service_uid(orientation.service_id)
                         if orientation.service_id
                         else orientation.di_service_id,
                     },

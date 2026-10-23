@@ -25,6 +25,7 @@ from dora.core.models import ModerationStatus
 from dora.core.throttling import OrientationsExportLinkThrottle
 from dora.core.utils import TRUTHY_VALUES
 from dora.emplois.api_client import EmploisApiClient, EmploisAPIException
+from dora.services.utils import DORA_UID_PREFIX, get_emplois_service_uid
 
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..services.models import Service
@@ -288,15 +289,15 @@ def _emplois_service_names(emplois_orientations: list[dict]) -> dict[str, str]:
     nom de service. Les identifiants d'autres sources sont ignorés.
     """
     service_ids = {
-        uid.removeprefix("dora--")
+        uid.removeprefix(DORA_UID_PREFIX)
         for orientation in emplois_orientations
-        if (uid := orientation.get("service_uid") or "").startswith("dora--")
+        if (uid := orientation.get("service_uid") or "").startswith(DORA_UID_PREFIX)
     }
     if not service_ids:
         return {}
 
     return {
-        f"dora--{service_id}": name
+        get_emplois_service_uid(service_id): name
         for service_id, name in Service.objects.filter(id__in=service_ids).values_list(
             "id", "name"
         )

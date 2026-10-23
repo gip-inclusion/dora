@@ -198,3 +198,13 @@ def test_map_service_kind_inconnu():
 
     assert service["kind"] is None
     assert service["kind_display"] is None
+
+
+def test_map_service_emplois_uid_is_the_di_id():
+    di_service_data = make_di_service_data()
+
+    service = map_service(di_service_data, is_authenticated=False)
+
+    # l'identifiant d·i est déjà de la forme « <source>--<id> » : on le relaie tel quel
+    assert service["emplois_uid"] == di_service_data["id"]
+    assert service["emplois_uid"].startswith(f"{di_service_data['source']}--")

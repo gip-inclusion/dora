@@ -1,6 +1,7 @@
 import pytest
 from data_inclusion.schema.v1 import ModeMobilisation
 from data_inclusion.schema.v1.publics import Public as DiPublic
+from django.contrib.auth.models import AnonymousUser
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, force_authenticate
 
@@ -19,7 +20,11 @@ from dora.services.serializers import (
     ServiceModelSerializer,
     ServiceSerializer,
 )
-from dora.services.utils import DI_PUBLICS_ORDER, update_sync_checksum
+from dora.services.utils import (
+    DI_PUBLICS_ORDER,
+    get_emplois_service_uid,
+    update_sync_checksum,
+)
 
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
 
@@ -294,3 +299,19 @@ def test_dora_form_write_leaves_sync_checksum_untouched():
     in_memory = update_sync_checksum(saved)
     saved.refresh_from_db()
     assert update_sync_checksum(saved) == in_memory
+
+
+def test_emplois_service_uid():
+    service = make_service()
+
+    assert get_emplois_service_uid(service.id) == f"dora--{service.id}"
+
+
+def test_service_serialization_exposes_emplois_uid():
+    service = make_published_service()
+    request = APIRequestFactory().get(f"/services/{service.slug}/")
+    request.user = AnonymousUser()
+
+    data = ServiceSerializer(instance=service, context={"request": request}).data
+
+    assert data["emplois_uid"] == f"dora--{service.id}"

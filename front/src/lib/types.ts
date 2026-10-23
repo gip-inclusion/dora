@@ -494,6 +494,7 @@ export interface Service extends ServiceModelBase {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
+  emploisUid: string;
   fillingDuration?: number;
   geom: Point | null;
   hasAlreadyBeenUnpublished: boolean | null;

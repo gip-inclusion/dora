@@ -3,6 +3,8 @@ import logging
 import httpx
 from django.conf import settings
 
+from dora.services.utils import DORA_UID_PREFIX
+
 logger = logging.getLogger(__name__)
 
 PAGE_SIZE = 100
@@ -47,7 +49,7 @@ class EmploisApiClient:
 
     @staticmethod
     def _get_structure_uid(structure_id: str) -> str:
-        return f"dora--{structure_id}"
+        return f"{DORA_UID_PREFIX}{structure_id}"
 
     def fetch_received_orientations(self, structure_id: str) -> list[dict]:
         """Toutes les orientations reçues, pagination comprise.

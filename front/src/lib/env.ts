@@ -8,3 +8,5 @@ export const OIDC_AUTH_BACKEND =
 export const INCLUSION_PLATFORM_URL =
   import.meta.env.VITE_INCLUSION_PLATFORM_URL ||
   "https://plateforme.inclusion.gouv.fr";
+export const ORIENTATION_REDIRECTION_FEATURE_FLAG =
+  import.meta.env.VITE_ORIENTATION_REDIRECTION_FEATURE_FLAG === "true";

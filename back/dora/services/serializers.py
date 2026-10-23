@@ -27,6 +27,7 @@ from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import get_zone_eligibilite_choices
 from dora.services.enums import ServiceStatus
 from dora.services.utils import (
+    get_emplois_service_uid,
     get_kinds_labels,
     normalize_publics,
 )
@@ -294,6 +295,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     short_desc = serializers.CharField(source="short_description", read_only=True)
 
+    emplois_uid = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
 
@@ -342,6 +345,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "diffusion_zone_type_display",
             "duration_weekly_hours",
             "duration_weeks",
+            "emplois_uid",
             "fee_condition",
             "fee_details",
             "forms",
@@ -630,6 +634,9 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_is_orientable_ft_service(self, obj):
         return obj.is_orientable_ft_service()
+
+    def get_emplois_uid(self, obj):
+        return get_emplois_service_uid(obj.pk)
 
 
 class ServiceModelSerializer(ServiceSerializer):
