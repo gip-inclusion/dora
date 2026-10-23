@@ -3,13 +3,11 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import {
   getLastSearchLocation,
+  loadLastLocation,
   storeLastKeywordSearchLocation,
   storeLastSearchLocation,
 } from "$lib/utils/service-search";
-import {
-  LocationType,
-  loadLastLocation,
-} from "$lib/utils/service-search-keyword";
+import { LocationType } from "$lib/utils/service-search-keyword";
 
 beforeEach(() => {
   const store = new Map<string, string>();

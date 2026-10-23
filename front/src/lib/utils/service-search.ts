@@ -1,12 +1,9 @@
 import type { SearchQuery } from "$lib/types";
 import { logException } from "./logger";
-import {
-  LocationType,
-  saveLastLocation,
-  type AddressResult,
-} from "./service-search-keyword";
+import { LocationType, type AddressResult } from "./service-search-keyword";
 
 const LAST_SEARCH_CITY_KEY = "lastSearch";
+const TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY = "lastSelectedLocation";
 
 export function getQueryString({
   categoryIds,
@@ -41,6 +38,49 @@ export function getQueryString({
     .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
     .join("&");
   return query;
+}
+
+export function loadLastLocation(): AddressResult | null {
+  try {
+    const stored = localStorage.getItem(TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY);
+    if (!stored) {
+      return null;
+    }
+    const parsed = JSON.parse(stored);
+    return {
+      kind: parsed.kind,
+      label: parsed.label,
+      cityLabel: parsed.cityLabel,
+      searchParams: new URLSearchParams(parsed.searchParams),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function saveLastLocation(newAddress: AddressResult | null) {
+  if (newAddress === null) {
+    try {
+      localStorage.removeItem(TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY);
+    } catch {
+      // Le localStorage peut être inaccessible.
+    }
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      TEXT_SEARCH_LAST_LOCATION_STORAGE_KEY,
+      JSON.stringify({
+        kind: newAddress.kind,
+        label: newAddress.label,
+        cityLabel: newAddress.cityLabel,
+        searchParams: newAddress.searchParams.toString(),
+      })
+    );
+  } catch {
+    // Le localStorage peut être inaccessible.
+  }
 }
 
 interface LastSearchLocation {

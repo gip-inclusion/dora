@@ -26,10 +26,12 @@
     formatMunicipality,
     search as searchBAN,
   } from "$lib/requests/ban";
-  import { storeLastKeywordSearchLocation } from "$lib/utils/service-search";
+  import {
+    loadLastLocation,
+    storeLastKeywordSearchLocation,
+  } from "$lib/utils/service-search";
   import {
     LocationType,
-    loadLastLocation,
     type AddressResult,
   } from "$lib/utils/service-search-keyword";
   import { searchDepartment, searchRegion } from "$lib/utils/search-area";
