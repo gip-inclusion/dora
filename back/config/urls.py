@@ -101,7 +101,6 @@ private_api_patterns = [
     path("delete-upload/<path:filename>/", dora.core.views.delete_upload),
     path("admin/", admin.site.urls),
     path("ping/", dora.core.views.ping),
-    path("sentry-debug/", dora.core.views.trigger_error),
     path("", include(router.urls)),
     path("profile/", dora.users.views.update_user_profile),
     path(

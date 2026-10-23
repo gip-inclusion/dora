@@ -72,8 +72,3 @@ def ping(request: Request) -> Response:
     if check_services:
         return Response("ok", status=200)
     return Response("ko", status=500)
-
-
-def trigger_error(request: Request) -> None:
-    division_by_zero = 1 / 0
-    print(division_by_zero)
