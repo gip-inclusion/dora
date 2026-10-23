@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { getCityLabel } from "$lib/requests/geo";
 import { getServicesOptions } from "$lib/requests/services";
-import { getLastSearchCity } from "$lib/utils/service-search";
+import { getLastSearchLocation } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, parent, url, data }) => {
@@ -10,11 +10,20 @@ export const load: PageLoad = async ({ fetch, parent, url, data }) => {
 
   let cityCode = query.get("city");
   let cityLabel: string | null | undefined;
+  let label: string | undefined;
+  let lon: number | undefined;
+  let lat: number | undefined;
 
   if (cityCode) {
     cityLabel = await getCityLabel(cityCode, fetch);
   } else if (browser) {
-    ({ cityCode, cityLabel } = getLastSearchCity());
+    const lastLocation = getLastSearchLocation();
+    cityCode = lastLocation.cityCode ?? null;
+    ({ cityLabel, label } = lastLocation);
+    if (lastLocation.lon && lastLocation.lat) {
+      lon = Number(lastLocation.lon);
+      lat = Number(lastLocation.lat);
+    }
   }
 
   return {
@@ -24,6 +33,9 @@ export const load: PageLoad = async ({ fetch, parent, url, data }) => {
     servicesOptions: await getServicesOptions(fetch),
     cityCode,
     cityLabel,
+    label: label ?? cityLabel,
+    lon,
+    lat,
     ...data,
   };
 };
