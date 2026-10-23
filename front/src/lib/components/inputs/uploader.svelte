@@ -6,7 +6,6 @@
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
-  import { deleteFile } from "$lib/requests/upload";
 
   interface Props {
     id: string;
@@ -45,12 +44,11 @@
     fileKeys = uniqueFiles;
   }
 
-  async function handleRemove(fileKey: string) {
-    const isFileDeleted = await deleteFile(fileKey);
-
-    if (isFileDeleted) {
-      updateFiles(localFiles.filter((key) => key !== fileKey));
-    }
+  // Le fichier n’est pas supprimé du stockage : sa clé peut être partagée (services
+  // synchronisés avec un modèle) et le formulaire n’est pas encore enregistré. Les
+  // fichiers qui ne sont plus référencés sont purgés chaque nuit (`delete_orphaned_uploads`).
+  function handleRemove(fileKey: string) {
+    updateFiles(localFiles.filter((key) => key !== fileKey));
   }
 
   function clearInput() {
