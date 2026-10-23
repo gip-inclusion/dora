@@ -1,6 +1,5 @@
 import logging
 
-from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework.decorators import (
