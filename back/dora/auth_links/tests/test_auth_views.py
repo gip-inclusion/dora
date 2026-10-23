@@ -14,7 +14,7 @@ from dora.core.test_utils import make_user
 # c'est de la response de `django-sesame`
 
 
-def test_send_link(client):
+def test_send_link(client, mailoutbox):
     user_ic = make_user(is_active=True)
 
     response = client.post(
@@ -24,6 +24,16 @@ def test_send_link(client):
     assert response.status_code == 204, (
         "Une response 204 est attendue (utilisateur avec IC trouvé)"
     )
+    assert len(mailoutbox) == 1
+    assert mailoutbox[0].to == [user_ic.email]
+
+
+def test_send_link_unknown_email(client, mailoutbox):
+    response = client.post(reverse("send_link"), data={"email": "inconnu@example.com"})
+    assert response.status_code == 204, (
+        "La réponse ne doit pas révéler l'existence du compte"
+    )
+    assert mailoutbox == []
 
 
 def test_authenticate_with_link(client):

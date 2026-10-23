@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -27,12 +26,15 @@ logger = logging.getLogger("dora.logs.core")
 @require_http_methods(["POST"])
 def send_link(request):
     # on ne veut que des utilisateurs qui se sont déjà connectés via IC
-    user = get_object_or_404(
-        User,
+    user = User.objects.filter(
         email=request.POST.get("email"),
         is_active=True,
         is_valid=True,
-    )
+    ).first()
+
+    # Même réponse que le compte existe ou non, pour ne pas permettre l'énumération
+    if user is None:
+        return HttpResponse(status=204)
 
     magic_link = get_token(user)
     url = request.build_absolute_uri(
