@@ -55,6 +55,15 @@ def make_unique_slug(instance, parent_slug, value, length=20):
 
 
 def validate_unique_form_names(value):
+    """Interdit deux documents portant le même nom dans `Service.forms`.
+
+    Les valeurs stockées sont des clés S3 préfixées par l'environnement et la structure.
+    Les documents envoyés depuis l'ajout du segment aléatoire ont la forme
+    `prod/<uuid>/<aléa>/dossier.pdf` ; les plus anciens, et les services qui en ont copié
+    la clé depuis un modèle, gardent `prod/<uuid>/dossier.pdf`. Seul le dernier segment
+    compte ici : c'est le nom de fichier, seul affiché à l'utilisateur, qui doit rester
+    distinct.
+    """
     names = [form.rsplit("/", 1)[-1] for form in value]
     duplicates = sorted({name for name in names if names.count(name) > 1})
     if duplicates:
