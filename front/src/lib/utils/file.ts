@@ -3,8 +3,7 @@ export function getFileNameFromPath(filePath: string): string {
 }
 
 // Reproduit `django.utils.text.get_valid_filename` : le serveur range les documents sous
-// une clé dérivée du nom nettoyé (« mon dossier.pdf » devient « mon_dossier.pdf »), c’est
-// donc sur ce nom-là que se joue la collision entre deux fichiers.
+// une clé dérivée du nom nettoyé (« mon dossier.pdf » devient « mon_dossier.pdf »)
 export function toValidFileName(fileName: string): string {
   return fileName
     .trim()
