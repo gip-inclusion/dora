@@ -51,11 +51,9 @@
     submit: undefined,
     validateForm: undefined,
   });
-  const shouldShowModal = $derived(
-    (service.credentials?.length ?? 0) > 0 ||
-      (service.forms?.length ?? 0) > 0 ||
-      !!service.onlineForm
-  );
+
+  //on montre le modal soit s'il y a des pièces jointes soit si l'utilisateur crée le service
+  const shouldShowModal = $derived(service.forms.length > 0 || !service.slug);
 
   function handleChange(validatedData) {
     service = { ...service, ...validatedData };
