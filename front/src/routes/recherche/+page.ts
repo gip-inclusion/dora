@@ -158,7 +158,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     storeLastSearchLocation({
       cityCode,
       cityLabel,
-      label: label ?? undefined,
+      label,
       lon: lon ?? undefined,
       lat: lat ?? undefined,
     });
