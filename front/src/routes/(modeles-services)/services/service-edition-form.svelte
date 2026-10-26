@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
@@ -51,10 +52,11 @@
     submit: undefined,
     validateForm: undefined,
   });
+
+  // on ne montre la modale que si des documents ont été ajoutés ou remplacés
+  const initialForms = untrack(() => new Set(service.forms ?? []));
   const shouldShowModal = $derived(
-    (service.credentials?.length ?? 0) > 0 ||
-      (service.forms?.length ?? 0) > 0 ||
-      !!service.onlineForm
+    (service.forms ?? []).some((form) => !initialForms.has(form))
   );
 
   function handleChange(validatedData) {
