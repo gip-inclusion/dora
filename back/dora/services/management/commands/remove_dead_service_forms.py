@@ -10,9 +10,10 @@ Seules les clés gérées par le nettoyage (`_MANAGED_KEY`) sont examinées. Les
 sont lus avant le bucket : un document est envoyé avant d'être référencé, donc toute clé
 lue en base existe déjà au moment où le bucket est listé.
 
-Sans `--wet-run`, rien n'est écrit : la commande se contente de journaliser ce qu'elle
-ferait.
+Sans `--wet-run`, les modifications sont faites puis annulées en fin de commande.
 """
+
+from itoutils.django.commands import AtomicHandleMixin, dry_runnable
 
 from dora.core.commands import BaseCommand
 from dora.core.management.commands.delete_orphaned_uploads import (
@@ -23,8 +24,9 @@ from dora.services.models import Service
 from dora.services.utils import save_forms
 
 
-class Command(BaseCommand):
+class Command(AtomicHandleMixin, BaseCommand):
     help = "Retire de `Service.forms` les documents absents du bucket"
+    ATOMIC_HANDLE = True
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -34,9 +36,8 @@ class Command(BaseCommand):
             help="Effectue les modifications (sinon dry-run)",
         )
 
+    @dry_runnable
     def handle(self, *args, **options):
-        wet_run = options["wet_run"]
-
         # `Service.objects` masque les modèles (`is_model=True`), qui portent eux aussi des
         # documents : le gestionnaire de base les inclut.
         services = list(Service._base_manager.exclude(forms=[]))
@@ -62,24 +63,22 @@ class Command(BaseCommand):
 
             removed_count += len(dead)
             self.logger.info(
-                "%s %s : %d document(s) %s : %s",
+                "%s %s : %d document(s) retiré(s) : %s",
                 "Modèle" if service.is_model else "Service",
                 service.slug,
                 len(dead),
-                "retiré(s)" if wet_run else "seraient retiré(s)",
                 ", ".join(dead),
             )
 
             service.forms = [form for form in service.forms if form not in dead]
             cleaned.append(service)
 
-        checksums_updated = save_forms(cleaned, wet_run)
+        checksums_updated = save_forms(cleaned)
 
         self.logger.info(
-            "%d document(s) %s sur %d service(s), %d empreinte(s) de modèle %s.",
+            "%d document(s) retiré(s) sur %d service(s), %d empreinte(s) de modèle "
+            "recalculée(s).",
             removed_count,
-            "retiré(s)" if wet_run else "seraient retiré(s)",
             len(cleaned),
             checksums_updated,
-            "recalculée(s)" if wet_run else "seraient recalculée(s)",
         )

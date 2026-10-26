@@ -207,7 +207,7 @@ def get_kinds_labels(kinds):
 FORMS_BATCH = 500
 
 
-def save_forms(services, wet_run):
+def save_forms(services):
     """Écrit les `forms` modifiés et réaligne les empreintes des modèles touchés.
 
     `forms` entre dans l'empreinte de synchronisation : sans recalcul, l'empreinte
@@ -218,9 +218,7 @@ def save_forms(services, wet_run):
 
     Les écritures forment un tout : une liste modifiée sans son empreinte, ou une
     empreinte de copie sans celle de son modèle, laisserait justement l'affichage
-    « modèle modifié » que ce recalcul existe pour éviter. Seules elles sont dans la
-    transaction — le parcours qui les précède ne prend aucun verrou, et l'y inclure
-    immobiliserait un instantané le temps de lire toute la table.
+    « modèle modifié » que ce recalcul existe pour éviter.
     """
     checksums_updated = []
 
@@ -235,23 +233,22 @@ def save_forms(services, wet_run):
 
         checksums_updated.append((service, previous))
 
-    if wet_run:
-        with transaction.atomic():
-            for start in range(0, len(services), FORMS_BATCH):
-                Service._base_manager.bulk_update(
-                    services[start : start + FORMS_BATCH], ["forms"]
-                )
+    with transaction.atomic():
+        for start in range(0, len(services), FORMS_BATCH):
+            Service._base_manager.bulk_update(
+                services[start : start + FORMS_BATCH], ["forms"]
+            )
 
-            for start in range(0, len(checksums_updated), FORMS_BATCH):
-                batch = checksums_updated[start : start + FORMS_BATCH]
-                Service._base_manager.bulk_update(
-                    [model for model, _ in batch], ["sync_checksum"]
-                )
-                # Les copies suivent l'empreinte de leur modèle : seules celles qui
-                # étaient à jour, les autres ont de vraies modifications en attente.
-                for model, previous in batch:
-                    Service._base_manager.filter(
-                        model_id=model.pk, last_sync_checksum=previous
-                    ).update(last_sync_checksum=model.sync_checksum)
+        for start in range(0, len(checksums_updated), FORMS_BATCH):
+            batch = checksums_updated[start : start + FORMS_BATCH]
+            Service._base_manager.bulk_update(
+                [model for model, _ in batch], ["sync_checksum"]
+            )
+            # Les copies suivent l'empreinte de leur modèle : seules celles qui
+            # étaient à jour, les autres ont de vraies modifications en attente.
+            for model, previous in batch:
+                Service._base_manager.filter(
+                    model_id=model.pk, last_sync_checksum=previous
+                ).update(last_sync_checksum=model.sync_checksum)
 
     return len(checksums_updated)
