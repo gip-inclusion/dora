@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -44,8 +45,11 @@
     validateForm: undefined,
   });
 
-  //on montre le modal soit s'il y a des pièces jointes soit si l'utilisateur crée le modèle
-  const shouldShowModal = $derived(model.forms.length > 0 || !model.slug);
+  // on ne montre la modale que si des documents ont été ajoutés ou remplacés
+  const initialForms = untrack(() => new Set(model.forms ?? []));
+  const shouldShowModal = $derived(
+    (model.forms ?? []).some((form) => !initialForms.has(form))
+  );
 
   function handleModalConfirm() {
     isModalOpen = false;

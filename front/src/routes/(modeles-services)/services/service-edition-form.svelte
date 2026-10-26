@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
@@ -52,8 +53,11 @@
     validateForm: undefined,
   });
 
-  //on montre le modal soit s'il y a des pièces jointes soit si l'utilisateur crée le service
-  const shouldShowModal = $derived(service.forms.length > 0 || !service.slug);
+  // on ne montre la modale que si des documents ont été ajoutés ou remplacés
+  const initialForms = untrack(() => new Set(service.forms ?? []));
+  const shouldShowModal = $derived(
+    (service.forms ?? []).some((form) => !initialForms.has(form))
+  );
 
   function handleChange(validatedData) {
     service = { ...service, ...validatedData };
