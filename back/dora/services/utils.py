@@ -234,21 +234,17 @@ def save_forms(services):
         checksums_updated.append((service, previous))
 
     with transaction.atomic():
-        for start in range(0, len(services), FORMS_BATCH):
-            Service._base_manager.bulk_update(
-                services[start : start + FORMS_BATCH], ["forms"]
-            )
-
-        for start in range(0, len(checksums_updated), FORMS_BATCH):
-            batch = checksums_updated[start : start + FORMS_BATCH]
-            Service._base_manager.bulk_update(
-                [model for model, _ in batch], ["sync_checksum"]
-            )
-            # Les copies suivent l'empreinte de leur modèle : seules celles qui
-            # étaient à jour, les autres ont de vraies modifications en attente.
-            for model, previous in batch:
-                Service._base_manager.filter(
-                    model_id=model.pk, last_sync_checksum=previous
-                ).update(last_sync_checksum=model.sync_checksum)
+        Service._base_manager.bulk_update(services, ["forms"], batch_size=FORMS_BATCH)
+        Service._base_manager.bulk_update(
+            [model for model, _ in checksums_updated],
+            ["sync_checksum"],
+            batch_size=FORMS_BATCH,
+        )
+        # Les copies suivent l'empreinte de leur modèle : seules celles qui
+        # étaient à jour, les autres ont de vraies modifications en attente.
+        for model, previous in checksums_updated:
+            Service._base_manager.filter(
+                model_id=model.pk, last_sync_checksum=previous
+            ).update(last_sync_checksum=model.sync_checksum)
 
     return len(checksums_updated)
