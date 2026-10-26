@@ -1,6 +1,7 @@
 import pytest
 
 from dora.stats.models import PageView
+from dora.stats.views import PATH_MAX_LENGTH, TITLE_MAX_LENGTH
 
 URL = "/stats/event/"
 
@@ -8,8 +9,8 @@ URL = "/stats/event/"
 def test_pageview_truncates_long_path_and_title(api_client):
     payload = {
         "tag": "pageview",
-        "path": "/services/" + "s" * 400,
-        "title": "t" * 400,
+        "path": "/" + "s" * PATH_MAX_LENGTH,
+        "title": "t" * (TITLE_MAX_LENGTH + 1),
         "userHash": "a" * 32,
     }
 
@@ -17,8 +18,8 @@ def test_pageview_truncates_long_path_and_title(api_client):
 
     assert response.status_code == 201, response.data
     page_view = PageView.objects.get(id=response.data["event"])
-    assert page_view.path == payload["path"][:255]
-    assert page_view.title == "t" * 255
+    assert page_view.path == payload["path"][:PATH_MAX_LENGTH]
+    assert page_view.title == "t" * TITLE_MAX_LENGTH
 
 
 @pytest.mark.parametrize("user_hash", ["a" * 40, "a" * 10, 1234])

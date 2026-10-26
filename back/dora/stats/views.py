@@ -33,6 +33,9 @@ from dora.structures.models import Structure, StructureMember
 from .enums import Tag
 from .models import PageView
 
+PATH_MAX_LENGTH = PageView._meta.get_field("path").max_length
+TITLE_MAX_LENGTH = PageView._meta.get_field("title").max_length
+
 
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
@@ -88,7 +91,7 @@ def log_event(request):
         user_hash = ""
 
     common_analytics_data = {
-        "path": (request.data.get("path") or "")[:255],
+        "path": (request.data.get("path") or "")[:PATH_MAX_LENGTH],
         "user": user if user.is_authenticated else None,
         "is_logged": user.is_authenticated,
         "is_staff": user.is_staff,
@@ -145,7 +148,7 @@ def log_event(request):
                 **common_analytics_data,
                 # Le titre des pages de service (nom du service et de la
                 # structure) peut dépasser la taille du champ
-                title=(request.data.get("title") or "")[:255],
+                title=(request.data.get("title") or "")[:TITLE_MAX_LENGTH],
             )
 
         case Tag.SEARCH:
