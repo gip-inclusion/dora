@@ -40,7 +40,7 @@ class Command(AtomicHandleMixin, BaseCommand):
     def handle(self, *args, **options):
         # `Service.objects` masque les modèles (`is_model=True`), qui portent eux aussi des
         # documents : le gestionnaire de base les inclut.
-        services = list(Service._base_manager.exclude(forms=[]))
+        services_with_forms = list(Service._base_manager.exclude(forms=[]))
 
         existing = {key for key, _ in _iter_objects()}
         if not existing:
@@ -52,7 +52,7 @@ class Command(AtomicHandleMixin, BaseCommand):
         cleaned = []
         removed_count = 0
 
-        for service in services:
+        for service in services_with_forms:
             dead = [
                 form
                 for form in service.forms
