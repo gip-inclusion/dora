@@ -1,7 +1,6 @@
 from io import StringIO
 from unittest.mock import patch
 
-import pytest
 from django.conf import settings
 from django.core.management import call_command
 
@@ -23,12 +22,8 @@ def call_cmd(bucket_keys, **kwargs):
         call_command("remove_dead_service_forms", stdout=StringIO(), **kwargs)
 
 
-@pytest.fixture
-def structure():
-    return make_structure()
-
-
-def test_dry_run_does_not_write(structure):
+def test_dry_run_does_not_write():
+    structure = make_structure()
     forms = [key(structure, "perdu.pdf"), key(structure, "present.pdf")]
     service = make_service(structure=structure, forms=list(forms))
 
@@ -38,7 +33,8 @@ def test_dry_run_does_not_write(structure):
     assert forms == service.forms
 
 
-def test_wet_run_removes_only_dead_managed_keys(structure):
+def test_wet_run_removes_only_dead_managed_keys():
+    structure = make_structure()
     present = key(structure, "present.pdf")
     # Hors du périmètre du nettoyage : jamais supprimée par lui, donc laissée en l'état.
     unmanaged = "ailleurs/fichier.pdf"
@@ -52,7 +48,8 @@ def test_wet_run_removes_only_dead_managed_keys(structure):
     assert [present, unmanaged] == service.forms
 
 
-def test_wet_run_covers_models_and_realigns_synced_copies(structure):
+def test_wet_run_covers_models_and_realigns_synced_copies():
+    structure = make_structure()
     dead = key(structure, "perdu.pdf")
     present = key(structure, "present.pdf")
     model = make_model(structure=structure, forms=[dead, present])
@@ -76,7 +73,8 @@ def test_wet_run_covers_models_and_realigns_synced_copies(structure):
     assert "obsolete" == outdated.last_sync_checksum
 
 
-def test_aborts_when_bucket_is_empty(structure):
+def test_aborts_when_bucket_is_empty():
+    structure = make_structure()
     forms = [key(structure, "present.pdf")]
     service = make_service(structure=structure, forms=list(forms))
 
