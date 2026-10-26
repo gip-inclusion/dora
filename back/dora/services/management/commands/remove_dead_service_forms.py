@@ -53,24 +53,26 @@ class Command(AtomicHandleMixin, BaseCommand):
         removed_count = 0
 
         for service in services_with_forms:
-            dead = [
+            unreachable_forms = [
                 form
                 for form in service.forms
                 if _MANAGED_KEY.match(form) and form not in existing
             ]
-            if not dead:
+            if not unreachable_forms:
                 continue
 
-            removed_count += len(dead)
+            removed_count += len(unreachable_forms)
             self.logger.info(
                 "%s %s : %d document(s) retiré(s) : %s",
                 "Modèle" if service.is_model else "Service",
                 service.slug,
-                len(dead),
-                ", ".join(dead),
+                len(unreachable_forms),
+                ", ".join(unreachable_forms),
             )
 
-            service.forms = [form for form in service.forms if form not in dead]
+            service.forms = [
+                form for form in service.forms if form not in unreachable_forms
+            ]
             cleaned.append(service)
 
         checksums_updated = save_forms(cleaned)
