@@ -25,7 +25,7 @@ def save_orientation_attachment(filename: str, file_obj: UploadedFile) -> str:
     return _save_document(filename, file_obj, "#orientations")
 
 
-def save_structure_document(filename: str, file_obj: UploadedFile, structure) -> str:
+def save_structure_document(filename: str, file_obj: UploadedFile, structure_id) -> str:
     return _save_document(
-        filename, file_obj, str(structure.pk), structure_id=structure.pk
+        filename, file_obj, str(structure_id), structure_id=structure_id
     )

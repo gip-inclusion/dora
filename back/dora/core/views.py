@@ -35,7 +35,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
         )
 
     file_obj = request.data["file"]
-    result = save_structure_document(filename, file_obj, structure)
+    result = save_structure_document(filename, file_obj, structure.pk)
     return Response({"key": result}, status=201)
 
 
