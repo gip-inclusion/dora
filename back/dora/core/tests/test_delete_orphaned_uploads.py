@@ -68,6 +68,7 @@ def test_skips_orientation_attachment(mock_iter, mock_delete):
 @patch(STORAGE_DELETE)
 @patch(BUCKET_OBJECTS)
 def test_skips_service_form(mock_iter, mock_delete):
+    make_orientation(beneficiary_attachments=["orientation.pdf"])
     make_service(forms=["referenced_form.pdf"])
     mock_iter.return_value = [s3_object("referenced_form.pdf")]
 
@@ -94,6 +95,8 @@ def test_skips_service_model_form(mock_iter, mock_delete):
 @patch(STORAGE_DELETE)
 @patch(BUCKET_OBJECTS)
 def test_skips_recent_file(mock_iter, mock_delete):
+    make_orientation(beneficiary_attachments=["orientation.pdf"])
+    make_service(forms=["service.pdf"])
     mock_iter.return_value = [s3_object("recent.pdf", age_hours=1)]
 
     call_cmd(wet_run=True)
