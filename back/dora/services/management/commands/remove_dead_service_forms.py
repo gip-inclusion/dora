@@ -75,12 +75,12 @@ class Command(AtomicHandleMixin, BaseCommand):
             ]
             cleaned.append(service)
 
-        checksums_updated = save_forms(cleaned)
+        n_updated_checksums = save_forms(cleaned)
 
         self.logger.info(
             "%d document(s) retiré(s) sur %d service(s), %d empreinte(s) de modèle "
             "recalculée(s).",
             removed_count,
             len(cleaned),
-            checksums_updated,
+            n_updated_checksums,
         )
