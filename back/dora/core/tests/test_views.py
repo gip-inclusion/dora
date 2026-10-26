@@ -18,14 +18,12 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=self.user)
 
-        self.file_mock = SimpleUploadedFile("test.pdf", b"content")
-
     @patch("dora.core.uploads.get_random_string", return_value="random_string")
     @patch("dora.core.uploads.default_storage.save", return_value="upload_key")
     def test_structure_file_upload(self, mock_save, mock_random_string, mock_validate):
-        response = self.client.post(
-            self.url, {"file": self.file_mock}, format="multipart"
-        )
+        file = SimpleUploadedFile("test.pdf", b"content")
+
+        response = self.client.post(self.url, {"file": file}, format="multipart")
 
         self.assertEqual(mock_validate.call_count, 1)
         self.assertEqual(mock_validate.call_args[0][0], "test.pdf")
@@ -49,13 +47,14 @@ class StructureFileUploadTestCase(APITestCase):
     def test_two_files_with_the_same_structure_and_name_have_different_paths(
         self, mock_save, mock_random_string, mock_validate
     ):
-        file_with_duplicate_name = SimpleUploadedFile("test.pdf", b"new_content")
+        file_1 = SimpleUploadedFile("test.pdf", b"content")
+        file_2 = SimpleUploadedFile("test.pdf", b"new_content")
 
         response_file_1 = self.client.post(
-            self.url, {"file": self.file_mock}, format="multipart"
+            self.url, {"file": file_1}, format="multipart"
         )
         response_file_2 = self.client.post(
-            self.url, {"file": file_with_duplicate_name}, format="multipart"
+            self.url, {"file": file_2}, format="multipart"
         )
 
         self.assertEqual(response_file_1.status_code, 201)
@@ -74,9 +73,9 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=non_member_user)
 
-        response = self.client.post(
-            self.url, {"file": self.file_mock}, format="multipart"
-        )
+        file = SimpleUploadedFile("test.pdf", b"content")
+
+        response = self.client.post(self.url, {"file": file}, format="multipart")
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
@@ -92,9 +91,9 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=department_manager)
 
-        response = self.client.post(
-            self.url, {"file": self.file_mock}, format="multipart"
-        )
+        file = SimpleUploadedFile("test.pdf", b"content")
+
+        response = self.client.post(self.url, {"file": file}, format="multipart")
 
         self.assertEqual(response.status_code, 201)
 
@@ -106,17 +105,15 @@ class SafeFileUploadTestCase(APITestCase):
         baker.make(StructureMember, user=self.user, structure=self.structure)
         self.url = "/safe-upload/test.pdf/"
 
-        self.file_mock = SimpleUploadedFile("test.pdf", b"content")
-
         self.client.force_authenticate(user=self.user)
 
     @patch("dora.core.uploads.validate_upload")
     @patch("dora.core.uploads.get_random_string", return_value="random_string")
     @patch("dora.core.uploads.default_storage.save", return_value="upload_key")
     def test_safe_file_upload(self, mock_save, mock_random_string, mock_validate):
-        response = self.client.post(
-            self.url, {"file": self.file_mock}, format="multipart"
-        )
+        file = SimpleUploadedFile("test.pdf", b"content")
+
+        response = self.client.post(self.url, {"file": file}, format="multipart")
 
         self.assertEqual(mock_save.call_count, 1)
 
