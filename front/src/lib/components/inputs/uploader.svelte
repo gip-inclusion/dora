@@ -60,8 +60,8 @@
   function handleSubmit(event: Event) {
     event.preventDefault();
 
-    // Deux documents de même nom se recouvrent : le serveur range les fichiers d’une
-    // structure sous une clé dérivée de leur nom, et le second écraserait le premier.
+    // Deux documents de même nom sont refusés à l’enregistrement du service
+    // (`validate_unique_form_names`) : seul leur nom est affiché à l’utilisateur.
     // On les écarte avant l’envoi, en tenant compte des fichiers du même lot, et en
     // comparant les noms nettoyés comme le fera le serveur.
     const usedFileNames = new Set(
