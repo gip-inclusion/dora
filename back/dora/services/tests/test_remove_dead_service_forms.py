@@ -82,3 +82,28 @@ def test_aborts_when_bucket_is_empty():
 
     service.refresh_from_db()
     assert forms == service.forms
+
+
+def test_logs_removed_forms_and_summary(caplog):
+    structure = make_structure()
+    present = key(structure, "present.pdf")
+    model_dead = key(structure, "modele-perdu.pdf")
+    service_dead = key(structure, "service-perdu.pdf")
+    model = make_model(structure=structure, forms=[model_dead, present])
+    service = make_service(structure=structure, forms=[service_dead])
+
+    call_cmd([present])
+
+    messages = [
+        record.getMessage()
+        for record in caplog.records
+        if record.name == "dora.services.management.commands.remove_dead_service_forms"
+    ]
+    assert f"Modèle {model.slug} : 1 document(s) retiré(s) : {model_dead}" in messages
+    assert (
+        f"Service {service.slug} : 1 document(s) retiré(s) : {service_dead}" in messages
+    )
+    assert (
+        "2 document(s) retiré(s) sur 2 service(s), 1 empreinte(s) de modèle "
+        "recalculée(s)." in messages
+    )
