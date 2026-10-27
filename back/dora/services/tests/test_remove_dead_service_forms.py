@@ -9,7 +9,7 @@ from dora.services.models import Service
 from dora.services.utils import update_sync_checksum
 
 BUCKET_OBJECTS = (
-    "dora.services.management.commands.remove_dead_service_forms._iter_objects"
+    "dora.services.management.commands.remove_dead_service_forms.iter_managed_objects"
 )
 
 

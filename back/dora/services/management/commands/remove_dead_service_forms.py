@@ -6,7 +6,7 @@ services créés ou synchronisés depuis ce modèle ont ensuite recopiés. Faute
 versioning et de sauvegarde du bucket, ces fichiers sont perdus ; leurs références ne
 produisent plus que des liens de téléchargement en 404.
 
-Seules les clés gérées par le nettoyage (`_MANAGED_KEY`) sont examinées. Les services
+Seules les clés gérées par le nettoyage (`MANAGED_KEY`) sont examinées. Les services
 sont lus avant le bucket : un document est envoyé avant d'être référencé, donc toute clé
 lue en base existe déjà au moment où le bucket est listé.
 
@@ -16,10 +16,7 @@ Sans `--wet-run`, les modifications sont faites puis annulées en fin de command
 from itoutils.django.commands import AtomicHandleMixin, dry_runnable
 
 from dora.core.commands import BaseCommand
-from dora.core.management.commands.delete_orphaned_uploads import (
-    _MANAGED_KEY,
-    _iter_objects,
-)
+from dora.core.uploads import MANAGED_KEY, iter_managed_objects
 from dora.services.models import Service
 from dora.services.utils import save_forms
 
@@ -42,7 +39,7 @@ class Command(AtomicHandleMixin, BaseCommand):
         # documents : le gestionnaire de base les inclut.
         services_with_forms = list(Service._base_manager.exclude(forms=[]))
 
-        existing = {key for key, _ in _iter_objects()}
+        existing = {key for key, _ in iter_managed_objects()}
         if not existing:
             self.logger.error(
                 "Abandon : aucun objet listé dans le bucket — modification annulée par sécurité."
@@ -56,7 +53,7 @@ class Command(AtomicHandleMixin, BaseCommand):
             unreachable_forms = [
                 form
                 for form in service.forms
-                if _MANAGED_KEY.match(form) and form not in existing
+                if MANAGED_KEY.match(form) and form not in existing
             ]
             if not unreachable_forms:
                 continue
