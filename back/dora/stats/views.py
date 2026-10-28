@@ -1,3 +1,5 @@
+import logging
+
 from data_inclusion.schema.v1 import TypeService
 from django.db.models import Q
 from rest_framework import permissions
@@ -35,6 +37,9 @@ from .models import PageView
 
 PATH_MAX_LENGTH = PageView._meta.get_field("path").max_length
 TITLE_MAX_LENGTH = PageView._meta.get_field("title").max_length
+USER_HASH_LENGTH = PageView._meta.get_field("anonymous_user_hash").max_length
+
+logger = logging.getLogger(__name__)
 
 
 @api_view(["POST"])
@@ -58,6 +63,15 @@ def log_event(request):
         return all_categories, all_subcategories
 
     tag = request.data.get("tag")
+
+    # Le front génère toujours un hash de 32 caractères : une autre valeur
+    # signale un client tiers (scanners, notamment), dont on ignore l'événement
+    user_hash = request.data.get("user_hash")
+    if not isinstance(user_hash, str) or len(user_hash) != USER_HASH_LENGTH:
+        logger.warning(
+            "Événement analytics ignoré : user_hash invalide (%r)", user_hash
+        )
+        return Response({"error": "Invalid user hash"}, status=400)
     service_slug = request.data.get("service", "")
     structure_slug = request.data.get("structure", "")
     service = structure = orientation = None
@@ -84,11 +98,6 @@ def log_event(request):
         structure = get_object_or_none(Structure, slug=structure_slug)
 
     user = request.user
-
-    # Le front génère un hash de 32 caractères : toute autre valeur est ignorée
-    user_hash = request.data.get("user_hash", "")
-    if not isinstance(user_hash, str) or len(user_hash) != 32:
-        user_hash = ""
 
     common_analytics_data = {
         "path": (request.data.get("path") or "")[:PATH_MAX_LENGTH],
