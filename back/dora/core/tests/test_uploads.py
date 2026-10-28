@@ -6,7 +6,7 @@ from dora.core.uploads import iter_managed_objects
 
 
 @patch("dora.core.uploads.default_storage")
-def test_iter_managed_objects_skips_unmanaged_path(mock_storage):
+def test_iter_managed_objects_skips_unmanaged_path(mock_storage, caplog):
     now = timezone.now()
     mock_page = {
         "Contents": [
@@ -22,3 +22,6 @@ def test_iter_managed_objects_skips_unmanaged_path(mock_storage):
 
     assert "local/#orientations/abc/file.pdf" in keys
     assert "local/some-other-prefix/file.pdf" not in keys
+    assert "1 fichier(s) inattendu(s) dans le bucket S3" in [
+        record.getMessage() for record in caplog.records
+    ]
