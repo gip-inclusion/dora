@@ -673,6 +673,8 @@ class Service(models.Model):
     )
 
     objects = ServiceManager()
+    # Inclut les modèles de services, exclus par `objects`
+    including_models = models.Manager()
 
     class Meta:
         constraints = [
