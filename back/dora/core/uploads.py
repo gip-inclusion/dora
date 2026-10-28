@@ -1,3 +1,6 @@
+import logging
+import re
+
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
@@ -5,6 +8,8 @@ from django.utils.crypto import get_random_string
 from django.utils.text import get_valid_filename
 
 from dora.core.file_upload_validators import validate_upload
+
+logger = logging.getLogger(__name__)
 
 
 def _save_document(
@@ -29,3 +34,29 @@ def save_structure_document(filename: str, file_obj: UploadedFile, structure_id)
     return _save_document(
         filename, file_obj, str(structure_id), structure_id=structure_id
     )
+
+
+# Correspond aux préfixes des documents pour les orientations (#orientations/) ou les formulaires des services (structure UUID/).
+MANAGED_KEY = re.compile(
+    rf"^{re.escape(settings.ENVIRONMENT)}/"
+    r"(#orientations/|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)"
+)
+
+
+def iter_managed_objects():
+    """Chercher le file path et la date de la dernière modification de tous les objets dans le bucket s3"""
+    client = default_storage.connection.meta.client
+    paginator = client.get_paginator("list_objects_v2")
+    n_unexpected = 0
+    for page in paginator.paginate(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Prefix=f"{settings.ENVIRONMENT}/",
+    ):
+        for obj in page.get("Contents", ()):
+            key = obj["Key"]
+            if MANAGED_KEY.match(key):
+                yield key, obj["LastModified"]
+            else:
+                n_unexpected += 1
+    if n_unexpected:
+        logger.warning("%d fichier(s) inattendu(s) dans le bucket S3", n_unexpected)

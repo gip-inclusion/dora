@@ -4,6 +4,7 @@ from enum import Enum
 from data_inclusion.schema.v1 import TypeService
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -17,6 +18,7 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.services.enums import ServiceStatus
+from dora.services.models import Service
 
 # Préfixe des identifiants de services Dora dans data·inclusion et sur Les Emplois
 DORA_UID_PREFIX = "dora--"
@@ -200,3 +202,49 @@ def filter_services_by_region(services, region_code):
 
 def get_kinds_labels(kinds):
     return [TypeService(kind).label for kind in kinds]
+
+
+FORMS_BATCH = 500
+
+
+def save_forms(services):
+    """Écrit les `forms` modifiés et réaligne les empreintes des modèles touchés.
+
+    `forms` entre dans l'empreinte de synchronisation : sans recalcul, l'empreinte
+    stockée d'un modèle resterait celle d'avant la modification, et son prochain
+    enregistrement ferait basculer d'un coup toutes ses copies en « modèle modifié ».
+    Les copies encore à jour suivent la nouvelle empreinte ; celles qui divergeaient
+    déjà gardent la leur, pour ne pas masquer des modifications en attente.
+
+    Les écritures forment un tout : une liste modifiée sans son empreinte, ou une
+    empreinte de copie sans celle de son modèle, laisserait justement l'affichage
+    « modèle modifié » que ce recalcul existe pour éviter.
+    """
+    checksums_updated = []
+
+    for service in services:
+        if not service.is_model:
+            continue
+
+        previous = service.sync_checksum
+        service.sync_checksum = update_sync_checksum(service)
+        if service.sync_checksum == previous:
+            continue
+
+        checksums_updated.append((service, previous))
+
+    with transaction.atomic():
+        Service._base_manager.bulk_update(services, ["forms"], batch_size=FORMS_BATCH)
+        Service._base_manager.bulk_update(
+            [model for model, _ in checksums_updated],
+            ["sync_checksum"],
+            batch_size=FORMS_BATCH,
+        )
+        # Les copies suivent l'empreinte de leur modèle : seules celles qui
+        # étaient à jour, les autres ont de vraies modifications en attente.
+        for model, previous in checksums_updated:
+            Service._base_manager.filter(
+                model_id=model.pk, last_sync_checksum=previous
+            ).update(last_sync_checksum=model.sync_checksum)
+
+    return len(checksums_updated)

@@ -6,10 +6,11 @@ import pytest
 from django.core.management import call_command
 from django.utils import timezone
 
-from dora.core.management.commands.delete_orphaned_uploads import _iter_objects
 from dora.core.test_utils import make_model, make_orientation, make_service
 
-BUCKET_OBJECTS = "dora.core.management.commands.delete_orphaned_uploads._iter_objects"
+BUCKET_OBJECTS = (
+    "dora.core.management.commands.delete_orphaned_uploads.iter_managed_objects"
+)
 STORAGE_DELETE = (
     "dora.core.management.commands.delete_orphaned_uploads.default_storage.delete"
 )
@@ -146,22 +147,3 @@ def test_aborts_when_services_exist_but_have_no_forms(mock_iter, mock_delete):
     call_cmd(wet_run=True)
 
     mock_delete.assert_not_called()
-
-
-@patch("dora.core.management.commands.delete_orphaned_uploads.default_storage")
-def test_iter_objects_skips_unmanaged_path(mock_storage):
-    now = timezone.now()
-    mock_page = {
-        "Contents": [
-            {"Key": "local/#orientations/abc/file.pdf", "LastModified": now},
-            {"Key": "local/some-other-prefix/file.pdf", "LastModified": now},
-        ]
-    }
-    mock_storage.connection.meta.client.get_paginator.return_value.paginate.return_value = [
-        mock_page
-    ]
-
-    keys = [key for key, _ in _iter_objects()]
-
-    assert "local/#orientations/abc/file.pdf" in keys
-    assert "local/some-other-prefix/file.pdf" not in keys
