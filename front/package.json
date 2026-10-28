@@ -45,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^8.72.0",
     "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
-    "bits-ui": "^2.20.0",
+    "bits-ui": "^2.20.1",
     "dayjs": "^1.11.23",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
