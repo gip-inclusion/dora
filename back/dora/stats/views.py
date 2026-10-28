@@ -68,8 +68,12 @@ def log_event(request):
     # signale un client tiers (scanners, notamment), dont on ignore l'événement
     user_hash = request.data.get("user_hash")
     if not isinstance(user_hash, str) or len(user_hash) != USER_HASH_LENGTH:
+        # La valeur elle-même n'est pas loggée : taille arbitraire, fournie
+        # par le client
         logger.warning(
-            "Événement analytics ignoré : user_hash invalide (%r)", user_hash
+            "Événement analytics ignoré : user_hash invalide (%s, longueur %s)",
+            type(user_hash).__name__,
+            len(user_hash) if isinstance(user_hash, str) else None,
         )
         return Response({"error": "Invalid user hash"}, status=400)
     service_slug = request.data.get("service", "")
