@@ -60,7 +60,7 @@ def test_wet_run_covers_models_and_realigns_synced_copies():
 
     call_cmd([present], wet_run=True)
 
-    model = Service._base_manager.get(pk=model.pk)
+    model = Service.including_models.get(pk=model.pk)
     synced.refresh_from_db()
     outdated.refresh_from_db()
 

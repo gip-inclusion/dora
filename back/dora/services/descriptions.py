@@ -184,7 +184,7 @@ def backfill_service_descriptions(*, batch: int = 500) -> dict[str, int]:
     from dora.services.models import Service
 
     weight = build_idf(
-        Service._base_manager.exclude(full_desc="")
+        Service.including_models.exclude(full_desc="")
         .values_list("full_desc", flat=True)
         .iterator(chunk_size=batch)
     )
@@ -193,7 +193,7 @@ def backfill_service_descriptions(*, batch: int = 500) -> dict[str, int]:
     updated = []
 
     services = (
-        Service._base_manager.only("pk", "short_desc", "full_desc", "description")
+        Service.including_models.only("pk", "short_desc", "full_desc", "description")
         .order_by("pk")
         .iterator(chunk_size=batch)
     )
@@ -210,10 +210,10 @@ def backfill_service_descriptions(*, batch: int = 500) -> dict[str, int]:
         stats["written"] += 1
         updated.append(service)
         if len(updated) >= batch:
-            Service._base_manager.bulk_update(updated, ["description"])
+            Service.including_models.bulk_update(updated, ["description"])
             updated = []
 
     if updated:
-        Service._base_manager.bulk_update(updated, ["description"])
+        Service.including_models.bulk_update(updated, ["description"])
 
     return stats
