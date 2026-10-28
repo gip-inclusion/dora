@@ -35,8 +35,6 @@ class Command(AtomicHandleMixin, BaseCommand):
 
     @dry_runnable
     def handle(self, *args, **options):
-        # `Service.objects` masque les modèles (`is_model=True`), qui portent eux aussi des
-        # documents : `including_models` les inclut.
         services_with_forms = list(Service.including_models.exclude(forms=[]))
 
         existing = {key for key, _ in iter_managed_objects()}

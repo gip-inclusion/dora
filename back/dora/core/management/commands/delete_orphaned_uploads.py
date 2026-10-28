@@ -39,8 +39,6 @@ class Command(BaseCommand):
             )
             return
 
-        # `Service.objects` masque les modèles (`is_model=True`), qui portent eux aussi des
-        # documents : `including_models` les inclut.
         service_form_paths = set(
             chain.from_iterable(
                 Service.including_models.values_list("forms", flat=True)
