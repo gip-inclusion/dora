@@ -1,28 +1,30 @@
 # Politique de confidentialité de DORA
 
-Version au 30 mars 2026
+Version au 15 octobre 2026
 
 ## Qui est responsable de DORA ?
 
-DORA est développé au sein du GIP Plateforme de l’inclusion. DORA est une plateforme numérique alimentée par les offreurs de solution d’insertion locales, nationales et numériques.
+DORA est développé au sein du GIP Plateforme de l’inclusion. DORA est une plateforme numérique alimentée par les offreurs de solutions d’insertion locales, nationales et numériques.
 
-Le responsable de l’utilisation des données est le GIP Plateforme de l’inclusion, représenté par Arnaud DENOIX, Directeur du GIP Plateforme de l’inclusion. Spécifiquement s’agissant de la fiche d’orientation une responsabilité conjointe entre l’organisme proposant un service et le GIP Plateforme de l’inclusion est mis en oeuvre.
+Le responsable de l’utilisation des données est le GIP Plateforme de l’inclusion, représenté par monsieur Jean VETTRAINO, en sa qualité de directeur du GIP Plateforme de l’inclusion. Spécifiquement s’agissant de la fiche d’orientation une responsabilité conjointe entre l’organisme proposant un service et le GIP Plateforme de l’inclusion est mis en oeuvre.
 
 ## Pourquoi manipulons-nous ces données ?
 
 DORA manipule des données à caractère personnel pour :
 
-- Permettre aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent via une recherche simple et personnalisée, des résultats qualifiées et des fiches solutions claires et actionnables ;
-- Avoir une visibilité au niveau territorial sur le déploiement de la plateforme DORA.
-- Suivre les activités des utilisateurs
+- Permettre aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent via une recherche simple et personnalisée, des orientations, des résultats qualifiées et des fiches solutions claires et actionnables ;
+- Prendre contact avec des testeurs volontaires ;
+- Avoir une visibilité au niveau territorial sur le déploiement de la plateforme DORA ;
+- Suivre les activités des utilisateurs et comptabiliser le nombre d’adresses courriels qui ont répondu à une orientation.
 
 ## Quelles sont les données à caractère personnel que nous manipulons ?
 
 DORA manipule les données à caractère personnel suivantes relatives aux utilisateurs de la plateforme :
 
-- **Données relatives aux utilisateurs de la plateforme** (nom, prénom, adresse e-mail, numéro de téléphone) ;
-- **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, identifiant unique France Travail, pièces justificatives relatives au dossier proposé par l’agent accompagnateur qui peuvent contenir des informations financières, des informations relatives à l’insertion sociale et l’emploi, des informations relatives à la situation familiale, RQTH ) ;
-- **Données relatives aux personnes à contacter pour référencer une structure** (prénom, nom, adresse e-mail, numéro de téléphone).
+- **Données relatives aux utilisateurs de la plateforme** (nom, prénom, adresse e-mail, numéro de téléphone) ;
+- **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, identifiant unique France Travail, pièces justificatives relatives au dossier proposé par l’agent accompagnateur qui peuvent contenir des informations financières, des informations relatives à l’insertion sociale et l’emploi, des informations relatives à la situation familiale, RQTH ) ;
+- **Données relatives aux testeurs volontaires** (nom, prénom, adresse courriel, champs libres) ;
+- **Données relatives aux personnes à contacter pour référencer une structure** (prénom, nom, adresse e-mail, numéro de téléphone) ;
 - **Données relatives à la traçabilité des utilisateurs** (identifiant utilisateur, localisation, logs et adresse IP).
 
 ## Qu’est-ce qui nous autorise à manipuler ces données ?
@@ -44,15 +46,16 @@ Nous rappelons que chaque responsable de traitement doit bénéficier d’une ba
 | Données relatives aux utilisateurs de la plateforme                       | 2 ans à compter du dernier contact avec l’utilisateur de la plateforme DORA.                                                      |
 | Données relatives aux personnes suivies par les agents accompagnateurs    | 6 mois après traitement de la demande, (ou immédiatement en cas de refus ou de rejet de l’orientation en cas d’auto-orientation). |
 | Données relatives aux personnes à contacter pour référencer une structure | 2 ans à compter du dernier contact avec le référent.                                                                              |
+| Données relatives aux testeurs volontaires                                | 2 ans à compter du dernier contact avec le testeur.                                                                               |
 | Données relatives à la traçabilité des utilisateurs                       | 1 an à compter du dernier contact avec l’utilisateur.                                                                             |
 
 ## Quels droits avez-vous ?
 
 Vous disposez :
 
-- D’un droit d’information et d’un droit d’accès à vos données ;
-- D’un droit à la limitation du traitement de données ;
-- D’un droit de rectification ;
+- D’un droit d’information et d’un droit d’accès à vos données ;
+- D’un droit à la limitation du traitement de données ;
+- D’un droit de rectification ;
 - D’un droit d’opposition.
 
 Pour les exercer, contactez-nous à : [rgpd@inclusion.gouv.fr](mailto:rgpd@inclusion.gouv.fr)
@@ -75,55 +78,49 @@ Vous pouvez également exercer vos droits auprès du responsable de traitement c
 
 Les accès aux données sont strictement encadrés et juridiquement justifiés. Les personnes suivantes vont avoir accès aux données :
 
-- Les membres de l’équipe DORA qui ont besoin des données dans leurs missions ou qui y ont accès de fait (développeur, etc.) ;
-- Agent ou toute personne désignée comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora ;
-- Agent ou toute personne désignée comme "accompagnateur" recevant les dossiers ou demande d’insertion ;
-- Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l’API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l’API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion).
+- Les membres de l’équipe DORA qui ont besoin des données dans leurs missions ou qui y ont accès de fait (développeur, etc.) ;
+- Agent ou toute personne désignée comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora ;
+- Agent ou toute personne désignée comme "accompagnateur" recevant les dossiers ou demande d’insertion ;
+- Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l’API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l’API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion) ;
 - Les données peuvent être transmises via France Transfert.
 
 ## Quelles mesures de sécurité mettons-nous en place ?
 
 Nous mettons en place plusieurs mesures pour sécuriser les données :
 
-- Gestion des accès logiques et des mots de passe ;
-- Stockage des données en base de données ;
-- Cloisonnement des données ;
-- Mesures de traçabilité ;
-- Surveillance ;
-- Protection des réseaux ;
-- Sauvegarde ;
+- Gestion des accès logiques et des mots de passe ;
+- Stockage des données en base de données ;
+- Cloisonnement des données ;
+- Mesures de traçabilité ;
+- Surveillance ;
+- Protection des réseaux ;
+- Sauvegarde ;
 - Mesures restrictives limitant l’accès physiques aux données à caractère personnel.
 
 ## Qui nous aide à manipuler les données ?
 
 Certaines des données sont envoyées à d’autres acteurs, appelés "sous-traitants de données", pour qu’ils nous aident à les manipuler. Nous nous assurons qu’ils respectent strictement le RGPD et qu’ils apportent des garanties suffisantes en matière de sécurité.
 
-| **Partenaire**       | **Pays destinataire** | **Traitement réalisé**              | **Garanties**                                                                                                                                                                                                  |
-| -------------------- | --------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scalingo**         | France                | Hébergement                         | [https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles](https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles)                                                           |
-| **Crisp**            | Union européenne      | Outil de chat                       | [https://crisp.chat/en/privacy/​](https://crisp.chat/en/privacy/)                                                                                                                                              |
-| **Data Inclusion**   | France                | API/Open Data                       | [https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion](https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion) |
-| **Tally**            | Belgique              | Outil de sondage                    | https://tally.so/help/privacy-policy                                                                                                                                                                           |
-| **France Transfert** | France                | Outil de transfert de documents     | [https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                 |
-| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar | [https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                         |
-| **Brevo**            | UE et non-UE          | Outil de messagerie electronique    | [https://www.brevo.com/fr/legal/privacypolicy/](https://www.brevo.com/fr/legal/privacypolicy/)                                                                                                                 |
-| **Clever Cloud SAS** | France                | Stockage de fichiers                | [https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/](https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/)         |
+| **Partenaire**       | **Pays destinataire** | **Traitement réalisé**                                       | **Garanties**                                                                                                                                                                                                  |
+| -------------------- | --------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scalingo**         | France                | Hébergement                                                  | [https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles](https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles)                                                           |
+| **Crisp**            | Union européenne      | Outil de chat                                                | [https://crisp.chat/en/privacy/​](https://crisp.chat/en/privacy/)                                                                                                                                              |
+| **Data Inclusion**   | France                | API/Open Data                                                | [https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion](https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion) |
+| **Tally**            | Belgique              | Outil de sondage et de recueil des informations des testeurs | https://tally.so/help/privacy-policy                                                                                                                                                                           |
+| **France Transfert** | France                | Outil de transfert de documents                              | [https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                 |
+| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                          | [https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                         |
+| **Brevo**            | UE et non-UE          | Outil de messagerie electronique                             | [https://www.brevo.com/fr/legal/privacypolicy/](https://www.brevo.com/fr/legal/privacypolicy/)                                                                                                                 |
+| **Clever Cloud SAS** | France                | Stockage de fichiers                                         | [https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/](https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/)         |
 
 ## Cookies
 
-En application de l’article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
-
-Les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consentis par l’utilisateur.
-
-Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l’article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l’égard du traitement des données à caractère personnel et à la libre circulation de ces données.
-
 Un cookie est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
 
-Certains cookies sont strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique et sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17 du 6 janvier 1978.
+DORA utilise des cookies qui ne sont déposés que si vous les acceptez via le bandeau dédié. DORA utilise également la solution de mesure d’audience Matomo en l’ayant configuré en mode « exempté », conformément aux recommandations de la CNIL. Elle ne nécessite donc pas le consentement des personnes concernées.
 
-Des cookies relatifs aux statistiques publiques et anonymes sont également déposés.
+Vous pouvez à tout moment revenir sur votre choix en cliquant sur le bouton “Gestion des cookies” en bas de page.
 
-À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre ordinateur en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
+DORA utilise aussi “l’inbound parsing” de Brevo pour stocker le fait qu’une adresse courriel a répondu à une orientation pour la comptabiliser.
 
 Pour aller plus loin, vous pouvez consulter les ﬁches proposées par la Commission Nationale de l’Informatique et des Libertés (CNIL) :
 
