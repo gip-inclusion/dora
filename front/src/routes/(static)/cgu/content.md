@@ -1,6 +1,6 @@
-# Conditions générales d’utilisation de DORA au 15/07/2026
+# Conditions générales d’utilisation de DORA au 15/10/2026
 
-Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
+Les présentes conditions générales d’utilisation (ci-après « CGU ») précisent le cadre juridique de DORA (ci-après la « Plateforme ») et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
 ## Article 1 — Champ d’application
 
@@ -10,7 +10,7 @@ La Plateforme est accessible gratuitement pour l’Utilisateur inscrit à savoir
 
 La Plateforme développée au sein du GIP Plateforme de l’inclusion est un service public numérique alimenté par les offreurs de solutions d’insertion locales, nationales et numériques.
 
-Elle centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
+Elle centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés, d’un suivi des orientations et des fiches de solutions claires.
 
 ## Article 3 — Définitions
 
@@ -24,7 +24,7 @@ Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emp
 
 « Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d’animer les structures d’un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d’aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la Plateforme.
 
-« L’éditeur » est le GIP Plateforme de l’inclusion, qui met à disposition le présent service.
+« L’Éditeur » est le GIP Plateforme de l’inclusion, qui met à disposition le présent service.
 
 « Les Services » sont l’ensemble des fonctionnalités proposées sur la Plateforme qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
 
@@ -34,7 +34,7 @@ Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emp
 
 ### 4.1 Création de compte
 
-Tout Utilisateur peut créer un compte sur DORA grâce à la solution ProConnect en fournissant les informations suivantes :
+Tout Utilisateur peut créer un compte sur la Plateforme grâce à la solution ProConnect en fournissant les informations suivantes :
 
 - Nom ;
 - Prénom ;
@@ -44,7 +44,7 @@ Tout Utilisateur peut créer un compte sur DORA grâce à la solution ProConnect
 
 Lorsque l’Utilisateur fournit ces informations, il reçoit un mail pour vérifier son adresse électronique et activer son compte ProConnect.
 
-Par dérogation, les “gestionnaires de territoire” ont un compte avec des accès et fonctionnalités renforcés. Une double authentification est mise en place.
+Par dérogation, les “Gestionnaires de territoire” ont un compte avec des accès et fonctionnalités renforcés. Une double authentification est mise en place.
 
 ### 4.2 Identification de la structure
 
@@ -56,9 +56,11 @@ Toute violation de cette disposition entraîne l’engagement de la responsabili
 
 L’Accompagnateur dispose d’un compte dédié à partir duquel il peut avoir accès aux informations relatives aux structures et aux points de contacts.
 
-L’Accompagnateur pourra également remplir un formulaire de demande de prise en charge ou d’orientation par une structure accueillante. Un lien est envoyé par l’Accompagnateur pour lui permettre d’accéder au site Dora. Ce lien est accessible pendant 7 jours maximum et deux relances ont lieu à 10 jours puis 20\. L’organisme recevant cette demande devra se connecter dans les conditions prévues par le présent article 4\.
+L’Accompagnateur pourra également remplir un formulaire de demande de prise en charge ou d’orientation par une structure accueillante. Un lien est envoyé par l’Accompagnateur pour lui permettre d’accéder à la Plateforme. Ce lien est accessible pendant 7 jours maximum et deux relances ont lieu à 10 jours puis 20\. L’organisme recevant cette demande devra se connecter dans les conditions prévues par le présent article 4\.
 
 Ce formulaire comprend des pièces jointes nécessaires à la compréhension du dossier d’un bénéficiaire (nom, prénom, e-mail et documents demandés). L’Accompagnateur s’engage à informer la personne concernée de ce traitement de données.
+
+La fonctionnalité de suivi des orientations est dorénavant intégrée à l’application unifiée. Les professionnels de l’accompagnement peuvent retrouver leur portefeuille de bénéficiaires, les candidatures et les orientations à cette adresse : [https://plateforme.inclusion.gouv.fr/](https://plateforme.inclusion.gouv.fr/).
 
 ### 4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
@@ -80,7 +82,7 @@ Lorsque l’accompagnateur oriente un bénéficiaire vers un offreur de solution
 
 La demande d’orientation est réalisée conformément aux articles 4.3 et 5 des présentes conditions générales d’utilisation.
 
-En cas de propos violant les dispositions de l’article 8 des présentes conditions générales d’utilisation, un signalement peut être réalisé sur la plateforme et l’éditeur se réserve le droit de suspendre ou supprimer le compte auteur de la violation.
+En cas de propos violant les dispositions de l’article 8 des présentes conditions générales d’utilisation, un signalement peut être réalisé sur la Plateforme et l’Éditeur se réserve le droit de suspendre ou supprimer le compte auteur de la violation.
 
 **5.2 Accès aux orientations**
 
@@ -91,35 +93,35 @@ Les bénéficiaires peuvent accéder aux orientations et intégrer les pièces j
 
 **5.3 Modération des premières orientations**
 
-Lorsqu’un Accompagnateur oriente un bénéficiaire pour la première fois, la structure à laquelle il est rattaché obtient le statut “en cours de modération” (si elle n’avait pas été validée au préalable), et l’orientation est alors vérifiée par l’équipe Dora. Celle-ci vérifie l’existence de l’organisme, à l’exception des structures portant les labels suivants :
+Lorsqu’un Accompagnateur oriente un bénéficiaire pour la première fois, la structure à laquelle il est rattaché obtient le statut “en cours de modération” (si elle n’avait pas été validée au préalable), et l’orientation est alors vérifiée par l’équipe de la Plateforme. Celle-ci vérifie l’existence de l’organisme, à l’exception des structures portant les labels suivants :
 
 - France Travail ;
 - Conseil Départemental ;
 - Cap Emploi.
 
-Lorsque l’équipe Dora refuse une organisation, et donc l’orientation qui en suit, l’ensemble des utilisateurs de la structure sont désactivés et un e-mail leur est envoyé pour leur expliquer la situation. Toute contestation est envoyée à l’éditeur dans un délai raisonnable, et il revient aux organisations de démontrer leur existence en envoyant tout document à cette adresse : [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr).
+Lorsque l’équipe de la Plateforme refuse une organisation, et donc l’orientation qui en suit, l’ensemble des Utilisateurs de la structure sont désactivés et un e-mail leur est envoyé pour leur expliquer la situation. Toute contestation est envoyée à l’Éditeur dans un délai raisonnable, et il revient aux organisations de démontrer leur existence en envoyant tout document à cette adresse : [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr).
 
 **5.4 Refus d’orientation**
 
-En cas de refus d’orientation, le bénéficiaire est informé par la plateforme. L’Accompagnateur s’engage à donner les raisons de son refus via la plateforme ou par tout moyen qu’il lui appartient de démontrer. La responsabilité de l’éditeur ne saurait être engagée pour un refus d’orientation.
+En cas de refus d’orientation, le bénéficiaire est informé par la Plateforme. L’Accompagnateur s’engage à donner les raisons de son refus via la Plateforme ou par tout moyen qu’il lui appartient de démontrer. La responsabilité de l’Éditeur ne saurait être engagée pour un refus d’orientation.
 
 ## Article 6 — Suspension ou Suppression de l’espace de la structure ou d’un compte
 
 Tout Utilisateur régulièrement inscrit pourra solliciter sa désinscription en contactant [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr).
 
-En cas de violation des dispositions de l’article 8 des présentes conditions générales d’utilisations ou de toute discrimination, propos discriminatoire ou insultant dans le cadre de l’orientation prévue à l’article 5, l’éditeur peut suspendre un compte pour une durée proportionnée à la violation et choisie par l’éditeur. En cas de répétition des violations du présent article ou de propos ou action d’une particulière gravité, la structure encourt la suppression de son espace et des comptes associés.
+En cas de violation des dispositions de l’article 8 des présentes CGU ou de toute discrimination, propos discriminatoire ou insultant dans le cadre de l’orientation prévue à l’article 5, l’Éditeur peut suspendre un compte pour une durée proportionnée à la violation et choisie par ce dernier. En cas de répétition des violations du présent article ou de propos ou action d’une particulière gravité, la structure encourt la suppression de son espace et des comptes associés.
 
-Lorsqu’une sanction au titre de l’article 6 est envisagée, l’éditeur informe la structure et procède au déréférencement du compte incriminé ou de l’espace de la structure. Elle précise les motifs de la décision de suspension ou de suppression prévue, et l’informe des éléments à son endroit, sauf si une disposition législative ou réglementaire l’en empêche. La structure dispose d’un délai de 10 jours pour répondre à la décision de l’éditeur, et présenter les éléments à sa disposition qu’elle estime pertinents. A l’issue de ce délai, l’éditeur communique sa décision dans un délai raisonnable. La décision comprend les motifs de la décision et précise les faits reprochés, ainsi que les délais et voies de recours.
+Lorsqu’une sanction au titre de l’article 6 est envisagée, l’Éditeur informe la structure et procède au déréférencement du compte incriminé ou de l’espace de la structure. Elle précise les motifs de la décision de suspension ou de suppression prévue, et l’informe des éléments à son endroit, sauf si une disposition législative ou réglementaire l’en empêche. La structure dispose d’un délai de 10 jours pour répondre à la décision de l’Éditeur, et présenter les éléments à sa disposition qu’elle estime pertinents. A l’issue de ce délai, l’Éditeur communique sa décision dans un délai raisonnable. La décision comprend les motifs de la décision et précise les faits reprochés, ainsi que les délais et voies de recours.
 
 ## Article 7 — Abonnement à la lettre d’information
 
-Tout Offreur de solution ou Accompagnateur qui le souhaite peut s’abonner à la lettre d’information de Dora et se maintenir informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire, en cliquant sur le lien « s’abonner à l’infolettre » depuis la page de la Plateforme.
+Tout Offreur de solution ou Accompagnateur qui le souhaite peut s’abonner à la lettre d’information de la Plateforme pour être informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire, en cliquant sur le lien « s’abonner à l’infolettre » depuis la page de la Plateforme.
 
 ## Article 8 — Responsabilités
 
 ### 8.1 L’Éditeur de la Plateforme
 
-Les sources des informations diffusées sur la Plateforme sont réputées fiables mais ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
+Les sources des informations diffusées sur la Plateforme sont réputées fiables mais l’Éditeur ne garantit pas qu’elle soit exempte de défauts, d’erreurs ou d’omissions.
 
 L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
 
@@ -127,9 +129,9 @@ L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un acc
 
 La Plateforme peut mettre à disposition des liens pouvant orienter l’utilisateur vers des services numériques tiers. Ces tiers sont les seuls responsables des contenus publiés sur leurs services numériques. L’Éditeur n’a aucun contrôle sur le contenu de ces services numériques, leurs contenus ne sauraient engager la responsabilité de l’Éditeur.
 
-En cas de manquement à une ou plusieurs des stipulations des présentes conditions générales d’utilisation, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l'utilisateur responsable.
+En cas de manquement à une ou plusieurs des stipulations des présentes CGU, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l'Utilisateur responsable.
 
-L'Éditeur peut également suspendre ou supprimer un accès ou un compte en cas de comportement portant atteinte à la sécurité de la plateforme, ou de tout comportement anormal au sens des présentes conditions générales d’utilisations. Des mesures conservatoires peuvent être prises sans que cela puisse engager la responsabilité de l’éditeur.
+L'Éditeur peut également suspendre ou supprimer un accès ou un compte en cas de comportement portant atteinte à la sécurité de la plateforme, ou de tout comportement anormal au sens des présentes CGU. Des mesures conservatoires peuvent être prises sans que cela puisse engager la responsabilité de l’Éditeur.
 
 ### 8.2 Responsabilités de l’Utilisateur
 
@@ -167,7 +169,6 @@ Le Groupement d’intérêt public « Plateforme de l’inclusion » s’eng
 
 - le droit d’information ;
 - le droit d’opposition au traitement ;
-- le droit à l’effacement des données ;
 - le droit à la limitation du traitement de données ;
 - le droit d’accès aux données ;
 - le droit de rectification des données.
@@ -230,6 +231,7 @@ Les termes des présentes CGU peuvent être amendés à tout moment, en fonction
 
 Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
 
+- [Version du 15/07/2026](/cgu/cgu-20260715)
 - [Version du 01/07/2026](/cgu/cgu-20260701)
 - [Version du 03/11/2025](/cgu/cgu-20251103)
 - [Version du 12/12/2024](/cgu/cgu-20241212)
