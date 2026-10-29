@@ -76,6 +76,19 @@ def log_event(request):
             len(user_hash) if isinstance(user_hash, str) else None,
         )
         return Response({"error": "Invalid user hash"}, status=400)
+
+    # Même raisonnement : le front envoie toujours un chemin, et un titre
+    # seulement si la page en définit un
+    path = request.data.get("path")
+    title = request.data.get("title")
+    if not isinstance(path, str) or not isinstance(title, (str, type(None))):
+        logger.warning(
+            "Événement analytics ignoré : path (%s) ou title (%s) invalide",
+            type(path).__name__,
+            type(title).__name__,
+        )
+        return Response({"error": "Invalid path or title"}, status=400)
+
     service_slug = request.data.get("service", "")
     structure_slug = request.data.get("structure", "")
     service = structure = orientation = None
@@ -104,7 +117,7 @@ def log_event(request):
     user = request.user
 
     common_analytics_data = {
-        "path": (request.data.get("path") or "")[:PATH_MAX_LENGTH],
+        "path": path[:PATH_MAX_LENGTH],
         "user": user if user.is_authenticated else None,
         "is_logged": user.is_authenticated,
         "is_staff": user.is_staff,
@@ -161,7 +174,7 @@ def log_event(request):
                 **common_analytics_data,
                 # Le titre des pages de service (nom du service et de la
                 # structure) peut dépasser la taille du champ
-                title=(request.data.get("title") or "")[:TITLE_MAX_LENGTH],
+                title=(title or "")[:TITLE_MAX_LENGTH],
             )
 
         case Tag.SEARCH:

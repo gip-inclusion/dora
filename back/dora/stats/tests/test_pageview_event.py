@@ -48,3 +48,46 @@ def test_event_without_user_hash_is_rejected(api_client):
 
     assert response.status_code == 400
     assert not PageView.objects.exists()
+
+
+@pytest.mark.parametrize(
+    "invalid",
+    [
+        {"path": 123},
+        {"path": {"a": 1}},
+        {"path": ["x"]},
+        {"path": None},
+        {"title": 123},
+        {"title": {"a": 1}},
+        {"title": ["x"]},
+    ],
+)
+def test_pageview_rejects_non_string_path_or_title(api_client, invalid):
+    payload = {
+        "tag": "pageview",
+        "path": "/",
+        "title": "",
+        "userHash": "a" * USER_HASH_LENGTH,
+        **invalid,
+    }
+
+    response = api_client.post(URL, data=payload, format="json")
+
+    assert response.status_code == 400
+    assert not PageView.objects.exists()
+
+
+@pytest.mark.parametrize("title", [{}, {"title": None}])
+def test_pageview_accepts_missing_title(api_client, title):
+    payload = {
+        "tag": "pageview",
+        "path": "/",
+        "userHash": "a" * USER_HASH_LENGTH,
+        **title,
+    }
+
+    response = api_client.post(URL, data=payload, format="json")
+
+    assert response.status_code == 201, response.data
+    page_view = PageView.objects.get(id=response.data["event"])
+    assert page_view.title == ""
