@@ -45,12 +45,16 @@ export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
 export const handle: Handle = sequence(
   Sentry.sentryHandle({ injectFetchProxyScript: false }),
   async ({ event, resolve }) => {
-    const status = await rateLimiter.check(event);
-    if (status.limited) {
-      throw error(
-        429,
-        `Trop de requêtes. Réessayez après ${status.retryAfter} secondes.`
-      );
+    // Les appels au proxy /api sont limités par le back, par IP client
+    // (cf. `dora.core.throttling`), avec des compteurs partagés entre conteneurs.
+    if (!event.url.pathname.startsWith("/api/")) {
+      const status = await rateLimiter.check(event);
+      if (status.limited) {
+        throw error(
+          429,
+          `Trop de requêtes. Réessayez après ${status.retryAfter} secondes.`
+        );
+      }
     }
 
     const token = event.cookies.get(TOKEN_KEY);
