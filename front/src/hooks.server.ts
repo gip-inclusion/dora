@@ -34,7 +34,11 @@ if (ENVIRONMENT !== "local") {
 }
 
 export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
-  ({ error: err }) => {
+  ({ kind, error: err }) => {
+    if (kind !== "unknown") {
+      return undefined;
+    }
+
     const message =
       ENVIRONMENT === "local" && err instanceof Error
         ? err.message

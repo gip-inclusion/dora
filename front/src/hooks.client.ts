@@ -24,7 +24,7 @@ if (ENVIRONMENT !== "local") {
 }
 
 export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
-  ({ error }) => {
+  ({ kind, error }) => {
     // Quand un chunk JS ne peut plus être chargé (ex: après un déploiement qui
     // change les hash des fichiers), on force un rechargement complet de la page
     // pour que le navigateur récupère le nouvel HTML et les nouveaux chunks.
@@ -36,6 +36,10 @@ export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
     ) {
       window.location.reload();
       return { message: STALE_CHUNK_RELOAD_MESSAGE };
+    }
+
+    if (kind !== "unknown") {
+      return undefined;
     }
 
     const message =

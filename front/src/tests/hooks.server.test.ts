@@ -1,13 +1,13 @@
 import { describe, expect, test, vi } from "vitest";
 
-vi.mock("$env/static/private", () => ({ MAX_REQUESTS_PER_MINUTE: "2" }));
+vi.mock("$app/env/private", () => ({ MAX_REQUESTS_PER_MINUTE: 2 }));
 
-vi.mock("$lib/env", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("$lib/env")>()),
+vi.mock("#lib/env.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("#lib/env.ts")>()),
   ENVIRONMENT: "local",
 }));
 
-vi.mock("$lib/utils/nexus", () => ({
+vi.mock("#lib/utils/nexus.ts", () => ({
   handleInboundNexusAutoLogin: vi.fn(),
 }));
 
