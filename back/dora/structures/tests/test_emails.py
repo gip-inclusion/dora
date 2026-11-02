@@ -7,6 +7,7 @@ from freezegun import freeze_time
 from dora.core.test_utils import make_structure, make_user
 
 from ..emails import (
+    send_access_requested_notification,
     send_admin_invited_users_20_notification,
     send_admin_invited_users_90_notification,
     send_admin_self_invited_users_notification,
@@ -84,6 +85,34 @@ def test_send_second_admin_notification_for_pending_invitation():
         )
         assert structure.name in mail.outbox[idx].body
         assert putative_member.email in mail.outbox[idx].body
+
+
+def test_send_access_requested_notification():
+    putative_member = make_user()
+    structure = make_structure(putative_member=putative_member)
+    admin_user = make_user(structure=structure, is_admin=True)
+    member = structure.putative_membership.get(user=putative_member)
+
+    send_access_requested_notification(member, admin_user)
+
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == [admin_user.email]
+    assert mail.outbox[0].subject == "[LOCAL] [DORA] Demande d’accès à votre structure"
+    assert structure.name in mail.outbox[0].body
+    assert putative_member.email in mail.outbox[0].body
+
+    # le lien doit passer par la page de connexion et rediriger vers
+    # l'espace collaborateurs, où la demande peut être validée
+    assert "/auth/connexion" in mail.outbox[0].body
+    assert (
+        urlencode({"next": f"/structures/{structure.slug}/collaborateurs"})
+        in mail.outbox[0].body
+    )
+    assert "login_hint" in mail.outbox[0].body
+    assert "mtm_campaign=MailsTransactionnels" in mail.outbox[0].body
+    assert "mtm_kwd=DemandeRattachementStructure" in mail.outbox[0].body
+
+    assert "Approuver la demande de rattachement" in mail.outbox[0].body
 
 
 def test_send_admin_self_invited_users_notification():

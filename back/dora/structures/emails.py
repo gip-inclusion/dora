@@ -108,13 +108,27 @@ def send_member_fast_tracked_notification(member, admin_user):
 
 
 def send_access_requested_notification(member, admin_user):
+    cta_link = furl(settings.FRONTEND_URL) / "auth" / "connexion"
+    cta_link.add(
+        {
+            "next": furl(f"/structures/{member.structure.slug}/collaborateurs"),
+            "login_hint": iri_to_uri(admin_user.email),
+        }
+    )
+    cta_link.add(
+        {
+            "mtm_campaign": "MailsTransactionnels",
+            "mtm_kwd": "DemandeRattachementStructure",
+        }
+    )
+
     params = {
         "recipient_email": admin_user.email,
         "recipient_name": admin_user.get_short_name(),
         "new_member_full_name": member.user.get_full_name(),
         "new_member_email": member.user.email,
         "structure_name": member.structure.name,
-        "cta_link": f"{settings.FRONTEND_URL}/structures/{member.structure.slug}",
+        "cta_link": cta_link.url,
     }
 
     body = render_to_string("notification-access-request.html", params)
