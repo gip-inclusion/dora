@@ -34,7 +34,8 @@ export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
   if (response.ok) {
     const data = await response.json();
     if (data.redirectUrl) {
-      redirect(302, data.redirectUrl);
+      // URL fournie par le back, qui l'a validée : cf. `nexus/auto-login`
+      redirect(302, data.redirectUrl, { external: true });
     }
   }
 }

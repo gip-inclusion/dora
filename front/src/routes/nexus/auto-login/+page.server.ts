@@ -36,7 +36,7 @@ export const load = async ({ cookies, url }: RequestEvent) => {
 
   if (!token) {
     if (fallback) {
-      redirect(302, fallback);
+      redirect(302, fallback, { external: [INCLUSION_PLATFORM_URL] });
     }
     error(404, "Page Not Found");
   }
@@ -44,11 +44,12 @@ export const load = async ({ cookies, url }: RequestEvent) => {
   const autoLoginRedirectUrl = await fetchNexusAutoLoginUrl(nextUrl, token);
 
   if (autoLoginRedirectUrl) {
-    redirect(302, autoLoginRedirectUrl);
+    // autoLoginRedirectUrl a déjà été validé contre `NEXUS_ALLOWED_REDIRECT_HOSTS` par le back
+    redirect(302, autoLoginRedirectUrl, { external: true });
   }
 
   if (fallback) {
-    redirect(302, fallback);
+    redirect(302, fallback, { external: [INCLUSION_PLATFORM_URL] });
   }
 
   error(404, "Page Not Found");
