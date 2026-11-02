@@ -33,22 +33,26 @@ if (ENVIRONMENT !== "local") {
   });
 }
 
-export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
-  ({ kind, error: err }) => {
-    if (kind !== "unknown") {
-      return undefined;
-    }
-
-    const message =
-      ENVIRONMENT === "local" && err instanceof Error
-        ? err.message
-        : UNEXPECTED_ERROR_MESSAGE;
-
-    return {
-      message,
-    };
+export const handleError: HandleServerError = ({ kind, error: err }) => {
+  if (kind !== "unknown") {
+    return undefined;
   }
-);
+
+  // Handler synchrone volontairement : `Sentry.handleErrorWithSentry` est
+  // `async`, et depuis SvelteKit 3 un `handleError` asynchrone est ignoré pour
+  // les erreurs levées pendant le rendu SSR (message remplacé par
+  // « Internal Error »), sauf à activer `compilerOptions.experimental.async`.
+  Sentry.captureException(err);
+
+  const message =
+    ENVIRONMENT === "local" && err instanceof Error
+      ? err.message
+      : UNEXPECTED_ERROR_MESSAGE;
+
+  return {
+    message,
+  };
+};
 
 export const handle: Handle = sequence(
   Sentry.sentryHandle({ injectFetchProxyScript: false }),
