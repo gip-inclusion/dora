@@ -168,7 +168,7 @@ def test_idf_saves_a_summary_whose_only_addition_is_a_rare_name():
 
 def empty_the_description(service):
     """Remet le service dans l'état où le déploiement le trouve : description à composer."""
-    Service._base_manager.filter(pk=service.pk).update(description="")
+    Service.including_models.filter(pk=service.pk).update(description="")
 
 
 def test_partial_save_leaves_the_description_alone():
@@ -176,7 +176,7 @@ def test_partial_save_leaves_the_description_alone():
     service = make_service(short_desc="Un résumé", full_desc="Un descriptif")
     empty_the_description(service)
 
-    service = Service._base_manager.get(pk=service.pk)
+    service = Service.including_models.get(pk=service.pk)
     service.name = "Un autre nom"
     service.save(update_fields=["name"])
 

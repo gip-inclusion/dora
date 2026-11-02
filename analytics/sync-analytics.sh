@@ -121,6 +121,9 @@ DROP COLUMN IF EXISTS is_contact_info_public;
 ALTER TABLE public.users_user
 DROP COLUMN IF EXISTS password;
 
+ALTER TABLE public.structures_structure
+ADD COLUMN synced_at TIMESTAMPTZ NOT NULL DEFAULT '$SYNC_DATE';
+
 ALTER TABLE public.logs_actionlog
 ADD COLUMN userId INTEGER;
 
@@ -243,6 +246,9 @@ run_dbt_model_generation_and_validation() {
     echo "✔️ Fait."
     echo ""
 }
+
+# Date de lancement du script, exposée dans les tables synchronisées
+SYNC_DATE=$(date -u +%FT%TZ)
 
 # Prepare
 load_env_file_if_exists

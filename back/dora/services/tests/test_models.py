@@ -632,15 +632,21 @@ def test_validate_unique_form_names_rejects_duplicate_file_names():
     # Deux clés S3 distinctes peuvent pointer vers le même nom de fichier :
     # c'est ce nom, seul affiché, qui doit rester unique.
     with pytest.raises(ValidationError):
-        validate_unique_form_names(["prod/42/dossier.pdf", "prod/51/dossier.pdf"])
+        validate_unique_form_names(
+            ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/dossier.pdf"]
+        )
 
 
 def test_validate_unique_form_names_accepts_distinct_file_names():
-    validate_unique_form_names(["prod/42/dossier.pdf", "prod/42/attestation.pdf"])
+    validate_unique_form_names(
+        ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/attestation.pdf"]
+    )
 
 
 def test_service_forms_reject_duplicate_file_names():
-    service = make_service(forms=["prod/42/dossier.pdf", "prod/42/dossier.pdf"])
+    service = make_service(
+        forms=["prod/42/a1b2/dossier.pdf", "prod/42/a1b2/dossier.pdf"]
+    )
 
     with pytest.raises(ValidationError) as excinfo:
         service.full_clean()
@@ -656,7 +662,7 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
     response = api_client.patch(
         f"/services/{service.slug}/",
-        {"forms": ["prod/42/dossier.pdf", "prod/51/dossier.pdf"]},
+        {"forms": ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/dossier.pdf"]},
     )
 
     assert 400 == response.status_code

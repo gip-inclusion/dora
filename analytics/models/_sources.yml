@@ -276,6 +276,9 @@ sources:
         - name: typology
           description: |
             Typologie de la structure. Fiable pour CAP_EMPLOI, FT et ML.
+        - name: synced_at
+          description: |
+            Date de lancement du script de synchronisation (sync-analytics.sh).
 
       - name: structures_structuremember
         description: |

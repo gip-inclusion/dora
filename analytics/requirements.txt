@@ -2,7 +2,7 @@ dbt-core==1.8.8
 dbt-postgres==1.8.2
 sqlfluff==4.2.1
 sqlfluff-templater-dbt==4.2.1
-certifi==2025.8.3
+certifi==2026.10.18
 charset-normalizer==3.4.3
 dotenv==0.9.9
 greenlet==3.2.4

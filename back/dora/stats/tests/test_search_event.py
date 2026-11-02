@@ -1,6 +1,7 @@
 import pytest
 
 from dora.stats.models import SearchView
+from dora.stats.views import USER_HASH_LENGTH
 
 URL = "/stats/event/"
 
@@ -10,7 +11,7 @@ def base_payload():
     return {
         "tag": "search",
         "path": "/recherche-mots-cles",
-        "userHash": "a" * 32,
+        "userHash": "a" * USER_HASH_LENGTH,
         "searchNumResults": 12,
         "categoryIds": [],
         "subCategoryIds": [],
