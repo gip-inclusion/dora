@@ -2,8 +2,8 @@ import { defineEnvVars } from "@sveltejs/kit/env";
 
 export const variables = defineEnvVars({
   MAX_REQUESTS_PER_MINUTE: {
-    // Inlinée au build, comme l'ancien `$env/static/private`
-    static: true,
+    // Lue au démarrage du serveur : la limite peut être ajustée par un simple
+    // redémarrage du conteneur, sans reconstruire l'application.
     schema: (value) => Number(value) || 24,
     description:
       "Nombre maximum de requêtes par minute et par couple IP/User-Agent",
@@ -11,6 +11,13 @@ export const variables = defineEnvVars({
   VITE_PUBLIC_CANONICAL_URL: {
     // Utilisée dans `src/app.html` (`%sveltekit.env.VITE_PUBLIC_CANONICAL_URL%`)
     public: true,
+    schema: (value) => {
+      if (value === undefined) {
+        throw new Error("Value is missing");
+      }
+      new URL(value);
+      return value;
+    },
     description: "URL canonique du site",
   },
   VITE_PUBLIC_MATOMO_CONTAINER_URL: {
