@@ -21,6 +21,7 @@ from dora.structures.models import (
     StructurePutativeMember,
     StructureSource,
 )
+from dora.users.models import User
 
 DUMMY_STRUCTURE = {
     "siret": "12345678901234",
@@ -1469,3 +1470,208 @@ def test_short_description_is_derived_from_description(structure_admin_client):
         response.data["short_description"]
         == "Notre offre Un accompagnement à la mobilité."
     )
+
+
+class TestStructurePutativeMember:
+    """Endpoints /structure-putative-members/ : invitation et acceptation"""
+
+    @pytest.fixture
+    def structure(self):
+        return make_structure(department="31")
+
+    @pytest.fixture
+    def admin(self, structure):
+        return make_user(structure=structure, is_admin=True)
+
+    @pytest.fixture
+    def simple_member(self, structure):
+        return make_user(structure=structure)
+
+    @pytest.fixture
+    def pending_invitation(self, structure):
+        return baker.make(
+            StructurePutativeMember,
+            user=make_user(),
+            structure=structure,
+            invited_by_admin=False,
+            is_admin=False,
+        )
+
+    @pytest.mark.parametrize(
+        ("make_requesting_user", "expected_status"),
+        [
+            pytest.param(
+                lambda structure: make_user(structure=structure, is_admin=True),
+                201,
+                id="admin",
+            ),
+            pytest.param(lambda structure: make_user(is_staff=True), 201, id="staff"),
+            pytest.param(
+                lambda structure: make_user(is_manager=True, departments=["31"]),
+                201,
+                id="manager_of_the_department",
+            ),
+            pytest.param(
+                lambda structure: make_user(is_manager=True, departments=["44"]),
+                403,
+                id="manager_of_another_department",
+            ),
+            pytest.param(
+                lambda structure: make_user(structure=structure),
+                403,
+                id="simple_member",
+            ),
+            pytest.param(lambda structure: make_user(), 403, id="non_member"),
+            pytest.param(lambda structure: None, 401, id="anonymous"),
+        ],
+    )
+    def test_accept_membership_request_permissions(
+        self,
+        api_client,
+        structure,
+        pending_invitation,
+        make_requesting_user,
+        expected_status,
+    ):
+        api_client.force_authenticate(user=make_requesting_user(structure))
+
+        response = api_client.post(
+            f"/structure-putative-members/{pending_invitation.id}"
+            "/accept-membership-request/"
+        )
+
+        assert response.status_code == expected_status
+        accepted = expected_status == 201
+        assert (
+            StructureMember.objects.filter(
+                user=pending_invitation.user, structure=structure
+            ).exists()
+            is accepted
+        )
+        assert (
+            StructurePutativeMember.objects.filter(pk=pending_invitation.pk).exists()
+            is not accepted
+        )
+
+    @pytest.mark.parametrize("is_admin", [False, True], ids=["user", "admin"])
+    def test_accept_membership_request_creates_the_member(
+        self, api_client, structure, admin, pending_invitation, is_admin
+    ):
+        pending_invitation.is_admin = is_admin
+        pending_invitation.save()
+        api_client.force_authenticate(user=admin)
+
+        response = api_client.post(
+            f"/structure-putative-members/{pending_invitation.id}"
+            "/accept-membership-request/"
+        )
+
+        assert response.status_code == 201
+        membership = StructureMember.objects.get(
+            user=pending_invitation.user, structure=structure
+        )
+        assert membership.is_admin is is_admin
+        assert len(mail.outbox) == 1
+
+    @pytest.mark.parametrize(
+        "invalidate_user",
+        [
+            pytest.param(lambda user: None, id="valid_user"),
+            pytest.param(
+                lambda user: User.objects.filter(pk=user.pk).update(is_valid=False),
+                id="invalid_user",
+            ),
+            pytest.param(
+                lambda user: User.objects.filter(pk=user.pk).update(is_active=False),
+                id="inactive_user",
+            ),
+        ],
+    )
+    def test_accept_membership_request_of_an_unusable_user(
+        self, api_client, admin, pending_invitation, invalidate_user
+    ):
+        expected_status = 404 if invalidate_user(pending_invitation.user) else 201
+        api_client.force_authenticate(user=admin)
+
+        response = api_client.post(
+            f"/structure-putative-members/{pending_invitation.id}"
+            "/accept-membership-request/"
+        )
+
+        assert response.status_code == expected_status
+
+    def test_accept_unknown_membership_request(self, api_client, admin):
+        api_client.force_authenticate(user=admin)
+
+        response = api_client.post(
+            "/structure-putative-members/"
+            "11111111-1111-1111-1111-111111111111/accept-membership-request/"
+        )
+
+        assert response.status_code == 404
+
+    def test_accept_membership_request_twice(
+        self, api_client, structure, admin, pending_invitation
+    ):
+        api_client.force_authenticate(user=admin)
+        url = (
+            f"/structure-putative-members/{pending_invitation.id}"
+            "/accept-membership-request/"
+        )
+
+        assert api_client.post(url).status_code == 201
+        assert api_client.post(url).status_code == 404
+        assert (
+            StructureMember.objects.filter(
+                user=pending_invitation.user, structure=structure
+            ).count()
+            == 1
+        )
+
+    def test_accept_membership_request_of_an_existing_member(
+        self, api_client, structure, admin, simple_member
+    ):
+        # régression : une invitation résiduelle sur un membre existant
+        # déclenchait "duplicate key value violates unique constraint
+        # structures_unique_user_by_structure"
+        invitation = baker.make(
+            StructurePutativeMember,
+            user=simple_member,
+            structure=structure,
+            invited_by_admin=False,
+            is_admin=False,
+        )
+        api_client.force_authenticate(user=admin)
+
+        response = api_client.post(
+            f"/structure-putative-members/{invitation.id}/accept-membership-request/"
+        )
+
+        assert response.status_code == 201
+        assert not StructurePutativeMember.objects.filter(pk=invitation.pk).exists()
+        assert (
+            StructureMember.objects.filter(
+                user=simple_member, structure=structure
+            ).count()
+            == 1
+        )
+        # pas de notification : l'accès était déjà accordé
+        assert not mail.outbox
+
+    def test_cannot_invite_an_existing_member(
+        self, api_client, structure, admin, simple_member
+    ):
+        # régression : inviter un membre existant créait une invitation en
+        # doublon, qui violait la contrainte d'unicité à son acceptation
+        api_client.force_authenticate(user=admin)
+
+        response = api_client.post(
+            f"/structure-putative-members/?structure={structure.slug}",
+            {"is_admin": False, "user": {"email": simple_member.email}},
+            format="json",
+        )
+
+        assert response.status_code == 403
+        assert not StructurePutativeMember.objects.filter(
+            user=simple_member, structure=structure
+        ).exists()

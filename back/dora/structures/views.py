@@ -297,7 +297,6 @@ class StructurePutativeMemberViewset(viewsets.ModelViewSet):
         permission_classes=[permissions.IsAuthenticated],
     )
     def accept_membership_request(self, request, pk):
-        # TODO: add tests
         try:
             pm = StructurePutativeMember.objects.get(
                 id=pk, user__is_valid=True, user__is_active=True
