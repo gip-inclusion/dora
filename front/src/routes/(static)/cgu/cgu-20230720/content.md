@@ -115,6 +115,7 @@ Les termes des présentes conditions d’utilisation peuvent être amendés à t
 
 Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
 
+- [Version du 15/07/2026](/cgu/cgu-20260715)
 - [Version du 01/07/2026](/cgu/cgu-20260701)
 - [Version du 03/11/2025](/cgu/cgu-20251103)
 - [Version du 12/12/2024](/cgu/cgu-20241212)
