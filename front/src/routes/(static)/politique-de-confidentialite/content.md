@@ -31,7 +31,7 @@ DORA manipule les données à caractère personnel suivantes relatives aux utili
 
 DORA manipule des données à caractère personnel en se basant sur :
 
-- L’exécution d’une mission d’intérêt public ou relevant de l’exercice de l’autorité publique dont est investi le responsable de traitement au sens de l’article 6-1 e) du RPGD.
+- L’exécution d’une mission d’intérêt public ou relevant de l’exercice de l’autorité publique dont est investi le responsable de traitement au sens de l’article 6-1 e) du RGPD.
 
 Cette mission d’intérêt public est précisée dans l’arrêté du 19 avril 2022 portant approbation de la convention constitutive du "Groupement d’intérêt public plateforme de l’inclusion" qui prévoit notamment que le responsable de traitement peut "**participer au développement de démarches numériques innovantes d’intérêt général, en particulier dans le domaine de l’insertion professionnelle**."
 
@@ -95,7 +95,7 @@ Nous mettons en place plusieurs mesures pour sécuriser les données :
 - Surveillance ;
 - Protection des réseaux ;
 - Sauvegarde ;
-- Mesures restrictives limitant l’accès physiques aux données à caractère personnel.
+- Mesures restrictives limitant l’accès physique aux données à caractère personnel.
 
 ## Qui nous aide à manipuler les données ?
 
