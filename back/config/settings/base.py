@@ -281,7 +281,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "json": {"()": "itoutils.django.logging.DataDogJSONFormatter"},
+        "json": {"()": "dora.core.log_formatters.DataDogJSONFormatter"},
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
