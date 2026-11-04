@@ -1,5 +1,5 @@
-import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-import { fetchData } from "$lib/utils/misc";
+import { defaultAcceptHeader, getApiURL } from "#lib/utils/api.ts";
+import { fetchData } from "#lib/utils/misc.ts";
 
 export type OrientationExportType = "sent" | "received";
 

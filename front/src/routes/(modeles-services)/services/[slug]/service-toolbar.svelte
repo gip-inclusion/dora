@@ -1,6 +1,6 @@
 <script lang="ts">
-  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
+  import type { Service, ServicesOptions } from "#lib/types.ts";
 
   import ServiceActionButtons from "./service-action-buttons.svelte";
   import ServiceUpdateButtons from "./service-update-buttons.svelte";

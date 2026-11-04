@@ -1,6 +1,6 @@
 <script lang="ts">
-  import illustration from "$lib/assets/illustrations/Referencer_Vos_Services.webp";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import illustration from "#lib/assets/illustrations/Referencer_Vos_Services.webp";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
 </script>
 
 <CenteredGrid>

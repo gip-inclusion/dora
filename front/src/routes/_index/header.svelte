@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { ENVIRONMENT, WARNING_BANNER } from "$lib/env";
-  import LogoDORA from "$lib/assets/logos/logo-dora.svg";
-  import LogoRepublique from "$lib/assets/logos/logo-rf.svg";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
+  import { browser } from "$app/env";
+  import { ENVIRONMENT, WARNING_BANNER } from "#lib/env.ts";
+  import LogoDORA from "#lib/assets/logos/logo-dora.svg";
+  import LogoRepublique from "#lib/assets/logos/logo-rf.svg";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import MarkdownRenderer from "#lib/components/display/markdown-renderer.svelte";
 
   import HeaderActions from "./menu.svelte";
   import SubMenu from "./sub-menu.svelte";

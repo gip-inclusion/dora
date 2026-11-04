@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import SearchFormByKeyword from "$lib/components/specialized/service-search-keyword.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import SearchFormByKeyword from "#lib/components/specialized/service-search-keyword.svelte";
 
   import type { PageData } from "./$types";
   import KeywordSearch from "./keyword-search.svelte";

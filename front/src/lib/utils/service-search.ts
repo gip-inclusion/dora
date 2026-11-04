@@ -1,4 +1,4 @@
-import type { SearchQuery } from "$lib/types";
+import type { SearchQuery } from "#lib/types.ts";
 import { logException } from "./logger";
 import { LocationType, type AddressResult } from "./service-search-keyword";
 

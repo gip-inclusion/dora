@@ -1,11 +1,11 @@
 <script lang="ts">
-  import FieldGroup from "$lib/components/display/field-group.svelte";
-  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
-  import { getModelInputProps } from "$lib/utils/forms";
-  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import { currentSchema } from "$lib/validation/validation";
-  import type { FieldGroupProps } from "$lib/components/specialized/services/types";
+  import FieldGroup from "#lib/components/display/field-group.svelte";
+  import MultiSelectField from "#lib/components/forms/fields/multi-select-field.svelte";
+  import { getModelInputProps } from "#lib/utils/forms.ts";
+  import FieldModel from "#lib/components/specialized/services/field-model.svelte";
+  import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
+  import { currentSchema } from "#lib/validation/validation.ts";
+  import type { FieldGroupProps } from "#lib/components/specialized/services/types.ts";
 
   let {
     servicesOptions,

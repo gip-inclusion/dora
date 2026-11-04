@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { formatErrors } from "$lib/validation/validation";
-  import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
+  import { formatErrors } from "#lib/validation/validation.ts";
+  import ExternalLinkIcon from "#lib/components/display/external-link-icon.svelte";
 
   interface Props {
     id: string;

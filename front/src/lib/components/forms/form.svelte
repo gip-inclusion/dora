@@ -13,8 +13,8 @@
   import { onDestroy, onMount, setContext } from "svelte";
 
   import { beforeNavigate } from "$app/navigation";
-  import type { ServicesOptions } from "$lib/types";
-  import type { Schema } from "$lib/validation/schema-utils";
+  import type { ServicesOptions } from "#lib/types.ts";
+  import type { Schema } from "#lib/validation/schema-utils.ts";
   import {
     contextValidationKey,
     currentFormData,
@@ -23,7 +23,7 @@
     injectAPIErrors,
     validate,
     type ValidationContext,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.ts";
 
   let hasUnsavedChange = false;
   interface Props {

@@ -2,7 +2,7 @@
   import FileCopy2LineDocument from "svelte-remix/FileCopy2LineDocument.svelte";
   import HistoryLineSystem from "svelte-remix/HistoryLineSystem.svelte";
 
-  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
+  import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
   import ModelMenu from "./model-button-menu.svelte";
 
   interface Props {

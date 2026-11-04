@@ -1,6 +1,6 @@
 <script lang="ts">
-  import illuRecenser from "$lib/assets/illustrations/illu-recenser-black-and-white.svg";
-  import illuModeEmploi from "$lib/assets/illustrations/illu-modeemploi.svg";
+  import illuRecenser from "#lib/assets/illustrations/illu-recenser-black-and-white.svg";
+  import illuModeEmploi from "#lib/assets/illustrations/illu-modeemploi.svg";
   import InboxArchiveLineBusiness from "svelte-remix/InboxArchiveLineBusiness.svelte";
   import InboxUnarchiveLineBusiness from "svelte-remix/InboxUnarchiveLineBusiness.svelte";
   import { orientationState } from "./state.svelte";

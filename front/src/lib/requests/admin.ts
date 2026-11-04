@@ -1,6 +1,10 @@
-import type { AdminStructure, ModerationStatus, Structure } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
-import { fetchData } from "$lib/utils/misc";
+import type {
+  AdminStructure,
+  ModerationStatus,
+  Structure,
+} from "#lib/types.ts";
+import { getApiURL } from "#lib/utils/api.ts";
+import { fetchData } from "#lib/utils/misc.ts";
 
 export async function getStructuresAdmin(
   departmentCode

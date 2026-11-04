@@ -15,15 +15,15 @@
   import User6LineUserFaces from "svelte-remix/User6LineUserFaces.svelte";
   import UserShared2LineUserFaces from "svelte-remix/UserShared2LineUserFaces.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import { formatLongDate } from "$lib/utils/date";
-  import { formatFilePath } from "$lib/utils/file";
-  import { formatPhoneNumber } from "$lib/utils/misc";
-  import { getOrientation } from "$lib/utils/orientation";
-  import { trackOrientation } from "$lib/utils/stats";
+  import Breadcrumb from "#lib/components/display/breadcrumb.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import { formatLongDate } from "#lib/utils/date.ts";
+  import { formatFilePath } from "#lib/utils/file.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
+  import { getOrientation } from "#lib/utils/orientation.ts";
+  import { trackOrientation } from "#lib/utils/stats.ts";
 
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";
@@ -48,7 +48,7 @@
 
   onMount(() => {
     if (orientation) {
-      trackOrientation(orientation, $page.url);
+      trackOrientation(orientation, page.url);
     }
   });
 </script>

@@ -1,16 +1,16 @@
 import Cookies from "js-cookie";
 
-import { browser } from "$app/environment";
-import { log } from "$lib/utils/logger";
+import { browser } from "$app/env";
+import { log } from "#lib/utils/logger.ts";
 import {
   clearConsentCookie,
   CONSENT_COOKIE_NAME,
   deleteCrispCookie,
   deleteMatomoCookies,
   getCookie,
-} from "$lib/utils/cookie";
-import { sendConsentToAPI } from "$lib/requests/consent";
-import { URL_HELP_SITE } from "$lib/consts";
+} from "#lib/utils/cookie.ts";
+import { sendConsentToAPI } from "#lib/requests/consent.ts";
+import { URL_HELP_SITE } from "#lib/consts.ts";
 
 export const CONSENT_VERSION = "1.0";
 const CONSENT_EXPIRY_MONTHS = 13;

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
   import ContactInfo from "./contact-info.svelte";
-  import type { Service } from "$lib/types";
+  import type { Service } from "#lib/types.ts";
 
   interface Props {
     service: Service;

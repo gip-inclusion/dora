@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
-  import Button from "$lib/components/display/button.svelte";
+  import Button from "#lib/components/display/button.svelte";
 
   interface Props {
     isOpen: boolean;

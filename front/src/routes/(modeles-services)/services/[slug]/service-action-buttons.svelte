@@ -9,15 +9,15 @@
   import PrinterLineBusiness from "svelte-remix/PrinterLineBusiness.svelte";
 
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { isAuthenticated } from "$lib/utils/auth";
-  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
-  import type { Service } from "$lib/types";
+  import { page } from "$app/state";
+  import Bookmarkable from "#lib/components/hoc/bookmarkable.svelte";
+  import Tooltip from "#lib/components/ui/tooltip.svelte";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.ts";
+  import type { Service } from "#lib/types.ts";
 
   import ServiceActionButton from "./service-action-button.svelte";
-  import { trackMatomoEvent } from "$lib/utils/matomo";
+  import { trackMatomoEvent } from "#lib/utils/matomo.ts";
 
   interface Props {
     service: Service;
@@ -49,7 +49,7 @@
     if (!isAuthenticated()) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
-          $page.url.pathname + $page.url.search
+          page.url.pathname + page.url.search
         )}`
       );
       return;
@@ -64,7 +64,7 @@
     trackMatomoEvent({
       category: "Page Service",
       action: "Clic Bouton Partager cette Fiche",
-      name: $page.url.pathname,
+      name: page.url.pathname,
     });
   }
 </script>

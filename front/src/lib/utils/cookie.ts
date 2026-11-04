@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 
 export const CONSENT_COOKIE_NAME = "cookie_consent";
 

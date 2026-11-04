@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { getFileNameFromPath } from "$lib/utils/file";
+import { getFileNameFromPath } from "#lib/utils/file.ts";
 
 describe("getFileNameFromPath", () => {
   test("renvoie le nom de fichier d’une clé de stockage", () => {

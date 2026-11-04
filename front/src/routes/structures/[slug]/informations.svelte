@@ -6,21 +6,21 @@
   import TimeLineSystem from "svelte-remix/TimeLineSystem.svelte";
   import WheelchairLineOthers from "svelte-remix/WheelchairLineOthers.svelte";
 
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import DateLabel from "$lib/components/display/date-label.svelte";
-  import TextClamp from "$lib/components/display/text-clamp.svelte";
-  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import DateLabel from "#lib/components/display/date-label.svelte";
+  import TextClamp from "#lib/components/display/text-clamp.svelte";
+  import OsmHours from "#lib/components/specialized/osm-hours.svelte";
   import type {
     StructureMember,
     Structure,
     StructuresOptions,
     PutativeStructureMember,
-  } from "$lib/types";
-  import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
-  import { trackStructureInfos } from "$lib/utils/stats";
+  } from "#lib/types.ts";
+  import { formatPhoneNumber, markdownToHTML } from "#lib/utils/misc.ts";
+  import { trackStructureInfos } from "#lib/utils/stats.ts";
 
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
   import QuickStart from "./quick-start.svelte";
@@ -73,7 +73,7 @@
 
   async function showInformations() {
     displayInformations = true;
-    await trackStructureInfos(structure, $page.url);
+    await trackStructureInfos(structure, page.url);
   }
 </script>
 

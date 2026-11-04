@@ -3,7 +3,7 @@
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.ts";
   import FieldWrapper from "../field-wrapper.svelte";
   import RadioButtons from "../../inputs/radio-buttons.svelte";
 

@@ -4,7 +4,7 @@
   import EmotionHappyFillUserFaces from "svelte-remix/EmotionHappyFillUserFaces.svelte";
   import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
 
-  import Label from "$lib/components/display/label.svelte";
+  import Label from "#lib/components/display/label.svelte";
 
   interface Props {
     label?: string;

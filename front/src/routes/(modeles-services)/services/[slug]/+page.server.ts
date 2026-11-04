@@ -1,10 +1,10 @@
 import { redirect } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
-import { handleEmploisOrientation } from "$lib/requests/emplois-orientation";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
-import { TOKEN_KEY } from "$lib/utils/auth";
-import { transferUrlParams } from "$lib/utils/misc";
+import { handleEmploisOrientation } from "#lib/requests/emplois-orientation.ts";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
+import { transferUrlParams } from "#lib/utils/misc.ts";
 
 export const load: PageServerLoad = async ({ url, params, cookies }) => {
   const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);

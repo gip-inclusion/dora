@@ -1,12 +1,12 @@
 <script lang="ts">
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
 
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import Label from "$lib/components/display/label.svelte";
-  import { setModerationState } from "$lib/requests/admin";
-  import { modifyStructure } from "$lib/requests/structures";
-  import type { AdminStructure, ModerationStatus } from "$lib/types";
+  import ButtonMenu from "#lib/components/display/button-menu.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import Label from "#lib/components/display/label.svelte";
+  import { setModerationState } from "#lib/requests/admin.ts";
+  import { modifyStructure } from "#lib/requests/structures.ts";
+  import type { AdminStructure, ModerationStatus } from "#lib/types.ts";
 
   import { getAdminsBadge } from "./structure-statuses";
 

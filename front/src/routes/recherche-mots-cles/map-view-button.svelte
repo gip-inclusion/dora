@@ -4,14 +4,14 @@
   n'expose pas `cityLabel`).
 -->
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
 
-  import mapViewImage from "$lib/assets/illustrations/map-view.jpg";
+  import mapViewImage from "#lib/assets/illustrations/map-view.jpg";
 
-  import type { ServiceSearchResult } from "$lib/types";
-  import Button from "$lib/components/display/button.svelte";
-  import Pagination from "$lib/components/display/pagination.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import type { ServiceSearchResult } from "#lib/types.ts";
+  import Button from "#lib/components/display/button.svelte";
+  import Pagination from "#lib/components/display/pagination.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   import type { PageData } from "./$types";
   import ResultMap from "./result-map.svelte";

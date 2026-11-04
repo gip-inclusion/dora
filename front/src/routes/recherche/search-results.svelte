@@ -5,15 +5,15 @@
 <script lang="ts">
   import { tick } from "svelte";
 
-  import type { ServiceSearchResult } from "$lib/types";
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
+  import type { ServiceSearchResult } from "#lib/types.ts";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
   import {
     getSavedSearchQueryString,
     saveSearch,
-  } from "$lib/requests/saved-search";
-  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
-  import { getQueryString } from "$lib/utils/service-search";
+  } from "#lib/requests/saved-search.ts";
+  import { refreshUserInfo, userInfo } from "#lib/utils/auth.ts";
+  import { getQueryString } from "#lib/utils/service-search.ts";
 
   import type { PageData } from "./$types";
   import CollectivityDirectoryBanner from "./collectivity-directory-banner.svelte";

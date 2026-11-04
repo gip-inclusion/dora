@@ -1,6 +1,6 @@
 <script lang="ts">
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
 </script>
 
 <Notice title="Aidez-nous à améliorer DORA" titleLevel="h2" type="info">

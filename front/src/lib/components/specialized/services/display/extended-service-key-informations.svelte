@@ -6,10 +6,10 @@
   import MapPinUserFillMap from "svelte-remix/MapPinUserFillMap.svelte";
   import TimeLineSystem from "svelte-remix/TimeLineSystem.svelte";
 
-  import type { Service, ServicesOptions, ShortService } from "$lib/types";
-  import { getLabelFromValue } from "$lib/utils/choice";
-  import { shortenString } from "$lib/utils/misc";
-  import { isNotFreeService } from "$lib/utils/service";
+  import type { Service, ServicesOptions, ShortService } from "#lib/types.ts";
+  import { getLabelFromValue } from "#lib/utils/choice.ts";
+  import { shortenString } from "#lib/utils/misc.ts";
+  import { isNotFreeService } from "#lib/utils/service.ts";
 
   import OsmHours from "../../osm-hours.svelte";
 

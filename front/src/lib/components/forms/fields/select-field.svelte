@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Choice } from "$lib/types";
+  import type { Choice } from "#lib/types.ts";
   import {
     currentFormData,
     currentSchema,
     isRequired,
-  } from "$lib/validation/validation";
+  } from "#lib/validation/validation.ts";
   import FieldWrapper from "../field-wrapper.svelte";
   import Select from "../../inputs/select/select.svelte";
 

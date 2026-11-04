@@ -1,17 +1,17 @@
 <script lang="ts">
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import * as v from "$lib/validation/schema-utils";
-  import Button from "$lib/components/display/button.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import { acceptOrientation } from "$lib/utils/orientation";
-  import type { Orientation } from "$lib/types";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import Form from "#lib/components/forms/form.svelte";
+  import * as v from "#lib/validation/schema-utils.ts";
+  import Button from "#lib/components/display/button.svelte";
+  import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
+  import { acceptOrientation } from "#lib/utils/orientation.ts";
+  import type { Orientation } from "#lib/types.ts";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
   import {
     renderBeneficiaryAcceptMessage,
     renderPrescriberAcceptMessage,
-  } from "$lib/utils/orientation-templates";
-  import { formatPhoneNumber } from "$lib/utils/misc";
+  } from "#lib/utils/orientation-templates.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
   interface Props {
     isOpen?: boolean;

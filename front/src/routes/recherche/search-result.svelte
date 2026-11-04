@@ -1,8 +1,8 @@
 <script lang="ts">
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
-  import type { ServiceSearchResult } from "$lib/types";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Bookmarkable from "#lib/components/hoc/bookmarkable.svelte";
+  import FavoriteIcon from "#lib/components/specialized/favorite-icon.svelte";
+  import type { ServiceSearchResult } from "#lib/types.ts";
 
   interface Props {
     id: string;

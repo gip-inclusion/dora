@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Choice } from "$lib/types";
+  import type { Choice } from "#lib/types.ts";
 
   interface Props {
     choice: Choice;

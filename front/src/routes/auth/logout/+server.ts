@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { AUTH_STATE_KEY, TOKEN_KEY } from "$lib/utils/auth";
+import { AUTH_STATE_KEY, TOKEN_KEY } from "#lib/utils/auth.ts";
 
 export const POST: RequestHandler = ({ cookies }) => {
   cookies.delete(TOKEN_KEY, { path: "/" });

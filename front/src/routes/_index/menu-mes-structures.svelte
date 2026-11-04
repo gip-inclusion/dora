@@ -4,9 +4,9 @@
   import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
   import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
 
-  import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
+  import DropdownMenu from "#lib/components/display/dropdown-menu.svelte";
 
-  import type { ShortStructure } from "$lib/types";
+  import type { ShortStructure } from "#lib/types.ts";
 
   interface Props {
     structures?: ShortStructure[];

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { browser } from "$app/env";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import type { PageData } from "./$types";
   import ModelHeader from "./model-header.svelte";
-  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import { userInfo } from "$lib/utils/auth";
+  import RelativeDateLabel from "#lib/components/display/relative-date-label.svelte";
+  import UpdateNeededIcon from "#lib/components/specialized/services/update-needed-icon.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import { userInfo } from "#lib/utils/auth.ts";
   import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
   import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
   import ServiceBody from "../../components/service-body/service-body.svelte";

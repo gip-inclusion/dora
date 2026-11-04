@@ -1,24 +1,24 @@
 <script lang="ts">
-  import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import UploadField from "$lib/components/forms/fields/upload-field.svelte";
-  import { formatFilePath } from "$lib/utils/file";
+  import Fieldset from "#lib/components/display/fieldset.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
+  import TextareaField from "#lib/components/forms/fields/textarea-field.svelte";
+  import UploadField from "#lib/components/forms/fields/upload-field.svelte";
+  import { formatFilePath } from "#lib/utils/file.ts";
   import { orientation } from "../store";
-  import { userInfo } from "$lib/utils/auth";
+  import { userInfo } from "#lib/utils/auth.ts";
   import { onMount } from "svelte";
-  import Alert from "$lib/components/display/alert.svelte";
-  import Accordion from "$lib/components/display/accordion.svelte";
-  import BooleanCheckboxField from "$lib/components/forms/fields/boolean-checkbox-field.svelte";
-  import SelectField from "$lib/components/forms/fields/select-field.svelte";
-  import { orientationContainsTestWords } from "$lib/utils/orientation";
-  import { userPreferences } from "$lib/utils/preferences";
-  import type { Choice } from "$lib/types";
-  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
-  import { formErrors } from "$lib/validation/validation";
-  import type { Service } from "$lib/types";
+  import Alert from "#lib/components/display/alert.svelte";
+  import Accordion from "#lib/components/display/accordion.svelte";
+  import BooleanCheckboxField from "#lib/components/forms/fields/boolean-checkbox-field.svelte";
+  import SelectField from "#lib/components/forms/fields/select-field.svelte";
+  import { orientationContainsTestWords } from "#lib/utils/orientation.ts";
+  import { userPreferences } from "#lib/utils/preferences.ts";
+  import type { Choice } from "#lib/types.ts";
+  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.ts";
+  import { formErrors } from "#lib/validation/validation.ts";
+  import type { Service } from "#lib/types.ts";
   import { orientationStep2Schema } from "../schema";
 
   interface Props {

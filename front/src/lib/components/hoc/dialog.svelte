@@ -5,7 +5,7 @@
 
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
 
-  import Button from "$lib/components/display/button.svelte";
+  import Button from "#lib/components/display/button.svelte";
 
   interface Props {
     isOpen: boolean;

@@ -1,7 +1,7 @@
 import type { PageLoad } from "./$types";
-import { getOrientation } from "$lib/utils/orientation";
+import { getOrientation } from "#lib/utils/orientation.ts";
 import { error } from "@sveltejs/kit";
-import type { Orientation } from "$lib/types";
+import type { Orientation } from "#lib/types.ts";
 
 export const ssr = false;
 

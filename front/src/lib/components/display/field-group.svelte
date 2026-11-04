@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import InformationLineSystem from "svelte-remix/InformationLineSystem.svelte";
-  import Tooltip from "$lib/components/ui/tooltip.svelte";
+  import Tooltip from "#lib/components/ui/tooltip.svelte";
 
   interface Props {
     title: string;

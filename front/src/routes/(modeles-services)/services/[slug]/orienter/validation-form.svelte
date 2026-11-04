@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import type { Service } from "$lib/types";
-  import { formatFilePath } from "$lib/utils/file";
+  import Fieldset from "#lib/components/display/fieldset.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import CheckboxesField from "#lib/components/forms/fields/checkboxes-field.svelte";
+  import type { Service } from "#lib/types.ts";
+  import { formatFilePath } from "#lib/utils/file.ts";
   import {
     computePublicsChoices,
     computeRequirementsChoices,
-  } from "$lib/utils/orientation";
-  import { isNotFreeService } from "$lib/utils/service";
+  } from "#lib/utils/orientation.ts";
+  import { isNotFreeService } from "#lib/utils/service.ts";
   import { orientationStep1Schema } from "./schema";
   import { orientation } from "./store";
 

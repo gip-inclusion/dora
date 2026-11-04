@@ -5,8 +5,8 @@ import { orientationStep1Schema } from "../schema";
 import {
   computePublicsChoices,
   computeRequirementsChoices,
-} from "$lib/utils/orientation";
-import { validate } from "$lib/validation/validation";
+} from "#lib/utils/orientation.ts";
+import { validate } from "#lib/validation/validation.ts";
 
 export const load = async ({ parent }) => {
   const data = await parent();
