@@ -297,7 +297,6 @@ class StructurePutativeMemberViewset(viewsets.ModelViewSet):
         permission_classes=[permissions.IsAuthenticated],
     )
     def accept_membership_request(self, request, pk):
-        # TODO: add tests
         try:
             pm = StructurePutativeMember.objects.get(
                 id=pk, user__is_valid=True, user__is_active=True
@@ -313,13 +312,25 @@ class StructurePutativeMemberViewset(viewsets.ModelViewSet):
         new_member = pm.user
 
         with transaction.atomic(durable=True):
-            membership = StructureMember.objects.create(
+            # verrou sur l'invitation : évite qu'un double envoi crée deux adhésions
+            pm = (
+                StructurePutativeMember.objects.select_for_update()
+                .filter(pk=pm.pk)
+                .first()
+            )
+            if pm is None:
+                raise exceptions.NotFound
+
+            # l'utilisateur peut déjà être membre (ex: invitation créée alors
+            # qu'il l'était déjà) : on ne recrée pas l'adhésion
+            membership, created = StructureMember.objects.get_or_create(
                 user=pm.user,
                 structure=pm.structure,
-                is_admin=pm.is_admin,
+                defaults={"is_admin": pm.is_admin},
             )
             pm.delete()
-            membership.notify_access_granted()
+            if created:
+                membership.notify_access_granted()
 
         # À ce point, il peut être nécessaire de déclencher un onboarding :
         # la *première* acceptation en tant que membre d'une structure déclenche
