@@ -13,6 +13,7 @@
     saveSearch,
   } from "$lib/requests/saved-search";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import { logException } from "$lib/utils/logger";
   import { getQueryString } from "$lib/utils/service-search";
 
   import type { PageData } from "./$types";
@@ -45,7 +46,6 @@
     currentPageLength = $bindable(SEARCH_RESULTS_PAGE_LENGTH),
   }: Props = $props();
 
-  let creatingAlert = $state(false);
   let isLoading = $state(false);
 
   let currentSearchWasAlreadySaved = $derived.by(() => {
@@ -89,23 +89,26 @@
   }
 
   async function handleCreateAlertClick() {
-    creatingAlert = true;
     isLoading = true;
-    await saveSearch({
-      category: data.categoryIds[0],
-      subcategories: data.subCategoryIds.filter(
-        (value) => !value.endsWith("--all")
-      ),
-      cityCode: data.cityCode,
-      cityLabel: data.cityLabel,
-      kinds: filters.kinds.sort(),
-      fees: filters.feeConditions.sort(),
-      locationKinds: filters.locationKinds.sort(),
-      fundingLabels: filters.fundingLabels.sort(),
-    });
-    await refreshUserInfo();
-    creatingAlert = false;
-    isLoading = false;
+    try {
+      await saveSearch({
+        category: data.categoryIds[0],
+        subcategories: data.subCategoryIds.filter(
+          (value) => !value.endsWith("--all")
+        ),
+        cityCode: data.cityCode,
+        cityLabel: data.cityLabel,
+        kinds: filters.kinds.sort(),
+        fees: filters.feeConditions.sort(),
+        locationKinds: filters.locationKinds.sort(),
+        fundingLabels: filters.fundingLabels.sort(),
+      });
+      await refreshUserInfo();
+    } catch (err) {
+      logException(err);
+    } finally {
+      isLoading = false;
+    }
   }
 </script>
 
@@ -141,20 +144,22 @@
     </div>
   {/if}
 
-  <div
-    class="sticky z-10 m-auto flex justify-center"
-    class:bottom-s0={noAlertButtonBottomGap}
-    class:bottom-s16={!noAlertButtonBottomGap}
-  >
-    {#if currentSearchWasAlreadySaved}
-      <LinkButton to="/mes-alertes" secondary label="Voir mes alertes" />
-    {:else}
-      <Button
-        label="Créer une alerte"
-        disabled={!data.cityCode || creatingAlert}
-        onclick={handleCreateAlertClick}
-        loading={isLoading}
-      />
-    {/if}
-  </div>
+  {#if $userInfo}
+    <div
+      class="sticky z-10 m-auto flex justify-center"
+      class:bottom-s0={noAlertButtonBottomGap}
+      class:bottom-s16={!noAlertButtonBottomGap}
+    >
+      {#if currentSearchWasAlreadySaved}
+        <LinkButton to="/mes-alertes" secondary label="Voir mes alertes" />
+      {:else}
+        <Button
+          label="Créer une alerte"
+          disabled={!data.cityCode}
+          onclick={handleCreateAlertClick}
+          loading={isLoading}
+        />
+      {/if}
+    </div>
+  {/if}
 </div>
