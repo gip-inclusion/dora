@@ -22,6 +22,24 @@ STRUCTURE_SOURCES = [
 
 
 @pytest.fixture(autouse=True)
+def clear_geo_caches():
+    """Vide les caches des managers de découpage administratif entre deux tests.
+
+    Ces caches vivent pour toute la durée du process (les tables sont statiques
+    en production) : sans cette remise à zéro, les divisions créées par un test
+    resteraient visibles dans le suivant.
+    """
+    from dora.decoupage_administratif.models import EPCI, City, Department, Region
+
+    managers = [City.objects, Department.objects, EPCI.objects, Region.objects]
+    for manager in managers:
+        manager._cache.clear()
+    yield
+    for manager in managers:
+        manager._cache.clear()
+
+
+@pytest.fixture(autouse=True)
 def structure_sources(db):
     """Ensure structure sources exist for tests that create or join structures."""
     from dora.structures.models import StructureSource

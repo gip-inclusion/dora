@@ -133,6 +133,24 @@ def group_codes_by_division_type(codes):
     return grouped
 
 
+def get_divisions_from_cache(division_type, codes):
+    """Récupère des divisions par code, en s'appuyant sur le cache de leur manager.
+
+    Ces tables sont statiques : les caches de `GeoManager` évitent de les
+    requêter à nouveau, ce qui importe d'autant plus que la reconstitution des
+    territoires est faite service par service (cf. N+1).
+    """
+    manager = MODEL_BY_TYPE[division_type].objects
+    if hasattr(manager, "warm_cache"):
+        manager.warm_cache(codes)
+    divisions = {}
+    for code in codes:
+        division = manager.get_from_code(code)
+        if division is not None:
+            divisions[division.code] = division
+    return divisions
+
+
 def get_zone_eligibilite_choices(codes):
     """Reconstitue les territoires sélectionnés à partir des codes enregistrés.
 
@@ -152,12 +170,7 @@ def get_zone_eligibilite_choices(codes):
 
     grouped = group_codes_by_division_type(codes)
     divisions = {
-        division_type: {
-            division.code: division
-            for division in MODEL_BY_TYPE[division_type].objects.filter(
-                code__in=division_codes
-            )
-        }
+        division_type: get_divisions_from_cache(division_type, division_codes)
         for division_type, division_codes in grouped.items()
     }
 
@@ -166,13 +179,19 @@ def get_zone_eligibilite_choices(codes):
 
     choices = []
     if department_codes:
-        codes_by_region = defaultdict(set)
-        for code, region_code in Department.objects.values_list("code", "region"):
-            codes_by_region[region_code].add(code)
+        codes_by_region = Department.objects.codes_by_region()
 
-        regions = Region.objects.filter(
-            code__in={department.region for department in departments.values()}
-        ).order_by("name")
+        selected_region_codes = {
+            department.region for department in departments.values()
+        }
+        regions = sorted(
+            (
+                region
+                for region in map(Region.objects.get_from_code, selected_region_codes)
+                if region is not None
+            ),
+            key=lambda region: unidecode(region.name),
+        )
         for region in regions:
             region_codes = codes_by_region[region.code]
             # une région d'un seul département est indiscernable de ce

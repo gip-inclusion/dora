@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.contrib.gis.db import models as gis_models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.indexes import GinIndex
@@ -50,14 +52,13 @@ class ManyGeoManager(GeoManager):
 # Cache instantané pour les tables comportant peu d'entités
 # on fait la requête une fois pour toute
 class FewGeoManager(GeoManager):
-    def get_from_code(self, code):
-        code = code.upper()
-        if len(self._cache):
-            return self._cache.get(code)
+    def _get_cache(self):
+        if not len(self._cache):
+            self._cache = {value.code: value for value in self.all()}
+        return self._cache
 
-        values = self.all()
-        self._cache = {value.code: value for value in values}
-        return self._cache.get(code)
+    def get_from_code(self, code):
+        return self._get_cache().get(code.upper())
 
 
 class AdminDivision(models.Model):
@@ -104,7 +105,12 @@ class City(AdminDivision):
 
 
 class DepartmentManager(FewGeoManager):
-    pass
+    def codes_by_region(self):
+        """Renvoie les codes des départements regroupés par code de région."""
+        codes_by_region = defaultdict(set)
+        for department in self._get_cache().values():
+            codes_by_region[department.region].add(department.code)
+        return codes_by_region
 
 
 class Department(AdminDivision):
