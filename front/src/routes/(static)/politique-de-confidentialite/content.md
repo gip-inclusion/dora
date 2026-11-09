@@ -1,6 +1,6 @@
 # Politique de confidentialité de DORA
 
-Version au 15 octobre 2026
+Version au 9 novembre 2026
 
 ## Qui est responsable de DORA ?
 
