@@ -40,7 +40,8 @@ export const load = async ({ parent, url, params, fetch }) => {
       beneficiaryInfo = null;
     }
     if (beneficiaryInfo && "nextUrl" in beneficiaryInfo) {
-      // URL fournie par l'API, qui l'a validée : cf. `nexus/auto-login`
+      // URL construite par l'API à partir de `FRONTEND_URL` :
+      // cf. `orientations/views.py::_resolve_emplois_orientation`
       redirect(
         302,
         transferUrlParams({
