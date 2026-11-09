@@ -202,6 +202,7 @@ fetch_and_export_di_data() {
 
     # Generate DuckDB SQL file
     DUCKSQL=$(mktemp)
+    trap 'rm -f "$DUCKSQL"' EXIT
 
     cat > "$DUCKSQL" <<EOF
 INSTALL httpfs;
