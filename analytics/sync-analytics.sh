@@ -175,6 +175,7 @@ fetch_and_export_di_data() {
     echo "💎 Récupération et synchronisation des données de data·inclusion..."
 
     DUCKDB_VERSION="2.0.0"
+    DUCKDB_SHA256="c6507206baf7793c6013dbd82368469a45f20dc0e17a6f92f204602f652ed2bc"
 
     # Installation of tool `duckdb` on Scalingo/Linux
     if command -v duckdb &>/dev/null; then
@@ -182,9 +183,11 @@ fetch_and_export_di_data() {
     else
         if [[ "$OSTYPE" == linux* ]]; then
             echo "Installation de duckdb ${DUCKDB_VERSION} pour Linux..."
+            curl -fsSL -o /tmp/duckdb_cli.tar.gz \
+                "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb-cli-linux-amd64.tar.gz"
+            echo "${DUCKDB_SHA256}  /tmp/duckdb_cli.tar.gz" | sha256sum -c -
             mkdir -p /tmp/duckdb
-            curl -fsSL "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb-cli-linux-amd64.tar.gz" \
-                | tar -xz -C /tmp/duckdb
+            tar -xzf /tmp/duckdb_cli.tar.gz -C /tmp/duckdb
             export PATH="/tmp/duckdb:${PATH}"
             echo "duckdb installé."
         else
