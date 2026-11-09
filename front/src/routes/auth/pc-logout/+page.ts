@@ -4,5 +4,5 @@ import { redirect } from "@sveltejs/kit";
 
 export const load = async () => {
   await disconnect();
-  redirect(302, `${API_URL}/oidc/pre_logout/`);
+  redirect(302, `${API_URL}/oidc/pre_logout/`, { external: [API_URL] });
 };
