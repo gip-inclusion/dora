@@ -232,7 +232,7 @@ CREATE TABLE analytics_pg.public.di_services AS SELECT * FROM di_services;
 EOF
 
     # Execute SQL export/import orders
-    time duckdb < "$DUCKSQL"
+    time duckdb -bail < "$DUCKSQL"
 
     echo "✔️ Fait."
     echo ""
