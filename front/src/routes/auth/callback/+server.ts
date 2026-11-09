@@ -67,5 +67,5 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   });
 
   const next = getNextPage(url);
-  return redirect(302, CANONICAL_URL + next);
+  return redirect(302, CANONICAL_URL + next, { external: [CANONICAL_URL] });
 };
