@@ -174,14 +174,17 @@ SQL
 fetch_and_export_di_data() {
     echo "💎 Récupération et synchronisation des données de data·inclusion..."
 
+    DUCKDB_VERSION="2.0.0"
+
     # Installation of tool `duckdb` on Scalingo/Linux
     if command -v duckdb &>/dev/null; then
         echo "duckdb est déjà installé, installation ignorée."
     else
         if [[ "$OSTYPE" == linux* ]]; then
-            echo "Installation de duckdb pour Linux..."
-            curl -L -o /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip
-            unzip -o /tmp/duckdb_cli.zip -d /tmp/duckdb
+            echo "Installation de duckdb ${DUCKDB_VERSION} pour Linux..."
+            mkdir -p /tmp/duckdb
+            curl -fsSL "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb-cli-linux-amd64.tar.gz" \
+                | tar -xz -C /tmp/duckdb
             export PATH="/tmp/duckdb:${PATH}"
             echo "duckdb installé."
         else
