@@ -1561,10 +1561,11 @@ class TestStructurePutativeMember:
         pending_invitation.save()
         api_client.force_authenticate(user=admin)
 
-        response = api_client.post(
-            f"/structure-putative-members/{pending_invitation.id}"
-            "/accept-membership-request/"
-        )
+        with patch("dora.structures.views.onboarding.onboard_user") as onboard_user:
+            response = api_client.post(
+                f"/structure-putative-members/{pending_invitation.id}"
+                "/accept-membership-request/"
+            )
 
         assert response.status_code == 201
         membership = StructureMember.objects.get(
@@ -1572,6 +1573,7 @@ class TestStructurePutativeMember:
         )
         assert membership.is_admin is is_admin
         assert len(mail.outbox) == 1
+        assert onboard_user.call_count == 1
 
     @pytest.mark.parametrize(
         "invalidate_user",
@@ -1643,9 +1645,10 @@ class TestStructurePutativeMember:
         )
         api_client.force_authenticate(user=admin)
 
-        response = api_client.post(
-            f"/structure-putative-members/{invitation.id}/accept-membership-request/"
-        )
+        with patch("dora.structures.views.onboarding.onboard_user") as onboard_user:
+            response = api_client.post(
+                f"/structure-putative-members/{invitation.id}/accept-membership-request/"
+            )
 
         assert response.status_code == 201
         assert not StructurePutativeMember.objects.filter(pk=invitation.pk).exists()
@@ -1657,6 +1660,7 @@ class TestStructurePutativeMember:
         )
         # pas de notification : l'accès était déjà accordé
         assert not mail.outbox
+        assert onboard_user.call_count == 0
 
     def test_cannot_invite_an_existing_member(
         self, api_client, structure, admin, simple_member

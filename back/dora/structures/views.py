@@ -335,7 +335,7 @@ class StructurePutativeMemberViewset(viewsets.ModelViewSet):
         # À ce point, il peut être nécessaire de déclencher un onboarding :
         # la *première* acceptation en tant que membre d'une structure déclenche
         # l'inscription à une liste Brevo.
-        if new_member.membership.count() == 1:
+        if created and new_member.membership.count() == 1:
             # on vient d'enregistrer le nouveau membre (1 seule structure)
             onboarding.onboard_user(new_member, structure)
 
