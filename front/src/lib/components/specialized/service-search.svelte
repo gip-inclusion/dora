@@ -151,7 +151,7 @@
     isLoading = true;
     submitDisabled = true;
     refreshMode = false;
-    await goto(`/recherche?${query}`, { noScroll: true });
+    await goto(`/recherche?${query}`, { reset: false });
     isLoading = false;
   }
 

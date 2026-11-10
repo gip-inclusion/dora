@@ -77,7 +77,7 @@
       newUrl += `?${searchParams.toString()}`;
     }
 
-    goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true });
+    goto(newUrl, { replace: true, reset: false });
   }
 
   // Status options

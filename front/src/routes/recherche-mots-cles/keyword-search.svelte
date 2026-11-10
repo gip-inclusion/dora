@@ -102,8 +102,7 @@
   function navigate(url: URL) {
     loading = true;
     goto(url, {
-      keepFocus: true,
-      noScroll: true,
+      reset: false,
     }).then(() => {
       loading = false;
     });

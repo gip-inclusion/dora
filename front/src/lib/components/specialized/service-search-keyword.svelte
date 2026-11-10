@@ -205,7 +205,7 @@
       params.append("label", addressFieldValue);
     }
     await goto(`/recherche-mots-cles?${params.toString()}`, {
-      noScroll: true,
+      reset: false,
     });
 
     isLoading = false;

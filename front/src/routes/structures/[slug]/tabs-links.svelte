@@ -25,7 +25,7 @@
         <a
           href={item.href}
           class="bg-magenta-dark px-s24 py-s12 flex items-center rounded-t text-white"
-          data-sveltekit-noscroll
+          data-sveltekit-reset="false"
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
             <item.icon />

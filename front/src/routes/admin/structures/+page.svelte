@@ -49,7 +49,7 @@
     } else {
       url.searchParams.set("statut", status);
     }
-    goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+    goto(url, { replace: true, reset: false });
   }
   let structures: AdminStructure[] = $state([]);
   let filteredStructures: AdminStructure[] = $state([]);
