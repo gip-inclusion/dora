@@ -41,3 +41,11 @@ jobs:
       - name: Run tests
         working-directory: front
         run: npm run test
+
+      - name: Build
+        working-directory: front
+        # `MAX_REQUESTS_PER_MINUTE` est importée depuis `$env/static/private` :
+        # sans elle, le build échoue (export manquant)
+        env:
+          MAX_REQUESTS_PER_MINUTE: 24
+        run: npm run build
