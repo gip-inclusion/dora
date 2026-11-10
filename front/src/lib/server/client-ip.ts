@@ -12,9 +12,9 @@ const CLIENT_IP_HEADERS = [
 ];
 
 // Transmet au back l'IP du client, authentifiée par le secret partagé
-// FRONT_PROXY_SECRET, pour qu'il l'utilise comme identité de rate limiting.
-// X-Forwarded-For est réécrit avec cette IP : les logs du back en retiennent
-// l'adresse la plus à gauche.
+// FRONT_PROXY_SECRET, pour qu'il l'utilise comme identité de rate limiting et
+// dans ses logs. X-Forwarded-For est réécrit avec cette IP, pour ne pas relayer
+// les adresses fournies par le navigateur.
 export function setClientIpHeaders(headers: Headers, clientAddress: string) {
   CLIENT_IP_HEADERS.forEach((header) => headers.delete(header));
   headers.set("X-Forwarded-For", clientAddress);

@@ -12,6 +12,7 @@ from dora.core.test_utils import make_structure
 from dora.core.throttling import (
     ClientIpAnonRateThrottle,
     StructureUploadThrottle,
+    get_client_ip,
     get_front_client_ip,
 )
 
@@ -117,3 +118,29 @@ def test_client_ip_throttle_ident(settings, headers, expected_ident):
         HTTP_X_FORWARDED_FOR="198.51.100.1, 203.0.113.7", **headers
     )
     assert ClientIpAnonRateThrottle().get_ident(request) == expected_ident
+
+
+@pytest.mark.no_django_db
+@pytest.mark.parametrize(
+    "headers,expected_ip",
+    [
+        # Requête du front : IP transmise avec le secret partagé
+        (
+            {
+                "HTTP_X_DORA_PROXY_SECRET": "s3cret",
+                "HTTP_X_DORA_CLIENT_IP": "192.0.2.1",
+                "HTTP_X_FORWARDED_FOR": "192.0.2.1, 203.0.113.7",
+            },
+            "192.0.2.1",
+        ),
+        # Appel direct : l'adresse fournie par le client est ignorée
+        ({"HTTP_X_FORWARDED_FOR": "198.51.100.1, 203.0.113.7"}, "203.0.113.7"),
+        ({"HTTP_X_FORWARDED_FOR": "203.0.113.7"}, "203.0.113.7"),
+        ({"HTTP_X_DORA_CLIENT_IP": "192.0.2.1"}, "127.0.0.1"),
+        ({}, "127.0.0.1"),
+    ],
+)
+def test_get_client_ip(settings, headers, expected_ip):
+    settings.FRONT_PROXY_SECRET = "s3cret"
+    request = RequestFactory().get("/", **headers)
+    assert get_client_ip(request) == expected_ip

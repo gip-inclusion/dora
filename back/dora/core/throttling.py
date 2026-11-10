@@ -3,6 +3,7 @@ import hmac
 from django.conf import settings
 from rest_framework.throttling import (
     AnonRateThrottle,
+    BaseThrottle,
     SimpleRateThrottle,
     UserRateThrottle,
 )
@@ -22,14 +23,24 @@ def get_front_client_ip(request) -> str | None:
     return None
 
 
+def get_client_ip(request) -> str | None:
+    """IP réelle du client, non falsifiable par celui-ci.
+
+    Pour les requêtes du front, l'IP qu'il transmet ; sinon, la règle de DRF
+    avec `NUM_PROXIES` : l'adresse ajoutée par le routeur Scalingo à la fin de
+    `X-Forwarded-For`, les adresses précédentes étant fournies par le client.
+    """
+    return get_front_client_ip(request) or BaseThrottle().get_ident(request)
+
+
 class ClientIpAnonRateThrottle(AnonRateThrottle):
     def get_ident(self, request):
-        return get_front_client_ip(request) or super().get_ident(request)
+        return get_client_ip(request)
 
 
 class ClientIpUserRateThrottle(UserRateThrottle):
     def get_ident(self, request):
-        return get_front_client_ip(request) or super().get_ident(request)
+        return get_client_ip(request)
 
 
 class UploadRateThrottle(ClientIpUserRateThrottle):
