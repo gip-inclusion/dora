@@ -155,6 +155,7 @@ def _add_user_to_structure_or_waitlist(structure, user):
 
 
 def _fast_track_user_to_structure_member(structure, user):
+    StructurePutativeMember.objects.filter(user=user, structure=structure).delete()
     member = StructureMember.objects.create(
         user=user,
         structure=structure,
