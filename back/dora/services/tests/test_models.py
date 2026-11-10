@@ -369,17 +369,12 @@ def test_update_service_from_model_m2m(api_client):
 
     # ÉTANT DONNÉ un service lié à un modèle avec des champs custom et M2M
     struct = make_structure(user)
-    global_condition1 = baker.make("AccessCondition", structure=None)
-    struct_condition1 = baker.make("AccessCondition", structure=struct)
 
     model = make_model(
         structure=struct,
         name=model_name,
         slug=model_slug,
     )
-    # SYNC_CUSTOM_M2M_FIELDS
-    model.access_conditions.add(global_condition1)
-    model.access_conditions.add(struct_condition1)
 
     # SYNC_M2M_FIELDS
     model.categories.add(ServiceCategory.objects.get(value="numerique"))
@@ -397,9 +392,6 @@ def test_update_service_from_model_m2m(api_client):
         status=ServiceStatus.PUBLISHED,
     )
 
-    assert sorted(service.access_conditions.values_list("id", flat=True)) != sorted(
-        model.access_conditions.values_list("id", flat=True)
-    )
     assert sorted(service.categories.values_list("value", flat=True)) != sorted(
         model.categories.values_list("value", flat=True)
     )
@@ -419,9 +411,6 @@ def test_update_service_from_model_m2m(api_client):
 
     # ALORS les champs custom et M2M ont été mis à jour
     assert 204 == response.status_code
-    assert sorted(service.access_conditions.values_list("id", flat=True)) == sorted(
-        model.access_conditions.values_list("id", flat=True)
-    )
     assert sorted(service.categories.values_list("value", flat=True)) == sorted(
         model.categories.values_list("value", flat=True)
     )
@@ -643,15 +632,21 @@ def test_validate_unique_form_names_rejects_duplicate_file_names():
     # Deux clés S3 distinctes peuvent pointer vers le même nom de fichier :
     # c'est ce nom, seul affiché, qui doit rester unique.
     with pytest.raises(ValidationError):
-        validate_unique_form_names(["prod/42/dossier.pdf", "prod/51/dossier.pdf"])
+        validate_unique_form_names(
+            ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/dossier.pdf"]
+        )
 
 
 def test_validate_unique_form_names_accepts_distinct_file_names():
-    validate_unique_form_names(["prod/42/dossier.pdf", "prod/42/attestation.pdf"])
+    validate_unique_form_names(
+        ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/attestation.pdf"]
+    )
 
 
 def test_service_forms_reject_duplicate_file_names():
-    service = make_service(forms=["prod/42/dossier.pdf", "prod/42/dossier.pdf"])
+    service = make_service(
+        forms=["prod/42/a1b2/dossier.pdf", "prod/42/a1b2/dossier.pdf"]
+    )
 
     with pytest.raises(ValidationError) as excinfo:
         service.full_clean()
@@ -667,7 +662,7 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
     response = api_client.patch(
         f"/services/{service.slug}/",
-        {"forms": ["prod/42/dossier.pdf", "prod/51/dossier.pdf"]},
+        {"forms": ["prod/42/a1b2/dossier.pdf", "prod/42/c3d4/dossier.pdf"]},
     )
 
     assert 400 == response.status_code
@@ -675,7 +670,7 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
 
 recompute_migration = importlib.import_module(
-    "dora.services.migrations.0021_recompute_sync_checksums_update_frequency"
+    "dora.services.migrations.0026_recompute_sync_checksums_with_suspension_date"
 )
 
 

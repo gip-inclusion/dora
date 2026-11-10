@@ -315,6 +315,15 @@ STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR = os.getenv(
 ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE = os.getenv(
     "ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE", "5"
 )
+AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE = os.getenv(
+    "AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE", "5"
+)
+AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR = os.getenv(
+    "AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR", "5"
+)
+# Secret partagé avec le front, qui authentifie l'IP du client transmise dans
+# `X-Dora-Client-Ip` (cf. `dora.core.throttling.get_front_client_ip`).
+FRONT_PROXY_SECRET = os.getenv("FRONT_PROXY_SECRET", "")
 
 REST_FRAMEWORK = {
     # Let's lock down access by default
@@ -340,9 +349,12 @@ REST_FRAMEWORK = {
     },
     "EXCEPTION_HANDLER": "dora.core.exceptions_handler.custom_exception_handler",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    # Le routeur Scalingo ajoute l'IP du client à la fin de `X-Forwarded-For` :
+    # les adresses précédentes sont fournies par le client et donc falsifiables.
+    "NUM_PROXIES": 1,
     "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.UserRateThrottle",
+        "dora.core.throttling.ClientIpAnonRateThrottle",
+        "dora.core.throttling.ClientIpUserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon": f"{ANON_THROTTLE_RATE_PER_MINUTE}/minute",
@@ -350,6 +362,8 @@ REST_FRAMEWORK = {
         "upload": f"{USER_UPLOAD_THROTTLE_RATE_PER_MINUTE}/minute",
         "structure_upload": f"{STRUCTURE_UPLOAD_THROTTLE_RATE_PER_HOUR}/hour",
         "orientations_export_link": f"{ORIENTATIONS_EXPORT_LINK_THROTTLE_RATE_PER_MINUTE}/minute",
+        "auth_link_ip": f"{AUTH_LINK_IP_THROTTLE_RATE_PER_MINUTE}/minute",
+        "auth_link_email": f"{AUTH_LINK_EMAIL_THROTTLE_RATE_PER_HOUR}/hour",
     },
 }
 
@@ -513,8 +527,7 @@ SECURE_CSP = {
     ],
 }
 
-# Envoi d'e-mails transactionnels :
-# https://app.tipimail.com/#/app/settings/smtp_and_apis
+# Envoi d'e-mails transactionnels via le relais SMTP Brevo.
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 NO_REPLY_EMAIL = os.getenv("NO_REPLY_EMAIL", DEFAULT_FROM_EMAIL)
 EMAIL_HOST = os.getenv("EMAIL_HOST")

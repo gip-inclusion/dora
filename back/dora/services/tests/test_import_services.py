@@ -11,6 +11,7 @@ from freezegun import freeze_time
 from model_bakery import baker
 
 from dora.core.utils import GeoData
+from dora.decoupage_administratif.models import Department
 from dora.services.csv_import import ImportServicesHelper
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceSource
@@ -429,6 +430,7 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.diffusion_zone_details, self.city.department)
+        self.assertEqual(created_service.zone_eligibilite, ["75"])
 
     @patch(
         "dora.services.csv_import.get_geo_data",
@@ -471,6 +473,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(
             created_service.diffusion_zone_details, dom_tom_city.department
         )
+        self.assertEqual(created_service.zone_eligibilite, ["971"])
 
     @patch(
         "dora.services.csv_import.get_geo_data",
@@ -503,12 +506,15 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.diffusion_zone_details, self.city.department)
+        self.assertEqual(created_service.zone_eligibilite, ["75"])
 
     @patch(
         "dora.services.csv_import.get_geo_data",
     )
     def test_diffusion_zone_details_when_service_for_region(self, mock_geo_data):
         mock_geo_data.return_value = self.geo_data
+
+        baker.make(Department, region=self.city.region, code="123")
 
         csv_content = (
             f"{self.csv_headers}\n"
@@ -524,6 +530,7 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.diffusion_zone_details, self.city.region)
+        self.assertEqual(created_service.zone_eligibilite, ["123"])
 
     @patch(
         "dora.services.csv_import.get_geo_data",
@@ -545,6 +552,7 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.diffusion_zone_details, self.city.epci)
+        self.assertEqual(created_service.zone_eligibilite, ["012345678"])
 
     def test_multiple_financing_labels(self):
         other_funding_label = baker.make(

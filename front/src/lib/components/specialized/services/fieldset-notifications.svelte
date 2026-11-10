@@ -1,0 +1,60 @@
+<script lang="ts">
+  import FieldSet from "$lib/components/display/fieldset.svelte";
+  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
+  import { getModelInputProps } from "$lib/utils/forms";
+  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
+
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model;
+  }
+
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
+
+  let showModel = $derived(!!service.model);
+
+  function handleUseModelValue(fieldName: string) {
+    service[fieldName] = model ? model[fieldName] : undefined;
+  }
+
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+          schema: $currentSchema,
+        })
+      : {}
+  );
+</script>
+
+<FieldSet title="Notifications" {showModel}>
+  {#snippet help()}
+    <div>
+      <p class="text-f14">
+        Choisissez la fréquence des notifications pour recevoir un rappel
+        lorsque vous souhaitez que cette page de service soit mise à jour. Des
+        informations à jour vous assure la réception de toutes les demandes
+        d’orientation.
+      </p>
+    </div>
+  {/snippet}
+  <FieldModel
+    {...fieldModelProps.updateFrequency ?? {}}
+    serviceValue={service.updateFrequency}
+    type="text"
+  >
+    <RadioButtonsField
+      id="updateFrequency"
+      bind:value={service.updateFrequency}
+      choices={servicesOptions.updateFrequencies}
+      description="À quelle fréquence les informations de votre service changent-elles (description, critères, public, contact) ? Choisissez la période pour être alerté."
+    />
+  </FieldModel>
+</FieldSet>

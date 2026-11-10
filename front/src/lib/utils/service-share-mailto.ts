@@ -1,6 +1,7 @@
 import { URL_HELP_SITE } from "$lib/consts";
 import { CANONICAL_URL } from "$lib/env";
 import type { Service } from "$lib/types";
+import { getMobilisationModesDisplay } from "$lib/utils/service";
 
 function formatBulletList(
   items: ReadonlyArray<string> | null | undefined,
@@ -13,47 +14,15 @@ function formatBulletList(
   return filtered.map((item) => `- ${item}`).join("\n");
 }
 
-/**
- * Retourne la liste des modes de mobilisation en remplaçant l'entrée
- * « Autre » par le texte libre saisi par la structure le cas échéant.
- */
-function buildMobilizationModes(
-  modes: ReadonlyArray<string> | null | undefined,
-  modesDisplay: ReadonlyArray<string> | null | undefined,
-  otherText: string | null | undefined
-): string[] {
-  const hasOther = modes?.includes("autre") ?? false;
-  const items = (modesDisplay ?? []).filter(
-    (label) => !hasOther || label.toLowerCase() !== "autre"
-  );
-  if (hasOther && otherText?.trim()) {
-    items.push(otherText.trim());
-  }
-  return items;
+function buildMobilizationModes(service: Service): string {
+  return formatBulletList(getMobilisationModesDisplay(service));
 }
 
-/**
- * Construit une URL `mailto:` permettant à l'utilisateur de partager
- * une fiche service via son client de messagerie habituel.
- *
- * Aucun destinataire n'est pré-rempli : l'utilisateur le saisit dans son client.
- */
 export function buildServiceShareMailto(
   service: Service,
   isDI = false
 ): string {
   const serviceUrl = `${CANONICAL_URL}/services/${isDI ? "di--" : ""}${service.slug}`;
-
-  const beneficiaryModes = buildMobilizationModes(
-    service.beneficiariesAccessModes,
-    service.beneficiariesAccessModesDisplay,
-    service.beneficiariesAccessModesOther
-  );
-  const professionalModes = buildMobilizationModes(
-    service.coachOrientationModes,
-    service.coachOrientationModesDisplay,
-    service.coachOrientationModesOther
-  );
 
   const subject = `On vous a recommandé une solution solidaire`;
 
@@ -75,14 +44,13 @@ export function buildServiceShareMailto(
       service.publicsDisplay,
       service.publicsDisplay === null ? "Non renseigné" : "Tous publics"
     ),
+    ...(service.publicsPrecisions?.trim()
+      ? ["", service.publicsPrecisions.trim()]
+      : []),
     "",
     "Comment mobiliser ce service :",
     "",
-    "Si vous êtes un particulier :",
-    formatBulletList(beneficiaryModes),
-    "",
-    "Si vous êtes un professionnel :",
-    formatBulletList(professionalModes),
+    buildMobilizationModes(service),
     "",
     `Consulter le service : ${serviceUrl}`,
     "",

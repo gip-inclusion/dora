@@ -26,7 +26,7 @@
       {/if}
     </Tooltip.Trigger>
     <Tooltip.Content
-      class="text-gray-dark text-f12 py-s2 px-s8 rounded-sm bg-white leading-20 shadow-md"
+      class="text-gray-dark text-f12 py-s2 px-s8 max-w-xs rounded-sm bg-white leading-20 shadow-md"
       {side}
     >
       {#if content}

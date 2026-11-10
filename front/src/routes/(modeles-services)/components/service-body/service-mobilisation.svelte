@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
   import Button from "$lib/components/display/button.svelte";
@@ -27,30 +26,20 @@
     onTrackMobilisation,
   }: Props = $props();
 
-  let isOrientableWithDoraForm = $derived(
-    (service.isOrientable &&
-      service.coachOrientationModes?.includes("formulaire-dora")) ||
-      service.isOrientableFtService
-  );
-  let hasExternalForm = $derived(
-    service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
-  );
-
   let contactBoxOpen = $state(false);
 
   let shareMailtoHref = $derived(buildServiceShareMailto(service, isDI));
 
+  let loginHref = $derived(
+    `/auth/connexion?next=${encodeURIComponent(
+      $page.url.pathname + $page.url.search
+    )}`
+  );
+
+  let structureHref = $derived(`/structures/${service.structureInfo.slug}`);
+
   function handleShowContactClick() {
-    if (!isAuthenticated() && !service.isContactInfoPublic) {
-      goto(
-        `/auth/connexion?next=${encodeURIComponent(
-          $page.url.pathname + $page.url.search
-        )}`
-      );
-      return;
-    }
     contactBoxOpen = true;
-    // on tracke comme une MER si les contacts du service sont publics
     onTrackMobilisation();
   }
 
@@ -70,43 +59,63 @@
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
 <div class="mt-s16 gap-s16 flex w-full flex-col sm:w-auto print:hidden">
-  {#if !(isDI && hasExternalForm)}
-    {#if isOrientableWithDoraForm}
-      <LinkButton
-        label="Orienter votre bénéficiaire"
-        to={orientationFormUrl}
-        extraClass="bg-white text-france-blue! hover:text-white!"
-        onclick={handleOrientationFormClickEvent}
-      />
-    {:else if service.contactInfoFilled}
-      {#if !contactBoxOpen}
-        <Button
-          onclick={handleShowContactClick}
-          extraClass="mt-s16 bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
-          label="Orienter votre bénéficiaire"
-          wFull
-        />
-      {:else}
-        <ServiceContact {service} />
-      {/if}
-    {:else}
-      Informations de contact non renseignées
-    {/if}
-  {/if}
-
-  {#if hasExternalForm}
+  {#if service.isOrientable && service.coachOrientationModes?.includes("formulaire-dora") && !(isDI && service.mobilisationLink)}
     <LinkButton
-      onclick={() =>
-        handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
-      to={service.coachOrientationModesExternalFormLink}
+      label="Orienter votre bénéficiaire"
+      to={orientationFormUrl}
+      extraClass="bg-white text-france-blue! hover:text-white!"
+      onclick={handleOrientationFormClickEvent}
+    />
+  {:else if service.mobilisationLink}
+    {@const externalFormLink = service.mobilisationLink}
+    <LinkButton
+      onclick={() => handleExternalFormClick(externalFormLink)}
+      to={externalFormLink}
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
-      label={service.coachOrientationModesExternalFormLinkText ||
-        "Orienter votre bénéficiaire"}
+      label={"Orienter votre bénéficiaire"}
       icon={ExternalLinkLineSystem}
       iconOnRight
       otherTab
       wFull
     />
+  {/if}
+
+  {#if !contactBoxOpen}
+    <Button
+      onclick={handleShowContactClick}
+      extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
+      label="Afficher les données de contact"
+      wFull
+    />
+  {:else}
+    {#if service.contactInfoFilled && (service.isContactInfoPublic || isAuthenticated())}
+      <ServiceContact {service} />
+    {:else}
+      <div class="p-s16 gap-s4 flex flex-col bg-white/20 text-white">
+        <h3 class="text-f18 font-bold text-white">Données de contact</h3>
+        {#if service.contactInfoFilled && !service.isContactInfoPublic && !isAuthenticated()}
+          <span class="text-f16">
+            <a href={loginHref} class="font-bold underline"
+              >Connectez-vous à Dora</a
+            > pour afficher le contact du service
+          </span>
+          <span class="text-f16">ou</span>
+          <span class="text-f16">
+            <a href={structureHref} class="font-bold underline"
+              >Contactez la structure</a
+            >
+          </span>
+        {:else}
+          <span class="text-f16">
+            Il n'y a pas de données de contact dédiées à ce service. Nous vous
+            invitons à
+            <a href={structureHref} class="font-bold underline"
+              >contacter la structure</a
+            >
+          </span>
+        {/if}
+      </div>
+    {/if}
   {/if}
 
   <LinkButton

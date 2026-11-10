@@ -6,7 +6,6 @@
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
-  import { deleteFile } from "$lib/requests/upload";
 
   interface Props {
     id: string;
@@ -45,12 +44,11 @@
     fileKeys = uniqueFiles;
   }
 
-  async function handleRemove(fileKey: string) {
-    const isFileDeleted = await deleteFile(fileKey);
-
-    if (isFileDeleted) {
-      updateFiles(localFiles.filter((key) => key !== fileKey));
-    }
+  // Le fichier n’est pas supprimé du stockage : sa clé peut être partagée (services
+  // synchronisés avec un modèle) et le formulaire n’est pas encore enregistré. Les
+  // fichiers qui ne sont plus référencés sont purgés chaque nuit (`delete_orphaned_uploads`).
+  function handleRemove(fileKey: string) {
+    updateFiles(localFiles.filter((key) => key !== fileKey));
   }
 
   function clearInput() {
@@ -62,8 +60,8 @@
   function handleSubmit(event: Event) {
     event.preventDefault();
 
-    // Deux documents de même nom se recouvrent : le serveur range les fichiers d’une
-    // structure sous une clé dérivée de leur nom, et le second écraserait le premier.
+    // Deux documents de même nom sont refusés à l’enregistrement du service
+    // (`validate_unique_form_names`) : seul leur nom est affiché à l’utilisateur.
     // On les écarte avant l’envoi, en tenant compte des fichiers du même lot, et en
     // comparant les noms nettoyés comme le fera le serveur.
     const usedFileNames = new Set(
@@ -207,7 +205,11 @@
       Choisir un fichier
     </span>
     <span class="text-f14 text-gray-text">
-      {progress != null ? `${Math.round(progress)} %` : ""}
+      {#if progress != null}
+        {Math.round(progress)} %
+      {:else if !localFiles.length}
+        Aucun fichier sélectionné
+      {/if}
     </span>
   </label>
 

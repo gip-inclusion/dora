@@ -21,6 +21,7 @@
   {onclick}
   {href}
   target={otherTab ? "_blank" : ""}
+  title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener"
   {disabled}
 >

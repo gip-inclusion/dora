@@ -2,9 +2,9 @@ export function getFileNameFromPath(filePath: string): string {
   return filePath.split("/").pop() ?? "";
 }
 
-// Reproduit `django.utils.text.get_valid_filename` : le serveur range les documents sous
-// une clé dérivée du nom nettoyé (« mon dossier.pdf » devient « mon_dossier.pdf »), c’est
-// donc sur ce nom-là que se joue la collision entre deux fichiers.
+// Reproduit `django.utils.text.get_valid_filename` : le serveur stocke les documents
+// sous ce nom nettoyé (« mon dossier.pdf » devient « mon_dossier.pdf »), et c’est sur
+// lui que `validate_unique_form_names` refuse les doublons.
 export function toValidFileName(fileName: string): string {
   return fileName
     .trim()

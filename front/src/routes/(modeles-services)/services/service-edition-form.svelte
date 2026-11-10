@@ -1,21 +1,17 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
-  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
-  import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
-  import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsModalities from "../_common/fields-modalities.svelte";
-  import FieldsPerimeter from "../_common/fields-perimeter.svelte";
-  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
-  import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
-  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
+  import FieldsetContact from "$lib/components/specialized/services/fieldset-contact.svelte";
+  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
+  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
+  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
-  import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
   import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
@@ -24,7 +20,7 @@
     ShortStructure,
   } from "$lib/types";
   import { log } from "$lib/utils/logger";
-  import { draftSchema, serviceSchema } from "$lib/validation/schemas/service";
+  import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
   import DocumentUploadNoticeModal from "./document-upload-notice-modal.svelte";
   import { goto } from "$app/navigation";
@@ -56,10 +52,11 @@
     submit: undefined,
     validateForm: undefined,
   });
+
+  // on ne montre la modale que si des documents ont été ajoutés ou remplacés
+  const initialForms = untrack(() => new Set(service.forms ?? []));
   const shouldShowModal = $derived(
-    (service.credentials?.length ?? 0) > 0 ||
-      (service.forms?.length ?? 0) > 0 ||
-      !!service.onlineForm
+    (service.forms ?? []).some((form) => !initialForms.has(form))
   );
 
   function handleChange(validatedData) {
@@ -113,8 +110,7 @@
   }
 
   function handleValidate(data, kind?: string) {
-    const schema = kind === "draft" ? draftSchema : serviceSchema;
-    return validate(data, schema, {
+    return validate(data, serviceSchema, {
       servicesOptions,
       checkRequired: kind !== "draft",
     });
@@ -131,17 +127,6 @@
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
-
-  const modalitiesServicesOptions = $derived(
-    structure?.noDoraForm
-      ? {
-          ...servicesOptions,
-          coachOrientationModes: servicesOptions.coachOrientationModes.filter(
-            (mode) => mode.value !== "formulaire-dora"
-          ),
-        }
-      : servicesOptions
-  );
 </script>
 
 <FormErrors />
@@ -165,7 +150,6 @@
         <FieldsStructure
           bind:structure
           bind:service
-          bind:servicesOptions
           bind:model
           {managedStructureSearchMode}
           {structures}
@@ -215,30 +199,20 @@
       {/if}
 
       <div class={service.model ? "" : "lg:w-2/3"}>
-        <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
+        <FieldsetPrincipalInfo bind:service {servicesOptions} {model} />
 
-        <FieldsPresentation bind:service {servicesOptions} {model} />
+        <FieldsetEligibility bind:service {servicesOptions} {model} />
 
-        <FieldsDuration bind:service {servicesOptions} {model} />
-
-        <FieldsPublics bind:service {servicesOptions} {model} />
-
-        <FieldsModalities
+        <FieldsetReceptionConditions
           bind:service
-          servicesOptions={modalitiesServicesOptions}
+          {servicesOptions}
           {model}
+          {structure}
         />
-
-        <FieldsDocuments bind:service {servicesOptions} {model} />
-
-        <FieldsPeriodicity bind:service {servicesOptions} {model} />
       </div>
       <div class="lg:w-2/3">
-        <FieldsPerimeter bind:service {servicesOptions} />
-
-        <FieldsPlace bind:service {structure} {servicesOptions} />
-
-        <FieldsContact bind:service />
+        <FieldsetContact bind:service />
+        <FieldsetNotifications bind:service {servicesOptions} {model} />
       </div>
     </CenteredGrid>
 

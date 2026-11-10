@@ -1,19 +1,26 @@
 import logging
 
 from django.conf import settings
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.http.response import HttpResponseRedirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 from itoutils.urls import add_url_params
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    permission_classes,
+    throttle_classes,
+)
+from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
+from rest_framework.response import Response
 from sesame.utils import get_token, get_user
 
 from dora.auth_links.emails import send_authentication_link
 from dora.auth_links.enums import AuthLinkAction
 from dora.auth_links.utils import generate_auth_code
 from dora.core.constants import FRONTEND_CALLBACK_URL
+from dora.core.throttling import AuthLinkEmailThrottle, AuthLinkIpThrottle
 from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
@@ -23,16 +30,22 @@ logger = logging.getLogger("dora.logs.core")
 # la connexion directe par lien est-elle toujours utilisée ?
 
 
-@csrf_exempt
-@require_http_methods(["POST"])
-def send_link(request):
+# Vue DRF pour bénéficier du throttling ; sans authentification, donc sans CSRF.
+@api_view(["POST"])
+@authentication_classes([])
+@permission_classes([AllowAny])
+@throttle_classes([AuthLinkIpThrottle, AuthLinkEmailThrottle])
+def send_link(request: Request) -> Response:
     # on ne veut que des utilisateurs qui se sont déjà connectés via IC
-    user = get_object_or_404(
-        User,
-        email=request.POST.get("email"),
+    user = User.objects.filter(
+        email=request.data.get("email"),
         is_active=True,
         is_valid=True,
-    )
+    ).first()
+
+    # Même réponse que le compte existe ou non, pour ne pas permettre l'énumération
+    if user is None:
+        return Response(status=204)
 
     magic_link = get_token(user)
     url = request.build_absolute_uri(
@@ -51,7 +64,7 @@ def send_link(request):
         },
     )
 
-    return HttpResponse(status=204)
+    return Response(status=204)
 
 
 def authenticate_with_link(request, sesame):

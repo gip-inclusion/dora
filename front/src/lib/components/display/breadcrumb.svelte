@@ -6,7 +6,6 @@
   type BreadcrumbLocation =
     | "home"
     | "search"
-    | "text-search"
     | "legal"
     | "cgu"
     | "model"
@@ -44,7 +43,6 @@
 
   const locationToText: Record<string, string> = {
     search: "Recherche",
-    "text-search": "Recherche par mots-clés",
     login: "Accéder à DORA",
     legal: "Mentions légales",
     cgu: "Conditions générales d’utilisation",

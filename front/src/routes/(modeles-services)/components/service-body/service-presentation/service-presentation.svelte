@@ -2,12 +2,10 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
   import ServiceFeedbackButton from "../../../services/[slug]/service-feedback-button.svelte";
-  import ServiceDescription from "./service-description.svelte";
   import ServiceDiIdentification from "./service-di-identification.svelte";
-  import ServiceDocuments from "./service-documents.svelte";
-  import ServiceKeyInformations from "./service-key-informations/service-key-informations.svelte";
-  import ServiceOtherInformations from "./service-other-informations.svelte";
-  import ServiceSteps from "./service-steps.svelte";
+  import ServiceTypology from "./service-typology.svelte";
+  import ServiceEligibility from "./service-eligibility.svelte";
+  import ServiceConditions from "./service-conditions.svelte";
 
   interface Props {
     service: Service | Model;
@@ -25,15 +23,11 @@
 </script>
 
 <div class="gap-s36 flex flex-col">
-  <ServiceKeyInformations {service} {servicesOptions} {onFeedbackButtonClick} />
+  <ServiceTypology {service} {servicesOptions} />
 
-  <ServiceDescription {service} />
+  <ServiceEligibility {service} {servicesOptions} {onTrackMobilisation} />
 
-  <ServiceSteps {service} {onTrackMobilisation} />
-
-  <ServiceDocuments {service} />
-
-  <ServiceOtherInformations {service} {servicesOptions} />
+  <ServiceConditions {service} />
 
   <ServiceDiIdentification {service} />
 

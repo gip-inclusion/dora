@@ -196,7 +196,7 @@ class ImportUserHelperTestCase(TestCase):
         )
         mock_send_invitation_email.assert_not_called()
 
-    def test_import_users_with_missing_names_creates_user_with_empty_names(
+    def test_import_users_with_missing_names_does_not_save(
         self, mock_send_invitation_email
     ):
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,,"
@@ -205,9 +205,8 @@ class ImportUserHelperTestCase(TestCase):
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
-        user = User.objects.get(email="john.doe@example.com")
-        self.assertEqual(user.first_name, "")
-        self.assertEqual(user.last_name, "")
+        self.assertFalse(User.objects.filter(email="john.doe@example.com").exists())
+        mock_send_invitation_email.assert_not_called()
 
     def test_missing_headers(self, mock_send_invitation_email):
         csv_content = (
@@ -320,6 +319,24 @@ class ImportFranceTravailUsersTestCase(TestCase):
         mock_send_france_travail_invitation_email.assert_called_once_with(
             putative_member, "L’équipe DORA"
         )
+
+    def test_import_france_travail_users_with_missing_names_does_not_save(
+        self, mock_send_france_travail_invitation_email
+    ):
+        # le prénom et le nom sont obligatoires même lorsque l'e-mail est fourni
+        # (ils ne servent pas uniquement à générer l'adresse)
+        csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,,"
+        csv_file = StringIO(csv_content)
+        reader = csv.reader(csv_file)
+
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+
+        self.assertFalse(
+            User.objects.filter(email="john.doe@francetravail.fr").exists()
+        )
+        mock_send_france_travail_invitation_email.assert_not_called()
 
     def test_import_france_travail_users_strips_accents_in_generated_email(
         self, mock_send_france_travail_invitation_email

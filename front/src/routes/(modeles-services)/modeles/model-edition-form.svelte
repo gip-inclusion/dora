@@ -1,17 +1,15 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form, { type FormControls } from "$lib/components/forms/form.svelte";
-  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
-  import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
-  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
-  import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
-  import FieldsDocuments from "../_common/fields-documents.svelte";
-  import FieldsModalities from "../_common/fields-modalities.svelte";
-  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsetPrincipalInfo from "$lib/components/specialized/services/fieldset-principal-info.svelte";
+  import FieldsetEligibility from "$lib/components/specialized/services/fieldset-eligibility.svelte";
+  import FieldsetReceptionConditions from "$lib/components/specialized/services/fieldset-reception-conditions.svelte";
+  import FieldsetNotifications from "$lib/components/specialized/services/fieldset-notifications.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
   import type { Model, ServicesOptions, ShortStructure } from "$lib/types";
@@ -46,10 +44,11 @@
     submit: undefined,
     validateForm: undefined,
   });
+
+  // on ne montre la modale que si des documents ont été ajoutés ou remplacés
+  const initialForms = untrack(() => new Set(model.forms ?? []));
   const shouldShowModal = $derived(
-    (model?.credentials?.length ?? 0) > 0 ||
-      (model.forms?.length ?? 0) > 0 ||
-      !!model.onlineForm
+    (model.forms ?? []).some((form) => !initialForms.has(form))
   );
 
   function handleModalConfirm() {
@@ -104,7 +103,6 @@
         <FieldsStructure
           bind:structure
           bind:service={model}
-          bind:servicesOptions
           {structures}
           {managedStructureSearchMode}
           isModel
@@ -118,24 +116,24 @@
   <CenteredGrid>
     <div class="lg:w-2/3">
       {#if model?.structure}
-        <FieldsTypology
-          noTopPadding
+        <FieldsetPrincipalInfo bind:service={model} {servicesOptions} {model} />
+
+        <FieldsetEligibility
           bind:service={model}
           {servicesOptions}
           {model}
+          isModel
         />
 
-        <FieldsPresentation bind:service={model} {servicesOptions} {model} />
+        <FieldsetReceptionConditions
+          bind:service={model}
+          {servicesOptions}
+          {model}
+          {structure}
+          isModel
+        />
 
-        <FieldsDuration bind:service={model} {servicesOptions} {model} />
-
-        <FieldsPublics bind:service={model} {servicesOptions} {model} />
-
-        <FieldsModalities bind:service={model} {servicesOptions} {model} />
-
-        <FieldsDocuments bind:service={model} {servicesOptions} {model} />
-
-        <FieldsPeriodicity bind:service={model} {servicesOptions} {model} />
+        <FieldsetNotifications bind:service={model} {servicesOptions} {model} />
       {/if}
     </div>
 

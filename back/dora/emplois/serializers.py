@@ -8,87 +8,13 @@ from dora.core.validators import validate_siret
 from dora.orientations.models import EmploisOrientationData, Orientation
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Service
+from dora.services.utils import DORA_UID_PREFIX, get_emplois_service_uid
 from dora.stats.models import (
     DiMobilisationEvent,
     MobilisationEvent,
     StructureInfosView,
 )
-from dora.structures.models import DisabledDoraFormDIStructure, Structure
-
-
-class ReferenceDataSerializer(serializers.Serializer):
-    kind = serializers.CharField()
-    label = serializers.CharField()
-    value = serializers.CharField()
-
-
-class ServiceSerializer(serializers.ModelSerializer):
-    funding_labels = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="value"
-    )
-    coach_orientation_modes = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="value"
-    )
-    beneficiaries_access_modes = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="value"
-    )
-    forms = serializers.ListField(child=serializers.CharField())
-    access_conditions = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
-    )
-    credentials = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
-    )
-    is_orientable_with_form = serializers.SerializerMethodField()
-    average_orientation_response_delay_days = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Service
-
-        fields = [
-            "id",
-            "short_desc",
-            "recurrence",
-            "funding_labels",
-            "coach_orientation_modes",
-            "coach_orientation_modes_other",
-            "coach_orientation_modes_external_form_link",
-            "coach_orientation_modes_external_form_link_text",
-            "beneficiaries_access_modes",
-            "beneficiaries_access_modes_other",
-            "beneficiaries_access_modes_external_form_link",
-            "beneficiaries_access_modes_external_form_link_text",
-            "forms",
-            "online_form",
-            "access_conditions",
-            "credentials",
-            "is_orientable_with_form",
-            "contact_name",
-            "contact_phone",
-            "contact_email",
-            "is_contact_info_public",
-            "average_orientation_response_delay_days",
-        ]
-
-    def get_is_orientable_with_form(self, obj):
-        return obj.is_orientable() and any(
-            mode.value == "formulaire-dora"
-            for mode in obj.coach_orientation_modes.all()
-        )
-
-    def get_average_orientation_response_delay_days(self, obj):
-        """Délai moyen de réponse aux demandes d'orientation, en jours."""
-        orientations = obj.answered_orientations
-        delays = [(o.processing_date - o.creation_date).days for o in orientations]
-        if not delays:
-            return None
-        return round(sum(delays) / len(delays))
-
-
-class DisabledDoraFormDIStructureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DisabledDoraFormDIStructure
-        fields = ["source", "structure_id"]
+from dora.structures.models import Structure
 
 
 class EmploisOrientationDataSerializer(serializers.Serializer):
@@ -192,8 +118,8 @@ class EmploisOrientationCreateSerializer(OrientationSerializer):
                     "di_service_id": "Format d'identifiant invalide (attendu : « source--id »)."
                 }
             )
-        if di_service_id.startswith("dora--"):
-            suffix = di_service_id.removeprefix("dora--").strip()
+        if di_service_id.startswith(DORA_UID_PREFIX):
+            suffix = di_service_id.removeprefix(DORA_UID_PREFIX).strip()
             try:
                 service_pk = uuid.UUID(suffix)
                 service = Service.objects.get(pk=service_pk)
@@ -206,7 +132,9 @@ class EmploisOrientationCreateSerializer(OrientationSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if instance.service_id:
-            data["di_service_id"] = f"dora--{instance.service_id}"
+            # un service Dora n'a pas de `di_service_id` en base : on renvoie son
+            # identifiant data·inclusion, celui par lequel Les Emplois l'ont ciblé
+            data["di_service_id"] = get_emplois_service_uid(instance.service_id)
         return data
 
 
@@ -264,7 +192,9 @@ class DoraServiceMobilisationSerializer(BaseMobilisationSerializer):
 
     def validate(self, attrs):
         try:
-            pk = uuid.UUID(attrs.pop("service_id").removeprefix("dora--").strip())
+            pk = uuid.UUID(
+                attrs.pop("service_id").removeprefix(DORA_UID_PREFIX).strip()
+            )
             attrs["service"] = Service.objects.select_related(
                 "structure", "structure__source", "source"
             ).get(pk=pk)
@@ -302,7 +232,9 @@ class DoraStructureViewSerializer(BaseMobilisationSerializer):
 
     def validate(self, attrs):
         try:
-            pk = uuid.UUID(attrs.pop("structure_id").removeprefix("dora--").strip())
+            pk = uuid.UUID(
+                attrs.pop("structure_id").removeprefix(DORA_UID_PREFIX).strip()
+            )
             attrs["structure"] = (
                 Structure.objects.select_related("source")
                 .only("pk", "department", "city_code", "source__value")

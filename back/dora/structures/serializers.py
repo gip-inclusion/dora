@@ -235,6 +235,7 @@ class StructureSerializer(serializers.ModelSerializer):
                     "status",
                     "structure",
                     "update_needed",
+                    "zone_eligibilite_display",
                 ]
 
         user = self.context.get("request").user

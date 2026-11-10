@@ -1,9 +1,10 @@
 <script lang="ts">
-  import InformationLineSystem from "svelte-remix/InformationLineSystem.svelte";
+  import AlertLineSystem from "svelte-remix/AlertLineSystem.svelte";
 
   import { page } from "$app/state";
 
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
+  import { INCLUSION_PLATFORM_LOGIN_URL } from "$lib/consts";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -16,8 +17,7 @@
 
   let displayModal = $state(false);
 
-  function handleOpenModal(event: MouseEvent) {
-    event.preventDefault();
+  function handleOpenModal() {
     displayModal = true;
   }
 </script>
@@ -35,31 +35,37 @@
         <div>
           <h2 class="mb-s32 text-france-blue">Se connecter ou s’inscrire</h2>
           <hr class="mb-s32" />
-          <div class="mb-s24 bg-info-light p-s16 rounded-2xl">
-            <h3 class="text-f17 text-info flex leading-24">
-              <div class="mr-s8 h-s24 w-s24 inline-block fill-current">
-                <InformationLineSystem />
+          <div
+            class="mb-s24 bg-warning-light border-warning p-s16 rounded-r-sm border-l-4"
+          >
+            <h3 class="text-f17 text-warning mb-s8 flex leading-24 font-bold">
+              <div class="mr-s8 h-s24 w-s24 inline-block shrink-0 fill-current">
+                <AlertLineSystem />
               </div>
-              <div>DORA utilise ProConnect</div>
+              <div>Professionnels de l’accompagnement</div>
             </h3>
-            <p class="legend mb-s16 text-gray-text">
-              <strong>Si vous avez déjà un compte Inclusion Connect,</strong> vous
-              pouvez utiliser la même adresse e-mail pour accéder plus facilement
-              à DORA.
+            <p class="legend mb-s0 text-gray-text">
+              Les orientations Dora sont dorénavant intégrées à <a
+                class="underline"
+                title="La plateforme de l’inclusion - ouverture dans une nouvelle fenêtre"
+                href={INCLUSION_PLATFORM_LOGIN_URL}
+                target="_blank"
+                rel="noopener noreferrer">La plateforme de l’inclusion</a
+              >. Retrouvez votre portefeuille de bénéficiaires ainsi que toutes
+              leurs candidatures et orientations dans la même application.
             </p>
           </div>
           <PcButton {nextPage}>
             {#snippet pcHelpLink()}
-              <a
+              <button
+                type="button"
                 class="text-magenta-cta underline"
-                target="_blank"
                 title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
-                rel="noopener noreferrer"
-                href="#"
+                aria-haspopup="dialog"
                 onclick={handleOpenModal}
               >
                 Des difficultés à vous connecter&#8239;?
-              </a>
+              </button>
             {/snippet}
           </PcButton>
         </div>

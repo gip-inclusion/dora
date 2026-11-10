@@ -39,11 +39,21 @@ class ImportUserHelper:
             try:
                 safir = row["safir"]
                 structure = self._structure_by_safir(safir)
-                email = row.get("email") or self._name_to_france_travail_email(
-                    row["prenom"], row["nom"]
-                )
                 first_name = row.get("prenom")
                 last_name = row.get("nom")
+
+                # note : `_name_to_france_travail_email` vérifie déjà la présence
+                # du prénom et du nom, mais uniquement lorsqu'il faut générer
+                # l'adresse e-mail. On l'exige dans tous les cas, comme pour
+                # l'import hors France Travail.
+                if not first_name or not last_name:
+                    raise Exception(
+                        "Un prénom et un nom de famille sont obligatoires pour chaque utilisateur"
+                    )
+
+                email = row.get("email") or self._name_to_france_travail_email(
+                    first_name, last_name
+                )
 
                 users_to_import.append(
                     {
@@ -94,8 +104,10 @@ class ImportUserHelper:
                 first_name = row.get("prenom")
                 last_name = row.get("nom")
 
-                if not email:
-                    raise Exception("An email is required")
+                if not email or not first_name or not last_name:
+                    raise Exception(
+                        "Un mail, prénom et nom de famille sont obligatoires pour chaque utilisateur"
+                    )
 
                 users_to_import.append(
                     {

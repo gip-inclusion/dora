@@ -205,7 +205,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
     lien_mobilisation = serializers.ReadOnlyField(source="mobilisation_link")
-    zone_eligibilite = serializers.ReadOnlyField()
+    zone_eligibilite = serializers.SerializerMethodField()
     conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
     temps_passe_semaines = serializers.SerializerMethodField()
@@ -312,9 +312,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         # totalité du référentiel se traduisent en « tous-publics ». Seul endroit où Dora
         # réintroduit `tous-publics` ; partout ailleurs l'absence de restriction reste [].
         specific_publics = {p.value for p in DiPublic} - {DiPublic.TOUS_PUBLICS.value}
-        all_publics = normalize_publics(
-            obj.publics + obj.publics_derived_from_conditions
-        )
+        all_publics = normalize_publics(obj.publics)
         if not all_publics or set(all_publics) >= specific_publics:
             return [DiPublic.TOUS_PUBLICS.value]
         return all_publics
@@ -453,3 +451,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_formulaire_en_ligne_a_completer(self, obj):
         return obj.online_form or None
+
+    def get_zone_eligibilite(self, obj):
+        if obj.zone_eligibilite == []:
+            return ["france"]
+        return obj.zone_eligibilite

@@ -4,7 +4,10 @@ import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/stats";
-import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
+import {
+  getQueryString,
+  storeLastSearchLocation,
+} from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 import { SEARCH_RADIUS_KM } from "$lib/consts";
 
@@ -152,7 +155,13 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   );
 
   if (cityCode && cityLabel) {
-    storeLastSearchCity(cityCode, cityLabel);
+    storeLastSearchLocation({
+      cityCode,
+      cityLabel,
+      label,
+      lon: lon ?? undefined,
+      lat: lat ?? undefined,
+    });
   }
 
   // Pour le formulaire de recherche, on veut afficher la catégorie sélectionnée

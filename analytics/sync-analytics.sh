@@ -121,6 +121,9 @@ DROP COLUMN IF EXISTS is_contact_info_public;
 ALTER TABLE public.users_user
 DROP COLUMN IF EXISTS password;
 
+ALTER TABLE public.structures_structure
+ADD COLUMN synced_at TIMESTAMPTZ NOT NULL DEFAULT '$SYNC_DATE';
+
 ALTER TABLE public.logs_actionlog
 ADD COLUMN userId INTEGER;
 
@@ -171,14 +174,20 @@ SQL
 fetch_and_export_di_data() {
     echo "💎 Récupération et synchronisation des données de data·inclusion..."
 
+    DUCKDB_VERSION="2.0.0"
+    DUCKDB_SHA256="c6507206baf7793c6013dbd82368469a45f20dc0e17a6f92f204602f652ed2bc"
+
     # Installation of tool `duckdb` on Scalingo/Linux
     if command -v duckdb &>/dev/null; then
         echo "duckdb est déjà installé, installation ignorée."
     else
         if [[ "$OSTYPE" == linux* ]]; then
-            echo "Installation de duckdb pour Linux..."
-            curl -L -o /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip
-            unzip -o /tmp/duckdb_cli.zip -d /tmp/duckdb
+            echo "Installation de duckdb ${DUCKDB_VERSION} pour Linux..."
+            curl -fsSL -o /tmp/duckdb_cli.tar.gz \
+                "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb-cli-linux-amd64.tar.gz"
+            echo "${DUCKDB_SHA256}  /tmp/duckdb_cli.tar.gz" | sha256sum -c -
+            mkdir -p /tmp/duckdb
+            tar -xzf /tmp/duckdb_cli.tar.gz -C /tmp/duckdb
             export PATH="/tmp/duckdb:${PATH}"
             echo "duckdb installé."
         else
@@ -193,6 +202,7 @@ fetch_and_export_di_data() {
 
     # Generate DuckDB SQL file
     DUCKSQL=$(mktemp)
+    trap 'rm -f "$DUCKSQL"' EXIT
 
     cat > "$DUCKSQL" <<EOF
 INSTALL httpfs;
@@ -226,7 +236,7 @@ CREATE TABLE analytics_pg.public.di_services AS SELECT * FROM di_services;
 EOF
 
     # Execute SQL export/import orders
-    time duckdb < "$DUCKSQL"
+    time duckdb -bail < "$DUCKSQL"
 
     echo "✔️ Fait."
     echo ""
@@ -243,6 +253,9 @@ run_dbt_model_generation_and_validation() {
     echo "✔️ Fait."
     echo ""
 }
+
+# Date de lancement du script, exposée dans les tables synchronisées
+SYNC_DATE=$(date -u +%FT%TZ)
 
 # Prepare
 load_env_file_if_exists

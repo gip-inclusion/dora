@@ -13,8 +13,7 @@
     onFeedbackButtonClick: () => void;
   }
 
-  let { service, servicesOptions, onRefresh, onFeedbackButtonClick }: Props =
-    $props();
+  let { service, servicesOptions, onRefresh }: Props = $props();
 </script>
 
 {#if service.modificationDate}
@@ -26,7 +25,7 @@
 <div
   class="border-gray-02 py-s40 gap-s24 relative flex flex-col items-center justify-between border-b sm:flex-row print:hidden"
 >
-  <ServiceUpdateDate {service} {onFeedbackButtonClick} />
+  <ServiceUpdateDate {service} />
   {#if service.canWrite}
     <ServiceUpdateButtons {service} {servicesOptions} {onRefresh} />
   {:else}

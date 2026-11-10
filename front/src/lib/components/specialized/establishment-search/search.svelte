@@ -67,17 +67,12 @@
       }
     }
   }
-  const tabs: { id: string; name: string }[] = [];
+  const tabs: { id: Tab; name: string }[] = [];
   if (showSafir) {
     tabs.push({ id: "safir", name: "Agences France Travail" });
   }
 
-  tabs.push(
-    ...[
-      { id: "nom", name: "Nom" },
-      { id: "siret", name: "SIRET" },
-    ]
-  );
+  tabs.push({ id: "nom", name: "Nom" }, { id: "siret", name: "SIRET" });
 
   if (proposedSiret) {
     tabId = "siret";

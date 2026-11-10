@@ -13,6 +13,7 @@ from django.utils import timezone
 from dora.core.models import EnumModel, LogItem
 from dora.core.validators import validate_siret
 from dora.services.models import Service
+from dora.services.utils import get_emplois_service_uid
 from dora.structures.models import Structure
 from dora.users.models import User
 
@@ -61,12 +62,6 @@ EMPLOIS_ORIENTATION_Q = models.Q(
 
 
 class OrientationQuerySet(models.QuerySet):
-    def answered(self):
-        return self.filter(
-            status__in=[OrientationStatus.ACCEPTED, OrientationStatus.REJECTED],
-            processing_date__isnull=False,
-        )
-
     def emplois(self):
         # Orientations émises par Les Emplois — mêmes conditions
         # que `Orientation.is_emplois()`.
@@ -216,7 +211,7 @@ class Orientation(models.Model):
     )
 
     original_service_name = models.CharField(
-        verbose_name="Nom original", max_length=140, default="", editable=False
+        verbose_name="Nom original", max_length=150, default="", editable=False
     )
     orientation_reasons = models.TextField(
         verbose_name="Motif de l'orientation", blank=True
@@ -430,6 +425,9 @@ class Orientation(models.Model):
             return attachment, True
         else:
             logger.warning("deleteOrientationAttachment", {"pathNotFound": attachment})
+            if attachment in self.beneficiary_attachments:
+                self.beneficiary_attachments.remove(attachment)
+                self.save()
             return attachment, False
 
     def delete_attachments(self) -> dict[str, bool]:
@@ -529,7 +527,7 @@ class EmploisOrientationData(models.Model):
     def service_detail_url(self):
         orientation = self.orientation
         if orientation.service_id:
-            service_uid = f"dora--{orientation.service.id}"
+            service_uid = get_emplois_service_uid(orientation.service_id)
         else:
             service_uid = orientation.di_service_id
         return f"{settings.EMPLOIS_FRONTEND_URL}/insertion/services/{service_uid}"

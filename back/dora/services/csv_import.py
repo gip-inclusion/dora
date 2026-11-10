@@ -9,6 +9,9 @@ from django.db.models import Q, QuerySet
 from django.utils import timezone
 
 from dora.core.utils import get_geo_data, skip_csv_lines
+from dora.data_inclusion.diffusion_zone_info import (
+    get_zone_eligibilite_from_diffusion_zone,
+)
 from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
@@ -292,6 +295,9 @@ class ImportServicesHelper:
                 service.geom = geo_data.geom
                 service.diffusion_zone_details = self.get_diffusion_zone_details(
                     service
+                )
+                service.zone_eligibilite = get_zone_eligibilite_from_diffusion_zone(
+                    data.diffusion_zone_type, service.diffusion_zone_details
                 )
             else:
                 self.geo_data_missing_lines.append(

@@ -146,4 +146,16 @@ describe("fromJsonToOsmString", () => {
     // Un créneau avec seulement openAt est considéré invalide
     expect(result).toBe(`Mo ${INVALID_OPENING_HOURS_MARKER}`);
   });
+
+  test("devrait sérialiser les jours fériés fermés", () => {
+    const data: OsmOpeningHours = returnEmptyHoursData();
+    data.monday.timeSlot1.isOpen = true;
+    data.monday.timeSlot1.openAt = "09:00";
+    data.monday.timeSlot1.closeAt = "12:00";
+    data.phOff = true;
+
+    const result = fromJsonToOsmString(data);
+
+    expect(result).toBe("Mo 09:00-12:00; PH off");
+  });
 });

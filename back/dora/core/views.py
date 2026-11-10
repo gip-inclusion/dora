@@ -1,9 +1,6 @@
 import logging
 
-from django.conf import settings
-from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
-from django.utils.text import get_valid_filename
 from rest_framework import permissions
 from rest_framework.decorators import (
     api_view,
@@ -17,9 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from dora.core.file_upload_validators import validate_upload
 from dora.core.throttling import StructureUploadThrottle, UploadRateThrottle
-from dora.core.uploads import save_orientation_attachment
+from dora.core.uploads import save_orientation_attachment, save_structure_document
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -39,11 +35,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
         )
 
     file_obj = request.data["file"]
-    validate_upload(filename, file_obj, structure.id)
-    clean_filename = (
-        f"{settings.ENVIRONMENT}/{structure.pk}/{get_valid_filename(filename)}"
-    )
-    result = default_storage.save(clean_filename, file_obj)
+    result = save_structure_document(filename, file_obj, structure.pk)
     return Response({"key": result}, status=201)
 
 
@@ -58,13 +50,6 @@ def safe_upload(request: Request, filename: str) -> Response:
     return Response({"key": result}, status=201)
 
 
-@api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
-def delete_upload(request: Request, filename: str) -> Response:
-    default_storage.delete(filename)
-    return Response(status=204)
-
-
 @api_view()
 @permission_classes([permissions.AllowAny])
 def ping(request: Request) -> Response:
@@ -72,8 +57,3 @@ def ping(request: Request) -> Response:
     if check_services:
         return Response("ok", status=200)
     return Response("ko", status=500)
-
-
-def trigger_error(request: Request) -> None:
-    division_by_zero = 1 / 0
-    print(division_by_zero)

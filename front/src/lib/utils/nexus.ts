@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 
 import { getApiURL } from "./api";
+import { logException } from "./logger";
 
 export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
   const autoLoginJwt = url.searchParams.get("auto_login");
@@ -40,4 +41,32 @@ export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
 
 export function generateOutboundNexusAutoLoginUrl(url: URL | string) {
   return `/nexus/auto-login/?next=${encodeURIComponent(url.toString())}`;
+}
+
+// Demande à Nexus un lien d'auto-connexion vers `nextUrl`. Renvoie `undefined`
+// si l'auto-connexion n'est pas possible (destination refusée, clé absente, API
+// injoignable…) : c'est à l'appelant de décider quoi faire sans elle.
+export async function fetchNexusAutoLoginUrl(nextUrl: string, token: string) {
+  try {
+    const response = await fetch(
+      new URL("/nexus/auto-login-out/", getApiURL()),
+      {
+        method: "POST",
+        body: JSON.stringify({ nextUrl }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json; version=1.0",
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return (await response.json()).redirectUrl as string | undefined;
+    }
+  } catch (err) {
+    logException(err, "Échec de l'auto-connexion Nexus sortante");
+  }
+
+  return undefined;
 }

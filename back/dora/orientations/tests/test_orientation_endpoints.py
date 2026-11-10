@@ -65,6 +65,15 @@ def test_access_refused_when_query_id_hash_invalid(api_client, orientation):
     assert response.status_code == 401
 
 
+def test_orientations_list_not_exposed(api_client, orientation):
+    response = api_client.get("/orientations/")
+    assert response.status_code == 405
+
+    api_client.force_authenticate(user=make_user())
+    response = api_client.get("/orientations/")
+    assert response.status_code == 405
+
+
 @freeze_time("2022-01-01")
 def test_query_validate(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/validate/"
@@ -495,6 +504,19 @@ def test_create_via_dora_api_does_not_create_emplois_orientation_data(api_client
 
     orientation = structure.orientations.first()
     assert not hasattr(orientation, "emplois_orientation_data")
+
+
+def test_create_refused_when_anonymous(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 401
+    assert structure.orientations.count() == 0
 
 
 def test_create_without_data_protection_commitment(api_client):

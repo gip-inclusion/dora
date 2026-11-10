@@ -5,8 +5,10 @@
   import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { isAuthenticated, userInfo } from "$lib/utils/auth";
+  import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
   import { isServiceRecentlyPublished } from "$lib/utils/service";
   import { trackMobilisation } from "$lib/utils/stats";
 
@@ -14,6 +16,7 @@
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
+  import ServiceDescription from "./service-presentation/service-description.svelte";
 
   interface Props {
     service: Service | Model;
@@ -49,6 +52,15 @@
   });
   let orientationFormUrl = $derived(
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
+  );
+
+  // quand la redirection est active, la page d'orientation envoie vers le
+  // formulaire de La plateforme de l'inclusion : la mobilisation est donc
+  // comptabilisée comme sortante
+  let plateformeOrientationUrl = $derived(
+    ORIENTATION_REDIRECTION_FEATURE_FLAG && !opParam && !service.isModel
+      ? getPlateformeOrientationUrl(service)
+      : null
   );
 
   let isServiceFromOwnStructure = $derived(
@@ -88,15 +100,15 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (isAuthenticated()) {
-      handleTrackMobilisation();
+    } else if (isAuthenticated() || plateformeOrientationUrl) {
+      handleTrackMobilisation(plateformeOrientationUrl ?? undefined);
     }
   }
 </script>
 
 <CenteredGrid>
-  <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
-    <div class="gap-s32 flex basis-2/3 flex-col">
+  <div class="md:gap-s48 gap-s32 mb-s32 grid grid-cols-1 md:grid-cols-3">
+    <div class="min-w-0 md:col-span-2">
       {#if showServiceWillBeVisibleSoonNotice}
         <Notice
           title="Votre service est publié et sera bientôt visible partout"
@@ -109,26 +121,11 @@
           </p>
         </Notice>
       {/if}
-      <div class="text-f18 leading-s32 text-gray-text">
-        <p>
-          {service.shortDesc || ""}
-        </p>
+      <div class="text-f18 leading-s32">
+        <ServiceDescription {service} />
       </div>
     </div>
-    <div class="basis-1/3"></div>
-  </div>
-
-  <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
-    <div class="md:col-span-2">
-      <ServicePresentation
-        {service}
-        {servicesOptions}
-        {onFeedbackButtonClick}
-        onTrackMobilisation={handleTrackMobilisation}
-      />
-    </div>
-
-    <div class="gap-y-s24 flex flex-col">
+    <div class="gap-y-s24 flex flex-col md:col-span-1">
       {#if !service.isModel}
         <div class="top-s32 sticky">
           <div
@@ -152,12 +149,24 @@
       {/if}
     </div>
   </div>
+
+  <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
+    <div class="md:col-span-2">
+      <ServicePresentation
+        {service}
+        {servicesOptions}
+        {onFeedbackButtonClick}
+        onTrackMobilisation={handleTrackMobilisation}
+      />
+    </div>
+  </div>
 </CenteredGrid>
 
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
   onShowVideo={handleShowVideoModal}
-  onTrackMobilisation={handleTrackMobilisation}
+  onTrackMobilisation={() =>
+    handleTrackMobilisation(plateformeOrientationUrl ?? undefined)}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />

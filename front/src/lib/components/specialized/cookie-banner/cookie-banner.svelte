@@ -10,7 +10,6 @@
   function handleAcceptAll() {
     setConsentChoices({
       matomo: true,
-      googleCSE: true,
       crisp: true,
     });
     hideCookieBanner();
@@ -19,7 +18,6 @@
   function handleRejectAll() {
     setConsentChoices({
       matomo: false,
-      googleCSE: false,
       crisp: false,
     });
     hideCookieBanner();

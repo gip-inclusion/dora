@@ -1,3 +1,5 @@
+import logging
+
 from data_inclusion.schema.v1 import TypeService
 from django.db.models import Q
 from rest_framework import permissions
@@ -33,6 +35,12 @@ from dora.structures.models import Structure, StructureMember
 from .enums import Tag
 from .models import PageView
 
+PATH_MAX_LENGTH = PageView._meta.get_field("path").max_length
+TITLE_MAX_LENGTH = PageView._meta.get_field("title").max_length
+USER_HASH_LENGTH = PageView._meta.get_field("anonymous_user_hash").max_length
+
+logger = logging.getLogger(__name__)
+
 
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
@@ -55,6 +63,32 @@ def log_event(request):
         return all_categories, all_subcategories
 
     tag = request.data.get("tag")
+
+    # Le front génère toujours un hash de 32 caractères : une autre valeur
+    # signale un client tiers (scanners, notamment), dont on ignore l'événement
+    user_hash = request.data.get("user_hash")
+    if not isinstance(user_hash, str) or len(user_hash) != USER_HASH_LENGTH:
+        # La valeur elle-même n'est pas loggée : taille arbitraire, fournie
+        # par le client
+        logger.warning(
+            "Événement analytics ignoré : user_hash invalide (%s, longueur %s)",
+            type(user_hash).__name__,
+            len(user_hash) if isinstance(user_hash, str) else None,
+        )
+        return Response({"error": "Invalid user hash"}, status=400)
+
+    # Même raisonnement : le front envoie toujours un chemin, et un titre
+    # seulement si la page en définit un
+    path = request.data.get("path")
+    title = request.data.get("title")
+    if not isinstance(path, str) or not isinstance(title, (str, type(None))):
+        logger.warning(
+            "Événement analytics ignoré : path (%s) ou title (%s) invalide",
+            type(path).__name__,
+            type(title).__name__,
+        )
+        return Response({"error": "Invalid path or title"}, status=400)
+
     service_slug = request.data.get("service", "")
     structure_slug = request.data.get("structure", "")
     service = structure = orientation = None
@@ -83,7 +117,7 @@ def log_event(request):
     user = request.user
 
     common_analytics_data = {
-        "path": request.data.get("path"),
+        "path": path[:PATH_MAX_LENGTH],
         "user": user if user.is_authenticated else None,
         "is_logged": user.is_authenticated,
         "is_staff": user.is_staff,
@@ -92,7 +126,7 @@ def log_event(request):
         if user.is_authenticated
         else False,
         "user_kind": user.main_activity if user.is_authenticated else "",
-        "anonymous_user_hash": request.data.get("user_hash", ""),
+        "anonymous_user_hash": user_hash,
     }
 
     structure_membership = (
@@ -138,7 +172,9 @@ def log_event(request):
         case Tag.PAGEVIEW:
             event = PageView.objects.create(
                 **common_analytics_data,
-                title=request.data.get("title", ""),
+                # Le titre des pages de service (nom du service et de la
+                # structure) peut dépasser la taille du champ
+                title=(title or "")[:TITLE_MAX_LENGTH],
             )
 
         case Tag.SEARCH:

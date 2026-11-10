@@ -52,7 +52,7 @@ class DeploymentState(models.Model):
 
 
 class AbstractAnalyticsEvent(models.Model):
-    path = models.CharField(max_length=255)
+    path = models.CharField(max_length=512)
     date = models.DateTimeField(auto_now_add=True, db_index=True)
 
     user = models.ForeignKey(
@@ -247,7 +247,7 @@ class AbstractSearchEvent(AbstractAnalyticsEvent):
 
 
 class PageView(AbstractAnalyticsEvent):
-    title = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=512, blank=True)
 
 
 class StructureView(AbstractStructureEvent):

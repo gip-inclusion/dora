@@ -1,10 +1,10 @@
-type OrientationType = "sent" | "received";
+export type OrientationType = "sent" | "received";
 
 class OrientationState {
   selectedType = $state<OrientationType>("received");
 
-  setSelectedType = (type: string) => {
-    this.selectedType = type as OrientationType;
+  setSelectedType = (type: OrientationType) => {
+    this.selectedType = type;
   };
 }
 

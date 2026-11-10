@@ -4,12 +4,12 @@ from enum import Enum
 from data_inclusion.schema.v1 import TypeService
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from dora.core.constants import WGS84
-from dora.core.di_v1 import sync_v1_service_fields
 from dora.decoupage_administratif.models import (
     EPCI,
     AdminDivisionType,
@@ -18,30 +18,37 @@ from dora.decoupage_administratif.models import (
     Region,
 )
 from dora.services.enums import ServiceStatus
+from dora.services.models import Service
+
+# Préfixe des identifiants de services Dora dans data·inclusion et sur Les Emplois
+DORA_UID_PREFIX = "dora--"
+
+
+def get_emplois_service_uid(service_id) -> str:
+    # Identifiant « dora--<uuid> » : c'est à la fois l'identifiant data·inclusion
+    # du service (cf. `dora.api.serializers`, source « dora ») et l'identifiant
+    # par lequel Les Emplois le désignent. Les deux sont la même chaîne.
+    return f"{DORA_UID_PREFIX}{service_id}"
+
 
 SYNC_FIELDS = [
     "name",
-    "short_desc",
-    "full_desc",
-    "is_cumulative",
-    "fee_condition",
-    "fee_details",
-    "beneficiaries_access_modes_external_form_link",
-    "beneficiaries_access_modes_external_form_link_text",
-    "beneficiaries_access_modes_other",
-    "coach_orientation_modes_external_form_link",
-    "coach_orientation_modes_external_form_link_text",
-    "coach_orientation_modes_other",
-    "duration_weekly_hours",
-    "duration_weeks",
-    "forms",
+    "description",
     "kind",
-    "online_form",
     "publics",
     "publics_precisions",
-    "recurrence",
-    "suspension_date",
+    "conditions_acces",
+    "forms",
+    "fee_condition",
+    "fee_details",
+    "mobilisable_by",
+    "mobilisation_modes",
+    "mobilisation_details",
+    "mobilisation_link",
+    "duration_weekly_hours",
+    "duration_weeks",
     "update_frequency",
+    "suspension_date",
 ]
 
 # Clés étrangères parmi `SYNC_FIELDS` : hachées par leur identifiant plutôt que par
@@ -52,17 +59,10 @@ SYNC_FK_FIELDS = {"fee_condition"}
 
 # Many to many fields
 SYNC_M2M_FIELDS = [
+    "funding_labels",
     "categories",
     "subcategories",
-    "beneficiaries_access_modes",
     "coach_orientation_modes",
-]
-
-# Custom Many to many fields
-SYNC_CUSTOM_M2M_FIELDS = [
-    "access_conditions",
-    "requirements",
-    "credentials",
 ]
 
 TOUS_PUBLICS = DiPublic.TOUS_PUBLICS.value
@@ -78,17 +78,6 @@ DI_PUBLICS_ORDER = {p.value: index for index, p in enumerate(DiPublic)}
 
 def normalize_publics(publics):
     return sorted(set(publics), key=DI_PUBLICS_ORDER.__getitem__)
-
-
-def _duplicate_customizable_choices(field, choices, structure):
-    for choice in choices:
-        if choice.structure:
-            new_choice, _created = choice._meta.model.objects.get_or_create(
-                name=choice.name, structure=structure
-            )
-            field.add(new_choice)
-        else:
-            field.add(choice)
 
 
 def instantiate_service_from_model(model, structure, user):
@@ -121,13 +110,7 @@ def instantiate_service_from_model(model, structure, user):
     for field in SYNC_M2M_FIELDS:
         getattr(service, field).set(getattr(model, field).all())
 
-    for field in SYNC_CUSTOM_M2M_FIELDS:
-        _duplicate_customizable_choices(
-            getattr(service, field), getattr(model, field).all(), service.structure
-        )
-
     service.save()
-    sync_v1_service_fields(service)
     return service
 
 
@@ -138,12 +121,6 @@ def synchronize_service_from_model(service, model):
     for field in SYNC_M2M_FIELDS:
         getattr(service, field).set(getattr(model, field).all())
 
-    for field in SYNC_CUSTOM_M2M_FIELDS:
-        _duplicate_customizable_choices(
-            getattr(service, field), getattr(model, field).all(), service.structure
-        )
-
-    sync_v1_service_fields(service)
     return service
 
 
@@ -155,7 +132,7 @@ def update_sync_checksum(service):
         if isinstance(value, Enum):
             value = value.value
         md5.update(repr(value).encode())
-    for m2m_field in [*SYNC_M2M_FIELDS, *SYNC_CUSTOM_M2M_FIELDS]:
+    for m2m_field in SYNC_M2M_FIELDS:
         # `.all()` sert le cache de `prefetch_related` quand il existe, là où un
         # `.values_list()` reclone le queryset et repart en base à chaque champ.
         pks = sorted(obj.pk for obj in getattr(service, m2m_field).all())
@@ -225,3 +202,51 @@ def filter_services_by_region(services, region_code):
 
 def get_kinds_labels(kinds):
     return [TypeService(kind).label for kind in kinds]
+
+
+FORMS_BATCH = 500
+
+
+def save_forms(services):
+    """Écrit les `forms` modifiés et réaligne les empreintes des modèles touchés.
+
+    `forms` entre dans l'empreinte de synchronisation : sans recalcul, l'empreinte
+    stockée d'un modèle resterait celle d'avant la modification, et son prochain
+    enregistrement ferait basculer d'un coup toutes ses copies en « modèle modifié ».
+    Les copies encore à jour suivent la nouvelle empreinte ; celles qui divergeaient
+    déjà gardent la leur, pour ne pas masquer des modifications en attente.
+
+    Les écritures forment un tout : une liste modifiée sans son empreinte, ou une
+    empreinte de copie sans celle de son modèle, laisserait justement l'affichage
+    « modèle modifié » que ce recalcul existe pour éviter.
+    """
+    checksums_updated = []
+
+    for service in services:
+        if not service.is_model:
+            continue
+
+        previous = service.sync_checksum
+        service.sync_checksum = update_sync_checksum(service)
+        if service.sync_checksum == previous:
+            continue
+
+        checksums_updated.append((service, previous))
+
+    with transaction.atomic():
+        Service.including_models.bulk_update(
+            services, ["forms"], batch_size=FORMS_BATCH
+        )
+        Service.including_models.bulk_update(
+            [model for model, _ in checksums_updated],
+            ["sync_checksum"],
+            batch_size=FORMS_BATCH,
+        )
+        # Les copies suivent l'empreinte de leur modèle : seules celles qui
+        # étaient à jour, les autres ont de vraies modifications en attente.
+        for model, previous in checksums_updated:
+            Service.including_models.filter(
+                model_id=model.pk, last_sync_checksum=previous
+            ).update(last_sync_checksum=model.sync_checksum)
+
+    return len(checksums_updated)

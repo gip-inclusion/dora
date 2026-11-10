@@ -1,4 +1,3 @@
-import json
 import re
 
 from django.conf import settings
@@ -27,14 +26,6 @@ def send_mail(
     bcc=None,
     attachments=None,
 ):
-    headers = {
-        "X-TM-DOMAIN": settings.EMAIL_DOMAIN,
-        "X-TM-TAGS": json.dumps(tags) if tags else "",
-        "X-TM-TRACKING": '{"html":{"open":0,"click":0,"text":{"click":0}}}',
-        "X-TM-GOOGLEANALYTICS": '{"enable":"0"}',
-        "X-TM-TEXTVERSION": "1",
-    }
-
     # Conversion en liste si besoin
     if not isinstance(to, list):
         to = [to]
@@ -52,7 +43,6 @@ def send_mail(
         body,
         from_email,
         to,
-        headers=headers,
         cc=cc,
         bcc=bcc,
         reply_to=clean_reply_to(reply_to),

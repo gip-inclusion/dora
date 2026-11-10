@@ -5,6 +5,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
+  import { AUTOMETA_PUBLIC_STATS_URL } from "$lib/consts";
   import { showCookieBanner } from "$lib/utils/consent.svelte";
 </script>
 
@@ -80,7 +81,7 @@
       <NavItem label="Gestion des cookies" onclick={showCookieBanner} />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
-      <NavItem label="Statistiques" href="/stats" />
+      <NavItem label="Statistiques" href={AUTOMETA_PUBLIC_STATS_URL} otherTab />
     </nav>
   </CenteredGrid>
 </footer>

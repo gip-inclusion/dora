@@ -2,12 +2,18 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import type { Service } from "$lib/types";
   import ServiceStructureLabel from "./components/service-structure-label.svelte";
+  import { formatEligibilityZones } from "$lib/utils/service";
 
   interface Props {
     service: Service;
   }
 
   let { service }: Props = $props();
+
+  const eligibilityZones = formatEligibilityZones(
+    service.zoneEligibiliteDisplay,
+    4
+  );
 </script>
 
 <div class="gap-s48 text-gray-text flex flex-col">
@@ -25,8 +31,7 @@
       {service.name}
     </h1>
     <div class="text-f14">
-      Périmètre d’éligibilité&#8239;: {service.diffusionZoneDetailsDisplay ||
-        "non renseigné"}
+      Périmètre d’éligibilité&#8239;: {eligibilityZones}
     </div>
   </div>
 </div>

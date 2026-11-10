@@ -20,8 +20,10 @@ import type {
   Service,
   ServicesOptions,
   ServiceStatus,
+  ZoneEligibiliteDisplay,
 } from "$lib/types";
 
+import { NATIONAL_ELIGIBLITITY_ZONE } from "$lib/consts";
 import { isLessThanOneHourAgo } from "./date";
 import { log } from "./logger";
 
@@ -136,4 +138,45 @@ export function isServiceRecentlyPublished(service: Service): boolean {
   return (
     !!service.publicationDate && isLessThanOneHourAgo(service.publicationDate)
   );
+}
+
+export function formatEligibilityZones(
+  zones: ZoneEligibiliteDisplay[] | null,
+  maxZonesToDisplay?: number
+): string {
+  if (!zones || zones.length === 0) {
+    return NATIONAL_ELIGIBLITITY_ZONE;
+  }
+
+  const zonesToDisplay = maxZonesToDisplay ? maxZonesToDisplay : zones.length;
+
+  const joinedZones = zones
+    .slice(0, zonesToDisplay)
+    .map((zone) => zone.label)
+    .join(", ");
+
+  return zones.length > zonesToDisplay ? `${joinedZones} ...` : joinedZones;
+}
+
+// L'option formulaire-dora n'est pas un mode de mobilisation de DI donc il faut
+// le réinsérer dans la liste des modes à afficher quand c'est applicable.
+export function getMobilisationModesDisplay(
+  service: Service | Model
+): string[] {
+  // un modèle n'est pas orientable : la mention s'affiche dès que l'option est cochée
+  const isOrientable = service.isModel || service.isOrientable;
+
+  const modes = service.mobilisationModesDisplay ?? [];
+
+  if (
+    service.coachOrientationModes?.includes("formulaire-dora") &&
+    isOrientable
+  ) {
+    return [
+      ...modes.filter((mode) => mode !== "Utiliser le lien de mobilisation"),
+      "Via le formulaire Dora",
+    ];
+  }
+
+  return modes;
 }

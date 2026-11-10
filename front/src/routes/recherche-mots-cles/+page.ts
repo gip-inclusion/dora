@@ -1,11 +1,26 @@
+import { ADDRESS_QUERY_PARAMS } from "$lib/components/specialized/service-search-keyword.svelte";
 import { getKeywordResults, getServicesOptions } from "$lib/requests/services";
 import type { ServiceSearchResult } from "$lib/types";
 
 import type { PageLoad } from "./$types";
 
+export const ssr = false;
+
 export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
   const keywords = url.searchParams.get("q") || "";
+  // Sans mots-clés ni lieu, on affiche uniquement le formulaire de recherche :
+  // ni appel à l’API, ni suivi d’une recherche vide.
+  const hasCriteria =
+    !!keywords ||
+    [...ADDRESS_QUERY_PARAMS].some((key) => url.searchParams.has(key));
+  if (!hasCriteria) {
+    return {
+      title: "Recherche par mots-clés | DORA",
+      noIndex: true,
+      hasCriteria: false as const,
+    };
+  }
   const lon = url.searchParams.get("lon");
   const lat = url.searchParams.get("lat");
   let fetchError: string = "";
@@ -30,6 +45,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   return {
     title: `Recherche par mots-clés${titleKeywordTruncated ? ` : ${titleKeywordTruncated}` : ""} | DORA`,
     noIndex: true,
+    hasCriteria: true as const,
     keywords,
     fetchError,
     lat,

@@ -92,6 +92,18 @@ def test_delete_attachment_non_existing(orientation, mock_storage):
     assert not success
 
 
+def test_delete_attachments_removes_orphan_references(orientation, mock_storage):
+    default_storage.save("present.txt", ContentFile("Test content"))
+    orientation.beneficiary_attachments = ["present.txt", "missing.txt"]
+    orientation.save()
+
+    results = orientation.delete_attachments()
+
+    assert results == {"present.txt": True, "missing.txt": False}
+    orientation.refresh_from_db()
+    assert orientation.beneficiary_attachments == []
+
+
 @only_local
 def test_delete_attachments(orientation, mock_storage):
     # Créer plusieurs pièces jointes factices

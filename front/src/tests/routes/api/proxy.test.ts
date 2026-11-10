@@ -8,6 +8,9 @@ vi.mock("$lib/utils/auth", () => ({
   TOKEN_KEY: "token",
 }));
 
+const privateEnv: Record<string, string | undefined> = {};
+vi.mock("$env/dynamic/private", () => ({ env: privateEnv }));
+
 // Import after mocks are set up
 const { GET, POST, PUT, PATCH, DELETE } =
   await import("../../../routes/api/[...path]/+server");
@@ -18,16 +21,19 @@ function makeEvent({
   search = "",
   token = null,
   body = null,
+  headers = {},
 }: {
   method?: string;
   path?: string;
   search?: string;
   token?: string | null;
   body?: BodyInit | null;
+  headers?: Record<string, string>;
 } = {}) {
   return {
     request: new Request(`http://localhost/api/${path}${search}`, {
       method,
+      headers,
       body: body ?? (method !== "GET" && method !== "HEAD" ? null : undefined),
 
       duplex: "half",
@@ -38,11 +44,13 @@ function makeEvent({
     },
     params: { path },
     url: new URL(`http://localhost/api/${path}${search}`),
+    getClientAddress: () => "203.0.113.7",
   };
 }
 
 describe("proxy", () => {
   beforeEach(() => {
+    privateEnv.FRONT_PROXY_SECRET = undefined;
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(new Response("ok", { status: 200 }))
@@ -143,5 +151,33 @@ describe("proxy", () => {
     await GET(event as any);
 
     expect(vi.mocked(fetch).mock.calls[0][1]?.body).toBeUndefined();
+  });
+
+  test("transmet l'IP du client authentifiée par le secret partagé", async () => {
+    privateEnv.FRONT_PROXY_SECRET = "s3cret";
+    const event = makeEvent();
+    await GET(event as any);
+
+    const headers = new Headers(vi.mocked(fetch).mock.calls[0][1]?.headers);
+    expect(headers.get("X-Dora-Client-Ip")).toBe("203.0.113.7");
+    expect(headers.get("X-Dora-Proxy-Secret")).toBe("s3cret");
+  });
+
+  test("remplace les en-têtes d'IP fournis par le navigateur", async () => {
+    const event = makeEvent({
+      headers: {
+        "X-Forwarded-For": "192.0.2.1",
+        "X-Real-IP": "192.0.2.1",
+        "X-Dora-Client-Ip": "192.0.2.1",
+        "X-Dora-Proxy-Secret": "faux",
+      },
+    });
+    await GET(event as any);
+
+    const headers = new Headers(vi.mocked(fetch).mock.calls[0][1]?.headers);
+    expect(headers.get("X-Forwarded-For")).toBe("203.0.113.7");
+    expect(headers.has("X-Real-IP")).toBe(false);
+    expect(headers.has("X-Dora-Client-Ip")).toBe(false);
+    expect(headers.has("X-Dora-Proxy-Secret")).toBe(false);
   });
 });
