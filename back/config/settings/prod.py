@@ -28,9 +28,8 @@ DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-# Disabled as this is already managed by Scalingo
-# also : raised as `security.W004` via `check --deploy`
-# SECURE_HSTS_SECONDS = 31536000
+# Scalingo sert déjà HSTS, mais sans `includeSubDomains`
+SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # https://hstspreload.org/
 # SECURE_HSTS_PRELOAD = True

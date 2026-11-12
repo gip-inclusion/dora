@@ -77,10 +77,24 @@ export const handle: Handle = sequence(
     if (ENVIRONMENT !== "production") {
       response.headers.set("X-Robots-Tag", "noindex");
     }
+    if (ENVIRONMENT === "production") {
+      // Scalingo sert déjà HSTS, mais sans `includeSubDomains`
+      response.headers.set(
+        "Strict-Transport-Security",
+        "max-age=31536000; includeSubDomains"
+      );
+    }
     response.headers.set("X-Frame-Options", "DENY");
-    response.headers.set("X-XSS-Protection", "1; mode=block");
     response.headers.set("X-Content-Type-Options", "nosniff");
     response.headers.set("Referrer-Policy", "strict-origin");
+    // `geolocation` (recherche de ville) et `clipboard-write` (boutons de copie)
+    // restent permis à la page elle-même
+    response.headers.set(
+      "Permissions-Policy",
+      "camera=(), microphone=(), payment=(), usb=(), serial=(), " +
+        "midi=(), magnetometer=(), gyroscope=(), accelerometer=(), " +
+        "display-capture=(), geolocation=(self), clipboard-write=(self)"
+    );
 
     return response;
   }

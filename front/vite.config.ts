@@ -31,17 +31,13 @@ export default defineConfig(({ mode }) => {
               "https://openmaptiles.data.gouv.fr",
               "https://openmaptiles.geo.data.gouv.fr/",
               "https://openmaptiles.github.io/osm-bright-gl-style/",
-              "https://matomo.inclusion.beta.gouv.fr",
               "https://matomo.inclusion.gouv.fr",
               "https://api.collectivite.fr",
             ].filter((source) => !!source),
             "script-src": [
               "self",
-              "unsafe-inline",
               "https://tally.so/widgets/embed.js",
-              "https://matomo.inclusion.beta.gouv.fr",
               "https://matomo.inclusion.gouv.fr",
-              "unsafe-eval",
             ],
             "worker-src": ["self", "blob:"],
             "child-src": [
