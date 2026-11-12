@@ -10,7 +10,8 @@
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
 
-  import insane from "insane";
+  import HighlightedText from "#lib/components/display/highlighted-text.svelte";
+  import { splitHighlight } from "#lib/utils/highlight.ts";
 
   import CheckboxMark from "#lib/components/display/checkbox-mark.svelte";
   import { clickOutside } from "#lib/utils/misc.ts";
@@ -703,30 +704,32 @@
   }
 
   function highlightFilter(keywords, fields) {
-    keywords = keywords.split(/\s+/gu);
+    const patterns = keywords
+      .split(/\s+/gu)
+      .filter(Boolean)
+      .map((keyword) =>
+        ignoreAccents
+          ? makeAccentInsensitivePattern(removeAccents(keyword))
+          : escapeRegExp(keyword)
+      );
     return (item) => {
       const newItem = Object.assign({ highlighted: {} }, item);
       if (fields) {
         fields.forEach((field) => {
-          if (newItem[field] && !newItem.highlighted[field]) {
-            newItem.highlighted[field] = newItem[field];
-          }
-          if (newItem.highlighted[field]) {
-            keywords.forEach((keyword) => {
-              const keywordPattern = ignoreAccents
-                ? makeAccentInsensitivePattern(removeAccents(keyword))
-                : keyword;
-              const reg = new RegExp(`(${keywordPattern})`, "igu");
-              newItem.highlighted[field] = newItem.highlighted[field].replace(
-                reg,
-                "<b>$1</b>"
-              );
-            });
+          if (newItem[field]) {
+            newItem.highlighted[field] = splitHighlight(
+              newItem[field],
+              patterns
+            );
           }
         });
       }
       return newItem;
     };
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[|()[\]{}.+*?^$\\]/gu, "\\$&");
   }
 
   function removeAccents(str) {
@@ -770,7 +773,7 @@
     };
 
     // escape meta characters
-    searchString = searchString.replace(/([|()[{.+*?^$\\])/gu, "\\$1");
+    searchString = escapeRegExp(searchString);
 
     // split into words
     const words = searchString.split(/\s+/u);
@@ -887,13 +890,10 @@
                   {@render itemContent({ item: listItem })}
                 {:else}
                   <div>
-                    {#if listItem.highlighted}
-                      {@html insane(listItem.highlighted.label, {
-                        allowedTags: ["b"],
-                      })}
-                    {:else}
-                      {listItem.label}
-                    {/if}
+                    <HighlightedText
+                      text={listItem.label}
+                      segments={listItem.highlighted?.label}
+                    />
                   </div>
                 {/if}
 

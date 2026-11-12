@@ -19,7 +19,7 @@
     StructuresOptions,
     PutativeStructureMember,
   } from "#lib/types.ts";
-  import { formatPhoneNumber, markdownToHTML } from "#lib/utils/misc.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
   import { trackStructureInfos } from "#lib/utils/stats.ts";
 
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
@@ -41,8 +41,6 @@
     structuresOptions,
     onRefresh,
   }: Props = $props();
-
-  let description: string = $derived(markdownToHTML(structure.description, 4));
 
   let reseauxPorteursDisplay = $derived(
     structure.reseauxPorteurs
@@ -131,11 +129,11 @@
     </div>
   {/if}
 
-  {#if description}
+  {#if structure.description?.trim()}
     <hr class="separator" />
 
     <div class="presentation">
-      <TextClamp text={description} />
+      <TextClamp text={structure.description} titleLevel={4} />
     </div>
   {/if}
 

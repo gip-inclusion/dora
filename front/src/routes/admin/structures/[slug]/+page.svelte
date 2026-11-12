@@ -3,7 +3,6 @@
   import DateLabel from "#lib/components/display/date-label.svelte";
   import TextClamp from "#lib/components/display/text-clamp.svelte";
   import { getStructureAdmin } from "#lib/requests/admin.ts";
-  import { markdownToHTML } from "#lib/utils/misc.ts";
   import History from "../../history.svelte";
   import InfoLine from "../../info-line.svelte";
   import SmallLink from "../../small-link.svelte";
@@ -19,8 +18,6 @@
   }
 
   let { data = $bindable() }: Props = $props();
-
-  const description = markdownToHTML(data.structure.description, 2);
 
   async function handleRefresh() {
     data.structure = await getStructureAdmin(data.structure.slug);
@@ -123,7 +120,7 @@
     <InfoLine condition={data.structure.description}>
       description :
       <div class="prose-sm border-gray-02 p-s16 rounded-lg border-2">
-        <TextClamp text={description} />
+        <TextClamp text={data.structure.description} titleLevel={2} />
       </div>
     </InfoLine>
 

@@ -1,40 +1,5 @@
-import { browser } from "$app/env";
 import type { ServicesOptions } from "#lib/types.ts";
 import { defaultAcceptHeader } from "#lib/utils/api.ts";
-import insane from "insane";
-import showdown from "showdown";
-
-const { defaults } = insane;
-
-const INSANE_CONFIGURATION = {
-  ...defaults,
-  allowedAttributes: {
-    ...defaults.allowedAttributes,
-    a: [...defaults.allowedAttributes.a, "rel", "class"],
-    ["h2"]: ["id"],
-  },
-};
-
-export function markdownToHTML(markdownContent: string, titleLevel?: number) {
-  const converter = new showdown.Converter({
-    headerLevelStart: titleLevel,
-    tables: true,
-    openLinksInNewWindow: true,
-    simplifiedAutoLink: true,
-    customizedHeaderId: true,
-  });
-
-  return insane(converter.makeHtml(markdownContent), INSANE_CONFIGURATION);
-}
-
-export function htmlToMarkdown(html: string) {
-  if (browser) {
-    const converter = new showdown.Converter();
-    return converter.makeMarkdown(html);
-  }
-
-  return "";
-}
 
 export type FetchDataSuccess<T> = {
   ok: true;
@@ -205,15 +170,6 @@ export function arraysCompare(a, b) {
   const sortedB = [...b].sort();
 
   return sortedA.every((val, i) => val === sortedB[i]);
-}
-
-// Compare deux textes en markdown en ignorant les fins de ligne (`\r\n`), la forme des
-// liens et les espaces en bord de texte, que l'éditeur réécrit à la première modification.
-export function markdownCompare(a?: string | null, b?: string | null) {
-  const rewrite = (value?: string | null) =>
-    htmlToMarkdown(markdownToHTML(value ?? "")).trim();
-
-  return rewrite(a) === rewrite(b);
 }
 
 export function formatPhoneNumber(phoneNumber: string): string {
