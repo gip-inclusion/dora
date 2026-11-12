@@ -5,10 +5,10 @@
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
 
   import { afterNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import { clickOutside } from "$lib/utils/misc";
-  import { randomId } from "$lib/utils/random";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
 
   interface Props {
     mobileDesign?: boolean;
@@ -79,7 +79,7 @@
     class:hidden={!isOpen}
   >
     {#each links as { href, label: linkLabel, openInNewTab }, index}
-      {@const currentPage = $page.url.pathname === href}
+      {@const currentPage = page.url.pathname === href}
       <li class="text-f14 hover:bg-magenta-10 whitespace-nowrap">
         <a
           {href}

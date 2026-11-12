@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Day } from "$lib/types";
+  import type { Day } from "#lib/types.ts";
   import {
     getHoursFromStr,
     returnEmptyHoursData,
-  } from "$lib/utils/opening-hours/parse";
-  import { fromJsonToOsmString } from "$lib/utils/opening-hours/serialize";
+  } from "#lib/utils/opening-hours/parse.ts";
+  import { fromJsonToOsmString } from "#lib/utils/opening-hours/serialize.ts";
   import DayField from "./day-field.svelte";
   import Toggle from "./toggle.svelte";
 

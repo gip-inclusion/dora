@@ -4,9 +4,9 @@
 
   import insane from "insane";
 
-  import circleIcon from "$lib/assets/icons/circle.png";
-  import Map from "$lib/components/display/map.svelte";
-  import type { ServiceSearchResult } from "$lib/types";
+  import circleIcon from "#lib/assets/icons/circle.png";
+  import Map from "#lib/components/display/map.svelte";
+  import type { ServiceSearchResult } from "#lib/types.ts";
 
   import type { PageData } from "./$types";
 

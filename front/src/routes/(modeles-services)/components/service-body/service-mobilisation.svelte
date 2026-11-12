@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import ServiceContact from "#lib/components/specialized/services/display/service-contact.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
-  import type { Service } from "$lib/types";
-  import { isAuthenticated } from "$lib/utils/auth";
-  import { buildServiceShareMailto } from "$lib/utils/service-share-mailto";
-  import { trackMatomoEvent } from "$lib/utils/matomo";
+  import type { Service } from "#lib/types.ts";
+  import { isAuthenticated } from "#lib/utils/auth.ts";
+  import { buildServiceShareMailto } from "#lib/utils/service-share-mailto.ts";
+  import { trackMatomoEvent } from "#lib/utils/matomo.ts";
 
   interface Props {
     service: Service;
@@ -32,7 +32,7 @@
 
   let loginHref = $derived(
     `/auth/connexion?next=${encodeURIComponent(
-      $page.url.pathname + $page.url.search
+      page.url.pathname + page.url.search
     )}`
   );
 
@@ -51,7 +51,7 @@
     trackMatomoEvent({
       category: "Page Service",
       action: "Clic Bouton Partager cette Fiche",
-      name: $page.url.pathname,
+      name: page.url.pathname,
     });
   }
 </script>

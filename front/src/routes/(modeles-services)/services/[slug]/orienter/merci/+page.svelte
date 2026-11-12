@@ -1,14 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import FlashlightLineWeather from "svelte-remix/FlashlightLineWeather.svelte";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { initEmptyOrientation, orientation } from "../store";
-  import illustration from "$lib/assets/illustrations/illu-favs.svg";
-  import Notice from "$lib/components/display/notice.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import illustration from "#lib/assets/illustrations/illu-favs.svg";
+  import Notice from "#lib/components/display/notice.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
 
   interface Props {
     data: PageData;

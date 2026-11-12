@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import CenteredGrid from "#lib/components/display/centered-grid.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
   import ServiceEditionForm from "../service-edition-form.svelte";
   import type { PageData } from "./$types";
 

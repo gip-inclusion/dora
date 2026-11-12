@@ -1,18 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import Form from "$lib/components/forms/form.svelte";
-  import * as v from "$lib/validation/schema-utils";
+  import Form from "#lib/components/forms/form.svelte";
+  import * as v from "#lib/validation/schema-utils.ts";
   import {
     refreshUserInfo,
     userInfo,
     type DiscoveryMethod,
     type UserMainActivity,
-  } from "$lib/utils/auth";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
-  import { updateUserProfile } from "$lib/utils/user";
+  } from "#lib/utils/auth.ts";
+  import BasicInputField from "#lib/components/forms/fields/basic-input-field.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import RadioButtonsField from "#lib/components/forms/fields/radio-buttons-field.svelte";
+  import { updateUserProfile } from "#lib/utils/user.ts";
 
   let mainActivity = $state("");
   let discoveryMethod = $state("");

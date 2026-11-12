@@ -1,9 +1,9 @@
 <script lang="ts">
-  import mapViewImage from "$lib/assets/illustrations/map-view.jpg";
+  import mapViewImage from "#lib/assets/illustrations/map-view.jpg";
 
-  import type { FundingLabel, ServiceSearchResult } from "$lib/types";
-  import Button from "$lib/components/display/button.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import type { FundingLabel, ServiceSearchResult } from "#lib/types.ts";
+  import Button from "#lib/components/display/button.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   import type { PageData } from "./$types";
   import type { Filters } from "./result-filters.svelte";

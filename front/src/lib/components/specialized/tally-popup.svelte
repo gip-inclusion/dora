@@ -2,8 +2,8 @@
   // Documentation : https://tally.so/help/popup-forms
   import dayjs from "dayjs";
 
-  import { browser } from "$app/environment";
-  import type { TallyFormId } from "$lib/consts";
+  import { browser } from "$app/env";
+  import type { TallyFormId } from "#lib/consts.ts";
   import { onDestroy, onMount } from "svelte";
 
   interface TallyFormLocalStorageItem {

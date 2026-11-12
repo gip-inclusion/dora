@@ -1,15 +1,19 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-vi.mock("$lib/env", () => ({
+vi.mock("#lib/env.ts", () => ({
   API_URL: "http://backend",
 }));
 
-vi.mock("$lib/utils/auth", () => ({
+vi.mock("#lib/utils/auth.ts", () => ({
   TOKEN_KEY: "token",
 }));
 
 const privateEnv: Record<string, string | undefined> = {};
-vi.mock("$env/dynamic/private", () => ({ env: privateEnv }));
+vi.mock("$app/env/private", () => ({
+  get FRONT_PROXY_SECRET() {
+    return privateEnv.FRONT_PROXY_SECRET;
+  },
+}));
 
 // Import after mocks are set up
 const { GET, POST, PUT, PATCH, DELETE } =

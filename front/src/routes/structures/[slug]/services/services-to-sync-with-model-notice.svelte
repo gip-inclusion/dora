@@ -1,15 +1,15 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import Notice from "$lib/components/display/notice.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import Notice from "#lib/components/display/notice.svelte";
   import {
     addIgnoredServicesToUpdate,
     updateServicesFromModel,
-  } from "$lib/requests/services";
-  import type { StructureService } from "$lib/types";
+  } from "#lib/requests/services.ts";
+  import type { StructureService } from "#lib/types.ts";
   import {
     hideNotice,
     isNoticeHidden,
-  } from "$lib/utils/service-update-notices";
+  } from "#lib/utils/service-update-notices.ts";
 
   interface Props {
     structureSlug: string;

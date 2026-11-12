@@ -1,8 +1,8 @@
 <script lang="ts">
   import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
 
-  import type { Service, ShortService } from "$lib/types";
-  import { formatPhoneNumber } from "$lib/utils/misc";
+  import type { Service, ShortService } from "#lib/types.ts";
+  import { formatPhoneNumber } from "#lib/utils/misc.ts";
 
   interface Props {
     service: Service | ShortService;

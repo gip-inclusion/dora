@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { searchDepartment, searchRegion } from "$lib/utils/search-area";
+import { searchDepartment, searchRegion } from "#lib/utils/search-area.ts";
 
 describe("searchDepartment", () => {
   test("basic", () => {

@@ -1,13 +1,13 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
+  import Button from "#lib/components/display/button.svelte";
   import DenyOrientationModal from "./deny-orientation-modal.svelte";
   import AcceptOrientationModal from "./accept-orientation-modal.svelte";
   import ContactBeneficiaryModal from "./contact-beneficiary-modal.svelte";
   import ContactPrescriberModal from "./contact-prescriber-modal.svelte";
-  import { browser } from "$app/environment";
-  import type { Orientation } from "$lib/types";
-  import Notice from "$lib/components/display/notice.svelte";
-  import { formatNumericDate } from "$lib/utils/date";
+  import { browser } from "$app/env";
+  import type { Orientation } from "#lib/types.ts";
+  import Notice from "#lib/components/display/notice.svelte";
+  import { formatNumericDate } from "#lib/utils/date.ts";
 
   const statusMap = {
     VALIDÉE: { label: "Validée", cssClass: "text-success" },

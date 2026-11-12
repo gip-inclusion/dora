@@ -9,12 +9,17 @@ interface CityResult {
   region: string;
 }
 
+const COLLECTIVITE_FR_URL = "https://collectivite.fr";
+
 function redirectToCollectiviteFr(citySlug = "") {
   redirect(
     307,
     // Page d'accueil si le slug de la ville n'a pas été déterminé
     // Page de la ville si le slug a été déterminé
-    `https://collectivite.fr/${citySlug}?mtm_campaign=backlink_SE_dora`
+    `${COLLECTIVITE_FR_URL}/${citySlug}?mtm_campaign=backlink_SE_dora`,
+    {
+      external: [COLLECTIVITE_FR_URL],
+    }
   );
 }
 

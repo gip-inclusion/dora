@@ -1,4 +1,4 @@
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
 
 export function doesUrlHaveOrientationJwt(url: URL): boolean {
   if (url.searchParams.has(ORIENTATION_JWT_QUERY_PARAM)) {

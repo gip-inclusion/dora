@@ -1,5 +1,5 @@
-import { getStructureAdmin } from "$lib/requests/admin";
-import { capitalize } from "$lib/utils/misc";
+import { getStructureAdmin } from "#lib/requests/admin.ts";
+import { capitalize } from "#lib/utils/misc.ts";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

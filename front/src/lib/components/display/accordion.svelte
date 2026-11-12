@@ -4,7 +4,7 @@
   import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
   import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
 
-  import { randomId } from "$lib/utils/random";
+  import { randomId } from "#lib/utils/random.ts";
 
   interface Props {
     title: string;

@@ -3,8 +3,8 @@
 
   import * as mlgl from "maplibre-gl";
 
-  import Map from "$lib/components/display/map.svelte";
-  import type { AdminStructure } from "$lib/types";
+  import Map from "#lib/components/display/map.svelte";
+  import type { AdminStructure } from "#lib/types.ts";
 
   interface Props {
     filteredStructures?: AdminStructure[];

@@ -1,6 +1,6 @@
 <script lang="ts">
   import UserOnboardingForm from "./user-onboarding-form.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
 
   let isOpen = $state(true);
 

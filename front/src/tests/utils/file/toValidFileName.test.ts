@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { toValidFileName } from "$lib/utils/file";
+import { toValidFileName } from "#lib/utils/file.ts";
 
 // Les cas attendus sont ceux de `django.utils.text.get_valid_filename`, appliqué par le
 // serveur avant de stocker le document.

@@ -1,22 +1,26 @@
-import type { Handle, HandleFetch, HandleServerError } from "@sveltejs/kit";
-import { sequence } from "@sveltejs/kit/hooks";
 import { error } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
+import type {
+  Handle,
+  HandleFetch,
+  HandleServerError,
+} from "@sveltejs/kit/hooks";
 
 import * as Sentry from "@sentry/sveltekit";
 
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
-import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
-import { SENTRY_DATA_COLLECTION } from "$lib/sentry";
-import { UNEXPECTED_ERROR_MESSAGE } from "$lib/consts";
-import { handleInboundNexusAutoLogin } from "$lib/utils/nexus";
-import { isApiRequest, setClientIpHeaders } from "$lib/server/client-ip";
+import { ENVIRONMENT, SENTRY_DSN } from "#lib/env.ts";
+import { SENTRY_DATA_COLLECTION } from "#lib/sentry.ts";
+import { UNEXPECTED_ERROR_MESSAGE } from "#lib/consts.ts";
+import { handleInboundNexusAutoLogin } from "#lib/utils/nexus.ts";
+import { isApiRequest, setClientIpHeaders } from "#lib/server/client-ip.ts";
 
-import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
-import { TOKEN_KEY } from "$lib/utils/auth";
+import { MAX_REQUESTS_PER_MINUTE } from "$app/env/private";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
 
 const rateLimiter = new RetryAfterRateLimiter({
-  IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
+  IPUA: [MAX_REQUESTS_PER_MINUTE, "m"],
 });
 
 if (ENVIRONMENT !== "local") {
@@ -29,18 +33,26 @@ if (ENVIRONMENT !== "local") {
   });
 }
 
-export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
-  ({ error: err }) => {
-    const message =
-      ENVIRONMENT === "local" && err instanceof Error
-        ? err.message
-        : UNEXPECTED_ERROR_MESSAGE;
-
-    return {
-      message,
-    };
+export const handleError: HandleServerError = ({ kind, error: err }) => {
+  if (kind !== "unknown") {
+    return undefined;
   }
-);
+
+  // Handler synchrone volontairement : `Sentry.handleErrorWithSentry` est
+  // `async`, et depuis SvelteKit 3 un `handleError` asynchrone est ignoré pour
+  // les erreurs levées pendant le rendu SSR (message remplacé par
+  // « Internal Error »), sauf à activer `compilerOptions.experimental.async`.
+  Sentry.captureException(err);
+
+  const message =
+    ENVIRONMENT === "local" && err instanceof Error
+      ? err.message
+      : UNEXPECTED_ERROR_MESSAGE;
+
+  return {
+    message,
+  };
+};
 
 export const handle: Handle = sequence(
   Sentry.sentryHandle({ injectFetchProxyScript: false }),

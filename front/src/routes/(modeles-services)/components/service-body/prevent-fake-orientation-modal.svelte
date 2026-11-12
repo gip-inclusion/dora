@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
 
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
-  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
+  import { URL_DOCUMENTATION_ORIENTATION } from "#lib/consts.ts";
 
   interface Props {
     isOpen?: boolean;

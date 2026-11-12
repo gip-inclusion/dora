@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import EnsureLoggedIn from "#lib/components/hoc/ensure-logged-in.svelte";
 
   import { orientationState } from "./state.svelte.js";
 
@@ -8,15 +8,15 @@
   import OrientationsStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
-  import { CANONICAL_URL } from "$lib/env";
+  import { CANONICAL_URL } from "#lib/env.ts";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
   import { toast } from "@zerodevx/svelte-toast";
-  import Notice from "$lib/components/display/notice.svelte";
-  import { requestOrientationExportLink } from "$lib/requests/orientations";
-  import { userInfo } from "$lib/utils/auth";
-  import { logException } from "$lib/utils/logger";
-  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "$lib/consts";
+  import Notice from "#lib/components/display/notice.svelte";
+  import { requestOrientationExportLink } from "#lib/requests/orientations.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
+  import { logException } from "#lib/utils/logger.ts";
+  import { ORIENTATIONS_EXPORT_LINK_VALIDITY_MINUTES } from "#lib/consts.ts";
 
   interface Props {
     data: PageData;

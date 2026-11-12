@@ -1,11 +1,11 @@
-import { browser } from "$app/environment";
-import type { Service } from "$lib/types";
+import { browser } from "$app/env";
+import type { Service } from "#lib/types.ts";
 import { error } from "@sveltejs/kit";
 import {
   getService,
   getServiceDI,
   getServicesOptions,
-} from "$lib/requests/services";
+} from "#lib/requests/services.ts";
 import type { PageLoad } from "./$types";
 
 export const ssr = false;

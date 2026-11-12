@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Modal from "#lib/components/hoc/modal.svelte";
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
   import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
-  import { markServiceAsSynced } from "$lib/requests/services";
-  import type { Service, ServicesOptions, ShortService } from "$lib/types";
+  import { markServiceAsSynced } from "#lib/requests/services.ts";
+  import type { Service, ServicesOptions, ShortService } from "#lib/types.ts";
   import ServiceContact from "./display/service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
-  import { formatEligibilityZones } from "$lib/utils/service";
+  import { formatEligibilityZones } from "#lib/utils/service.ts";
 
   interface Props {
     isOpen?: boolean;

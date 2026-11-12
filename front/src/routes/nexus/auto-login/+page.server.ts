@@ -1,8 +1,8 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
-import { INCLUSION_PLATFORM_URL } from "$lib/env";
-import { TOKEN_KEY } from "$lib/utils/auth";
-import { fetchNexusAutoLoginUrl } from "$lib/utils/nexus";
+import { INCLUSION_PLATFORM_URL } from "#lib/env.ts";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
+import { fetchNexusAutoLoginUrl } from "#lib/utils/nexus.ts";
 
 // Seule destination vers laquelle on accepte de rediriger sans auto-connexion.
 // Le contrôle est indispensable : sur ce chemin, l'URL demandée n'est jamais
@@ -36,7 +36,7 @@ export const load = async ({ cookies, url }: RequestEvent) => {
 
   if (!token) {
     if (fallback) {
-      redirect(302, fallback);
+      redirect(302, fallback, { external: [INCLUSION_PLATFORM_URL] });
     }
     error(404, "Page Not Found");
   }
@@ -44,11 +44,12 @@ export const load = async ({ cookies, url }: RequestEvent) => {
   const autoLoginRedirectUrl = await fetchNexusAutoLoginUrl(nextUrl, token);
 
   if (autoLoginRedirectUrl) {
-    redirect(302, autoLoginRedirectUrl);
+    // autoLoginRedirectUrl a déjà été validé contre `NEXUS_ALLOWED_REDIRECT_HOSTS` par le back
+    redirect(302, autoLoginRedirectUrl, { external: true });
   }
 
   if (fallback) {
-    redirect(302, fallback);
+    redirect(302, fallback, { external: [INCLUSION_PLATFORM_URL] });
   }
 
   error(404, "Page Not Found");

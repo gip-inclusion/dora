@@ -2,15 +2,15 @@
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
 
-  import Button from "$lib/components/display/button.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import Tooltip from "$lib/components/ui/tooltip.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import Select from "#lib/components/inputs/select/select.svelte";
+  import Tooltip from "#lib/components/ui/tooltip.svelte";
   import type {
     AdminStructure,
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
-  } from "$lib/types";
+  } from "#lib/types.ts";
 
   import { getStructureStatus, STATUS_FILTER_TABS } from "./structures-filters";
   import type { StatusFilter } from "./types";

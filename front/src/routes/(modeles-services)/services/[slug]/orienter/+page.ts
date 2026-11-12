@@ -1,14 +1,17 @@
 import { error, redirect } from "@sveltejs/kit";
-import { ORIENTATION_JWT_QUERY_PARAM } from "$lib/consts";
+import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
 import {
   getOrientationBeneficiaryInfo,
   type OrientationBeneficiaryInfo,
-} from "$lib/requests/nexus";
-import { isAuthenticated } from "$lib/utils/auth";
-import { transferUrlParams } from "$lib/utils/misc";
-import { generateOutboundNexusAutoLoginUrl } from "$lib/utils/nexus";
-import { getPlateformeOrientationUrl } from "$lib/utils/plateforme-orientation";
-import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "$lib/env";
+} from "#lib/requests/nexus.ts";
+import { isAuthenticated } from "#lib/utils/auth.ts";
+import { transferUrlParams } from "#lib/utils/misc.ts";
+import { generateOutboundNexusAutoLoginUrl } from "#lib/utils/nexus.ts";
+import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
+import {
+  INCLUSION_PLATFORM_URL,
+  ORIENTATION_REDIRECTION_FEATURE_FLAG,
+} from "#lib/env.ts";
 
 export const load = async ({ parent, url, params, fetch }) => {
   const data = await parent();
@@ -37,13 +40,16 @@ export const load = async ({ parent, url, params, fetch }) => {
       beneficiaryInfo = null;
     }
     if (beneficiaryInfo && "nextUrl" in beneficiaryInfo) {
+      // URL construite par l'API à partir de `FRONTEND_URL` :
+      // cf. `orientations/views.py::_resolve_emplois_orientation`
       redirect(
         302,
         transferUrlParams({
           targetUrl: beneficiaryInfo.nextUrl,
           sourceUrl: url,
           exclude: [ORIENTATION_JWT_QUERY_PARAM],
-        })
+        }),
+        { external: true }
       );
     }
   } else if (ORIENTATION_REDIRECTION_FEATURE_FLAG) {
@@ -59,7 +65,8 @@ export const load = async ({ parent, url, params, fetch }) => {
         302,
         isAuthenticated()
           ? generateOutboundNexusAutoLoginUrl(plateformeUrl)
-          : plateformeUrl
+          : plateformeUrl,
+        { external: [INCLUSION_PLATFORM_URL] }
       );
     }
   }

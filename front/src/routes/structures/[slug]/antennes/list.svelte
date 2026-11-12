@@ -1,9 +1,9 @@
 <script lang="ts">
   import Home3LineBuildings from "svelte-remix/Home3LineBuildings.svelte";
 
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import Button from "$lib/components/display/button.svelte";
-  import StructureCard from "$lib/components/specialized/structure-card.svelte";
+  import LinkButton from "#lib/components/display/link-button.svelte";
+  import Button from "#lib/components/display/button.svelte";
+  import StructureCard from "#lib/components/specialized/structure-card.svelte";
 
   import NewBranchModal from "./new-branch-modal.svelte";
 

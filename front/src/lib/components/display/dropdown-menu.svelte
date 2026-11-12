@@ -6,8 +6,8 @@
 
   import { afterNavigate } from "$app/navigation";
 
-  import { clickOutside } from "$lib/utils/misc";
-  import { randomId } from "$lib/utils/random";
+  import { clickOutside } from "#lib/utils/misc.ts";
+  import { randomId } from "#lib/utils/random.ts";
 
   interface Props {
     icon?: Component;

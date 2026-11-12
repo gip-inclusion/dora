@@ -1,21 +1,21 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { isRedirect } from "@sveltejs/kit";
-import type { Service } from "$lib/types";
-import { isAuthenticated } from "$lib/utils/auth";
+import type { Service } from "#lib/types.ts";
+import { isAuthenticated } from "#lib/utils/auth.ts";
 import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page";
 
-vi.mock("$lib/utils/auth", () => ({
+vi.mock("#lib/utils/auth.ts", () => ({
   isAuthenticated: vi.fn(),
 }));
 
 // la redirection est derrière un feature flag, alimenté par un `.env` non
 // versionné : on le force pour que les tests ne dépendent pas de l'environnement
-vi.mock("$lib/env", () => ({
+vi.mock("#lib/env.ts", () => ({
   INCLUSION_PLATFORM_URL: "https://plateforme.inclusion.gouv.fr",
   ORIENTATION_REDIRECTION_FEATURE_FLAG: true,
 }));
 
-vi.mock("$lib/requests/nexus", () => ({
+vi.mock("#lib/requests/nexus.ts", () => ({
   getOrientationBeneficiaryInfo: vi.fn(),
 }));
 

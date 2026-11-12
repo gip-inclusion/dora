@@ -17,6 +17,11 @@ jobs:
       matrix:
         node-version: [24.13]
 
+    # Les variables validées par `front/src/env.ts` doivent être présentes,
+    # sinon SvelteKit refuse de démarrer (lint, tests et build chargent la config Vite).
+    env:
+      VITE_PUBLIC_CANONICAL_URL: "http://localhost:3000"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

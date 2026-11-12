@@ -1,9 +1,9 @@
 <script lang="ts">
   import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
 
-  import Label from "$lib/components/display/label.svelte";
-  import type { Structure } from "$lib/types";
-  import { capitalize } from "$lib/utils/misc";
+  import Label from "#lib/components/display/label.svelte";
+  import type { Structure } from "#lib/types.ts";
+  import { capitalize } from "#lib/utils/misc.ts";
 
   interface Props {
     structure: Structure;
