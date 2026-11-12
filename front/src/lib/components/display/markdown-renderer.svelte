@@ -3,9 +3,9 @@
   /*
    * Pour des raisons de sécurité, on centralise l'affichage du rendu Markdown
    * en utilisant @html dans ce fichier.
-   * On utilise markdownToHTML() qui fait appel à insane() pour sécuriser le HTML.
+   * On utilise markdownToHTML() qui nettoie le HTML avec sanitize-html.
    */
-  import { markdownToHTML } from "#lib/utils/misc.ts";
+  import { markdownToHTML } from "#lib/utils/markdown.ts";
 
   interface Props {
     content: string;
@@ -14,7 +14,7 @@
 
   let { content, titleLevel }: Props = $props();
 
-  const html = markdownToHTML(content, titleLevel);
+  const html = $derived(markdownToHTML(content, titleLevel));
 </script>
 
 {@html html}

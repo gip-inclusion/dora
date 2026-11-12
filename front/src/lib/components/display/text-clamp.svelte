@@ -5,12 +5,14 @@
   import MarkdownRenderer from "./markdown-renderer.svelte";
 
   interface Props {
+    // markdown, converti par MarkdownRenderer
     text: string;
+    titleLevel?: number;
     // hauteur du texte visible une fois replié
     clampedHeight?: number;
   }
 
-  let { text, clampedHeight = 112 }: Props = $props();
+  let { text, titleLevel, clampedHeight = 112 }: Props = $props();
 
   const id = `text-clamp-${randomId()}`;
 
@@ -27,7 +29,9 @@
 </script>
 
 <div class="hidden print:inline">
-  <div class="prose mb-s24"><MarkdownRenderer content={text} /></div>
+  <div class="prose mb-s24">
+    <MarkdownRenderer content={text} {titleLevel} />
+  </div>
 </div>
 <div class="print:hidden">
   <div
@@ -36,7 +40,7 @@
     style:height={isClamped ? `${clampedHeight}px` : undefined}
   >
     <div class="prose mb-s12" bind:clientHeight={height}>
-      <MarkdownRenderer content={text} />
+      <MarkdownRenderer content={text} {titleLevel} />
     </div>
     {#if isClamped}
       <!-- le dégradé ne couvre que la dernière ligne, pas tout le bloc replié -->

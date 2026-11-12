@@ -1,5 +1,5 @@
 <script lang="ts">
-  import insane from "insane";
+  import { createPopupContent } from "#lib/utils/map-popup.ts";
 
   import * as mlgl from "maplibre-gl";
 
@@ -19,9 +19,10 @@
   // Le premier cadrage est instantané, les suivants (i.e. lors d'un changement de filtre) sont animés.
   let hasZoomedToStructures = false;
 
-  function getPopupContent(feature: mlgl.MapGeoJSONFeature): string {
-    return insane(
-      `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDescription}`
+  function getPopupContent(feature: mlgl.MapGeoJSONFeature): HTMLElement {
+    return createPopupContent(
+      feature.properties.name,
+      feature.properties.shortDescription
     );
   }
 
@@ -121,7 +122,7 @@
         // based on the feature found.
         popup
           .setLngLat(coordinates)
-          .setHTML(getPopupContent(feature))
+          .setDOMContent(getPopupContent(feature))
           .addTo(map);
         popup._update();
       }
