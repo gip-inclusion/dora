@@ -34,8 +34,9 @@ export async function handleInboundNexusAutoLogin(url: URL, token?: string) {
   if (response.ok) {
     const data = await response.json();
     if (data.redirectUrl) {
-      // URL construite par l'API à partir de `FRONTEND_URL` :
-      // cf. `nexus/views.py::auto_login_in`
+      // URL construite par l'API : son endpoint OIDC si l'utilisateur n'est pas
+      // connecté côté Dora, `FRONTEND_URL/auth/pc-logout/` sinon
+      // (cf. `nexus/views.py::auto_login_in`)
       redirect(302, data.redirectUrl, { external: true });
     }
   }
