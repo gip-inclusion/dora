@@ -2,7 +2,7 @@
   import * as mlgl from "maplibre-gl";
   import Spiderfy from "@nazka/map-gl-js-spiderfy";
 
-  import insane from "insane";
+  import { createPopupContent } from "#lib/utils/map-popup.ts";
 
   import circleIcon from "#lib/assets/icons/circle.png";
   import Map from "#lib/components/display/map.svelte";
@@ -38,9 +38,10 @@
 
   let zoomToAddress = $derived(Boolean(data.lat && data.lon));
 
-  function getPopupContent(feature): string {
-    return insane(
-      `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDesc}`
+  function getPopupContent(feature): HTMLElement {
+    return createPopupContent(
+      feature.properties.name,
+      feature.properties.shortDesc
     );
   }
 
@@ -56,7 +57,10 @@
       number,
       number,
     ];
-    popup.setLngLat(coordinates).setHTML(getPopupContent(feature)).addTo(map);
+    popup
+      .setLngLat(coordinates)
+      .setDOMContent(getPopupContent(feature))
+      .addTo(map);
     popup._update();
   }
 

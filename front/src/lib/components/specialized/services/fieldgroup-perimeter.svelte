@@ -1,5 +1,5 @@
 <script lang="ts">
-  import insane from "insane";
+  import HighlightedText from "#lib/components/display/highlighted-text.svelte";
 
   import FieldGroup from "#lib/components/display/field-group.svelte";
   import Select from "#lib/components/inputs/select/select.svelte";
@@ -123,10 +123,7 @@
 {#snippet itemContent({ item })}
   {@const { type } = parseLocation(item.value)}
   <span>
-    {@html // eslint-disable-line svelte/no-at-html-tags
-    insane(item.highlighted?.label ?? item.label, {
-      allowedTags: ["b"],
-    })}
+    <HighlightedText text={item.label} segments={item.highlighted?.label} />
     <span class="text-gray-text-alt2">
       {#if type === LocationType.City}
         · Commune

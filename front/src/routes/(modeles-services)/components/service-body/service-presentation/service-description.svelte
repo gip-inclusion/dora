@@ -1,7 +1,6 @@
 <script lang="ts">
   import TextClamp from "#lib/components/display/text-clamp.svelte";
   import type { Service } from "#lib/types.ts";
-  import { markdownToHTML } from "#lib/utils/misc.ts";
 
   import ServiceSection from "./components/service-section.svelte";
 
@@ -16,7 +15,8 @@
   <div class="markdown-wrapper prose w-full">
     {#if service.description}
       <TextClamp
-        text={markdownToHTML(service.description, 4)}
+        text={service.description}
+        titleLevel={4}
         clampedHeight={220}
       />
     {:else}
