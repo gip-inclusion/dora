@@ -693,6 +693,14 @@ SESAME_SESSION_NAME = "sesame_magic_link"
 # Et pontiellement désactivable par configuration
 DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED") == "true"
 
+# Limitation des tentatives de connexion à l'admin, par IP et par email
+# (cf. `config.admin.AdminLoginForm`)
+ADMIN_LOGIN_MAX_FAILURES_PER_IP = int(os.getenv("ADMIN_LOGIN_MAX_FAILURES_PER_IP", "5"))
+ADMIN_LOGIN_MAX_FAILURES_PER_EMAIL = int(
+    os.getenv("ADMIN_LOGIN_MAX_FAILURES_PER_EMAIL", "10")
+)
+ADMIN_LOGIN_LOCKOUT_MINUTES = int(os.getenv("ADMIN_LOGIN_LOCKOUT_MINUTES", "15"))
+
 if DJANGO_ADMIN_2FA_ENABLED:
     INSTALLED_APPS += [  # noqa
         "django_otp",
