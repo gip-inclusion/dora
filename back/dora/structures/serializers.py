@@ -566,13 +566,15 @@ class StructurePutativeMemberSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(**user_data)
             user.set_unusable_password()
             user.save()
-        try:
-            StructurePutativeMember.objects.get(
-                user=user, structure=validated_data["structure"]
-            )
+        if StructurePutativeMember.objects.filter(
+            user=user, structure=validated_data["structure"]
+        ).exists():
+            # déjà invité
             raise exceptions.PermissionDenied
-        except StructurePutativeMember.DoesNotExist:
-            pass
+        if StructureMember.objects.filter(
+            user=user, structure=validated_data["structure"]
+        ).exists():
+            raise exceptions.PermissionDenied
         member = StructurePutativeMember.objects.create(
             user=user,
             **validated_data,

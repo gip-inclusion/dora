@@ -201,7 +201,7 @@ class AuthenticationTestCase(APITestCase):
         structure = Structure.objects.get(siret=response.data["siret"])
         self.assertEqual(structure.moderation_status, ModerationStatus.VALIDATED)
 
-    def test_fast_track_user_becomes_member_directly(self):
+    def test_fast_track_user_becomes_member_directly_and_is_not_putative_member(self):
         baker.make("Establishment", siret=DUMMY_SIRET)
         struct = make_structure(siret=DUMMY_SIRET)
         admin = baker.make("users.User", is_valid=True)
@@ -212,6 +212,8 @@ class AuthenticationTestCase(APITestCase):
             },
         )
         user = baker.make("users.User", is_valid=True)
+
+        struct.putative_members.add(user)
         self.client.force_authenticate(user=user)
 
         with patch(
@@ -230,7 +232,7 @@ class AuthenticationTestCase(APITestCase):
                 },
             )
         self.assertEqual(response.status_code, 200)
-        # Le membre doit être un membre direct, pas un membre putatif
+        # Le nouveau membre ne devrait plus être un membre putatif
         StructureMember.objects.get(structure__siret=DUMMY_SIRET, user=user)
         self.assertFalse(
             StructurePutativeMember.objects.filter(
