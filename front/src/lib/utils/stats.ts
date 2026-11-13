@@ -37,28 +37,23 @@ async function logAnalyticsEvent(
   // Les statistiques sont « best effort » : un échec (bloqueur de pub, réseau
   // coupé, navigation pendant l'envoi) ne doit jamais interrompre l'appelant,
   // dont la plupart ne gèrent pas la promesse retournée.
-  let res: Response;
   try {
-    res = await fetchFunction(`${getApiURL()}/stats/event/`, {
+    const res = await fetchFunction(`${getApiURL()}/stats/event/`, {
       method: "POST",
       headers,
       body: JSON.stringify(data),
       keepalive: true,
     });
+
+    if (res.ok) {
+      return (await res.json()) as { tag: string; event: number };
+    } else {
+      console.error(await res.json());
+    }
   } catch (err) {
     console.error(err);
-    return null;
   }
 
-  if (res.ok) {
-    return res.json() as Promise<{ tag: string; event: number }>;
-  } else {
-    try {
-      console.error(await res.json());
-    } catch (err) {
-      console.error(err);
-    }
-  }
   return null;
 }
 
