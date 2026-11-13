@@ -145,3 +145,16 @@ class ZoneEligibiliteChoicesTests(TestCase):
         self.assertEqual(
             get_zone_eligibilite_choices(["1", "123456", "abcdefghij"]), []
         )
+
+    def test_does_not_requery_for_each_service(self):
+        # La zone d'éligibilité est reconstituée service par service : les
+        # tables de découpage étant statiques, seul le premier appel doit
+        # requêter la base (cf. N+1 sur le détail d'une structure).
+        codes = ["69", "01", "75", "69123"]
+
+        with self.assertNumQueries(3):
+            first = get_zone_eligibilite_choices(codes)
+
+        with self.assertNumQueries(0):
+            self.assertEqual(get_zone_eligibilite_choices(codes), first)
+            self.assertEqual(get_zone_eligibilite_choices(codes), first)
