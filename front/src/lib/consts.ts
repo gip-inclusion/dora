@@ -78,6 +78,17 @@ export const STALE_CHUNK_ERROR_MESSAGES = [
   "Importing a module script failed",
 ];
 
+// Échecs réseau au niveau du navigateur : aucune réponse n'est reçue, donc aucune
+// information exploitable. Causes habituelles : bloqueur de pub, perte de réseau,
+// onglet fermé pendant la requête, robot d'indexation. Le message varie selon le
+// navigateur (Chrome, Safari, Firefox).
+export const NETWORK_ERROR_MESSAGES = [
+  "Failed to fetch",
+  "Load failed",
+  "NetworkError",
+  "network error",
+];
+
 // Marqueur retourné par le handleError client lors du rechargement automatique
 // après un déploiement, pour que la page d'erreur ne le remonte pas à Sentry
 export const STALE_CHUNK_RELOAD_MESSAGE = "stale-chunk-reload";

@@ -1,5 +1,5 @@
 import { browser } from "$app/env";
-import { RATE_LIMIT_MESSAGE } from "#lib/consts.ts";
+import { NETWORK_ERROR_MESSAGES, RATE_LIMIT_MESSAGE } from "#lib/consts.ts";
 import { API_URL } from "#lib/env.ts";
 import * as Sentry from "@sentry/sveltekit";
 import { toast } from "@zerodevx/svelte-toast";
@@ -20,6 +20,19 @@ function isFirstPartyRequest(input: string | URL | Request): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Un échec réseau brut (aucune réponse reçue) n'apporte aucune information
+ * exploitable : il est provoqué par l'environnement du client (bloqueur de pub,
+ * perte de réseau, onglet fermé pendant la requête, robot d'indexation) et pas
+ * par notre code. On ne le remonte donc pas à Sentry.
+ */
+function isNetworkError(err: unknown): boolean {
+  return (
+    err instanceof TypeError &&
+    NETWORK_ERROR_MESSAGES.some((message) => err.message.includes(message))
+  );
 }
 
 /**
@@ -52,7 +65,9 @@ export function setupFetchInterceptor(): void {
     try {
       response = await originalFetch(input, init);
     } catch (err) {
-      Sentry.captureException(err);
+      if (!isNetworkError(err)) {
+        Sentry.captureException(err);
+      }
       throw err;
     }
 
