@@ -28,9 +28,9 @@ Les services sont l’ensemble des services proposés sur la plateforme DORA qui
 
 ## Fonctionnalités
 
-###Inscription sur le site internet et fonctionnalités liées aux comptes
+### Inscription sur le site internet et fonctionnalités liées aux comptes
 
-####Création de l’espace de la structure via Inclusion Connect
+#### Création de l’espace de la structure via Inclusion Connect
 
 Tout accompagnateur qui le souhaite peut créer un espace personnel en cliquant sur "Se connecter" en s’identifiant via Inclusion Connect puis sur "Créer un compte". Il communique les informations relatives à sa structure.
 
