@@ -5,17 +5,17 @@ permissions:
 
 on:
   push:
-    paths:
-      - 'front/**'
-      - '.github/workflows/front-ci.yml'
+    branches: [main]
+  pull_request:
 
 jobs:
-  build:
+  front-ci:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [24.13]
+    # Un groupe par commit sur `main`, pour que chaque commit fusionné soit vérifié
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+      cancel-in-progress: true
 
     # Les variables validées par `front/src/env.ts` doivent être présentes,
     # sinon SvelteKit refuse de démarrer (lint, tests et build chargent la config Vite).
@@ -26,10 +26,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7.1.0
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: front/package.json
 
       - name: Install dependencies
         working-directory: front

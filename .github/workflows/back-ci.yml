@@ -5,12 +5,11 @@ permissions:
 
 on:
   push:
-    paths:
-      - 'back/**'
-      - '.github/workflows/back-ci.yml'
+    branches: [main]
+  pull_request:
 
 jobs:
-  build:
+  back-ci:
     runs-on: ubuntu-latest
 
     env:
@@ -23,8 +22,9 @@ jobs:
       AWS_SECRET_ACCESS_KEY: s3-secret-key
       REQUIREMENTS_PATH: requirements/test.txt  # Pas besoin de préciser 'back' ici, car le 'working-directory' sera 'back'
 
+    # Un groupe par commit sur `main`, pour que chaque commit fusionné soit vérifié
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}
+      group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
       cancel-in-progress: true
 
     services:
