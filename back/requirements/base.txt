@@ -16,15 +16,15 @@ asgiref==3.13.0 \
     # via
     #   django
     #   django-cors-headers
-boto3==1.43.126 \
-    --hash=sha256:5fda4a3dd2782c134a01d1678911962c2860dd8de8cd10bef168ba1507b371a9 \
-    --hash=sha256:5fda4a3dd2782c134a01d1678911962c2860dd8de8cd10bef168ba1507b371a9 \
-    --hash=sha256:dd701a973b02a73930e546a6a15d13edbfbedc3180bb3d55b0a88678c284ccd6 \
-    --hash=sha256:dd701a973b02a73930e546a6a15d13edbfbedc3180bb3d55b0a88678c284ccd6
+boto3==1.44.0 \
+    --hash=sha256:5d311d2988ae560f83e5fb8a284cb57b48e2c8d444ecb78a6d6752ae1740e04a \
+    --hash=sha256:5d311d2988ae560f83e5fb8a284cb57b48e2c8d444ecb78a6d6752ae1740e04a \
+    --hash=sha256:ae3009db1294fd4ca2e30d9592ead8ab56f0e270bcad0b95e555f03f7875716d \
+    --hash=sha256:ae3009db1294fd4ca2e30d9592ead8ab56f0e270bcad0b95e555f03f7875716d
     # via django-storages
-botocore==1.43.127 \
-    --hash=sha256:93bae360fb3a6f1b8e36593faa8bbbfa05b19866f7a37e9606a98f13394156f8 \
-    --hash=sha256:aa0e3188679a2164a2098a14ea9b59520520cb573aaee9999d852480691e134a
+botocore==1.44.3 \
+    --hash=sha256:44d86fff55ce2d014bd72183ebc164b21b36598253b8234d4f59e8600e09b8b3 \
+    --hash=sha256:793eac2a7ca167e9376b136cf000e1675e9ffe8d7ec609160cc1ee00b93ace28
     # via
     #   boto3
     #   s3transfer
@@ -607,9 +607,9 @@ cryptography==50.0.2 \
     # via
     #   jwcrypto
     #   mozilla-django-oidc
-data-inclusion-schema==1.0.10 \
-    --hash=sha256:3e226d1944dec20185f3aa17bc3dac0cdd16ec39787bad76eecddf0fbe20b8ca \
-    --hash=sha256:46592527c4fb288da4b5e7cb1ab87b481d4fc816b066118ca135b90c2487828e
+data-inclusion-schema==1.0.11 \
+    --hash=sha256:50efbc5e99591b2de8ce7b63d3b5ce5c28b86d4e8e8caf81f28dfa6baae409d9 \
+    --hash=sha256:d66478c130f77181082d993bee8441368f21665fd4595c882860ef650edbcbf6
     # via -r requirements/base.in
 dj-database-url==3.1.2 \
     --hash=sha256:544e015fee3efa5127a1eb1cca465f4ace578265b3671fe61d0ed7dbafb5ec8a \
@@ -868,9 +868,9 @@ jwcrypto==1.6.1 \
     # via
     #   -r requirements/base.in
     #   itoutils
-markdown-it-py==4.2.0 \
-    --hash=sha256:04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49 \
-    --hash=sha256:9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a
+markdown-it-py==4.3.0 \
+    --hash=sha256:7aa1511a46c39138de78d9eba92ce47e63124d8003fc98b3a351909e04239efa \
+    --hash=sha256:91a58fa5b72c71a40cf7177250fd767480d7a2bb3ac426ccfb76fb90305fdaaa
     # via -r requirements/base.in
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
