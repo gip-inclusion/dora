@@ -24,15 +24,15 @@ venv: $(VIRTUAL_ENV)
 # =============================================================================
 .PHONY: fix quality
 
-LINTER_CHECKED_DIRS := analyses macros metabase_scanner models seeds snapshots tests
+SQLFLUFF_CHECKED_DIRS := analyses macros metabase_scanner models seeds snapshots tests
 SQLFLUFF_OPTIONS := --disable-progress-bar
 
 fix: $(VIRTUAL_ENV)
-	ruff format $(LINTER_CHECKED_DIRS)
-	ruff check --fix $(LINTER_CHECKED_DIRS)
-	sqlfluff fix $(SQLFLUFF_OPTIONS) $(LINTER_CHECKED_DIRS)
+	ruff format .
+	ruff check --fix .
+	sqlfluff fix $(SQLFLUFF_OPTIONS) $(SQLFLUFF_CHECKED_DIRS)
 
 quality: $(VIRTUAL_ENV)
-	ruff format --check $(LINTER_CHECKED_DIRS)
-	ruff check $(LINTER_CHECKED_DIRS)
-	sqlfluff lint $(SQLFLUFF_OPTIONS) $(LINTER_CHECKED_DIRS)
+	ruff format --check .
+	ruff check .
+	sqlfluff lint $(SQLFLUFF_OPTIONS) $(SQLFLUFF_CHECKED_DIRS)
