@@ -6,7 +6,9 @@ const MARKDOWN_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedAttributes: {
     ...sanitizeHtml.defaults.allowedAttributes,
     a: [...sanitizeHtml.defaults.allowedAttributes.a, "rel", "title"],
-    ["h2"]: ["id"],
+    ...Object.fromEntries(
+      ["h1", "h2", "h3", "h4", "h5", "h6"].map((tag) => [tag, ["id"]])
+    ),
   },
   transformTags: {
     a: sanitizeHtml.simpleTransform("a", {
