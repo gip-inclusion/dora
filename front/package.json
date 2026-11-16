@@ -30,19 +30,19 @@
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@nazka/map-gl-js-spiderfy": "^2.0.0",
-    "@sveltejs/adapter-node": "^6.0.1",
-    "@sveltejs/kit": "^3.1.1",
+    "@sveltejs/adapter-node": "^6.0.2",
+    "@sveltejs/kit": "^3.2.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.5",
-    "@tiptap/core": "3.33.0",
-    "@tiptap/extension-link": "3.33.0",
-    "@tiptap/extension-placeholder": "3.33.0",
-    "@tiptap/starter-kit": "3.33.0",
+    "@tiptap/core": "3.33.1",
+    "@tiptap/extension-link": "3.33.1",
+    "@tiptap/extension-placeholder": "3.33.1",
+    "@tiptap/starter-kit": "3.33.1",
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
     "@typescript-eslint/parser": "^8.56.1",
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.20.6",
@@ -72,7 +72,7 @@
     "tailwindcss": "^4.2.1",
     "tslib": "^2.9.1",
     "typescript": "^6.0.3",
-    "vite": "^8.3.6",
+    "vite": "^8.3.7",
     "vitest": "^5.1.0",
     "wicg-inert": "^3.1.3",
     "write-excel-file": "^4.1.1"
@@ -94,6 +94,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^11.11.0"
+    "@sentry/sveltekit": "^11.12.0"
   }
 }
