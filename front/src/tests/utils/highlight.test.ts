@@ -1,4 +1,7 @@
-import { splitHighlight } from "#lib/utils/highlight.ts";
+import {
+  buildHighlightPatterns,
+  splitHighlight,
+} from "#lib/utils/highlight.ts";
 import { describe, expect, test } from "vitest";
 
 describe("splitHighlight", () => {
@@ -27,6 +30,28 @@ describe("splitHighlight", () => {
   test("renvoie le texte entier sans motif", () => {
     expect(splitHighlight("<b>Paris</b>", [])).toEqual([
       { text: "<b>Paris</b>", match: false },
+    ]);
+  });
+});
+
+describe("buildHighlightPatterns", () => {
+  test("échappe les caractères spéciaux, parenthèses comprises", () => {
+    const patterns = buildHighlightPatterns("(a|b) c.", false);
+    expect(splitHighlight("x (a|b) c.", patterns)).toEqual([
+      { text: "x ", match: false },
+      { text: "(a|b)", match: true },
+      { text: " ", match: false },
+      { text: "c.", match: true },
+    ]);
+  });
+
+  test("ignore les accents si demandé", () => {
+    const patterns = buildHighlightPatterns("evry  (", true);
+    expect(splitHighlight("Évry (91)", patterns)).toEqual([
+      { text: "Évry", match: true },
+      { text: " ", match: false },
+      { text: "(", match: true },
+      { text: "91)", match: false },
     ]);
   });
 });
