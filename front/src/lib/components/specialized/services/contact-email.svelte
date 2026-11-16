@@ -1,21 +1,22 @@
 <script lang="ts">
-  import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
-
   import { CANONICAL_URL } from "#lib/env.ts";
+  import ContactEmailLink from "./contact-email-link.svelte";
   import type { Service, ShortService } from "#lib/types.ts";
   import { userInfo } from "#lib/utils/auth.ts";
 
   interface Props {
     service: Service | ShortService;
+    email: string;
     preferred?: boolean;
   }
 
-  let { service, preferred = false }: Props = $props();
-  const emailSubject = encodeURIComponent(
-    `Candidature ${service.name} / Demande d’orientation`
+  let { service, email, preferred = false }: Props = $props();
+  const emailSubject = $derived(
+    encodeURIComponent(`Candidature ${service.name} / Demande d’orientation`)
   );
-  const emailBody = encodeURIComponent(
-    `
+  const emailBody = $derived(
+    encodeURIComponent(
+      `
   Bonjour,
 
   Je vous contacte concernant l’offre ${
@@ -37,22 +38,12 @@
     ?.map((credential) => `- ${credential}`)
     .join("\n")}
   `.trim()
+    )
+  );
+
+  const mailtoHref = $derived(
+    `mailto:${email}?subject=${emailSubject}&body=${emailBody}`
   );
 </script>
 
-<div>
-  <a
-    class="text-f16 flex items-center break-all"
-    class:font-bold={preferred}
-    href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
-  >
-    <span
-      class="mr-s8 h-s24 w-s24 fill-current"
-      role="img"
-      aria-label="Courriel"
-    >
-      <MailSendLineBusiness />
-    </span>
-    {service.contactEmail}
-  </a>
-</div>
+<ContactEmailLink {email} {mailtoHref} {preferred} />

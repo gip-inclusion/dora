@@ -29,10 +29,10 @@
         </p>
       {/if}
       {#if service.contactEmail}
-        <ContactEmail {service} preferred />
+        <ContactEmail {service} email={service.contactEmail} preferred />
       {/if}
       {#if service.contactPhone}
-        <ContactPhone {service} preferred />
+        <ContactPhone phoneNumber={service.contactPhone} preferred />
       {/if}
     {/if}
   </div>
