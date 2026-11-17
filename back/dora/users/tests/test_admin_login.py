@@ -55,6 +55,7 @@ def test_failed_login_is_logged(client, staff_user):
     log = ActionLog.objects.get()
     assert log.payload["action"] == AdminLoginAction.FAILED
     assert log.payload["email"] == staff_user.email
+    assert log.payload["userId"] == staff_user.pk
     assert log.payload["ip"] == "127.0.0.1"
     assert "mauvais" not in str(log.payload)
 
@@ -65,6 +66,7 @@ def test_unknown_email_is_not_logged_in_clear(client, staff_user):
 
     log = ActionLog.objects.get()
     assert "email" not in log.payload
+    assert "userId" not in log.payload
     assert log.payload["emailDigest"]
     assert PASSWORD not in str(log.payload)
 

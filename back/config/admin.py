@@ -118,8 +118,15 @@ class AdminLoginForm(login_form_class):
             blocked |= _increment(key) >= limit
 
         log_payload = {"legal": True, "ip": ip}
-        if get_user_model().objects.filter(email__iexact=email).exists():
+        user_id = (
+            get_user_model()
+            .objects.filter(email__iexact=email)
+            .values_list("pk", flat=True)
+            .first()
+        )
+        if user_id is not None:
             log_payload["email"] = email
+            log_payload["userId"] = user_id
         else:
             log_payload["emailDigest"] = email_digest
         logger.warning(
