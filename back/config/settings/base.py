@@ -695,7 +695,9 @@ DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED") == "true"
 
 # Limitation des tentatives de connexion à l'admin, par IP et par email
 # (cf. `config.admin.AdminLoginForm`)
-ADMIN_LOGIN_MAX_FAILURES_PER_IP = int(os.getenv("ADMIN_LOGIN_MAX_FAILURES_PER_IP", "5"))
+ADMIN_LOGIN_MAX_FAILURES_PER_IP = int(
+    os.getenv("ADMIN_LOGIN_MAX_FAILURES_PER_IP", "10")
+)
 ADMIN_LOGIN_MAX_FAILURES_PER_EMAIL = int(
     os.getenv("ADMIN_LOGIN_MAX_FAILURES_PER_EMAIL", "10")
 )
