@@ -204,7 +204,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     modes_mobilisation = serializers.ReadOnlyField(source="mobilisation_modes")
     mobilisable_par = serializers.ReadOnlyField(source="mobilisable_by")
     mobilisation_precisions = serializers.ReadOnlyField(source="mobilisation_details")
-    lien_mobilisation = serializers.ReadOnlyField(source="mobilisation_link")
+    lien_mobilisation = serializers.SerializerMethodField()
     zone_eligibilite = serializers.SerializerMethodField()
     conditions_acces = serializers.ReadOnlyField()
     temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
@@ -456,3 +456,21 @@ class ServiceSerializer(serializers.ModelSerializer):
         if obj.zone_eligibilite == []:
             return ["france"]
         return obj.zone_eligibilite
+
+    def get_lien_mobilisation(self, obj):
+        # DI ne contient pas la valeur `formulaire-dora` pour `mobilisation_modes`.
+        # La Plateforme utilise la presence de `lien_mobilisation` pour décidier si les orientations se font
+        # dans le formulaire interne ou un lien externe. Si un service a `formulaire-dora`
+        # comme `coach_orientation_mode` mais il n'y a pas de `coach_orientation_modes_external_form_link', on
+        # renvoie None pour que la Plateforme utilise le formulaire interne.
+        coach_orientation_mode_values = set(
+            m.value for m in obj.coach_orientation_modes.all()
+        )
+
+        if "formulaire-dora" in coach_orientation_mode_values:
+            if obj.coach_orientation_modes_external_form_link:
+                return obj.coach_orientation_modes_external_form_link
+
+            return None
+
+        return obj.mobilisation_link

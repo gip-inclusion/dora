@@ -301,6 +301,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         horaires_accueil="Mo-Fr 08:30-12:30; PH off",
         coach_orientation_modes_other="Mêmes modalités que pour les bénéficiaires",
         beneficiaries_access_modes_other="Contacter conseiller(e) Pôle Emploi",
+        coach_orientation_modes_external_form_link="https://example.com",
         appointment_link="https://example.com",
         kind="formation",
         publics=[
@@ -713,3 +714,56 @@ def test_service_transforms_empty_eligibility_zone_list_to_national_code(
     assert response.status_code == 200
 
     assert response.data["zone_eligibilite"] == ["france"]
+
+
+def test_returns_mobilisation_link_if_service_uses_internal_form_but_has_coach_orientation_modes_external_form_link(
+    authenticated_user, api_client
+):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        coach_orientation_modes_external_form_link="https://link.com",
+        mobilisation_link="https://link.com",
+    )
+    service.coach_orientation_modes.add(
+        CoachOrientationMode.objects.get(value="formulaire-dora")
+    )
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+
+    assert response.data["lien_mobilisation"] == "https://link.com"
+
+
+def test_returns_mobilisation_link_if_service_uses_internal_form_but_does_not_have_coach_orientation_modes_external_form_link(
+    authenticated_user, api_client
+):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        appointment_link="https://link.com",
+        mobilisation_link="https://link.com",
+    )
+    service.coach_orientation_modes.add(
+        CoachOrientationMode.objects.get(value="formulaire-dora")
+    )
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert response.status_code == 200
+
+    assert response.data["lien_mobilisation"] is None
+
+
+def test_returns_mobilisation_link_if_service_does_not_use_internal_form(
+    authenticated_user, api_client
+):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        appointment_link="https://link.com",
+        mobilisation_link="https://link.com",
+    )
+
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+    assert response.status_code == 200
+
+    assert response.data["lien_mobilisation"] == "https://link.com"
