@@ -44,3 +44,26 @@ updates:
           - "patch"
           - "minor"
 
+  - package-ecosystem: "pip"
+    directory: "/analytics"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 5
+    commit-message:
+      prefix: "build"
+    open-pull-requests-limit: 10
+    groups:
+      # sqlfluff-templater-dbt dépend de dbt-core et de sqlfluff : tout monte ensemble
+      dbt-sqlfluff:
+        patterns:
+          - "dbt-*"
+          - "sqlfluff*"
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "patch"
+          - "minor"
+        # ruff est en 0.x : une mineure change règles et formatage, PR à part
+        exclude-patterns:
+          - "ruff"
