@@ -1679,3 +1679,22 @@ class TestStructurePutativeMember:
         assert not StructurePutativeMember.objects.filter(
             user=simple_member, structure=structure
         ).exists()
+
+
+def test_admin_cannot_move_membership_to_another_structure(api_client):
+    structure_admin = make_user()
+    structure = make_structure()
+    membership = make_structure_member(structure_admin, structure, is_admin=True)
+    other_structure = make_structure()
+    api_client.force_authenticate(user=structure_admin)
+
+    response = api_client.patch(
+        f"/structure-members/{membership.id}/?structure={other_structure.slug}",
+        {"is_admin": True},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    membership.refresh_from_db()
+    assert membership.structure == structure
+    assert not other_structure.is_member(structure_admin)

@@ -496,16 +496,6 @@ class StructureMemberSerializer(serializers.ModelSerializer):
         ]
         validators = []
 
-    def validate(self, data):
-        structure_slug = self.context["request"].query_params.get("structure")
-        if structure_slug:
-            try:
-                structure = Structure.objects.get(slug=structure_slug)
-            except Structure.DoesNotExist:
-                raise exceptions.NotFound
-            data["structure"] = structure
-        return data
-
     def update(self, instance, validated_data):
         # For now, we don't want the user to be editable this way
         # user_data = validated_data.pop("user") if "user" in validated_data else {}
