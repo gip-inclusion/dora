@@ -1682,11 +1682,11 @@ class TestStructurePutativeMember:
 
 
 def test_admin_cannot_move_membership_to_another_structure(api_client):
-    admin = make_user()
+    structure_admin = make_user()
     structure = make_structure()
-    membership = make_structure_member(admin, structure, is_admin=True)
+    membership = make_structure_member(structure_admin, structure, is_admin=True)
     other_structure = make_structure()
-    api_client.force_authenticate(user=admin)
+    api_client.force_authenticate(user=structure_admin)
 
     response = api_client.patch(
         f"/structure-members/{membership.id}/?structure={other_structure.slug}",
@@ -1697,4 +1697,4 @@ def test_admin_cannot_move_membership_to_another_structure(api_client):
     assert response.status_code == 200
     membership.refresh_from_db()
     assert membership.structure == structure
-    assert not other_structure.is_member(admin)
+    assert not other_structure.is_member(structure_admin)
