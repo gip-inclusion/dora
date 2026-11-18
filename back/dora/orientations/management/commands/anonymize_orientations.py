@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.conf import settings
+from django.db import transaction
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
@@ -24,29 +25,30 @@ class Command(BaseCommand):
             is_anonymized=False, creation_date__date__lte=anonymization_date
         )
 
-        emplois_count = EmploisOrientationData.objects.filter(
-            orientation__in=orientations_to_anonymize
-        ).update(
-            prescriber_email="",
-            prescriber_first_name="",
-            prescriber_last_name="",
-            prescriber_phone="",
-        )
+        with transaction.atomic():
+            emplois_count = EmploisOrientationData.objects.filter(
+                orientation__in=orientations_to_anonymize
+            ).update(
+                prescriber_email="",
+                prescriber_first_name="",
+                prescriber_last_name="",
+                prescriber_phone="",
+            )
 
-        count = orientations_to_anonymize.update(
-            beneficiary_first_name="",
-            beneficiary_last_name="",
-            beneficiary_phone="",
-            beneficiary_email="",
-            beneficiary_france_travail_number="",
-            referent_first_name="",
-            referent_last_name="",
-            referent_phone="",
-            referent_email="",
-            di_contact_name="",
-            di_contact_email="",
-            is_anonymized=True,
-        )
+            count = orientations_to_anonymize.update(
+                beneficiary_first_name="",
+                beneficiary_last_name="",
+                beneficiary_phone="",
+                beneficiary_email="",
+                beneficiary_france_travail_number="",
+                referent_first_name="",
+                referent_last_name="",
+                referent_phone="",
+                referent_email="",
+                di_contact_name="",
+                di_contact_email="",
+                is_anonymized=True,
+            )
 
         self.logger.info(
             "%s orientations ont été anonymisées (dont %s avec des données Les Emplois).",
