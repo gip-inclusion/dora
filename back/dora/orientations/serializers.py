@@ -1,38 +1,16 @@
-import requests
 from django.core.files.storage import default_storage
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
-import dora.data_inclusion.client
-from dora.data_inclusion.mappings import map_service
 from dora.orientations.models import (
     EMPLOIS_SOURCE_LABEL,
     Orientation,
     OrientationStatus,
 )
-from dora.services.models import Service
-from dora.structures.models import Structure
 
 
 class OrientationSerializer(serializers.ModelSerializer):
-    service_slug = serializers.SlugRelatedField(
-        source="service",
-        slug_field="slug",
-        queryset=Service.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
-
-    prescriber_structure_slug = serializers.SlugRelatedField(
-        source="prescriber_structure",
-        slug_field="slug",
-        queryset=Structure.objects.all(),
-        write_only=True,
-    )
-
     service = serializers.SerializerMethodField()
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
@@ -41,7 +19,6 @@ class OrientationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orientation
         fields = [
-            "beneficiary_attachments",
             "beneficiary_attachments_details",
             "beneficiary_availability",
             "beneficiary_contact_preferences",
@@ -64,7 +41,6 @@ class OrientationSerializer(serializers.ModelSerializer):
             "orientation_reasons",
             "prescriber",
             "prescriber_structure",
-            "prescriber_structure_slug",
             "processing_date",
             "query_id",
             "referent_email",
@@ -73,70 +49,11 @@ class OrientationSerializer(serializers.ModelSerializer):
             "referent_phone",
             "requirements",
             "service",
-            "service_slug",
             "situation",
             "situation_other",
             "source",
             "status",
         ]
-        extra_kwargs = {"beneficiary_attachments": {"write_only": True}}
-
-    def validate(self, orientation):
-        """Valide les documents joints.
-
-        Si au moins un document (`Service.forms`) ou justificatif (`Service.credentials`) est demandé par le service,
-        alors le bénéficiaire doit joindre au moins un document (`Orientation.beneficiary_attachments`).
-        S'il n'y en a pas, une erreur est levée.
-
-        À la fois les services Dora et DI sont supportés.
-        """
-        # Récupère le service depuis les données ou l'instance
-        service = orientation.get("service") or (
-            self.instance.service if self.instance else None
-        )
-
-        if service:
-            # Il s'agit d'un service Dora
-
-            # Est-ce que le service nécessite des documents ou justificatifs ?
-            requires_attachments = (
-                service.credentials.exists()  # A des justificatifs requis
-                or bool(service.forms)  # A des documents à compléter
-            )
-        elif orientation.get("di_service_id"):
-            # Il s'agit d'un service DI
-
-            # Récupération du service depuis le client DI
-            di_client = dora.data_inclusion.di_client_factory()
-            try:
-                raw_service = (
-                    di_client.retrieve_service(id=orientation.get("di_service_id"))
-                    if di_client is not None
-                    else None
-                )
-            except requests.ConnectionError:
-                return orientation
-            if raw_service is None:
-                return orientation
-
-            # Mapping du service DI
-            di_service = map_service(raw_service, False)
-
-            # Est-ce que le service DI nécessite des documents ou justificatifs ?
-            requires_attachments = (
-                bool(di_service.get("credentials"))  # A des justificatifs requis
-                or bool(di_service.get("forms"))  # A des documents à compléter
-            )
-
-        # Si le service nécessite des documents mais qu'aucun n'est fourni, une erreur est levée.
-        if requires_attachments and not orientation.get("beneficiary_attachments"):
-            raise ValidationError(
-                {
-                    "beneficiary_attachments": "Pour valider l’envoi de votre demande, vous devez ajouter les documents demandés."
-                }
-            )
-
-        return orientation
 
     def get_service(self, orientation):
         return {
