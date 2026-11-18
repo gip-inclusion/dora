@@ -4,6 +4,8 @@
   import Button from "#lib/components/display/button.svelte";
   import LinkButton from "#lib/components/display/link-button.svelte";
   import ServiceContact from "#lib/components/specialized/services/display/service-contact.svelte";
+  import ContactEmailLink from "#lib/components/specialized/services/contact-email-link.svelte";
+  import ContactPhone from "#lib/components/specialized/services/contact-phone.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "#lib/types.ts";
   import { isAuthenticated } from "#lib/utils/auth.ts";
@@ -107,12 +109,21 @@
           </span>
         {:else}
           <span class="text-f16">
-            Il n'y a pas de données de contact dédiées à ce service. Nous vous
-            invitons à
-            <a href={structureHref} class="font-bold underline"
-              >contacter la structure</a
-            >
+            Aucune coordonnée n’est disponible pour ce service.
           </span>
+          {#if service.structureInfo.email || service.structureInfo.phone}
+            <br />
+            <span class="text-f16">Contactez la structure</span>
+            {#if service.structureInfo.email}
+              <ContactEmailLink email={service.structureInfo.email} preferred />
+            {/if}
+            {#if service.structureInfo.phone}
+              <ContactPhone
+                phoneNumber={service.structureInfo.phone}
+                preferred
+              />
+            {/if}
+          {/if}
         {/if}
       </div>
     {/if}

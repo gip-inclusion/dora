@@ -37,9 +37,11 @@
       </p>
     {/if}
     {#if service.contactPhone}
-      <ContactPhone {service} />
+      <ContactPhone phoneNumber={service.contactPhone} />
     {/if}
-    <ContactEmail {service} />
+    {#if service.contactEmail}
+      <ContactEmail {service} email={service.contactEmail} />
+    {/if}
   </div>
 {:else}
   <Button
