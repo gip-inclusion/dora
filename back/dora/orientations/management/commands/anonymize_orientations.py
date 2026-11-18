@@ -41,12 +41,21 @@ class Command(BaseCommand):
                 beneficiary_phone="",
                 beneficiary_email="",
                 beneficiary_france_travail_number="",
+                beneficiary_other_contact_method="",
+                # Les fichiers, désormais non référencés, sont supprimés du
+                # stockage par la commande `delete_orphaned_uploads`.
+                beneficiary_attachments=[],
+                situation=[],
+                situation_other="",
+                requirements=[],
+                orientation_reasons="",
                 referent_first_name="",
                 referent_last_name="",
                 referent_phone="",
                 referent_email="",
                 di_contact_name="",
                 di_contact_email="",
+                di_contact_phone="",
                 is_anonymized=True,
             )
 

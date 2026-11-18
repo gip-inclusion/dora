@@ -122,3 +122,33 @@ def test_should_not_anonymize_recent_emplois_orientation_data():
     orientation = emplois_data.orientation
     orientation.refresh_from_db()
     assert not orientation.is_anonymized
+
+
+def _old_creation_date():
+    return timezone.now() - timedelta(
+        days=settings.ORIENTATION_ANONYMIZATION_PERIOD_DAYS + 1
+    )
+
+
+def test_should_anonymize_sensitive_and_free_text_fields():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        situation=["Situation de handicap"],
+        situation_other="Suivi psychiatrique",
+        requirements=["Bénéficiaire du RSA"],
+        orientation_reasons="Jean Dupont, 12 rue de la Paix",
+        beneficiary_other_contact_method="Via sa sœur au 0601020304",
+        beneficiary_attachments=["abc/CV_Jean_Dupont.pdf"],
+        di_contact_phone="0601020304",
+    )
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.situation == []
+    assert orientation.situation_other == ""
+    assert orientation.requirements == []
+    assert orientation.orientation_reasons == ""
+    assert orientation.beneficiary_other_contact_method == ""
+    assert orientation.beneficiary_attachments == []
+    assert orientation.di_contact_phone == ""
