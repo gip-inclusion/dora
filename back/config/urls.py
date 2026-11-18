@@ -97,7 +97,6 @@ private_api_patterns = [
     path("siret-claimed/<siret:siret>/", dora.structures.views.siret_was_claimed),
     path("structures-options/", dora.structures.views.options),
     path("upload/<slug:structure_slug>/<str:filename>/", dora.core.views.upload),
-    path("safe-upload/<str:filename>/", dora.core.views.safe_upload),
     path("admin/", admin.site.urls),
     path("ping/", dora.core.views.ping),
     path("", include(router.urls)),
@@ -117,14 +116,6 @@ private_api_patterns = [
     path(
         "structures/<slug:structure_slug>/orientations/export-link/",
         dora.orientations.views.StructureOrientationsView.as_view(mode="export_link"),
-    ),
-    path(
-        "orientations/emplois/beneficiary-info/",
-        dora.orientations.views.orientation_beneficiary_info,
-    ),
-    path(
-        "orientations/emplois/<slug:service_slug>/",
-        dora.orientations.views.handle_emplois_orientation,
     ),
 ]
 

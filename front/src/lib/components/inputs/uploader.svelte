@@ -9,7 +9,7 @@
 
   interface Props {
     id: string;
-    structureSlug?: string;
+    structureSlug: string;
     fileKeys?: string[];
     disabled?: boolean;
     onblur?: (event: Event) => void;
@@ -104,9 +104,7 @@
       usedFileNames.add(uploadedFileName);
 
       // We can't use fetch if we want a progress indicator
-      const url = structureSlug
-        ? `${getApiURL()}/upload/${structureSlug}/${file.name}/`
-        : `${getApiURL()}/safe-upload/${file.name}/`;
+      const url = `${getApiURL()}/upload/${structureSlug}/${file.name}/`;
       const request = new XMLHttpRequest();
       request.open("POST", url);
       request.setRequestHeader("Accept", "application/json; version=1.0");

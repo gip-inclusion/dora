@@ -5,7 +5,6 @@ from django.core.cache import cache
 from django.db import transaction
 from django.http.response import Http404
 from django.utils import timezone
-from itoutils.django.nexus.token import decode_token
 from rest_framework import exceptions, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
@@ -154,15 +153,6 @@ def _add_user_to_structure_or_waitlist(structure, user):
         pm.notify_admin_access_requested()
 
 
-def _fast_track_user_to_structure_member(structure, user):
-    StructurePutativeMember.objects.filter(user=user, structure=structure).delete()
-    member = StructureMember.objects.create(
-        user=user,
-        structure=structure,
-    )
-    member.notify_admins_invitation_accepted(is_fast_track=True)
-
-
 @api_view(["POST"])
 @permission_classes([permissions.IsAuthenticated])
 @transaction.atomic
@@ -173,18 +163,8 @@ def join_structure(request):
     data = serializer.validated_data
     establishment = data.get("establishment")
     structure = data.get("structure")
-    op_token = data.get("op")
-    fast_track = False
     siret = establishment.siret if establishment else structure.siret
 
-    if op_token:
-        try:
-            op_claims = decode_token(op_token)
-
-            if op_claims["prescriber"]["organization"]["siret"] == siret:
-                fast_track = op_claims.get("fast_track", False)
-        except ValueError:
-            pass
     if (
         siret
         and siret.startswith(SIREN_FRANCE_TRAVAIL)
@@ -225,8 +205,6 @@ def join_structure(request):
 
     if not structure_has_admin:
         _add_user_to_adminless_structure(structure, user)
-    elif fast_track:
-        _fast_track_user_to_structure_member(structure, user)
     else:
         _add_user_to_structure_or_waitlist(structure, user)
 

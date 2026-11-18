@@ -2,13 +2,12 @@
   import { onMount, setContext } from "svelte";
 
   import { browser } from "$app/env";
-  import { beforeNavigate } from "$app/navigation";
   import { page } from "$app/state";
 
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import MonRecapPopup from "#lib/components/specialized/mon-recap-popup.svelte";
   import TallyPopup from "#lib/components/specialized/tally-popup.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM, TallyFormId } from "#lib/consts.ts";
+  import { TallyFormId } from "#lib/consts.ts";
   import { getService } from "#lib/requests/services.ts";
   import type { Service } from "#lib/types.ts";
   import { userInfo } from "#lib/utils/auth.ts";
@@ -52,29 +51,6 @@
   onMount(() => {
     const searchId = page.url.searchParams.get("searchId");
     trackService(service, page.url, searchId, isDI);
-  });
-
-  beforeNavigate(({ from, to }) => {
-    if (!from || !to) {
-      return;
-    }
-
-    const hasEmploisOrientation = from.url.searchParams.has(
-      ORIENTATION_JWT_QUERY_PARAM
-    );
-    if (!hasEmploisOrientation) {
-      return;
-    }
-
-    const isGoingToOrienter = to.url.pathname.match(
-      /^\/services\/[^/]+\/orienter/
-    );
-    if (!isGoingToOrienter) {
-      const cleanUrl = new URL(from.url);
-      cleanUrl.searchParams.delete(ORIENTATION_JWT_QUERY_PARAM);
-      cleanUrl.searchParams.delete("user_structure_slug");
-      history.replaceState({}, "", cleanUrl);
-    }
   });
 
   async function handleRefresh() {

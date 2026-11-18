@@ -8,15 +8,10 @@ vi.mock("#lib/utils/auth.ts", () => ({
   isAuthenticated: vi.fn(),
 }));
 
-// la redirection est derrière un feature flag, alimenté par un `.env` non
-// versionné : on le force pour que les tests ne dépendent pas de l'environnement
+// l'URL de La plateforme vient d'un `.env` non versionné : on la force pour
+// que les tests ne dépendent pas de l'environnement
 vi.mock("#lib/env.ts", () => ({
   INCLUSION_PLATFORM_URL: "https://plateforme.inclusion.gouv.fr",
-  ORIENTATION_REDIRECTION_FEATURE_FLAG: true,
-}));
-
-vi.mock("#lib/requests/nexus.ts", () => ({
-  getOrientationBeneficiaryInfo: vi.fn(),
 }));
 
 const EMPLOIS_UID = "dora--22e2a25c-ee9e-4606-9236-757417322c5b";
@@ -32,18 +27,17 @@ function makeService(overrides: Partial<Service> = {}): Service {
   } as Service;
 }
 
-function callLoad(service: Service, search = "") {
+function callLoad(service: Service) {
   return load({
     parent: () => Promise.resolve({ service }),
-    url: new URL(`https://dora.fr/services/${service.slug}/orienter${search}`),
-    params: { slug: service.slug },
-    fetch: vi.fn(),
+    // lu par l'instrumentation Sentry qui enveloppe la fonction `load`
+    url: new URL(`https://dora.fr/services/${service.slug}/orienter`),
   } as never);
 }
 
-async function captureRedirect(service: Service, search = "") {
+async function captureRedirect(service: Service) {
   try {
-    await callLoad(service, search);
+    await callLoad(service);
   } catch (err) {
     if (isRedirect(err)) {
       return err.location;
@@ -68,14 +62,6 @@ describe("page d’orientation", () => {
     expect(await captureRedirect(makeService())).toEqual(
       `/nexus/auto-login/?next=${encodeURIComponent(PLATEFORME_URL)}`
     );
-  });
-
-  test("conserve le formulaire Dora si le service n’a pas d’identifiant Emplois", async () => {
-    const service = makeService({ emploisUid: undefined });
-
-    const result = await callLoad(service);
-
-    expect(result.service).toBe(service);
   });
 
   test("refuse un service non orientable", async () => {

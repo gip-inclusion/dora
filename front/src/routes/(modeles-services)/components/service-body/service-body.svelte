@@ -4,10 +4,8 @@
   import CenteredGrid from "#lib/components/display/centered-grid.svelte";
   import Notice from "#lib/components/display/notice.svelte";
   import OrientationVideo from "#lib/components/specialized/orientation-video.svelte";
-  import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
-  import { ORIENTATION_REDIRECTION_FEATURE_FLAG } from "#lib/env.ts";
   import type { Model, Service, ServicesOptions } from "#lib/types.ts";
-  import { isAuthenticated, userInfo } from "#lib/utils/auth.ts";
+  import { userInfo } from "#lib/utils/auth.ts";
   import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
   import { isServiceRecentlyPublished } from "#lib/utils/service.ts";
   import { trackMobilisation } from "#lib/utils/stats.ts";
@@ -32,35 +30,14 @@
   let searchIdNumber = $derived(
     searchIdParam ? parseInt(searchIdParam) : undefined
   );
-  let opParam = $derived(
-    page.url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM)
-  );
-  let orientationQueryString = $derived.by(() => {
-    const params = new URLSearchParams();
-
-    if (searchIdParam) {
-      params.set("searchId", searchIdParam);
-    }
-
-    if (opParam) {
-      params.set(ORIENTATION_JWT_QUERY_PARAM, opParam);
-    }
-
-    const query = params.toString();
-
-    return query ? `?${query}` : "";
-  });
   let orientationFormUrl = $derived(
-    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${orientationQueryString}`
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter`
   );
 
-  // quand la redirection est active, la page d'orientation envoie vers le
-  // formulaire de La plateforme de l'inclusion : la mobilisation est donc
-  // comptabilisée comme sortante
+  // la page d'orientation redirige vers le formulaire de La plateforme de
+  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
   let plateformeOrientationUrl = $derived(
-    ORIENTATION_REDIRECTION_FEATURE_FLAG && !opParam && !service.isModel
-      ? getPlateformeOrientationUrl(service)
-      : null
+    service.isModel ? null : getPlateformeOrientationUrl(service as Service)
   );
 
   let isServiceFromOwnStructure = $derived(
@@ -100,8 +77,8 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (isAuthenticated() || plateformeOrientationUrl) {
-      handleTrackMobilisation(plateformeOrientationUrl ?? undefined);
+    } else if (plateformeOrientationUrl) {
+      handleTrackMobilisation(plateformeOrientationUrl);
     }
   }
 </script>

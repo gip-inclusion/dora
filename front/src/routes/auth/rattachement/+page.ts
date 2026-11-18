@@ -3,7 +3,6 @@ import { getApiURL } from "#lib/utils/api.ts";
 import type { PageLoad } from "./$types";
 import { userInfo } from "#lib/utils/auth.ts";
 import { get } from "svelte/store";
-import { ORIENTATION_JWT_QUERY_PARAM } from "#lib/consts.ts";
 
 function siretSearch(siret: string, fetchFunction: typeof fetch) {
   const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
@@ -38,10 +37,6 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   let establishment: Establishment | undefined;
 
   const proposedSiret = url.searchParams.get("siret");
-  const unknownSiret = url.searchParams.get("unknown_siret") === "true";
-  const opJwt = url.searchParams.get(ORIENTATION_JWT_QUERY_PARAM);
-  const serviceSlug = url.searchParams.get("service_slug");
-  const directToOrientationPage = url.searchParams.get("orienter") === "true";
   const proposedSafir = userIsFranceTravail
     ? url.searchParams.get("safir")
     : "";
@@ -62,10 +57,6 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     noIndex: true,
     establishment,
     proposedSiret,
-    unknownSiret,
-    opJwt,
-    serviceSlug,
-    directToOrientationPage,
     proposedSafir,
     userIsFranceTravail,
   };

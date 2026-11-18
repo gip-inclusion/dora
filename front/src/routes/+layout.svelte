@@ -14,15 +14,13 @@
   import { enforceCrispConsent } from "#lib/utils/consent.svelte.ts";
   import CookieBanner from "#lib/components/specialized/cookie-banner/cookie-banner.svelte";
   import { TOAST_DURATION_MS } from "#lib/consts.ts";
-  import type { PageData } from "./$types";
   import { setCurrentStructure } from "#lib/utils/preferences.ts";
 
   interface Props {
     children?: Snippet;
-    data: PageData;
   }
 
-  let { children, data }: Props = $props();
+  let { children }: Props = $props();
 
   $effect(() => {
     trackPageView(page.url.pathname, page.data.title);
@@ -82,7 +80,7 @@
 <Header />
 
 <main id="main-content">
-  {#if $userInfo && !$userInfo.mainActivity && !data.hasOrientationJwt}
+  {#if $userInfo && !$userInfo.mainActivity}
     <UserOnboardingModal />
   {/if}
 
