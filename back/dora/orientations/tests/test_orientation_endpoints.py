@@ -65,8 +65,12 @@ def test_access_refused_when_query_id_hash_invalid(api_client, orientation):
     assert response.status_code == 401
 
 
-def test_orientations_list_and_create_not_exposed(api_client, orientation):
-    api_client.force_authenticate(user=make_user())
+@pytest.mark.parametrize("authenticated", [False, True])
+def test_orientations_list_and_create_not_exposed(
+    api_client, orientation, authenticated
+):
+    if authenticated:
+        api_client.force_authenticate(user=make_user())
 
     assert api_client.get("/orientations/").status_code == 404
     assert api_client.post("/orientations/", data={}).status_code == 404

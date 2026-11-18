@@ -1,11 +1,17 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { isRedirect } from "@sveltejs/kit";
 import type { Service } from "#lib/types.ts";
+import { getService, getServiceDI } from "#lib/requests/services.ts";
 import { isAuthenticated } from "#lib/utils/auth.ts";
 import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page";
 
 vi.mock("#lib/utils/auth.ts", () => ({
   isAuthenticated: vi.fn(),
+}));
+
+vi.mock("#lib/requests/services.ts", () => ({
+  getService: vi.fn(),
+  getServiceDI: vi.fn(),
 }));
 
 // l'URL de La plateforme vient d'un `.env` non versionné : on la force pour
@@ -27,17 +33,21 @@ function makeService(overrides: Partial<Service> = {}): Service {
   } as Service;
 }
 
-function callLoad(service: Service) {
+function callLoad(service: Service | null, slug = "un-service") {
+  vi.mocked(getService).mockResolvedValue(service as Service);
+  vi.mocked(getServiceDI).mockResolvedValue(service as never);
   return load({
-    parent: () => Promise.resolve({ service }),
+    parent: () => Promise.resolve({}),
+    params: { slug },
+    fetch: vi.fn(),
     // lu par l'instrumentation Sentry qui enveloppe la fonction `load`
-    url: new URL(`https://dora.fr/services/${service.slug}/orienter`),
+    url: new URL(`https://dora.fr/services/${slug}/orienter`),
   } as never);
 }
 
-async function captureRedirect(service: Service) {
+async function captureRedirect(service: Service, slug?: string) {
   try {
-    await callLoad(service);
+    await callLoad(service, slug);
   } catch (err) {
     if (isRedirect(err)) {
       return err.location;
@@ -68,5 +78,20 @@ describe("page d’orientation", () => {
     await expect(
       callLoad(makeService({ isOrientable: false }))
     ).rejects.toThrow();
+  });
+  test("charge un service data·inclusion via son préfixe `di--`", async () => {
+    const service = makeService({ emploisUid: "source--1234" });
+
+    expect(await captureRedirect(service, "di--source--1234")).toContain(
+      "/insertion/orientations/source--1234/job-seeker/"
+    );
+    expect(getServiceDI).toHaveBeenCalledWith(
+      "source--1234",
+      expect.anything()
+    );
+  });
+
+  test("renvoie une 404 si le service est introuvable", async () => {
+    await expect(callLoad(null)).rejects.toMatchObject({ status: 404 });
   });
 });

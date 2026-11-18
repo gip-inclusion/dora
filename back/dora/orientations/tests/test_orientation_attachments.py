@@ -142,7 +142,6 @@ def test_delete_attachments_with_mock(mock_delete, mock_exists, orientation):
         assert results[path]
 
 
-# Tests pour la méthode validate
 @patch("dora.orientations.models.default_storage.delete")
 @patch("dora.orientations.models.default_storage.exists", return_value=True)
 def test_reject_orientation_deletes_attachments(
