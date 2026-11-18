@@ -2,12 +2,8 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { isRedirect } from "@sveltejs/kit";
 import type { Service } from "#lib/types.ts";
 import { getService, getServiceDI } from "#lib/requests/services.ts";
-import { isAuthenticated } from "#lib/utils/auth.ts";
-import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page";
-
-vi.mock("#lib/utils/auth.ts", () => ({
-  isAuthenticated: vi.fn(),
-}));
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
+import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page.server";
 
 vi.mock("#lib/requests/services.ts", () => ({
   getService: vi.fn(),
@@ -33,15 +29,21 @@ function makeService(overrides: Partial<Service> = {}): Service {
   } as Service;
 }
 
+let token: string | undefined;
+
 function callLoad(service: Service | null, slug = "un-service") {
   vi.mocked(getService).mockResolvedValue(service as Service);
   vi.mocked(getServiceDI).mockResolvedValue(service as never);
+  const url = `https://dora.fr/services/${slug}/orienter`;
   return load({
-    parent: () => Promise.resolve({}),
+    cookies: {
+      get: (name: string) => (name === TOKEN_KEY ? token : undefined),
+    },
     params: { slug },
     fetch: vi.fn(),
-    // lu par l'instrumentation Sentry qui enveloppe la fonction `load`
-    url: new URL(`https://dora.fr/services/${slug}/orienter`),
+    // lus par l'instrumentation Sentry qui enveloppe la fonction `load`
+    url: new URL(url),
+    request: new Request(url),
   } as never);
 }
 
@@ -59,7 +61,7 @@ async function captureRedirect(service: Service, slug?: string) {
 
 describe("page d’orientation", () => {
   beforeEach(() => {
-    vi.mocked(isAuthenticated).mockReturnValue(false);
+    token = undefined;
   });
 
   test("redirige l’utilisateur anonyme vers le formulaire de La plateforme", async () => {
@@ -67,7 +69,7 @@ describe("page d’orientation", () => {
   });
 
   test("redirige l’utilisateur connecté via l’auto-connexion Nexus", async () => {
-    vi.mocked(isAuthenticated).mockReturnValue(true);
+    token = "un-token";
 
     expect(await captureRedirect(makeService())).toEqual(
       `/nexus/auto-login/?next=${encodeURIComponent(PLATEFORME_URL)}`
