@@ -12,6 +12,14 @@ from dora.orientations.models import EmploisOrientationData, Orientation
 class Command(BaseCommand):
     help = "Anonymise les orientations en supprimant les données personnelles après un délai"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--include-anonymized",
+            action="store_true",
+            default=False,
+            help="Repasse aussi sur les orientations déjà anonymisées",
+        )
+
     def handle(self, *args, **options):
         self.logger.info(
             "Anonymisation des orientations qui ont été créées il y a plus de %d jours.",
@@ -23,8 +31,12 @@ class Command(BaseCommand):
         )
 
         orientations_to_anonymize = Orientation.objects.filter(
-            is_anonymized=False, creation_date__date__lte=anonymization_date
+            creation_date__date__lte=anonymization_date
         )
+        if not options["include_anonymized"]:
+            orientations_to_anonymize = orientations_to_anonymize.filter(
+                is_anonymized=False
+            )
 
         with transaction.atomic():
             emplois_count = EmploisOrientationData.objects.filter(

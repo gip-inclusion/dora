@@ -172,3 +172,29 @@ def test_should_replace_emplois_beneficiary_id():
     assert emplois_data.beneficiary_id != other_emplois_data.beneficiary_id
     assert emplois_data.prescriber_id == prescriber_id
     assert emplois_data.emplois_sync_uid == emplois_sync_uid
+
+
+def test_should_skip_already_anonymized_orientations_by_default():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        is_anonymized=True,
+        orientation_reasons="Motif",
+    )
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.orientation_reasons == "Motif"
+
+
+def test_should_reprocess_already_anonymized_orientations_on_demand():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        is_anonymized=True,
+        orientation_reasons="Motif",
+    )
+
+    call_command("anonymize_orientations", "--include-anonymized", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.orientation_reasons == ""
