@@ -67,6 +67,13 @@
     }
   }
 
+  // la page d'orientation redirige vers le formulaire de La plateforme de
+  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
+  // (le bloc de mobilisation n'est jamais affiché pour un modèle)
+  function handleTrackOrientation() {
+    handleTrackMobilisation(getPlateformeOrientationUrl(service as Service));
+  }
+
   function handleOrientationFormClickEvent(event) {
     if (isServiceFromOwnStructure) {
       event.preventDefault();
@@ -74,13 +81,6 @@
     } else {
       handleTrackOrientation();
     }
-  }
-
-  // la page d'orientation redirige vers le formulaire de La plateforme de
-  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
-  // (le bloc de mobilisation n'est jamais affiché pour un modèle)
-  function handleTrackOrientation() {
-    handleTrackMobilisation(getPlateformeOrientationUrl(service as Service));
   }
 </script>
 

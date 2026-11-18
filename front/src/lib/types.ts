@@ -658,7 +658,6 @@ export interface Orientation {
   referentFirstName: string;
   referentPhone: string;
   referentEmail: string;
-  prescriberStructureSlug: string;
 
   beneficiaryFranceTravailNumber: string;
   beneficiaryLastName: string;
@@ -672,7 +671,7 @@ export interface Orientation {
 
   dataProtectionCommitment: boolean;
 
-  // Champs après la création de l'orientation
+  // Champs calculés par l'API
   id?: number;
   queryId: string;
   creationDate: string;
