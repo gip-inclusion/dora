@@ -23,4 +23,6 @@ def test_create_user():
 
 
 def test_get_dora_bot():
-    User.objects.get_dora_bot()
+    dora_bot = User.objects.get_dora_bot()
+    assert not dora_bot.is_staff
+    assert not dora_bot.is_active
