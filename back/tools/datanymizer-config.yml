@@ -123,6 +123,8 @@ tables:
       - prescriber_last_name
       - prescriber_email
     rules:
+      beneficiary_id:
+        uuid: ~
       prescriber_first_name:
         first_name: {}
       prescriber_last_name:
