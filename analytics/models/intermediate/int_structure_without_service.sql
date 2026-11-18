@@ -19,4 +19,7 @@ SELECT
     structures.department,
     structures.typology
 FROM structures
-WHERE NOT EXISTS (SELECT 1 FROM services WHERE services.structure_id = structures.id)
+WHERE NOT EXISTS (
+    SELECT 1 FROM services
+    WHERE services.structure_id = structures.id
+)

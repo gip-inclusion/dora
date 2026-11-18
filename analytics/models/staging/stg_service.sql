@@ -5,8 +5,8 @@ WITH src AS (
 
 services AS (
     SELECT
-        src.{{ dbt_utils.star(relation_alias=src, from=source('dora', 'services_service'), except=['geom']) }},
-        'dora--' || src.id AS id_jointure_di,
+        {{ dbt_utils.star(relation_alias='src', from=source('dora', 'services_service'), except=['geom']) }},
+        'dora--' || src.id               AS id_jointure_di,
         ST_Y(CAST(src.geom AS geometry)) AS latitude,
         ST_X(CAST(src.geom AS geometry)) AS longitude,
         CASE

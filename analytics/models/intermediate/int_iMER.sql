@@ -1,7 +1,7 @@
 SELECT
     'orientation'                                                                       AS kind,
     CAST(orientation_id AS text)                                                        AS event_id,
-    orientation_creation_date                                                           AS date,
+    orientation_creation_date                                                           AS date,  -- noqa: RF04
     orientation_prescriber_id                                                           AS user_id,
     user_main_activity                                                                  AS user_kind,
     user_is_manager                                                                     AS is_manager,
@@ -15,7 +15,7 @@ UNION ALL
 SELECT
     'mobilisation'                                                                        AS kind,
     m.event_id,
-    m.event_date                                                                          AS date,
+    m.event_date                                                                          AS date,  -- noqa: RF04
     m.user_id,
     m.event_user_kind                                                                     AS user_kind,
     m.event_is_manager                                                                    AS is_manager,

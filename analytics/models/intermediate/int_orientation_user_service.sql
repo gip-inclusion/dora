@@ -4,7 +4,7 @@ SELECT
     {{ dbt_utils.star(relation_alias='services', from=ref('int_service_structure')) }}
 FROM {{ ref('stg_orientation') }} AS orientations
 -- left join pour considérer les orientations faites par des users supprimés
-LEFT JOIN {{ ref('stg_user') }} AS users
+LEFT JOIN {{ ref('stg_user') }} AS users  -- noqa: RF04
     ON orientations.prescriber_id = users.id
 -- left join pour considérer les cas suivants : 
 -- orientations faites sur des services sans service_id (ont un di_service_id)

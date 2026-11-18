@@ -1,0 +1,65 @@
+name: Dora Analytics CI
+
+permissions:
+  contents: read
+
+on:
+  push:
+    paths:
+      - 'analytics/**'
+      - '.github/workflows/analytics-ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # Le templater dbt de sqlfluff a besoin d'une connexion : une base vide suffit
+      # (dbt_utils.star() y rend `*` au lieu de la liste des colonnes).
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGDATABASE: dora
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}
+      cancel-in-progress: true
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: dora
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    defaults:
+      run:
+        working-directory: analytics
+
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Installation de Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Installation des dépendances
+        run: |
+          pip install uv==0.13.4
+          make venv
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Installation des paquets dbt
+        run: dbt deps
+
+      - name: Compilation des modèles dbt
+        run: dbt compile
+
+      - name: Qualité du code (ruff, sqlfluff)
+        run: make quality
