@@ -24,7 +24,7 @@ export const load: LayoutLoad = async ({ url }) => {
   if (!browser) {
     // On ne fait pas d'authentification coté serveur
     // => on peut court-circuiter les vérifications ici
-    return {};
+    return;
   }
 
   let currentUserInfo = get(userInfo);
@@ -42,7 +42,7 @@ export const load: LayoutLoad = async ({ url }) => {
     const currentPathName = url.pathname;
 
     if (SAFE_URLS.some((urlPrefix) => currentPathName.startsWith(urlPrefix))) {
-      return {};
+      return;
     }
 
     // Si l'utilisateur est connecté mais n'est rattaché à aucune structure,
@@ -74,6 +74,4 @@ export const load: LayoutLoad = async ({ url }) => {
       );
     }
   }
-
-  return {};
 };
