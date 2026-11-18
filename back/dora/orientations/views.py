@@ -60,8 +60,6 @@ class ModeratedOrientationPermission(permissions.BasePermission):
 
 class OrientationPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        if view.action == "create":
-            return request.user.is_authenticated
         match request.method:
             case "DELETE":
                 return False
@@ -70,7 +68,7 @@ class OrientationPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, orientation):
         match request.method:
-            case "GET" | "POST" | "PATCH":
+            case "GET" | "POST":
                 if h := request.query_params.get("h"):
                     if not hmac.compare_digest(h, orientation.get_query_id_hash()):
                         return False
@@ -84,7 +82,6 @@ class OrientationPermission(permissions.BasePermission):
 
 class OrientationViewSet(
     mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer

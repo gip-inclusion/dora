@@ -72,6 +72,17 @@ def test_orientations_list_and_create_not_exposed(api_client, orientation):
     assert api_client.post("/orientations/", data={}).status_code == 404
 
 
+def test_orientation_update_not_exposed(api_client, orientation):
+    beneficiary_email = orientation.beneficiary_email
+    url = f"/orientations/{orientation.query_id}/?h={orientation.get_query_id_hash()}"
+
+    response = api_client.patch(url, data={"beneficiaryEmail": "pirate@example.com"})
+
+    assert response.status_code == 405
+    orientation.refresh_from_db()
+    assert orientation.beneficiary_email == beneficiary_email
+
+
 @freeze_time("2022-01-01")
 def test_query_validate(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/validate/"

@@ -34,12 +34,6 @@
     `/services/${isDI ? "di--" : ""}${service.slug}/orienter`
   );
 
-  // la page d'orientation redirige vers le formulaire de La plateforme de
-  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
-  let plateformeOrientationUrl = $derived(
-    service.isModel ? null : getPlateformeOrientationUrl(service as Service)
-  );
-
   let isServiceFromOwnStructure = $derived(
     $userInfo
       ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
@@ -77,9 +71,16 @@
     if (isServiceFromOwnStructure) {
       event.preventDefault();
       isPreventFakeOrientationModalOpen = true;
-    } else if (plateformeOrientationUrl) {
-      handleTrackMobilisation(plateformeOrientationUrl);
+    } else {
+      handleTrackOrientation();
     }
+  }
+
+  // la page d'orientation redirige vers le formulaire de La plateforme de
+  // l'inclusion : la mobilisation est donc comptabilisée comme sortante
+  // (le bloc de mobilisation n'est jamais affiché pour un modèle)
+  function handleTrackOrientation() {
+    handleTrackMobilisation(getPlateformeOrientationUrl(service as Service));
   }
 </script>
 
@@ -142,8 +143,7 @@
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
   onShowVideo={handleShowVideoModal}
-  onTrackMobilisation={() =>
-    handleTrackMobilisation(plateformeOrientationUrl ?? undefined)}
+  onTrackMobilisation={handleTrackOrientation}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />

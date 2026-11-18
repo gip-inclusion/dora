@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { browser } from "$app/env";
-  import { SvelteToast, toast } from "@zerodevx/svelte-toast";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
+  import { replaceState } from "$app/navigation";
   import { page } from "$app/state";
   import { ENVIRONMENT } from "#lib/env.ts";
   import "../app.css";
@@ -14,13 +15,14 @@
   import { enforceCrispConsent } from "#lib/utils/consent.svelte.ts";
   import CookieBanner from "#lib/components/specialized/cookie-banner/cookie-banner.svelte";
   import { TOAST_DURATION_MS } from "#lib/consts.ts";
-  import { setCurrentStructure } from "#lib/utils/preferences.ts";
 
   interface Props {
     children?: Snippet;
   }
 
   let { children }: Props = $props();
+
+  const LEGACY_ORIENTATION_JWT_PARAM = "op";
 
   $effect(() => {
     trackPageView(page.url.pathname, page.data.title);
@@ -31,26 +33,15 @@
     enforceCrispConsent();
   });
 
+  // Les anciens liens des Emplois portaient un JWT (`op`) contenant les
+  // données du bénéficiaire : on le retire de l'URL pour qu'il ne reste ni
+  // dans l'historique ni dans les rapports d'erreur.
   $effect(() => {
-    if (browser && page.url.searchParams.get("link_invalid") === "true") {
-      toast.push("Lien expiré ou invalide");
-    }
-  });
-
-  $effect(() => {
-    const userStructureSlug = page.url.searchParams.get("user_structure_slug");
-    if (userStructureSlug && $userInfo) {
-      const userStructure = [
-        ...$userInfo.pendingStructures,
-        ...$userInfo.structures,
-      ].find((struct) => struct.slug === userStructureSlug);
-
-      if (userStructure && setCurrentStructure(userStructureSlug)) {
-        toast.push(
-          `Votre structure active a été automatiquement modifiée : vous utilisez désormais ${userStructure.name}.<br/><br/>Attention : si d'autres onglets DORA sont ouverts dans votre navigateur, votre activité dans ces onglets sera également associée à la structure ${userStructure.name}.`,
-          { target: "structure-switch" }
-        );
-      }
+    if (browser && page.url.searchParams.has(LEGACY_ORIENTATION_JWT_PARAM)) {
+      const cleanUrl = new URL(page.url.href);
+      cleanUrl.searchParams.delete(LEGACY_ORIENTATION_JWT_PARAM);
+      cleanUrl.searchParams.delete("user_structure_slug");
+      replaceState(cleanUrl, page.state);
     }
   });
 </script>
@@ -90,21 +81,3 @@
 <Footer />
 <CookieBanner />
 <SvelteToast options={{ duration: TOAST_DURATION_MS }} />
-<div class="structure-switch-toast">
-  <SvelteToast
-    target="structure-switch"
-    options={{ duration: TOAST_DURATION_MS }}
-  />
-</div>
-
-<style>
-  .structure-switch-toast :global(._toastContainer) {
-    top: 6.6rem;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
-  .structure-switch-toast :global(._toastItem) {
-    width: 50vw;
-  }
-</style>

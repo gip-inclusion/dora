@@ -21,7 +21,6 @@
     descriptionText?: string;
     proposedSafir?: string | null;
     proposedSiret?: string | null;
-    siretInputDisabled?: boolean;
     cta?: Snippet;
   }
 
@@ -35,7 +34,6 @@
     descriptionText,
     proposedSafir = $bindable(""),
     proposedSiret = "",
-    siretInputDisabled = false,
     cta,
   }: Props = $props();
 
@@ -108,7 +106,6 @@
       onEstablishmentChange={handleEstablishmentChange}
       {establishment}
       {proposedSiret}
-      disabled={siretInputDisabled}
     />
   {:else if tabId === "nom"}
     <SearchByCommune
