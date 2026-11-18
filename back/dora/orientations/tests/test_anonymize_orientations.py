@@ -1,3 +1,4 @@
+import uuid
 from datetime import timedelta
 from io import StringIO
 
@@ -152,3 +153,22 @@ def test_should_anonymize_sensitive_and_free_text_fields():
     assert orientation.beneficiary_other_contact_method == ""
     assert orientation.beneficiary_attachments == []
     assert orientation.di_contact_phone == ""
+
+
+def test_should_replace_emplois_beneficiary_id():
+    emplois_data = make_emplois_orientation_data(_old_creation_date())
+    prescriber_id = uuid.uuid4()
+    emplois_data.prescriber_id = prescriber_id
+    emplois_data.save()
+    other_emplois_data = make_emplois_orientation_data(_old_creation_date())
+    beneficiary_id = emplois_data.beneficiary_id
+    emplois_sync_uid = emplois_data.emplois_sync_uid
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    emplois_data.refresh_from_db()
+    other_emplois_data.refresh_from_db()
+    assert emplois_data.beneficiary_id != beneficiary_id
+    assert emplois_data.beneficiary_id != other_emplois_data.beneficiary_id
+    assert emplois_data.prescriber_id == prescriber_id
+    assert emplois_data.emplois_sync_uid == emplois_sync_uid

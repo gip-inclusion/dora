@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Func, UUIDField
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
@@ -29,6 +30,9 @@ class Command(BaseCommand):
             emplois_count = EmploisOrientationData.objects.filter(
                 orientation__in=orientations_to_anonymize
             ).update(
+                beneficiary_id=Func(
+                    function="gen_random_uuid", output_field=UUIDField()
+                ),
                 prescriber_email="",
                 prescriber_first_name="",
                 prescriber_last_name="",
