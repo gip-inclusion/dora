@@ -88,6 +88,15 @@ def test_structure_page_excludes_suspended_service(api_client, suspended_service
     response = api_client.get(f"/structures/{suspended_service.structure.slug}/")
     slugs = {s["slug"] for s in response.data["services"]}
     assert slugs == {exposed_service.slug}
+    assert response.data["num_services"] == 1
+
+
+def test_member_counts_its_suspended_service(api_client, suspended_service):
+    make_published_service(structure=suspended_service.structure)
+    member = make_user(structure=suspended_service.structure)
+    api_client.force_authenticate(user=member)
+    response = api_client.get(f"/structures/{suspended_service.structure.slug}/")
+    assert response.data["num_services"] == 2
 
 
 def test_outsider_cant_bookmark_suspended_service(

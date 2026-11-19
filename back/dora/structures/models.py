@@ -577,7 +577,7 @@ class Structure(ModerationMixin, models.Model):
         ):
             return self.services.active().count()
         else:
-            return self.services.published().count()
+            return self.services.filter_for_DI().count()
 
     def get_num_visible_models(self, user):
         # On ne peut pas utiliser le manager lié (self.services) étant donné qu'il filtre les modèles
