@@ -5,7 +5,7 @@ Seul le premier lien renseigné, par ordre de priorité, décide : les suivants 
 S'il est identique, le lien de mobilisation est une copie de ce champ et le formulaire Dora prime.
 S'il diffère — ou si aucun champ n'est renseigné — c'est une saisie personnalisée, qui est conservée.
 
-Vu que cette migration touche à deux champs dans `SYNC_FIELDS`, il faut recalculer les checksums
+Vu que `mobilisation_link` appartient à `SYNC_FIELDS`, il faut recalculer les checksums
 des modèles nettoyés : sans ça, leur premier enregistrement, même sans modification, ferait
 apparaître leurs copies encore synchronisées comme « modèle modifié ». Le calcul est figé ici
 comme en 0026, à l'identique : ce qui compte est l'égalité stricte avec ce que l'application
@@ -19,7 +19,6 @@ from collections import defaultdict
 from django.db import migrations
 
 DORA_FORM = "formulaire-dora"
-MOBILISATION_LINK_MODE = "utiliser-lien-mobilisation"
 
 LINK_FIELDS_BY_PRIORITY = [
     "appointment_link",
@@ -104,13 +103,6 @@ def clear_mobilisation_links(Service):
                 break
 
             service.mobilisation_link = None
-            # Pendant de `_validate_dora_form` : sans lien, data·inclusion rejette
-            # le mode. Les deux champs doivent donc être nettoyés ensemble.
-            service.mobilisation_modes = [
-                mode
-                for mode in (service.mobilisation_modes or [])
-                if mode != MOBILISATION_LINK_MODE
-            ]
             services_to_update.append(service)
             if service.is_model:
                 model_ids.append(service.pk)
@@ -120,7 +112,7 @@ def clear_mobilisation_links(Service):
 
     Service._base_manager.bulk_update(
         services_to_update,
-        ["mobilisation_link", "mobilisation_modes"],
+        ["mobilisation_link"],
         batch_size=BATCH,
     )
 

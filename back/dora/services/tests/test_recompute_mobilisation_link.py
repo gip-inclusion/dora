@@ -11,9 +11,6 @@ recompute_migration = importlib.import_module(
     "dora.services.migrations.0027_recompute_mobilisation_link"
 )
 
-MOBILISATION_LINK_MODE = "utiliser-lien-mobilisation"
-OTHER_MODE = "envoyer-un-courriel"
-
 LINK = "https://example.com/mobilisation"
 OTHER_LINK = "https://example.com/autre"
 
@@ -106,55 +103,12 @@ def test_services_without_a_link_are_left_untouched():
     service = make_dora_form_service(
         appointment_link=LINK,
         mobilisation_link=None,
-        mobilisation_modes=[OTHER_MODE, MOBILISATION_LINK_MODE],
     )
 
     run_migration()
 
     service.refresh_from_db()
     assert service.mobilisation_link is None
-    assert service.mobilisation_modes == [OTHER_MODE, MOBILISATION_LINK_MODE]
-
-
-def test_mobilisation_link_mode_is_removed_with_the_link():
-    service = make_dora_form_service(
-        appointment_link=LINK,
-        mobilisation_link=LINK,
-        mobilisation_modes=[OTHER_MODE, MOBILISATION_LINK_MODE],
-    )
-
-    run_migration()
-
-    service.refresh_from_db()
-    assert service.mobilisation_link is None
-    assert service.mobilisation_modes == [OTHER_MODE]
-
-
-def test_mobilisation_link_mode_is_kept_when_the_link_is_kept():
-    service = make_dora_form_service(
-        appointment_link=OTHER_LINK,
-        mobilisation_link=LINK,
-        mobilisation_modes=[MOBILISATION_LINK_MODE],
-    )
-
-    run_migration()
-
-    service.refresh_from_db()
-    assert service.mobilisation_link == LINK
-    assert service.mobilisation_modes == [MOBILISATION_LINK_MODE]
-
-
-def test_null_mobilisation_modes_are_normalised_to_an_empty_list():
-    service = make_dora_form_service(
-        appointment_link=LINK,
-        mobilisation_link=LINK,
-        mobilisation_modes=None,
-    )
-
-    run_migration()
-
-    service.refresh_from_db()
-    assert service.mobilisation_modes == []
 
 
 def add_dora_form(service):
