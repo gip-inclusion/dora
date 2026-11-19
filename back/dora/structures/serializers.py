@@ -249,7 +249,7 @@ class StructureSerializer(serializers.ModelSerializer):
                 return data
 
         user = self.context.get("request").user
-        qs = obj.services.published()
+        qs = obj.services.filter_for_DI()
         if obj.can_edit_services(user):
             qs = obj.services.active()
 

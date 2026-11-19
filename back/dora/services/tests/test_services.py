@@ -25,7 +25,7 @@ from rest_framework.test import APIRequestFactory, APITestCase
 
 from dora.core.constants import WGS84
 from dora.core.models import LogItem
-from dora.core.test_utils import make_model, make_service, make_structure
+from dora.core.test_utils import make_model, make_service, make_structure, make_user
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
 from dora.decoupage_administratif.models import EPCI, AdminDivisionType, City
 from dora.services.enums import ServiceStatus
@@ -133,7 +133,7 @@ class ServiceTestCase(APITestCase):
         cache.delete(f"options:user:{self.superuser.pk}", version=OPTIONS_CACHE_VERSION)
         cache.delete(f"options:user:{self.manager.pk}", version=OPTIONS_CACHE_VERSION)
 
-        self.struct_44 = make_structure(department="44")
+        self.struct_44 = make_structure(user=make_user(), department="44")
         self.service_44 = make_service(
             structure=self.struct_44, status=ServiceStatus.PUBLISHED
         )
