@@ -134,3 +134,13 @@ def test_branch_member_counts_its_suspended_service(api_client):
     api_client.force_authenticate(user=member)
     response = api_client.get(f"/structures/{parent.slug}/")
     assert response.data["branches"][0]["num_services"] == 2
+
+
+def test_active_structures_have_an_exposed_service(api_client):
+    exposed_service = make_published_service()
+    make_published_service(suspension_date=timezone.localdate() - timedelta(days=1))
+    make_published_service(structure=make_structure())
+
+    response = api_client.get("/structures/", {"active": "1"})
+    slugs = {s["slug"] for s in response.data}
+    assert slugs == {exposed_service.structure.slug}

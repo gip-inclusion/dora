@@ -1,6 +1,6 @@
 from data_inclusion.schema.v1 import ReseauPorteur
 from django.db import transaction
-from django.db.models.query_utils import Q
+from django.db.models import Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import exceptions, mixins, permissions, viewsets
@@ -12,7 +12,7 @@ from dora import onboarding
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
-from dora.services.enums import ServiceStatus
+from dora.services.models import Service
 from dora.structures.emails import send_invitation_email
 from dora.structures.models import (
     Structure,
@@ -90,12 +90,10 @@ class StructureViewSet(
                 .distinct()
             )
         elif only_active:
-            qs = (
-                structures.filter(services__status=ServiceStatus.PUBLISHED)
-                .order_by("-modification_date")
-                .distinct()
-            )
-            return qs
+            # Structures ayant au moins un service exposé (cf. sitemap)
+            return structures.filter(
+                Exists(Service.objects.filter_for_DI().filter(structure=OuterRef("pk")))
+            ).order_by("-modification_date")
         else:
             return structures.order_by("-modification_date")
 

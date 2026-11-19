@@ -436,7 +436,7 @@ class StructureSiteMapTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_structures_w_published_services_are_listed(self):
-        st = make_structure()
+        st = make_structure(user=make_user())
         make_service(structure=st, status=ServiceStatus.DRAFT)
         make_service(structure=st, status=ServiceStatus.PUBLISHED)
 
