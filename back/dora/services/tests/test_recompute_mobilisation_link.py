@@ -35,9 +35,7 @@ def make_dora_form_service(with_dora_form=True, **kwargs):
 
 
 def run_migration():
-    # Les deux opérations de la migration, dans l'ordre déclaré.
-    recompute_migration.clear_mobilisation_links(django_apps, None)
-    recompute_migration.recompute_sync_checksums(django_apps, None)
+    recompute_migration.recompute_mobilisation_link(django_apps, None)
 
 
 def test_link_is_removed_when_the_first_filled_field_matches():
@@ -242,3 +240,38 @@ def test_untouched_model_checksum_is_left_alone():
     model.refresh_from_db()
     assert model.mobilisation_link == LINK
     assert model.sync_checksum == unchanged
+
+
+def test_copies_that_kept_their_link_still_show_as_outdated():
+    # La copie a son propre `appointment_link` — hors `SYNC_FIELDS` — donc son lien
+    # est conservé là où celui du modèle est supprimé : elle diverge réellement.
+    model = make_dora_form_model(appointment_link=LINK, mobilisation_link=LINK)
+    previous = model.sync_checksum
+    copy = make_dora_form_service(
+        model=model,
+        appointment_link=OTHER_LINK,
+        mobilisation_link=LINK,
+        last_sync_checksum=previous,
+    )
+
+    run_migration()
+
+    model.refresh_from_db()
+    copy.refresh_from_db()
+    assert copy.mobilisation_link == LINK
+    assert model.mobilisation_link is None
+    # Son empreinte de référence n'est pas réalignée : « modèle modifié » reste
+    # visible, et la copie peut reprendre le changement.
+    assert copy.last_sync_checksum == previous
+    assert copy.last_sync_checksum != model.sync_checksum
+
+
+def test_untouched_models_are_not_recomputed_at_all():
+    # Hors périmètre : 0026 reste la migration de référence pour ces modèles.
+    model = make_dora_form_model(mobilisation_link=None)
+    Service.including_models.filter(pk=model.pk).update(sync_checksum="ancienne")
+
+    run_migration()
+
+    model.refresh_from_db()
+    assert model.sync_checksum == "ancienne"

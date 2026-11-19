@@ -5,10 +5,16 @@ Seul le premier lien renseigné, par ordre de priorité, décide : les suivants 
 S'il est identique, le lien de mobilisation est une copie de ce champ et le formulaire Dora prime.
 S'il diffère — ou si aucun champ n'est renseigné — c'est une saisie personnalisée, qui est conservée.
 
-Vu que cette migration touche à deux champs dans `SYNC_FIELDS`, il faut recalculer lec checksums
+Vu que cette migration touche à deux champs dans `SYNC_FIELDS`, il faut recalculer les checksums
+des modèles nettoyés : sans ça, leur premier enregistrement, même sans modification, ferait
+apparaître leurs copies encore synchronisées comme « modèle modifié ». Le calcul est figé ici
+comme en 0026, à l'identique : ce qui compte est l'égalité stricte avec ce que l'application
+calculera au prochain enregistrement. La formule n'est pas modifiée, et 0026 reste la migration
+de référence pour les modèles que celle-ci ne touche pas.
 """
 
 import hashlib
+from collections import defaultdict
 
 from django.db import migrations
 
@@ -66,8 +72,12 @@ def sync_checksum(service):
     return md5.hexdigest()
 
 
-def clear_mobilisation_links(apps, schema_editor):
-    Service = apps.get_model("services", "Service")
+def clear_mobilisation_links(Service):
+    """Nettoie les liens recopiés.
+
+    Renvoie les identifiants des modèles nettoyés, et ceux des copies nettoyées
+    regroupées par modèle.
+    """
 
     qs = (
         Service._base_manager.filter(
@@ -79,6 +89,8 @@ def clear_mobilisation_links(apps, schema_editor):
     )
 
     services_to_update = []
+    model_ids = []
+    cleared_copies_by_model = defaultdict(list)
     for service in qs:
         service_dict = service.__dict__
 
@@ -100,6 +112,10 @@ def clear_mobilisation_links(apps, schema_editor):
                 if mode != MOBILISATION_LINK_MODE
             ]
             services_to_update.append(service)
+            if service.is_model:
+                model_ids.append(service.pk)
+            elif service.model_id:
+                cleared_copies_by_model[service.model_id].append(service.pk)
             break
 
     Service._base_manager.bulk_update(
@@ -108,12 +124,14 @@ def clear_mobilisation_links(apps, schema_editor):
         batch_size=BATCH,
     )
 
+    return model_ids, cleared_copies_by_model
 
-def recompute_sync_checksums(apps, schema_editor):
-    Service = apps.get_model("services", "Service")
+
+def realign_sync_checksums(Service, model_ids, cleared_copies_by_model):
+    """Réaligne les empreintes des modèles nettoyés, et celles de leurs copies."""
 
     models = (
-        Service._base_manager.filter(is_model=True)
+        Service._base_manager.filter(pk__in=model_ids)
         .prefetch_related(*SYNC_M2M_FIELDS)
         .iterator(chunk_size=BATCH)
     )
@@ -125,9 +143,18 @@ def recompute_sync_checksums(apps, schema_editor):
         if model.sync_checksum == previous:
             continue
 
-        Service._base_manager.filter(
-            model_id=model.pk, last_sync_checksum=previous
-        ).update(last_sync_checksum=model.sync_checksum)
+        # Seules les copies nettoyées de la même façon que leur modèle restent à
+        # jour. Les champs comparés (`appointment_link`, etc.) n'appartiennent pas à
+        # `SYNC_FIELDS` : une copie peut donc garder son lien là où son modèle perd
+        # le sien. Elle diverge alors réellement, et doit afficher « modèle modifié »
+        # pour pouvoir reprendre le changement.
+        cleared_copy_ids = cleared_copies_by_model.get(model.pk)
+        if cleared_copy_ids:
+            Service._base_manager.filter(
+                model_id=model.pk,
+                last_sync_checksum=previous,
+                pk__in=cleared_copy_ids,
+            ).update(last_sync_checksum=model.sync_checksum)
 
         updated.append(model)
         if len(updated) >= BATCH:
@@ -138,12 +165,21 @@ def recompute_sync_checksums(apps, schema_editor):
         Service._base_manager.bulk_update(updated, ["sync_checksum"])
 
 
+def recompute_mobilisation_link(apps, schema_editor):
+    Service = apps.get_model("services", "Service")
+
+    # Une seule opération : le réalignement des empreintes doit savoir quels services
+    # ont été nettoyés, information que seul le nettoyage connaît. Les empreintes sont
+    # calculées ensuite, sur les nouvelles valeurs.
+    model_ids, cleared_copies_by_model = clear_mobilisation_links(Service)
+    realign_sync_checksums(Service, model_ids, cleared_copies_by_model)
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("services", "0026_recompute_sync_checksums_with_suspension_date"),
     ]
 
     operations = [
-        migrations.RunPython(clear_mobilisation_links, migrations.RunPython.noop),
-        migrations.RunPython(recompute_sync_checksums, migrations.RunPython.noop),
+        migrations.RunPython(recompute_mobilisation_link, migrations.RunPython.noop),
     ]

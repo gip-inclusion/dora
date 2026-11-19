@@ -670,7 +670,7 @@ def test_service_api_rejects_duplicate_form_names(api_client):
 
 
 recompute_migration = importlib.import_module(
-    "dora.services.migrations.0027_recompute_mobilisation_link"
+    "dora.services.migrations.0026_recompute_sync_checksums_with_suspension_date"
 )
 
 
