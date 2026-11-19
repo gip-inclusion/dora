@@ -428,7 +428,11 @@ class StructureSerializer(serializers.ModelSerializer):
                     branches_other.annotate(
                         num_services=Count(
                             "services",
-                            filter=Q(services__status=ServiceStatus.PUBLISHED),
+                            filter=Q(
+                                services__in=Service.objects.filter_for_DI().values(
+                                    "pk"
+                                )
+                            ),
                         )
                     )
                 ),

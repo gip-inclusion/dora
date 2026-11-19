@@ -105,3 +105,32 @@ def test_outsider_cant_bookmark_suspended_service(
     api_client.force_authenticate(user=outsider)
     response = api_client.post("/bookmarks/", {"slug": suspended_service.slug})
     assert response.status_code == 403
+
+
+def test_branch_card_counts_only_exposed_services(api_client):
+    parent = make_structure(user=make_user())
+    branch = make_structure(user=make_user(), parent=parent)
+    make_published_service(structure=branch)
+    make_published_service(
+        structure=branch, suspension_date=timezone.localdate() - timedelta(days=1)
+    )
+    orphan_branch = make_structure(parent=parent)
+    make_published_service(structure=orphan_branch)
+
+    response = api_client.get(f"/structures/{parent.slug}/")
+    counts = {b["slug"]: b["num_services"] for b in response.data["branches"]}
+    assert counts == {branch.slug: 1, orphan_branch.slug: 0}
+
+
+def test_branch_member_counts_its_suspended_service(api_client):
+    parent = make_structure(user=make_user())
+    member = make_user()
+    branch = make_structure(user=member, parent=parent)
+    make_published_service(structure=branch)
+    make_published_service(
+        structure=branch, suspension_date=timezone.localdate() - timedelta(days=1)
+    )
+
+    api_client.force_authenticate(user=member)
+    response = api_client.get(f"/structures/{parent.slug}/")
+    assert response.data["branches"][0]["num_services"] == 2
