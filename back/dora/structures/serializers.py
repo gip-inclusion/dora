@@ -238,6 +238,16 @@ class StructureSerializer(serializers.ModelSerializer):
                     "zone_eligibilite_display",
                 ]
 
+            def to_representation(self, instance):
+                data = super().to_representation(instance)
+                # Contacts non publics : jamais exposés aux utilisateurs non connectés.
+                if not (
+                    instance.is_contact_info_public
+                    or self.context["request"].user.is_authenticated
+                ):
+                    data.update(contact_name="", contact_email="", contact_phone="")
+                return data
+
         user = self.context.get("request").user
         qs = obj.services.published()
         if obj.can_edit_services(user):
@@ -249,6 +259,7 @@ class StructureSerializer(serializers.ModelSerializer):
                 "categories", "location_kinds", "coach_orientation_modes"
             ),
             many=True,
+            context=self.context,
         ).data
 
     def get_archived_services(self, obj):
