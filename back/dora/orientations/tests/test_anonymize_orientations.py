@@ -1,3 +1,4 @@
+import uuid
 from datetime import timedelta
 from io import StringIO
 
@@ -122,3 +123,78 @@ def test_should_not_anonymize_recent_emplois_orientation_data():
     orientation = emplois_data.orientation
     orientation.refresh_from_db()
     assert not orientation.is_anonymized
+
+
+def _old_creation_date():
+    return timezone.now() - timedelta(
+        days=settings.ORIENTATION_ANONYMIZATION_PERIOD_DAYS + 1
+    )
+
+
+def test_should_anonymize_sensitive_and_free_text_fields():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        situation=["Situation de handicap"],
+        situation_other="Suivi psychiatrique",
+        requirements=["Bénéficiaire du RSA"],
+        orientation_reasons="Jean Dupont, 12 rue de la Paix",
+        beneficiary_other_contact_method="Via sa sœur au 0601020304",
+        beneficiary_attachments=["abc/CV_Jean_Dupont.pdf"],
+        di_contact_phone="0601020304",
+    )
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.situation == []
+    assert orientation.situation_other == ""
+    assert orientation.requirements == []
+    assert orientation.orientation_reasons == ""
+    assert orientation.beneficiary_other_contact_method == ""
+    assert orientation.beneficiary_attachments == []
+    assert orientation.di_contact_phone == ""
+
+
+def test_should_replace_emplois_beneficiary_id():
+    emplois_data = make_emplois_orientation_data(_old_creation_date())
+    prescriber_id = uuid.uuid4()
+    emplois_data.prescriber_id = prescriber_id
+    emplois_data.save()
+    other_emplois_data = make_emplois_orientation_data(_old_creation_date())
+    beneficiary_id = emplois_data.beneficiary_id
+    emplois_sync_uid = emplois_data.emplois_sync_uid
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    emplois_data.refresh_from_db()
+    other_emplois_data.refresh_from_db()
+    assert emplois_data.beneficiary_id != beneficiary_id
+    assert emplois_data.beneficiary_id != other_emplois_data.beneficiary_id
+    assert emplois_data.prescriber_id == prescriber_id
+    assert emplois_data.emplois_sync_uid == emplois_sync_uid
+
+
+def test_should_skip_already_anonymized_orientations_by_default():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        is_anonymized=True,
+        orientation_reasons="Motif",
+    )
+
+    call_command("anonymize_orientations", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.orientation_reasons == "Motif"
+
+
+def test_should_reprocess_already_anonymized_orientations_on_demand():
+    orientation = make_orientation(
+        creation_date=_old_creation_date(),
+        is_anonymized=True,
+        orientation_reasons="Motif",
+    )
+
+    call_command("anonymize_orientations", "--include-anonymized", stdout=StringIO())
+
+    orientation.refresh_from_db()
+    assert orientation.orientation_reasons == ""
