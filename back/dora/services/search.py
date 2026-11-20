@@ -207,7 +207,7 @@ def _map_di_results(
 def _dora_services_by_id(service_ids):
     return {
         str(service.id): service
-        for service in models.Service.objects.filter_for_DI()
+        for service in models.Service.objects.publicly_exposed()
         .select_related(
             "structure",
         )

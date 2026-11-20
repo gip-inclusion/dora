@@ -275,7 +275,7 @@ class ServiceManager(models.Manager):
             - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
         )
 
-    def filter_for_DI(self):
+    def publicly_exposed(self):
         return (
             self.published()
             .exclude(structure__is_obsolete=True)
@@ -714,7 +714,7 @@ class Service(models.Model):
         return super().save(*args, **kwargs)
 
     def can_read(self, user):
-        return Service.objects.filter_for_DI().filter(pk=self.pk).exists() or (
+        return Service.objects.publicly_exposed().filter(pk=self.pk).exists() or (
             user.is_authenticated
             and (
                 user.is_staff

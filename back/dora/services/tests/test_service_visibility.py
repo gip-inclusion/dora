@@ -1,6 +1,6 @@
 """
 La consultation des services (fiche, liste, page structure, favoris) suit la même
-règle d'exposition que l'API v2 / data·inclusion (`Service.objects.filter_for_DI`),
+règle d'exposition que l'API v2 / data·inclusion (`Service.objects.publicly_exposed`),
 sauf pour les ayants droit (staff, gestionnaire du département, membres).
 """
 
