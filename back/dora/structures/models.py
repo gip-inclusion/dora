@@ -44,7 +44,6 @@ from dora.structures.emails import (
     send_access_requested_notification,
     send_branch_created_notification,
     send_invitation_accepted_notification,
-    send_member_fast_tracked_notification,
 )
 from dora.users.models import User
 
@@ -141,15 +140,12 @@ class StructureMember(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
-    def notify_admins_invitation_accepted(self, is_fast_track=False):
+    def notify_admins_invitation_accepted(self):
         structure_admins = StructureMember.objects.filter(
             structure=self.structure, is_admin=True
         ).exclude(user=self.user)
         for admin in structure_admins:
-            if is_fast_track:
-                send_member_fast_tracked_notification(self, admin.user)
-            else:
-                send_invitation_accepted_notification(self, admin.user)
+            send_invitation_accepted_notification(self, admin.user)
 
     def notify_access_granted(self):
         send_access_granted_notification(self)
@@ -581,7 +577,7 @@ class Structure(ModerationMixin, models.Model):
         ):
             return self.services.active().count()
         else:
-            return self.services.published().count()
+            return self.services.filter_for_DI().count()
 
     def get_num_visible_models(self, user):
         # On ne peut pas utiliser le manager lié (self.services) étant donné qu'il filtre les modèles

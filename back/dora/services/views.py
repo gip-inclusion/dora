@@ -148,24 +148,24 @@ def get_visible_services(user):
         .filter(structure__is_obsolete=False)
     )
 
-    # Everybody can see published services
+    # Tout le monde voit les services exposés à data·inclusion (et à l'API v2)
+    exposed = Q(pk__in=Service.objects.filter_for_DI().values("pk"))
+
     if not user or not user.is_authenticated:
-        qs = all_services.filter(status=ServiceStatus.PUBLISHED)
+        qs = all_services.filter(exposed)
     # Staff can see everything
     elif user.is_staff:
         qs = all_services
     elif user.is_manager and user.departments:
         qs = all_services.filter(
-            Q(status=ServiceStatus.PUBLISHED)
+            exposed
             | Q(structure__department__in=user.departments)
             | Q(structure__membership__user=user)
         )
     else:
         # Authentified users can see everything in their structure
-        # plus published services for other structures
-        qs = all_services.filter(
-            Q(status=ServiceStatus.PUBLISHED) | Q(structure__membership__user=user)
-        )
+        # plus exposed services for other structures
+        qs = all_services.filter(exposed | Q(structure__membership__user=user))
     return qs.distinct()
 
 

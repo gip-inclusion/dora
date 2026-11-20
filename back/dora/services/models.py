@@ -714,7 +714,7 @@ class Service(models.Model):
         return super().save(*args, **kwargs)
 
     def can_read(self, user):
-        return self.status == ServiceStatus.PUBLISHED or (
+        return Service.objects.filter_for_DI().filter(pk=self.pk).exists() or (
             user.is_authenticated
             and (
                 user.is_staff

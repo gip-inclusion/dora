@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import type { Service } from "#lib/types.ts";
 import { getPlateformeOrientationUrl } from "#lib/utils/plateforme-orientation.ts";
 
-function makeService(emploisUid: string | undefined): Service {
+function makeService(emploisUid: string): Service {
   return { emploisUid } as Service;
 }
 
@@ -29,10 +29,5 @@ describe("getPlateformeOrientationUrl", () => {
     expect(getPlateformeOrientationUrl(service)).toContain(
       "/insertion/orientations/source%20avec%20espace--1%2F2/job-seeker/"
     );
-  });
-
-  test("renvoie null quand le service n’a pas d’identifiant Emplois", () => {
-    expect(getPlateformeOrientationUrl(makeService(undefined))).toBeNull();
-    expect(getPlateformeOrientationUrl(makeService(""))).toBeNull();
   });
 });

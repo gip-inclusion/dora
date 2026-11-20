@@ -1,49 +1,16 @@
-import requests
 from django.core.files.storage import default_storage
-from django.db import transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from itoutils.django.nexus.token import decode_token
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
-import dora.data_inclusion.client
-from dora.data_inclusion.mappings import map_service
 from dora.orientations.models import (
     EMPLOIS_SOURCE_LABEL,
-    EmploisOrientationData,
     Orientation,
     OrientationStatus,
 )
-from dora.services.models import Service
-from dora.structures.models import Structure
 
 
 class OrientationSerializer(serializers.ModelSerializer):
-    service_slug = serializers.SlugRelatedField(
-        source="service",
-        slug_field="slug",
-        queryset=Service.objects.all(),
-        write_only=True,
-        required=False,
-        allow_null=True,
-    )
-
-    prescriber_structure_slug = serializers.SlugRelatedField(
-        source="prescriber_structure",
-        slug_field="slug",
-        queryset=Structure.objects.all(),
-        write_only=True,
-    )
-
-    op_jwt = serializers.CharField(
-        required=False,
-        allow_blank=True,
-        allow_null=True,
-        write_only=True,
-        help_text="JWT des Emplois contenant des données d'orientation pré-remplies",
-    )
-
     service = serializers.SerializerMethodField()
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
@@ -52,7 +19,6 @@ class OrientationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orientation
         fields = [
-            "beneficiary_attachments",
             "beneficiary_attachments_details",
             "beneficiary_availability",
             "beneficiary_contact_preferences",
@@ -73,10 +39,8 @@ class OrientationSerializer(serializers.ModelSerializer):
             "di_structure_name",
             "id",
             "orientation_reasons",
-            "op_jwt",
             "prescriber",
             "prescriber_structure",
-            "prescriber_structure_slug",
             "processing_date",
             "query_id",
             "referent_email",
@@ -85,118 +49,11 @@ class OrientationSerializer(serializers.ModelSerializer):
             "referent_phone",
             "requirements",
             "service",
-            "service_slug",
             "situation",
             "situation_other",
             "source",
             "status",
         ]
-        extra_kwargs = {"beneficiary_attachments": {"write_only": True}}
-
-    def validate(self, orientation):
-        """Valide l'engagement de protection des données et les documents joints.
-
-        L'engagement de protection des données (`data_protection_commitment`) doit être True lors de la création.
-
-        Si au moins un document (`Service.forms`) ou justificatif (`Service.credentials`) est demandé par le service,
-        alors le bénéficiaire doit joindre au moins un document (`Orientation.beneficiary_attachments`).
-        S'il n'y en a pas, une erreur est levée.
-
-        À la fois les services Dora et DI sont supportés.
-
-        Si un JWT des Emplois (`op_jwt`) est fourni à la création, il est décodé et les informations
-        bénéficiaire sont préremplies. Les identifiants Les Emplois (beneficiary_id, structure_id) sont
-        stockés dans `_emplois_data` pour création ultérieure de l'objet EmploisOrientationData.
-        """
-        self._prefill_from_emplois_jwt(orientation)
-
-        # Validation de l'engagement de protection des données
-        if not self.instance and not orientation.get("data_protection_commitment"):
-            raise ValidationError(
-                {
-                    "data_protection_commitment": "Vous devez accepter l’engagement de protection des données."
-                }
-            )
-
-        # Récupère le service depuis les données ou l'instance
-        service = orientation.get("service") or (
-            self.instance.service if self.instance else None
-        )
-
-        if service:
-            # Il s'agit d'un service Dora
-
-            # Est-ce que le service nécessite des documents ou justificatifs ?
-            requires_attachments = (
-                service.credentials.exists()  # A des justificatifs requis
-                or bool(service.forms)  # A des documents à compléter
-            )
-        elif orientation.get("di_service_id"):
-            # Il s'agit d'un service DI
-
-            # Récupération du service depuis le client DI
-            di_client = dora.data_inclusion.di_client_factory()
-            try:
-                raw_service = (
-                    di_client.retrieve_service(id=orientation.get("di_service_id"))
-                    if di_client is not None
-                    else None
-                )
-            except requests.ConnectionError:
-                return orientation
-            if raw_service is None:
-                return orientation
-
-            # Mapping du service DI
-            di_service = map_service(raw_service, False)
-
-            # Est-ce que le service DI nécessite des documents ou justificatifs ?
-            requires_attachments = (
-                bool(di_service.get("credentials"))  # A des justificatifs requis
-                or bool(di_service.get("forms"))  # A des documents à compléter
-            )
-
-        # Si le service nécessite des documents mais qu'aucun n'est fourni, une erreur est levée.
-        if requires_attachments and not orientation.get("beneficiary_attachments"):
-            raise ValidationError(
-                {
-                    "beneficiary_attachments": "Pour valider l’envoi de votre demande, vous devez ajouter les documents demandés."
-                }
-            )
-
-        return orientation
-
-    def _prefill_from_emplois_jwt(self, attrs):
-        op_jwt = attrs.pop("op_jwt", None)
-        if self.instance or not op_jwt:
-            return
-        try:
-            claims = decode_token(op_jwt)
-        except ValueError:
-            raise serializers.ValidationError(
-                {"op_jwt": "Token JWT invalide ou expiré."}
-            )
-        beneficiary = claims["beneficiary"]
-        attrs["beneficiary_first_name"] = beneficiary["first_name"]
-        attrs["beneficiary_last_name"] = beneficiary["last_name"]
-        attrs["beneficiary_email"] = beneficiary["email"]
-        attrs["beneficiary_phone"] = beneficiary["phone"]
-        attrs["beneficiary_france_travail_number"] = beneficiary["france_travail_id"]
-        organization = claims["prescriber"]["organization"]
-        attrs["_emplois_data"] = {
-            "beneficiary_id": beneficiary["uid"],
-            "structure_id": organization["uid"],
-        }
-
-    def create(self, validated_data):
-        emplois_data = validated_data.pop("_emplois_data", None)
-        with transaction.atomic():
-            orientation = super().create(validated_data)
-            if emplois_data:
-                EmploisOrientationData.objects.create(
-                    orientation=orientation, **emplois_data
-                )
-        return orientation
 
     def get_service(self, orientation):
         return {
@@ -377,27 +234,3 @@ class EmploisReceivedOrientationExportSerializer(serializers.Serializer):
         if obj.get("status") == OrientationStatus.ACCEPTED:
             return obj.get("france_travail_id") or ""
         return ""
-
-
-class OrientationBeneficiaryInfoInputSerializer(serializers.Serializer):
-    op = serializers.CharField(required=True)
-
-    def validate_op(self, value):
-        try:
-            claims = decode_token(value)
-        except ValueError:
-            raise ValidationError("Token JWT invalide.")
-
-        if "beneficiary" not in claims:
-            raise ValidationError("Données bénéficiaire absentes du token.")
-
-        return claims
-
-
-class OrientationBeneficiaryInfoOutputSerializer(serializers.Serializer):
-    first_name = serializers.CharField(default="")
-    last_name = serializers.CharField(default="")
-    email = serializers.CharField(default="")
-    phone = serializers.CharField(default="")
-    france_travail_id = serializers.CharField(default="")
-    user_structure_slug = serializers.CharField(default="")

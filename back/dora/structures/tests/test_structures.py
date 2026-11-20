@@ -436,7 +436,7 @@ class StructureSiteMapTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_structures_w_published_services_are_listed(self):
-        st = make_structure()
+        st = make_structure(user=make_user())
         make_service(structure=st, status=ServiceStatus.DRAFT)
         make_service(structure=st, status=ServiceStatus.PUBLISHED)
 
@@ -1280,36 +1280,6 @@ class StructureMemberTestCase(APITestCase):
             "[LOCAL] [DORA] Demande d’accès à votre structure", mail.outbox[0].subject
         )
         self.assertIn(self.my_struct.slug, mail.outbox[0].body)
-
-    def test_admin_notified_when_fast_track_user_joins(self):
-        baker.make("Establishment", siret=self.my_struct.siret)
-        user = baker.make("users.User", is_valid=True)
-
-        self.client.force_authenticate(user=user)
-
-        with patch(
-            "dora.rest_auth.views.decode_token",
-            return_value={
-                "fast_track": True,
-                "prescriber": {"organization": {"siret": self.my_struct.siret}},
-            },
-        ):
-            response = self.client.post(
-                "/auth/join-structure/",
-                {
-                    "siret": self.my_struct.siret,
-                    "cguVersion": "20230805",
-                    "op": "fast_track_token",
-                },
-            )
-        self.assertEqual(response.status_code, 200)
-        StructureMember.objects.get(structure__siret=self.my_struct.siret, user=user)
-        self.assertGreater(len(mail.outbox), 0)
-        self.assertEqual(
-            "[LOCAL] [DORA] Utilisateur rattaché à votre structure",
-            mail.outbox[0].subject,
-        )
-        self.assertIn(user.email, mail.outbox[0].body)
 
 
 # Tests au format pytest

@@ -1,22 +1,19 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { isRedirect } from "@sveltejs/kit";
 import type { Service } from "#lib/types.ts";
-import { isAuthenticated } from "#lib/utils/auth.ts";
-import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page";
+import { getService, getServiceDI } from "#lib/requests/services.ts";
+import { TOKEN_KEY } from "#lib/utils/auth.ts";
+import { load } from "../../routes/(modeles-services)/services/[slug]/orienter/+page.server";
 
-vi.mock("#lib/utils/auth.ts", () => ({
-  isAuthenticated: vi.fn(),
+vi.mock("#lib/requests/services.ts", () => ({
+  getService: vi.fn(),
+  getServiceDI: vi.fn(),
 }));
 
-// la redirection est derrière un feature flag, alimenté par un `.env` non
-// versionné : on le force pour que les tests ne dépendent pas de l'environnement
+// l'URL de La plateforme vient d'un `.env` non versionné : on la force pour
+// que les tests ne dépendent pas de l'environnement
 vi.mock("#lib/env.ts", () => ({
   INCLUSION_PLATFORM_URL: "https://plateforme.inclusion.gouv.fr",
-  ORIENTATION_REDIRECTION_FEATURE_FLAG: true,
-}));
-
-vi.mock("#lib/requests/nexus.ts", () => ({
-  getOrientationBeneficiaryInfo: vi.fn(),
 }));
 
 const EMPLOIS_UID = "dora--22e2a25c-ee9e-4606-9236-757417322c5b";
@@ -32,18 +29,27 @@ function makeService(overrides: Partial<Service> = {}): Service {
   } as Service;
 }
 
-function callLoad(service: Service, search = "") {
+let token: string | undefined;
+
+function callLoad(service: Service | null, slug = "un-service") {
+  vi.mocked(getService).mockResolvedValue(service as Service);
+  vi.mocked(getServiceDI).mockResolvedValue(service as never);
+  const url = `https://dora.fr/services/${slug}/orienter`;
   return load({
-    parent: () => Promise.resolve({ service }),
-    url: new URL(`https://dora.fr/services/${service.slug}/orienter${search}`),
-    params: { slug: service.slug },
+    cookies: {
+      get: (name: string) => (name === TOKEN_KEY ? token : undefined),
+    },
+    params: { slug },
     fetch: vi.fn(),
+    // lus par l'instrumentation Sentry qui enveloppe la fonction `load`
+    url: new URL(url),
+    request: new Request(url),
   } as never);
 }
 
-async function captureRedirect(service: Service, search = "") {
+async function captureRedirect(service: Service, slug?: string) {
   try {
-    await callLoad(service, search);
+    await callLoad(service, slug);
   } catch (err) {
     if (isRedirect(err)) {
       return err.location;
@@ -55,7 +61,7 @@ async function captureRedirect(service: Service, search = "") {
 
 describe("page d’orientation", () => {
   beforeEach(() => {
-    vi.mocked(isAuthenticated).mockReturnValue(false);
+    token = undefined;
   });
 
   test("redirige l’utilisateur anonyme vers le formulaire de La plateforme", async () => {
@@ -63,24 +69,31 @@ describe("page d’orientation", () => {
   });
 
   test("redirige l’utilisateur connecté via l’auto-connexion Nexus", async () => {
-    vi.mocked(isAuthenticated).mockReturnValue(true);
+    token = "un-token";
 
     expect(await captureRedirect(makeService())).toEqual(
       `/nexus/auto-login/?next=${encodeURIComponent(PLATEFORME_URL)}`
     );
   });
 
-  test("conserve le formulaire Dora si le service n’a pas d’identifiant Emplois", async () => {
-    const service = makeService({ emploisUid: undefined });
-
-    const result = await callLoad(service);
-
-    expect(result.service).toBe(service);
-  });
-
   test("refuse un service non orientable", async () => {
     await expect(
       callLoad(makeService({ isOrientable: false }))
     ).rejects.toThrow();
+  });
+  test("charge un service data·inclusion via son préfixe `di--`", async () => {
+    const service = makeService({ emploisUid: "source--1234" });
+
+    expect(await captureRedirect(service, "di--source--1234")).toContain(
+      "/insertion/orientations/source--1234/job-seeker/"
+    );
+    expect(getServiceDI).toHaveBeenCalledWith(
+      "source--1234",
+      expect.anything()
+    );
+  });
+
+  test("renvoie une 404 si le service est introuvable", async () => {
+    await expect(callLoad(null)).rejects.toMatchObject({ status: 404 });
   });
 });

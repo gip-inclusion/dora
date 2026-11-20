@@ -1,27 +1,21 @@
 import functools
 import hmac
 import logging
-import time
-from math import ceil
-from urllib.parse import urlencode
 
-from django.conf import settings
 from django.core import signing
 from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
-from itoutils.django.nexus.token import decode_token, generate_token
 from rest_framework import mixins, permissions, viewsets
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, MethodNotAllowed, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from dora.core.models import ModerationStatus
 from dora.core.throttling import OrientationsExportLinkThrottle
 from dora.core.utils import TRUTHY_VALUES
 from dora.emplois.api_client import EmploisApiClient, EmploisAPIException
@@ -29,14 +23,11 @@ from dora.services.utils import DORA_UID_PREFIX, get_emplois_service_uid
 
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..services.models import Service
-from ..sirene.models import Establishment
 from ..structures.models import Structure
-from ..users.enums import DiscoveryMethod, MainActivity
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
     send_orientation_accepted_emails,
-    send_orientation_created_emails,
     send_orientation_created_to_structure,
     send_orientation_rejected_emails,
 )
@@ -51,13 +42,10 @@ from .models import (
 )
 from .serializers import (
     EmploisReceivedOrientationExportSerializer,
-    OrientationBeneficiaryInfoInputSerializer,
-    OrientationBeneficiaryInfoOutputSerializer,
     OrientationSerializer,
     ReceivedOrientationExportSerializer,
     SentOrientationExportSerializer,
 )
-from .slack import send_orientation_moderation_pending_notification
 
 logger = logging.getLogger(__name__)
 
@@ -72,8 +60,6 @@ class ModeratedOrientationPermission(permissions.BasePermission):
 
 class OrientationPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        if view.action == "create":
-            return request.user.is_authenticated
         match request.method:
             case "DELETE":
                 return False
@@ -82,7 +68,7 @@ class OrientationPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, orientation):
         match request.method:
-            case "GET" | "POST" | "PATCH":
+            case "GET" | "POST":
                 if h := request.query_params.get("h"):
                     if not hmac.compare_digest(h, orientation.get_query_id_hash()):
                         return False
@@ -95,9 +81,7 @@ class OrientationPermission(permissions.BasePermission):
 
 
 class OrientationViewSet(
-    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer
@@ -106,24 +90,6 @@ class OrientationViewSet(
 
     def get_queryset(self):
         return Orientation.objects.select_related("emplois_orientation_data")
-
-    def perform_create(self, serializer):
-        serializer.is_valid()
-        orientation = serializer.save(prescriber=self.request.user)
-        if (
-            orientation.prescriber_structure.moderation_status
-            == ModerationStatus.VALIDATED
-        ):
-            send_orientation_created_emails(orientation)
-        else:
-            orientation.status = OrientationStatus.MODERATION_PENDING
-            orientation.save()
-            # Malgré l'utilisation, de on_commit, on est en autocommit donc le message est envoyé de façon synchrone.
-            transaction.on_commit(
-                functools.partial(
-                    send_orientation_moderation_pending_notification, orientation
-                )
-            )
 
     @action(
         detail=True,
@@ -493,109 +459,3 @@ class StructureOrientationsView(APIView):
             return Response(rows)
 
         raise RuntimeError(f"Type d'export inconnu : {export_type!r}.")
-
-
-def _resolve_emplois_orientation(
-    request: Request, op_jwt: str, service_slug: str, direct_to_orientation=False
-) -> (str | None, str | None):
-    """
-    Logique métier partagé entre les routes appelé pour diriger l'utilisateur avec un jwt "OP" vers la bonne page
-    Ça renvoie un tuple qui est soit (<next_url>, None) soit (None, <structure_slug>)
-    """
-    try:
-        orientation_data = decode_token(op_jwt)
-    except ValueError:
-        return Response(
-            {"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"}
-        ), None
-
-    prescriber_data = orientation_data["prescriber"]
-
-    if request.user.email != prescriber_data["email"]:
-        return Response(
-            {"next_url": f"{settings.FRONTEND_URL}?link_invalid=true"}
-        ), None
-
-    user_has_new_dora_account = (
-        not request.user.main_activity and not request.user.discovery_method
-    )
-    if user_has_new_dora_account:
-        request.user.main_activity = MainActivity.ACCOMPAGNATEUR
-        request.user.discovery_method = DiscoveryMethod.EMPLOIS_DE_L_INCLUSION
-        request.user.save()
-
-    structure_siret = prescriber_data["organization"]["siret"]
-    rattachement_url = f"{settings.FRONTEND_URL}/auth/rattachement"
-
-    if not Establishment.objects.filter(siret=structure_siret).exists():
-        return Response(
-            {
-                "next_url": f"{rattachement_url}?{urlencode({'siret': structure_siret, 'unknown_siret': 'true'})}"
-            }
-        ), None
-
-    try:
-        structure = Structure.objects.get(siret=structure_siret)
-    except Structure.DoesNotExist:
-        params = {"siret": structure_siret, "op": op_jwt, "service_slug": service_slug}
-        if direct_to_orientation:
-            params["orienter"] = "true"
-        return Response({"next_url": f"{rattachement_url}?{urlencode(params)}"}), None
-
-    if not structure.membership.filter(user=request.user).exists():
-        orientation_data["fast_track"] = True
-        orientation_data["exp"] = ceil(time.time()) + 3600
-        op_jwt_with_fast_track = generate_token(orientation_data)
-        params = {
-            "siret": structure_siret,
-            "op": op_jwt_with_fast_track,
-            "service_slug": service_slug,
-            "fast_track": "true",
-        }
-        if direct_to_orientation:
-            params["orienter"] = "true"
-        return Response({"next_url": f"{rattachement_url}?{urlencode(params)}"}), None
-
-    return None, structure.slug
-
-
-@api_view(["GET"])
-@permission_classes([permissions.IsAuthenticated])
-def handle_emplois_orientation(request, service_slug):
-    op_jwt = request.GET.get("op")
-    response, structure_slug = _resolve_emplois_orientation(
-        request, op_jwt, service_slug
-    )
-    if response is not None:
-        return response
-    return Response(
-        {
-            "next_url": f"{settings.FRONTEND_URL}/services/{service_slug}?{urlencode({'op': op_jwt, 'user_structure_slug': structure_slug})}"
-        }
-    )
-
-
-@api_view(["GET"])
-@permission_classes([permissions.IsAuthenticated])
-def orientation_beneficiary_info(request):
-    op_jwt = request.GET.get("op")
-
-    service_slug = request.GET.get("service_slug", "")
-
-    response, structure_slug = _resolve_emplois_orientation(
-        request, op_jwt, service_slug, direct_to_orientation=True
-    )
-
-    if response is not None:
-        return response
-
-    input_serializer = OrientationBeneficiaryInfoInputSerializer(
-        data=request.query_params
-    )
-    input_serializer.is_valid(raise_exception=True)
-    claims = input_serializer.validated_data["op"]
-
-    output_serializer = OrientationBeneficiaryInfoOutputSerializer(
-        {**claims["beneficiary"], "user_structure_slug": structure_slug}
-    )
-    return Response(output_serializer.data)

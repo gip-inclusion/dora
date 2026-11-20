@@ -14,8 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from dora.core.throttling import StructureUploadThrottle, UploadRateThrottle
-from dora.core.uploads import save_orientation_attachment, save_structure_document
+from dora.core.throttling import StructureUploadThrottle
+from dora.core.uploads import save_structure_document
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -36,17 +36,6 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
 
     file_obj = request.data["file"]
     result = save_structure_document(filename, file_obj, structure.pk)
-    return Response({"key": result}, status=201)
-
-
-@api_view(["POST"])
-@parser_classes([MultiPartParser])
-@permission_classes([IsAuthenticated])
-@throttle_classes([UploadRateThrottle])
-def safe_upload(request: Request, filename: str) -> Response:
-    file_obj = request.data["file"]
-    # coupled to "orientations" bucket for now
-    result = save_orientation_attachment(filename, file_obj)
     return Response({"key": result}, status=201)
 
 

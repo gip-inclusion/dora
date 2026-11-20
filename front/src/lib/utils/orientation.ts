@@ -1,5 +1,4 @@
-import { TEST_WORDS } from "#lib/consts.ts";
-import type { Choice, Orientation, Service } from "#lib/types.ts";
+import type { Orientation } from "#lib/types.ts";
 
 import { getApiURL } from "./api";
 import { fetchData } from "./misc";
@@ -113,60 +112,4 @@ export function acceptOrientation(
       beneficiaryMessage,
     }),
   });
-}
-
-export function computePublicsChoices(service: Service): {
-  publicsChoices: Choice[];
-  servesAllPublics: boolean;
-} {
-  const publicsChoices = (service.publicsDisplay || []).map((value) => ({
-    value: value,
-    label: value,
-  }));
-
-  return {
-    publicsChoices,
-    servesAllPublics: publicsChoices.length === 0,
-  };
-}
-
-export function computeRequirementsChoices(service: Service): {
-  requirementChoices: Choice[];
-  requirementRequired: boolean;
-} {
-  const excludedRequirementLabels = ["Aucun", "Sans condition"];
-
-  const requirementChoices = [
-    ...(service.requirementsDisplay || []),
-    ...(service.accessConditionsDisplay || []),
-  ]
-    .map((value) => ({ value: value, label: value }))
-    .filter((elt) => !excludedRequirementLabels.includes(elt.value));
-
-  return {
-    requirementChoices,
-    requirementRequired: requirementChoices.length > 0,
-  };
-}
-
-export function orientationContainsTestWords(
-  orientation: Orientation
-): string | false {
-  const testWordsRegexp = `\\b(${TEST_WORDS.join("|")})\\b`;
-  const fieldsToTest = [
-    orientation.referentFirstName,
-    orientation.referentLastName,
-    orientation.referentEmail,
-    orientation.beneficiaryFirstName,
-    orientation.beneficiaryLastName,
-    orientation.beneficiaryEmail,
-    orientation.orientationReasons,
-  ];
-  for (const field of fieldsToTest) {
-    const testWordMatched = field.match(testWordsRegexp);
-    if (testWordMatched) {
-      return testWordMatched[0];
-    }
-  }
-  return false;
 }

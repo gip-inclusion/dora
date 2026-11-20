@@ -7,8 +7,6 @@ export const enum TallyFormId {
   SERVICE_CREATION_FORM_ID = "mRGdpK",
 }
 
-export const TEST_WORDS = ["test", "truc", "bidule"];
-
 export const URL_HELP_SITE = "https://aide.dora.inclusion.gouv.fr/fr/";
 
 export const URL_DOCUMENTATION_ORIENTATION = `${URL_HELP_SITE}category/orienter-vos-beneficiaires-c25cna/`;
@@ -66,8 +64,6 @@ export const INCLUSION_PLATFORM_LOGIN_URL = `${INCLUSION_PLATFORM_URL}/accounts/
 // de la plateforme de l'inclusion.
 export const INCLUSION_PLATFORM_SEARCH_URL = `${INCLUSION_PLATFORM_URL}/search/services?mtm_campaign=DORA&mtm_kwd=homeorienter`;
 export const INCLUSION_PLATFORM_ORIENTATIONS_URL = `${INCLUSION_PLATFORM_URL}/insertion/orientations/?mtm_campaign=DORA&mtm_kwd=homesuivi`;
-
-export const ORIENTATION_JWT_QUERY_PARAM = "op";
 
 export const TOAST_DURATION_MS = 30000;
 

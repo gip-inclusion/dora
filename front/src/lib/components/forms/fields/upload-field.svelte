@@ -16,7 +16,7 @@
     readonly?: boolean;
     label?: string;
     fileKeys?: string[];
-    structureSlug?: string;
+    structureSlug: string;
     descriptionText?: string;
     hidden?: boolean;
     hideLabel?: boolean;
@@ -31,7 +31,7 @@
     readonly = undefined,
     label = undefined,
     fileKeys = $bindable([]),
-    structureSlug = undefined,
+    structureSlug,
     descriptionText = "",
     hidden = false,
     hideLabel = false,
