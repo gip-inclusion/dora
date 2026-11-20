@@ -50,7 +50,7 @@ def test_non_exposed_service_is_not_visible(
 
 
 @pytest.mark.parametrize("days", [0, 1])
-def test_service_suspended_from_today_or_later_is_visible(api_client, days):
+def test_service_suspension_date_today_or_later_is_visible(api_client, days):
     service = make_published_service(
         suspension_date=timezone.localdate() + timedelta(days=days)
     )
