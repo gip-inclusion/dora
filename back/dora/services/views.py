@@ -149,7 +149,7 @@ def get_visible_services(user):
     )
 
     # Tout le monde voit les services exposés à data·inclusion (et à l'API v2)
-    exposed = Q(pk__in=Service.objects.filter_for_DI().values("pk"))
+    exposed = Q(pk__in=Service.objects.publicly_exposed().values("pk"))
 
     if not user or not user.is_authenticated:
         qs = all_services.filter(exposed)

@@ -77,7 +77,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return (
-            Service.objects.filter_for_DI()
+            Service.objects.publicly_exposed()
             .select_related("structure", "fee_condition", "source")
             .prefetch_related(
                 "subcategories",

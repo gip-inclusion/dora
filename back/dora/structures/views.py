@@ -92,7 +92,9 @@ class StructureViewSet(
         elif only_active:
             # Structures ayant au moins un service exposé (cf. sitemap)
             return structures.filter(
-                Exists(Service.objects.filter_for_DI().filter(structure=OuterRef("pk")))
+                Exists(
+                    Service.objects.publicly_exposed().filter(structure=OuterRef("pk"))
+                )
             ).order_by("-modification_date")
         else:
             return structures.order_by("-modification_date")

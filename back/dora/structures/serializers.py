@@ -249,7 +249,7 @@ class StructureSerializer(serializers.ModelSerializer):
                 return data
 
         user = self.context.get("request").user
-        qs = obj.services.filter_for_DI()
+        qs = obj.services.publicly_exposed()
         if obj.can_edit_services(user):
             qs = obj.services.active()
 
@@ -429,7 +429,7 @@ class StructureSerializer(serializers.ModelSerializer):
                         num_services=Count(
                             "services",
                             filter=Q(
-                                services__in=Service.objects.filter_for_DI().values(
+                                services__in=Service.objects.publicly_exposed().values(
                                     "pk"
                                 )
                             ),
