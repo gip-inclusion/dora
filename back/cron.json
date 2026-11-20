@@ -21,7 +21,7 @@
       "size": "S"
     },
     {
-      "command": "0 1 3 * * tools/import-sirene.sh",
+      "command": "0 1 5 * * tools/import-sirene.sh",
       "size": "XL"
     },
     {
