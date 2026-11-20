@@ -37,7 +37,7 @@ def test_service_list_does_not_expose_contact_info(api_client):
 def test_structure_services_contact_info(
     api_client, is_authenticated, is_public, expected
 ):
-    structure = make_structure()
+    structure = make_structure(user=make_user())
     make_published_service(
         structure=structure, is_contact_info_public=is_public, **CONTACT
     )
